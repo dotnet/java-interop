@@ -18,6 +18,8 @@ namespace Android.InteropTests {
 	[TestFixture]
 	public class TestsSample : Java.InteropTests.JavaVMFixture {
 
+		const   string  JavaInteropLib                  = "JavaInterop";
+
 		const   int     Unified_ToString_Iterations     = 10000;
 		const   int     MaxLocalRefs                    = 500;
 
@@ -29,6 +31,13 @@ namespace Android.InteropTests {
 
 		static  readonly    int     JNIEnvOffset_CallObjectMethodA      = JNIEnvIndex_CallObjectMethodA * IntPtr.Size;
 		static  readonly    int     JNIEnvOffset_DeleteLocalRef         = JNIEnvIndex_DeleteLocalRef    * IntPtr.Size;
+
+		[DllImport (JavaInteropLib, CallingConvention = CallingConvention.Cdecl)]
+		static extern JniLocalReference JavaInterop_CallObjectMethod (JniEnvironmentSafeHandle env, JniReferenceSafeHandle obj, JniInstanceMethodID method);
+
+		[DllImport (JavaInteropLib, CallingConvention = CallingConvention.Cdecl)]
+		static extern void JavaInterop_DeleteLocalRef (JniEnvironmentSafeHandle env, IntPtr handle);
+
 
 		TimeSpan GetXAMethodCallTiming ()
 		{
@@ -95,7 +104,8 @@ namespace Android.InteropTests {
 		void GetJICallObjectMethodAndDeleteLocalRefTimings (
 				out TimeSpan callVirtualObjectMethodTime, out TimeSpan disposeTime,
 				out TimeSpan safeCallObjectMethodTime, out TimeSpan safeDeleteLocalRefTime,
-				out TimeSpan unsafeCallObjectMethodTime, out TimeSpan unsafeDeleteLocalRefTime)
+				out TimeSpan unsafeCallObjectMethodTime, out TimeSpan unsafeDeleteLocalRefTime,
+				out TimeSpan pinvokeCallObjectMethodTime, out TimeSpan pinvokeDeleteLocalRefTime)
 		{
 
 			using (var k = new JniType ("java/lang/Object"))
@@ -170,6 +180,21 @@ namespace Android.InteropTests {
 				}
 				sw.Stop ();
 				unsafeDeleteLocalRefTime  = sw.Elapsed;
+
+				sw.Restart ();
+				for (int i = 0; i < urs.Length; ++i) {
+					rs [i] = JavaInterop_CallObjectMethod (sh, o, t);
+				}
+				sw.Stop ();
+				pinvokeCallObjectMethodTime = sw.Elapsed;
+
+				sw.Restart ();
+				for (int i = 0; i < rs.Length; ++i) {
+					JavaInterop_DeleteLocalRef (sh, rs [i].DangerousGetHandle ());
+					rs [i].SetHandleAsInvalid ();
+				}
+				sw.Stop ();
+				pinvokeDeleteLocalRefTime   = sw.Elapsed;
 			}
 		}
 
@@ -183,7 +208,12 @@ namespace Android.InteropTests {
 			GetXACallObjectMethodAndDeleteLocalRefTimings (out xaCallObjectMethodTime, out xaDeleteLocalRefTime);
 
 			TimeSpan callVirtualObjectMethodTiming, disposeTiming, safeCallTime, safeDelTime, unsafeCallTime, unsafeDelTime;
-			GetJICallObjectMethodAndDeleteLocalRefTimings (out callVirtualObjectMethodTiming, out disposeTiming, out safeCallTime, out safeDelTime, out unsafeCallTime, out unsafeDelTime);
+			TimeSpan pinvokeCallTime, pinvokeDelTime;
+			GetJICallObjectMethodAndDeleteLocalRefTimings (
+					out callVirtualObjectMethodTiming, out disposeTiming,
+					out safeCallTime, out safeDelTime,
+					out unsafeCallTime, out unsafeDelTime,
+					out pinvokeCallTime, out pinvokeDelTime);
 
 			Console.WriteLine ("# \"Full\" Invocations: JNIEnv::CallObjectMethod() + JNIEnv::DeleteLocalRef() for {0} iterations", Unified_ToString_Iterations);
 			Console.WriteLine ("           Java.Interop Object.toString() Timing: {0}; {1,12} ms/iteration                                -- ~{2}x",
@@ -218,6 +248,10 @@ namespace Android.InteropTests {
 					safeCallTime,
 					safeCallTime.TotalMilliseconds / MaxLocalRefs,
 					safeCallTime.TotalMilliseconds / unsafeCallTime.TotalMilliseconds);
+			Console.WriteLine ("         Java.Interop P/Invoke safeCall() Timing: {0}; {1,12} ms/SafeHandle JNIEnv::CallObjectMethodA()   -- ~{2}x",
+					pinvokeCallTime,
+					pinvokeCallTime.TotalMilliseconds / MaxLocalRefs,
+					pinvokeCallTime.TotalMilliseconds / unsafeCallTime.TotalMilliseconds);
 			Console.WriteLine ("                Java.Interop unsafeCall() Timing: {0}; {1,12} ms/IntPtr JNIEnv::CallObjectMethodA()",
 					unsafeCallTime,
 					unsafeCallTime.TotalMilliseconds / MaxLocalRefs);
@@ -226,6 +260,10 @@ namespace Android.InteropTests {
 					safeDelTime,
 					safeDelTime.TotalMilliseconds / MaxLocalRefs,
 					safeDelTime.TotalMilliseconds / unsafeDelTime.TotalMilliseconds);
+			Console.WriteLine ("          Java.Interop P/Invoke safeDel() Timing: {0}; {1,12} ms/SafeHandle JNIEnv::DeleteLocalRef()      -- ~{2}x",
+					pinvokeDelTime,
+					pinvokeDelTime.TotalMilliseconds / MaxLocalRefs,
+					pinvokeDelTime.TotalMilliseconds / unsafeDelTime.TotalMilliseconds);
 			Console.WriteLine ("                 Java.Interop unsafeDel() Timing: {0}; {1,12} ms/IntPtr JNIEnv::DeleteLocalRef",
 					unsafeDelTime,
 					unsafeDelTime.TotalMilliseconds / MaxLocalRefs);

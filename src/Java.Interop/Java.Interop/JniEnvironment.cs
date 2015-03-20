@@ -29,12 +29,6 @@ namespace Java.Interop {
 			return false;
 		}
 
-		internal unsafe JniEnvironmentInvoker CreateInvoker ()
-		{
-			IntPtr p = Marshal.ReadIntPtr (handle);
-			return new JniEnvironmentInvoker ((JniNativeInterfaceStruct*) p);
-		}
-
 		public override string ToString ()
 		{
 			return string.Format ("{0}(0x{1})", GetType ().FullName, handle.ToString ("x"));
@@ -58,7 +52,6 @@ namespace Java.Interop {
 		{
 			handle  = safeHandle;
 			vm      = javaVM;
-			Invoker = SafeHandle.CreateInvoker ();
 
 			previous    = current;
 			current     = this;
@@ -82,8 +75,6 @@ namespace Java.Interop {
 			return new JniEnvironmentSafeHandle (jniEnvironmentHandle);
 		}
 
-		internal JniEnvironmentInvoker Invoker;
-
 		public JniEnvironmentSafeHandle SafeHandle  {
 			get {return handle ?? RootEnvironment.SafeHandle;}
 		}
@@ -94,7 +85,7 @@ namespace Java.Interop {
 					return vm;
 
 				JavaVMSafeHandle vmh;
-				int r = Invoker.GetJavaVM (SafeHandle, out vmh);
+				int r = Handles.JavaInterop_GetJavaVM (SafeHandle, out vmh);
 				if (r < 0)
 					throw new InvalidOperationException ("JNIEnv::GetJavaVM() returned: " + r);
 

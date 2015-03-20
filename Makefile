@@ -1,6 +1,7 @@
 CONFIGURATION = Debug
 
 DEPENDENCIES = \
+	bin/$(CONFIGURATION)/libJavaInterop.dylib   \
 	bin/$(CONFIGURATION)/libNativeTiming.dylib
 
 TESTS = \
@@ -19,6 +20,14 @@ all: $(DEPENDENCIES) $(TESTS)
 clean:
 	xbuild /t:Clean
 	rm -Rf bin/$(CONFIGURATION)
+
+bin/$(CONFIGURATION)/libJavaInterop.dylib: src/Java.Interop/JniEnvironment.g.c
+	gcc -g -shared -o $@ $< -m32 -I /System/Library/Frameworks/JavaVM.framework/Headers
+	touch $@
+
+src/Java.Interop/JniEnvironment.g.c: $(wildcard tools/jnienv-gen/*.cs)
+	xbuild
+	touch $@
 
 bin/$(CONFIGURATION)/libNativeTiming.dylib: tests/NativeTiming/timing.c
 	mkdir -p `dirname "$@"`

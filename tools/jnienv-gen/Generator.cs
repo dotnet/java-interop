@@ -15,13 +15,17 @@ namespace Xamarin.Java.Interop
 
 	partial class Generator
 	{
+		static string jnienv_g_c;
 		static string jnienv_g_cs;
 
 		public static int Main (string [] args)
 		{
+			jnienv_g_c  = "JniEnvironment.g.c";
 			jnienv_g_cs = "JniEnvironment.g.cs";
 			if (args.Length > 0)
 				jnienv_g_cs = args [0];
+			if (args.Length > 1)
+				jnienv_g_c  = args [1];
 			try {
 				using (TextWriter w = new StringWriter ()) {
 					w.NewLine = "\n";
@@ -29,6 +33,13 @@ namespace Xamarin.Java.Interop
 					string content = w.ToString ();
 					if (!File.Exists (jnienv_g_cs) || !string.Equals (content, File.ReadAllText (jnienv_g_cs)))
 						File.WriteAllText (jnienv_g_cs, content);
+				}
+				using (TextWriter w = new StringWriter ()) {
+					w.NewLine = "\n";
+					GenerateNativeLibSource (w);
+					string content = w.ToString ();
+					if (!File.Exists (jnienv_g_c) || !string.Equals (content, File.ReadAllText (jnienv_g_c)))
+						File.WriteAllText (jnienv_g_c, content);
 				}
 				return 0;
 			} catch (Exception ex) {
@@ -60,125 +71,13 @@ namespace Xamarin.Java.Interop
 			o.WriteLine ();
 			o.WriteLine ("namespace Java.Interop {");
 			o.WriteLine ();
-			GenerateDelegates (o);
-			o.WriteLine ();
 			GenerateTypes (o);
-			o.WriteLine ();
-			GenerateJniNativeInterface (o);
-			o.WriteLine ();
-			GenerateJniNativeInterfaceInvoker (o);
-			// GenerateJniNativeInterfaceInvoker2 (o);
 			o.WriteLine ("}");
-		}
-		
-		static void GenerateDelegates (TextWriter o)
-		{
-			foreach (var e in JNIEnvEntries) {
-				CreateDelegate (o, e);
-			}
-		}
-
-		static void GenerateJniNativeInterface (TextWriter o)
-		{
-			o.WriteLine ("\t[StructLayout (LayoutKind.Sequential)]");
-			o.WriteLine ("\tpartial struct JniNativeInterfaceStruct {");
-			o.WriteLine ();
-
-			int maxName = JNIEnvEntries.Max (e => e.Name.Length);
-
-			o.WriteLine ("#pragma warning disable 0649	// Field is assigned to, and will always have its default value `null`; ignore as it'll be set in native code.");
-			o.WriteLine ("#pragma warning disable 0169	// Field never used; ignore since these fields make the structure have the right layout.");
-
-			for (int i = 0; i < 4; i++)
-				o.WriteLine ("\t\tprivate IntPtr  reserved{0};                      // void*", i);
-
-			foreach (var e in JNIEnvEntries) {
-				o.WriteLine ("\t\tpublic  IntPtr  {0};{1}  // {2}", e.Name, new string (' ', maxName - e.Name.Length), e.Prototype);
-			}
-			o.WriteLine ("#pragma warning restore 0169");
-			o.WriteLine ("#pragma warning restore 0649");
-			o.WriteLine ("\t}");
 		}
 
 		static string Initialize (JniFunction e, string prefix)
 		{
 			return string.Format ("{2}{0} = ({1}) Marshal.GetDelegateForFunctionPointer (env.{0}, typeof ({1}));", e.Name, e.Delegate, prefix);
-		}
-
-		static void GenerateJniNativeInterfaceInvoker (TextWriter o)
-		{
-			o.WriteLine ("\tpartial class JniEnvironmentInvoker {");
-			o.WriteLine ();
-			o.WriteLine ("\t\tinternal JniNativeInterfaceStruct env;");
-			o.WriteLine ();
-			o.WriteLine ("\t\tpublic unsafe JniEnvironmentInvoker (JniNativeInterfaceStruct* p)");
-			o.WriteLine ("\t\t{");
-			o.WriteLine ("\t\t\tenv = *p;");
-
-			foreach (var e in JNIEnvEntries) {
-				if (e.Delegate == null)
-					continue;
-				if (!e.Prebind)
-					continue;
-				o.WriteLine ("\t\t\t{0}", Initialize (e, ""));
-			}
-
-			o.WriteLine ("\t\t}");
-			o.WriteLine ();
-
-			foreach (var e in JNIEnvEntries) {
-				if (e.Delegate == null)
-					continue;
-				o.WriteLine ();
-				if (e.Prebind)
-					o.WriteLine ("\t\tpublic readonly {0} {1};\n", e.Delegate, e.Name);
-				else {
-					o.WriteLine ("\t\t{0} _{1};", e.Delegate, e.Name);
-					o.WriteLine ("\t\tpublic {0} {1} {{", e.Delegate, e.Name);
-					o.WriteLine ("\t\t\tget {");
-					o.WriteLine ("\t\t\t\tif (_{0} == null)\n\t\t\t\t\t{1}", e.Name, Initialize (e, "_"));
-					o.WriteLine ("\t\t\t\treturn _{0};\n\t\t\t}}", e.Name);
-					o.WriteLine ("\t\t}");
-				}
-			}
-
-			o.WriteLine ("\t}");
-		}
-
-
-		static HashSet<string> created_delegates = new HashSet<string> ();
-
-		static void CreateDelegate (TextWriter o, JniFunction entry)
-		{
-			StringBuilder builder = new StringBuilder ();
-			bool has_char_array = false;
-
-			string name = entry.GetDelegateTypeName (entry.Name);
-			if (name == null)
-				return;
-
-			builder.AppendFormat ("\tdelegate {0} {1} (JniEnvironmentSafeHandle env", entry.GetReturnType (entry.Name), name);
-			for (int i = 0; i < entry.Parameters.Length; i++) {
-				if (i >= 0) {
-					builder.Append (", ");
-					builder.AppendFormat ("{0} {1}", entry.Parameters [i].Type.ManagedType, entry.Parameters [i].Name);
-				} 
-				
-				if (entry.Parameters [i].Type.ManagedType == "va_list")
-					return;
-				if (entry.Parameters [i].Type.ManagedType == "char[]")
-					has_char_array = true;
-			}
-			builder.Append (");");
-
-			entry.Delegate = name;
-			if (created_delegates.Contains (name))
-				return;
-
-			created_delegates.Add (name);
-			if (entry.Name == "NewString" || has_char_array)
-				o.WriteLine ("\t[UnmanagedFunctionPointerAttribute (CallingConvention.Cdecl, CharSet=CharSet.Unicode)]");
-			o.WriteLine (builder.ToString ());
 		}
 
 		static void GenerateTypes (TextWriter o)
@@ -191,6 +90,8 @@ namespace Xamarin.Java.Interop
 				{ "Types",      "public" },
 			};
 			o.WriteLine ("\tpartial class JniEnvironment {");
+			o.WriteLine ();
+			o.WriteLine ("\tconst string JavaInteropLib = \"JavaInterop\";");
 			foreach (var t in JNIEnvEntries
 					.Select (e => e.DeclaringType ?? "JniEnvironment")
 					.Distinct ()
@@ -216,6 +117,14 @@ namespace Xamarin.Java.Interop
 					continue;
 
 				o.WriteLine ();
+				o.WriteLine ("\t\t[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]");
+				o.WriteLine ("\t\tinternal static extern {0} JavaInterop_{1} (JniEnvironmentSafeHandle env{2}{3});",
+						entry.GetReturnType (entry.Name),
+						entry.Name,
+						entry.Parameters.Length != 0 ? ", " : "",
+						string.Join (", ", entry.Parameters.Select (p => string.Format ("{0} {1}", p.Type.ManagedType, Escape (p.Name)))));
+
+				o.WriteLine ();
 				o.Write ("\t\t{2} static {0} {1} (", entry.GetReturnType(entry.Name), entry.ApiName, entry.Visibility);
 				switch (entry.ApiName) {
 				case "NewArray":
@@ -224,7 +133,7 @@ namespace Xamarin.Java.Interop
 					o.WriteLine ("\t\t{");
 					o.WriteLine ("\t\t\tif (array == null)");
 					o.WriteLine ("\t\t\t\treturn null;");
-					o.WriteLine ("\t\t\tvar result = JniEnvironment.Current.Invoker.{0} (JniEnvironment.Current.SafeHandle, array.Length);", entry.Name);
+					o.WriteLine ("\t\t\tvar result = JavaInterop_{0} (JniEnvironment.Current.SafeHandle, array.Length);", entry.Name);
 					RaiseException (o, entry);
 					LogHandleCreation (o, entry, "result", "\t\t\t");
 					o.WriteLine ("\t\t\tCopyArray (array, result);");
@@ -236,13 +145,13 @@ namespace Xamarin.Java.Interop
 						o.WriteLine ("\t\t{");
 						o.WriteLine ("\t\t\tif (src == null)");
 						o.WriteLine ("\t\t\t\treturn;");
-						o.WriteLine ("\t\t\tJniEnvironment.Current.Invoker.{0} (JniEnvironment.Current.SafeHandle, src, 0, dest.Length, dest);", entry.Name);
+						o.WriteLine ("\t\t\tJavaInterop_{0} (JniEnvironment.Current.SafeHandle, src, 0, dest.Length, dest);", entry.Name);
 					} else {
 						o.WriteLine ("{0} src, JniReferenceSafeHandle dest)", entry.Parameters [3].Type.ManagedType);
 						o.WriteLine ("\t\t{");
 						o.WriteLine ("\t\t\tif (src == null)");
 						o.WriteLine ("\t\t\t\tthrow new ArgumentNullException (\"src\");");
-						o.WriteLine ("\t\t\tJniEnvironment.Current.Invoker.{0} (JniEnvironment.Current.SafeHandle, dest, 0, src.Length, src);", entry.Name);
+						o.WriteLine ("\t\t\tJavaInterop_{0} (JniEnvironment.Current.SafeHandle, dest, 0, src.Length, src);", entry.Name);
 					}
 					RaiseException (o, entry);
 					break;
@@ -261,7 +170,7 @@ namespace Xamarin.Java.Interop
 					o.Write ("\t\t\t");
 					if (!is_void) 
 						o.Write ("var tmp = ", entry.ReturnType.GetManagedType (isReturn:true));
-					o.Write ("JniEnvironment.Current.Invoker.{0} (JniEnvironment.Current.SafeHandle", entry.Name);
+					o.Write ("JavaInterop_{0} (JniEnvironment.Current.SafeHandle", entry.Name);
 					for (int i = 0; i < entry.Parameters.Length; i++) {
 						o.Write (", ");
 						if (entry.Parameters [i].Type.ManagedType.StartsWith ("out "))
@@ -365,6 +274,38 @@ namespace Xamarin.Java.Interop
 			o.WriteLine ();
 		}
 
+		static void GenerateNativeLibSource (TextWriter o)
+		{
+			o.WriteLine ("/*");
+			o.WriteLine (" * Generated file; DO NOT EDIT!");
+			o.WriteLine (" *");
+			o.WriteLine (" * To make changes, edit Java.Interop/tools/jnienv-gen and rerun");
+			o.WriteLine (" */");
+			o.WriteLine ();
+			o.WriteLine ("#include <jni.h>");
+			o.WriteLine ();
+			o.WriteLine ("typedef jmethodID jstaticmethodID;");
+			o.WriteLine ("typedef jfieldID  jstaticfieldID;");
+			foreach (JniFunction entry in JNIEnvEntries) {
+				if (entry.IsPrivate || entry.CustomWrapper)
+					continue;
+				o.WriteLine ();
+				o.WriteLine (entry.ReturnType.Type);
+				o.WriteLine ("JavaInterop_{0} (JNIEnv *env{1}{2})",
+						entry.Name,
+						entry.Parameters.Length != 0 ? ", " : "",
+						string.Join (", ", entry.Parameters.Select (p => string.Format ("{0} {1}", p.Type.Type, p.Name))));
+				o.WriteLine ("{");
+				o.Write ("\t");
+				if (entry.ReturnType.Type != "void")
+					o.Write ("return ");
+				o.WriteLine ("(*env)->{0} (env{1}{2});",
+						entry.Name,
+						entry.Parameters.Length != 0 ? ", " : "",
+						string.Join (", ", entry.Parameters.Select (p => p.Name)));
+				o.WriteLine ("}");
+			}
+		}
 	}
 
 	class JniFunction {

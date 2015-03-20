@@ -17,7 +17,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Throws        = true,
 				Prototype     = "jclass      (*DefineClass)(JNIEnv*, const char, jobject, const jbyte*, jsize);",
-				ReturnType    = new TypeInfo ("JniLocalReference"),
+				ReturnType    = new TypeInfo ("jclass", "JniLocalReference"),
 				Parameters    = new ParamInfo [] {new ParamInfo ("const char*", "name"), new ParamInfo ("jobject", "loader"), new ParamInfo ("const jbyte*", "buf"), new ParamInfo ("jsize", "bufLen")},
 			},
 			new JniFunction {
@@ -26,7 +26,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "public",
 				Throws        = true,
 				Prototype     = "jclass      (*FindClass)(JNIEnv*, const char*);",
-				ReturnType    = new TypeInfo ("JniLocalReference"),
+				ReturnType    = new TypeInfo ("jclass", "JniLocalReference"),
 				Parameters    = new ParamInfo [] {new ParamInfo ("const char*", "classname")},
 			},
 			new JniFunction {
@@ -59,7 +59,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "public",
 				Prototype     = "jclass      (*GetSuperclass)(JNIEnv*, jclass);",
 				ReturnType    = new TypeInfo ("jclass"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz")},
 			},
 			new JniFunction {
 				DeclaringType = "Types",
@@ -154,7 +154,7 @@ namespace Xamarin.Java.Interop
 				// Prebind       = true,
 				Prototype     = "jobject     (*NewGlobalRef)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Handles",
@@ -163,7 +163,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*DeleteGlobalRef)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("IntPtr", "jobject", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("void*", "globalRef", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Handles",
@@ -173,7 +173,7 @@ namespace Xamarin.Java.Interop
 				// Prebind       = true,
 				Prototype     = "void        (*DeleteLocalRef)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("IntPtr", "jobject", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("void*", "localRef", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Types",
@@ -190,7 +190,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jobject     (*NewLocalRef)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Handles",
@@ -208,7 +208,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*AllocObject)(JNIEnv*, jclass);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz")},
 			},
 			new JniFunction {
 				DeclaringType = "Activator",
@@ -217,7 +217,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*NewObject)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Activator",
@@ -226,7 +226,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*NewObjectV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Activator",
@@ -236,7 +236,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*NewObjectA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Types",
@@ -244,7 +244,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "public",
 				Prototype     = "jclass      (*GetObjectClass)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("jclass"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj")},
 			},
 			new JniFunction {
 				DeclaringType = "Types",
@@ -270,7 +270,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallObjectMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -289,7 +289,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jobject     (*CallObjectMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -298,7 +298,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallBooleanMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -317,35 +317,35 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallBooleanMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallSByteMethod",
+				Name          = "CallByteMethod",
 				Visibility    = "internal",
 				Throws        = true,
 				Prototype     = "jbyte       (*CallByteMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallSByteMethodV",
+				Name          = "CallByteMethodV",
 				Visibility    = "private",
 				Throws        = true,
 				Prototype     = "jbyte       (*CallByteMethodV)(JNIEnv*, jobject, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallSByteMethodA",
-				ApiName       = "CallSByteMethod",
+				Name          = "CallByteMethodA",
+				ApiName       = "CallByteMethod",
 				Visibility    = "internal",
 				Throws        = true,
 				Prototype     = "jbyte       (*CallByteMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -354,7 +354,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallCharMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -373,7 +373,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallCharMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -382,7 +382,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallShortMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -401,7 +401,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallShortMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -410,7 +410,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallIntMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -429,7 +429,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallIntMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -438,7 +438,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallLongMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -457,7 +457,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallLongMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -466,7 +466,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallFloatMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -485,7 +485,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallFloatMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -494,7 +494,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallDoubleMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -513,7 +513,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallDoubleMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -522,7 +522,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallVoidMethod)(JNIEnv*, jobject, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -541,7 +541,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallVoidMethodA)(JNIEnv*, jobject, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -550,7 +550,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallNonvirtualObjectMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -559,7 +559,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallNonvirtualObjectMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -569,7 +569,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallNonvirtualObjectMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -578,7 +578,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallNonvirtualBooleanMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -587,7 +587,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallNonvirtualBooleanMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -597,35 +597,35 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallNonvirtualBooleanMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallNonvirtualSByteMethod",
+				Name          = "CallNonvirtualByteMethod",
 				Visibility    = "internal",
 				Throws        = true,
 				Prototype     = "jbyte       (*CallNonvirtualByteMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallNonvirtualSByteMethodV",
+				Name          = "CallNonvirtualByteMethodV",
 				Visibility    = "private",
 				Throws        = true,
 				Prototype     = "jbyte       (*CallNonvirtualByteMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallNonvirtualSByteMethodA",
-				ApiName       = "CallNonvirtualSByteMethod",
+				Name          = "CallNonvirtualByteMethodA",
+				ApiName       = "CallNonvirtualByteMethod",
 				Visibility    = "internal",
 				Throws        = true,
-				Prototype     = "jbyte       (*CallNonvirtualSByteMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
+				Prototype     = "jbyte       (*CallNonvirtualByteMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -634,7 +634,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallNonvirtualCharMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -643,7 +643,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallNonvirtualCharMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -653,7 +653,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallNonvirtualCharMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -662,7 +662,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallNonvirtualShortMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -671,7 +671,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallNonvirtualShortMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -681,7 +681,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallNonvirtualShortMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -690,7 +690,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallNonvirtualIntMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -699,7 +699,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallNonvirtualIntMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -709,7 +709,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallNonvirtualIntMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -718,7 +718,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallNonvirtualLongMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -727,7 +727,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallNonvirtualLongMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -737,7 +737,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jlong       (*CallNonvirtualLongMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -746,7 +746,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallNonvirtualFloatMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -755,7 +755,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallNonvirtualFloatMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -765,7 +765,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallNonvirtualFloatMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -774,7 +774,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallNonvirtualDoubleMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -783,7 +783,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallNonvirtualDoubleMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -793,7 +793,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallNonvirtualDoubleMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -802,7 +802,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallNonvirtualVoidMethod)(JNIEnv*, jobject, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -811,7 +811,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallNonvirtualVoidMethodV)(JNIEnv*, jobject, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -821,7 +821,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallNonvirtualVoidMethodA)(JNIEnv*, jobject, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jclass", "jclass"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jclass", "clazz"), new ParamInfo ("jmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -830,7 +830,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfieldID    (*GetFieldID)(JNIEnv*, jclass, const char*, const char*);",
 				ReturnType    = new TypeInfo ("jfieldID"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("const char*", "name"), new ParamInfo ("const char*", "sig")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("const char*", "name"), new ParamInfo ("const char*", "sig")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -838,7 +838,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jobject     (*GetObjectField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -846,7 +846,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jboolean    (*GetBooleanField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -854,7 +854,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jbyte       (*GetByteField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -862,7 +862,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jchar       (*GetCharField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -870,7 +870,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jshort      (*GetShortField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -878,7 +878,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jint        (*GetIntField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -886,7 +886,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jlong       (*GetLongField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -894,7 +894,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jfloat      (*GetFloatField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -902,7 +902,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jdouble     (*GetDoubleField)(JNIEnv*, jobject, jfieldID);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -911,7 +911,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetObjectField)(JNIEnv*, jobject, jfieldID, jobject);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jobject", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jobject", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -920,7 +920,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetBooleanField)(JNIEnv*, jobject, jfieldID, jboolean);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jboolean", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jboolean", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -929,7 +929,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetByteField)(JNIEnv*, jobject, jfieldID, jbyte);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jbyte", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jbyte", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -938,7 +938,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetCharField)(JNIEnv*, jobject, jfieldID, jchar);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jchar", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jchar", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -947,7 +947,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetShortField)(JNIEnv*, jobject, jfieldID, jshort);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jshort", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jshort", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -956,7 +956,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetIntField)(JNIEnv*, jobject, jfieldID, jint);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jint", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jint", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -965,7 +965,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetLongField)(JNIEnv*, jobject, jfieldID, jlong);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jlong", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jlong", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -974,7 +974,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetFloatField)(JNIEnv*, jobject, jfieldID, jfloat);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jfloat", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jfloat", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -983,7 +983,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetDoubleField)(JNIEnv*, jobject, jfieldID, jdouble);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject"), new ParamInfo ("jfieldID", "jfieldID"), new ParamInfo ("jdouble", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj"), new ParamInfo ("jfieldID", "field"), new ParamInfo ("jdouble", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -992,7 +992,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jmethodID   (*GetStaticMethodID)(JNIEnv*, jclass, const char*, const char*);",
 				ReturnType    = new TypeInfo ("jstaticmethodID"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("const char*", "name"), new ParamInfo ("const char*", "sig")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("const char*", "name"), new ParamInfo ("const char*", "sig")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1001,7 +1001,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallStaticObjectMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1010,7 +1010,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallStaticObjectMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1020,7 +1020,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jobject     (*CallStaticObjectMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1029,7 +1029,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallStaticBooleanMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1038,7 +1038,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallStaticBooleanMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1048,35 +1048,35 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jboolean    (*CallStaticBooleanMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallStaticSByteMethod",
+				Name          = "CallStaticByteMethod",
 				Visibility    = "internal",
 				Throws        = true,
 				Prototype     = "jbyte       (*CallStaticByteMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallStaticSByteMethodV",
+				Name          = "CallStaticByteMethodV",
 				Visibility    = "private",
 				Throws        = true,
-				Prototype     = "jbyte       (*CallStaticSByteMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
+				Prototype     = "jbyte       (*CallStaticByteMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
-				Name          = "CallStaticSByteMethodA",
-				ApiName       = "CallStaticSByteMethod",
+				Name          = "CallStaticByteMethodA",
+				ApiName       = "CallStaticByteMethod",
 				Throws        = true,
 				Visibility    = "internal",
 				Prototype     = "jbyte       (*CallStaticByteMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1085,7 +1085,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallStaticCharMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1094,7 +1094,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallStaticCharMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1104,7 +1104,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jchar       (*CallStaticCharMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1113,7 +1113,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallStaticShortMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1122,7 +1122,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallStaticShortMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1132,7 +1132,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jshort      (*CallStaticShortMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1141,7 +1141,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallStaticIntMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1150,7 +1150,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallStaticIntMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1160,7 +1160,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jint        (*CallStaticIntMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1169,7 +1169,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallStaticLongMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1178,7 +1178,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallStaticLongMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1188,7 +1188,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jlong       (*CallStaticLongMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1197,7 +1197,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallStaticFloatMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1206,7 +1206,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallStaticFloatMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1216,7 +1216,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jfloat      (*CallStaticFloatMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1225,7 +1225,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallStaticDoubleMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1234,7 +1234,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallStaticDoubleMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1244,7 +1244,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jdouble     (*CallStaticDoubleMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1253,7 +1253,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallStaticVoidMethod)(JNIEnv*, jclass, jmethodID, ...);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1262,7 +1262,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallStaticVoidMethodV)(JNIEnv*, jclass, jmethodID, va_list);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("va_list", "args")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1272,7 +1272,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "void        (*CallStaticVoidMethodA)(JNIEnv*, jclass, jmethodID, jvalue*);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticmethodID", "jmethod"), new ParamInfo ("jvalue*", "parms", true)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1281,7 +1281,7 @@ namespace Xamarin.Java.Interop
 				Throws        = true,
 				Prototype     = "jstaticfieldID    (*GetStaticFieldID)(JNIEnv*, jclass, const char*, const char*);",
 				ReturnType    = new TypeInfo ("jstaticfieldID"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("const char*", "name"), new ParamInfo ("const char*", "sig")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("const char*", "name"), new ParamInfo ("const char*", "sig")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1289,7 +1289,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jobject     (*GetStaticObjectField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jobject"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1297,7 +1297,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jboolean    (*GetStaticBooleanField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jboolean"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1305,7 +1305,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jbyte       (*GetStaticByteField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jbyte"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1313,7 +1313,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jchar       (*GetStaticCharField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jchar"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1321,7 +1321,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jshort      (*GetStaticShortField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jshort"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1329,7 +1329,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jint        (*GetStaticIntField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jint"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1337,7 +1337,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jlong       (*GetStaticLongField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jlong"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1345,7 +1345,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jfloat      (*GetStaticFloatField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jfloat"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1353,7 +1353,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jdouble     (*GetStaticDoubleField)(JNIEnv*, jclass, jfieldID);",
 				ReturnType    = new TypeInfo ("jdouble"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID")},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1362,7 +1362,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticObjectField)(JNIEnv*, jclass, jfieldID, jobject);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jobject", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jobject", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1371,7 +1371,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticBooleanField)(JNIEnv*, jclass, jfieldID, jboolean);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jboolean", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jboolean", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1380,7 +1380,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticByteField)(JNIEnv*, jclass, jfieldID, jbyte);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jbyte", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jbyte", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1389,7 +1389,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticCharField)(JNIEnv*, jclass, jfieldID, jchar);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jchar", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jchar", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1398,7 +1398,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticShortField)(JNIEnv*, jclass, jfieldID, jshort);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jshort", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jshort", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1407,7 +1407,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticIntField)(JNIEnv*, jclass, jfieldID, jint);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jint", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jint", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1416,7 +1416,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticLongField)(JNIEnv*, jclass, jfieldID, jlong);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jlong", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jlong", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1425,7 +1425,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticFloatField)(JNIEnv*, jclass, jfieldID, jfloat);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jfloat", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jfloat", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Members",
@@ -1434,7 +1434,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*SetStaticDoubleField)(JNIEnv*, jclass, jfieldID, jdouble);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "jclass"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jdouble", "val", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jclass", "clazz"), new ParamInfo ("jstaticfieldID", "jfieldID"), new ParamInfo ("jdouble", "val", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1452,7 +1452,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jsize       (*GetStringLength)(JNIEnv*, jstring);",
 				ReturnType    = new TypeInfo ("jsize"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string")},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1460,7 +1460,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "const jchar* (*GetStringChars)(JNIEnv*, jstring, jboolean*);",
 				ReturnType    = new TypeInfo ("const jchar*", "IntPtr"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string"), new ParamInfo ("jboolean*", "isCopy", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string"), new ParamInfo ("jboolean*", "isCopy", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1468,7 +1468,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*ReleaseStringChars)(JNIEnv*, jstring, const jchar*);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string"), new ParamInfo (new TypeInfo ("const jchar*", "IntPtr"), "chars")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string"), new ParamInfo (new TypeInfo ("const jchar*", "IntPtr"), "chars")},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1485,7 +1485,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "private",
 				Prototype     = "jsize       (*GetStringUTFLength)(JNIEnv*, jstring);",
 				ReturnType    = new TypeInfo ("jsize"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string")},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1493,7 +1493,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "private",
 				Prototype     = "const char* (*GetStringUTFChars)(JNIEnv*, jstring, jboolean*);",
 				ReturnType    = new TypeInfo ("const char*"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string"), new ParamInfo ("jboolean*", "isCopy", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string"), new ParamInfo ("jboolean*", "isCopy", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1501,7 +1501,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "private",
 				Prototype     = "void        (*ReleaseStringUTFChars)(JNIEnv*, jstring, const char*);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string"), new ParamInfo ("const char*", "utf")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string"), new ParamInfo ("const char*", "utf")},
 			},
 			new JniFunction {
 				DeclaringType = "Arrays",
@@ -1958,7 +1958,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "private",
 				Prototype     = "const jchar* (*GetStringCritical)(JNIEnv*, jstring, jboolean*);",
 				ReturnType    = new TypeInfo ("const jchar*"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string"), new ParamInfo ("jboolean*", "isCopy", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string"), new ParamInfo ("jboolean*", "isCopy", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Strings",
@@ -1966,7 +1966,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "private",
 				Prototype     = "void        (*ReleaseStringCritical)(JNIEnv*, jstring, const jchar*);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "@string"), new ParamInfo ("const jchar*", "carray")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jstring", "string"), new ParamInfo ("const jchar*", "carray")},
 			},
 			new JniFunction {
 				DeclaringType = "Handles",
@@ -1974,7 +1974,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jweak       (*NewWeakGlobalRef)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("jweak"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Handles",
@@ -1983,7 +1983,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "void        (*DeleteWeakGlobalRef)(JNIEnv*, jweak);",
 				ReturnType    = new TypeInfo ("void"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("IntPtr", "jobject", Modifier.CanBeNull)},
+				Parameters    = new ParamInfo [] {new ParamInfo ("void*", "weakRef", Modifier.CanBeNull)},
 			},
 			new JniFunction {
 				DeclaringType = "Errors",
@@ -2024,7 +2024,7 @@ namespace Xamarin.Java.Interop
 				Visibility    = "internal",
 				Prototype     = "jobjectRefType (*GetObjectRefType)(JNIEnv*, jobject);",
 				ReturnType    = new TypeInfo ("jobjectRefType"),
-				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "jobject")},
+				Parameters    = new ParamInfo [] {new ParamInfo ("jobject", "obj")},
 			},
 		};
 	}

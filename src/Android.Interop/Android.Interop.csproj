@@ -57,6 +57,12 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <PropertyGroup>
+    <BuildDependsOn>
+      BuildNativeLibs;
+      $(BuildDependsOn)
+    </BuildDependsOn>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Java.Interop\Java.Interop.csproj">
       <Project>{94BD81F7-B06F-4295-9636-F8A3B6BDC762}</Project>
@@ -75,4 +81,13 @@
       <Link>java-interop.jar</Link>
     </AndroidEmbeddedJavaLibrary>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedNativeLibrary Include="libs\armeabi\libJavaInterop.so" />
+    <EmbeddedNativeLibrary Include="libs\armeabi-v7a\libJavaInterop.so" />
+    <EmbeddedNativeLibrary Include="libs\x86\libJavaInterop.so" />
+  </ItemGroup>
+  <Target Name="BuildNativeLibs" DependsOnTargets="_ResolveMonoAndroidSdks" Inputs="..\Java.Interop\JniEnvironment.g.c;jni\Android.mk" Outputs="@(AndroidNativeLibrary)">
+    <Error Text="Could not locate Android NDK." Condition="!Exists ('$(_AndroidNdkDirectory)\ndk-build')" />
+    <Exec Command="&quot;$(_AndroidNdkDirectory)\ndk-build&quot;" />
+  </Target>
 </Project>
