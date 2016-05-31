@@ -36,6 +36,35 @@
     <Externalconsole>True</Externalconsole>
     <DefineConstants>GENERATOR;USE_CECIL;JCW_ONLY_TYPE_NAMES</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'XADebug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>..\..\..\..\bin\Debug\lib\mandroid</OutputPath>
+    <DefineConstants>DEBUG;GENERATOR;USE_CECIL;JCW_ONLY_TYPE_NAMES</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="FACADES_PATH" value="\lib\xbuild-frameworks\MonoAndroid\v1.0\Facades" />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'XARelease|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>..\..\..\..\bin\Release\lib\mandroid</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>True</Externalconsole>
+    <DefineConstants>GENERATOR;USE_CECIL;JCW_ONLY_TYPE_NAMES</DefineConstants>
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="FACADES_PATH" value="\lib\xbuild-frameworks\MonoAndroid\v1.0\Facades" />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
