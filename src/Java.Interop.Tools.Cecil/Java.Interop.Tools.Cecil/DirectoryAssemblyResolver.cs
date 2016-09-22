@@ -93,7 +93,7 @@ namespace Java.Interop.Tools.Cecil {
 			return resolver_cache;
 		}
 
-		public virtual AssemblyDefinition Load (string fileName)
+		public virtual AssemblyDefinition Load (string fileName, ReaderParameters parameters = null)
 		{
 			if (!File.Exists (fileName))
 				return null;
@@ -104,7 +104,7 @@ namespace Java.Interop.Tools.Cecil {
 				return assembly;
 
 			try {
-				assembly  = ReadAssembly (fileName);
+				assembly  = ReadAssembly (fileName, parameters);
 			} catch (Exception e) {
 				Diagnostic.Error (9, e, "Error while loading assembly: {0}", fileName);
 			}
@@ -112,27 +112,31 @@ namespace Java.Interop.Tools.Cecil {
 			return assembly;
 		}
 
-		protected virtual AssemblyDefinition ReadAssembly (string file)
+		protected virtual AssemblyDefinition ReadAssembly (string file, ReaderParameters parameters)
 		{
-			var reader_parameters = new ReaderParameters () {
-				AssemblyResolver  = this,
-				ReadSymbols       = loadDebugSymbols && (File.Exists(file + ".mdb") || File.Exists(Path.ChangeExtension(file, ".pdb"))),
-			};
+			parameters = parameters ?? new ReaderParameters ();
+			parameters.AssemblyResolver = this;
+			parameters.ReadSymbols = loadDebugSymbols && (File.Exists(file + ".mdb") || File.Exists(Path.ChangeExtension(file, ".pdb")));
 			try {
-				return AssemblyDefinition.ReadAssembly (file, reader_parameters);
+				return AssemblyDefinition.ReadAssembly (file, parameters);
 			} catch (Exception ex) {
 				logWarnings (
 						"Failed to read '{0}' with debugging symbols. Retrying to load it without it. Error details are logged below.",
 						new [] { file });
 				logWarnings ("{0}", new [] { ex.ToString () });
-				reader_parameters.ReadSymbols = false;
-				return AssemblyDefinition.ReadAssembly (file, reader_parameters);
+				parameters.ReadSymbols = false;
+				return AssemblyDefinition.ReadAssembly (file, parameters);
 			}
 		}
 
 		public AssemblyDefinition GetAssembly (string fileName)
 		{
 			return Resolve (Path.GetFileNameWithoutExtension (fileName));
+		}
+
+		public AssemblyDefinition GetAssembly (string fileName, ReaderParameters parameters)
+		{
+			return Resolve (Path.GetFileNameWithoutExtension (fileName), parameters);
 		}
 
 		public AssemblyDefinition Resolve (string fullName)
@@ -187,7 +191,7 @@ namespace Java.Interop.Tools.Cecil {
 			AssemblyDefinition candidate = null;
 			foreach (var dir in SearchDirectories) {
 				if ((assemblyFile = SearchDirectory (name, dir)) != null) {
-					var loaded = Load (assemblyFile);
+					var loaded = Load (assemblyFile, parameters);
 					if (Array.Equals (loaded.Name.MetadataToken, reference.MetadataToken))
 						return loaded;
 					candidate = candidate ?? loaded;
