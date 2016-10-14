@@ -93,8 +93,6 @@ namespace Xamarin.Android.Tools.Bytecode {
 				return "public";
 			if ((accessFlags & ClassAccessFlags.Protected) != 0)
 				return "protected";
-			if ((accessFlags & ClassAccessFlags.Private) != 0)
-				return "private";
 			return "";
 		}
 
