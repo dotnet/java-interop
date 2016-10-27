@@ -17,7 +17,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 		Java6,
 		Java7,
 		Java8,
-		ApiXml
+		_ApiXml
 	}
 
 	public class ClassPath {
@@ -232,7 +232,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			case JavaDocletType.Java6: return new JavaDocScraper (src);
 			case JavaDocletType.Java7: return new Java7DocScraper (src);
 			case JavaDocletType.Java8: return new Java8DocScraper (src);
-			case JavaDocletType.ApiXml: return new ApiXmlDocScraper(src);
+			case JavaDocletType._ApiXml: return new ApiXmlDocScraper (src);
 			}
 		}
 

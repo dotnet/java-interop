@@ -39,7 +39,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				tempFile = Path.GetTempFileName();
 				File.WriteAllText(tempFile, LoadString("ParameterFixupApiXmlDocs.xml"));
 
-				AssertXmlDeclaration("Collection.class", "ParameterFixupFromDocs.xml", tempFile, Bytecode.JavaDocletType.ApiXml);
+				AssertXmlDeclaration("Collection.class", "ParameterFixupFromDocs.xml", tempFile, Bytecode.JavaDocletType._ApiXml);
 			}
 			catch (Exception ex)
 			{
