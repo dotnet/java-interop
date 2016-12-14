@@ -7,11 +7,18 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 	public partial class JavaApi
 	{
 		public event Action<IJavaInfoItem> NewExtensibleCreated;
+		public event Action<IJavaInfoItem> ExistingExtensibleFoundOnLoad;
 
 		public void OnNewExtensibleCreated (IJavaInfoItem item)
 		{
 			if (NewExtensibleCreated != null)
 				NewExtensibleCreated (item);
+		}
+
+		public void OnExistingExtensibleFoundOnLoad (IJavaInfoItem existingItem)
+		{
+			if (ExistingExtensibleFoundOnLoad != null)
+				ExistingExtensibleFoundOnLoad (existingItem);
 		}
 
 		Dictionary<IJavaInfoItem, IList<object>> extensions = new Dictionary<IJavaInfoItem, IList<object>> ();
