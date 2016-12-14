@@ -12,6 +12,8 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 			Packages = new List<JavaPackage> ();
 		}
 
+		partial void Initialize ();
+
 		public string ExtendedApiSource { get; set; }
 		public IList<JavaPackage> Packages { get; set; }
 	}
@@ -25,6 +27,8 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 			Types = new List<JavaType> ();
 		}
 		
+		partial void Initialize ();
+
 		public JavaApi Parent { get; private set; }
 
 		public string Name { get; set; }
@@ -45,7 +49,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 			
 			Implements = new List<JavaImplements> ();
 			Members = new List<JavaMember> ();
+
+			Initialize ();
 		}
+
+		partial void Initialize ();
 
 		public JavaPackage Parent { get; private set; }
 
@@ -81,8 +89,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		public JavaInterface (JavaPackage parent)
 			: base (parent)
 		{
+			Initialize ();
 		}
 		
+		partial void Initialize ();
+
 		// Content of this value is not stable.
 		public override string ToString ()
 		{
@@ -97,6 +108,8 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		{
 		}
 		
+		partial void Initialize ();
+
 		public string Extends { get; set; }
 		public string ExtendsGeneric { get; set; }
 		public string ExtendedJniExtends { get; set; }
@@ -109,7 +122,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 	}
 
 
-	class ManagedType : JavaType
+	partial class ManagedType : JavaType
 	{
 		static JavaPackage dummy_system_package, dummy_system_io_package, dummy_system_xml_package;
 		static JavaType system_object, system_exception, system_io_stream, system_xml_xmlreader;
@@ -139,7 +152,10 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 
 		public ManagedType (JavaPackage package) : base (package) 
 		{
+			Initialize ();
 		}
+
+		partial void Initialize ();
 	}
 
 
@@ -156,8 +172,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		protected JavaMember (JavaType parent)
 		{
 			Parent = parent;
+			Initialize ();
 		}
-		
+
+		partial void Initialize ();
+
 		public JavaType Parent { get; private set; }
 		
 		public string Deprecated { get; set; }
@@ -172,8 +191,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		public JavaField (JavaType parent)
 			: base (parent)
 		{
+			Initialize ();
 		}
 		
+		partial void Initialize ();
+
 		public bool Transient { get; set; }
 		public string Type { get; set; }
 		public string TypeGeneric { get; set; }
@@ -194,7 +216,10 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		{
 			Parameters = new List<JavaParameter> ();
 			Exceptions = new List<JavaException> ();
+			Initialize ();
 		}
+
+		partial void Initialize ();
 
 		public IList<JavaParameter> Parameters { get; set; }
 		public IList<JavaException> Exceptions { get; set; }
@@ -223,8 +248,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		public JavaConstructor (JavaType parent)
 			: base (parent)
 		{
+			Initialize ();
 		}
 		
+		partial void Initialize ();
+
 		// it was required in the original API XML, but removed in class-parsed...
 		public string Type { get; set; }
 		
@@ -242,6 +270,8 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		{
 		}
 		
+		partial void Initialize ();
+
 		public bool Abstract { get; set; }
 		public bool Native { get; set; }
 		public string Return { get; set; }

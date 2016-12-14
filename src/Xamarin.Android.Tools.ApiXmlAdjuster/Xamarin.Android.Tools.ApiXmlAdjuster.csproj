@@ -50,6 +50,7 @@
     <Compile Include="JavaTypeResolutionUtil.cs" />
     <Compile Include="JavaApiFixVisibilityExtensions.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="JavaApi.XmlModelExtensionObjects.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
