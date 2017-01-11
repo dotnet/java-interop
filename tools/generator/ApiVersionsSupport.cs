@@ -20,16 +20,25 @@ namespace MonoDroid.Generation
 			int ApiAvailableSince { get; set; }
 		}
 
-		public static void AssignApiLevels (IList<GenBase> gens, string apiVersionsXml, string currentApiLevelString)
+		static IEnumerable<GenBase> FlattenGens (IEnumerable<GenBase> gens)
 		{
-			int dummy;
-			int currentApiLevel = int.TryParse (currentApiLevelString, out dummy) ? dummy : int.MaxValue;
+			foreach (var g in gens) {
+				yield return g;
+				foreach (var nt in FlattenGens (g.NestedTypes))
+					yield return nt;
+			}
+		}
 
+		public static void AssignApiLevels (IList<GenBase> gens, string apiVersionsXml)
+		{
+			var flattenGens = FlattenGens (gens);
 			var versions = new ApiVersionsProvider ();
 			versions.Parse (apiVersionsXml);
 			foreach (var type in versions.Versions.Values) {
-				var matchedGens = gens.Where (g => g.JavaName == type.Name);
+				var matchedGens = flattenGens.Where (g => g.JavaName == type.Name);
 				if (!matchedGens.Any ())
+					// There are known missing types, and it's going to be too noisy to report missing ones here.
+					// That task should be done elsewhere.
 					continue;
 				foreach (var gen in matchedGens)
 					gen.ApiAvailableSince = type.Since;
