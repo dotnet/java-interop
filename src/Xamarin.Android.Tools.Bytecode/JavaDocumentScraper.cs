@@ -33,14 +33,6 @@ using System.Text.RegularExpressions;
 
 namespace Xamarin.Android.Tools.Bytecode
 {
-	enum JavaDocKind {
-		DroidDoc,
-		DroidDoc2,
-		Java6,
-		Java7,
-		Java8
-	}
-	
 	class DroidDocScraper : AndroidDocScraper
 	{
 		const String pattern_head_droiddoc = "<span class=\"sympad\"><a href=\".*";
