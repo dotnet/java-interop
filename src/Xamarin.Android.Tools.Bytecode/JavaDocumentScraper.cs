@@ -117,6 +117,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			: base (dir, pattern_head_javadoc, reset_pattern_head_javadoc, parameter_pair_splitter_javadoc, true, "\\-", "\\-", "\\-", null)
 		{
 			ShouldAlterArraySpec = true;
+			ShouldEliminateGenericArguments = true;
 		}
 	}
 
@@ -164,6 +165,7 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		protected bool ShouldEscapeBrackets { get; set; }
 		protected bool ShouldAlterArraySpec { get; set; }
+		protected bool ShouldEliminateGenericArguments { get; set; }
 
 		protected virtual IEnumerable<string> GetContentLines (string path)
 		{
@@ -195,7 +197,11 @@ namespace Xamarin.Android.Tools.Bytecode
 			for (int i = 0; i < ptypes.Length; i++) {
 				if (i != 0)
 					buffer.Append (param_sep);
-				buffer.Append (ptypes [i].Replace ('$', '.'));
+				var ptype = ptypes [i];
+				if (ShouldEliminateGenericArguments)
+					while (ptype.IndexOf ('<') > 0 && ptype.IndexOf ('>') > ptype.IndexOf ('<'))
+						ptype = ptype.Substring (0, ptype.IndexOf ('<')) + ptype.Substring (ptype.IndexOf ('>') + 1);
+				buffer.Append (ptype.Replace ('$', '.'));
 			}
 			if (ShouldEscapeBrackets)
 				buffer.Replace ("[", "\\[").Replace ("]", "\\]");
