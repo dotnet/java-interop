@@ -59,7 +59,7 @@ prepare-external: $(PACKAGES) $(NUNIT_CONSOLE)
 clean:
 	-$(MSBUILD) $(MSBUILD_FLAGS) /t:Clean
 	-rm -Rf bin/$(CONFIGURATION) bin/Build$(CONFIGURATION) bin/Test$(CONFIGURATION) bin/XAIntegration$(CONFIGURATION)
-	-rm src/Java.Runtime.Environment/Java.Runtime.Environment.dll.config
+	-rm -f src/Java.Runtime.Environment/Java.Runtime.Environment.dll.config
 
 include build-tools/scripts/mono.mk
 include build-tools/scripts/jdk.mk
