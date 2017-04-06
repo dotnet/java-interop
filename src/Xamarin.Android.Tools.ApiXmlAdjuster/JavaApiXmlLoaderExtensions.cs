@@ -32,10 +32,10 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "package")
 						throw XmlUtil.UnexpectedElementOrContent ("api", reader, "package");
 					var pkg = api.Packages.FirstOrDefault (p => p.Name == reader.GetAttribute ("name"));
-					if (pkg == null) {
-						pkg = new JavaPackage (api);
-						api.Packages.Add (pkg);
-					}
+					if (pkg != null)
+						api.OnExistingExtensibleFoundOnLoad (pkg);
+					else
+						api.Packages.Add (pkg = new JavaPackage (api));
 					pkg.Load (reader, isReferenceOnly);
 				} while (true);
 	
@@ -58,20 +58,36 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 				reader.Read ();
 				do {
 					reader.MoveToContent ();
+					Func<JavaType> create = null;
 					if (reader.NodeType == XmlNodeType.EndElement)
 						break; // </package>
 					if (reader.NodeType != XmlNodeType.Element)
 						throw XmlUtil.UnexpectedElementOrContent ("package", reader, "class", "interface");
-					if (reader.LocalName == "class") {
-						var kls = new JavaClass (package) { IsReferenceOnly = isReferenceOnly };
-						kls.Load (reader);
-						package.Types.Add (kls);
-					} else if (reader.LocalName == "interface") {
-						var iface = new JavaInterface (package) { IsReferenceOnly = isReferenceOnly };
-						iface.Load (reader);
-						package.Types.Add (iface);
-					} else
+					
+					var type = package.Types.FirstOrDefault (arg => arg.Name == reader.GetAttribute ("name"));
+
+					if (reader.LocalName == "class")
+						create = () => type = new JavaClass (package) { IsReferenceOnly = isReferenceOnly };
+					else if (reader.LocalName == "interface")
+						create = () => type = new JavaInterface (package) { IsReferenceOnly = isReferenceOnly };
+					else
 						throw XmlUtil.UnexpectedElementOrContent ("package", reader, "class", "interface");
+
+					if (type != null)
+						package.Parent.OnExistingExtensibleFoundOnLoad (type);
+					else
+						package.Types.Add (type = create ());
+					if (type is JavaClass) {
+						if (reader.LocalName != "class")
+							reader.Skip ();
+						else
+							((JavaClass) type).Load (reader);
+					} else {
+						if (reader.LocalName != "interface")
+							reader.Skip ();
+						else
+							((JavaInterface) type).Load (reader);
+					}
 				} while (true);
 	
 				XmlUtil.VerifyEndElement (reader, "package");
