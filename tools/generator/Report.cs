@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 
 namespace MonoDroid.Generation
@@ -46,13 +47,11 @@ namespace MonoDroid.Generation
 			Error (errorCode, innerException, null, -1, -1, format, args);
 		}
 
-		public static void Error (int errorCode, Exception innerException, XPathNavigator nav, string format, params object [] args)
+		public static void Error (int errorCode, Exception innerException, XNode node, string format, params object [] args)
 		{
-			var hn = nav as IHasXmlNode;
-			var baseUri = hn != null ? hn.GetNode ().OwnerDocument.BaseURI : nav.BaseURI;
 			Uri uri;
-			string file = Uri.TryCreate (baseUri, UriKind.Absolute, out uri) ? uri.LocalPath : null;
-			IXmlLineInfo li = nav as IXmlLineInfo;
+			string file = Uri.TryCreate (node.BaseUri, UriKind.Absolute, out uri) ? uri.LocalPath : null;
+			IXmlLineInfo li = node as IXmlLineInfo;
 			li = li != null && li.HasLineInfo () ? li : null;
 			Error (errorCode, innerException, file, li != null ? li.LineNumber : -1, li != null ? li.LinePosition : -1, format, args);
 		}
@@ -67,13 +66,11 @@ namespace MonoDroid.Generation
 			Warning (verbosity, errorCode, null, format, args);
 		}
 
-		public static void Warning (int verbosity, int errorCode, Exception innerException, XPathNavigator nav, string format, params object [] args)
+		public static void Warning (int verbosity, int errorCode, Exception innerException, XNode node, string format, params object [] args)
 		{
-			var hn = nav as IHasXmlNode;
-			var baseUri = hn != null ? hn.GetNode ().OwnerDocument.BaseURI : nav.BaseURI;
 			Uri uri;
-			string file = Uri.TryCreate (baseUri, UriKind.Absolute, out uri) ? uri.LocalPath : null;
-			IXmlLineInfo li = nav as IXmlLineInfo;
+			string file = Uri.TryCreate (node.BaseUri, UriKind.Absolute, out uri) ? uri.LocalPath : null;
+			IXmlLineInfo li = node as IXmlLineInfo;
 			li = li != null && li.HasLineInfo () ? li : null;
 			Warning (verbosity, errorCode, innerException, file, li != null ? li.LineNumber : -1, li != null ? li.LinePosition : -1, format, args);
 		}
