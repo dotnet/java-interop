@@ -91,10 +91,10 @@ namespace MonoDroid.Generation
 							api_node.ParentNode.RemoveChild (api_node);
 						if (matches.Count == 0)
 							// BG8A00
-							Report.Warning (0, Report.WarningApiFixup + 0, "<remove-node path=\"{0}\"/> matched no nodes.", path);
+							Report.Warning (0, Report.WarningApiFixup + 0, null, metanav, "<remove-node path=\"{0}\"/> matched no nodes.", path);
 					} catch (XPathException e) {
 						// BG4A01
-						Report.Error (Report.ErrorApiFixup + 1, e, "Invalid XPath specification: {0}", path);
+						Report.Error (Report.ErrorApiFixup + 1, e, metanav, "Invalid XPath specification: {0}", path);
 					}
 					break;
 				case "add-node":
@@ -109,10 +109,10 @@ namespace MonoDroid.Generation
 						}
 						if (!matched)
 							// BG8A01
-							Report.Warning (0, Report.WarningApiFixup + 1, "<add-node path=\"{0}\"/> matched no nodes.", path);
+							Report.Warning (0, Report.WarningApiFixup + 1, null, metanav, "<add-node path=\"{0}\"/> matched no nodes.", path);
 					} catch (XPathException e) {
 						// BG4A02
-						Report.Error (Report.ErrorApiFixup + 2, e, "Invalid XPath specification: {0}", path);
+						Report.Error (Report.ErrorApiFixup + 2, e, metanav, "Invalid XPath specification: {0}", path);
 					}
 					break;
 				case "change-node":
@@ -135,10 +135,10 @@ namespace MonoDroid.Generation
 						
 						if (!matched)
 							// BG8A03
-							Report.Warning (0, Report.WarningApiFixup + 3, "<change-node-type path=\"{0}\"/> matched no nodes.", path);
+							Report.Warning (0, Report.WarningApiFixup + 3, null, metanav, "<change-node-type path=\"{0}\"/> matched no nodes.", path);
 					} catch (XPathException e) {
 						// BG4A03
-						Report.Error (Report.ErrorApiFixup + 3, e, "Invalid XPath specification: {0}", path);
+						Report.Error (Report.ErrorApiFixup + 3, e, metanav, "Invalid XPath specification: {0}", path);
 					}
 					break;
 				case "attr":
@@ -146,7 +146,7 @@ namespace MonoDroid.Generation
 						string attr_name = metanav.XGetAttribute ("name", "");
 						if (string.IsNullOrEmpty (attr_name))
 							// BG4A07
-							Report.Error (Report.ErrorApiFixup + 7, "Target attribute name is not specified for path: {0}", path);
+							Report.Error (Report.ErrorApiFixup + 7, null, metanav, "Target attribute name is not specified for path: {0}", path);
 						var nodes = attr_last_cache != null ?
 					            (IEnumerable<XPathNavigator>) new XPathNavigator [] {attr_last_cache} :
 								api_nav.Select (path).OfType<XPathNavigator> ();
@@ -159,12 +159,12 @@ namespace MonoDroid.Generation
 						}
 						if (attr_matched == 0)
 							// BG8A04
-							Report.Warning (0, Report.WarningApiFixup + 4, "<attr path=\"{0}\"/> matched no nodes.", path);
+							Report.Warning (0, Report.WarningApiFixup + 4, null, metanav, "<attr path=\"{0}\"/> matched no nodes.", path);
 						if (attr_matched != 1)
 							attr_last_cache = null;
 					} catch (XPathException e) {
 						// BG4A04
-						Report.Error (Report.ErrorApiFixup + 4, e, "Invalid XPath specification: {0}", path);
+						Report.Error (Report.ErrorApiFixup + 4, e, metanav, "Invalid XPath specification: {0}", path);
 					}
 					break;
 				case "move-node":
@@ -185,10 +185,10 @@ namespace MonoDroid.Generation
 						}
 						if (!matched)
 							// BG8A05
-							Report.Warning (0, Report.WarningApiFixup + 5, "<move-node path=\"{0}\"/> matched no nodes.", path);
+							Report.Warning (0, Report.WarningApiFixup + 5, null, metanav, "<move-node path=\"{0}\"/> matched no nodes.", path);
 					} catch (XPathException e) {
 						// BG4A05
-						Report.Error (Report.ErrorApiFixup + 5, e, "Invalid XPath specification: {0}", path);
+						Report.Error (Report.ErrorApiFixup + 5, e, metanav, "Invalid XPath specification: {0}", path);
 					}
 					break;
 				case "remove-attr":
@@ -206,10 +206,10 @@ namespace MonoDroid.Generation
 						
 						if (!matched)
 							// BG8A06
-							Report.Warning (0, Report.WarningApiFixup + 6, "<remove-attr path=\"{0}\"/> matched no nodes.", path);
+							Report.Warning (0, Report.WarningApiFixup + 6, null, metanav, "<remove-attr path=\"{0}\"/> matched no nodes.", path);
 					} catch (XPathException e) {
 						// BG4A06
-						Report.Error (Report.ErrorApiFixup + 6, e, "Invalid XPath specification: {0}", path);
+						Report.Error (Report.ErrorApiFixup + 6, e, metanav, "Invalid XPath specification: {0}", path);
 					}
 					break;
 				}
