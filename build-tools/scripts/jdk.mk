@@ -91,8 +91,8 @@ endif   # Darwin
 
 ifeq ($(OS),Linux)
 
-# This is for Ubuntu and derivatives (possibly Debian too)
-_DEFAULT_LINUX_JAVA_ROOT          = /usr/lib/jvm/default-java
+# This is for all linux distributions with which and java installed
+_DEFAULT_LINUX_JAVA_ROOT          = $(which java | sed 's/bin\/\java//g')
 _DEFAULT_LINUX_JAVA_INCLUDE_DIRS  = $(_DEFAULT_LINUX_JAVA_ROOT)/include/
 _LINUX_JAVA_FALLBACK_DIRS         = /usr/lib/jvm/java*
 _LINUX_JAVA_JNI_INCLUDE_DIR       = include
