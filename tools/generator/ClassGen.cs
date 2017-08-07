@@ -12,6 +12,7 @@ using Xamarin.Android.Binder;
 using Xamarin.Android.Tools;
 
 using MonoDroid.Utils;
+using System.Xml.Linq;
 
 namespace MonoDroid.Generation {
 #if USE_CECIL
@@ -75,26 +76,23 @@ namespace MonoDroid.Generation {
 		bool is_final;
 		string base_type;
 
-		public XmlClassGen (XmlElement pkg, XmlElement elem)
+		public XmlClassGen (XElement pkg, XElement elem)
 			: base (new XmlGenBaseSupport (pkg, elem))//FIXME: should not be xml specific
 		{
 			is_abstract = elem.XGetAttribute ("abstract") == "true";
 			is_final = elem.XGetAttribute ("final") == "true";
 			base_type = elem.XGetAttribute ("extends");
-			foreach (XmlNode node in elem.ChildNodes) {
-				XmlElement child = node as XmlElement;
-				if (child == null)
-					continue;
-				switch (node.Name) {
+			foreach (var child in elem.Elements ()) {
+				switch (child.Name.LocalName) {
 				case "implements":
 					string iname = child.XGetAttribute ("name-generic-aware");
 					iname = iname.Length > 0 ? iname : child.XGetAttribute ("name");
 					AddInterface (iname);
 					break;
 				case "method":
-					var synthetic = child.GetAttribute ("synthetic") == "true";
-					var finalizer = child.GetAttribute ("name") == "finalize" &&
-						child.GetAttribute ("jni-signature") == "()V";
+					var synthetic = child.XGetAttribute ("synthetic") == "true";
+					var finalizer = child.XGetAttribute ("name") == "finalize" &&
+						child.XGetAttribute ("jni-signature") == "()V";
 					if (!(synthetic || finalizer))
 						AddMethod (new XmlMethod (this, child));
 					break;
@@ -107,7 +105,7 @@ namespace MonoDroid.Generation {
 				case "typeParameters":
 					break; // handled at GenBaseSupport
 				default:
-					Report.Warning (0, Report.WarningClassGen + 1, "unexpected class child {0}.", node.Name);
+					Report.Warning (0, Report.WarningClassGen + 1, "unexpected class child {0}.", child.Name);
 					break;
 				}
 			}
@@ -311,9 +309,7 @@ namespace MonoDroid.Generation {
 		void GenerateAbstractMembers (StreamWriter sw, string indent, CodeGenerationOptions opt)
 		{
 			foreach (InterfaceGen gen in GetAllDerivedInterfaces ())
-				// FIXME: this is an ugly workaround for bug in generator that generates extraneous member.
-				if (FullName != "Android.Views.Animations.BaseInterpolator" || gen.FullName != "Android.Views.Animations.IInterpolator")
-					gen.GenerateAbstractMembers (this, sw, indent, opt);
+				gen.GenerateAbstractMembers (this, sw, indent, opt);
 		}
 
 		void GenMethods (StreamWriter sw, string indent, CodeGenerationOptions opt)
@@ -337,6 +333,7 @@ namespace MonoDroid.Generation {
 					m.GenerateAbstractDeclaration (sw, indent, opt, null, this);
 				else
 					m.Generate (sw, indent, opt, this, true);
+				opt.ContextGeneratedMethods.Add (m);
 				m.IsVirtual = virt;
 			}
 
@@ -369,6 +366,8 @@ namespace MonoDroid.Generation {
 		public override void Generate (StreamWriter sw, string indent, CodeGenerationOptions opt, GenerationInfo gen_info)
 		{
 			opt.ContextTypes.Push (this);
+			opt.ContextGeneratedMethods = new List<Method> ();
+
 			gen_info.TypeRegistrations.Add (new KeyValuePair<string, string>(RawJniName, AssemblyQualifiedName));
 			bool is_enum = base_symbol != null && base_symbol.FullName == "Java.Lang.Enum";
 			if (is_enum)
@@ -494,6 +493,9 @@ namespace MonoDroid.Generation {
 				sw.WriteLine ();
 				GenerateInvoker (sw, indent, opt);
 			}
+
+			opt.ContextGeneratedMethods.Clear ();
+
 			opt.ContextTypes.Pop ();
 		}
 

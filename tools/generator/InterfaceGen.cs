@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using Mono.Cecil;
 
 using Xamarin.Android.Binder;
@@ -39,24 +40,20 @@ namespace MonoDroid.Generation {
 
 		string args_type;
 
-		public XmlInterfaceGen (XmlElement pkg, XmlElement elem) 
+		public XmlInterfaceGen (XElement pkg, XElement elem) 
 			: base (new InterfaceXmlGenBaseSupport (pkg, elem))
 		{
-			hasManagedName = elem.HasAttribute ("managedName");
+			hasManagedName = elem.Attribute ("managedName") != null;
 			args_type = elem.XGetAttribute ("argsType");
-			foreach (XmlNode node in elem.ChildNodes) {
-				XmlElement child = node as XmlElement;
-				if (child == null)
-					continue;
-
-				switch (node.Name) {
+			foreach (var child in elem.Elements ()) {
+				switch (child.Name.LocalName) {
 				case "implements":
 					string iname = child.XGetAttribute ("name-generic-aware");
 					iname = iname.Length > 0 ? iname : child.XGetAttribute ("name");
 					AddInterface (iname);
 					break;
 				case "method":
-					if (child.GetAttribute ("synthetic") != "true")
+					if (child.XGetAttribute ("synthetic") != "true")
 						AddMethod (new XmlMethod (this, child));
 					break;
 				case "field":
@@ -65,7 +62,7 @@ namespace MonoDroid.Generation {
 				case "typeParameters":
 					break; // handled at GenBaseSupport
 				default:
-					Report.Warning (0, Report.WarningInterfaceGen + 0, "unexpected interface child {0}.", node.Name);
+					Report.Warning (0, Report.WarningInterfaceGen + 0, "unexpected interface child {0}.", child);
 					break;
 				}
 			}
@@ -623,6 +620,8 @@ namespace MonoDroid.Generation {
 			foreach (Method m in Methods.Where (m => !m.IsInterfaceDefaultMethod && !m.IsStatic)) {
 				bool mapped = false;
 				string sig = m.GetSignature ();
+				if (opt.ContextGeneratedMethods.Any (_ => _.Name == m.Name && _.JniSignature == m.JniSignature))
+					continue;
 				for (var cls = gen; cls != null; cls = cls.BaseGen)
 					if (cls.ContainsMethod (m, false) || cls != gen && gen.ExplicitlyImplementedInterfaceMethods.Contains (sig)) {
 						mapped = true;
@@ -634,6 +633,7 @@ namespace MonoDroid.Generation {
 					m.GenerateExplicitInterfaceImplementation (sw, indent, opt, this);
 				else
 					m.GenerateAbstractDeclaration (sw, indent, opt, this, gen);
+				opt.ContextGeneratedMethods.Add (m); 
 			}
 			foreach (Property prop in Properties) {
 				if (gen.ContainsProperty (prop.Name, false))
