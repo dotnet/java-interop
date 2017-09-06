@@ -118,17 +118,18 @@ namespace Java.Interop.Tools.Diagnostics {
 	//					XA5204	Failed to strip the final binary. Please review the build log.
 	//			XA52xx	other tools
 	//					XA5205	Missing 'aapt' tool. Please install the Android SDK Build-tools package.
-	//					XA5206	{0}. Android resource directory {1} doesn't exist.
-	//					XA5207  {0}. Java library file {1} doesn't exist.
-	//					XA5208  Download failed. Please download {0} and put it to the {1} directory.
-	//					XA5209  Unzipping failed. Please download {0} and extract it to the {1} directory.
-	//					XA5210  {0}. Native library file {1} doesn't exist.
+	//					XA5206	{0}. (Details: Android resource directory {1} doesn't exist.)
+	//					XA5207	{0}. (Details: Java library file {1} doesn't exist.)
+	//					XA5208	Download failed. Please download {0} and copy it to {1}
+	//					XA5209	Unzipping failed while attempting to extract {0} into {1}{2}
+	//					XA5210	{0}. (Details: Native library file {1} doesn't exist.)
 	//					XA5211 Embedded wear app package name differs from handheld app package name ({0} != {1}).
 	//					XA5212 The Minimum Sdk Version ({0}) in AndroidManifest is invalid.
 	//					XA5213 Java.Lang.OutOfMemory Excption. Consider increasing the value of $(JavaMaximumHeapSize).
 	//					XA5214	Duplicate resource file.
 	//					XA5215	Duplicate "values" Resource found
 	//					XA5216	Duplicate Resource found for
+	//					XA5217	Expected file {0} does not exist after extracting {1}
 	//			XA53xx	linking
 	//					XA5303	Native linking warning: {0}
 	//			XA53xx	other tools
