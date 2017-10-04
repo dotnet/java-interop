@@ -242,11 +242,12 @@ namespace Xamarin.Android.Tools.Bytecode {
 				kind = JavaDocletType.Java8;
 
 			// Check to see if it's an api.xml formatted doc
-			buf = new char[buf.Length];
-			using (var reader = File.OpenText(path))
-				reader.ReadBlock(buf, 0, buf.Length);
-			var rawXML = new string(buf);
-			if (rawXML.Contains("<api>") && rawXML.Contains("<package"))
+			string rawXML = null;
+			using (var reader = File.OpenText (path)) {
+				int len = reader.ReadBlock (buf, 0, buf.Length);
+				rawXML = new string (buf, 0, len);
+			}
+			if (rawXML.Contains ("<api>") && rawXML.Contains ("<package"))
 				kind = JavaDocletType._ApiXml;
 
 			return kind;
