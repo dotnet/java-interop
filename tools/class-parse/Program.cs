@@ -23,6 +23,7 @@ namespace Xamarin.Android.Tools {
 			var  outputFile = (string) null;
 			string platform = null;
 			var  docsPaths  = new List<string> ();
+			var paramDescs = new List<string> ();
 			var p = new OptionSet () {
 				"usage: class-dump [-dump] FILES",
 				"",
@@ -38,6 +39,9 @@ namespace Xamarin.Android.Tools {
 				{ "docspath=",
 				  "Documentation {PATH} for parameter fixup",
 				  doc => docsPaths.Add (doc) },
+				{ "parameters-description=",
+				  "Parameter description file {PATH}",
+				  desc => paramDescs.Add (desc) },
 				{ "docstype=",
 				  "OBSOLETE: Previously used to specify a doc type (now auto detected).",
 				  t => docsType = t != null },
@@ -71,6 +75,7 @@ namespace Xamarin.Android.Tools {
 				ApiSource         = "class-parse",
 				AndroidFrameworkPlatform = platform,
 				DocumentationPaths  = docsPaths.Count == 0 ? null : docsPaths,
+				ParametersDescriptionFiles = paramDescs.Count == 0 ? null : paramDescs,
 				AutoRename = autorename
 			};
 			foreach (var file in files) {
