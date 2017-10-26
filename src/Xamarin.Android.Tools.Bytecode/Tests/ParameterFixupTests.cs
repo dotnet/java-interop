@@ -40,11 +40,8 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 				AssertXmlDeclaration ("Collection.class", "ParameterFixupFromDocs.xml", tempFile);
 			} finally {
-				try {
-					if (File.Exists (tempFile))
-						File.Delete (tempFile);
-				}
-				catch { }
+				if (File.Exists (tempFile))
+					File.Delete (tempFile);
 			}
 		}
 
@@ -68,11 +65,8 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 				Assert.AreEqual (JavaDocletType._ApiXml, AndroidDocScraper.GetDocletType (tempFile));
 			} finally {
-				try {
-					if (File.Exists (tempFile))
-						File.Delete (tempFile);
-				}
-				catch { }
+				if (File.Exists (tempFile))
+					File.Delete (tempFile);
 			}
 		}
 
