@@ -58,6 +58,48 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
 			}
 		}
+
+		[Test]
+		public void DocletType_ShouldDetectApiXml ()
+		{
+			string tempFile = null;
+
+			try {
+				tempFile = LoadToTempFile ("ParameterFixupApiXmlDocs.xml");
+
+				AssertDocletType (tempFile, Bytecode.JavaDocletType._ApiXml);
+			} catch (Exception ex) {
+				try {
+					if (File.Exists (tempFile))
+						File.Delete (tempFile);
+				}
+				catch { }
+
+				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
+			}
+		}
+
+		[Test]
+		public void DocletType_ShouldDetectDroidDocs ()
+		{
+			var androidSdkPath = Environment.GetEnvironmentVariable ("ANDROID_SDK_PATH");
+			if (string.IsNullOrEmpty (androidSdkPath)) {
+				Assert.Ignore("The `ANDROID_SDK_PATH` environment variable isn't set; " +
+						"cannot test importing parameter names from HTML. Skipping...");
+				return;
+			}
+
+			try {
+				var droidDocsPath = Path.Combine (androidSdkPath, "docs", "reference");
+
+				if (!Directory.Exists (droidDocsPath))
+					Assert.Fail("The Android SDK Documentation path `{0}` was not found.", droidDocsPath);
+				
+				AssertDocletType (droidDocsPath, Bytecode.JavaDocletType.DroidDoc2);
+			} catch (Exception ex) {
+				Assert.Fail("An unexpected exception was thrown : {0}", ex);
+			}
+		}
 	}
 }
 
