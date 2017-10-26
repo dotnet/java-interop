@@ -30,27 +30,22 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		}
 
 		[Test]
-		public void XmlDeclaration_FixedUpFromApiXmlDocumentation()
+		public void XmlDeclaration_FixedUpFromApiXmlDocumentation ()
 		{
 			string tempFile = null;
 
-			try
-			{
-				tempFile = Path.GetTempFileName();
-				File.WriteAllText(tempFile, LoadString("ParameterFixupApiXmlDocs.xml"));
+			try {
+				tempFile = LoadToTempFile ("ParameterFixupApiXmlDocs.xml");
 
-				AssertXmlDeclaration("Collection.class", "ParameterFixupFromDocs.xml", tempFile, Bytecode.JavaDocletType._ApiXml);
-			}
-			catch (Exception ex)
-			{
-				try
-				{
-					if (File.Exists(tempFile))
-						File.Delete(tempFile);
+				AssertXmlDeclaration ("Collection.class", "ParameterFixupFromDocs.xml", tempFile, Bytecode.JavaDocletType._ApiXml);
+			} catch (Exception ex) {
+				try {
+					if (File.Exists (tempFile))
+						File.Delete (tempFile);
 				}
 				catch { }
 
-				Assert.Fail("An unexpected exception was thrown : {0}", ex);
+				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
 			}
 		}
 
