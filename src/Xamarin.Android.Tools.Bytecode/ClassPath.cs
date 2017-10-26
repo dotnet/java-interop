@@ -271,10 +271,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		IAndroidDocScraper CreateDocScraper (string src)
 		{
-			if (!DocletType.HasValue)
-				DocletType = GetDocletType(src);
-			
-			switch (DocletType) {
+			switch (DocletType ?? GetDocletType (src)) {
 			default: return new DroidDoc2Scraper (src);
 			case JavaDocletType.DroidDoc: return new DroidDocScraper (src);
 			case JavaDocletType.Java6: return new JavaDocScraper (src);
