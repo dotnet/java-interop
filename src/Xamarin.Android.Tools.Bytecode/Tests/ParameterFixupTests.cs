@@ -37,7 +37,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			try {
 				tempFile = LoadToTempFile ("ParameterFixupApiXmlDocs.xml");
 
-				AssertXmlDeclaration ("Collection.class", "ParameterFixupFromDocs.xml", tempFile, Bytecode.JavaDocletType._ApiXml);
+				AssertXmlDeclaration ("Collection.class", "ParameterFixupFromDocs.xml", tempFile);
 			} finally {
 				try {
 					if (File.Exists (tempFile))
