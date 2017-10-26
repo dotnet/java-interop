@@ -38,14 +38,12 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				tempFile = LoadToTempFile ("ParameterFixupApiXmlDocs.xml");
 
 				AssertXmlDeclaration ("Collection.class", "ParameterFixupFromDocs.xml", tempFile, Bytecode.JavaDocletType._ApiXml);
-			} catch (Exception ex) {
+			} finally {
 				try {
 					if (File.Exists (tempFile))
 						File.Delete (tempFile);
 				}
 				catch { }
-
-				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
 			}
 		}
 
@@ -68,14 +66,12 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				tempFile = LoadToTempFile ("ParameterFixupApiXmlDocs.xml");
 
 				AssertDocletType (tempFile, Bytecode.JavaDocletType._ApiXml);
-			} catch (Exception ex) {
+			} finally {
 				try {
 					if (File.Exists (tempFile))
 						File.Delete (tempFile);
 				}
 				catch { }
-
-				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
 			}
 		}
 
