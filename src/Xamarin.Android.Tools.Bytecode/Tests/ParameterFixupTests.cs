@@ -85,16 +85,12 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				return;
 			}
 
-			try {
-				var droidDocsPath = Path.Combine (androidSdkPath, "docs", "reference");
+			var droidDocsPath = Path.Combine (androidSdkPath, "docs", "reference");
 
-				if (!Directory.Exists (droidDocsPath))
-					Assert.Fail("The Android SDK Documentation path `{0}` was not found.", droidDocsPath);
+			if (!Directory.Exists (droidDocsPath))
+				Assert.Fail("The Android SDK Documentation path `{0}` was not found.", droidDocsPath);
 				
-				AssertDocletType (droidDocsPath, Bytecode.JavaDocletType.DroidDoc2);
-			} catch (Exception ex) {
-				Assert.Fail("An unexpected exception was thrown : {0}", ex);
-			}
+			AssertDocletType (droidDocsPath, Bytecode.JavaDocletType.DroidDoc2);
 		}
 	}
 }
