@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using Xamarin.Android.Tools.Bytecode;
 
 namespace Xamarin.Android.Tools.BytecodeTests
 {
@@ -65,7 +66,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			try {
 				tempFile = LoadToTempFile ("ParameterFixupApiXmlDocs.xml");
 
-				AssertDocletType (tempFile, Bytecode.JavaDocletType._ApiXml);
+				Assert.AreEqual (JavaDocletType._ApiXml, AndroidDocScraper.GetDocletType (tempFile));
 			} finally {
 				try {
 					if (File.Exists (tempFile))
@@ -90,7 +91,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			if (!Directory.Exists (droidDocsPath))
 				Assert.Fail("The Android SDK Documentation path `{0}` was not found.", droidDocsPath);
 				
-			AssertDocletType (droidDocsPath, Bytecode.JavaDocletType.DroidDoc2);
+			Assert.AreEqual(JavaDocletType.DroidDoc2, AndroidDocScraper.GetDocletType(droidDocsPath));
 		}
 	}
 }
