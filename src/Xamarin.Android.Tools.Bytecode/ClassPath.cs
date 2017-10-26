@@ -233,7 +233,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			}
 		}
 
-		JavaDocletType GetDocletType (string path)
+		public JavaDocletType GetDocletType (string path)
 		{
 			var kind = JavaDocletType.DroidDoc;
 			char [] buf = new char [500];

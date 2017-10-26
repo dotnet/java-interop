@@ -81,18 +81,11 @@ namespace Xamarin.Android.Tools.BytecodeTests {
 
 		protected static void AssertDocletType (string path, JavaDocletType docletType)
 		{
-			var classPathBuilder = new ClassPath () {
-				ApiSource = "class-parse",
-				DocumentationPaths = new string[] {
-					path,
-				},
-				AutoRename = true
-			};
+			var classPathBuilder = new ClassPath ();
 
-			var actual = new StringWriter ();
-			classPathBuilder.SaveXmlDescription (actual);
+			var actual = classPathBuilder.GetDocletType(path);
 
-			Assert.AreEqual (docletType, classPathBuilder.DocletType);
+			Assert.AreEqual (docletType, actual);
 		}
 	}
 }
