@@ -15,7 +15,7 @@ namespace Xamarin.Android.Tools {
 
 		public static void Main (string[] args)
 		{
-			JavaDocletType docsType = 0;
+			JavaDocletType? docsType = null;
 
 			bool dump       = false;
 			bool help       = false;
