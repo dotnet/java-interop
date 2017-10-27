@@ -26,8 +26,6 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public string ApiSource { get; set; }
 
-		public JavaDocletType? DocletType { get; set; }
-
 		public IEnumerable<string> DocumentationPaths { get; set; }
 
 		public string AndroidFrameworkPlatform { get; set; }
@@ -235,7 +233,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		IAndroidDocScraper CreateDocScraper (string src)
 		{
-			switch (DocletType ?? AndroidDocScraper.GetDocletType (src)) {
+			switch (AndroidDocScraper.GetDocletType (src)) {
 			default: return new DroidDoc2Scraper (src);
 			case JavaDocletType.DroidDoc: return new DroidDocScraper (src);
 			case JavaDocletType.Java6: return new JavaDocScraper (src);
