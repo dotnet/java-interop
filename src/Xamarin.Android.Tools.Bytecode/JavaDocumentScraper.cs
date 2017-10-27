@@ -301,8 +301,7 @@ namespace Xamarin.Android.Tools.Bytecode
 				kind = JavaDocletType.DroidDoc2;
 
 			string indexHtml = Path.Combine (path, "index.html");
-			if (File.Exists (indexHtml))
-			{
+			if (File.Exists (indexHtml)) {
 				using (var reader = File.OpenText (indexHtml))
 					reader.ReadBlock (buf, 0, buf.Length);
 				string rawHTML = new string (buf);
@@ -315,11 +314,9 @@ namespace Xamarin.Android.Tools.Bytecode
 			}
 
 			// Check to see if it's an api.xml formatted doc
-			if (File.Exists (path))
-			{
+			if (File.Exists (path)) {
 				string rawXML = null;
-				using (var reader = File.OpenText (path))
-				{
+				using (var reader = File.OpenText (path)) {
 					int len = reader.ReadBlock (buf, 0, buf.Length);
 					rawXML = new string (buf, 0, len);
 				}
