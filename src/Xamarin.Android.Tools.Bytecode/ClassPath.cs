@@ -30,6 +30,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public string AndroidFrameworkPlatform { get; set; }
 
+		public IEnumerable<string> ParametersDescriptionFiles { get; set; }
+
 		public bool AutoRename { get; set; }
 
 		public ClassPath (string path = null)
@@ -231,6 +233,17 @@ namespace Xamarin.Android.Tools.Bytecode {
 			}
 		}
 
+		void FixupParametersFromParametersDescription (XElement api)
+		{
+			if (ParametersDescriptionFiles == null)
+				return;
+			foreach (var path in ParametersDescriptionFiles) {
+				if (!File.Exists (path))
+					continue;
+				new JavaParameterNamesLoader ().ApplyParameterNameChanges (api, path);
+			}
+		}
+
 		IAndroidDocScraper CreateDocScraper (string src)
 		{
 			switch (AndroidDocScraper.GetDocletType (src)) {
@@ -297,6 +310,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 						packagesDictionary [p].OrderBy (c => c.ThisClass.Name.Value, StringComparer.OrdinalIgnoreCase)
 						.Select (c => new XmlClassDeclarationBuilder (c).ToXElement ()))));
 			FixupParametersFromDocs (api);
+			FixupParametersFromParametersDescription (api);
 			return api;
 		}
 

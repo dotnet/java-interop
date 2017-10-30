@@ -55,12 +55,15 @@ namespace Xamarin.Android.Tools.BytecodeTests {
 			Assert.AreEqual (expected, actual.ToString ());
 		}
 
-		protected static void AssertXmlDeclaration (string[] classResources, string xmlResource, string documentationPath = null)
+		protected static void AssertXmlDeclaration (string[] classResources, string xmlResource, string documentationPath = null, string parameterDescriptionFile = null)
 		{
 			var classPathBuilder    = new ClassPath () {
 				ApiSource           = "class-parse",
-				DocumentationPaths  = new string[] {
+				DocumentationPaths  = documentationPath == null ? null : new string[] {
 					documentationPath,
+				},
+				ParametersDescriptionFiles = parameterDescriptionFile == null ? null : new string [] {
+					parameterDescriptionFile,
 				},
 				AutoRename = true
 			};

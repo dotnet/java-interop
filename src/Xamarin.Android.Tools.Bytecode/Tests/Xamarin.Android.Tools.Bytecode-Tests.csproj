@@ -57,13 +57,8 @@
     <Compile Include="ParameterFixupTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <TestJar
-        Include="java\**\*.java"
-        Exclude="java\java\util\Collection.java"
-    />
-    <TestJarNoParameters
-        Include="java\java\util\Collection.java"
-    />
+    <TestJar Include="java\**\*.java" Exclude="java\java\util\Collection.java" />
+    <TestJarNoParameters Include="java\java\util\Collection.java" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -74,8 +69,8 @@
   </PropertyGroup>
   <Target Name="BuildClasses" Inputs="@(TestJar)" Outputs="@(TestJar-&gt;'$(IntermediateOutputPath)classes\%(RecursiveDir)%(Filename).class')">
     <MakeDir Directories="$(IntermediateOutputPath)classes" />
-    <Exec Command="&quot;$(JavaCPath)&quot; -parameters -source 1.5 -target 1.6 -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJar->'%(Identity)', ' ')" />
-    <Exec Command="&quot;$(JavaCPath)&quot; -source 1.5 -target 1.6 -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJarNoParameters->'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(JavaCPath)&quot; -parameters -source 1.5 -target 1.6 -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJar-&gt;'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(JavaCPath)&quot; -source 1.5 -target 1.6 -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJarNoParameters-&gt;'%(Identity)', ' ')" />
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Android.Tools.Bytecode.csproj">
@@ -165,5 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ParameterDescription.txt">
+      <LogicalName>ParameterDescription.txt</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

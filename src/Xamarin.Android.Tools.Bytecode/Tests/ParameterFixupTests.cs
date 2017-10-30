@@ -87,6 +87,22 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				
 			Assert.AreEqual(JavaDocletType.DroidDoc2, AndroidDocScraper.GetDocletType(droidDocsPath));
 		}
+
+		[Test]
+		public void XmlDeclaration_FixedUpFromParameterDescription ()
+		{
+			var androidSdkPath = Environment.GetEnvironmentVariable ("ANDROID_SDK_PATH");
+			if (string.IsNullOrEmpty (androidSdkPath)) {
+				Assert.Ignore ("The `ANDROID_SDK_PATH` environment variable isn't set; " +
+						"cannot test importing parameter names from HTML. Skipping...");
+				return;
+			}
+			try {
+				AssertXmlDeclaration (new string [] {"Collection.class"}, "ParameterFixupFromDocs.xml", null, "ParameterDescription.txt");
+			} catch (Exception ex) {
+				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
+			}
+		}
 	}
 }
 
