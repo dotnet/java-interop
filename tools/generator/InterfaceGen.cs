@@ -221,7 +221,7 @@ namespace MonoDroid.Generation {
 		void GenerateInvoker (StreamWriter sw, string indent, CodeGenerationOptions opt)
 		{
 			sw.WriteLine ("{0}[global::Android.Runtime.Register (\"{1}\", DoNotGenerateAcw=true{2})]", indent, RawJniName, this.AdditionalAttributeString ());
-			sw.WriteLine ("{0}internal class {1}Invoker : global::Java.Lang.Object, {1} {{", indent, Name);
+			sw.WriteLine ("{0}internal partial class {1}Invoker : global::Java.Lang.Object, {1} {{", indent, Name);
 			sw.WriteLine ();
 			opt.CodeGenerator.WriteInterfaceInvokerHandle (this, sw, indent + "\t", opt, Name + "Invoker");
 			sw.WriteLine ("{0}\tIntPtr class_ref;", indent);
