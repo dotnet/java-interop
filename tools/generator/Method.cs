@@ -262,7 +262,7 @@ namespace MonoDroid.Generation {
 		
 		internal void FillReturnType ()
 		{
-			retval = new ReturnValue (this, Return, ManagedReturn, IsReturnEnumified);
+			retval = new ReturnValue (Return, ManagedReturn, IsReturnEnumified);
 		}
 
 		public bool GenerateDispatchingSetter { get; protected set; }
@@ -456,7 +456,22 @@ namespace MonoDroid.Generation {
 			}
 			return delegate_type;
 		}
-		
+
+		public bool IsCovariantOverride (Method overriddenMethod)
+		{
+			//A method with a covariant return type would have the following to be true:
+			// 1) Neither is generic
+			// 2) JavaName is the same
+			// 3) retval.JavaName is *different*
+			// 4) Same number of parameters
+			// 5) JavaSignature for parameters is the same
+			return !IsGeneric && !overriddenMethod.IsGeneric &&
+				JavaName == overriddenMethod.JavaName && 
+				retval.JavaName != overriddenMethod.retval.JavaName && 
+				Parameters.Count == overriddenMethod.Parameters.Count &&
+				Parameters.JavaSignature == overriddenMethod.Parameters.JavaSignature;
+		}
+
 		// it used to be private though...
 		internal string AdjustedName {
 			get { return IsReturnCharSequence ? Name + "Formatted" : Name; }

@@ -39,6 +39,45 @@
     <Content Include='expected\Constructors\Xamarin.Test.SomeObject.cs'>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.CovariantClass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.CovariantInterfaceImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.CovariantPropertyClass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.CovariantPropertyImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.CovariantPropertySubclass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.CovariantSubclass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.GenericCovariantImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.GenericImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.GenericStringImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.ICovariantInterface.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.ICovariantPropertyInterface.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\Covariant.Returntypes.IGenericInterface.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected\CovariantReturnTypes\CovariantReturnTypes.xml'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include='expected\CSharpKeywords\CSharpKeywords.xml'>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -206,6 +245,45 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include='expected.ji\Constructors\Xamarin.Test.SomeObject.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.CovariantClass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.CovariantInterfaceImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.CovariantPropertyClass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.CovariantPropertyImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.CovariantPropertySubclass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.CovariantSubclass.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.GenericCovariantImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.GenericImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.GenericStringImplementation.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.ICovariantInterface.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.ICovariantPropertyInterface.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Covariant.Returntypes.IGenericInterface.cs'>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include='expected.ji\CovariantReturnTypes\Mono.Android.projitems'>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include='expected.ji\CSharpKeywords\CSharpKeywords.xml'>

@@ -14,8 +14,9 @@ namespace MonoDroid.Generation {
 		string managed_type;
 		string raw_type;
 		bool is_enumified;
+		Func<CodeGenerationOptions, string, string> to_native;
 
-		public ReturnValue (Method owner, string java_type, string managed_type, bool isEnumified)
+		public ReturnValue (string java_type, string managed_type, bool isEnumified)
 		{
 			this.raw_type = this.java_type = java_type;
 			this.managed_type = managed_type;
@@ -36,12 +37,8 @@ namespace MonoDroid.Generation {
 		}
 
 		public string FullName {
-			get {
-				if (!String.IsNullOrEmpty (managed_type))
-					return managed_type;
-				return sym.FullName;
-				//return sym is GenBase && !String.IsNullOrEmpty ((sym as GenBase).Marshaler) ? (sym as GenBase).Marshaler : sym.FullName;
-			}
+			get { return !String.IsNullOrEmpty (managed_type) ? managed_type : sym.FullName; }
+			set { managed_type = value; }
 		}
 		
 		public void SetGeneratedEnumType (string enumType)
@@ -89,6 +86,12 @@ namespace MonoDroid.Generation {
 			get { return raw_type; }
 		}
 
+		public Func<CodeGenerationOptions, string, string> ToNativeOverride
+		{
+			get { return to_native; }
+			set { to_native = value; }
+		}
+
 		public string FromNative (CodeGenerationOptions opt, string var_name, bool owned)
 		{
 			if (!string.IsNullOrEmpty (managed_type) && (sym is ClassGen || sym is InterfaceGen)) {
@@ -100,6 +103,9 @@ namespace MonoDroid.Generation {
 
 		public string ToNative (CodeGenerationOptions opt, string var_name)
 		{
+			if (to_native != null)
+				return to_native (opt, var_name);
+
 			return ((sym is GenericTypeParameter) || (sym is GenericSymbol)) ? String.Format ("JNIEnv.ToLocalJniHandle ({0})", var_name) : sym.ToNative (opt, var_name);
 		}
 

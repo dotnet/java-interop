@@ -415,6 +415,19 @@ namespace MonoDroid.Generation {
 			if (!m.Validate (opt, TypeParameters)) {
 				return false;
 			}
+
+			//Fix up Java covariant return types, C# return type must match the base return type
+			var baseCovariantMethod = BaseGen?.methods.FirstOrDefault (bm => bm.IsCovariantOverride (m));
+			if (baseCovariantMethod == null) {
+				baseCovariantMethod = ifaces.OfType<InterfaceGen> ()
+				                            .SelectMany (i => i.methods)
+				                            .FirstOrDefault (im => im.IsCovariantOverride (m));
+			}
+			if (baseCovariantMethod != null && m.ManagedReturn == null) {
+				m.RetVal.FullName = baseCovariantMethod.ReturnType;
+				m.RetVal.ToNativeOverride = baseCovariantMethod.RetVal.ToNative;
+			}
+
 			return true;
 		}
 

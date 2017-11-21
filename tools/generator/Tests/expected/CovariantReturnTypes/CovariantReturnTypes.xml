@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<api>
+	<package name="java.lang">
+		<class abstract="false" deprecated="not deprecated" final="false" name="Object" static="false" visibility="public">
+		</class>
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object"
+			final="false" name="String" static="false" visibility="public">
+		</class>
+	</package>
+	<package name="covariant.returntypes">
+		<!--
+			public interface CovariantInterface {
+				Object someMethod();
+			}
+		-->
+		<interface abstract="true" deprecated="not deprecated" final="false" name="CovariantInterface" static="false" visibility="public">
+			<method abstract="true" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public">
+			</method>
+		</interface>
+		<!--
+			public class CovariantInterfaceImplementation implements CovariantInterface {
+				@Override
+				String someMethod();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="CovariantInterfaceImplementation" static="false" visibility="public">
+			<implements name="covariant.returntypes.CovariantInterface" name-generic-aware="covariant.returntypes.CovariantInterface" />
+			<constructor deprecated="not deprecated" final="false" name="CovariantInterfaceImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class CovariantClass {
+				Object someMethod();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="CovariantClass" static="false" visibility="public">
+			<method abstract="false" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class CovariantSubclass extends CovariantClass {
+				@Override
+				String someMethod();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="covariant.returntypes.CovariantClass" extends-generic-aware="covariant.returntypes.CovariantClass" final="false" name="CovariantSubclass" static="false" visibility="public">
+			<constructor deprecated="not deprecated" final="false" name="CovariantSubclass" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public interface CovariantPropertyInterface {
+				Object getObject();
+			}
+		-->
+		<interface abstract="true" deprecated="not deprecated" final="false" name="CovariantPropertyInterface" static="false" visibility="public">
+			<method abstract="true" deprecated="not deprecated" final="false" name="getObject" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public">
+			</method>
+		</interface>
+		<!--
+			public class CovariantPropertyImplementation implements CovariantPropertyInterface {
+				@Override
+				String getObject();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="CovariantPropertyImplementation" static="false" visibility="public">
+			<implements name="covariant.returntypes.CovariantPropertyInterface" name-generic-aware="covariant.returntypes.CovariantPropertyInterface" />
+			<constructor deprecated="not deprecated" final="false" name="CovariantPropertyImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getObject" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class CovariantPropertyClass {
+				Object getObject();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="CovariantPropertyClass" static="false" visibility="public">
+			<method abstract="false" deprecated="not deprecated" final="false" name="getObject" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class CovariantPropertySubclass extends CovariantPropertyClass {
+				@Override
+				String getObject();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="covariant.returntypes.CovariantPropertyClass" extends-generic-aware="covariant.returntypes.CovariantPropertyClass" final="false" name="CovariantPropertySubclass" static="false" visibility="public">
+			<constructor deprecated="not deprecated" final="false" name="CovariantInterfaceImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getObject" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!-- 
+			public interface GenericInterface<T> {
+				T someMethod();
+			}
+		-->
+		<interface abstract="true" deprecated="not deprecated" final="false" name="GenericInterface" static="false" visibility="public">
+			<typeParameters>
+				<typeParameter name="T" classBound="java.lang.Object" interfaceBounds="" />
+			</typeParameters>
+			<method abstract="true" deprecated="not deprecated" final="false" name="someMethod" native="false" return="T" static="false" synchronized="false" visibility="public">
+			</method>
+		</interface>
+		<!--
+			public class GenericImplementation implements GenericInterface<Object> {
+				@Override
+				public Object someMethod();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="GenericImplementation" static="false" visibility="public">
+			<implements name="covariant.returntypes.GenericInterface" name-generic-aware="covariant.returntypes.GenericInterface&lt;java.lang.Object&gt;" />
+			<constructor deprecated="not deprecated" final="false" name="GenericImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class GenericStringImplementation implements GenericInterface<String> {
+				@Override
+				public String someMethod();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="GenericStringImplementation" static="false" visibility="public">
+			<implements name="covariant.returntypes.GenericInterface" name-generic-aware="covariant.returntypes.GenericInterface&lt;java.lang.String&gt;" />
+			<constructor deprecated="not deprecated" final="false" name="GenericStringImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class GenericCovariantImplementation extends GenericImplementation {
+				@Override
+				public String someMethod();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="covariant.returntypes.GenericImplementation" extends-generic-aware="covariant.returntypes.GenericImplementation" final="false" name="GenericCovariantImplementation" static="false" visibility="public">
+			<constructor deprecated="not deprecated" final="false" name="GenericCovariantImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="someMethod" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+	</package>
+</api>

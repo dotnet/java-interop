@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);ANDROID_1;ANDROID_2;ANDROID_3;ANDROID_4</DefineConstants>
+  </PropertyGroup>
+  <!-- Classes -->
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.CovariantClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.CovariantInterfaceImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.CovariantPropertyClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.CovariantPropertyImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.CovariantPropertySubclass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.CovariantSubclass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.GenericCovariantImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.GenericImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.GenericStringImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.ICovariantInterface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.ICovariantPropertyInterface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Covariant.Returntypes.IGenericInterface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Java.Interop.__TypeRegistrations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Java.Lang.Object.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Java.Lang.String.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\__NamespaceMapping__.cs" />
+  </ItemGroup>
+  <!-- Enums -->
+  <ItemGroup />
+</Project>
