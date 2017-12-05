@@ -415,19 +415,6 @@ namespace MonoDroid.Generation {
 			if (!m.Validate (opt, TypeParameters)) {
 				return false;
 			}
-
-			//Fix up Java covariant return types, C# return type must match the base return type
-			var baseCovariantMethod = BaseGen?.methods.FirstOrDefault (bm => bm.IsCovariantOverride (m));
-			if (baseCovariantMethod == null) {
-				baseCovariantMethod = ifaces.OfType<InterfaceGen> ()
-				                            .SelectMany (i => i.methods)
-				                            .FirstOrDefault (im => im.IsCovariantOverride (m));
-			}
-			if (baseCovariantMethod != null && m.ManagedReturn == null) {
-				m.RetVal.FullName = baseCovariantMethod.ReturnType;
-				m.RetVal.ToNativeOverride = baseCovariantMethod.RetVal.ToNative;
-			}
-
 			return true;
 		}
 
@@ -738,6 +725,26 @@ namespace MonoDroid.Generation {
 			nested_types = nested_types.Where (n => !n.IsObfuscated && n.Visibility != "private").ToList ();
 			foreach (var n in nested_types)
 				n.StripNonBindables ();
+		}
+
+		public void FixupCovariantReturnTypes()
+		{
+			//Fix up Java covariant return types, C# return type must match the base return type
+			foreach (Method m in methods) {
+				var baseCovariantMethod = BaseGen?.methods.FirstOrDefault (bm => bm.IsCovariantOverride (m));
+				if (baseCovariantMethod == null) {
+					baseCovariantMethod = ifaces.OfType<InterfaceGen> ()
+					                            .SelectMany (i => i.methods)
+					                            .FirstOrDefault (im => im.IsCovariantOverride (m));
+				}
+				if (baseCovariantMethod != null && m.ManagedReturn == null) {
+					m.RetVal.FullName = baseCovariantMethod.ReturnType;
+					m.RetVal.ToNativeOverride = baseCovariantMethod.RetVal.ToNative;
+				}
+			}
+
+			foreach (var nt in NestedTypes)
+				nt.FixupCovariantReturnTypes ();
 		}
 
 		public void FillProperties ()

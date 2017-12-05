@@ -323,16 +323,19 @@ namespace Xamarin.Android.Binder {
 			if (api_versions_xml != null)
 				ApiVersionsSupport.AssignApiLevels (gens, api_versions_xml);
 
-			foreach (GenBase gen in gens)
+			foreach (var gen in gens)
+				gen.FixupCovariantReturnTypes ();
+
+			foreach (var gen in gens)
 				gen.FillProperties ();
 
 			foreach (var gen in gens)
 				gen.UpdateEnums (opt);
 
-			foreach (GenBase gen in gens)
+			foreach (var gen in gens)
 				gen.FixupMethodOverrides ();
 
-			foreach (GenBase gen in gens)
+			foreach (var gen in gens)
 				gen.FixupExplicitImplementation ();
 
 			GenerateAnnotationAttributes (gens, annotations_zips);
