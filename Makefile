@@ -14,7 +14,7 @@ endif
 
 XA_CONFIGURATION  = XAIntegrationDebug
 
-GENDARME_URL = https://cloud.github.com/downloads/spouliot/gendarme/gendarme-2.10-bin.zip
+GENDARME_URL = https://github.com/downloads/spouliot/gendarme/gendarme-2.10-bin.zip
 
 PACKAGES = \
 	packages/NUnit.2.6.3/NUnit.2.6.3.nupkg \
