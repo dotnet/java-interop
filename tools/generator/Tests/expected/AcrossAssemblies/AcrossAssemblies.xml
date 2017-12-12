@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<api>
+	<package name="java.lang">
+		<class abstract="false" deprecated="not deprecated" final="false" name="Object" static="false" visibility="public">
+		</class>
+		<!--
+			public class Foo {
+				public void bar();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="Foo" static="false" visibility="public">
+			<method abstract="false" deprecated="not deprecated" final="false" name="bar" native="false" return="void" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public interface MyInterface {
+				public static final int MY_FIELD = 256;
+
+				void myMethod();
+			}
+		-->
+		<interface abstract="true" deprecated="not deprecated" final="false" name="MyInterface" static="false" visibility="public">
+			<field deprecated="not deprecated" final="true" name="MY_FIELD" static="true" transient="false" type="int" type-generic-aware="int" value="256" visibility="public" volatile="false">
+			</field>
+			<method abstract="true" deprecated="not deprecated" final="false" name="myMethod" native="false" return="void" static="false" synchronized="false" visibility="public">
+			</method>
+		</interface>
+	</package>
+	<package name="xamarin.test">
+		<!-- 
+			public class ExtendsFoo extends Foo {
+				public void bar();
+			}
+		-->
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Foo" extends-generic-aware="java.lang.Foo" final="false" name="ExtendsFoo" static="false" visibility="public">
+			<method abstract="false" deprecated="not deprecated" final="false" name="foo" native="false" return="void" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+		<!--
+			public class MyInterfaceImplementation implements MyInterface {
+				void myMethod();
+			}
+		-->
+		<class abstract="true" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="MyInterfaceImplementation" static="false" visibility="public">
+			<implements name="java.lang.MyInterface" name-generic-aware="java.lang.MyInterface" />
+			<constructor deprecated="not deprecated" final="false" name="MyInterfaceImplementation" static="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="myMethod" native="false" return="void" static="false" synchronized="false" visibility="public">
+			</method>
+		</class>
+	</package>
+</api>

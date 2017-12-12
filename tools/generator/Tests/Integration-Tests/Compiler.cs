@@ -12,7 +12,6 @@ namespace generatortests
 	{
 		const string RoslynEnvironmentVariable = "ROSLYN_COMPILER_LOCATION";
 		private static string unitTestFrameworkAssemblyPath = typeof(Assert).Assembly.Location;
-		private static string supportFilePath = typeof(Compiler).Assembly.Location;
 
 		static CodeDomProvider GetCodeDomProvider ()
 		{
@@ -31,41 +30,31 @@ namespace generatortests
 			}
 		}
 
-		public static Assembly Compile (Xamarin.Android.Binder.CodeGeneratorOptions options,
-			string assemblyFileName, IEnumerable<string> AdditionalSourceDirectories,
+		public static string CompileToDisk (IEnumerable<string> sourceFiles,
 			out bool hasErrors, out string output, bool allowWarnings)
 		{
-			var generatedCodePath = options.ManagedCallableWrapperSourceOutputDirectory;
-			var sourceFiles = Directory.EnumerateFiles (generatedCodePath, "*.cs",
-				SearchOption.AllDirectories).ToList ();
-			sourceFiles = sourceFiles.Select (x => Path.GetFullPath(x)).ToList ();
+			var path = Path.Combine (Path.GetTempPath (), Path.GetRandomFileName ());
+			var parameters = CreateParameters (path, false);
+			using (var codeProvider = GetCodeDomProvider ()) {
+				var results = codeProvider.CompileAssemblyFromFile (parameters, sourceFiles.ToArray ());
 
-			var supportFiles = Directory.EnumerateFiles (Path.Combine (Path.GetDirectoryName (supportFilePath), "SupportFiles"),
-				"*.cs", SearchOption.AllDirectories);
-			sourceFiles.AddRange (supportFiles);
+				hasErrors = false;
 
-			foreach (var dir in AdditionalSourceDirectories) {
-				var additonal = Directory.EnumerateFiles (dir, "*.cs", SearchOption.AllDirectories);
-				sourceFiles.AddRange (additonal);
+				foreach (CompilerError message in results.Errors) {
+					hasErrors |= !message.IsWarning || !allowWarnings;
+				}
+				output = string.Join (Environment.NewLine, results.Output.Cast<string> ());
+
+				return results.PathToAssembly;
 			}
+		}
 
-			CompilerParameters parameters = new CompilerParameters ();
-			parameters.GenerateExecutable = false;
-			parameters.GenerateInMemory = true;
-			parameters.CompilerOptions = "/unsafe";
-			parameters.OutputAssembly = assemblyFileName;
-			parameters.ReferencedAssemblies.Add (unitTestFrameworkAssemblyPath);
-			parameters.ReferencedAssemblies.Add (typeof (Enumerable).Assembly.Location);
-
-			var binDir  = Path.GetDirectoryName (typeof (BaseGeneratorTest).Assembly.Location);
-			var facDir  = GetFacadesPath ();
-			parameters.ReferencedAssemblies.Add (Path.Combine (binDir, "Java.Interop.dll"));
-			parameters.ReferencedAssemblies.Add (Path.Combine (facDir, "System.Runtime.dll"));
-#if DEBUG
-			parameters.IncludeDebugInformation = true;
-#else
-			parameters.IncludeDebugInformation = false;
-#endif
+		public static Assembly CompileInMemory (IEnumerable<string> sourceFiles,
+			string assemblyFileName, string supportAssemblyPath,
+			out bool hasErrors, out string output, bool allowWarnings)
+		{
+			var parameters = CreateParameters (assemblyFileName, true);
+			parameters.ReferencedAssemblies.Add (supportAssemblyPath);
 
 			using (var codeProvider = GetCodeDomProvider ()) {
 				CompilerResults results = codeProvider.CompileAssemblyFromFile (parameters, sourceFiles.ToArray ());
@@ -81,18 +70,49 @@ namespace generatortests
 			}
 		}
 
-		static string GetFacadesPath ()
+		static CompilerParameters CreateParameters (string assemblyFileName, bool inMemory)
 		{
+			var parameters = new CompilerParameters ();
+			parameters.GenerateExecutable = false;
+			parameters.GenerateInMemory = inMemory;
+			parameters.CompilerOptions = "/unsafe";
+			parameters.OutputAssembly = assemblyFileName;
+			parameters.ReferencedAssemblies.Add (unitTestFrameworkAssemblyPath);
+			parameters.ReferencedAssemblies.Add (typeof (Enumerable).Assembly.Location);
+
+			var binDir = Path.GetDirectoryName (typeof (BaseGeneratorTest).Assembly.Location);
+			parameters.ReferencedAssemblies.Add (Path.Combine (binDir, "Java.Interop.dll"));
+			parameters.ReferencedAssemblies.Add (GetSystemAssembly ("System.Runtime.dll"));
+			parameters.ReferencedAssemblies.Add (GetSystemAssembly ("System.Xml.dll"));
+#if DEBUG
+			parameters.IncludeDebugInformation = true;
+#else
+			parameters.IncludeDebugInformation = false;
+#endif
+			return parameters;
+		}
+
+		static string GetSystemAssembly (string assembly)
+		{
+			string path;
+
 			var env = Environment.GetEnvironmentVariable ("FACADES_PATH");
-			if (env != null)
-				return env;
+			if (!string.IsNullOrEmpty (env)) {
+				path = Path.Combine (env, assembly);
+				if (File.Exists (path))
+					return path;
+
+				path = Path.Combine (env, "..", assembly);
+				if (File.Exists (path))
+					return path;
+			}
 
 			var dir = Path.GetDirectoryName (typeof (object).Assembly.Location);
-			var facades = Path.Combine (dir, "Facades");
-			if (Directory.Exists (facades))
-				return facades;
+			path = Path.Combine (dir, assembly);
+			if (File.Exists (path))
+				return path;
 
-			return dir;
+			return Path.Combine (dir, "Facades", assembly);
 		}
 	}
 }

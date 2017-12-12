@@ -10,10 +10,10 @@ namespace generatortests
 		public void GeneratedOK ()
 		{
 			RunAllTargets (
-					outputRelativePath:     "Streams",
-					apiDescriptionFile:     "expected/Streams/Streams.xml",
-					expectedRelativePath:   "Streams",
-					additionalSupportPaths: new[]{ "expected/Streams/SupportFiles" });
+					outputRelativePath:    "Streams",
+					apiDescriptionFile:    "expected/Streams/Streams.xml",
+					expectedRelativePath:  "Streams",
+					additionalSourcePaths: new[]{ "expected/Streams/SupportFiles" });
 		}
 	}
 }

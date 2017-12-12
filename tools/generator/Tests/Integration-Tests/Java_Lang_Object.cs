@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.Reflection;
 using System.Linq;
 using NUnit.Framework;
-using MonoDroid.Generation;
-using System.Xml;
 
 namespace generatortests
 {
@@ -17,7 +15,7 @@ namespace generatortests
 					apiDescriptionFile: "expected/java.lang.Object/java.lang.Object.xml",
 					expectedPath:       "expected/java.lang.Object");
 
-			var javaLangObject = BuiltAssembly.GetType ("Java.Lang.Object");
+			var javaLangObject = Assembly.LoadFile (SupportAssembly).GetType ("Java.Lang.Object");
 
 			Assert.IsNotNull (javaLangObject);
 			Assert.IsTrue (javaLangObject.IsPublic);

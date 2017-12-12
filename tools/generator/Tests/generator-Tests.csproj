@@ -48,6 +48,8 @@
     <Compile Include="Integration-Tests\Java_Lang_Object.cs" />
     <Compile Include="Integration-Tests\Interfaces.cs" />
     <Compile Include="Integration-Tests\Enumerations.cs" />
+    <Compile Include="Integration-Tests\AcrossAssemblies.cs" />
+    <Compile Include="Integration-Tests\MonoAndroid.cs" />
     <Compile Include="Integration-Tests\StaticFields.cs" />
     <Compile Include="Integration-Tests\NonStaticFields.cs" />
     <Compile Include="Integration-Tests\StaticMethods.cs" />

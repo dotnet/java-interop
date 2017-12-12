@@ -14,7 +14,7 @@ namespace generatortests
 		StringWriter sw = null;
 
 		[SetUp]
-		public void Setup ()
+		public void SetUp ()
 		{
 			Options = new CodeGeneratorOptions ();
 			Options.ApiLevel = "4";
@@ -25,12 +25,42 @@ namespace generatortests
 			Options.OnlyBindPublicTypes = true;
 			sw = new StringWriter ();
 			AdditionalSourceDirectories = new List<string> ();
+			AdditionalSupportDirectories = new List<string> ();
 		}
 
-		protected CodeGeneratorOptions Options = null;
-		protected Assembly BuiltAssembly = null;
+		[TearDown]
+		public void TearDown ()
+		{
+			if (!string.IsNullOrEmpty (SupportAssembly)) {
+				File.Delete (SupportAssembly);
+			}
+		}
+
+		protected CodeGeneratorOptions Options;
+		/// <summary>
+		/// The resulting "main" assembly compiled with the InMemory option, think of this as the output assembly of a Java binding project
+		/// </summary>
+		protected Assembly MainAssembly;
+		/// <summary>
+		/// Additional source code to be compiled into the "main" assembly
+		/// </summary>
 		protected List<string> AdditionalSourceDirectories;
+		/// <summary>
+		/// Additional source code to be compiled into the "support" assembly
+		/// </summary>
+		protected List<string> AdditionalSupportDirectories;
+		/// <summary>
+		/// To be removed eventually, this allows a test to ignore compiler warnings
+		/// </summary>
 		protected bool AllowWarnings;
+		/// <summary>
+		/// If set, compiles everything to a single assembly. This allows us to simulate how `generator` will be used upstream in xamarin-android/src/Mono.Android.csproj
+		/// </summary>
+		protected bool CompileToSingleAssembly;
+		/// <summary>
+		/// The full path to the "support" assembly, saved to disk in $TMP so the "main" assembly can reference it
+		/// </summary>
+		protected string SupportAssembly;
 
 		public void Execute ()
 		{
@@ -41,10 +71,52 @@ namespace generatortests
 			}
 			bool    hasErrors;
 			string  compilerOutput;
-			BuiltAssembly = Compiler.Compile (Options, FullPath ("Mono.Android.dll"), AdditionalSourceDirectories,
-				out hasErrors, out compilerOutput, AllowWarnings);
-			Assert.AreEqual (false, hasErrors, compilerOutput);
-			Assert.IsNotNull (BuiltAssembly);
+			string  supportFilePath = typeof (BaseGeneratorTest).Assembly.Location;
+
+			//Compile the "support" assembly, this emulates what is in Mono.Android.dll
+			if (!CompileToSingleAssembly) {
+				var sourceFiles = Directory.EnumerateFiles (Options.ManagedCallableWrapperSourceOutputDirectory, "Java.Lang.*.cs",
+					SearchOption.AllDirectories).ToList ();
+				var supportFiles = Directory.EnumerateFiles (Path.Combine (Path.GetDirectoryName (supportFilePath), "SupportFiles"),
+					"*.cs", SearchOption.AllDirectories);
+				sourceFiles.AddRange (supportFiles);
+
+				foreach (var dir in AdditionalSupportDirectories) {
+					var additional = Directory.EnumerateFiles (dir, "*.cs", SearchOption.AllDirectories);
+					sourceFiles.AddRange (additional);
+				}
+
+				//NOTE: due to the tests generating Java.Lang.Object or Java.Lang.String, we will get some warnings
+				SupportAssembly = Compiler.CompileToDisk (sourceFiles, out hasErrors, out compilerOutput, allowWarnings: true);
+				Assert.AreEqual (false, hasErrors, compilerOutput);
+				FileAssert.Exists (SupportAssembly, "Support assembly did not exist!");
+			}
+
+			//Compile the "main" assembly, this emulates a user's assembly in a binding project
+			{
+				var sourceDirectories = new List<string> (AdditionalSourceDirectories);
+				var csharpFiles = Directory.EnumerateFiles (Options.ManagedCallableWrapperSourceOutputDirectory, "*.cs", SearchOption.AllDirectories);
+				if (CompileToSingleAssembly) {
+					sourceDirectories.AddRange (AdditionalSupportDirectories);
+				} else {
+					csharpFiles = csharpFiles.Where (x => !Path.GetFileName (x).StartsWith ("Java.Lang.", StringComparison.InvariantCultureIgnoreCase));
+				}
+
+				var sourceFiles = csharpFiles.ToList ();
+				if (CompileToSingleAssembly) {
+					var supportFiles = Directory.EnumerateFiles (Path.Combine (Path.GetDirectoryName (supportFilePath), "SupportFiles"),
+						"*.cs", SearchOption.AllDirectories);
+					sourceFiles.AddRange (supportFiles);
+				}
+				foreach (var dir in sourceDirectories) {
+					var additional = Directory.EnumerateFiles (dir, "*.cs", SearchOption.AllDirectories);
+					sourceFiles.AddRange (additional);
+				}
+
+				MainAssembly = Compiler.CompileInMemory (sourceFiles, FullPath ("UserAssembly.dll"), SupportAssembly, out hasErrors, out compilerOutput, AllowWarnings);
+				Assert.AreEqual (false, hasErrors, compilerOutput);
+				Assert.IsNotNull (MainAssembly);
+			}
 		}
 
 		protected void CompareOutputs (string sourceDir, string destinationDir)
@@ -118,10 +190,10 @@ namespace generatortests
 			}
 		}
 
-		protected void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string[] additionalSupportPaths = null)
+		protected void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string[] additionalSupportPaths = null, string[] additionalSourcePaths = null)
 		{
-			Run (CodeGenerationTarget.XamarinAndroid,   Path.Combine ("out", outputRelativePath),       apiDescriptionFile,     Path.Combine ("expected", expectedRelativePath),        additionalSupportPaths);
-			Run (CodeGenerationTarget.JavaInterop1,     Path.Combine ("out.ji", outputRelativePath),    apiDescriptionFile,     Path.Combine ("expected.ji", expectedRelativePath),     additionalSupportPaths);
+			Run (CodeGenerationTarget.XamarinAndroid,   Path.Combine ("out", outputRelativePath),       apiDescriptionFile,     Path.Combine ("expected", expectedRelativePath),        additionalSupportPaths, additionalSourcePaths);
+			Run (CodeGenerationTarget.JavaInterop1,     Path.Combine ("out.ji", outputRelativePath),    apiDescriptionFile,     Path.Combine ("expected.ji", expectedRelativePath),     additionalSupportPaths, additionalSourcePaths);
 		}
 
 		protected string FullPath (string path)
@@ -130,7 +202,7 @@ namespace generatortests
 			return Path.Combine (dir, path.Replace ('/', Path.DirectorySeparatorChar));
 		}
 
-		protected void Run (CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string[] additionalSupportPaths = null)
+		protected void Run (CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string[] additionalSupportPaths = null, string[] additionalSourcePaths = null)
 		{
 			Cleanup (outputPath);
 
@@ -140,6 +212,9 @@ namespace generatortests
 
 			if (additionalSupportPaths != null) {
 				AdditionalSourceDirectories.AddRange (additionalSupportPaths.Select (p => FullPath (p)));
+			}
+			if (additionalSourcePaths != null) {
+				AdditionalSourceDirectories.AddRange (additionalSourcePaths.Select (p => FullPath (p)));
 			}
 
 			Execute ();

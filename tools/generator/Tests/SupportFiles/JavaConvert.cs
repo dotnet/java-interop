@@ -7,7 +7,7 @@ using Android.Runtime;
 
 namespace Java.Interop {
 
-	static class JavaConvert {
+	public static class JavaConvert {
 	
 		public static T FromJniHandle<T>(IntPtr handle, JniHandleOwnership transfer)
 		{

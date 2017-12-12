@@ -12,10 +12,10 @@ namespace generatortests
 			//hides inherited member `Java.Lang.Object.class_ref'
 			AllowWarnings = true;
 			RunAllTargets (
-					outputRelativePath:     "Adapters",
-					apiDescriptionFile:     "expected/Adapters/Adapters.xml",
-					expectedRelativePath:   "Adapters",
-					additionalSupportPaths: new[]{ "expected/Adapters/SupportFiles" });
+					outputRelativePath:    "Adapters",
+					apiDescriptionFile:    "expected/Adapters/Adapters.xml",
+					expectedRelativePath:  "Adapters",
+					additionalSourcePaths: new[]{ "expected/Adapters/SupportFiles" });
 		}
 	}
 }

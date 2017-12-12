@@ -1,0 +1,691 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<api>
+	<package name="java.lang">
+		<class abstract="false" deprecated="not deprecated" final="false" name="Object" static="false" visibility="public">
+		</class>
+	</package>
+	<package name="android.app">
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object" final="false" name="Activity" static="false" visibility="public">
+			<constructor deprecated="not deprecated" final="false" name="Activity" static="false" type="android.app.Activity" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="addContentView" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="view" type="android.view.View"></parameter>
+			<parameter name="params" type="android.view.ViewGroup.LayoutParams"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="closeContextMenu" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="closeOptionsMenu" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="createPendingResult" native="false" return="android.app.PendingIntent" static="false" synchronized="false" visibility="public">
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="data" type="android.content.Intent"></parameter>
+			<parameter name="flags" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="dismissDialog" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="15">
+			<parameter name="id" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="dismissKeyboardShortcutsHelper" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="dispatchGenericMotionEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="ev" type="android.view.MotionEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="dispatchKeyEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="dispatchKeyShortcutEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="dispatchPopulateAccessibilityEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="event" type="android.view.accessibility.AccessibilityEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="dispatchTouchEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="ev" type="android.view.MotionEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="dispatchTrackballEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="ev" type="android.view.MotionEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="dump" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="prefix" type="java.lang.String"></parameter>
+			<parameter name="fd" type="java.io.FileDescriptor"></parameter>
+			<parameter name="writer" type="java.io.PrintWriter"></parameter>
+			<parameter name="args" type="java.lang.String[]"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="false" name="enterPictureInPictureMode" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" deprecated-since="26" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="enterPictureInPictureMode" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-26.xml.in">
+			<parameter name="params" type="android.app.PictureInPictureParams"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="findViewById" native="false" return="T" static="false" synchronized="false" visibility="public">
+			<typeParameters>
+				<typeParameter name="T">
+				<genericConstraints>
+					<genericConstraint type="android.view.View"></genericConstraint>
+				</genericConstraints>
+				</typeParameter>
+			</typeParameters>
+			<parameter name="id" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="finish" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="finishActivity" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="finishActivityFromChild" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="finishAffinity" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="finishAfterTransition" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="finishAndRemoveTask" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="finishFromChild" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="getActionBar" native="false" return="android.app.ActionBar" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getApplication" native="false" return="android.app.Application" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getCallingActivity" native="false" return="android.content.ComponentName" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getCallingPackage" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getChangingConfigurations" native="false" return="int" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getComponentName" native="false" return="android.content.ComponentName" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getContentScene" native="false" return="android.transition.Scene" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getContentTransitionManager" native="false" return="android.transition.TransitionManager" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getCurrentFocus" native="false" return="android.view.View" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getFragmentManager" native="false" return="android.app.FragmentManager" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getInstanceCount" native="false" return="long" static="true" synchronized="false" visibility="public"></method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="getIntent" native="false" return="android.content.Intent" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getLastNonConfigurationInstance" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public" deprecated-since="15" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getLayoutInflater" native="false" return="android.view.LayoutInflater" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getLoaderManager" native="false" return="android.app.LoaderManager" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getLocalClassName" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getMaxNumPictureInPictureActions" native="false" return="int" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-26.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getMediaController" native="false" return="android.media.session.MediaController" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getMenuInflater" native="false" return="android.view.MenuInflater" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getParent" native="false" return="android.app.Activity" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getParentActivityIntent" native="false" return="android.content.Intent" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getPreferences" native="false" return="android.content.SharedPreferences" static="false" synchronized="false" visibility="public">
+			<parameter name="mode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="getReferrer" native="false" return="android.net.Uri" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-22.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getRequestedOrientation" native="false" return="int" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getSearchEvent" native="false" return="android.view.SearchEvent" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getTaskId" native="false" return="int" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getTitle" native="false" return="java.lang.CharSequence" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getTitleColor" native="false" return="int" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getVoiceInteractor" native="false" return="android.app.VoiceInteractor" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="getVolumeControlStream" native="false" return="int" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getWindow" native="false" return="android.view.Window" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="getWindowManager" native="false" return="android.view.WindowManager" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="hasWindowFocus" native="false" return="boolean" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="invalidateOptionsMenu" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isActivityTransitionRunning" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-26.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isChangingConfigurations" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="true" name="isChild" native="false" return="boolean" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isDestroyed" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-17.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isFinishing" native="false" return="boolean" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isImmersive" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-18.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isInMultiWindowMode" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isInPictureInPictureMode" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isLocalVoiceInteractionSupported" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isTaskRoot" native="false" return="boolean" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isVoiceInteraction" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="isVoiceInteractionRoot" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="deprecated" final="true" name="managedQuery" native="false" return="android.database.Cursor" static="false" synchronized="false" visibility="public" deprecated-since="15">
+			<parameter name="uri" type="android.net.Uri"></parameter>
+			<parameter name="projection" type="java.lang.String[]"></parameter>
+			<parameter name="selection" type="java.lang.String"></parameter>
+			<parameter name="selectionArgs" type="java.lang.String[]"></parameter>
+			<parameter name="sortOrder" type="java.lang.String"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="moveTaskToBack" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="nonRoot" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="navigateUpTo" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="upIntent" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="navigateUpToFromChild" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			<parameter name="upIntent" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onActionModeFinished" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="mode" type="android.view.ActionMode"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onActionModeStarted" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="mode" type="android.view.ActionMode"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onActivityReenter" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="resultCode" type="int"></parameter>
+			<parameter name="data" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onActivityResult" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="resultCode" type="int"></parameter>
+			<parameter name="data" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onAttachedToWindow" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onAttachFragment" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="fragment" type="android.app.Fragment"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onBackPressed" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onChildTitleChanged" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="childActivity" type="android.app.Activity"></parameter>
+			<parameter name="title" type="java.lang.CharSequence"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onConfigurationChanged" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="newConfig" type="android.content.res.Configuration"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onContentChanged" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onContextItemSelected" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="item" type="android.view.MenuItem"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onContextMenuClosed" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreate" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="savedInstanceState" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreate" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="savedInstanceState" type="android.os.Bundle"></parameter>
+			<parameter name="persistentState" type="android.os.PersistableBundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateContextMenu" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="menu" type="android.view.ContextMenu"></parameter>
+			<parameter name="v" type="android.view.View"></parameter>
+			<parameter name="menuInfo" type="android.view.ContextMenu.ContextMenuInfo"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateDescription" native="false" return="java.lang.CharSequence" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="deprecated" final="false" name="onCreateDialog" native="false" return="android.app.Dialog" static="false" synchronized="false" visibility="protected" deprecated-since="15">
+			<parameter name="id" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="false" name="onCreateDialog" native="false" return="android.app.Dialog" static="false" synchronized="false" visibility="protected">
+			<parameter name="id" type="int"></parameter>
+			<parameter name="args" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateNavigateUpTaskStack" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="builder" type="android.app.TaskStackBuilder"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateOptionsMenu" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreatePanelMenu" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreatePanelView" native="false" return="android.view.View" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateThumbnail" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="outBitmap" type="android.graphics.Bitmap"></parameter>
+			<parameter name="canvas" type="android.graphics.Canvas"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateView" native="false" return="android.view.View" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="parent" type="android.view.View"></parameter>
+			<parameter name="name" type="java.lang.String"></parameter>
+			<parameter name="context" type="android.content.Context"></parameter>
+			<parameter name="attrs" type="android.util.AttributeSet"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onCreateView" native="false" return="android.view.View" static="false" synchronized="false" visibility="public">
+			<parameter name="name" type="java.lang.String"></parameter>
+			<parameter name="context" type="android.content.Context"></parameter>
+			<parameter name="attrs" type="android.util.AttributeSet"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onDestroy" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onDetachedFromWindow" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onEnterAnimationComplete" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onGenericMotionEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="event" type="android.view.MotionEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onKeyDown" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="keyCode" type="int"></parameter>
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onKeyLongPress" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="keyCode" type="int"></parameter>
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onKeyMultiple" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="keyCode" type="int"></parameter>
+			<parameter name="repeatCount" type="int"></parameter>
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onKeyShortcut" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="keyCode" type="int"></parameter>
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onKeyUp" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="keyCode" type="int"></parameter>
+			<parameter name="event" type="android.view.KeyEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onLocalVoiceInteractionStarted" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onLocalVoiceInteractionStopped" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onLowMemory" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onMenuItemSelected" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="item" type="android.view.MenuItem"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onMenuOpened" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="false" name="onMultiWindowModeChanged" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" deprecated-since="26">
+			<parameter name="isInMultiWindowMode" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onMultiWindowModeChanged" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-26.xml.in">
+			<parameter name="isInMultiWindowMode" type="boolean"></parameter>
+			<parameter name="newConfig" type="android.content.res.Configuration"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onNavigateUp" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onNavigateUpFromChild" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onNewIntent" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onOptionsItemSelected" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="item" type="android.view.MenuItem"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onOptionsMenuClosed" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPanelClosed" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPause" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="deprecated" final="false" name="onPictureInPictureModeChanged" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" deprecated-since="26">
+			<parameter name="isInPictureInPictureMode" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPictureInPictureModeChanged" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-26.xml.in">
+			<parameter name="isInPictureInPictureMode" type="boolean"></parameter>
+			<parameter name="newConfig" type="android.content.res.Configuration"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPostCreate" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="savedInstanceState" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPostCreate" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="savedInstanceState" type="android.os.Bundle"></parameter>
+			<parameter name="persistentState" type="android.os.PersistableBundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPostResume" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="deprecated" final="false" name="onPrepareDialog" native="false" return="void" static="false" synchronized="false" visibility="protected" deprecated-since="15">
+			<parameter name="id" type="int"></parameter>
+			<parameter name="dialog" type="android.app.Dialog"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="false" name="onPrepareDialog" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="id" type="int"></parameter>
+			<parameter name="dialog" type="android.app.Dialog"></parameter>
+			<parameter name="args" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPrepareNavigateUpTaskStack" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="builder" type="android.app.TaskStackBuilder"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPrepareOptionsMenu" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onPreparePanel" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="view" type="android.view.View"></parameter>
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onProvideAssistContent" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="outContent" type="android.app.assist.AssistContent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onProvideAssistData" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-18.xml.in">
+			<parameter name="data" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onProvideKeyboardShortcuts" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in">
+			<parameter name="data" type="java.util.List&lt;android.view.KeyboardShortcutGroup&gt;"></parameter>
+			<parameter name="menu" type="android.view.Menu"></parameter>
+			<parameter name="deviceId" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onProvideReferrer" native="false" return="android.net.Uri" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onRequestPermissionsResult" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="permissions" type="java.lang.String[]"></parameter>
+			<parameter name="grantResults" type="int[]"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onRestart" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onRestoreInstanceState" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="savedInstanceState" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onRestoreInstanceState" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="savedInstanceState" type="android.os.Bundle"></parameter>
+			<parameter name="persistentState" type="android.os.PersistableBundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onResume" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onRetainNonConfigurationInstance" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public" deprecated-since="15" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onSaveInstanceState" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="outState" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onSaveInstanceState" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="outState" type="android.os.Bundle"></parameter>
+			<parameter name="outPersistentState" type="android.os.PersistableBundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onSearchRequested" native="false" return="boolean" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onSearchRequested" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="searchEvent" type="android.view.SearchEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onStart" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onStateNotSaved" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onStop" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onTitleChanged" native="false" return="void" static="false" synchronized="false" visibility="protected">
+			<parameter name="title" type="java.lang.CharSequence"></parameter>
+			<parameter name="color" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onTouchEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="event" type="android.view.MotionEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onTrackballEvent" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="event" type="android.view.MotionEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onTrimMemory" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="level" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onUserInteraction" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onUserLeaveHint" native="false" return="void" static="false" synchronized="false" visibility="protected" />
+			<method abstract="false" deprecated="deprecated" final="false" name="onVisibleBehindCanceled" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" deprecated-since="26" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="onWindowAttributesChanged" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="params" type="android.view.WindowManager.LayoutParams"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onWindowFocusChanged" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="hasFocus" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onWindowStartingActionMode" native="false" return="android.view.ActionMode" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="callback" type="android.view.ActionMode.Callback"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="onWindowStartingActionMode" native="false" return="android.view.ActionMode" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="callback" type="android.view.ActionMode.Callback"></parameter>
+			<parameter name="type" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="openContextMenu" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="view" type="android.view.View"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="openOptionsMenu" native="false" return="void" static="false" synchronized="false" visibility="public" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="overridePendingTransition" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="enterAnim" type="int"></parameter>
+			<parameter name="exitAnim" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="postponeEnterTransition" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="recreate" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="registerForContextMenu" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="view" type="android.view.View"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="releaseInstance" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="deprecated" final="true" name="removeDialog" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="15">
+			<parameter name="id" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="reportFullyDrawn" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-19.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="requestDragAndDropPermissions" native="false" return="android.view.DragAndDropPermissions" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in">
+			<parameter name="event" type="android.view.DragEvent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="requestPermissions" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="permissions" type="java.lang.String[]"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="requestShowKeyboardShortcuts" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="deprecated" final="false" name="requestVisibleBehind" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" deprecated-since="26">
+			<parameter name="visible" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="requestWindowFeature" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="runOnUiThread" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="action" type="java.lang.Runnable"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setActionBar" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="toolbar" type="android.widget.Toolbar"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setContentTransitionManager" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="tm" type="android.transition.TransitionManager"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setContentView" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="view" type="android.view.View"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setContentView" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="view" type="android.view.View"></parameter>
+			<parameter name="params" type="android.view.ViewGroup.LayoutParams"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setContentView" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="layoutResID" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setDefaultKeyMode" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="mode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setEnterSharedElementCallback" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="callback" type="android.app.SharedElementCallback"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setExitSharedElementCallback" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="callback" type="android.app.SharedElementCallback"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setFeatureDrawable" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="drawable" type="android.graphics.drawable.Drawable"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setFeatureDrawableAlpha" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="alpha" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setFeatureDrawableResource" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="resId" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setFeatureDrawableUri" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="featureId" type="int"></parameter>
+			<parameter name="uri" type="android.net.Uri"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setFinishOnTouchOutside" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="finish" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setImmersive" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-18.xml.in">
+			<parameter name="i" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setIntent" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="newIntent" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setMediaController" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="controller" type="android.media.session.MediaController"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setPersistent" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="isPersistent" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setPictureInPictureParams" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-26.xml.in">
+			<parameter name="params" type="android.app.PictureInPictureParams"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="setProgress" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="24">
+			<parameter name="progress" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="setProgressBarIndeterminate" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="24">
+			<parameter name="indeterminate" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="setProgressBarIndeterminateVisibility" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="24">
+			<parameter name="visible" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="setProgressBarVisibility" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="24">
+			<parameter name="visible" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setRequestedOrientation" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="requestedOrientation" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setResult" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="resultCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setResult" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="resultCode" type="int"></parameter>
+			<parameter name="data" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="setSecondaryProgress" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="24">
+			<parameter name="secondaryProgress" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setShowWhenLocked" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-27.xml.in">
+			<parameter name="showWhenLocked" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setTaskDescription" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in">
+			<parameter name="taskDescription" type="android.app.ActivityManager.TaskDescription"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setTitle" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="titleId" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setTitle" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="title" type="java.lang.CharSequence"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="false" name="setTitleColor" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="21">
+			<parameter name="textColor" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setTurnScreenOn" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-27.xml.in">
+			<parameter name="turnScreenOn" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setVisible" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="visible" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="true" name="setVolumeControlStream" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="streamType" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="setVrModeEnabled" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in">
+			<parameter name="enabled" type="boolean"></parameter>
+			<parameter name="requestedComponent" type="android.content.ComponentName"></parameter>
+			<exception name="PackageManager.NameNotFoundException" type="android.content.pm.PackageManager.NameNotFoundException"></exception>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="shouldShowRequestPermissionRationale" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="permission" type="java.lang.String"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="shouldUpRecreateTask" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="targetIntent" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="showAssist" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="args" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="showDialog" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="15">
+			<parameter name="id" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="deprecated" final="true" name="showDialog" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="id" type="int"></parameter>
+			<parameter name="args" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="showLockTaskEscapeMessage" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActionMode" native="false" return="android.view.ActionMode" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="callback" type="android.view.ActionMode.Callback"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActionMode" native="false" return="android.view.ActionMode" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-23.xml.in">
+			<parameter name="callback" type="android.view.ActionMode.Callback"></parameter>
+			<parameter name="type" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityForResult" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityForResult" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityFromChild" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityFromChild" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityFromFragment" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-15.xml.in">
+			<parameter name="fragment" type="android.app.Fragment"></parameter>
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityFromFragment" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="fragment" type="android.app.Fragment"></parameter>
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityIfNeeded" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startActivityIfNeeded" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startIntentSenderForResult" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="intent" type="android.content.IntentSender"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="fillInIntent" type="android.content.Intent"></parameter>
+			<parameter name="flagsMask" type="int"></parameter>
+			<parameter name="flagsValues" type="int"></parameter>
+			<parameter name="extraFlags" type="int"></parameter>
+			<exception name="IntentSender.SendIntentException" type="android.content.IntentSender.SendIntentException"></exception>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startIntentSenderForResult" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="intent" type="android.content.IntentSender"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="fillInIntent" type="android.content.Intent"></parameter>
+			<parameter name="flagsMask" type="int"></parameter>
+			<parameter name="flagsValues" type="int"></parameter>
+			<parameter name="extraFlags" type="int"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			<exception name="IntentSender.SendIntentException" type="android.content.IntentSender.SendIntentException"></exception>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startIntentSenderFromChild" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			<parameter name="intent" type="android.content.IntentSender"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="fillInIntent" type="android.content.Intent"></parameter>
+			<parameter name="flagsMask" type="int"></parameter>
+			<parameter name="flagsValues" type="int"></parameter>
+			<parameter name="extraFlags" type="int"></parameter>
+			<exception name="IntentSender.SendIntentException" type="android.content.IntentSender.SendIntentException"></exception>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startIntentSenderFromChild" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="child" type="android.app.Activity"></parameter>
+			<parameter name="intent" type="android.content.IntentSender"></parameter>
+			<parameter name="requestCode" type="int"></parameter>
+			<parameter name="fillInIntent" type="android.content.Intent"></parameter>
+			<parameter name="flagsMask" type="int"></parameter>
+			<parameter name="flagsValues" type="int"></parameter>
+			<parameter name="extraFlags" type="int"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			<exception name="IntentSender.SendIntentException" type="android.content.IntentSender.SendIntentException"></exception>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startLocalVoiceInteraction" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in">
+			<parameter name="privateOptions" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startLockTask" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="deprecated" final="false" name="startManagingCursor" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="15">
+			<parameter name="c" type="android.database.Cursor"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startNextMatchingActivity" native="false" return="boolean" static="false" synchronized="false" visibility="public">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startNextMatchingActivity" native="false" return="boolean" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-16.xml.in">
+			<parameter name="intent" type="android.content.Intent"></parameter>
+			<parameter name="options" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="startPostponedEnterTransition" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="startSearch" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="initialQuery" type="java.lang.String"></parameter>
+			<parameter name="selectInitialQuery" type="boolean"></parameter>
+			<parameter name="appSearchData" type="android.os.Bundle"></parameter>
+			<parameter name="globalSearch" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="stopLocalVoiceInteraction" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-24.xml.in" />
+			<method abstract="false" deprecated="not deprecated" final="false" name="stopLockTask" native="false" return="void" static="false" synchronized="false" visibility="public" merge.SourceFile="..\..\bin\BuildRelease\api\api-21.xml.in" />
+			<method abstract="false" deprecated="deprecated" final="false" name="stopManagingCursor" native="false" return="void" static="false" synchronized="false" visibility="public" deprecated-since="15">
+			<parameter name="c" type="android.database.Cursor"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="takeKeyEvents" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="get" type="boolean"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="triggerSearch" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="query" type="java.lang.String"></parameter>
+			<parameter name="appSearchData" type="android.os.Bundle"></parameter>
+			</method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="unregisterForContextMenu" native="false" return="void" static="false" synchronized="false" visibility="public">
+			<parameter name="view" type="android.view.View"></parameter>
+			</method>
+			<field deprecated="not deprecated" final="true" name="DEFAULT_KEYS_DIALER" static="true" transient="false" type="int" type-generic-aware="int" value="1" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="DEFAULT_KEYS_DISABLE" static="true" transient="false" type="int" type-generic-aware="int" value="0" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="DEFAULT_KEYS_SEARCH_GLOBAL" static="true" transient="false" type="int" type-generic-aware="int" value="4" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="DEFAULT_KEYS_SEARCH_LOCAL" static="true" transient="false" type="int" type-generic-aware="int" value="3" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="DEFAULT_KEYS_SHORTCUT" static="true" transient="false" type="int" type-generic-aware="int" value="2" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="FOCUSED_STATE_SET" static="true" transient="false" type="int[]" type-generic-aware="int[]" visibility="protected" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="RESULT_CANCELED" static="true" transient="false" type="int" type-generic-aware="int" value="0" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="RESULT_FIRST_USER" static="true" transient="false" type="int" type-generic-aware="int" value="1" visibility="public" volatile="false"></field>
+			<field deprecated="not deprecated" final="true" name="RESULT_OK" static="true" transient="false" type="int" type-generic-aware="int" value="-1" visibility="public" volatile="false"></field>
+		</class>
+	</package>
+</api>
