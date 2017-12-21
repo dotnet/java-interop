@@ -32,7 +32,10 @@ JI_JAR_PATH   = jar
 ifneq ($(JI_MAX_JDK),)
 _VERSION_MAX  := | awk '$$1 <= $(JI_MAX_JDK)'
 endif #JI_MAX_JDK
+
 # Sort numerically on version numbers with `sort -n`, filtering on $(JI_MAX_JDK) if needed
+# Replace each line so it starts with a number (sed 's/...'\1 &/), sort on the leading number, then remove the leading number.
+# Grab the last path name printed.
 _VERSION_SORT := sed 's/[^0-9]*\([0-9.]*\)/\1 &/' $(_VERSION_MAX) | sort -n | sed 's/^[0-9.]* //g' | tail -1
 
 ifeq ($(OS),Darwin)
