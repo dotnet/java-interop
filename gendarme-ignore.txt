@@ -656,3 +656,8 @@ R: Gendarme.Rules.Performance.UseStringEmptyRule
 # these are compiler generated
 M: System.String <>__AnonType0`2::ToString()
 M: System.String <>__AnonType1`2::ToString()
+
+R: Gendarme.Rules.Performance.ImplementEqualsTypeRule
+# it doesn't make sense to implement IEquality<T> on unsealed classes
+T: Java.Interop.JavaException
+T: Java.Interop.JavaObject
