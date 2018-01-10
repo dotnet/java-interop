@@ -22,6 +22,10 @@ R: Gendarme.Rules.BadPractice.PreferSafeHandleRule
 # No, we don't want/need a SafeHandle for JniRuntime.InvocationPointer!
 T: Java.Interop.JniEnvironmentInfo
 T: Java.Interop.JniRuntime
+# We don't want to use the SafeHandle here to improve the performance
+T: Java.Interop.JavaException
+T: Java.Interop.JavaObject
+T: Java.Interop.JniArrayElements
 
 R: Gendarme.Rules.Correctness.AvoidFloatingPointEqualityRule
 # This is in from generated code. We could plausibly fix the generated code, but I'm not at all sure what to change it *to*.
