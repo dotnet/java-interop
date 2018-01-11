@@ -242,6 +242,12 @@ M: System.Reflection.Assembly Java.Interop.JniRuntime/JniTypeManager::TryLoadAss
 # The exception is transitioned to Jni
 M:System.Void Java.Interop.ManagedPeer::Construct(System.IntPtr,System.IntPtr,System.IntPtr,System.IntPtr,System.IntPtr,System.IntPtr)
 
+
+R: Gendarme.Rules.Exceptions.DoNotThrowInUnexpectedLocationRule
+# throwing ArgumentOutOfRangeException is OK according to the documentation https://msdn.microsoft.com/library/system.collections.ilist.item(v=vs.110).aspx
+M: T Java.Interop.JavaObjectArray`1::get_Item(System.Int32)
+
+
 R: Gendarme.Rules.Exceptions.ExceptionShouldBeVisibleRule
 T: Java.Interop.JniLocationException
 
@@ -685,6 +691,7 @@ R: Gendarme.Rules.Performance.UseStringEmptyRule
 M: System.String <>__AnonType0`2::ToString()
 M: System.String <>__AnonType1`2::ToString()
 
-R: Gendarme.Rules.Exceptions.DoNotThrowInUnexpectedLocationRule
-# throwing ArgumentOutOfRangeException is OK according to the documentation https://msdn.microsoft.com/library/system.collections.ilist.item(v=vs.110).aspx
-M: T Java.Interop.JavaObjectArray`1::get_Item(System.Int32)
+R: Gendarme.Rules.Performance.ImplementEqualsTypeRule
+# it doesn't make sense to implement IEquality<T> on unsealed classes
+T: Java.Interop.JavaException
+T: Java.Interop.JavaObject
