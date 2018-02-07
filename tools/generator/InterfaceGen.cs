@@ -376,7 +376,7 @@ namespace MonoDroid.Generation {
 						if (p.IsSender)
 							continue;
 						sw.WriteLine ();
-						var safeTypeName = p.Type.StartsWith ("params ", StringComparison.Ordinal) ? p.Type.Substring (7) : p.Type;
+						var safeTypeName = p.Type.StartsWith ("params ", StringComparison.Ordinal) ? p.Type.Substring ("params ".Length) : p.Type;
 						sw.WriteLine ("{0}\t{1} {2};", indent, opt.GetOutputName (safeTypeName), opt.GetSafeIdentifier (p.Name));
 						// AbsListView.IMultiChoiceModeListener.onItemCheckedStateChanged() hit this strict name check, at parameter "@checked".
 						sw.WriteLine ("{0}\tpublic {1} {2} {{", indent, opt.GetOutputName (safeTypeName), p.PropertyName);
