@@ -115,7 +115,7 @@ namespace Java.Interop.Tools.Cecil {
 			if (!File.Exists (fileName))
 				return null;
 
-			AssemblyDefinition assembly;
+			AssemblyDefinition assembly = null;
 			var name = Path.GetFileNameWithoutExtension (fileName);
 			if (!forceLoad && cache.TryGetValue (name, out assembly))
 				return assembly;
