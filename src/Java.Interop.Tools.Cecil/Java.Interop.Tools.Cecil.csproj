@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Java.Interop.Tools.Cecil\AssemblyNotFoundException.cs" />
     <Compile Include="Java.Interop.Tools.Cecil\CustomAttributeProviderRocks.cs" />
     <Compile Include="Java.Interop.Tools.Cecil\DirectoryAssemblyResolver.cs" />
     <Compile Include="Java.Interop.Tools.Cecil\MethodDefinitionRocks.cs" />

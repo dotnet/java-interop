@@ -193,15 +193,7 @@ namespace Java.Interop.Tools.Cecil {
 				if ((assembly = SearchDirectory (name, dir)) != null)
 					return assembly;
 
-			throw new System.IO.FileNotFoundException (
-				string.Format ("Could not load assembly '{0}, Version={1}, Culture={2}, PublicKeyToken={3}'. Perhaps it doesn't exist in the Mono for Android profile?",
-						name,
-						reference.Version,
-						string.IsNullOrEmpty (reference.Culture) ? "neutral" : reference.Culture,
-						reference.PublicKeyToken == null
-						? "null"
-						: string.Join ("", reference.PublicKeyToken.Select(b => b.ToString ("x2")))),
-				name + ".dll");
+			throw new AssemblyNotFoundException (reference);
 		}
 
 		public AssemblyDefinition Resolve (AssemblyNameReference reference, ReaderParameters parameters)
@@ -226,15 +218,7 @@ namespace Java.Interop.Tools.Cecil {
 			if (candidate != null)
 				return candidate;
 
-			throw new System.IO.FileNotFoundException (
-					string.Format ("Could not load assembly '{0}, Version={1}, Culture={2}, PublicKeyToken={3}'. Perhaps it doesn't exist in the Mono for Android profile?",
-						name, 
-						reference.Version, 
-						string.IsNullOrEmpty (reference.Culture) ? "neutral" : reference.Culture, 
-						reference.PublicKeyToken == null
-						? "null"
-						: string.Join ("", reference.PublicKeyToken.Select(b => b.ToString ("x2")))),
-					name + ".dll");
+			throw new AssemblyNotFoundException (reference);
 		}
 
 		string SearchDirectory (string name, string directory)
