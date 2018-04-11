@@ -162,7 +162,7 @@
     <Content Include="expected\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-        <Content Include="expected.ji\**\*">
+    <Content Include="expected.ji\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="..\Tests-Core\api-cp.xml">
