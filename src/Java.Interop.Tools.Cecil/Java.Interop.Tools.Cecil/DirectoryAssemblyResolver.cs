@@ -64,7 +64,7 @@ namespace Java.Interop.Tools.Cecil {
 		Dictionary<string, AssemblyDefinition> cache;
 		bool loadDebugSymbols;
 		Action<TraceLevel, string>              logger;
-
+		List<AssemblyNameReference>             resolutionPath;
 		ReaderParameters                        loadReaderParameters;
 
 		static  readonly    ReaderParameters    DefaultLoadReaderParameters = new ReaderParameters {
@@ -86,6 +86,7 @@ namespace Java.Interop.Tools.Cecil {
 			this.loadDebugSymbols = loadDebugSymbols;
 			this.logger       = logger;
 			SearchDirectories = new List<string> ();
+			this.resolutionPath = new List<AssemblyNameReference> ();
 			this.loadReaderParameters = loadReaderParameters ?? DefaultLoadReaderParameters;
 		}
 
@@ -193,15 +194,7 @@ namespace Java.Interop.Tools.Cecil {
 				if ((assembly = SearchDirectory (name, dir)) != null)
 					return assembly;
 
-			throw new System.IO.FileNotFoundException (
-				string.Format ("Could not load assembly '{0}, Version={1}, Culture={2}, PublicKeyToken={3}'. Perhaps it doesn't exist in the Mono for Android profile?",
-						name,
-						reference.Version,
-						string.IsNullOrEmpty (reference.Culture) ? "neutral" : reference.Culture,
-						reference.PublicKeyToken == null
-						? "null"
-						: string.Join ("", reference.PublicKeyToken.Select(b => b.ToString ("x2")))),
-				name + ".dll");
+			throw new AssemblyNotFoundException (reference, resolutionPath);
 		}
 
 		public AssemblyDefinition Resolve (AssemblyNameReference reference, ReaderParameters parameters)
@@ -211,6 +204,8 @@ namespace Java.Interop.Tools.Cecil {
 			AssemblyDefinition assembly;
 			if (cache.TryGetValue (name, out assembly))
 				return assembly;
+
+			resolutionPath.Add (reference);
 
 			string assemblyFile;
 			AssemblyDefinition candidate = null;
@@ -226,15 +221,7 @@ namespace Java.Interop.Tools.Cecil {
 			if (candidate != null)
 				return candidate;
 
-			throw new System.IO.FileNotFoundException (
-					string.Format ("Could not load assembly '{0}, Version={1}, Culture={2}, PublicKeyToken={3}'. Perhaps it doesn't exist in the Mono for Android profile?",
-						name, 
-						reference.Version, 
-						string.IsNullOrEmpty (reference.Culture) ? "neutral" : reference.Culture, 
-						reference.PublicKeyToken == null
-						? "null"
-						: string.Join ("", reference.PublicKeyToken.Select(b => b.ToString ("x2")))),
-					name + ".dll");
+			throw new AssemblyNotFoundException (reference, resolutionPath);
 		}
 
 		string SearchDirectory (string name, string directory)
