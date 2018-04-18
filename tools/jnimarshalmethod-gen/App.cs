@@ -62,7 +62,11 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 				return 0;
 			}
 
-			var readWriteParameters = new ReaderParameters { ReadWrite = true, AssemblyResolver = resolver, ReadSymbols = true };
+			var readWriteParameters    = new ReaderParameters {
+				AssemblyResolver   = resolver,
+				ReadSymbols        = true,
+				ReadWrite          = true,
+			};
 			foreach (var assembly in assemblies) {
 				if (!File.Exists (assembly)) {
 					Error ($"Path '{assembly}' does not exist.");
