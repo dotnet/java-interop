@@ -8,9 +8,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BB0AB9F7-0979-41A7-B7A9-877260655F94}</ProjectGuid>
   </PropertyGroup>
+  <Import Project="..\..\Configuration.props" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\bin\Debug</OutputPath>
+    <OutputPath>$(UtilityOutputFullPath)</OutputPath>
     <JNIEnvGenPath>..\..\bin\BuildDebug</JNIEnvGenPath>
     <OutputName>java-interop</OutputName>
     <CompileTarget>SharedLibrary</CompileTarget>
@@ -18,7 +19,7 @@
     <SourceDirectory>.</SourceDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\bin\Release</OutputPath>
+    <OutputPath>$(UtilityOutputFullPath)</OutputPath>
     <OutputName>java-interop</OutputName>
     <JNIEnvGenPath>..\..\bin\BuildRelease</JNIEnvGenPath>
     <CompileTarget>SharedLibrary</CompileTarget>
