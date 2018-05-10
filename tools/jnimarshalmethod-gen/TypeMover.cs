@@ -76,11 +76,12 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 				}
 			}
 
-			if (toRemove != null)
+			if (toRemove != null) {
 				foreach (var t in toRemove) {
 					App.ColorWriteLine ($"Removing original '{t.GetAssemblyQualifiedName ()}' type. (forced)", ConsoleColor.Cyan);
 					typeDst.NestedTypes.Remove (t);
 				}
+			}
 
 			var jniType = new TypeDefinition ("", NestedName, TypeAttributes.NestedPrivate | TypeAttributes.Sealed);
 
