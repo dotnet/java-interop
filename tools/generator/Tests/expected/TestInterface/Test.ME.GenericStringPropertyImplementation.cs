@@ -8,8 +8,8 @@ namespace Test.ME {
 	[global::Android.Runtime.Register ("test/me/GenericStringPropertyImplementation", DoNotGenerateAcw=true)]
 	public partial class GenericStringPropertyImplementation : global::Java.Lang.Object, global::Test.ME.IGenericPropertyInterface {
 
-		internal static new IntPtr java_class_handle;
-		internal static new IntPtr class_ref {
+		internal static IntPtr java_class_handle;
+		internal static IntPtr class_ref {
 			get {
 				return JNIEnv.FindClass ("test/me/GenericStringPropertyImplementation", ref java_class_handle);
 			}

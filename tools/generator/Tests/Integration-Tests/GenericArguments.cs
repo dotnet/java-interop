@@ -9,8 +9,7 @@ namespace generatortests
 		[Test]
 		public void GeneratedOK ()
 		{
-			//hides inherited member `Java.Lang.Object.class_ref'
-			AllowWarnings = true;
+			CompileToSingleAssembly = true;
 			RunAllTargets (
 					outputRelativePath: "GenericArguments",
 					apiDescriptionFile: "expected/GenericArguments/GenericArguments.xml",

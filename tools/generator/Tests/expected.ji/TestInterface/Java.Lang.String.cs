@@ -9,8 +9,8 @@ namespace Java.Lang {
 	[global::Android.Runtime.Register ("java/lang/String", DoNotGenerateAcw=true)]
 	public sealed partial class String : global::Java.Lang.Object {
 
-		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("java/lang/String", typeof (String));
-		internal static new IntPtr class_ref {
+		internal            static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("java/lang/String", typeof (String));
+		internal static IntPtr class_ref {
 			get {
 				return _members.JniPeerType.PeerReference.Handle;
 			}

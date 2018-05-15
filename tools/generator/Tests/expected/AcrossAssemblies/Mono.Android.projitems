@@ -8,7 +8,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)\Java.Interop.__TypeRegistrations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Java.Lang.Foo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Java.Lang.IMyInterface.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)\Java.Lang.Object.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Xamarin.Test.ExtendsFoo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Xamarin.Test.MyInterfaceImplementation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\__NamespaceMapping__.cs" />

@@ -9,8 +9,8 @@ namespace Xamarin.Test {
 	[global::Android.Runtime.Register ("xamarin/test/ExtendPublicClass", DoNotGenerateAcw=true)]
 	public partial class ExtendPublicClass : global::Java.Lang.Object {
 
-		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("xamarin/test/ExtendPublicClass", typeof (ExtendPublicClass));
-		internal static new IntPtr class_ref {
+		internal            static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("xamarin/test/ExtendPublicClass", typeof (ExtendPublicClass));
+		internal static IntPtr class_ref {
 			get {
 				return _members.JniPeerType.PeerReference.Handle;
 			}

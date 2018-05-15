@@ -10,8 +10,8 @@ namespace Java.Lang {
 	[global::Java.Interop.JavaTypeParameters (new string [] {"T"})]
 	public partial class Class : global::Java.Lang.Object {
 
-		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("java/lang/Class", typeof (Class));
-		internal static new IntPtr class_ref {
+		internal            static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("java/lang/Class", typeof (Class));
+		internal static IntPtr class_ref {
 			get {
 				return _members.JniPeerType.PeerReference.Handle;
 			}

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <api>
 	<package name="java.lang">
-		<class abstract="false" deprecated="not deprecated" final="false" name="Object" static="false" visibility="public">
-		</class>
 		<!--
 			public class Foo {
 				public void bar();

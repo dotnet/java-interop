@@ -467,16 +467,7 @@ namespace MonoDroid.Generation {
 				sw.WriteLine ();
 			}
 
-			bool requireNew = InheritsObject;
-			if (!requireNew) {
-				for (var bg = BaseGen; bg != null && bg is XmlClassGen; bg = bg.BaseGen) {
-					if (bg.InheritsObject) {
-						requireNew = true;
-						break;
-					}
-				}
-			}
-			opt.CodeGenerator.WriteClassHandle (this, sw, indent, opt, requireNew);
+			opt.CodeGenerator.WriteClassHandle (this, sw, indent, opt, BaseGen != null && BaseGen.InheritsObject);
 
 			GenConstructors (sw, indent + "\t", opt);
 

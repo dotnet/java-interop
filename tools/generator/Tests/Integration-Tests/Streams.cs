@@ -9,6 +9,7 @@ namespace generatortests
 		[Test]
 		public void GeneratedOK ()
 		{
+			CompileToSingleAssembly = true;
 			RunAllTargets (
 					outputRelativePath:    "Streams",
 					apiDescriptionFile:    "expected/Streams/Streams.xml",

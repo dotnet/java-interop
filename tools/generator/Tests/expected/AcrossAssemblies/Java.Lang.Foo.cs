@@ -8,8 +8,8 @@ namespace Java.Lang {
 	[global::Android.Runtime.Register ("java/lang/Foo", DoNotGenerateAcw=true)]
 	public partial class Foo : global::Java.Lang.Object {
 
-		internal static new IntPtr java_class_handle;
-		internal static new IntPtr class_ref {
+		internal static IntPtr java_class_handle;
+		internal static IntPtr class_ref {
 			get {
 				return JNIEnv.FindClass ("java/lang/Foo", ref java_class_handle);
 			}

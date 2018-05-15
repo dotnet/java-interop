@@ -19,8 +19,8 @@ namespace Xamarin.Test {
 			public const int MyField = (int) 256;
 		}
 
-		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("xamarin/test/MyInterfaceImplementation", typeof (MyInterfaceImplementation));
-		internal static new IntPtr class_ref {
+		internal            static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("xamarin/test/MyInterfaceImplementation", typeof (MyInterfaceImplementation));
+		internal static IntPtr class_ref {
 			get {
 				return _members.JniPeerType.PeerReference.Handle;
 			}

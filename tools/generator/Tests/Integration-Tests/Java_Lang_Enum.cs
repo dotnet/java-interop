@@ -9,8 +9,7 @@ namespace generatortests
 		[Test]
 		public void Generated_OK ()
 		{
-			//hides inherited member `Java.Lang.Object.class_ref'
-			AllowWarnings = true;
+			CompileToSingleAssembly = true;
 			RunAllTargets (
 					outputRelativePath:     "java.lang.Enum",
 					apiDescriptionFile:     "expected/java.lang.Enum/Java.Lang.Enum.xml",

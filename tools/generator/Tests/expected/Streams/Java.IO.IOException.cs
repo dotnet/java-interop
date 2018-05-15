@@ -8,8 +8,8 @@ namespace Java.IO {
 	[global::Android.Runtime.Register ("java/io/IOException", DoNotGenerateAcw=true)]
 	public abstract partial class IOException : global::Java.Lang.Throwable {
 
-		internal static new IntPtr java_class_handle;
-		internal static new IntPtr class_ref {
+		internal static IntPtr java_class_handle;
+		internal static IntPtr class_ref {
 			get {
 				return JNIEnv.FindClass ("java/io/IOException", ref java_class_handle);
 			}

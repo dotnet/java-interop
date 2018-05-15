@@ -23,6 +23,8 @@ namespace generatortests
 			Options.EnumMethodsMapFile = null;
 			Options.AssemblyQualifiedName = "Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
 			Options.OnlyBindPublicTypes = true;
+			Options.LibraryPaths.Add (Path.GetDirectoryName (Compiler.GetSystemAssembly ("mscorlib.dll")));
+			Options.LibraryPaths.Add (Compiler.BinDirectory);
 			sw = new StringWriter ();
 			AdditionalSourceDirectories = new List<string> ();
 			AdditionalSupportDirectories = new List<string> ();
@@ -64,22 +66,17 @@ namespace generatortests
 
 		public void Execute ()
 		{
-			CodeGenerator.Run (Options);
-			var output = sw.ToString ();
-			if (output.Contains ("error")) {
-				Assert.Fail (output);
-			}
 			bool    hasErrors;
 			string  compilerOutput;
-			string  supportFilePath = typeof (BaseGeneratorTest).Assembly.Location;
+			string  supportFilePath  = typeof (BaseGeneratorTest).Assembly.Location;
+			string  supportDirectory = Path.Combine (Path.GetDirectoryName (supportFilePath), "SupportFiles");
 
 			//Compile the "support" assembly, this emulates what is in Mono.Android.dll
 			if (!CompileToSingleAssembly) {
-				var sourceFiles = Directory.EnumerateFiles (Options.ManagedCallableWrapperSourceOutputDirectory, "Java.Lang.*.cs",
-					SearchOption.AllDirectories).ToList ();
-				var supportFiles = Directory.EnumerateFiles (Path.Combine (Path.GetDirectoryName (supportFilePath), "SupportFiles"),
+				var sourceFiles = Directory.EnumerateFiles (supportDirectory, "*.cs", SearchOption.TopDirectoryOnly).ToList ();
+				var targetSpecificFiles = Directory.EnumerateFiles (Path.Combine (supportDirectory, Options.CodeGenerationTarget.ToString ()), 
 					"*.cs", SearchOption.AllDirectories);
-				sourceFiles.AddRange (supportFiles);
+				sourceFiles.AddRange (targetSpecificFiles);
 
 				foreach (var dir in AdditionalSupportDirectories) {
 					var additional = Directory.EnumerateFiles (dir, "*.cs", SearchOption.AllDirectories);
@@ -92,20 +89,27 @@ namespace generatortests
 				FileAssert.Exists (SupportAssembly, "Support assembly did not exist!");
 			}
 
+			//Run generator using the "support" assembly
+			Options.AssemblyReferences.Clear ();
+			if (!string.IsNullOrEmpty (SupportAssembly))
+				Options.AssemblyReferences.Add (SupportAssembly);
+			CodeGenerator.Run (Options);
+			var output = sw.ToString ();
+			if (output.Contains ("error")) {
+				Assert.Fail (output);
+			}
+
 			//Compile the "main" assembly, this emulates a user's assembly in a binding project
 			{
 				var sourceDirectories = new List<string> (AdditionalSourceDirectories);
 				var csharpFiles = Directory.EnumerateFiles (Options.ManagedCallableWrapperSourceOutputDirectory, "*.cs", SearchOption.AllDirectories);
 				if (CompileToSingleAssembly) {
 					sourceDirectories.AddRange (AdditionalSupportDirectories);
-				} else {
-					csharpFiles = csharpFiles.Where (x => !Path.GetFileName (x).StartsWith ("Java.Lang.", StringComparison.InvariantCultureIgnoreCase));
 				}
 
 				var sourceFiles = csharpFiles.ToList ();
 				if (CompileToSingleAssembly) {
-					var supportFiles = Directory.EnumerateFiles (Path.Combine (Path.GetDirectoryName (supportFilePath), "SupportFiles"),
-						"*.cs", SearchOption.AllDirectories);
+					var supportFiles = Directory.EnumerateFiles (supportDirectory, "*.cs", SearchOption.TopDirectoryOnly);
 					sourceFiles.AddRange (supportFiles);
 				}
 				foreach (var dir in sourceDirectories) {

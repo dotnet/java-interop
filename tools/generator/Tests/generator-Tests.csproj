@@ -169,6 +169,18 @@
     <Content Include="SupportFiles\JavaTypeParametersAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SupportFiles\JavaInterop1\Java.Lang.Object.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SupportFiles\JavaInterop1\Java.Lang.Throwable.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SupportFiles\XamarinAndroid\Java.Lang.Object.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SupportFiles\XamarinAndroid\Java.Lang.Throwable.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="expected\**\*">

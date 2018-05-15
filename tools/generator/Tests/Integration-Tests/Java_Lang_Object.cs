@@ -10,12 +10,13 @@ namespace generatortests
 		[Test]
 		public void Generated_OK ()
 		{
+			CompileToSingleAssembly = true;
 			Run (target: Xamarin.Android.Binder.CodeGenerationTarget.XamarinAndroid,
 					outputPath:         "out/java.lang.Object",
 					apiDescriptionFile: "expected/java.lang.Object/java.lang.Object.xml",
 					expectedPath:       "expected/java.lang.Object");
 
-			var javaLangObject = Assembly.LoadFile (SupportAssembly).GetType ("Java.Lang.Object");
+			var javaLangObject = MainAssembly.GetType ("Java.Lang.Object");
 
 			Assert.IsNotNull (javaLangObject);
 			Assert.IsTrue (javaLangObject.IsPublic);

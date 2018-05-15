@@ -13,6 +13,8 @@ namespace generatortests
 		const string RoslynEnvironmentVariable = "ROSLYN_COMPILER_LOCATION";
 		private static string unitTestFrameworkAssemblyPath = typeof(Assert).Assembly.Location;
 
+		public static string BinDirectory { get; } = Path.GetDirectoryName (typeof (BaseGeneratorTest).Assembly.Location);
+
 		static CodeDomProvider GetCodeDomProvider ()
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
@@ -79,9 +81,7 @@ namespace generatortests
 			parameters.OutputAssembly = assemblyFileName;
 			parameters.ReferencedAssemblies.Add (unitTestFrameworkAssemblyPath);
 			parameters.ReferencedAssemblies.Add (typeof (Enumerable).Assembly.Location);
-
-			var binDir = Path.GetDirectoryName (typeof (BaseGeneratorTest).Assembly.Location);
-			parameters.ReferencedAssemblies.Add (Path.Combine (binDir, "Java.Interop.dll"));
+			parameters.ReferencedAssemblies.Add (Path.Combine (BinDirectory, "Java.Interop.dll"));
 			parameters.ReferencedAssemblies.Add (GetSystemAssembly ("System.Runtime.dll"));
 			parameters.ReferencedAssemblies.Add (GetSystemAssembly ("System.Xml.dll"));
 #if DEBUG
@@ -92,7 +92,7 @@ namespace generatortests
 			return parameters;
 		}
 
-		static string GetSystemAssembly (string assembly)
+		public static string GetSystemAssembly (string assembly)
 		{
 			string path;
 

@@ -9,8 +9,8 @@ namespace Java.IO {
 	[global::Android.Runtime.Register ("java/io/IOException", DoNotGenerateAcw=true)]
 	public abstract partial class IOException : global::Java.Lang.Throwable {
 
-		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("java/io/IOException", typeof (IOException));
-		internal static new IntPtr class_ref {
+		internal            static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("java/io/IOException", typeof (IOException));
+		internal static IntPtr class_ref {
 			get {
 				return _members.JniPeerType.PeerReference.Handle;
 			}

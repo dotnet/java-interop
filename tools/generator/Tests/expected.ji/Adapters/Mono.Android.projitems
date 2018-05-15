@@ -6,7 +6,6 @@
   <!-- Classes -->
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)\Java.Interop.__TypeRegistrations.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)\Java.Lang.Object.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Xamarin.Test.AbsSpinner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Xamarin.Test.AdapterView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Xamarin.Test.GenericReturnObject.cs" />

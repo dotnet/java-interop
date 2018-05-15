@@ -53,8 +53,8 @@ namespace Android.App {
 		// Metadata.xml XPath field reference: path="/api/package[@name='android.app']/class[@name='Activity']/field[@name='RESULT_OK']"
 		[Register ("RESULT_OK")]
 		public const int ResultOk = (int) -1;
-		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("android/app/Activity", typeof (Activity));
-		internal static new IntPtr class_ref {
+		internal            static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("android/app/Activity", typeof (Activity));
+		internal static IntPtr class_ref {
 			get {
 				return _members.JniPeerType.PeerReference.Handle;
 			}

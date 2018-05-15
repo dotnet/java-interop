@@ -52,8 +52,8 @@ namespace Android.App {
 		// Metadata.xml XPath field reference: path="/api/package[@name='android.app']/class[@name='Activity']/field[@name='RESULT_OK']"
 		[Register ("RESULT_OK")]
 		public const int ResultOk = (int) -1;
-		internal static new IntPtr java_class_handle;
-		internal static new IntPtr class_ref {
+		internal static IntPtr java_class_handle;
+		internal static IntPtr class_ref {
 			get {
 				return JNIEnv.FindClass ("android/app/Activity", ref java_class_handle);
 			}

@@ -18,8 +18,8 @@ namespace Xamarin.Test {
 			public const int MyField = (int) 256;
 		}
 
-		internal static new IntPtr java_class_handle;
-		internal static new IntPtr class_ref {
+		internal static IntPtr java_class_handle;
+		internal static IntPtr class_ref {
 			get {
 				return JNIEnv.FindClass ("xamarin/test/MyInterfaceImplementation", ref java_class_handle);
 			}
