@@ -183,9 +183,7 @@ ji_realpath (const char *path)
 			break;
 		}
 
-		wchar_t *allocated_buffer = malloc (sizeof (wchar_t)*retval);
-		if (allocated_buffer == NULL)
-			break;
+		wchar_t *allocated_buffer = xmalloc (sizeof (wchar_t)*retval);
 
 		retval = GetFullPathNameW (wpath, retval, allocated_buffer, NULL);
 
