@@ -98,15 +98,15 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 		{
 			CreateJavaVM ();
 
-			var readWriteParameters = new ReaderParameters {
-				AssemblyResolver = resolver,
-				ReadSymbols = true,
-				ReadWrite = true,
+			var readWriteParameters    = new ReaderParameters {
+				AssemblyResolver   = resolver,
+				ReadSymbols        = true,
+				ReadWrite          = true,
 			};
-			var readWriteParametersNoSymbols = new ReaderParameters {
-				AssemblyResolver = resolver,
-				ReadSymbols = false,
-				ReadWrite = true,
+			var readWriteParametersNoSymbols    = new ReaderParameters {
+				AssemblyResolver   = resolver,
+				ReadSymbols        = false,
+				ReadWrite          = true,
 			};
 
 			foreach (var assembly in assemblies) {
