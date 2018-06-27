@@ -129,7 +129,9 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 		void CreateJavaVM (string jvmDllPath)
 		{
-			var builder = new JreRuntimeOptions { JvmDllPath = jvmDllPath };
+			var builder = new JreRuntimeOptions {
+				JvmLibraryPath  = jvmDllPath,
+			};
 
 			try {
 				builder.CreateJreVM ();
