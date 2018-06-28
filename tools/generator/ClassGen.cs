@@ -458,7 +458,7 @@ namespace MonoDroid.Generation {
 
 			GenConstructors (sw, indent + "\t", opt);
 
-			GenerateImplementedProperties (sw, indent + "\t", IsFinal, opt);
+			GenerateImplementedProperties (Properties, sw, indent + "\t", IsFinal, opt);
 			GenMethods (sw, indent + "\t", opt);
 
 			if (IsAbstract)

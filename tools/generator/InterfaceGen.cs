@@ -222,7 +222,7 @@ namespace MonoDroid.Generation {
 		{
 			foreach (Property prop in Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod))
 				prop.GenerateDeclaration (sw, indent, opt, this, AssemblyQualifiedName + "Invoker");
-			base.GenerateImplementedProperties (sw, indent, false, opt);
+			base.GenerateImplementedProperties (Properties.Where (p => p.Getter.IsInterfaceDefaultMethod), sw, indent, false, opt);
 		}
 
 		void GenerateInvoker (StreamWriter sw, string indent, CodeGenerationOptions opt)

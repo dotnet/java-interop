@@ -599,9 +599,9 @@ namespace MonoDroid.Generation {
 			return result;
 		}
 
-		protected void GenerateImplementedProperties (StreamWriter sw, string indent, bool isFinal, CodeGenerationOptions opt)
+		protected void GenerateImplementedProperties (IEnumerable<Property> targetProperties, StreamWriter sw, string indent, bool isFinal, CodeGenerationOptions opt)
 		{
-			foreach (Property prop in Properties) {
+			foreach (Property prop in targetProperties) {
 				bool get_virt = prop.Getter.IsVirtual;
 				bool set_virt = prop.Setter == null ? false : prop.Setter.IsVirtual;
 				prop.Getter.IsVirtual = !isFinal && get_virt;
