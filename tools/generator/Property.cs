@@ -264,7 +264,7 @@ namespace MonoDroid.Generation {
 			opt.CodeGenerator.WriteMethodIdField (Getter, sw, indent, opt);
 			if (Setter != null)
 				opt.CodeGenerator.WriteMethodIdField (Setter, sw, indent, opt);
-			string visibility = Getter.IsAbstract && Getter.RetVal.IsGeneric ? "protected" : (Setter ?? Getter).Visibility;
+			string visibility = gen.IsInterface ? string.Empty : Getter.IsAbstract && Getter.RetVal.IsGeneric ? "protected" : (Setter ?? Getter).Visibility;
 			// Unlike [Register], mcs does not allow applying [Obsolete] on property accessors, so we can apply them only under limited condition...
 			if (Getter.Deprecated != null && (Setter == null || Setter.Deprecated != null))
 				sw.WriteLine ("{0}[Obsolete (@\"{1}\")]", indent, Getter.Deprecated.Replace ("\"", "\"\"").Trim () + (Setter != null && Setter.Deprecated != Getter.Deprecated ? " " + Setter.Deprecated.Replace ("\"", "\"\"").Trim () : null));

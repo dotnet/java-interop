@@ -362,24 +362,6 @@ namespace MonoDroid.Generation {
 			}
 		}
 
-		void GenProperties (StreamWriter sw, string indent, CodeGenerationOptions opt)
-		{
-			foreach (Property prop in Properties) {
-				bool get_virt = prop.Getter.IsVirtual;
-				bool set_virt = prop.Setter == null ? false : prop.Setter.IsVirtual;
-				prop.Getter.IsVirtual = !IsFinal && get_virt;
-				if (prop.Setter != null)
-					prop.Setter.IsVirtual = !IsFinal && set_virt;
-				if (prop.Getter.IsAbstract)
-					prop.GenerateAbstractDeclaration (sw, indent, opt, this);
-				else
-					prop.Generate (this, sw, indent, opt);
-				prop.Getter.IsVirtual = get_virt;
-				if (prop.Setter != null)
-					prop.Setter.IsVirtual = set_virt;
-			}
-		}
-
 		public override void Generate (StreamWriter sw, string indent, CodeGenerationOptions opt, GenerationInfo gen_info)
 		{
 			opt.ContextTypes.Push (this);
@@ -476,7 +458,7 @@ namespace MonoDroid.Generation {
 
 			GenConstructors (sw, indent + "\t", opt);
 
-			GenProperties (sw, indent + "\t", opt);
+			GenerateImplementedProperties (sw, indent + "\t", IsFinal, opt);
 			GenMethods (sw, indent + "\t", opt);
 
 			if (IsAbstract)

@@ -75,6 +75,7 @@
     <Compile Include="Unit-Tests\SupportTypes.cs" />
     <Compile Include="Unit-Tests\XamarinAndroidCodeGeneratorTests.cs" />
     <Compile Include="Unit-Tests\XmlTests.cs" />
+    <Compile Include="Integration-Tests\DefaultInterfaceMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -167,6 +168,12 @@
     <Content Include="SupportFiles\JavaTypeParametersAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="expected.ji\DefaultInterfaceMethods\DefaultInterfaceMethods.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="expected.ji\DefaultInterfaceMethods\Xamarin.Test.ITheInterface.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="expected\**\*">
@@ -199,5 +206,8 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="expected.ji\DefaultInterfaceMethods\" />
   </ItemGroup>
 </Project>

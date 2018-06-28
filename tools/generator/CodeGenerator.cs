@@ -57,6 +57,7 @@ namespace Xamarin.Android.Binder {
 		public string               MappingReportFile { get; set; }
 		public bool                 OnlyRunApiXmlAdjuster { get; set; }
 		public string               ApiXmlAdjusterOutput { get; set; }
+		public bool                 SupportDefaultInterfaceMethods { get; set; }
 
 		public static CodeGeneratorOptions Parse (string[] args)
 		{
@@ -103,6 +104,9 @@ namespace Xamarin.Android.Binder {
 				{ "sdk-platform|api-level=",
 					"SDK Platform {VERSION}/API level.",
 					v => opts.ApiLevel = v },
+				{ "default-interface-methods",
+					"For internal use.",
+					v => opts.SupportDefaultInterfaceMethods = v != null },
 				{ "preserve-enums",
 					"For internal use.",
 					v => opts.PreserveEnums = v != null },
@@ -242,7 +246,8 @@ namespace Xamarin.Android.Binder {
 				UseGlobal             = options.GlobalTypeNames,
 				IgnoreNonPublicType   = true,
 				UseShortFileNames     = options.UseShortFileNames,
-				ProductVersion        = options.ProductVersion
+				ProductVersion        = options.ProductVersion,
+				SupportDefaultInterfaceMethods = options.SupportDefaultInterfaceMethods,
 			};
 
 			// Load reference libraries
@@ -313,7 +318,7 @@ namespace Xamarin.Android.Binder {
 			// disable interface default methods here, especially before validation.
 			gens = gens.Where (g => !g.IsObfuscated && g.Visibility != "private").ToList ();
 			foreach (var gen in gens) {
-				gen.StripNonBindables ();
+				gen.StripNonBindables (opt);
 				if (gen.IsGeneratable)
 					AddTypeToTable (opt, gen);
 			}
@@ -624,6 +629,7 @@ namespace MonoDroid.Generation {
 		public bool UseShortFileNames { get; set; }
 		public IList<GenBase> Gens {get;set;}
 		public int ProductVersion { get; set; }
+		public bool SupportDefaultInterfaceMethods { get; set; }
 
 		public string GetOutputName (string s)
 		{
@@ -1084,7 +1090,8 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}[Register (\"{1}\", \"{2}\", \"{3}\"{4})]",
 				indent, method.JavaName, method.JniSignature, method.IsVirtual ? method.ConnectorName : String.Empty, method.AdditionalAttributeString ());
 			WriteMethodCustomAttributes (method, writer, indent);
-			writer.WriteLine ("{0}{1}{2}{3}{4} unsafe {5} {6} ({7})", indent, method.Visibility, static_arg, virt_ov, seal, ret, method.AdjustedName, GenBase.GetSignature (method, opt));
+			string visibility = type.IsInterface ? string.Empty : method.Visibility;
+			writer.WriteLine ("{0}{1}{2}{3}{4} unsafe {5} {6} ({7})", indent, visibility, static_arg, virt_ov, seal, ret, method.AdjustedName, GenBase.GetSignature (method, opt));
 			writer.WriteLine ("{0}{{", indent);
 			WriteMethodBody (method, writer, indent + "\t", opt);
 			writer.WriteLine ("{0}}}", indent);

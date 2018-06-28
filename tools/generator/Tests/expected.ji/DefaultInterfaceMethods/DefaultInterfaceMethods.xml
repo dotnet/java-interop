@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<api>
+	<package name="java.lang">
+		<class abstract="false" deprecated="not deprecated" final="false" name="Object" static="false" visibility="public">
+		</class>
+	</package>
+	<package name="xamarin.test">
+		<interface abstract="true" deprecated="not deprecated" final="false" name="TheInterface" static="false" visibility="public">
+			<method abstract="false" deprecated="not deprecated" final="false" name="foo" native="false" return="int" static="false" synchronized="false" visibility="public">
+            </method>
+			<method abstract="false" deprecated="not deprecated" final="false" name="getBar" native="false" return="int" static="false" synchronized="false" visibility="public">
+			</method>
+		</interface>
+	</package>
+</api>

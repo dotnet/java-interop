@@ -64,6 +64,10 @@ namespace MonoDroid.Generation {
 		public bool IsGeneratable {
 			get { return support.IsGeneratable; }
 		}
+
+		public virtual bool IsInterface {
+			get { return false; }
+		}
 		
 		public virtual ClassGen BaseGen {
 			get { return null; }
@@ -595,6 +599,24 @@ namespace MonoDroid.Generation {
 			return result;
 		}
 
+		protected void GenerateImplementedProperties (StreamWriter sw, string indent, bool isFinal, CodeGenerationOptions opt)
+		{
+			foreach (Property prop in Properties) {
+				bool get_virt = prop.Getter.IsVirtual;
+				bool set_virt = prop.Setter == null ? false : prop.Setter.IsVirtual;
+				prop.Getter.IsVirtual = !isFinal && get_virt;
+				if (prop.Setter != null)
+					prop.Setter.IsVirtual = !isFinal && set_virt;
+				if (prop.Getter.IsAbstract)
+					prop.GenerateAbstractDeclaration (sw, indent, opt, this);
+				else
+					prop.Generate (this, sw, indent, opt);
+				prop.Getter.IsVirtual = get_virt;
+				if (prop.Setter != null)
+					prop.Setter.IsVirtual = set_virt;
+			}
+		}
+
 		void GetAllDerivedInterfaces (List<InterfaceGen> ifaces)
 		{
 			foreach (ISymbol isym in Interfaces) {
@@ -716,15 +738,16 @@ namespace MonoDroid.Generation {
 		
 		bool property_filling;
 
-		public void StripNonBindables ()
+		public void StripNonBindables (CodeGenerationOptions opt)
 		{
 			// As of now, if we generate bindings for interface default methods, that means users will
 			// have to "implement" those methods because they are declared and you have to implement
 			// any declared methods in C#. That is going to be problematic a lot.
-			methods = methods.Where (m => !m.IsInterfaceDefaultMethod).ToList ();
+			if (!opt.SupportDefaultInterfaceMethods)
+				methods = methods.Where (m => !m.IsInterfaceDefaultMethod).ToList ();
 			nested_types = nested_types.Where (n => !n.IsObfuscated && n.Visibility != "private").ToList ();
 			foreach (var n in nested_types)
-				n.StripNonBindables ();
+				n.StripNonBindables (opt);
 		}
 
 		public virtual void FixupAccessModifiers (CodeGenerationOptions opt)

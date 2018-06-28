@@ -9,6 +9,7 @@ using Mono.Cecil;
 
 using Xamarin.Android.Binder;
 using Xamarin.Android.Tools;
+using System.Diagnostics;
 
 namespace MonoDroid.Generation {
 #if HAVE_CECIL
@@ -105,6 +106,10 @@ namespace MonoDroid.Generation {
 			}
 		}
 
+		public override bool IsInterface {
+			get { return true; }
+		}
+
 		public bool IsListener {
 			// If there is a property it cannot generate valid implementor, so reject this at least so far.
 			get { return Name.EndsWith ("Listener") && Properties.Count == 0 && Interfaces.Count == 0; }
@@ -196,11 +201,13 @@ namespace MonoDroid.Generation {
 
 		void GenMethods (StreamWriter sw, string indent, CodeGenerationOptions opt)
 		{
-			foreach (Method m in Methods.Where (m => !m.IsStatic)) {
+			foreach (Method m in Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
 				if (m.Name == Name || ContainsProperty (m.Name, true))
 					m.Name = "Invoke" + m.Name;
 				opt.CodeGenerator.WriteMethodDeclaration (m, sw, indent, opt, this, AssemblyQualifiedName + "Invoker");
 			}
+			foreach (Method m in Methods.Where (m => m.IsInterfaceDefaultMethod))
+				opt.CodeGenerator.WriteMethod (m, sw, indent, opt, this, true);
 		}
 
 		void GenExtensionMethods (StreamWriter sw, string indent, CodeGenerationOptions opt)
@@ -213,8 +220,9 @@ namespace MonoDroid.Generation {
 
 		void GenProperties (StreamWriter sw, string indent, CodeGenerationOptions opt)
 		{
-			foreach (Property prop in Properties.Where (p => !p.Getter.IsStatic))
+			foreach (Property prop in Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod))
 				prop.GenerateDeclaration (sw, indent, opt, this, AssemblyQualifiedName + "Invoker");
+			base.GenerateImplementedProperties (sw, indent, false, opt);
 		}
 
 		void GenerateInvoker (StreamWriter sw, string indent, CodeGenerationOptions opt)
@@ -255,14 +263,14 @@ namespace MonoDroid.Generation {
 			sw.WriteLine ();
 
 			HashSet<string> members = new HashSet<string> ();
-			GenerateInvoker (sw, Properties.Where (p => !p.Getter.IsStatic), indent + "\t", opt, members);
-			GenerateInvoker (sw, Methods.Where (m => !m.IsStatic), indent + "\t", opt, members);
+			GenerateInvoker (sw, Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), indent + "\t", opt, members);
+			GenerateInvoker (sw, Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod), indent + "\t", opt, members);
 			if (FullName == "Java.Lang.ICharSequence")
 				GenCharSequenceEnumerator (sw, indent + "\t", opt);
 
 			foreach (InterfaceGen iface in GetAllDerivedInterfaces ()) {
-				GenerateInvoker (sw, iface.Properties.Where (p => !p.Getter.IsStatic), indent + "\t", opt, members);
-				GenerateInvoker (sw, iface.Methods.Where (m => !m.IsStatic && !IsCovariantMethod (m) && !(iface.FullName.StartsWith ("Java.Lang.ICharSequence") && m.Name.EndsWith ("Formatted"))), indent + "\t", opt, members);
+				GenerateInvoker (sw, iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), indent + "\t", opt, members);
+				GenerateInvoker (sw, iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod && !IsCovariantMethod (m) && !(iface.FullName.StartsWith ("Java.Lang.ICharSequence") && m.Name.EndsWith ("Formatted"))), indent + "\t", opt, members);
 				if (iface.FullName == "Java.Lang.ICharSequence")
 					GenCharSequenceEnumerator (sw, indent + "\t", opt);
 			}
