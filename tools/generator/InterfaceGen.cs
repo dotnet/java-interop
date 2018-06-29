@@ -744,6 +744,16 @@ namespace MonoDroid.Generation {
 				}
 			}
 
+			var defaultInterfaceMethods = Methods.Where (m => m.IsInterfaceDefaultMethod);
+			var defaultInterfaceProperties = Properties.Where (p => p.Getter != null && p.Getter.IsInterfaceDefaultMethod || p.Setter != null && p.Setter.IsInterfaceDefaultMethod);
+			if (defaultInterfaceMethods.Any () || defaultInterfaceProperties.Any ()) {
+				sw.WriteLine ("{0}partial interface {1} {{", indent, Name);
+				sw.WriteLine ();
+				opt.CodeGenerator.WriteClassHandle (this, sw, indent + "\t", opt, Name);
+				sw.WriteLine ("{0}}}", indent);
+				sw.WriteLine ();
+			}
+
 			if (IsConstSugar)
 				return;
 
