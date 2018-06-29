@@ -4,6 +4,8 @@ using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using NUnit.Framework;
 
 namespace generatortests
@@ -67,6 +69,46 @@ namespace generatortests
 			parameters.IncludeDebugInformation = false;
 #endif
 
+			if (options.SupportDefaultInterfaceMethods) {
+				var sb = new StringBuilder ();
+				sb.Append (" /t:library")
+				  .Append (" /unsafe")
+				  .Append (" /langversion:latest")
+				  .Append (' ').Append ($"/out:\"{assemblyFileName}\"");
+				foreach (var assembly in parameters.ReferencedAssemblies)
+					sb.Append ($" /r:\"{assembly}\"");
+				if (parameters.IncludeDebugInformation)
+					sb.Append (" /debug:portable");
+				foreach (var sourceFile in sourceFiles)
+					sb.Append (' ').Append ($"\"{sourceFile}\"");
+				string compiler = Path.GetFullPath (Path.Combine (unitTestFrameworkAssemblyPath, "..", "..", "..", "packages", "xamarin.android.csc.dim.0.1.2", "tools", "csc.exe"));
+				var pinfo = new ProcessStartInfo () {
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+					RedirectStandardError = true,
+				};
+				if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+					pinfo.FileName = compiler;
+					pinfo.Arguments = sb.ToString ();
+				} else {
+					pinfo.FileName = "mono"; // SYSMONO
+					pinfo.Arguments = compiler + sb;
+				}
+				var results = new StringBuilder ();
+				var proc = new Process ();
+				proc.ErrorDataReceived += (o, e) => 
+					results.Append (e.Data).Append (Environment.NewLine);
+				proc.OutputDataReceived += (o, e) => 
+					results.Append (e.Data).Append (Environment.NewLine);
+				proc.StartInfo = pinfo;
+				proc.Start ();
+				proc.BeginOutputReadLine ();
+				proc.BeginErrorReadLine ();
+				proc.WaitForExit ();
+				output = results.ToString ();
+				hasErrors = proc.ExitCode != 0;
+				return hasErrors ? null : Assembly.ReflectionOnlyLoadFrom (Path.GetFullPath (assemblyFileName));
+			}
 			using (var codeProvider = GetCodeDomProvider ()) {
 				CompilerResults results = codeProvider.CompileAssemblyFromFile (parameters, sourceFiles.ToArray ());
 
