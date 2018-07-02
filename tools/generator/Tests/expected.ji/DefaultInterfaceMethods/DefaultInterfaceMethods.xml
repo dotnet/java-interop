@@ -10,6 +10,18 @@
             </method>
 			<method abstract="false" deprecated="not deprecated" final="false" name="getBar" native="false" return="int" static="false" synchronized="false" visibility="public">
 			</method>
+            <method abstract="false" deprecated="not deprecated" final="false" name="string1" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+            </method>
+            <method abstract="false" deprecated="not deprecated" final="false" name="getStringProp" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+            </method>
+            <method abstract="false" deprecated="not deprecated" final="false" name="string1" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
+              <parameter name="p1" type="java.lang.String" />
+              <parameter name="p2" type="java.lang.String[]" />
+              <parameter name="p3" type="java.lang.String..." />
+            </method>
+            <method abstract="false" deprecated="not deprecated" final="false" name="setStringProp" native="false" return="void" static="false" synchronized="false" visibility="public">
+              <parameter name="v" type="java.lang.String" />
+            </method>
 		</interface>
 	</package>
 </api>
