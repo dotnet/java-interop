@@ -220,7 +220,7 @@ public const int bar = (int) 1234;
 			var @class = new TestClass ("java.lang.Object", "com.mypackage.foo");
 			var method = new TestMethod (@class, "bar");
 			Assert.IsTrue (method.Validate (options, new GenericParameterDefinitionList ()), "method.Validate failed!");
-			generator.WriteMethodBody (method, writer, string.Empty, options);
+			generator.WriteMethodBody (method, writer, string.Empty, options, @class);
 
 			Assert.AreEqual (@"const string __id = ""bar.()V"";
 try {

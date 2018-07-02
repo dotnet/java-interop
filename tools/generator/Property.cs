@@ -274,7 +274,7 @@ namespace MonoDroid.Generation {
 				sw.WriteLine ("{0}\t// Metadata.xml XPath method reference: path=\"{1}/method[@name='{2}'{3}]\"", indent, gen.MetadataXPathReference, Getter.JavaName, Getter.Parameters.GetMethodXPathPredicate ());
 			sw.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, Getter.JavaName, Getter.JniSignature, Getter.ConnectorName, Getter.AdditionalAttributeString ());
 			sw.WriteLine ("{0}\tget {{", indent);
-			opt.CodeGenerator.WriteMethodBody (Getter, sw, indent + "\t\t", opt);
+			opt.CodeGenerator.WriteMethodBody (Getter, sw, indent + "\t\t", opt, gen);
 			sw.WriteLine ("{0}\t}}", indent);
 			if (Setter != null) {
 				if (gen.IsGeneratable)
@@ -284,7 +284,7 @@ namespace MonoDroid.Generation {
 				sw.WriteLine ("{0}\tset {{", indent);
 				string pname = Setter.Parameters [0].Name;
 				Setter.Parameters [0].Name = "value";
-				opt.CodeGenerator.WriteMethodBody (Setter, sw, indent + "\t\t", opt);
+				opt.CodeGenerator.WriteMethodBody (Setter, sw, indent + "\t\t", opt, gen);
 				Setter.Parameters [0].Name = pname;
 				sw.WriteLine ("{0}\t}}", indent);
 			} else if (GenerateDispatchingSetter) {

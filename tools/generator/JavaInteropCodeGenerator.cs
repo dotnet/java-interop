@@ -139,7 +139,7 @@ namespace MonoDroid.Generation {
 			// No method id_ field required; it's now an `id` constant in the binding.
 		}
 
-		internal override void WriteMethodBody (Method method, TextWriter writer, string indent, CodeGenerationOptions opt)
+		internal override void WriteMethodBody (Method method, TextWriter writer, string indent, CodeGenerationOptions opt, GenBase type)
 		{
 			writer.WriteLine ("{0}const string __id = \"{1}.{2}\";", indent, method.JavaName, method.JniSignature);
 			foreach (string prep in method.Parameters.GetCallPrep (opt))
@@ -156,21 +156,26 @@ namespace MonoDroid.Generation {
 				writer.Write ("var __rm = ");
 			}
 
+			string castToPeerable = type.IsInterface ? "(IJavaPeerable) " : string.Empty;
+
 			if (method.IsStatic) {
 				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
 						invokeType,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			} else if (method.IsFinal) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, this{1});",
+				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, {1}this{2});",
 						invokeType,
+						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			} else if (method.IsVirtual && !method.IsAbstract) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, this{1});",
+				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, {1}this{2});",
 						invokeType,
+						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			} else {
-				writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, this{1});",
+				writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, {1}this{2});",
 						invokeType,
+						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			}
 

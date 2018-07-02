@@ -1,8 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Android.Runtime;
+using Java.Interop;
 
 namespace Xamarin.Test {
+
+	partial interface ITheInterface {
+
+		new static JniPeerMembers _members = new JniPeerMembers ("xamarin/test/TheInterface", typeof (ITheInterface));
+	}
 
 	// Metadata.xml XPath interface reference: path="/api/package[@name='xamarin.test']/interface[@name='TheInterface']"
 	[Register ("xamarin/test/TheInterface", "", "Xamarin.Test.ITheInterfaceInvoker")]
@@ -19,18 +25,18 @@ namespace Xamarin.Test {
 
 		static int n_GetBar (IntPtr jnienv, IntPtr native__this)
 		{
-			global::Xamarin.Test.TheInterface __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.TheInterface> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+			global::Xamarin.Test.ITheInterface __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.ITheInterface> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			return __this.Bar;
 		}
 #pragma warning restore 0169
 
-		public virtual unsafe int Bar {
-			// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/class[@name='TheInterface']/method[@name='getBar' and count(parameter)=0]"
+		 virtual unsafe int Bar {
+			// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/interface[@name='TheInterface']/method[@name='getBar' and count(parameter)=0]"
 			[Register ("getBar", "()I", "GetGetBarHandler")]
 			get {
 				const string __id = "getBar.()I";
 				try {
-					var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, null);
+					var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, (IJavaPeerable) this, null);
 					return __rm;
 				} finally {
 				}
@@ -48,35 +54,44 @@ namespace Xamarin.Test {
 
 		static int n_Foo (IntPtr jnienv, IntPtr native__this)
 		{
-			global::Xamarin.Test.TheInterface __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.TheInterface> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+			global::Xamarin.Test.ITheInterface __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.ITheInterface> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			return __this.Foo ();
 		}
 #pragma warning restore 0169
 
-		// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/class[@name='TheInterface']/method[@name='foo' and count(parameter)=0]"
+		// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/interface[@name='TheInterface']/method[@name='foo' and count(parameter)=0]"
 		[Register ("foo", "()I", "GetFooHandler")]
-		public virtual unsafe int Foo ()
+		 virtual unsafe int Foo ()
 		{
 			const string __id = "foo.()I";
 			try {
-				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, null);
+				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, (IJavaPeerable) this, null);
 				return __rm;
 			} finally {
 			}
 		}
+
 	}
 
 	[global::Android.Runtime.Register ("xamarin/test/TheInterface", DoNotGenerateAcw=true)]
 	internal class ITheInterfaceInvoker : global::Java.Lang.Object, ITheInterface {
 
-		static IntPtr java_class_ref = JNIEnv.FindClass ("xamarin/test/TheInterface");
+		internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers ("xamarin/test/TheInterface", typeof (ITheInterfaceInvoker));
+
+		static IntPtr java_class_ref {
+			get { return _members.JniPeerType.PeerReference.Handle; }
+		}
+
+		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
+			get { return _members; }
+		}
 
 		protected override IntPtr ThresholdClass {
 			get { return class_ref; }
 		}
 
 		protected override global::System.Type ThresholdType {
-			get { return typeof (ITheInterfaceInvoker); }
+			get { return _members.ManagedPeerType; }
 		}
 
 		IntPtr class_ref;
@@ -108,6 +123,7 @@ namespace Xamarin.Test {
 			this.class_ref = JNIEnv.NewGlobalRef (local_ref);
 			JNIEnv.DeleteLocalRef (local_ref);
 		}
+
 	}
 
 }

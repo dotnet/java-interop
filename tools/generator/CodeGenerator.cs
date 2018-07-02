@@ -719,7 +719,7 @@ namespace MonoDroid.Generation {
 		internal    abstract    void    WriteConstructorBody (Ctor ctor,    TextWriter writer,    string indent,  CodeGenerationOptions opt, StringCollection call_cleanup);
 
 		internal    abstract    void    WriteMethodIdField (Method method,  TextWriter writer,    string indent,  CodeGenerationOptions opt);
-		internal    abstract    void    WriteMethodBody (Method method,     TextWriter writer,    string indent,  CodeGenerationOptions opt);
+		internal    abstract    void    WriteMethodBody (Method method,     TextWriter writer,    string indent,  CodeGenerationOptions opt, GenBase type);
 
 		internal    abstract    void    WriteFieldIdField (Field field,     TextWriter writer,    string indent,  CodeGenerationOptions opt);
 		internal    abstract    void    WriteFieldGetBody (Field field,     TextWriter writer,    string indent,  CodeGenerationOptions opt, GenBase type);
@@ -828,7 +828,7 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}unsafe {1} {2}.{3} ({4})",
 					indent, opt.GetOutputName (method.RetVal.FullName), opt.GetOutputName (iface.FullName), method.Name, GenBase.GetSignature (method, opt));
 			writer.WriteLine ("{0}{{", indent);
-			WriteMethodBody (method, writer, indent + "\t", opt);
+			WriteMethodBody (method, writer, indent + "\t", opt, iface);
 			writer.WriteLine ("{0}}}", indent);
 			writer.WriteLine ();
 		}
@@ -1093,7 +1093,7 @@ namespace MonoDroid.Generation {
 			string visibility = type.IsInterface ? string.Empty : method.Visibility;
 			writer.WriteLine ("{0}{1}{2}{3}{4} unsafe {5} {6} ({7})", indent, visibility, static_arg, virt_ov, seal, ret, method.AdjustedName, GenBase.GetSignature (method, opt));
 			writer.WriteLine ("{0}{{", indent);
-			WriteMethodBody (method, writer, indent + "\t", opt);
+			WriteMethodBody (method, writer, indent + "\t", opt, type);
 			writer.WriteLine ("{0}}}", indent);
 			writer.WriteLine ();
 
