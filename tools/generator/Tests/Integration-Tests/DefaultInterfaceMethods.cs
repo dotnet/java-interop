@@ -23,6 +23,9 @@ namespace generatortests
 		void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string [] additionalSupportPaths)
 		{
 			Run (CodeGenerationTarget.JavaInterop1, Path.Combine ("out.ji", outputRelativePath), apiDescriptionFile, Path.Combine ("expected.ji", expectedRelativePath), additionalSupportPaths);
+
+			Java.Interop.JniRuntime.SetCurrent (new Java.InteropTests.TestJVM ());
+
 			var type = BuiltAssembly.GetTypes ().First (t => t.FullName == "Xamarin.Test.TheImplementor");
 			var instance = Activator.CreateInstance (type);
 			type.GetProperty ("Bar").GetValue (instance);

@@ -92,6 +92,18 @@
       <Project>{15945D4B-FF56-4BCC-B598-2718D199DD08}</Project>
       <Name>Xamarin.Android.Cecil</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Java.Interop\Java.Interop.csproj">
+      <Project>{94BD81F7-B06F-4295-9636-F8A3B6BDC762}</Project>
+      <Name>Java.Interop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Java.Runtime.Environment\Java.Runtime.Environment.csproj">
+      <Project>{5887B410-D448-4257-A46B-EAC03C80BE93}</Project>
+      <Name>Java.Runtime.Environment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\tests\TestJVM\TestJVM.csproj">
+      <Project>{A76309AB-98AC-4AE2-BA30-75481420C52F}</Project>
+      <Name>TestJVM</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SupportFiles\JNIEnv.g.cs">
