@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using Xamarin.Android.Binder;
 
@@ -22,6 +23,9 @@ namespace generatortests
 		void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string [] additionalSupportPaths)
 		{
 			Run (CodeGenerationTarget.JavaInterop1, Path.Combine ("out.ji", outputRelativePath), apiDescriptionFile, Path.Combine ("expected.ji", expectedRelativePath), additionalSupportPaths);
+			var type = BuiltAssembly.GetTypes ().First (t => t.FullName == "Xamarin.Test.TheImplementor");
+			var instance = Activator.CreateInstance (type);
+			type.GetProperty ("Bar").GetValue (instance);
 		}
 	}
 }

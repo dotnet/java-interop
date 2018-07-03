@@ -107,7 +107,7 @@ namespace generatortests
 				proc.WaitForExit ();
 				output = results.ToString ();
 				hasErrors = proc.ExitCode != 0;
-				return hasErrors ? null : Assembly.ReflectionOnlyLoadFrom (Path.GetFullPath (assemblyFileName));
+				return hasErrors ? null : Assembly.LoadFrom (Path.GetFullPath (assemblyFileName));
 			}
 			using (var codeProvider = GetCodeDomProvider ()) {
 				CompilerResults results = codeProvider.CompileAssemblyFromFile (parameters, sourceFiles.ToArray ());

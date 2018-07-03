@@ -23,5 +23,9 @@
               <parameter name="v" type="java.lang.String" />
             </method>
 		</interface>
+		<class abstract="false" deprecated="not deprecated" extends="java.lang.Object" final="false" name="TheImplementor" name-generic-aware="TheImplementor" static="false" visibility="public">
+			<implements name-generic-aware="xamarin.test.TheInterface" />
+			<constructor deprecated="not deprecated" name="TheImplementor" native="false" static="false" synchronized="false" visibility="public" />
+		</class>
 	</package>
 </api>
