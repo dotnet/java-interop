@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup> 
+    <TargetFramework>net461</TargetFramework>
+    <RootNamespace>BindingIntegrationTests</RootNamespace>
+  </PropertyGroup> 
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.10.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Java.Interop\Java.Interop.csproj" />
+    <ProjectReference Include="..\TestJVM\TestJVM.csproj" />
+    <ProjectReference Include="..\..\src\Xamarin.Android.Tools.Bytecode\Xamarin.Android.Tools.Bytecode.csproj" />
+    <ProjectReference Include="..\..\src\Xamarin.Android.Tools.ApiXmlAdjuster\Xamarin.Android.Tools.ApiXmlAdjuster.csproj" />
+  </ItemGroup>
+</Project>
