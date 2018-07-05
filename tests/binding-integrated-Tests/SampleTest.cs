@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using NUnit.Framework;
 
 namespace BindingIntegrationTests
@@ -22,7 +24,7 @@ namespace BindingIntegrationTests
 			var project = new BindingProject { Id = nameof (VerifyJavac) };
 			string fooJavaFileName = "Foo.java";
 			string fooJavaContent = "public class Foo {}";
-			project.JavaSourceStrings.Add (new JavaSource { FileName = fooJavaFileName, Content = fooJavaContent });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = fooJavaFileName, Content = fooJavaContent });
 
 			// Set up builder. Hopefully you don't have to provide JDK path, it will be probed.
 			var builder = BindingBuilder.CreateBestBetDefault (project);
@@ -45,7 +47,7 @@ namespace BindingIntegrationTests
 			var project = new BindingProject { Id = nameof (VerifyJavacWithRtJar) };
 			string fooJavaFileName = "Foo.java";
 			string fooJavaContent = "public class Foo {}";
-			project.JavaSourceStrings.Add (new JavaSource { FileName = fooJavaFileName, Content = fooJavaContent });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = fooJavaFileName, Content = fooJavaContent });
 
 			var builder = BindingBuilder.CreateBestBetDefault (project);
 			project.CustomRuntimeJar = Path.Combine (builder.JdkPath, "jre", "lib", "rt.jar");
@@ -60,8 +62,8 @@ namespace BindingIntegrationTests
 		{
 			// You don't even have to create a set of project files. They can be created on the fly.
 			var project = new BindingProject { Id = nameof (VerifyJar) };
-			project.JavaSourceStrings.Add (new JavaSource { FileName = "Foo.java", Content = "public class Foo {}" });
-			project.JavaSourceStrings.Add (new JavaSource { FileName = "Bar.java", Content = "public class Bar {}" });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Foo.java", Content = "public class Foo {}" });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Bar.java", Content = "public class Bar {}" });
 
 			// Set up builder. Hopefully you don't have to provide JDK path, it will be probed.
 			var builder = BindingBuilder.CreateBestBetDefault (project);
@@ -72,6 +74,47 @@ namespace BindingIntegrationTests
 			var jar = Path.Combine (builder.IntermediateOutputPathAbsolute, BindingBuilder.ClassesSubDir, project.Id + ".jar");
 			Assert.AreEqual (jar, project.CompiledJarFile, "jar file path mismatch.");
 			Assert.IsTrue (File.Exists (project.CompiledJarFile), "Compiled jar not found");
+		}
+
+		[Test]
+		public void VerifyClassParse ()
+		{
+			// You don't even have to create a set of project files. They can be created on the fly.
+			var project = new BindingProject { Id = nameof (VerifyClassParse) };
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Foo.java", Content = "package com.xamarin.test; public class Foo {}" });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Bar.java", Content = "package com.xamarin.test; public class Bar {}" });
+
+			// Set up builder. Hopefully you don't have to provide JDK path, it will be probed.
+			var builder = BindingBuilder.CreateBestBetDefault (project);
+			builder.ProcessSteps = BindingBuilder.Steps.Javac | BindingBuilder.Steps.Jar | BindingBuilder.Steps.ClassParse;
+			builder.Clean ();
+			builder.Build ();
+
+			var cpxml = Path.Combine (builder.IntermediateOutputPathAbsolute, BindingBuilder.ClassParseSubDir, project.Id + ".class-parse");
+			Assert.AreEqual (cpxml, project.GeneratedClassParseXmlFile, "class-parse output file path mismatch.");
+			Assert.IsTrue (File.Exists (project.GeneratedClassParseXmlFile), "class-parse output file not found");
+			var doc = XDocument.Load (project.GeneratedClassParseXmlFile);
+			Assert.IsNotNull (doc.XPathSelectElement ("//class[@name='Foo']"), "Foo node does not exist");
+		}
+
+		[Test]
+		public void VerifyApiXmlAdjuster ()
+		{
+			// You don't even have to create a set of project files. They can be created on the fly.
+			var project = new BindingProject { Id = nameof (VerifyApiXmlAdjuster) };
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Object.java", Content = "package java.lang; public class Object {}" });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Foo.java", Content = "package com.xamarin.test; public class Foo {}" });
+			project.JavaSourceStrings.Add (new SourceFile { FileName = "Bar.java", Content = "package com.xamarin.test; public class Bar {}" });
+
+			// Set up builder. Hopefully you don't have to provide JDK path, it will be probed.
+			var builder = BindingBuilder.CreateBestBetDefault (project);
+			builder.ProcessSteps = BindingBuilder.Steps.Javac | BindingBuilder.Steps.Jar | BindingBuilder.Steps.ClassParse | BindingBuilder.Steps.ApiXmlAdjuster;
+			builder.Clean ();
+			builder.Build ();
+
+			var apixml = Path.Combine (builder.IntermediateOutputPathAbsolute, "api.xml");
+			Assert.AreEqual (apixml, project.GeneratedApiXmlFile, "api.xml file path mismatch.");
+			Assert.IsTrue (File.Exists (project.GeneratedApiXmlFile), "api.xml file not found");
 		}
 	}
 }
