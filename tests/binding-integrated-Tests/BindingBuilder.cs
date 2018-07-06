@@ -11,6 +11,10 @@ namespace BindingIntegrationTests
 {
 	public class BindingBuilder
 	{
+		// This is required to get generator.exe deployed next to this assembly
+		// so that the default GeneratorPath can probe that it is right there.
+		static readonly Type dummy = typeof (MonoDroid.Generation.GenBase);
+
 		[Flags]
 		public enum Steps
 		{
@@ -26,6 +30,9 @@ namespace BindingIntegrationTests
 		public const string JavaSourcesSubDir = "java-sources";
 		public const string ClassesSubDir = "classes";
 		public const string ClassParseSubDir = "class-parse-xml";
+		public const string ApiXmlSubDir = "api-xml";
+		public const string MetadataXmlSubDir = "metadata";
+		public const string CSharpSourcesSubDir = "csharp";
 
 		public Steps ProcessSteps { get; set; } = Steps.All;
 
@@ -34,6 +41,8 @@ namespace BindingIntegrationTests
 
 		// Used to resolve javac and rt.jar
 		public string JdkPath { get; set; }
+
+		public string GeneratorPath { get; set; } = Path.Combine (Path.GetDirectoryName (new Uri (typeof (BindingBuilder).Assembly.CodeBase).LocalPath), "generator.exe");
 
 		static string ProbeJavaHome ()
 		{
@@ -188,23 +197,26 @@ namespace BindingIntegrationTests
 		{
 			if ((ProcessSteps & Steps.ApiXmlAdjuster) == 0)
 				return;
-
-			if (project.GeneratedClassParseXmlFile == null)
-				throw new InvalidOperationException ("Input class-parse file is not set.");
-
+				
 			var objDir = IntermediateOutputPathAbsolute;
 			var cpDir = Path.Combine (objDir, ClassParseSubDir);
 			EnsureDirectory (cpDir);
 			if (project.GeneratedApiXmlFile == null)
 				project.GeneratedApiXmlFile = Path.Combine (objDir, "api.xml");
+			if (!File.Exists (project.GeneratedClassParseXmlFile) && !project.ClassParseXmlFiles.Any () && !project.ClassParseXmlStrings.Any ())
+				throw new InvalidOperationException ("Input class-parse file does not exist.");
+
 			foreach (var cpSource in project.ClassParseXmlStrings)
 				File.WriteAllText (Path.Combine (cpDir, cpSource.FileName), cpSource.Content);
 			var cpFiles = project.ClassParseXmlFiles.Concat (project.ClassParseXmlStrings.Select (i => Path.Combine (cpDir, i.FileName)));
 
+			// FIXME: this does not scale for parallel tasking.
 			var writer = new StringWriter ();
 			Xamarin.Android.Tools.ApiXmlAdjuster.Log.DefaultWriter = writer;
+
 			var api = new JavaApi ();
-			api.Load (project.GeneratedClassParseXmlFile);
+			if (File.Exists (project.GeneratedClassParseXmlFile))
+				api.Load (project.GeneratedClassParseXmlFile);
 			foreach (var apixml in cpFiles)
 				api.Load (apixml);
 			api.Resolve ();
@@ -219,6 +231,58 @@ namespace BindingIntegrationTests
 
 		void GenerateBindingSources ()
 		{
+			if ((ProcessSteps & Steps.Generator) == 0)
+				return;
+
+			if (GeneratorPath == null)
+				throw new InvalidOperationException ("GeneratorPath is not set.");
+
+			var objDir = IntermediateOutputPathAbsolute;
+			EnsureDirectory (objDir);
+
+			if (project.GeneratedApiXmlFile == null)
+				project.GeneratedApiXmlFile = Path.Combine (objDir, "api.xml");
+			if (!File.Exists (project.GeneratedApiXmlFile) && !project.ApiXmlFiles.Any () && !project.ApiXmlStrings.Any ())
+				throw new InvalidOperationException ("Input api xml file does not exist.");
+			if (project.GeneratedCSharpSourceDirectory == null)
+				project.GeneratedCSharpSourceDirectory = Path.Combine (objDir, CSharpSourcesSubDir);
+
+			string apiXmlSaved = Path.Combine (objDir, ApiXmlSubDir);
+			EnsureDirectory (apiXmlSaved);
+			foreach (var item in project.ApiXmlStrings)
+				File.WriteAllText (Path.Combine (apiXmlSaved, item.FileName), item.Content);
+			var apiXmlFiles = project.ApiXmlFiles.Concat (project.ApiXmlStrings.Select (i => Path.Combine (apiXmlSaved, i.FileName)));
+
+			string metadataSaved = Path.Combine (objDir, MetadataXmlSubDir);
+			EnsureDirectory (metadataSaved);
+			foreach (var item in project.MetadataXmlStrings)
+				File.WriteAllText (Path.Combine (metadataSaved, item.FileName), item.Content);
+			var metadataFiles = project.MetadataXmlFiles.Concat (project.MetadataXmlStrings.Select (i => Path.Combine (metadataSaved, i.FileName)));
+
+			var psi = new ProcessStartInfo () {
+				UseShellExecute = false,
+				FileName = GeneratorPath,
+				Arguments = $"{project.GeneratorOptions}" +
+					$" {(File.Exists (project.GeneratedApiXmlFile) ? project.GeneratedApiXmlFile : string.Empty)}" +
+					$" {string.Join (" ", apiXmlFiles.Select (s => '"' + s + '"'))}" +
+					$" {string.Join (" ", metadataFiles.Select (s => " --fixup=\"" + s + '"'))}" +
+					$" {string.Join (" ", project.ReferenceDlls.Select (s => " -r \"" + s + '"'))}" +
+					$" --csdir=\"{project.GeneratedCSharpSourceDirectory}\"",
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+			};
+
+			project.GeneratorExecutionOutput = $"Execute generator as: {psi.FileName} {psi.Arguments}\n";
+
+			var proc = new Process () { StartInfo = psi };
+			proc.OutputDataReceived += (sender, e) => project.GeneratorExecutionOutput += e.Data;
+			proc.ErrorDataReceived += (sender, e) => project.GeneratorExecutionOutput += e.Data;
+			proc.Start ();
+			proc.BeginOutputReadLine ();
+			proc.BeginErrorReadLine ();
+			proc.WaitForExit ();
+			if (proc.ExitCode != 0)
+				throw new Exception ("generator failed: " + project.GeneratorExecutionOutput);
 		}
 
 		void CompileBindings ()

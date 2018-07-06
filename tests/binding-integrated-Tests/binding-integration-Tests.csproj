@@ -3,6 +3,12 @@
     <TargetFramework>net461</TargetFramework>
     <RootNamespace>BindingIntegrationTests</RootNamespace>
   </PropertyGroup> 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\bin\TestDebug</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\bin\TestRelease</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.10.1" />
   </ItemGroup>
@@ -11,5 +17,6 @@
     <ProjectReference Include="..\TestJVM\TestJVM.csproj" />
     <ProjectReference Include="..\..\src\Xamarin.Android.Tools.Bytecode\Xamarin.Android.Tools.Bytecode.csproj" />
     <ProjectReference Include="..\..\src\Xamarin.Android.Tools.ApiXmlAdjuster\Xamarin.Android.Tools.ApiXmlAdjuster.csproj" />
+    <ProjectReference Include="..\..\tools\generator\generator.csproj" />
   </ItemGroup>
 </Project>
