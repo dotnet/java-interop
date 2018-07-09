@@ -94,6 +94,7 @@ namespace BindingIntegrationTests
 		}
 
 		[Test]
+		[Ignore ("This won't run until we get a working partial Object.cs that exist only in xamarin-android.")]
 		public void VerifyApiXmlAdjuster ()
 		{
 			var project = new BindingProject { Id = nameof (VerifyApiXmlAdjuster) };
@@ -114,6 +115,7 @@ namespace BindingIntegrationTests
 		}
 
 		[Test]
+		[Ignore ("This won't run until we get a working partial Object.cs that exist only in xamarin-android.")]
 		public void VerifyGenerator ()
 		{
 			var project = new BindingProject { Id = nameof (VerifyGenerator) };
