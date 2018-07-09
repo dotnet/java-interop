@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\tests\binding-support-files\binding-support-files.projitems" Label="Shared" Condition="Exists('..\..\..\tests\binding-support-files\binding-support-files.projitems')" />
   <Import Project="..\..\..\packages\xamarin.android.csc.dim.0.1.2\build\xamarin.android.csc.dim.props" Condition="Exists('..\..\..\packages\xamarin.android.csc.dim.0.1.2\build\xamarin.android.csc.dim.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -68,7 +69,6 @@
     <Compile Include="Integration-Tests\CSharpKeywords.cs" />
     <Compile Include="Integration-Tests\GenericArguments.cs" />
     <Compile Include="Integration-Tests\InterfaceMethodsConflict.cs" />
-    <Compile Include="SupportFiles\RegisterAttribute.cs" />
     <Compile Include="Unit-Tests\CodeGeneratorTests.cs" />
     <Compile Include="Unit-Tests\AdjusterTests.cs" />
     <Compile Include="Unit-Tests\JavaInteropCodeGeneratorTests.cs" />
@@ -92,91 +92,8 @@
       <Project>{15945D4B-FF56-4BCC-B598-2718D199DD08}</Project>
       <Name>Xamarin.Android.Cecil</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Java.Interop\Java.Interop.csproj">
-      <Project>{94BD81F7-B06F-4295-9636-F8A3B6BDC762}</Project>
-      <Name>Java.Interop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Java.Runtime.Environment\Java.Runtime.Environment.csproj">
-      <Project>{5887B410-D448-4257-A46B-EAC03C80BE93}</Project>
-      <Name>Java.Runtime.Environment</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SupportFiles\JNIEnv.g.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaConvert.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaObjectExtensions.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaDictionary.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaCollection.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\Android_Runtime_CharSequence.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\Java_Lang_ICharSequence.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\Java_Lang_Object.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\Java_Lang_String.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\Java_Lang_Throwable.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\GeneratedEnumAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\IJavaObject.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\IntDefinitionAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaArray.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaInterfaceDefaultMethodAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaObject.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JNIEnv.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JniHandleOwnership.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JValue.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\RegisterAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JObjectRefType.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\PreserveAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\NamespaceMappingAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\TypeManager.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SupportFiles\JavaTypeParametersAttribute.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="expected.ji\DefaultInterfaceMethods\DefaultInterfaceMethods.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

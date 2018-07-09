@@ -101,6 +101,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Java.Interop.BootstrapTasks
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "binding-integration-Tests", "tests\binding-integrated-Tests\binding-integration-Tests.csproj", "{D5CE4B09-C1D3-4647-B78B-6D2E89FE883E}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "binding-support-files", "tests\binding-support-files\binding-support-files.shproj", "{AA1309A9-60BE-4BFD-802B-C44283669D58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -403,5 +405,6 @@ Global
 		{D1243BAB-23CA-4566-A2A3-3ADA2C2DC3AF} = {4C173212-371D-45D8-BA83-9226194F48DC}
 		{3E8E5C8C-59A6-4A9A-B55D-46AB14431B2A} = {172B608B-E6F3-41CC-9949-203A76BA247C}
 		{D5CE4B09-C1D3-4647-B78B-6D2E89FE883E} = {271C9F30-F679-4793-942B-0D9527CB3E2F}
+		{AA1309A9-60BE-4BFD-802B-C44283669D58} = {271C9F30-F679-4793-942B-0D9527CB3E2F}
 	EndGlobalSection
 EndGlobal

@@ -16,7 +16,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>Android.Interop-Tests</AssemblyName>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -75,7 +75,7 @@
   <Import Project="..\..\Java.Interop.Export\Tests\Export-Tests.projitems" Label="Shared" Condition="Exists('..\..\Java.Interop.Export\Tests\Export-Tests.projitems')" />
   <Import Project="..\..\..\tests\PerformanceTests\PerformanceTests.projitems" Label="Shared" Condition="Exists('..\..\..\tests\PerformanceTests\PerformanceTests.projitems')" />
   <Import Project="..\..\Java.Interop.Dynamic\Tests\Dynamic-Tests.projitems" Label="Shared" Condition="Exists('..\..\Java.Interop.Dynamic\Tests\Dynamic-Tests.projitems')" />
-  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <PropertyGroup>
     <BuildDependsOn>
       BuildInteropTestJar;
@@ -100,7 +100,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\lib\mono.linq.expressions\Mono.Linq.Expressions.csproj">
       <Project>{0C001D50-4176-45AE-BDC8-BA626508B0CC}</Project>
-      <Name>Mono.Linq.Expressions-Android</Name>
+      <Name>Mono.Linq.Expressions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Java.Interop.Dynamic\Java.Interop.Dynamic.csproj">
       <Project>{AD4468F8-8883-434B-9D4C-E1801BB3B52A}</Project>
