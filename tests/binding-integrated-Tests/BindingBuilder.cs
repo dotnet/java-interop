@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using System;
 using System.Diagnostics;
-using Java.Interop;
 using System.IO;
 using System.Linq;
 using Xamarin.Android.Tools.Bytecode;
