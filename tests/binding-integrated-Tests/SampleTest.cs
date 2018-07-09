@@ -145,13 +145,12 @@ namespace BindingIntegrationTests
 			builder.Clean ();
 			builder.Build ();
 
-			var dll = Path.Combine (builder.IntermediateOutputPathAbsolute, project.Id + ".dll");
+			var dll = Path.Combine (builder.IntermediateOutputPathAbsolute, project.Id);
 			Assert.AreEqual (dll, project.GeneratedDllFile, "C# generated code directory path mismatch.");
 			Assert.IsTrue (File.Exists (dll), "gnerated dll not found");
 		}
 
 		[Test]
-		[Ignore ("rt.jar should be resolved at api-xml-adjuster step too, which is not part of its feature.")]
 		public void BindRtJar ()
 		{
 			var project = new BindingProject { Id = nameof (BindRtJar) };
