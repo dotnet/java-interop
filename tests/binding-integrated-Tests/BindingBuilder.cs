@@ -255,7 +255,7 @@ namespace BindingIntegrationTests
 			api.FindDefects ();
 			api.Save (project.GeneratedApiXmlFile);
 			project.ApiXmlAdjusterExecutionOutput = writer.ToString ();
-			if (project.ApiXmlAdjusterExecutionOutput != string.Empty)
+			if (!project.IgnoreApiXmlAdjusterWarnings && project.ApiXmlAdjusterExecutionOutput != string.Empty)
 				throw new Exception ("api-xml-adjuster failed: " + project.ApiXmlAdjusterExecutionOutput);
 		}
 
