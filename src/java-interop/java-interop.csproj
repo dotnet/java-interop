@@ -7,7 +7,6 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BB0AB9F7-0979-41A7-B7A9-877260655F94}</ProjectGuid>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,18 +60,27 @@
     <Runtime Condition="'$(OS)' != 'Windows_NT'">mono</Runtime>
   </PropertyGroup>
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
-  <Target Name="BuildJni_c" Inputs="$(JNIEnvGenPath)\jnienv-gen.exe" Outputs="jni.c">
+  <Target Name="BuildJni_c"
+      Inputs="$(JNIEnvGenPath)\jnienv-gen.exe"
+      Outputs="jni.c">
     <MakeDir Directories="$(OutputPath)" />
     <Exec Command="$(Runtime) &quot;$(JNIEnvGenPath)\jnienv-gen.exe&quot; jni.g.cs jni.c" />
   </Target>
-  <Target Name="BuildMac" Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/')" DependsOnTargets="BuildMacLibraries" Inputs="@(MacLibLipo)" Outputs="$(OutputPath)\lib$(OutputName).dylib">
+  <Target Name="BuildMac"
+      Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/')"
+      DependsOnTargets="BuildMacLibraries"
+      Inputs="@(MacLibLipo)"
+      Outputs="$(OutputPath)\lib$(OutputName).dylib">
     <PropertyGroup>
       <_Files>@(MacLibLipo -&gt; '%(Identity)', ' ')</_Files>
     </PropertyGroup>
     <Message Text="Inputs: MacLibLipo=@(MacLibLipo)" />
     <Exec Command="lipo $(_Files) -create -output $(OutputPath)\lib$(OutputName).dylib" />
   </Target>
-  <Target Name="BuildMacLibraries" Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/')" Inputs="@(Compile)" Outputs="@(MacLibLipo)">
+  <Target Name="BuildMacLibraries"
+      Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/')"
+      Inputs="@(Compile)"
+      Outputs="@(MacLibLipo)">
     <PropertyGroup>
       <_FixedDefines>$(DefineSymbols.Split(' '))</_FixedDefines>
     </PropertyGroup>
@@ -91,7 +99,10 @@
     <!-- Mono 4.4.0 (mono-4.4.0-branch/a3fabf1) has an incorrect shared library name. Fix it -->
     <Exec Command="install_name_tool -change /private/tmp/source-mono-4.4.0/bockbuild-mono-4.4.0-branch/profiles/mono-mac-xamarin/package-root/lib/libmonosgen-2.0.1.dylib /Library/Frameworks/Mono.framework/Libraries/libmonosgen-2.0.1.dylib &quot;%(MacLibLipo.Identity)&quot;" />
   </Target>
-  <Target Name="BuildUnixLibraries" Condition=" '$(OS)' != 'Windows_NT' And !Exists ('/Library/Frameworks/')" Inputs="@(Compile)" Outputs="$(OutputPath)\lib$(OutputName).so">
+  <Target Name="BuildUnixLibraries"
+      Condition=" '$(OS)' != 'Windows_NT' And !Exists ('/Library/Frameworks/')"
+      Inputs="@(Compile)"
+      Outputs="$(OutputPath)\lib$(OutputName).so">
     <PropertyGroup>
       <_FixedDefines>$(DefineSymbols.Split(' '))</_FixedDefines>
     </PropertyGroup>
@@ -111,7 +122,10 @@
   <Target Name="Clean">
     <RemoveDir Directories="obj" />
     <Delete Files="jni.c" />
-    <Delete Files="$(OutputPath)\lib$(OutputName).dylib" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Delete
+        Files="$(OutputPath)\lib$(OutputName).dylib"
+        Condition=" '$(OS)' != 'Windows_NT' "
+    />
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\..\build-tools\jnienv-gen\jnienv-gen.csproj">

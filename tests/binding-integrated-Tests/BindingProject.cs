@@ -8,20 +8,12 @@ namespace BindingIntegrationTests
 		public string Content { get; set; }
 	}
 
-	public enum CSharpStubUsage
-	{
-		None,
-		Partial,
-		Full,
-	}
-
 	public class BindingProject
 	{
 		public string Id { get; set; }
 
 		public string JavacOptions { get; set; } = "-g";
-		public string GeneratorOptions { get; internal set; } = " --codegen-target=XAJavaInterop1 --public";
-		public CSharpStubUsage CSharpStubUsage { get; set; } = CSharpStubUsage.Full;
+		public string GeneratorOptions { get; internal set; }
 
 		public IList<string> JavaSourceFiles { get; set; } = new List<string> ();
 		public IList<SourceFile> JavaSourceStrings { get; set; } = new List<SourceFile> ();

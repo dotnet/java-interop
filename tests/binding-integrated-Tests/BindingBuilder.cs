@@ -34,16 +34,6 @@ namespace BindingIntegrationTests
 		public const string MetadataXmlSubDir = "metadata";
 		public const string CSharpSourcesSubDir = "csharp";
 
-		public static string [] StubPartialSources =>
-			Directory.GetFiles (Path.Combine (ThisAssemblyDirectory, "SupportFiles"), "*.cs")
-				 .Where (cs => cs.IndexOf ("Java_Lang_", StringComparison.OrdinalIgnoreCase) < 0)
-				 .Where (cs => !string.Equals (Path.GetFileName (cs), "JavaObject.cs", StringComparison.OrdinalIgnoreCase))
-				 .ToArray ();
-		public static string [] StubAllSources =>
-			Directory.GetFiles (Path.Combine (ThisAssemblyDirectory, "SupportFiles"), "*.cs");
-
-		static string ThisAssemblyDirectory => Path.GetDirectoryName (new Uri (typeof (BindingBuilder).Assembly.CodeBase).LocalPath);
-
 		public Steps ProcessSteps { get; set; } = Steps.All;
 
 		// entire work (intermediate output) directory
@@ -52,24 +42,7 @@ namespace BindingIntegrationTests
 		// Used to resolve javac and rt.jar
 		public string JdkPath { get; set; }
 
-		public string GeneratorPath { get; set; } = Path.Combine (ThisAssemblyDirectory, "generator.exe");
-
-		public bool UseSystemCsc { get; set; } // we don't have to default to csc-dim, but why "not" ?
-
-		public string CscPath { get; set; }
-
-		static string GetMscorlibPath () => new Uri (typeof (object).Assembly.CodeBase).LocalPath;
-
-		static string ProbeCscDimPath ()
-		{
-			// For Windows, use nuget package. For Mac/Linux, use SYSMONO dim/csc.exe.
-			if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-				return Path.Combine ("..", "..", "..", "packages", "xamarin.android.csc.dim.0.1.2", "tools", "csc.exe");
-			// assume path relative to framework dll in the GAC.
-			return Path.GetFullPath (Path.Combine (GetMscorlibPath (), "..", "dim", "csc.exe"));
-		}
-
-		static string GetSystemRuntimeDll () => Path.Combine (Path.GetDirectoryName (GetMscorlibPath ()), "Facades", "System.Runtime.dll");
+		public string GeneratorPath { get; set; } = Path.Combine (Path.GetDirectoryName (new Uri (typeof (BindingBuilder).Assembly.CodeBase).LocalPath), "generator.exe");
 
 		static string ProbeJavaHome ()
 		{
@@ -81,10 +54,7 @@ namespace BindingIntegrationTests
 
 		public static BindingBuilder CreateBestBetDefault (BindingProject project)
 		{
-			return new BindingBuilder (project) {
-				JdkPath = ProbeJavaHome (),
-				CscPath = ProbeCscDimPath (),
-			};
+			return new BindingBuilder (project) { JdkPath = ProbeJavaHome () };
 		}
 
 		public BindingBuilder (BindingProject project)
@@ -155,8 +125,8 @@ namespace BindingIntegrationTests
 			project.JavacExecutionOutput = $"Execute javac as: {psi.FileName} {psi.Arguments}\n";
 
 			var proc = new Process () { StartInfo = psi };
-			proc.OutputDataReceived += (sender, e) => project.JavacExecutionOutput += e.Data + '\n';
-			proc.ErrorDataReceived += (sender, e) => project.JavacExecutionOutput += e.Data + '\n';
+			proc.OutputDataReceived += (sender, e) => project.JavacExecutionOutput += e.Data;
+			proc.ErrorDataReceived += (sender, e) => project.JavacExecutionOutput += e.Data;
 			proc.Start ();
 			proc.BeginOutputReadLine ();
 			proc.BeginErrorReadLine ();
@@ -190,8 +160,8 @@ namespace BindingIntegrationTests
 			project.JarExecutionOutput = $"Execute jar as: {psi.FileName} {psi.Arguments}\n";
 
 			var proc = new Process () { StartInfo = psi };
-			proc.OutputDataReceived += (sender, e) => project.JarExecutionOutput += e.Data + '\n';
-			proc.ErrorDataReceived += (sender, e) => project.JarExecutionOutput += e.Data + '\n';
+			proc.OutputDataReceived += (sender, e) => project.JarExecutionOutput += e.Data;
+			proc.ErrorDataReceived += (sender, e) => project.JarExecutionOutput += e.Data;
 			proc.Start ();
 			proc.BeginOutputReadLine ();
 			proc.BeginErrorReadLine ();
@@ -305,8 +275,8 @@ namespace BindingIntegrationTests
 			project.GeneratorExecutionOutput = $"Execute generator as: {psi.FileName} {psi.Arguments}\n";
 
 			var proc = new Process () { StartInfo = psi };
-			proc.OutputDataReceived += (sender, e) => project.GeneratorExecutionOutput += e.Data + '\n';
-			proc.ErrorDataReceived += (sender, e) => project.GeneratorExecutionOutput += e.Data + '\n';
+			proc.OutputDataReceived += (sender, e) => project.GeneratorExecutionOutput += e.Data;
+			proc.ErrorDataReceived += (sender, e) => project.GeneratorExecutionOutput += e.Data;
 			proc.Start ();
 			proc.BeginOutputReadLine ();
 			proc.BeginErrorReadLine ();
@@ -317,63 +287,6 @@ namespace BindingIntegrationTests
 
 		void CompileBindings ()
 		{
-			if ((ProcessSteps & Steps.Csc) == 0)
-				return;
-
-			if (CscPath == null)
-				throw new InvalidOperationException ("CscPath is not set.");
-
-			var objDir = IntermediateOutputPathAbsolute;
-			EnsureDirectory (objDir);
-
-			if (project.GeneratedCSharpSourceFiles == null)
-				project.GeneratedCSharpSourceDirectory = Path.Combine (objDir, CSharpSourcesSubDir);
-			if (!Directory.GetFiles (project.GeneratedCSharpSourceDirectory, "*.cs").Any () && !project.CSharpSourceFiles.Any () && !project.CSharpSourceStrings.Any ())
-				throw new InvalidOperationException ("No C# sources exist.");
-			if (project.GeneratedDllFile == null)
-				project.GeneratedDllFile = Path.Combine (objDir, project.Id + ".dll");
-
-			foreach (var item in project.CSharpSourceStrings)
-				File.WriteAllText (Path.Combine (project.GeneratedCSharpSourceDirectory, item.FileName), item.Content);
-			var csFiles = project.CSharpSourceFiles.AsEnumerable ();
-
-			switch (project.CSharpStubUsage) {
-			case CSharpStubUsage.Partial:
-				csFiles = csFiles.Concat (StubPartialSources);
-				break;
-			case CSharpStubUsage.Full:
-				csFiles = csFiles.Concat (StubAllSources);
-				break;
-			}
-
-			string localSystemRuntime = Path.Combine (ThisAssemblyDirectory, "System.Runtime.dll");
-			if (!File.Exists (localSystemRuntime))
-				File.Copy (GetSystemRuntimeDll (), localSystemRuntime);
-
-			var psi = new ProcessStartInfo () {
-				UseShellExecute = false,
-				FileName = UseSystemCsc ? "csc" : CscPath,
-				Arguments = $" -t:library -unsafe" + 
-					$" -out:\"{project.GeneratedDllFile}\" {project.GeneratedCSharpSourceDirectory}{Path.DirectorySeparatorChar}*.cs " +
-					$" {string.Join (" ", csFiles.Select (s => '"' + s + '"'))}" +
-					$" -r:{ThisAssemblyDirectory}{Path.DirectorySeparatorChar}System.Runtime.dll" +
-					$" -r:{ThisAssemblyDirectory}{Path.DirectorySeparatorChar}Java.Interop.dll" +
-					$" {string.Join (" ", project.ReferenceDlls.Select (s => " -r \"" + s + '"'))}",
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-			};
-
-			project.CscExecutionOutput = $"Execute csc as: {psi.FileName} {psi.Arguments}\n";
-
-			var proc = new Process () { StartInfo = psi };
-			proc.OutputDataReceived += (sender, e) => project.CscExecutionOutput += e.Data + '\n';
-			proc.ErrorDataReceived += (sender, e) => project.CscExecutionOutput += e.Data + '\n';
-			proc.Start ();
-			proc.BeginOutputReadLine ();
-			proc.BeginErrorReadLine ();
-			proc.WaitForExit ();
-			if (proc.ExitCode != 0)
-				throw new Exception ("csc failed: " + project.CscExecutionOutput);
 		}
 	}
 }

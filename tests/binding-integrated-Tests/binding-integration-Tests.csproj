@@ -19,5 +19,4 @@
     <ProjectReference Include="..\..\src\Xamarin.Android.Tools.ApiXmlAdjuster\Xamarin.Android.Tools.ApiXmlAdjuster.csproj" />
     <ProjectReference Include="..\..\tools\generator\generator.csproj" />
   </ItemGroup>
-  <Import Project="..\binding-support-files\binding-support-files.projitems" Label="Shared" Condition="Exists('..\binding-support-files\binding-support-files.projitems')" />
 </Project>

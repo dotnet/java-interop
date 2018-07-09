@@ -127,45 +127,6 @@ namespace BindingIntegrationTests
 			builder.Build ();
 
 			var csDir = Path.Combine (builder.IntermediateOutputPathAbsolute, BindingBuilder.CSharpSourcesSubDir);
-			Assert.AreEqual (csDir, project.GeneratedCSharpSourceDirectory, "C# generated code directory path mismatch.");
-			Assert.IsTrue (File.Exists (Path.Combine (csDir, "Java.Lang.Object.cs")), "C# source not found");
-		}
-
-		[Test]
-		[Ignore ("rt.jar should be resolved at api-xml-adjuster step too, which is not part of its feature.")]
-		public void VerifyCsc ()
-		{
-			var project = new BindingProject { Id = nameof (VerifyCsc) };
-			var builder = BindingBuilder.CreateBestBetDefault (project);
-			project.ReferenceJarFiles.Add (Path.Combine (builder.JdkPath, "jre", "lib", "rt.jar"));
-			project.JavaSourceStrings.Add (new SourceFile { FileName = "Foo.java", Content = "package com.xamarin.test; public class Foo {}" });
-			project.JavaSourceStrings.Add (new SourceFile { FileName = "Bar.java", Content = "package com.xamarin.test; public class Bar {}" });
-			project.CSharpStubUsage = CSharpStubUsage.Partial;
-
-			builder.Clean ();
-			builder.Build ();
-
-			var dll = Path.Combine (builder.IntermediateOutputPathAbsolute, project.Id);
-			Assert.AreEqual (dll, project.GeneratedDllFile, "C# generated code directory path mismatch.");
-			Assert.IsTrue (File.Exists (dll), "gnerated dll not found");
-		}
-
-		[Test]
-		public void BindRtJar ()
-		{
-			var project = new BindingProject { Id = nameof (BindRtJar) };
-			var builder = BindingBuilder.CreateBestBetDefault (project);
-			project.InputJarFiles.Add (Path.Combine (builder.JdkPath, "jre", "lib", "rt.jar"));
-			project.JavaSourceStrings.Add (new SourceFile { FileName = "Foo.java", Content = "package com.xamarin.test; public class Foo {}" });
-			project.JavaSourceStrings.Add (new SourceFile { FileName = "Bar.java", Content = "package com.xamarin.test; public class Bar {}" });
-			project.CSharpStubUsage = CSharpStubUsage.None;
-
-			builder.Clean ();
-			builder.Build ();
-
-			var dll = Path.Combine (builder.IntermediateOutputPathAbsolute, project.Id);
-			Assert.AreEqual (dll, project.GeneratedDllFile, "C# generated code directory path mismatch.");
-			Assert.IsTrue (File.Exists (dll), "gnerated dll not found");
 		}
 	}
 }
