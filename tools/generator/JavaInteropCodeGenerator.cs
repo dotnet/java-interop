@@ -162,7 +162,7 @@ namespace MonoDroid.Generation {
 				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
 						invokeType,
 						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if (method.IsFinal) {
+			} else if (method.IsFinal || method.IsInterfaceDefaultMethod) {
 				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, {1}this{2});",
 						invokeType,
 						castToPeerable,
