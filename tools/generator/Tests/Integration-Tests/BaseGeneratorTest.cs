@@ -130,7 +130,18 @@ namespace generatortests
 			return Path.Combine (dir, path.Replace ('/', Path.DirectorySeparatorChar));
 		}
 
-		protected void Run (CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string[] additionalSupportPaths = null)
+		protected void Run (CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string [] additionalSupportPaths = null)
+		{
+			// skip non-DIM mode if the test itself expects DIM mode.
+			if (!Options.SupportDefaultInterfaceMethods)
+				Run (false, target, outputPath, apiDescriptionFile, expectedPath, additionalSupportPaths);
+			var bak = Options.SupportDefaultInterfaceMethods;
+			Options.SupportDefaultInterfaceMethods = true;
+			Run (true, target, outputPath, apiDescriptionFile, expectedPath, additionalSupportPaths);
+			Options.SupportDefaultInterfaceMethods = bak;
+		}
+
+		protected void Run (bool supportDefaultInterfaceMethods, CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string[] additionalSupportPaths = null)
 		{
 			Cleanup (outputPath);
 

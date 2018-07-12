@@ -140,7 +140,7 @@ namespace MonoDroid.Generation
 				name = StringRocks.MemberToPascalCase (JavaName);
 
 			is_abstract = elem.XGetAttribute ("abstract") == "true";
-			if (declaringType is InterfaceGen)
+			if (declaringType.IsInterface)
 				is_interface_default_method = !is_abstract && !is_static;
 
 			GenerateDispatchingSetter = elem.Attribute ("generateDispatchingSetter") != null;

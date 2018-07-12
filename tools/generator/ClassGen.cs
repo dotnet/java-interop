@@ -329,8 +329,10 @@ namespace MonoDroid.Generation {
 				gen.GenerateAbstractMembers (this, sw, indent, opt);
 		}
 
-		void GenerateDefaultInterfaceMethodsImplementationClassic (StreamWriter sw, string indent, CodeGenerationOptions opt)
+		void GenMethods (StreamWriter sw, string indent, CodeGenerationOptions opt)
 		{
+			var methodsToDeclare = Methods.AsEnumerable ();
+
 			// This does not exclude overrides (unlike virtual methods) because we're not sure
 			// if calling the base interface default method via JNI expectedly dispatches to
 			// the derived method.
@@ -343,7 +345,9 @@ namespace MonoDroid.Generation {
 			var overridens = defaultMethods.Where (m => overrides.Where (_ => _.Name == m.Name && _.JniSignature == m.JniSignature)
 				.Any (mm => mm.DeclaringType.GetAllDerivedInterfaces ().Contains (m.DeclaringType)));
 
-			foreach (Method m in Methods.Concat (defaultMethods.Except (overridens)).Where (m => m.DeclaringType.IsGeneratable)) {
+			methodsToDeclare = opt.SupportDefaultInterfaceMethods ? methodsToDeclare : methodsToDeclare.Concat (defaultMethods.Except (overridens)).Where (m => m.DeclaringType.IsGeneratable);
+
+			foreach (Method m in methodsToDeclare) {
 				bool virt = m.IsVirtual;
 				m.IsVirtual = !IsFinal && virt;
 				if (m.IsAbstract && !m.IsInterfaceDefaultMethodOverride && !m.IsInterfaceDefaultMethod)
@@ -353,12 +357,6 @@ namespace MonoDroid.Generation {
 				opt.ContextGeneratedMethods.Add (m);
 				m.IsVirtual = virt;
 			}
-		}
-
-		void GenMethods (StreamWriter sw, string indent, CodeGenerationOptions opt)
-		{
-			if (!opt.SupportDefaultInterfaceMethods)
-				GenerateDefaultInterfaceMethodsImplementationClassic (sw, indent, opt);
 
 			var methods = Methods.Concat (Properties.Where (p => p.Setter != null).Select (p => p.Setter));
 			foreach (InterfaceGen type in methods.Where (m => m.IsListenerConnector && m.EventName != String.Empty).Select (m => m.ListenerType).Distinct ()) {
