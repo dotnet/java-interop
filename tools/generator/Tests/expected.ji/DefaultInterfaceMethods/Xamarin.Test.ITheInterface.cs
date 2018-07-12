@@ -36,7 +36,7 @@ namespace Xamarin.Test {
 			get {
 				const string __id = "getBar.()I";
 				try {
-					var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, (IJavaPeerable) this, null);
+					var __rm = _members.InstanceMethods.InvokeNonvirtualInt32Method (__id, (IJavaPeerable) this, null);
 					return __rm;
 				} finally {
 				}
@@ -82,7 +82,7 @@ namespace Xamarin.Test {
 			get {
 				const string __id = "getStringProp.()Ljava/lang/String;";
 				try {
-					var __rm = _members.InstanceMethods.InvokeVirtualObjectMethod (__id, (IJavaPeerable) this, null);
+					var __rm = _members.InstanceMethods.InvokeNonvirtualObjectMethod (__id, (IJavaPeerable) this, null);
 					return JNIEnv.GetString (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 				} finally {
 				}
@@ -95,7 +95,7 @@ namespace Xamarin.Test {
 				try {
 					JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 					__args [0] = new JniArgumentValue (native_value);
-					_members.InstanceMethods.InvokeVirtualVoidMethod (__id, (IJavaPeerable) this, __args);
+					_members.InstanceMethods.InvokeNonvirtualVoidMethod (__id, (IJavaPeerable) this, __args);
 				} finally {
 					JNIEnv.DeleteLocalRef (native_value);
 				}
@@ -124,7 +124,7 @@ namespace Xamarin.Test {
 		{
 			const string __id = "foo.()I";
 			try {
-				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, (IJavaPeerable) this, null);
+				var __rm = _members.InstanceMethods.InvokeNonvirtualInt32Method (__id, (IJavaPeerable) this, null);
 				return __rm;
 			} finally {
 			}
@@ -152,7 +152,7 @@ namespace Xamarin.Test {
 		{
 			const string __id = "string1.()Ljava/lang/String;";
 			try {
-				var __rm = _members.InstanceMethods.InvokeVirtualObjectMethod (__id, (IJavaPeerable) this, null);
+				var __rm = _members.InstanceMethods.InvokeNonvirtualObjectMethod (__id, (IJavaPeerable) this, null);
 				return JNIEnv.GetString (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 			} finally {
 			}
@@ -195,7 +195,7 @@ namespace Xamarin.Test {
 				__args [0] = new JniArgumentValue (native_p1);
 				__args [1] = new JniArgumentValue (native_p2);
 				__args [2] = new JniArgumentValue (native_p3);
-				var __rm = _members.InstanceMethods.InvokeVirtualObjectMethod (__id, (IJavaPeerable) this, __args);
+				var __rm = _members.InstanceMethods.InvokeNonvirtualObjectMethod (__id, (IJavaPeerable) this, __args);
 				return JNIEnv.GetString (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_p1);
