@@ -56,13 +56,14 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteClassHandle (InterfaceGen type, TextWriter writer, string indent, CodeGenerationOptions opt, string declaringType)
 		{
-			writer.WriteLine ("{0}new static JniPeerMembers _members = new JniPeerMembers (\"{1}\", typeof ({2}));",indent, type.RawJniName, declaringType);
+			writer.WriteLine ("{0}new static JniPeerMembers _members = new {1} (\"{2}\", typeof ({3}));",indent, GetPeerMembersType (), type.RawJniName, declaringType);
 		}
 
 		internal override void WriteClassInvokerHandle (ClassGen type, TextWriter writer, string indent, CodeGenerationOptions opt, string declaringType)
 		{
-			writer.WriteLine ("{0}internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers (\"{1}\", typeof ({2}));",
+			writer.WriteLine ("{0}internal    new     static  readonly    JniPeerMembers  _members    = new {1} (\"{2}\", typeof ({3}));",
 					indent,
+					GetPeerMembersType (),
 					type.RawJniName,
 					declaringType);
 			writer.WriteLine ();
@@ -78,8 +79,9 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteInterfaceInvokerHandle (InterfaceGen type, TextWriter writer, string indent, CodeGenerationOptions opt, string declaringType)
 		{
-			writer.WriteLine ("{0}internal    new     static  readonly    JniPeerMembers  _members    = new JniPeerMembers (\"{1}\", typeof ({2}));",
+			writer.WriteLine ("{0}internal    new     static  readonly    JniPeerMembers  _members    = new {1} (\"{2}\", typeof ({3}));",
 					indent,
+					GetPeerMembersType (),
 					type.RawJniName,
 					declaringType);
 			writer.WriteLine ();
