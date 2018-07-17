@@ -54,6 +54,11 @@ namespace MonoDroid.Generation {
 			return "JniPeerMembers";
 		}
 
+		internal override string GetAllInterfaceImplements ()
+		{
+			return "IJavaObject, IJavaPeerable";
+		}
+
 		internal override void WriteClassHandle (InterfaceGen type, TextWriter writer, string indent, CodeGenerationOptions opt, string declaringType)
 		{
 			writer.WriteLine ("{0}new static JniPeerMembers _members = new {1} (\"{2}\", typeof ({3}));",indent, GetPeerMembersType (), type.RawJniName, declaringType);

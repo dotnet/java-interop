@@ -671,7 +671,7 @@ namespace MonoDroid.Generation {
 			if (this.TypeParameters != null && this.TypeParameters.Any ())
 				sw.WriteLine ("{0}{1}", indent, TypeParameters.ToGeneratedAttributeString ());
 			sw.WriteLine ("{0}{1} partial interface {2} : {3} {{", indent, Visibility, Name,
-				Interfaces.Count == 0 || sb.Length == 0 ? "IJavaObject" : sb.ToString ());
+			              Interfaces.Count == 0 || sb.Length == 0 ? (opt.SupportDefaultInterfaceMethods ? opt.CodeGenerator.GetAllInterfaceImplements () : "IJavaObject") : sb.ToString ());
 			sw.WriteLine ();
 			GenProperties (sw, indent + "\t", opt);
 			GenMethods (sw, indent + "\t", opt);

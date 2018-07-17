@@ -725,6 +725,8 @@ namespace MonoDroid.Generation {
 		internal    abstract    void    WriteFieldGetBody (Field field,     TextWriter writer,    string indent,  CodeGenerationOptions opt, GenBase type);
 		internal    abstract    void    WriteFieldSetBody (Field field,     TextWriter writer,    string indent,  CodeGenerationOptions opt, GenBase type);
 
+		internal    virtual     string  GetAllInterfaceImplements () => "IJavaObject";
+
 		internal    virtual     void    WriteField (Field field,            TextWriter writer,    string indent,  CodeGenerationOptions opt, GenBase type)
 		{
 			if (field.IsEnumified)

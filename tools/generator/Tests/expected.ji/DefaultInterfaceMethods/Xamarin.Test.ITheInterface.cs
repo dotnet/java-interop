@@ -12,7 +12,7 @@ namespace Xamarin.Test {
 
 	// Metadata.xml XPath interface reference: path="/api/package[@name='xamarin.test']/interface[@name='TheInterface']"
 	[Register ("xamarin/test/TheInterface", "", "Xamarin.Test.ITheInterfaceInvoker")]
-	public partial interface ITheInterface : IJavaObject {
+	public partial interface ITheInterface : IJavaObject, IJavaPeerable {
 
 		static Delegate cb_getBar;
 #pragma warning disable 0169
