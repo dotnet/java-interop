@@ -1076,7 +1076,8 @@ namespace MonoDroid.Generation {
 			bool gen_string_overload = !method.IsOverride && method.Parameters.HasCharSequence && !type.ContainsMethod (name_and_jnisig);
 
 			string static_arg = method.IsStatic ? " static" : String.Empty;
-			string virt_ov = method.IsOverride ? (opt.SupportDefaultInterfaceMethods && method.IsInterfaceDefaultMethodOverride ? "/*DIM override*/" : " override") : method.IsVirtual ? " virtual" : String.Empty;
+			bool is_explicit = opt.SupportDefaultInterfaceMethods && type.IsInterface && method.OverriddenInterfaceMethod != null;
+			string virt_ov = is_explicit ? string.Empty : method.IsOverride ? (opt.SupportDefaultInterfaceMethods && method.OverriddenInterfaceMethod != null ? "/*DIM override*/" : " override") : method.IsVirtual ? " virtual" : String.Empty;
 			if ((string.IsNullOrEmpty (virt_ov) || virt_ov == " virtual") && type.RequiresNew (method.AdjustedName)) {
 				virt_ov = " new" + virt_ov;
 			}
@@ -1093,7 +1094,16 @@ namespace MonoDroid.Generation {
 				indent, method.JavaName, method.JniSignature, method.IsVirtual ? method.ConnectorName : String.Empty, method.AdditionalAttributeString ());
 			WriteMethodCustomAttributes (method, writer, indent);
 			string visibility = type.IsInterface ? string.Empty : method.Visibility;
-			writer.WriteLine ("{0}{1}{2}{3}{4} unsafe {5} {6} ({7})", indent, visibility, static_arg, virt_ov, seal, ret, method.AdjustedName, GenBase.GetSignature (method, opt));
+			writer.WriteLine ("{0}{1}{2}{3}{4} unsafe {5} {6}{7} ({8})",
+			                  indent,
+			                  visibility,
+			                  static_arg,
+			                  virt_ov,
+			                  seal,
+			                  ret,
+			                  is_explicit ? method.OverriddenInterfaceMethod.DeclaringType.FullName + '.' : string.Empty,
+			                  method.AdjustedName,
+			                  GenBase.GetSignature (method, opt));
 			writer.WriteLine ("{0}{{", indent);
 			WriteMethodBody (method, writer, indent + "\t", opt, type);
 			writer.WriteLine ("{0}}}", indent);

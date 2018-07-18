@@ -340,7 +340,7 @@ namespace MonoDroid.Generation {
 				.SelectMany (i => i.Methods)
 				.Where (m => m.IsInterfaceDefaultMethod)
 				.Where (m => !ContainsMethod (m, false, false));
-			var overrides = defaultMethods.Where (m => m.IsInterfaceDefaultMethodOverride);
+			var overrides = defaultMethods.Where (m => m.OverriddenInterfaceMethod != null);
 
 			var overridens = defaultMethods.Where (m => overrides.Where (_ => _.Name == m.Name && _.JniSignature == m.JniSignature)
 				.Any (mm => mm.DeclaringType.GetAllDerivedInterfaces ().Contains (m.DeclaringType)));
@@ -350,7 +350,7 @@ namespace MonoDroid.Generation {
 			foreach (Method m in methodsToDeclare) {
 				bool virt = m.IsVirtual;
 				m.IsVirtual = !IsFinal && virt;
-				if (m.IsAbstract && !m.IsInterfaceDefaultMethodOverride && !m.IsInterfaceDefaultMethod)
+				if (m.IsAbstract && m.OverriddenInterfaceMethod == null && !m.IsInterfaceDefaultMethod)
 					opt.CodeGenerator.WriteMethodAbstractDeclaration (m, sw, indent, opt, null, this);
 				else
 					opt.CodeGenerator.WriteMethod (m, sw, indent, opt, this, true);

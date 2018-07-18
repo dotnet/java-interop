@@ -363,7 +363,7 @@ namespace MonoDroid.Generation
 			set { is_override = value; }
 		}
 
-		public bool IsInterfaceDefaultMethodOverride { get; set; }
+		public Method OverriddenInterfaceMethod { get; set; }
 
 		public bool IsVoid {
 			get { return RetVal.JavaName == "void"; }
