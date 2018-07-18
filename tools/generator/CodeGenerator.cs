@@ -1063,6 +1063,13 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ();
 		}
 
+		static string GetDeclaringTypeOfExplicitInterfaceMethod (Method method)
+		{
+			return method.OverriddenInterfaceMethod != null ?
+				     GetDeclaringTypeOfExplicitInterfaceMethod (method.OverriddenInterfaceMethod) :
+				     method.DeclaringType.FullName;
+		}
+
 		public void WriteMethod (Method method, TextWriter writer, string indent, CodeGenerationOptions opt, GenBase type, bool generate_callbacks)
 		{
 			if (!method.IsValid)
@@ -1101,7 +1108,7 @@ namespace MonoDroid.Generation {
 			                  virt_ov,
 			                  seal,
 			                  ret,
-			                  is_explicit ? method.OverriddenInterfaceMethod.DeclaringType.FullName + '.' : string.Empty,
+			                  is_explicit ? GetDeclaringTypeOfExplicitInterfaceMethod (method.OverriddenInterfaceMethod) + '.' : string.Empty,
 			                  method.AdjustedName,
 			                  GenBase.GetSignature (method, opt));
 			writer.WriteLine ("{0}{{", indent);
