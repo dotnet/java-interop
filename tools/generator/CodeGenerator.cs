@@ -1016,9 +1016,9 @@ namespace MonoDroid.Generation {
 
 			string ret = opt.GetOutputName (method.RetVal.FullName.Replace ("Java.Lang.ICharSequence", "string"));
 			writer.WriteLine ();
-			writer.WriteLine ("{0}public static {1} {2} (this {3} self, {4})",
-					indent, ret, method.Name, selfType,
-				GenBase.GetSignature (method, opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string"));
+			var parameters = GenBase.GetSignature (method, opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
+			writer.WriteLine ("{0}public static {1} {2} (this {3} self{4}{5})",
+			                  indent, ret, method.Name, selfType, parameters.Length > 0 ? ", " : "", parameters);
 			writer.WriteLine ("{0}{{", indent);
 			WriteMethodStringOverloadBody (method, writer, indent + "\t", opt, true);
 			writer.WriteLine ("{0}}}", indent);
