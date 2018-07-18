@@ -806,9 +806,10 @@ namespace MonoDroid.Generation {
 			}
 
 			// Interface default methods can be overriden. We want to process them differently.
-			foreach (Method m in methods.Where (m => m.IsInterfaceDefaultMethod)) {
+			var checkDimOverrideTargets = opt.SupportDefaultInterfaceMethods ? methods : methods.Where (m => m.IsInterfaceDefaultMethod);
+			foreach (Method m in checkDimOverrideTargets) {
 				foreach (var bt in this.GetAllDerivedInterfaces ()) {
-					var bm = bt.Methods.FirstOrDefault (mm => mm.Name == m.Name && ParameterList.Equals (mm.Parameters, m.Parameters));
+					var bm = bt.Methods.FirstOrDefault (mm => !mm.IsAbstract && mm.Name == m.Name && ParameterList.Equals (mm.Parameters, m.Parameters));
 					if (bm != null) {
 						m.IsInterfaceDefaultMethodOverride = true;
 						break;

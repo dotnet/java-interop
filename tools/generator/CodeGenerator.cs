@@ -1076,7 +1076,7 @@ namespace MonoDroid.Generation {
 			bool gen_string_overload = !method.IsOverride && method.Parameters.HasCharSequence && !type.ContainsMethod (name_and_jnisig);
 
 			string static_arg = method.IsStatic ? " static" : String.Empty;
-			string virt_ov = method.IsOverride ? " override" : method.IsVirtual ? " virtual" : String.Empty;
+			string virt_ov = method.IsOverride ? (opt.SupportDefaultInterfaceMethods && method.IsInterfaceDefaultMethodOverride ? "/*DIM override*/" : " override") : method.IsVirtual ? " virtual" : String.Empty;
 			if ((string.IsNullOrEmpty (virt_ov) || virt_ov == " virtual") && type.RequiresNew (method.AdjustedName)) {
 				virt_ov = " new" + virt_ov;
 			}
