@@ -809,9 +809,9 @@ namespace MonoDroid.Generation {
 			var checkDimOverrideTargets = opt.SupportDefaultInterfaceMethods ? methods : methods.Where (m => m.IsInterfaceDefaultMethod);
 			foreach (Method m in checkDimOverrideTargets.Where (m => !m.IsStatic)) {
 				foreach (var bt in this.GetAllDerivedInterfaces ()) {
-					// We mark a method as an override if (1)it is declared in an interface, or (2) if the base method is DIM
+					// We mark a method as an override if (1) it is a DIM, or (2) if the base method is DIM
 					// (i.e. we don't mark as override if a class method "implements" normal iface method.)
-					var bm = bt.Methods.FirstOrDefault (mm => (this.IsInterface || !mm.IsAbstract) && mm.Name == m.Name && ParameterList.Equals (mm.Parameters, m.Parameters));
+					var bm = bt.Methods.FirstOrDefault (mm => (m.IsInterfaceDefaultMethod || !mm.IsAbstract) && mm.Name == m.Name && ParameterList.Equals (mm.Parameters, m.Parameters));
 					if (bm != null) {
 						m.OverriddenInterfaceMethod = bm;
 						break;
