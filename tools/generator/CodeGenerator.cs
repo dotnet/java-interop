@@ -1084,7 +1084,7 @@ namespace MonoDroid.Generation {
 
 			string static_arg = method.IsStatic ? " static" : String.Empty;
 			bool is_explicit = opt.SupportDefaultInterfaceMethods && type.IsInterface && method.OverriddenInterfaceMethod != null;
-			string virt_ov = is_explicit ? string.Empty : method.IsOverride ? (opt.SupportDefaultInterfaceMethods && method.OverriddenInterfaceMethod != null ? "/*DIM override*/" : " override") : method.IsVirtual ? " virtual" : String.Empty;
+			string virt_ov = is_explicit ? string.Empty : method.IsOverride ? (opt.SupportDefaultInterfaceMethods && method.OverriddenInterfaceMethod != null ? "/*DIM override*/ virtual" : " override") : method.IsVirtual ? " virtual" : String.Empty;
 			if ((string.IsNullOrEmpty (virt_ov) || virt_ov == " virtual") && type.RequiresNew (method.AdjustedName)) {
 				virt_ov = " new" + virt_ov;
 			}
