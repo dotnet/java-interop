@@ -795,7 +795,7 @@ namespace MonoDroid.Generation {
 		
 		public void FixupMethodOverrides (CodeGenerationOptions opt)
 		{
-			foreach (Method m in methods.Where (m => !m.IsInterfaceDefaultMethod)) {
+			foreach (Method m in methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
 				for (var bt = this.GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
 					var bm = bt.Methods.FirstOrDefault (mm => mm.Name == m.Name && mm.Visibility == m.Visibility && ParameterList.Equals (mm.Parameters, m.Parameters));
 					if (bm != null && bm.RetVal.FullName == m.RetVal.FullName) { // if return type is different, it could be still "new", not "override".

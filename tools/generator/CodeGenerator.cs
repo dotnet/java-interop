@@ -1100,7 +1100,7 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}[Register (\"{1}\", \"{2}\", \"{3}\"{4})]",
 				indent, method.JavaName, method.JniSignature, method.IsVirtual ? method.ConnectorName : String.Empty, method.AdditionalAttributeString ());
 			WriteMethodCustomAttributes (method, writer, indent);
-			string visibility = type.IsInterface ? string.Empty : method.Visibility;
+			string visibility = type.IsInterface && !method.IsStatic ? string.Empty : method.Visibility;
 			writer.WriteLine ("{0}{1}{2}{3}{4} unsafe {5} {6}{7} ({8})",
 			                  indent,
 			                  visibility,
