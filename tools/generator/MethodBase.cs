@@ -30,6 +30,10 @@ namespace MonoDroid.Generation
 			get;
 		}
 
+		// FIXME: this is semantically incorrect. A generic method should rather be evaluated as:
+		//    GenericArguments != null && GenericArguments.Count > 0.
+		// However, changing this part like this causes various build errors especially with Java.Lang.Enum and other various generic parameter resolution,
+		// so we should leave this as is (maybe renaming this is an option, in case we want keep using this generator).
 		public virtual bool IsGeneric {
 			get { return parms.HasGeneric; }
 		}
