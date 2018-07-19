@@ -350,7 +350,7 @@ namespace MonoDroid.Generation {
 			foreach (Method m in methodsToDeclare) {
 				bool virt = m.IsVirtual;
 				m.IsVirtual = !IsFinal && virt;
-				if (m.IsAbstract && m.OverriddenInterfaceMethod == null && !m.IsInterfaceDefaultMethod)
+				if (m.IsAbstract && m.OverriddenInterfaceMethod == null && (opt.SupportDefaultInterfaceMethods || !m.IsInterfaceDefaultMethod))
 					opt.CodeGenerator.WriteMethodAbstractDeclaration (m, sw, indent, opt, null, this);
 				else
 					opt.CodeGenerator.WriteMethod (m, sw, indent, opt, this, true);
@@ -573,7 +573,7 @@ namespace MonoDroid.Generation {
 //				if (iface.IsGeneric)
 //					continue;
 				GenerateInvoker (sw, iface.Properties.Where (p => !ContainsProperty (p.Name, false, false)), indent, opt, members);
-				GenerateInvoker (sw, iface.Methods.Where (m => !m.IsInterfaceDefaultMethod && !ContainsMethod (m, false, false) && !IsCovariantMethod (m) && !explicitly_implemented_iface_methods.Contains (m.GetSignature ())), indent, opt, members, iface);
+				GenerateInvoker (sw, iface.Methods.Where (m => (opt.SupportDefaultInterfaceMethods || !m.IsInterfaceDefaultMethod) && !ContainsMethod (m, false, false) && !IsCovariantMethod (m) && !explicitly_implemented_iface_methods.Contains (m.GetSignature ())), indent, opt, members, iface);
 			}
 
 			if (BaseGen != null && BaseGen.FullName != "Java.Lang.Object")

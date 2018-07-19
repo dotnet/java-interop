@@ -626,7 +626,7 @@ namespace MonoDroid.Generation {
 		// For each interface, generate either an abstract method or an explicit implementation method.
 		public void GenerateAbstractMembers (ClassGen gen, StreamWriter sw, string indent, CodeGenerationOptions opt)
 		{
-			foreach (Method m in Methods.Where (m => !m.IsInterfaceDefaultMethod && !m.IsStatic)) {
+			foreach (Method m in Methods.Where (m => (!opt.SupportDefaultInterfaceMethods || !m.IsInterfaceDefaultMethod) && !m.IsStatic)) {
 				bool mapped = false;
 				string sig = m.GetSignature ();
 				if (opt.ContextGeneratedMethods.Any (_ => _.Name == m.Name && _.JniSignature == m.JniSignature))
@@ -644,7 +644,7 @@ namespace MonoDroid.Generation {
 					opt.CodeGenerator.WriteMethodAbstractDeclaration (m, sw, indent, opt, this, gen);
 				opt.ContextGeneratedMethods.Add (m); 
 			}
-			foreach (Property prop in Properties.Where (p => !p.Getter.IsStatic)) {
+			foreach (Property prop in Properties.Where (p => (!opt.SupportDefaultInterfaceMethods || !p.Getter.IsInterfaceDefaultMethod) && !p.Getter.IsStatic)) {
 				if (gen.ContainsProperty (prop.Name, false))
 					continue;
 				prop.GenerateAbstractDeclaration (sw, indent, opt, gen);
