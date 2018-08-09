@@ -132,7 +132,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					typeNameRegexes.Add (new Regex (line));
 				}
 			} catch (Exception e) {
-				Error ($"Unable to read profile '{profilePath}'.\n{e}");
+				Error ($"Unable to read profile '{profilePath}'.{Environment.NewLine}{e}");
 				Environment.Exit (4);
 			}
 		}
@@ -174,7 +174,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 				try {
 					CreateMarshalMethodAssembly (assembly);
 				} catch (Exception e) {
-					Error ($"Unable to process assembly '{assembly}'\n{e.Message}\n{e}");
+					Error ($"Unable to process assembly '{assembly}'{Environment.NewLine}{e.Message}{Environment.NewLine}{e}");
 					Environment.Exit (1);
 				}
 			}
@@ -189,7 +189,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			try {
 				builder.CreateJreVM ();
 			} catch (Exception e) {
-				Error ($"Unable to create Java VM\n{e}");
+				Error ($"Unable to create Java VM{Environment.NewLine}{e}");
 				Environment.Exit (3);
 			}
 		}
