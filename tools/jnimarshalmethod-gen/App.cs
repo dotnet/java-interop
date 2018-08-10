@@ -94,7 +94,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 				  "Show this message and exit",
 				  v => help = v != null },
 				{ "p|profile=",
-					"Generate marshaling methods only for types whose names match regex patterns listed in the {PROFILE} file. One pattern per line. Empty lines and lines starting with '#' character are ignored (comments).",
+				  "Generate marshaling methods only for types whose names match regex patterns listed in the {PROFILE} file. One pattern per line. Empty lines and lines starting with '#' character are ignored (comments).",
 				  v => LoadProfile (v) },
 				{ "t|type=",
 				  "Generate marshaling methods only for types whose names match {TYPE-REGEX}.",
