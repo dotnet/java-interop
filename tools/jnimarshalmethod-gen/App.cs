@@ -93,9 +93,11 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 				{ "h|help|?",
 				  "Show this message and exit",
 				  v => help = v != null },
-				{ "p|profile=",
-				  "Generate marshaling methods only for types whose names match regex patterns listed in the {PROFILE} file. One pattern per line. Empty lines and lines starting with '#' character are ignored (comments).",
-				  v => LoadProfile (v) },
+				{ "types=",
+				  "Generate marshaling methods only for types whose names match regex patterns listed {FILE}.\n" +
+				  "One regex pattern per line.\n" +
+				  "Empty lines and lines starting with '#' character are ignored as comments.",
+				  v => LoadTypes (v) },
 				{ "t|type=",
 				  "Generate marshaling methods only for types whose names match {TYPE-REGEX}.",
 				  v => typeNameRegexes.Add (new Regex (v)) },
@@ -119,10 +121,10 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			return assemblies;
 		}
 
-		void LoadProfile (string profilePath)
+		void LoadTypes (string typesPath)
 		{
 			try {
-				foreach (var line in File.ReadLines (profilePath)) {
+				foreach (var line in File.ReadLines (typesPath)) {
 					if (string.IsNullOrWhiteSpace (line))
 						continue;
 
@@ -132,7 +134,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					typeNameRegexes.Add (new Regex (line));
 				}
 			} catch (Exception e) {
-				Error ($"Unable to read profile '{profilePath}'.{Environment.NewLine}{e}");
+				Error ($"Unable to read profile '{typesPath}'.{Environment.NewLine}{e}");
 				Environment.Exit (4);
 			}
 		}
