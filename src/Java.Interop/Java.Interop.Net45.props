@@ -1,0 +1,20 @@
+<Project>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(XAInstallPrefix)' != '' ">
+    <Reference Include="mscorlib">
+      <HintPath>$(XAInstallPrefix)xbuild-frameworks\MonoAndroid\v1.0\mscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>$(XAInstallPrefix)xbuild-frameworks\MonoAndroid\v1.0\System.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>$(XAInstallPrefix)xbuild-frameworks\MonoAndroid\v1.0\System.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
