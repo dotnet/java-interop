@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <strings.h>
 #include <string.h>
 #include <unistd.h>
@@ -10,11 +11,6 @@
 #endif
 
 #include "java-interop-logger.h"
-
-#include "monodroid.h"
-#include "monodroid-glue.h"
-#include "debug.h"
-#include "util.h"
 
 #define DO_LOG(_level_,_category_,_format_,_args_)						                        \
 	va_start ((_args_), (_format_));									                        \
@@ -59,124 +55,6 @@ __android_log_vprint (int prio, const char* tag, const char* fmt, va_list ap)
 
 unsigned int log_categories;
 int gc_spew_enabled;
-
-static FILE*
-open_file (LogCategories category, const char *path, const char *override_dir, const char *filename)
-{
-	char *p = NULL;
-	FILE *f;
-
-	if (path && access (path, W_OK) < 0) {
-		log_warn (category, "Could not open path '%s' for logging (\"%s\"). Using '%s/%s' instead.",
-				path, strerror (errno), override_dir, filename);
-		path  = NULL;
-	}
-
-	if (!path) {
-		create_public_directory (override_dir);
-		p     = path_combine (override_dir, filename);
-		path  = p;
-	}
-
-	unlink (path);
-
-	f = monodroid_fopen (path, "a");
-
-	if (f) {
-		set_world_accessable (path);
-	} else {
-		log_warn (category, "Could not open path '%s' for logging: %s",
-				path, strerror (errno));
-	}
-
-	free (p);
-
-	return f;
-}
-
-void
-init_categories (const char *override_dir)
-{
-	char *value;
-	char **args, **ptr;
-
-	const char *gref_file = NULL;
-	const char *lref_file = NULL;
-
-#if !ANDROID
-	log_categories = LOG_DEFAULT;
-#endif
-	int light_gref  = 0;
-	int light_lref  = 0;
-
-	if (monodroid_get_namespaced_system_property (DEBUG_MONO_LOG_PROPERTY, &value) == 0)
-		return;
-
-	args = monodroid_strsplit (value, ",", -1);
-	free (value);
-	value = NULL;
-
-	for (ptr = args; ptr && *ptr; ptr++) {
-		const char *arg = *ptr;
-
-		if (!strcmp (arg, "all")) {
-			log_categories = 0xFFFFFFFF;
-			break;
-		}
-
-#define CATEGORY(name,entry) do { \
-		if (!strncmp (arg, name, sizeof(name)-1)) \
-			log_categories |= entry; \
-	} while (0)
-
-		CATEGORY ("assembly", LOG_ASSEMBLY);
-		CATEGORY ("default",  LOG_DEFAULT);
-		CATEGORY ("debugger", LOG_DEBUGGER);
-		CATEGORY ("gc",       LOG_GC);
-		CATEGORY ("gref",     LOG_GREF);
-		CATEGORY ("lref",     LOG_LREF);
-		CATEGORY ("timing",   LOG_TIMING);
-		CATEGORY ("bundle",   LOG_BUNDLE);
-		CATEGORY ("network",  LOG_NET);
-		CATEGORY ("netlink",  LOG_NETLINK);
-
-#undef CATEGORY
-
-		if (!strncmp (arg, "gref=", 5)) {
-			log_categories  |= LOG_GREF;
-			gref_file        = arg + 5;
-		} else if (!strncmp (arg, "gref-", 5)) {
-			log_categories  |= LOG_GREF;
-			light_gref       = 1;
-		} else if (!strncmp (arg, "lref=", 5)) {
-			log_categories  |= LOG_LREF;
-			lref_file        = arg + 5;
-		} else if (!strncmp (arg, "lref-", 5)) {
-			log_categories  |= LOG_LREF;
-			light_lref       = 1;
-		}
-	}
-
-	if ((log_categories & LOG_GREF) != 0 && !light_gref) {
-		gref_log  = open_file (LOG_GREF, gref_file, override_dir, "grefs.txt");
-	}
-
-	if ((log_categories & LOG_LREF) != 0 && !light_lref) {
-		// if both lref & gref have files specified, and they're the same path, reuse the FILE*.
-		if (lref_file != NULL && strcmp (lref_file, gref_file != NULL ? gref_file : "") == 0) {
-			lref_log  = gref_log;
-		} else {
-			lref_log  = open_file (LOG_LREF, lref_file, override_dir, "lrefs.txt");
-		}
-	}
-
-	monodroid_strfreev (args);
-
-#if DEBUG
-	if ((log_categories & LOG_GC) != 0)
-		gc_spew_enabled = 1;
-#endif  /* DEBUG */
-}
 
 void
 log_error (LogCategories category, const char *format, ...)
