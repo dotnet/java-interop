@@ -2,6 +2,7 @@
   <PropertyGroup>
     <NoStdLib Condition=" '$(XAInstallPrefix)' != '' ">true</NoStdLib>
     <OutputPath>..\..\bin\$(Configuration)Net45</OutputPath>
+    <DocumentationFile>$(OutputPath)\Java.Interop.xml</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup Condition=" '$(XAInstallPrefix)' != '' ">
