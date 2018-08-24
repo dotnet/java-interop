@@ -129,7 +129,6 @@
     <CompileJavaInteropJar Include="java\com\xamarin\java_interop\ManagedPeer.java" />
   </ItemGroup>
   <Import Project="..\..\Configuration.props" />
-  <Import Project="$(JNIEnvGenPath)\JdkInfo.props" />
   <Import Project="Java.Interop.PCL.props"   Condition=" '$(JavaInteropProfile)' != 'net45' " />
   <Import Project="Java.Interop.Net45.props" Condition=" '$(JavaInteropProfile)' == 'net45' " />
   <Import Project="Java.Interop.targets" />

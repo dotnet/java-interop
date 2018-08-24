@@ -1,8 +1,9 @@
 <Project>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <NoStdLib>true</NoStdLib>
+    <NoStdLib Condition=" '$(XAInstallPrefix)' != '' ">true</NoStdLib>
+    <OutputPath>..\..\bin\$(Configuration)Net45</OutputPath>
   </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup Condition=" '$(XAInstallPrefix)' != '' ">
     <Reference Include="mscorlib">
       <HintPath>$(XAInstallPrefix)xbuild-frameworks\MonoAndroid\v1.0\mscorlib.dll</HintPath>
@@ -16,5 +17,10 @@
       <HintPath>$(XAInstallPrefix)xbuild-frameworks\MonoAndroid\v1.0\System.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(XAInstallPrefix)' == '' ">
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
   </ItemGroup>
 </Project>
