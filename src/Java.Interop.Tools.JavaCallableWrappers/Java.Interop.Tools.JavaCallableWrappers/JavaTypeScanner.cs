@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using Mono.Cecil;
 
 using Java.Interop.Tools.Cecil;
-using Java.Interop.Tools.Diagnostics;
 using Java.Interop.Tools.TypeNameMappings;
 
 namespace Java.Interop.Tools.JavaCallableWrappers
@@ -29,10 +29,9 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 
 			foreach (var assembly in assemblies) {
 				var assm = resolver.GetAssembly (assembly);
-
 				foreach (ModuleDefinition md in assm.Modules) {
 					foreach (TypeDefinition td in md.Types) {
-						AddJavaTypes (javaTypes, td);
+						AddJavaTypes (javaTypes.Add, td);
 					}
 				}
 			}
@@ -40,12 +39,28 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 			return javaTypes;
 		}
 
-		void AddJavaTypes (List<TypeDefinition> javaTypes, TypeDefinition type)
+		public List<TypeDefinition> GetJavaTypesInParallel (IEnumerable<string> assemblies, IAssemblyResolver resolver)
+		{
+			var javaTypes = new BlockingCollection<TypeDefinition> ();
+
+			Parallel.ForEach (assemblies, assembly => {
+				var assm = resolver.GetAssembly (assembly);
+				foreach (ModuleDefinition md in assm.Modules) {
+					foreach (TypeDefinition td in md.Types) {
+						AddJavaTypes (javaTypes.Add, td);
+					}
+				}
+			});
+
+			return javaTypes.ToList ();
+		}
+
+		void AddJavaTypes (Action<TypeDefinition> addMethod, TypeDefinition type)
 		{
 			if (type.IsSubclassOf ("Java.Lang.Object") || type.IsSubclassOf ("Java.Lang.Throwable")) {
 
 				// For subclasses of e.g. Android.App.Activity.
-				javaTypes.Add (type);
+				addMethod (type);
 			} else if (type.IsClass && !type.IsSubclassOf ("System.Exception") && type.ImplementsInterface ("Android.Runtime.IJavaObject")) {
 				var level   = ErrorOnCustomJavaObject ? TraceLevel.Error : TraceLevel.Warning;
 				var prefix  = ErrorOnCustomJavaObject ? "error" : "warning";
@@ -59,7 +74,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 				return;
 
 			foreach (TypeDefinition nested in type.NestedTypes)
-				AddJavaTypes (javaTypes, nested);
+				AddJavaTypes (addMethod, nested);
 		}
 
 		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type)
