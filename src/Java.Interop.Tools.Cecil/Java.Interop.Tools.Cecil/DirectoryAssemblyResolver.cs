@@ -29,7 +29,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -61,7 +61,7 @@ namespace Java.Interop.Tools.Cecil {
 
 		public ICollection<string> SearchDirectories {get; private set;}
 
-		Dictionary<string, AssemblyDefinition> cache;
+		ConcurrentDictionary<string, AssemblyDefinition> cache;
 		bool loadDebugSymbols;
 		Action<TraceLevel, string>              logger;
 
@@ -82,7 +82,7 @@ namespace Java.Interop.Tools.Cecil {
 		{
 			if (logger == null)
 				throw new ArgumentNullException (nameof (logger));
-			cache = new Dictionary<string, AssemblyDefinition> ();
+			cache = new ConcurrentDictionary<string, AssemblyDefinition> ();
 			this.loadDebugSymbols = loadDebugSymbols;
 			this.logger       = logger;
 			SearchDirectories = new List<string> ();

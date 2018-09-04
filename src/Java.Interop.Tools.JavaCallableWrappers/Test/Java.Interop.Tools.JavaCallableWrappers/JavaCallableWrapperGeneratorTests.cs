@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +16,7 @@ using Java.Interop.Tools.JavaCallableWrappersTests;
 using Java.Interop.Tools.TypeNameMappings;
 
 using Xamarin.Android.ToolsTests;
+using Java.Interop.Tools.Cecil;
 
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
@@ -490,6 +494,66 @@ public class ExportsThrowsConstructors
 }
 ";
 			Assert.AreEqual (expected, actual);
+		}
+
+		[Test, Repeat (10)]
+		public void GenerateInParallel ()
+		{
+			var zipPath = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location), "Data", "assemblies.zip");
+			var dest = Path.Combine (Path.GetTempPath (), Path.GetRandomFileName ());
+			try {
+				Directory.CreateDirectory (dest);
+				var assemblies = new List<string> ();
+
+				using (var zip = ZipFile.OpenRead (zipPath)) {
+					foreach (var entry in zip.Entries) {
+						var path = Path.Combine (dest, entry.FullName);
+						assemblies.Add (path);
+
+						using (var fs = File.Create (path))
+						using (var zs = entry.Open ()) {
+							zs.CopyTo (fs);
+						}
+					}
+				}
+
+				Action<TraceLevel, string> logger = (l, m) => {
+					TestContext.WriteLine ($"{l} {m}");
+				};
+
+				using (var res = new DirectoryAssemblyResolver (logger, loadDebugSymbols: false)) {
+					res.SearchDirectories.Add (dest);
+					foreach (var assembly in assemblies) {
+						res.Load (assembly);
+					}
+
+					var scanner = new JavaTypeScanner (logger);
+					var sw = new Stopwatch ();
+
+					sw.Reset ();
+					sw.Start ();
+					var parallelTypes = scanner.GetJavaTypesInParallel (assemblies, res);
+					sw.Stop ();
+					TestContext.WriteLine ($"Parallel took: {sw.Elapsed}");
+
+					sw.Reset ();
+					sw.Start ();
+					var types = scanner.GetJavaTypes (assemblies, res);
+					sw.Stop ();
+					TestContext.WriteLine ($"Non parallel took: {sw.Elapsed}");
+
+					types.Sort ((a, b) => a.FullName.CompareTo (b.FullName));
+					parallelTypes.Sort ((a, b) => a.FullName.CompareTo (b.FullName));
+
+					Assert.AreEqual (types.Count, parallelTypes.Count);
+					for (int i = 0; i < types.Count; i++) {
+						Assert.AreEqual (types [i].FullName, parallelTypes [i].FullName);
+					}
+				}
+
+			} finally {
+				Directory.Delete (dest, true);
+			}
 		}
 	}
 }
