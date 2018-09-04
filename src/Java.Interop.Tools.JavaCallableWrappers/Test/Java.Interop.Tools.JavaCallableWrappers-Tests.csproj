@@ -34,6 +34,8 @@
       <HintPath>..\..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Java.Interop.Tools.JavaCallableWrappers\JavaCallableWrapperGeneratorTests.cs" />
@@ -47,6 +49,9 @@
     <Compile Include="Android.Content\ContentProviderAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\Assemblies.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
