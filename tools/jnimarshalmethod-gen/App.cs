@@ -221,6 +221,22 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			return tb;
 		}
 
+		class MethodsComparer : IComparer<MethodInfo>
+		{
+			public int Compare (MethodInfo a, MethodInfo b)
+			{
+				bool aContainsDot = a.Name.IndexOf ('.') != -1;
+				bool bContainsDot = b.Name.IndexOf ('.') != -1;
+
+				if (aContainsDot ^ bContainsDot)
+					return bContainsDot ? -1 : 1;
+
+				return string.Compare (a.Name, b.Name);
+			}
+		}
+
+		static HashSet<string> addedMethods = new HashSet<string> ();
+
 		void CreateMarshalMethodAssembly (string path)
 		{
 			var assembly        = Assembly.LoadFile (Path.GetFullPath (path));
@@ -299,7 +315,13 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 				var flags = BindingFlags.Public | BindingFlags.NonPublic |
 						BindingFlags.Instance | BindingFlags.Static;
-				foreach (var method in type.GetMethods (flags)) {
+
+				var methods = type.GetMethods (flags);
+				Array.Sort (methods, new MethodsComparer ());
+
+				addedMethods.Clear ();
+
+				foreach (var method in methods) {
 					// TODO: Constructors
 					var export  = method.GetCustomAttribute<JavaCallableAttribute> ();
 					string signature = null;
@@ -328,6 +350,9 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					if (dt == null)
 						dt = GetTypeBuilder (dm, type);
 
+					if (addedMethods.Contains (methodName))
+						continue;
+
 					if (Verbose) {
 						Console.Write ("Adding marshal method for ");
 						ColorWriteLine ($"{method}", ConsoleColor.Green );
@@ -349,6 +374,8 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 						signature = builder.GetJniMethodSignature (method);
 
 					registrationElements.Add (CreateRegistration (name, signature, lambda, targetType, methodName));
+
+					addedMethods.Add (methodName);
 				}
 				if (dt != null)
 					AddRegisterNativeMembers (dt, targetType, registrationElements);
