@@ -132,7 +132,7 @@
   <Import Project="Java.Interop.targets" />
   <PropertyGroup>
     <BuildDependsOn>
-      BuildJnienvGen;
+      ResolveReferences;
       BuildJniEnvironment_g_cs;
       BuildInteropJar;
       $(BuildDependsOn)

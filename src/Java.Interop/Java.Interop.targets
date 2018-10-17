@@ -3,13 +3,6 @@
   <PropertyGroup>
     <Runtime Condition="'$(OS)' != 'Windows_NT'">mono</Runtime>
   </PropertyGroup>
-  <Target Name="BuildJnienvGen"
-      Inputs="..\..\build-tools\jnienv-gen\jnienv-gen.csproj"
-      Outputs="$(JNIEnvGenPath)\jnienv-gen.exe">
-    <MSBuild
-        Projects="..\..\build-tools\jnienv-gen\jnienv-gen.csproj"
-    />
-  </Target>
   <Target Name="BuildJniEnvironment_g_cs"
       Inputs="$(JNIEnvGenPath)\jnienv-gen.exe"
       Outputs="Java.Interop\JniEnvironment.g.cs;$(IntermediateOutputPath)\jni.c">
