@@ -172,6 +172,8 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					ad = AssemblyDefinition.ReadAssembly (assembly, readWriteParametersNoSymbols);
 					resolver.AddToCache (ad);
 				}
+
+				Extensions.MethodMap.Clear ();
 			}
 
 			foreach (var assembly in assemblies) {
@@ -223,13 +225,33 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 		class MethodsComparer : IComparer<MethodInfo>
 		{
+			readonly Type type;
+			readonly TypeDefinition td;
+
+			public MethodsComparer (Type type, TypeDefinition td)
+			{
+				this.type = type;
+				this.td = td;
+			}
+
 			public int Compare (MethodInfo a, MethodInfo b)
 			{
-				bool aContainsDot = a.Name.IndexOf ('.') != -1;
-				bool bContainsDot = b.Name.IndexOf ('.') != -1;
+				if (a.DeclaringType != type)
+					return 1;
 
-				if (aContainsDot ^ bContainsDot)
-					return bContainsDot ? -1 : 1;
+				var atd = td.GetMethodDefinition (a);
+				if (atd == null)
+					return 1;
+
+				if (b.DeclaringType != type)
+					return -1;
+
+				var btd = td.GetMethodDefinition (b);
+				if (btd == null)
+					return -1;
+
+				if (atd.HasOverrides ^ btd.HasOverrides)
+					return btd.HasOverrides ? -1 : 1;
 
 				return string.Compare (a.Name, b.Name);
 			}
@@ -317,7 +339,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 						BindingFlags.Instance | BindingFlags.Static;
 
 				var methods = type.GetMethods (flags);
-				Array.Sort (methods, new MethodsComparer ());
+				Array.Sort (methods, new MethodsComparer (type, td));
 
 				addedMethods.Clear ();
 
@@ -490,11 +512,11 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 		}
 	}
 
-	static class Extensions
+	internal static class Extensions
 	{
 		public static string GetCecilName (this Type type)
 		{
-			return type.FullName.Replace ('+', '/');
+			return type.FullName?.Replace ('+', '/');
 		}
 
 		static bool CompareTypes (Type reflectionType, TypeReference cecilType)
@@ -530,11 +552,19 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			return true;
 		}
 
+		internal static Dictionary<MethodInfo, MethodDefinition> MethodMap = new Dictionary<MethodInfo, MethodDefinition> ();
+
 		public static MethodDefinition GetMethodDefinition (this TypeDefinition td, MethodInfo method)
 		{
+			if (MethodMap.ContainsKey (method))
+				return MethodMap [method];
+
 			foreach (var m in td.Methods)
-				if (MethodsAreEqual (method, m))
+				if (MethodsAreEqual (method, m)) {
+					MethodMap [method] = m;
+
 					return m;
+				}
 
 			return null;
 		}
