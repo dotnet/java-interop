@@ -556,8 +556,8 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 		public static MethodDefinition GetMethodDefinition (this TypeDefinition td, MethodInfo method)
 		{
-			if (MethodMap.ContainsKey (method))
-				return MethodMap [method];
+			if (MethodMap.TryGetValue (method, out var md))
+				return md;
 
 			foreach (var m in td.Methods)
 				if (MethodsAreEqual (method, m)) {
