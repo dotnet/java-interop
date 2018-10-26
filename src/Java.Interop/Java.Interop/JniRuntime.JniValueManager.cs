@@ -528,12 +528,18 @@ namespace Java.Interop
 					return JavaPeerableValueMarshaler.Instance;
 				}
 
+				JniValueMarshalerAttribute ifaceAttribute = null;
 				foreach (var iface in info.ImplementedInterfaces) {
-					var ifaceInfo = iface.GetTypeInfo ();
-					marshalerAttr   = ifaceInfo.GetCustomAttribute<JniValueMarshalerAttribute> ();
-					if (marshalerAttr != null)
-						return (JniValueMarshaler) Activator.CreateInstance (marshalerAttr.MarshalerType);
+					marshalerAttr = iface.GetTypeInfo ().GetCustomAttribute<JniValueMarshalerAttribute> ();
+					if (marshalerAttr != null) {
+						if (ifaceAttribute != null)
+							throw new NotSupportedException ($"There is more than one interface with custom marshaler for type {type}.");
+
+						ifaceAttribute = marshalerAttr;
+					}
 				}
+				if (ifaceAttribute != null)
+					return (JniValueMarshaler) Activator.CreateInstance (ifaceAttribute.MarshalerType);
 
 				return GetValueMarshalerCore (type);
 			}
