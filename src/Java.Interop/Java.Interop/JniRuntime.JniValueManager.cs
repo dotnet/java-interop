@@ -527,6 +527,14 @@ namespace Java.Interop
 				if (typeof (IJavaPeerable).GetTypeInfo ().IsAssignableFrom (info)) {
 					return JavaPeerableValueMarshaler.Instance;
 				}
+
+				foreach (var iface in info.ImplementedInterfaces) {
+					var ifaceInfo = iface.GetTypeInfo ();
+					marshalerAttr   = ifaceInfo.GetCustomAttribute<JniValueMarshalerAttribute> ();
+					if (marshalerAttr != null)
+						return (JniValueMarshaler) Activator.CreateInstance (marshalerAttr.MarshalerType);
+				}
+
 				return GetValueMarshalerCore (type);
 			}
 
