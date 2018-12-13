@@ -55,7 +55,14 @@ namespace Java.Interop.Tools.Cecil {
 
 		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName)
 		{
-			return type.GetTypeAndBaseTypes ().Any (t => t.Interfaces.Any (i => i.InterfaceType.FullName == interfaceName));
+			foreach (var t in type.GetTypeAndBaseTypes ()) {
+				foreach (var i in t.Interfaces) {
+					if (i.InterfaceType.FullName == interfaceName) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		public static string GetPartialAssemblyName (this TypeReference type)
