@@ -17,9 +17,9 @@ namespace Java.Interop.Tools.Cecil {
 			foreach (var baseType in method.DeclaringType.GetBaseTypes ()) {
 				foreach (var m in baseType.Methods) {
 					if (!m.IsConstructor &&
-						m.Name == method.Name &&
-						(m.IsVirtual || m.IsAbstract) &&
-						AreParametersCompatibleWith (m.Parameters, method.Parameters)) {
+							m.Name == method.Name &&
+							(m.IsVirtual || m.IsAbstract) &&
+							AreParametersCompatibleWith (m.Parameters, method.Parameters)) {
 						return m;
 					}
 				}
