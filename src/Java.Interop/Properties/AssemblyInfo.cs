@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle ("Java.Interop")]
 [assembly: AssemblyDescription ("")]
+[assembly: AssemblyCulture ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Microsoft Corporation")]
-[assembly: AssemblyProduct ("")]
 [assembly: AssemblyCopyright ("Microsoft Corporation")]
+[assembly: AssemblyProduct ("")]
 [assembly: AssemblyTrademark ("Microsoft Corporation")]
-[assembly: AssemblyCulture ("")]
 [assembly: AssemblyVersion ("0.1.0.0")]
 
 [assembly: InternalsVisibleTo (
