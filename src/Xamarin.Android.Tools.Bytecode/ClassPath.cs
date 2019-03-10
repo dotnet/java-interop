@@ -51,12 +51,12 @@ namespace Xamarin.Android.Tools.Bytecode {
 			}
 		}
 
-		public void Load (Stream jarStream)
+		public void Load (Stream jarStream, bool leaveOpen = false)
 		{
 			if (jarStream == null)
 				throw new ArgumentNullException (nameof (jarStream));
 
-			using (var jar = CreateZipArchive (jarStream)) {
+			using (var jar = CreateZipArchive (jarStream, leaveOpen)) {
 				foreach (var entry in jar.Entries) {
 					if (entry.Length == 0)
 						continue;
@@ -77,11 +77,11 @@ namespace Xamarin.Android.Tools.Bytecode {
 			}
 		}
 
-		static ZipArchive CreateZipArchive (Stream jarStream)
+		static ZipArchive CreateZipArchive (Stream jarStream, bool leaveOpen)
 		{
 			var encoding    = new UTF8Encoding (encoderShouldEmitUTF8Identifier: false);
 
-			return new ZipArchive (jarStream, ZipArchiveMode.Read, leaveOpen: true, entryNameEncoding: encoding);
+			return new ZipArchive (jarStream, ZipArchiveMode.Read, leaveOpen: leaveOpen, entryNameEncoding: encoding);
 		}
 
 		public void Add (ClassFile classFile)
