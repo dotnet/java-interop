@@ -60,6 +60,9 @@
     <EmbeddedResource Include="Resources\MonoRuntimeProvider.Bundled.java">
       <LogicalName>MonoRuntimeProvider.Bundled.java</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MonoRuntimeProvider.Bundled.20.java">
+      <LogicalName>MonoRuntimeProvider.Bundled.20.java</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MonoRuntimeProvider.Shared.java">
       <LogicalName>MonoRuntimeProvider.Shared.java</LogicalName>
     </EmbeddedResource>

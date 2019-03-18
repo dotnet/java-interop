@@ -69,6 +69,8 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		public bool GenerateOnCreateOverrides { get; set; }
 
+		public int? TargetSdkVersion { get; set; }
+
 		public bool HasExport { get; private set; }
 
 		public string Name {
@@ -837,11 +839,15 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			sw.WriteLine ("\t\tandroid.content.Context context = getContext ();");
 			sw.WriteLine ();
 
+			var provider = "MonoRuntimeProvider.Bundled.java";
+			if (UseSharedRuntime) {
+				provider = "MonoRuntimeProvider.Shared.java";
+			} else if (TargetSdkVersion < 21) {
+				provider = "MonoRuntimeProvider.Bundled.20.java";
+			}
+
 			using (var app = new StreamReader (
-						Assembly.GetExecutingAssembly ().GetManifestResourceStream (
-							UseSharedRuntime
-							? "MonoRuntimeProvider.Shared.java"
-							: "MonoRuntimeProvider.Bundled.java"))) {
+						Assembly.GetExecutingAssembly ().GetManifestResourceStream (provider))) {
 				bool copy = false;
 				string line;
 				while ((line = app.ReadLine ()) != null) {
