@@ -25,7 +25,10 @@
         Targets="Clean;Build"
         StopOnFirstFailure="True"
         Properties="Configuration=net_4_0_Debug;OutputPath=$(CecilOutputPath);BuildingSolutionFile=false" />
-    <Touch Files="$(CecilAssemblies)" />
+    <ItemGroup>
+      <_CecilAssembly Include="$(OutputPath)\Mono.Cecil.*" />
+    </ItemGroup>
+    <Move SourceFiles="%(_CecilAssembly.Identity)" DestinationFiles="@(_CecilAssembly->'%(Identity)'->Replace('Mono.', 'Xamarin.Android.'))" />
   </Target>
   <Target Name="Build" DependsOnTargets="BuildCecil" Returns="$(CecilOutputPath)\$(AssemblyName).dll">
     <MakeDir Directories="obj\$(Configuration)" />
