@@ -679,7 +679,7 @@ namespace MonoDroid.Generation
 		public void WriteInterfaceFields (InterfaceGen iface, string indent)
 		{
 			// Interface fields are only supported with DIM
-			if (!opt.SupportDefaultInterfaceMethods)
+			if (!opt.SupportInterfaceConstants)
 				return;
 
 			var seen = new HashSet<string> ();

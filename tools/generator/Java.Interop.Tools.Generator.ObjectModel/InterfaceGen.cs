@@ -31,7 +31,7 @@ namespace MonoDroid.Generation
 		// These are fields that we currently support generating on the interface with DIM
 		public IEnumerable<Field> GetGeneratableFields (CodeGenerationOptions options)
 		{
-			if (!options.SupportDefaultInterfaceMethods)
+			if (!options.SupportInterfaceConstants)
 				return Enumerable.Empty<Field> ();
 
 			return Fields.Where (f => !f.NeedsProperty && !(f.DeprecatedComment?.Contains ("constant will be removed") == true));

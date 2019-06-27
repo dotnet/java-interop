@@ -39,7 +39,7 @@ namespace Xamarin.Android.Binder
 		public string               MappingReportFile { get; set; }
 		public bool                 OnlyRunApiXmlAdjuster { get; set; }
 		public string               ApiXmlAdjusterOutput { get; set; }
-		public bool                 SupportDefaultInterfaceMethods { get; set; }
+		public bool                 SupportInterfaceConstants { get; set; }
 
 		public static CodeGeneratorOptions Parse (string[] args)
 		{
@@ -86,9 +86,9 @@ namespace Xamarin.Android.Binder
 				{ "sdk-platform|api-level=",
 					"SDK Platform {VERSION}/API level.",
 					v => opts.ApiLevel = v },
-				{ "default-interface-methods",
-					"For internal use.",
-					v => opts.SupportDefaultInterfaceMethods = v != null },
+				{ "lang-features=",
+					"For internal use. (Flags: interface-constants)",
+					v => opts.SupportInterfaceConstants = v?.Contains ("interface-constants") == true },
 				{ "preserve-enums",
 					"For internal use.",
 					v => opts.PreserveEnums = v != null },

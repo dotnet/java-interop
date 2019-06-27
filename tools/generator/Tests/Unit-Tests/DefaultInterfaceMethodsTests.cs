@@ -23,7 +23,7 @@ namespace generatortests
 		{
 			var options = base.CreateOptions ();
 
-			options.SupportDefaultInterfaceMethods = true;
+			options.SupportInterfaceConstants = true;
 
 			return options;
 		}

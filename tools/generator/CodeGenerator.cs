@@ -64,7 +64,7 @@ namespace Xamarin.Android.Binder
 				IgnoreNonPublicType   = true,
 				UseShortFileNames     = options.UseShortFileNames,
 				ProductVersion        = options.ProductVersion,
-				SupportDefaultInterfaceMethods = options.SupportDefaultInterfaceMethods,
+				SupportInterfaceConstants = options.SupportInterfaceConstants,
 			};
 
 			// Load reference libraries
