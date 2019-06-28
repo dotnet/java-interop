@@ -358,7 +358,7 @@ namespace generatortests
 			return ctor;
 		}
 
-		public static TestInterface CreateEmptyInterface(string interfaceName)
+		public static TestInterface CreateEmptyInterface (string interfaceName)
 		{
 			var iface = new TestInterface (null, interfaceName);
 
@@ -367,7 +367,7 @@ namespace generatortests
 
 		public static TestInterface CreateInterface (string interfaceName, CodeGenerationOptions options)
 		{
-			var iface = CreateEmptyInterface(interfaceName);
+			var iface = CreateEmptyInterface (interfaceName);
 
 			iface.Properties.Add (CreateProperty (iface, "Count", "int", options));
 			iface.Properties.Add (CreateProperty (iface, "Key", "java.lang.String", options));
