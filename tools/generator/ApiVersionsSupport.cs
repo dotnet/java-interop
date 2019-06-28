@@ -35,7 +35,7 @@ namespace MonoDroid.Generation
 			var versions = new ApiVersionsProvider ();
 			versions.Parse (apiVersionsXml);
 			foreach (var type in versions.Versions.Values) {
-				var matchedGens = flattenGens[type.Name];
+				var matchedGens = flattenGens [type.Name];
 				if (!matchedGens.Any ())
 					// There are known missing types, and it's going to be too noisy to report missing ones here.
 					// That task should be done elsewhere.
