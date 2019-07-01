@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="CodeGenerationTarget.cs" />
     <Compile Include="CodeGeneratorOptions.cs" />
+    <Compile Include="Java.Interop.Tools.Generator.CodeGeneration\EnumGenerator.cs" />
     <Compile Include="Java.Interop.Tools.Generator.ObjectModel\InterfaceExtensionInfo.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\InterfaceXmlGenBaseSupport.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Transformation\ApiFixup.cs" />
