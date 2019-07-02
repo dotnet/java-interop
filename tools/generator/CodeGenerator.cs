@@ -175,6 +175,7 @@ namespace Xamarin.Android.Binder
 				if (gen.IsGeneratable)
 					gen.Generate (opt, gen_info);
 
+
 			ClassGen.GenerateTypeRegistrations (opt, gen_info);
 			ClassGen.GenerateEnumList (gen_info);
 

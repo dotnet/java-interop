@@ -869,7 +869,6 @@ namespace MonoDroid.Generation {
 				var baseName = Namespace.Length > 0 ? FullName.Substring (Namespace.Length + 1) : FullName;
 				var attrClassNameBase = baseName.Substring (TypeNamePrefix.Length) + "Attribute";
 				var localFullName = Namespace + (Namespace.Length > 0 ? "." : string.Empty) + attrClassNameBase;
-				gen_info.CurrentType = localFullName;
 
 				using (var sw = gen_info.OpenStream (opt.GetFileName (localFullName))) {
 					sw.WriteLine ("using System;");

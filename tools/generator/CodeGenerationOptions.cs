@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -111,20 +112,23 @@ namespace MonoDroid.Generation
 			return name.Replace ('$', '_');
 		}
 
-		Dictionary<string,string> short_file_names = new Dictionary<string, string> ();
+		readonly Dictionary<string,string> short_file_names = new Dictionary<string, string> ();
 
 		public string GetFileName (string fullName)
 		{
 			if (!UseShortFileNames)
 				return fullName;
-			string s;
-			if (short_file_names.TryGetValue (fullName, out s))
+
+			lock (short_file_names) {
+				if (short_file_names.TryGetValue (fullName, out var s))
+					return s;
+
+				s = short_file_names.Count.ToString ();
+				short_file_names [fullName] = s;
+
 				return s;
-			s = short_file_names.Count.ToString ();
-			short_file_names [fullName] = s;
-			return s;
+			}
 		}
 	}
-
 }
 
