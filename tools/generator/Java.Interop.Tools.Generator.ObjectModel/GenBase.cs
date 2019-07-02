@@ -870,27 +870,27 @@ namespace MonoDroid.Generation {
 				var attrClassNameBase = baseName.Substring (TypeNamePrefix.Length) + "Attribute";
 				var localFullName = Namespace + (Namespace.Length > 0 ? "." : string.Empty) + attrClassNameBase;
 				gen_info.CurrentType = localFullName;
-				StreamWriter sw = gen_info.Writer = gen_info.OpenStream (opt.GetFileName (localFullName));
-				sw.WriteLine ("using System;");
-				sw.WriteLine ();
-				sw.WriteLine ("namespace {0} {{", Namespace);
-				sw.WriteLine ();
-				sw.WriteLine ("\t[global::Android.Runtime.Annotation (\"{0}\")]", JavaName);
-				sw.WriteLine ("\t{0} partial class {1} : Attribute", this.Visibility, attrClassNameBase);
-				sw.WriteLine ("\t{");
 
-				// An Annotation attribute property is generated for each applicable annotation method,
-				// where *applicable* means java annotation compatible types. See IsTypeCommensurate().
-				foreach (var method in Methods.Where (m => m.Parameters.Count == 0 &&
-				                                      IsTypeCommensurate (opt, opt.SymbolTable.Lookup (m.RetVal.JavaName)))) {
-					sw.WriteLine ("\t\t[global::Android.Runtime.Register (\"{0}\"{1})]", method.JavaName, method.AdditionalAttributeString ());
-					sw.WriteLine ("\t\tpublic {0} {1} {{ get; set; }}", opt.GetOutputName (method.RetVal.FullName), method.Name);
+				using (var sw = gen_info.OpenStream (opt.GetFileName (localFullName))) {
+					sw.WriteLine ("using System;");
 					sw.WriteLine ();
+					sw.WriteLine ("namespace {0} {{", Namespace);
+					sw.WriteLine ();
+					sw.WriteLine ("\t[global::Android.Runtime.Annotation (\"{0}\")]", JavaName);
+					sw.WriteLine ("\t{0} partial class {1} : Attribute", this.Visibility, attrClassNameBase);
+					sw.WriteLine ("\t{");
+
+					// An Annotation attribute property is generated for each applicable annotation method,
+					// where *applicable* means java annotation compatible types. See IsTypeCommensurate().
+					foreach (var method in Methods.Where (m => m.Parameters.Count == 0 &&
+									      IsTypeCommensurate (opt, opt.SymbolTable.Lookup (m.RetVal.JavaName)))) {
+						sw.WriteLine ("\t\t[global::Android.Runtime.Register (\"{0}\"{1})]", method.JavaName, method.AdditionalAttributeString ());
+						sw.WriteLine ("\t\tpublic {0} {1} {{ get; set; }}", opt.GetOutputName (method.RetVal.FullName), method.Name);
+						sw.WriteLine ();
+					}
+					sw.WriteLine ("\t}");
+					sw.WriteLine ("}");
 				}
-				sw.WriteLine ("\t}");
-				sw.WriteLine ("}");
-				sw.Close ();
-				gen_info.Writer = null;
 			}
 		}
 		

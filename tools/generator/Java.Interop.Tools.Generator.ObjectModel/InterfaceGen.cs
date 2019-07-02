@@ -190,24 +190,22 @@ namespace MonoDroid.Generation
 		{
 			gen_info.CurrentType = FullName;
 
-			StreamWriter sw = gen_info.Writer = gen_info.OpenStream(opt.GetFileName (FullName));
+			using (var sw = gen_info.OpenStream (opt.GetFileName (FullName))) {
+				sw.WriteLine ("using System;");
+				sw.WriteLine ("using System.Collections.Generic;");
+				sw.WriteLine ("using Android.Runtime;");
+				if (opt.CodeGenerationTarget != CodeGenerationTarget.XamarinAndroid) {
+					sw.WriteLine ("using Java.Interop;");
+				}
+				sw.WriteLine ();
+				sw.WriteLine ("namespace {0} {{", Namespace);
+				sw.WriteLine ();
 
-			sw.WriteLine ("using System;");
-			sw.WriteLine ("using System.Collections.Generic;");
-			sw.WriteLine ("using Android.Runtime;");
-			if (opt.CodeGenerationTarget != CodeGenerationTarget.XamarinAndroid) {
-				sw.WriteLine ("using Java.Interop;");
+				var generator = opt.CreateCodeGenerator (sw);
+				generator.WriteInterface (this, "\t", gen_info);
+
+				sw.WriteLine ("}");
 			}
-			sw.WriteLine ();
-			sw.WriteLine ("namespace {0} {{", Namespace);
-			sw.WriteLine ();
-
-			var generator = opt.CreateCodeGenerator (sw);
-			generator.WriteInterface (this, "\t", gen_info);
-
-			sw.WriteLine ("}");
-			sw.Close ();
-			gen_info.Writer = null;
 			
 			GenerateAnnotationAttribute (opt, gen_info);
 		}

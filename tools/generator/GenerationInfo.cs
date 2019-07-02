@@ -44,12 +44,6 @@ namespace MonoDroid.Generation {
 			get { return typename; }
 			set { typename = value; }
 		}
-
-		StreamWriter sw;
-		public StreamWriter Writer {
-			get { return sw; }
-			set { sw = value; }
-		}
 		
 		List<string> generated_files = new List<string> ();
 		public IEnumerable<string> GeneratedFiles {
@@ -58,12 +52,12 @@ namespace MonoDroid.Generation {
 
 		public StreamWriter OpenStream (string name) 
 		{
-			if (!Directory.Exists(csdir))
-				Directory.CreateDirectory (csdir);
-			string filename = Path.Combine (csdir, name + ".cs");
+			if (!Directory.Exists (CSharpDir))
+				Directory.CreateDirectory (CSharpDir);
+			string filename = Path.Combine (CSharpDir, name + ".cs");
 			
-			sw = new StreamWriter (File.Create (filename));
 			generated_files.Add (filename);
+			var sw = new StreamWriter (File.Create (filename));
 			return sw;
 		}
 
