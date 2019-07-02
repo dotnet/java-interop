@@ -188,8 +188,6 @@ namespace MonoDroid.Generation
 
 		public override void Generate (CodeGenerationOptions opt, GenerationInfo gen_info)
 		{
-			gen_info.CurrentType = FullName;
-
 			using (var sw = gen_info.OpenStream (opt.GetFileName (FullName))) {
 				sw.WriteLine ("using System;");
 				sw.WriteLine ("using System.Collections.Generic;");

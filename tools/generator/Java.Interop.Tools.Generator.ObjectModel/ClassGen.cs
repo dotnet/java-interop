@@ -2,14 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
-
 using Java.Interop.Tools.TypeNameMappings;
-
 using Xamarin.Android.Binder;
-
-using MonoDroid.Utils;
 
 namespace MonoDroid.Generation
 {
@@ -244,8 +238,6 @@ namespace MonoDroid.Generation
 
 		public override void Generate (CodeGenerationOptions opt, GenerationInfo gen_info)
 		{
-			gen_info.CurrentType = FullName;
-
 			using (var sw = gen_info.OpenStream (opt.GetFileName (FullName))) {
 				sw.WriteLine ("using System;");
 				sw.WriteLine ("using System.Collections.Generic;");
@@ -269,7 +261,7 @@ namespace MonoDroid.Generation
 			using (var sw = gen_info.OpenStream (opt.GetFileName ("Java.Interop.__TypeRegistrations"))) {
 
 				Dictionary<string, List<KeyValuePair<string, string>>> mapping = new Dictionary<string, List<KeyValuePair<string, string>>> ();
-				foreach (KeyValuePair<string, string> reg in gen_info.TypeRegistrations) {
+				foreach (KeyValuePair<string, string> reg in gen_info.TypeRegistrations.OrderBy (p => p.Key, StringComparer.OrdinalIgnoreCase)) {
 					int ls = reg.Key.LastIndexOf ('/');
 					string package = ls >= 0 ? reg.Key.Substring (0, ls) : "";
 
@@ -345,7 +337,7 @@ namespace MonoDroid.Generation
 		public static void GenerateEnumList (GenerationInfo gen_info)
 		{
 			using (var sw = new StreamWriter (File.Create (Path.Combine (gen_info.CSharpDir, "enumlist")))) {
-				foreach (string e in gen_info.Enums)
+				foreach (string e in gen_info.Enums.OrderBy (p => p, StringComparer.OrdinalIgnoreCase))
 					sw.WriteLine (e);
 			}
 		}
