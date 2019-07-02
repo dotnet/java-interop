@@ -413,9 +413,9 @@ namespace MonoDroid.Generation {
 			return false;
 		}
 
-		bool ValidateMethod (CodeGenerationOptions opt, Method m)
+		bool ValidateMethod (CodeGenerationOptions opt, Method m, CodeGeneratorContext context)
 		{
-			if (!m.Validate (opt, TypeParameters)) {
+			if (!m.Validate (opt, TypeParameters, context)) {
 				return false;
 			}
 			return true;
@@ -623,17 +623,17 @@ namespace MonoDroid.Generation {
 					nested.FullName = parent.FullName + "." + nested.Name;
 		}
 
-		public bool Validate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params)
+		public bool Validate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params, CodeGeneratorContext context)
 		{
-			opt.ContextTypes.Push (this);
+			context.ContextTypes.Push (this);
 			try {
-				return is_valid = OnValidate (opt, type_params);
+				return is_valid = OnValidate (opt, type_params, context);
 			} finally {
-				opt.ContextTypes.Pop ();
+				context.ContextTypes.Pop ();
 			}
 		}
 
-		protected virtual bool OnValidate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params)
+		protected virtual bool OnValidate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params, CodeGeneratorContext context)
 		{
 			if (Name.Length > TypeNamePrefix.Length &&
 			    (Name [TypeNamePrefix.Length] == '.' || Char.IsDigit (Name [TypeNamePrefix.Length]))) // see bug #5111
@@ -644,7 +644,7 @@ namespace MonoDroid.Generation {
 
 			List<GenBase> valid_nests = new List<GenBase> ();
 			foreach (GenBase gen in nested_types) {
-				if (gen.Validate (opt, TypeParameters))
+				if (gen.Validate (opt, TypeParameters, context))
 					valid_nests.Add (gen);
 			}
 			nested_types = valid_nests;
@@ -653,7 +653,7 @@ namespace MonoDroid.Generation {
 
 			foreach (string iface_name in iface_names) {
 				ISymbol isym = opt.SymbolTable.Lookup (iface_name);
-				if (isym != null && isym.Validate (opt, TypeParameters))
+				if (isym != null && isym.Validate (opt, TypeParameters, context))
 					ifaces.Add (isym);
 				else {
 					if (isym == null)
@@ -666,14 +666,14 @@ namespace MonoDroid.Generation {
 
 			List<Field> valid_fields = new List<Field> ();
 			foreach (Field f in fields) {
-				if (!f.Validate (opt, TypeParameters))
+				if (!f.Validate (opt, TypeParameters, context))
 					continue;
 				valid_fields.Add (f);
 			}
 			fields = valid_fields;
 
 			int method_cnt = methods.Count;
-			methods = methods.Where (m => ValidateMethod (opt, m)).ToList ();
+			methods = methods.Where (m => ValidateMethod (opt, m, context)).ToList ();
 			method_validation_failed = method_cnt != methods.Count;
 			foreach (Method m in methods) {
 				if (m.IsVirtual)

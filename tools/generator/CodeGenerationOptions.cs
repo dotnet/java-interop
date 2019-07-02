@@ -10,29 +10,6 @@ namespace MonoDroid.Generation
 {
     public class CodeGenerationOptions
 	{
-		Stack<GenBase> context_types = new Stack<GenBase> ();
-		public Stack<GenBase> ContextTypes {
-			get { return context_types; }
-		}
-		public List<Method> ContextGeneratedMethods { get; set; } = new List<Method> ();
-		public GenBase ContextType {
-			get { return context_types.Any () ? context_types.Peek () : null; }
-		}
-		public Field ContextField { get; set; }
-		string ContextFieldString { 
-			get { return ContextField != null ? "in field " + ContextField.Name + " " : null; }
-		}
-		public MethodBase ContextMethod { get; set; }
-		string ContextMethodString { 
-			get { return ContextMethod != null ? "in method " + ContextMethod.Name + " " : null; }
-		}
-		string ContextTypeString {
-			get { return ContextType != null ? "in managed type " + ContextType.FullName : null; }
-		}
-		public string ContextString {
-			get { return ContextFieldString + ContextMethodString + ContextTypeString; }
-		}
-
 		CodeGenerationTarget    codeGenerationTarget;
 		public      CodeGenerationTarget    CodeGenerationTarget    {
 			get { return codeGenerationTarget; }

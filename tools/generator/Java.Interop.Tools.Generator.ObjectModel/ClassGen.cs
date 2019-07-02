@@ -93,7 +93,7 @@ namespace MonoDroid.Generation
 			base.ResetValidation ();
 		}
 
-		protected override bool OnValidate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params)
+		protected override bool OnValidate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params, CodeGeneratorContext context)
 		{
 			if (validated)
 				return is_valid;
@@ -106,7 +106,7 @@ namespace MonoDroid.Generation
 			}
 
 			// We're validating this in prior to BaseType.
-			if (TypeParameters != null && !TypeParameters.Validate (opt, type_params)) {
+			if (TypeParameters != null && !TypeParameters.Validate (opt, type_params, context)) {
 				is_valid = false;
 				return false;
 			}
@@ -124,7 +124,7 @@ namespace MonoDroid.Generation
 				return false;
 			}
 
-			if ((base_symbol != null && !base_symbol.Validate (opt, TypeParameters)) || !base.OnValidate (opt, type_params)) {
+			if ((base_symbol != null && !base_symbol.Validate (opt, TypeParameters, context)) || !base.OnValidate (opt, type_params, context)) {
 				Report.Warning (0, Report.WarningClassGen + 3, "Class {0} has invalid base type {1}.", FullName, BaseType);
 				is_valid = false;
 				return false;
@@ -132,7 +132,7 @@ namespace MonoDroid.Generation
 
 			List<Ctor> valid_ctors = new List<Ctor> ();
 			foreach (Ctor c in ctors)
-				if (c.Validate (opt, TypeParameters))
+				if (c.Validate (opt, TypeParameters, context))
 					valid_ctors.Add (c);
 			ctors = valid_ctors;
 

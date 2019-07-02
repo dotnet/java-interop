@@ -118,7 +118,7 @@ namespace MonoDroid.Generation
 			base.ResetValidation ();
 		}
 
-		protected override bool OnValidate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params)
+		protected override bool OnValidate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params, CodeGeneratorContext context)
 		{
 			if (validated)
 				return is_valid;
@@ -127,10 +127,10 @@ namespace MonoDroid.Generation
 			
 			// Due to demand to validate in prior to validate ClassGen's BaseType, it is *not* done at
 			// GenBase.
-			if (TypeParameters != null && !TypeParameters.Validate (opt, type_params))
+			if (TypeParameters != null && !TypeParameters.Validate (opt, type_params, context))
 				return false;
 
-			if (!base.OnValidate (opt, type_params) || iface_validation_failed || MethodValidationFailed) {
+			if (!base.OnValidate (opt, type_params, context) || iface_validation_failed || MethodValidationFailed) {
 				if (iface_validation_failed)
 					Report.Warning (0, Report.WarningInterfaceGen + 2, "Invalidating {0} and all nested types because some of its interfaces were invalid.", FullName);
 				else if (MethodValidationFailed)

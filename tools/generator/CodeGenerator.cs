@@ -140,7 +140,7 @@ namespace Xamarin.Android.Binder
 					AddTypeToTable (opt, gen);
 			}
 
-			Validate (gens, opt);
+			Validate (gens, opt, new CodeGeneratorContext ());
 
 			if (api_versions_xml != null)
 				ApiVersionsSupport.AssignApiLevels (gens, api_versions_xml);
@@ -211,7 +211,7 @@ namespace Xamarin.Android.Binder
 			}
 		}
 
-		static void Validate (List<GenBase> gens, CodeGenerationOptions opt)
+		static void Validate (List<GenBase> gens, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			//int cycle = 1;
 			List<GenBase> removed = new List<GenBase> ();
@@ -229,7 +229,7 @@ namespace Xamarin.Android.Binder
 				foreach (GenBase gen in gens)
 					if ((opt.IgnoreNonPublicType &&
 					    (gen.RawVisibility != "public" && gen.RawVisibility != "internal"))
-					    || !gen.Validate (opt, null)) {
+					    || !gen.Validate (opt, null, context)) {
 						foreach (GenBase nest in gen.NestedTypes) {
 							foreach (var nt in nest.Invalidate ())
 								removed.Add (nt);
