@@ -160,6 +160,9 @@ namespace Xamarin.Android.Binder
 			foreach (GenBase gen in gens)
 				gen.FixupExplicitImplementation ();
 
+			foreach (GenBase gen in gens)
+				MethodVisibilityFixup.Fixup (gen);
+
 			GenerateAnnotationAttributes (gens, annotations_zips);
 
 			//SymbolTable.Dump ();

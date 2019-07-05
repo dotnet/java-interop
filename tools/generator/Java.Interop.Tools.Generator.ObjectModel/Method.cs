@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace MonoDroid.Generation
 {
@@ -244,6 +245,47 @@ namespace MonoDroid.Generation
 			if (AssemblyName == null)
 				return adapter + ", " + opt.AssemblyName;
 			return adapter + AssemblyName;
+		}
+
+		// This gets the Method's most direct ancestor
+		public Method GetBaseMethod ()
+		{
+			if (!is_override)
+				return null;
+
+			var base_class = DeclaringType?.BaseGen;
+
+			if (base_class == null)
+				return null;
+
+			while (base_class != null) {
+				var method = base_class.GetAllMethods ()
+					.FirstOrDefault (m => m.Name == Name
+						&& ParameterList.Equals (m.Parameters, Parameters)
+						&& m.ReturnType == ReturnType);
+
+				if (method != null)
+					return method;
+
+				base_class = base_class.BaseGen;
+			}
+
+			return null;
+		}
+
+		// This gets the instance where the Method is originally declared (ie: it may be several ancestors up)
+		public Method GetBaseMethodDeclaration ()
+		{
+			var candidate = GetBaseMethod ();
+			var last_candidate = (Method) null;
+
+			while (true) {
+				if (candidate is null)
+					return last_candidate;
+
+				last_candidate = candidate;
+				candidate = last_candidate.GetBaseMethod ();
+			}
 		}
 	}
 }

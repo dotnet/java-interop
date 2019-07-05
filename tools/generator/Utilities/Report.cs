@@ -29,6 +29,7 @@ namespace MonoDroid.Generation
 		public const int WarningGenBase = 0x8C00;
 		public const int WarningMethodBase = 0x8D00;
 		public const int WarningAnnotationsProvider = 0x8E00;
+		public const int WarningInconsistentAccessbility = 0x8F00;
 
 		public static int? Verbosity { get; set; }
 

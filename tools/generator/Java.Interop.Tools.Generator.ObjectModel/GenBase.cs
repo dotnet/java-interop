@@ -946,9 +946,9 @@ namespace MonoDroid.Generation {
 			return sb.ToString ();
 		}
 
-		static IEnumerable<Method> GetAllMethods (GenBase t)
+		public IEnumerable<Method> GetAllMethods ()
 		{
-			return t.Methods.Concat (t.Properties.Select (p => p.Getter)).Concat (t.Properties.Select (p => p.Setter).Where (m => m != null));
+			return Methods.Concat (Properties.Select (p => p.Getter)).Concat (Properties.Select (p => p.Setter).Where (m => m != null));
 		}
 
 		static string [] AutoDetectEnumifiedOverrideParameters (MethodBase method, AncestorDescendantCache cache)
@@ -958,7 +958,7 @@ namespace MonoDroid.Generation {
 			var classes = cache.GetAncestorsAndDescendants (method.DeclaringType);
 			classes = classes.Concat (classes.SelectMany(x => x.GetAllImplementedInterfaces ()));
 			foreach (var t in classes) {
-				foreach (var candidate in GetAllMethods (t).Where (m => m.Name == method.Name
+				foreach (var candidate in t.GetAllMethods ().Where (m => m.Name == method.Name
 					&& m.Parameters.Count == method.Parameters.Count
 					&& m.Parameters.Any (p => p.IsEnumified))) {
 					var ret = new string [method.Parameters.Count];
@@ -989,7 +989,7 @@ namespace MonoDroid.Generation {
 			var classes = cache.GetAncestorsAndDescendants (method.DeclaringType);
 			classes = classes.Concat (classes.SelectMany(x => x.GetAllImplementedInterfaces ()));
 			foreach (var t in classes) {
-				foreach (var candidate in GetAllMethods (t).Where (m => m.Name == method.Name && m.Parameters.Count == method.Parameters.Count)) {
+				foreach (var candidate in t.GetAllMethods ().Where (m => m.Name == method.Name && m.Parameters.Count == method.Parameters.Count)) {
 					if (method.JniSignature != candidate.JniSignature)
 						continue;
 					if (candidate.IsReturnEnumified)
