@@ -32,12 +32,11 @@ namespace MonoDroid.Generation
 					Parameters.Add (Parameter.FromElement (child));
 			}
 			FillReturnType ();
+			Visibility = elem.Visibility ();
 		}
 
 		// core XML-based properties
 		public override string Deprecated => elem.Deprecated ();
-
-		public override string Visibility => elem.Visibility ();
 
 		public override string ArgsType {
 			get {

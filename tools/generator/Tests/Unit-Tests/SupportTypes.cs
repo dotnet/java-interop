@@ -142,13 +142,14 @@ namespace generatortests
 	class TestMethod : Method
 	{
 		int apiLevel = 27;
-		string @return, managedReturn, visibility = "public", deprecated;
+		string @return, managedReturn, deprecated;
 		bool isAbstract, isFinal, isStatic, asyncify, isReturnEnumified;
 
 		public TestMethod (GenBase @class, string name, string @return = "void") : base (@class)
 		{
 			Name = name;
 			this.@return = @return;
+			Visibility = "public";
 			FillReturnType ();
 		}
 
@@ -194,7 +195,7 @@ namespace generatortests
 
 		public TestMethod SetVisibility (string visibility)
 		{
-			this.visibility = visibility;
+			Visibility = visibility;
 			return this;
 		}
 
@@ -245,8 +246,6 @@ namespace generatortests
 		public override string AssemblyName => null;
 
 		public override string Deprecated => deprecated;
-
-		public override string Visibility => visibility;
 	}
 
 	class TestCtor : Ctor
@@ -254,7 +253,6 @@ namespace generatortests
 		string custom_attributes;
 		string deprecated;
 		bool is_non_static_nested_type;
-		string visibility;
 
 		public TestCtor (GenBase @class, string name) : base (@class)
 		{
@@ -287,7 +285,7 @@ namespace generatortests
 
 		public TestCtor SetVisibility (string value)
 		{
-			visibility = value;
+			Visibility = value;
 			return this;
 		}
 
@@ -298,8 +296,6 @@ namespace generatortests
 		public override bool IsNonStaticNestedType => is_non_static_nested_type;
 
 		public override string Name { get; set; }
-
-		public override string Visibility => visibility;
 	}
 
 	class TestInterface : InterfaceGen

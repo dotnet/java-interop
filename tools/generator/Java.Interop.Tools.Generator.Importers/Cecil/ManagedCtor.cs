@@ -24,6 +24,7 @@ namespace MonoDroid.Generation
 			is_acw = regatt != null;
 			foreach (var p in m.GetParameters (regatt))
 				Parameters.Add (p);
+			Visibility = m.Visibility ();
 		}
 
 		public override bool IsAcw {
@@ -45,8 +46,6 @@ namespace MonoDroid.Generation
 		}
 
 		public override string AssemblyName => m.DeclaringType.Module.Assembly.FullName;
-
-		public override string Visibility => m.Visibility ();
 
 		public override string Deprecated => m.Deprecated ();
 	}

@@ -43,6 +43,8 @@ namespace MonoDroid.Generation
 
 			if (elem.Attribute ("customAttributes") != null)
 				custom_attributes = elem.XGetAttribute ("customAttributes");
+
+			Visibility = elem.Visibility ();
 		}
 
 		static XElement GetPreviousClass (XNode n, string nameValue)
@@ -80,7 +82,5 @@ namespace MonoDroid.Generation
 		}
 
 		public override string Deprecated => elem.Deprecated ();
-
-		public override string Visibility => elem.Visibility ();
 	}
 }

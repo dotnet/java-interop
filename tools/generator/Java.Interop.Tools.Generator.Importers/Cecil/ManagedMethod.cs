@@ -34,13 +34,12 @@ namespace MonoDroid.Generation
 					java_return = rt.Type;
 			}
 			FillReturnType ();
+			Visibility = m.Visibility ();
 		}
 
 		public override string AssemblyName => m.DeclaringType.Module.Assembly.FullName;
 
 		public override string Deprecated => m.Deprecated ();
-
-		public override string Visibility => m.Visibility ();
 
 		public override bool IsAcw {
 			get { return is_acw; }

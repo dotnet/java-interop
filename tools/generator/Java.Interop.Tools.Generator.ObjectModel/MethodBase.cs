@@ -54,9 +54,7 @@ namespace MonoDroid.Generation
 			internal protected set;
 		}
 		
-		public abstract string Visibility {
-			get;
-		}
+		public string Visibility { get; set; }
 
 		public int ApiAvailableSince { get; set; }
 
