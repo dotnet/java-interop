@@ -22,15 +22,15 @@ namespace MonoDroid.Generation
 
 			sw.WriteLine ("namespace {0} {{", ns);
 			if (enu.Value.BitField)
-				sw.WriteLine ("  [System.Flags]");
-			sw.WriteLine ("  public enum {0} {{", enoom);
+				sw.WriteLine ("\t[System.Flags]");
+			sw.WriteLine ("\tpublic enum {0} {{", enoom);
 
 			foreach (var member in enu.Value.Members) {
 				var managedMember = FindManagedMember (enu.Value, member.Key, gens);
-				sw.WriteLine ("    [global::Android.Runtime.IntDefinition (" + (managedMember != null ? "\"" + managedMember + "\"" : "null") + ", JniField = \"" + StripExtraInterfaceSpec (enu.Value.JniNames [member.Key]) + "\")]");
-				sw.WriteLine ("    {0} = {1},", member.Key.Trim (), member.Value.Trim ());
+				sw.WriteLine ("\t\t[global::Android.Runtime.IntDefinition (" + (managedMember != null ? "\"" + managedMember + "\"" : "null") + ", JniField = \"" + StripExtraInterfaceSpec (enu.Value.JniNames [member.Key]) + "\")]");
+				sw.WriteLine ("\t\t{0} = {1},", member.Key.Trim (), member.Value.Trim ());
 			}
-			sw.WriteLine ("  }");
+			sw.WriteLine ("\t}");
 			sw.WriteLine ("}");
 		}
 

@@ -156,17 +156,21 @@ namespace MonoDroid.Generation {
 			return files.ToList ();
 		}
 
-		ConcurrentDictionary<string,string> file_name_map = new ConcurrentDictionary<string, string> ();
+		readonly Dictionary<string,string> file_name_map = new Dictionary<string, string> ();
 
 		string GetFileName (string file, bool useShortFileNames)
 		{
 			if (!useShortFileNames)
 				return file;
 			string s;
-			if (file_name_map.TryGetValue (file, out s))
-				return s;
-			s = file_name_map.Count.ToString ();
-			file_name_map [file] = s;
+
+			lock (file_name_map) {
+				if (file_name_map.TryGetValue (file, out s))
+					return s;
+				s = file_name_map.Count.ToString ();
+				file_name_map [file] = s;
+			}
+
 			return s;
 		}
 
