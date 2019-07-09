@@ -33,12 +33,12 @@ namespace MonoDroid.Generation
 					Report.Warning (0, Report.WarningCtor + 0, "For {0}, could not find enclosing type '{1}'.", name, expectedEnclosingName);
 				}
 				else
-					Parameters.AddFirst (Parameter.FromClassElement (enclosingType));
+					Parameters.AddFirst (XmlApiImporter.CreateParameterFromClassElement (enclosingType));
 			}
 			
 			foreach (var child in elem.Elements ()) {
 				if (child.Name == "parameter")
-					Parameters.Add (Parameter.FromElement (child));
+					Parameters.Add (XmlApiImporter.CreateParameter (child));
 			}
 
 			if (elem.Attribute ("customAttributes") != null)

@@ -19,7 +19,7 @@ namespace MonoDroid.Generation
 			// the type of the containing class must be inserted as the first
 			// argument
 			if (IsNonStaticNestedType)
-				Parameters.AddFirst (Parameter.FromManagedType (m.DeclaringType.DeclaringType, DeclaringType.JavaName));
+				Parameters.AddFirst (CecilApiImporter.CreateParameter (m.DeclaringType.DeclaringType.FullName, DeclaringType.JavaName));
 			var regatt = m.CustomAttributes.FirstOrDefault (a => a.AttributeType.FullName == "Android.Runtime.RegisterAttribute");
 			is_acw = regatt != null;
 			foreach (var p in m.GetParameters (regatt))

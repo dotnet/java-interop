@@ -29,7 +29,7 @@ namespace MonoDroid.Generation
 
 			foreach (var child in elem.Elements ()) {
 				if (child.Name == "parameter")
-					Parameters.Add (Parameter.FromElement (child));
+					Parameters.Add (XmlApiImporter.CreateParameter (child));
 			}
 			FillReturnType ();
 		}

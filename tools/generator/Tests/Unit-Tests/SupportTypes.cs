@@ -58,84 +58,56 @@ namespace generatortests
 
 	class TestField : Field
 	{
-		bool isFinal, isStatic, isEnumified, isDeprecated;
-		string type, value, deprecatedComment, visibility = "public";
-		Parameter setterParameter;
-
 		public TestField (string type, string name)
 		{
-			this.type = type;
+			TypeName = type;
+			JavaName = name;
 			Name = name;
+			Visibility = "public";
+
+			//NOTE: passing `type` for `managedType`, required since `SymbolTable` is no longer static
+			//	This currently isn't causing any test failures
+			SetterParameter = new Parameter ("value", TypeName, TypeName, IsEnumified);
 		}
 
 		public TestField SetStatic ()
 		{
-			isStatic = true;
+			IsStatic = true;
 			return this;
 		}
 
 		public TestField SetConstant (string value = null)
 		{
-			isFinal =
-				isStatic = true;
-			this.value = value;
+			IsFinal = true;
+			IsStatic = true;
+			Value = value;
 			return this;
 		}
 
 		public TestField SetEnumified ()
 		{
-			isEnumified = true;
+			IsEnumified = true;
+			SetterParameter = new Parameter ("value", TypeName, TypeName, IsEnumified);
 			return this;
 		}
 
 		public TestField SetDeprecated (string comment = null)
 		{
-			isDeprecated = true;
-			deprecatedComment = comment;
+			IsDeprecated = true;
+			DeprecatedComment = comment;
 			return this;
 		}
 
 		public TestField SetVisibility (string visibility)
 		{
-			this.visibility = visibility;
+			Visibility = visibility;
 			return this;
 		}
 
 		public TestField SetValue (string value)
 		{
-			this.value = value;
+			Value = value;
 			return this;
-		}
-
-		public override bool IsDeprecated => isDeprecated;
-
-		public override string DeprecatedComment => deprecatedComment;
-
-		public override bool IsFinal => isFinal;
-
-		public override bool IsStatic => isStatic;
-
-		public override string JavaName => Name;
-
-		public override bool IsEnumified => isEnumified;
-
-		public override string TypeName => type;
-
-		public override string Name { get; set; }
-
-		public override string Value => value;
-
-		public override string Visibility => visibility;
-
-		protected override Parameter SetterParameter {
-			get {
-				if (setterParameter == null) {
-					//NOTE: passing `type` for `managedType`, required since `SymbolTable` is no longer static
-					//	This currently isn't causing any test failures
-					setterParameter = new Parameter ("value", type, type, isEnumified);
-				}
-				return setterParameter;
-			}
 		}
 	}
 

@@ -28,7 +28,7 @@ namespace MonoDroid.Generation
 					Ctors.Add (new XmlCtor (this, child));
 					break;
 				case "field":
-					AddField (new XmlField (child));
+					AddField (XmlApiImporter.CreateField (child));
 					break;
 				case "typeParameters":
 					break; // handled at GenBaseSupport

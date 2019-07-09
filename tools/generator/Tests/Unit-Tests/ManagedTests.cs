@@ -183,7 +183,7 @@ namespace generatortests
 		{
 			var type = module.GetType ("Com.Mypackage.Foo");
 			var @class = new ManagedClassGen (type, options);
-			var field = new ManagedField (type.Fields.First (f => f.Name == "Value"));
+			var field = CecilApiImporter.CreateField (type.Fields.First (f => f.Name == "Value"));
 			Assert.IsTrue (field.Validate (new CodeGenerationOptions (), new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "field.Validate failed!");
 
 			Assert.AreEqual ("Value", field.Name);

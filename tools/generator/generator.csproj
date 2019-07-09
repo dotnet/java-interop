@@ -61,6 +61,8 @@
     <Compile Include="CodeGeneratorContext.cs" />
     <Compile Include="CodeGeneratorOptions.cs" />
     <Compile Include="Java.Interop.Tools.Generator.CodeGeneration\EnumGenerator.cs" />
+    <Compile Include="Java.Interop.Tools.Generator.Importers\CecilApiImporter.cs" />
+    <Compile Include="Java.Interop.Tools.Generator.Importers\XmlApiImporter.cs" />
     <Compile Include="Java.Interop.Tools.Generator.ObjectModel\InterfaceExtensionInfo.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\InterfaceXmlGenBaseSupport.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Transformation\ApiFixup.cs" />
@@ -97,7 +99,6 @@
     <Compile Include="Java.Interop.Tools.Generator.Importers\Cecil\ManagedClassGen.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Cecil\ManagedCtor.cs" />
     <Compile Include="Extensions\ManagedExtensions.cs" />
-    <Compile Include="Java.Interop.Tools.Generator.Importers\Cecil\ManagedField.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Cecil\ManagedGenBaseSupport.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Cecil\ManagedInterfaceGen.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Cecil\ManagedMethod.cs" />
@@ -122,7 +123,6 @@
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\XmlClassGen.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\XmlCtor.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
-    <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\XmlField.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\XmlGenBaseSupport.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\XmlInterfaceGen.cs" />
     <Compile Include="Java.Interop.Tools.Generator.Importers\Xml\XmlMethod.cs" />

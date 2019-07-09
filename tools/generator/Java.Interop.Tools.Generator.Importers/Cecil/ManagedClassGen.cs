@@ -34,7 +34,7 @@ namespace MonoDroid.Generation
 			}
 			foreach (var f in t.Fields)
 				if (!f.IsPrivate && !f.CustomAttributes.Any (ca => ca.AttributeType.FullNameCorrected () == "Android.Runtime.RegisterAttribute"))
-					AddField (new ManagedField (f));
+					AddField (CecilApiImporter.CreateField (f));
 			for (nominal_base_type = t.BaseType; nominal_base_type != null && (nominal_base_type.HasGenericParameters || nominal_base_type.IsGenericInstance); nominal_base_type = nominal_base_type.Resolve ().BaseType)
 				; // iterate up to non-generic type, at worst System.Object.
 		}
