@@ -20,7 +20,7 @@ namespace MonoDroid.Generation
 					AddInterface (iname);
 					break;
 				case "method":
-					AddMethod (new XmlMethod (this, child));
+					AddMethod (XmlApiImporter.CreateMethod (this, child));
 					break;
 				case "field":
 					AddField (XmlApiImporter.CreateField (child));

@@ -22,10 +22,10 @@ namespace MonoDroid.Generation
 					AddInterface (iname);
 					break;
 				case "method":
-					AddMethod (new XmlMethod (this, child));
+					AddMethod (XmlApiImporter.CreateMethod (this, child));
 					break;
 				case "constructor":
-					Ctors.Add (new XmlCtor (this, child));
+					Ctors.Add (XmlApiImporter.CreateCtor (this, child));
 					break;
 				case "field":
 					AddField (XmlApiImporter.CreateField (child));

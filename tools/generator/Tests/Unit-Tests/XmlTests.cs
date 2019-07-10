@@ -82,7 +82,7 @@ namespace generatortests
 		{
 			var element = package.Element ("class");
 			var @class = new XmlClassGen (package, element);
-			var method = new XmlMethod (@class, element.Element ("method"));
+			var method = XmlApiImporter.CreateMethod (@class, element.Element ("method"));
 			Assert.IsTrue (method.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "method.Validate failed!");
 
 			Assert.AreEqual ("public", method.Visibility);
@@ -103,8 +103,8 @@ namespace generatortests
 			var element = package.Element ("class");
 			var @class = new XmlClassGen (package, element);
 			var unknownTypes = element.Elements ("method").Where (e => e.Attribute ("name").Value == "unknownTypes").First ();
-			var methodA = new XmlMethod (@class, unknownTypes);
-			var methodB = new XmlMethod (@class, unknownTypes);
+			var methodA = XmlApiImporter.CreateMethod (@class, unknownTypes);
+			var methodB = XmlApiImporter.CreateMethod (@class, unknownTypes);
 			Assert.IsTrue (methodA.Matches (methodB), "Methods should match!");
 		}
 
@@ -116,8 +116,8 @@ namespace generatortests
 			var unknownTypesA = element.Elements ("method").Where (e => e.Attribute ("name").Value == "unknownTypes").First ();
 			var unknownTypesB = element.Elements ("method").Where (e => e.Attribute ("name").Value == "unknownTypesReturn").First ();
 			unknownTypesB.Attribute ("name").Value = "unknownTypes";
-			var methodA = new XmlMethod (@class, unknownTypesA);
-			var methodB = new XmlMethod (@class, unknownTypesB);
+			var methodA = XmlApiImporter.CreateMethod (@class, unknownTypesA);
+			var methodB = XmlApiImporter.CreateMethod (@class, unknownTypesB);
 			//Everything the same besides return type
 			Assert.IsFalse (methodA.Matches (methodB), "Methods should not match!");
 		}
@@ -127,7 +127,7 @@ namespace generatortests
 		{
 			var element = package.Element ("class");
 			var @class = new XmlClassGen (package, element);
-			var method = new XmlMethod (@class, element.Elements ("method").Where (e => e.Attribute ("name").Value == "barWithParams").First ());
+			var method = XmlApiImporter.CreateMethod (@class, element.Elements ("method").Where (e => e.Attribute ("name").Value == "barWithParams").First ());
 			Assert.IsTrue (method.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "method.Validate failed!");
 			Assert.AreEqual ("(ZID)Ljava/lang/String;", method.JniSignature);
 			Assert.AreEqual ("java.lang.String", method.Return);
@@ -157,7 +157,7 @@ namespace generatortests
 		{
 			var element = package.Element ("class");
 			var @class = new XmlClassGen (package, element);
-			var ctor = new XmlCtor (@class, element.Element ("constructor"));
+			var ctor = XmlApiImporter.CreateCtor (@class, element.Element ("constructor"));
 			Assert.IsTrue (ctor.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "ctor.Validate failed!");
 
 			Assert.AreEqual ("public", ctor.Visibility);

@@ -28,9 +28,9 @@ namespace MonoDroid.Generation
 				if (implements_charsequence && t.Methods.Any (mm => mm.Name == m.Name + "Formatted"))
 					continue;
 				if (m.IsConstructor)
-					Ctors.Add (new ManagedCtor (this, m));
+					Ctors.Add (CecilApiImporter.CreateCtor (this, m));
 				else
-					AddMethod (new ManagedMethod (this, m));
+					AddMethod (CecilApiImporter.CreateMethod (this, m));
 			}
 			foreach (var f in t.Fields)
 				if (!f.IsPrivate && !f.CustomAttributes.Any (ca => ca.AttributeType.FullNameCorrected () == "Android.Runtime.RegisterAttribute"))

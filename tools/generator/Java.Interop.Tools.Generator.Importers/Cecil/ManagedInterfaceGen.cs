@@ -15,7 +15,7 @@ namespace MonoDroid.Generation
 			foreach (var m in t.Methods) {
 				if (m.IsPrivate || m.IsAssembly || !m.CustomAttributes.Any (ca => ca.AttributeType.FullNameCorrected () == "Android.Runtime.RegisterAttribute"))
 					continue;
-				AddMethod (new ManagedMethod (this, m));
+				AddMethod (CecilApiImporter.CreateMethod (this, m));
 			}
 		}
 

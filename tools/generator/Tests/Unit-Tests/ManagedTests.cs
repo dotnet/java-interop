@@ -94,7 +94,7 @@ namespace generatortests
 		{
 			var type = module.GetType ("Com.Mypackage.Foo");
 			var @class = new ManagedClassGen (type, options);
-			var method = new ManagedMethod (@class, type.Methods.First (m => m.Name == "Bar"));
+			var method = CecilApiImporter.CreateMethod (@class, type.Methods.First (m => m.Name == "Bar"));
 			Assert.IsTrue (method.Validate (new CodeGenerationOptions (), new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "method.Validate failed!");
 
 			Assert.AreEqual ("public", method.Visibility);
@@ -115,8 +115,8 @@ namespace generatortests
 			var type = module.GetType ("Com.Mypackage.Foo");
 			var @class = new ManagedClassGen (type, options);
 			var unknownTypes = type.Methods.First (m => m.Name == "UnknownTypes");
-			var methodA = new ManagedMethod (@class, unknownTypes);
-			var methodB = new ManagedMethod (@class, unknownTypes);
+			var methodA = CecilApiImporter.CreateMethod (@class, unknownTypes);
+			var methodB = CecilApiImporter.CreateMethod (@class, unknownTypes);
 			Assert.IsTrue (methodA.Matches (methodB), "Methods should match!");
 		}
 
@@ -128,8 +128,8 @@ namespace generatortests
 			var unknownTypesA = type.Methods.First (m => m.Name == "UnknownTypes");
 			var unknownTypesB = type.Methods.First (m => m.Name == "UnknownTypesReturn");
 			unknownTypesB.Name = "UnknownTypes";
-			var methodA = new ManagedMethod (@class, unknownTypesA);
-			var methodB = new ManagedMethod (@class, unknownTypesB);
+			var methodA = CecilApiImporter.CreateMethod (@class, unknownTypesA);
+			var methodB = CecilApiImporter.CreateMethod (@class, unknownTypesB);
 			//Everything the same besides return type
 			Assert.IsFalse (methodA.Matches (methodB), "Methods should not match!");
 		}
@@ -139,7 +139,7 @@ namespace generatortests
 		{
 			var type = module.GetType ("Com.Mypackage.Foo");
 			var @class = new ManagedClassGen (type, options);
-			var method = new ManagedMethod (@class, type.Methods.First (m => m.Name == "BarWithParams"));
+			var method = CecilApiImporter.CreateMethod (@class, type.Methods.First (m => m.Name == "BarWithParams"));
 			Assert.IsTrue (method.Validate (new CodeGenerationOptions (), new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "method.Validate failed!");
 			Assert.AreEqual ("(ZID)Ljava/lang/String;", method.JniSignature);
 			Assert.AreEqual ("java.lang.String", method.Return);
@@ -169,7 +169,7 @@ namespace generatortests
 		{
 			var type = module.GetType ("Com.Mypackage.Foo");
 			var @class = new ManagedClassGen (type, options);
-			var ctor = new ManagedCtor (@class, type.Methods.First (m => m.IsConstructor && !m.IsStatic));
+			var ctor = CecilApiImporter.CreateCtor (@class, type.Methods.First (m => m.IsConstructor && !m.IsStatic));
 			Assert.IsTrue (ctor.Validate (new CodeGenerationOptions (), new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "ctor.Validate failed!");
 
 			Assert.AreEqual ("public", ctor.Visibility);
