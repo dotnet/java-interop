@@ -11,7 +11,7 @@ namespace MonoDroid.Generation
 		TypeReference nominal_base_type;
 
 		public ManagedClassGen (TypeDefinition t, CodeGenerationOptions opt)
-			: base (new ManagedGenBaseSupport (t, opt))
+			: base (CecilApiImporter.CreateGenBaseSupport (t, opt))
 		{
 			this.t = t;
 			foreach (var ifaceImpl in t.Interfaces) {

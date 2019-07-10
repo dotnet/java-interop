@@ -8,7 +8,7 @@ namespace MonoDroid.Generation
 		string args_type;
 
 		public XmlInterfaceGen (XElement pkg, XElement elem) 
-			: base (new InterfaceXmlGenBaseSupport (pkg, elem))
+			: base (XmlApiImporter.CreateGenBaseSupport (pkg, elem, true))
 		{
 			hasManagedName = elem.Attribute ("managedName") != null;
 			args_type = elem.XGetAttribute ("argsType");

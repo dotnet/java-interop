@@ -84,6 +84,70 @@ namespace MonoDroid.Generation
 			return field;
 		}
 
+		public static GenBaseSupport CreateGenBaseSupport (XElement pkg, XElement elem, bool isInterface)
+		{
+			var support = new GenBaseSupport {
+				IsAcw = true,
+				IsDeprecated = elem.XGetAttribute ("deprecated") != "not deprecated",
+				IsGeneratable = true,
+				JavaSimpleName = elem.XGetAttribute ("name"),
+				PackageName = pkg.XGetAttribute ("name"),
+				Visibility = elem.XGetAttribute ("visibility")
+			};
+			
+			if (support.IsDeprecated) {
+				support.DeprecatedComment = elem.XGetAttribute ("deprecated");
+
+				if (support.DeprecatedComment == "deprecated")
+					support.DeprecatedComment = "This class is obsoleted in this android platform";
+			}
+
+			if (support.Visibility == "protected")
+				support.Visibility = "protected internal";
+
+			if (pkg.Attribute ("managedName") != null)
+				support.Namespace = pkg.XGetAttribute ("managedName");
+			else
+				support.Namespace = StringRocks.PackageToPascalCase (support.PackageName);
+
+			var tpn = elem.Element ("typeParameters");
+
+			if (tpn != null) {
+				support.TypeParameters = GenericParameterDefinitionList.FromXml (tpn);
+				support.IsGeneric = true;
+				int idx = support.JavaSimpleName.IndexOf ('<');
+				if (idx > 0)
+					support.JavaSimpleName = support.JavaSimpleName.Substring (0, idx);
+			} else {
+				int idx = support.JavaSimpleName.IndexOf ('<');
+				if (idx > 0)
+					throw new NotSupportedException ("Looks like old API XML is used, which we don't support anymore.");
+			}
+
+			string raw_name;
+
+			if (elem.Attribute ("managedName") != null) {
+				support.Name = elem.XGetAttribute ("managedName");
+				support.FullName = string.Format ("{0}.{1}", support.Namespace, support.Name);
+				int idx = support.Name.LastIndexOf ('.');
+				support.Name = idx > 0 ? support.Name.Substring (idx + 1) : support.Name;
+				raw_name = support.Name;
+			} else {
+				int idx = support.JavaSimpleName.LastIndexOf ('.');
+				support.Name = idx > 0 ? support.JavaSimpleName.Substring (idx + 1) : support.JavaSimpleName;
+				if (char.IsLower (support.Name [0]))
+					support.Name = StringRocks.TypeToPascalCase (support.Name);
+				raw_name = support.Name;
+				support.TypeNamePrefix = isInterface ? IsPrefixableName (raw_name) ? "I" : string.Empty : string.Empty;
+				support.Name = support.TypeNamePrefix + raw_name;
+				support.FullName = string.Format ("{0}.{1}{2}", support.Namespace, idx > 0 ? StringRocks.TypeToPascalCase (support.JavaSimpleName.Substring (0, idx + 1)) : string.Empty, support.Name);
+			}
+
+			support.IsObfuscated = IsObfuscatedName (pkg.Elements ().Count (), support.JavaSimpleName) && elem.XGetAttribute ("obfuscated") != "false";
+
+			return support;
+		}
+
 		public static Method CreateMethod (GenBase declaringType, XElement elem)
 		{
 			var method = new Method (declaringType) {
@@ -186,6 +250,32 @@ namespace MonoDroid.Generation
 			}
 
 			return e;
+		}
+
+		static bool IsObfuscatedName (int threshold, string name)
+		{
+			if (name.StartsWith ("R.", StringComparison.Ordinal))
+				return false;
+			int idx = name.LastIndexOf ('.');
+			string last = idx < 0 ? name : name.Substring (idx + 1);
+			// probably new proguard within Gradle tasks, used in recent GooglePlayServices in 2016 or later.
+			if (last.StartsWith ("zz", StringComparison.Ordinal))
+				return true;
+			// do not expect any name with more than 3 letters is an 'obfuscated' one.
+			if (last.Length > 3)
+				return false;
+			// Only short ones ('a', 'b', 'c' ... 'aa', 'ab', ... 'zzz') are the targets.
+			if (!(last.Length == 3 && threshold > 26 * 26 || last.Length == 2 && threshold > 26 || last.Length == 1))
+				return false;
+			if (last.Any (c => (c < 'a' || 'z' < c) && (c < '0' || '9' < c)))
+				return false;
+			return true;
+		}
+
+		static bool IsPrefixableName (string name)
+		{
+			// IBlahBlah is not prefixed with 'I'
+			return name.Length <= 2 || name [0] != 'I' || !char.IsUpper (name [1]);
 		}
 	}
 }

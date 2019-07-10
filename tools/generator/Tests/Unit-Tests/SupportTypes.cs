@@ -24,36 +24,13 @@ namespace generatortests
 			var split = javaName.Split ('.');
 			Name = split.Last ();
 			FullName = javaName;
+			JavaSimpleName = Name;
 			PackageName = javaName.Substring (0, javaName.Length - Name.Length - 1);
+			Namespace = PackageName;
+			IsGeneratable = true;
+			Visibility = "public";
+			TypeParameters = new GenericParameterDefinitionList ();
 		}
-
-		public override bool IsAcw => false;
-
-		public override bool IsDeprecated => false;
-
-		public override string DeprecatedComment => string.Empty;
-
-		public override bool IsGeneratable => true;
-
-		public override bool IsGeneric => false;
-
-		public override bool IsObfuscated => false;
-
-		public override string FullName { get; set; }
-
-		public override string Name { get; set; }
-
-		public override string Namespace => PackageName;
-
-		public override string JavaSimpleName => Name;
-
-		public override string PackageName { get; set; }
-
-		public override string Visibility => "public";
-
-		GenericParameterDefinitionList typeParameters = new GenericParameterDefinitionList ();
-
-		public override GenericParameterDefinitionList TypeParameters => typeParameters;
 	}
 
 	class TestField : Field

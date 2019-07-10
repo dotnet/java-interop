@@ -63,6 +63,45 @@ namespace MonoDroid.Generation
 			return field;
 		}
 
+		public static GenBaseSupport CreateGenBaseSupport (TypeDefinition t, CodeGenerationOptions opt)
+		{
+			var obs_attr = GetObsoleteAttribute (t.CustomAttributes);
+			var reg_attr = GetRegisterAttribute (t.CustomAttributes);
+
+			var jn = reg_attr != null ? ((string) reg_attr.ConstructorArguments [0].Value).Replace ('/', '.') : t.FullNameCorrected ();
+			var idx = jn.LastIndexOf ('.');
+
+			var support = new GenBaseSupport {				
+				IsAcw = reg_attr != null,
+				IsDeprecated = obs_attr != null,
+				IsGeneratable = false,
+				IsGeneric = t.HasGenericParameters,
+				IsObfuscated = false, // obfuscated types have no chance to be already bound in managed types.
+				Name = t.Name,
+				Namespace = t.Namespace,
+				PackageName = idx < 0 ? string.Empty : jn.Substring (0, idx),
+				TypeParameters = GenericParameterDefinitionList.FromMetadata (t.GenericParameters),
+				Visibility = t.IsPublic || t.IsNestedPublic ? "public" : "protected internal"
+			};
+
+			support.JavaSimpleName = SymbolTable.FilterPrimitiveFullName (t.FullNameCorrected ());
+
+			if (support.JavaSimpleName == null) {
+				support.JavaSimpleName = idx < 0 ? jn : jn.Substring (idx + 1);
+				support.FullName = t.FullNameCorrected ();
+			} else {
+				var sym = opt.SymbolTable.Lookup (support.JavaSimpleName);
+				support.FullName = sym != null ? sym.FullName : t.FullNameCorrected ();
+			}
+
+			support.JavaSimpleName = support.JavaSimpleName.Replace ('$', '.');
+
+			if (support.IsDeprecated)
+				support.DeprecatedComment = GetObsoleteComment (obs_attr) ?? "This class is obsoleted in this android platform";
+
+			return support;
+		}
+
 		public static Method CreateMethod (GenBase declaringType, MethodDefinition m)
 		{
 			var reg_attr = GetRegisterAttribute (m.CustomAttributes);

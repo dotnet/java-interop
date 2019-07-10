@@ -9,7 +9,7 @@ namespace MonoDroid.Generation
 		string base_type;
 
 		public XmlClassGen (XElement pkg, XElement elem)
-			: base (new XmlGenBaseSupport (pkg, elem))//FIXME: should not be xml specific
+			: base (XmlApiImporter.CreateGenBaseSupport (pkg, elem, false))
 		{
 			is_abstract = elem.XGetAttribute ("abstract") == "true";
 			is_final = elem.XGetAttribute ("final") == "true";
