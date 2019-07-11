@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 using MonoDroid.Utils;
 using Xamarin.Android.Tools;
@@ -13,7 +9,43 @@ namespace MonoDroid.Generation
 {
 	class XmlApiImporter
 	{
-		static readonly Regex ApiLevel = new Regex (@"api-(\d+).xml");
+		static readonly Regex api_level = new Regex (@"api-(\d+).xml");
+
+		public static ClassGen CreateClass (XElement pkg, XElement elem)
+		{
+			var klass = new ClassGen (CreateGenBaseSupport (pkg, elem, false)) {
+				BaseType = elem.XGetAttribute ("extends"),
+				FromXml = true,
+				IsAbstract = elem.XGetAttribute ("abstract") == "true",
+				IsFinal = elem.XGetAttribute ("final") == "true"
+			};
+
+			foreach (var child in elem.Elements ()) {
+				switch (child.Name.LocalName) {
+					case "implements":
+						var iname = child.XGetAttribute ("name-generic-aware");
+						iname = iname.Length > 0 ? iname : child.XGetAttribute ("name");
+						klass.AddImplementedInterface (iname);
+						break;
+					case "method":
+						klass.AddMethod (CreateMethod (klass, child));
+						break;
+					case "constructor":
+						klass.Ctors.Add (CreateCtor (klass, child));
+						break;
+					case "field":
+						klass.AddField (CreateField (child));
+						break;
+					case "typeParameters":
+						break; // handled at GenBaseSupport
+					default:
+						Report.Warning (0, Report.WarningClassGen + 1, "unexpected class child {0}.", child.Name);
+						break;
+				}
+			}
+
+			return klass;
+		}
 
 		public static Ctor CreateCtor (GenBase declaringType, XElement elem)
 		{
@@ -148,6 +180,37 @@ namespace MonoDroid.Generation
 			return support;
 		}
 
+		public static InterfaceGen CreateInterface (XElement pkg, XElement elem)
+		{
+			var iface = new InterfaceGen (CreateGenBaseSupport (pkg, elem, true)) {
+				ArgsType = elem.XGetAttribute ("argsType"),
+				HasManagedName = elem.Attribute ("managedName") != null
+			};
+
+			foreach (var child in elem.Elements ()) {
+				switch (child.Name.LocalName) {
+					case "implements":
+						string iname = child.XGetAttribute ("name-generic-aware");
+						iname = iname.Length > 0 ? iname : child.XGetAttribute ("name");
+						iface.AddImplementedInterface (iname);
+						break;
+					case "method":
+						iface.AddMethod (CreateMethod (iface, child));
+						break;
+					case "field":
+						iface.AddField (CreateField (child));
+						break;
+					case "typeParameters":
+						break; // handled at GenBaseSupport
+					default:
+						Report.Warning (0, Report.WarningInterfaceGen + 0, "unexpected interface child {0}.", child);
+						break;
+				}
+			}
+
+			return iface;
+		}
+
 		public static Method CreateMethod (GenBase declaringType, XElement elem)
 		{
 			var method = new Method (declaringType) {
@@ -225,7 +288,7 @@ namespace MonoDroid.Generation
 			if (source == null)
 				return 0;
 
-			var m = ApiLevel.Match (source);
+			var m = api_level.Match (source);
 
 			if (!m.Success)
 				return 0;

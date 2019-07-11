@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using MonoDroid.Generation.Utilities;
 
 namespace MonoDroid.Generation
 {
@@ -39,6 +41,25 @@ namespace MonoDroid.Generation
 
 				return GenerateAsyncWrapper;
 			}
+		}
+
+		public string AutoDetectEnumifiedOverrideReturn (AncestorDescendantCache cache)
+		{
+			if (RetVal.FullName != "int")
+				return null;
+
+			var classes = cache.GetAncestorsAndDescendants (DeclaringType);
+			classes = classes.Concat (classes.SelectMany (x => x.GetAllImplementedInterfaces ()));
+
+			foreach (var t in classes) {
+				foreach (var candidate in t.GetAllMethods ().Where (m => m.Name == Name && m.Parameters.Count == Parameters.Count)) {
+					if (JniSignature != candidate.JniSignature)
+						continue;
+					if (candidate.IsReturnEnumified)
+						RetVal.SetGeneratedEnumType (candidate.RetVal.FullName);
+				}
+			}
+			return null;
 		}
 
 		public bool CanAdd {
@@ -186,4 +207,3 @@ namespace MonoDroid.Generation
 		}
 	}
 }
-

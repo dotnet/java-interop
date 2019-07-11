@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using System.Text;
+using MonoDroid.Generation.Utilities;
 
 namespace MonoDroid.Generation
 {
@@ -21,8 +24,58 @@ namespace MonoDroid.Generation
 		public ParameterList Parameters { get; } = new ParameterList ();
 		public string Visibility { get; set; }
 
+		public string [] AutoDetectEnumifiedOverrideParameters (AncestorDescendantCache cache)
+		{
+			if (Parameters.All (p => p.Type != "int"))
+				return null;
 
-		internal string IDSignature => Parameters.Count > 0 ? "_" + Parameters.JniSignature.Replace ("/", "_").Replace ("`", "_").Replace (";", "_").Replace ("$", "_").Replace ("[", "array") : String.Empty;
+			var classes = cache.GetAncestorsAndDescendants (DeclaringType);
+			classes = classes.Concat (classes.SelectMany (x => x.GetAllImplementedInterfaces ()));
+
+			foreach (var t in classes) {
+				foreach (var candidate in t.GetAllMethods ().Where (m => m.Name == Name
+					&& m.Parameters.Count == Parameters.Count
+					&& m.Parameters.Any (p => p.IsEnumified))) {
+					var ret = new string [Parameters.Count];
+					bool mismatch = false;
+					for (int i = 0; i < Parameters.Count; i++) {
+						if (Parameters [i].Type == "int" && candidate.Parameters [i].IsEnumified)
+							ret [i] = candidate.Parameters [i].Type;
+						else if (Parameters [i].Type != candidate.Parameters [i].Type) {
+							mismatch = true;
+							break;
+						}
+					}
+					if (mismatch)
+						continue;
+					for (int i = 0; i < ret.Length; i++)
+						if (ret [i] != null)
+							Parameters [i].SetGeneratedEnumType (ret [i]);
+					return ret;
+				}
+			}
+			return null;
+		}
+
+		public string GetSignature (CodeGenerationOptions opt)
+		{
+			var sb = new StringBuilder ();
+
+			foreach (var p in Parameters) {
+				if (sb.Length > 0)
+					sb.Append (", ");
+				if (p.IsEnumified)
+					sb.Append ("[global::Android.Runtime.GeneratedEnum] ");
+				if (p.Annotation != null)
+					sb.Append (p.Annotation);
+				sb.Append (opt.GetOutputName (p.Type));
+				sb.Append (" ");
+				sb.Append (opt.GetSafeIdentifier (p.Name));
+			}
+			return sb.ToString ();
+		}
+
+		internal string IDSignature => Parameters.Count > 0 ? "_" + Parameters.JniSignature.Replace ("/", "_").Replace ("`", "_").Replace (";", "_").Replace ("$", "_").Replace ("[", "array") : string.Empty;
 
 		public virtual bool IsGeneric => Parameters.HasGeneric;
 

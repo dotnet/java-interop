@@ -7,14 +7,10 @@ namespace generatortests
 	{
 		public TestClass (string baseType, string javaName) : base (new TestBaseSupport (javaName))
 		{
-			this.BaseType = baseType;
+			BaseType = baseType;
+			IsAbstract = false;
+			IsFinal = false;
 		}
-
-		public override bool IsAbstract => false;
-
-		public override bool IsFinal => false;
-
-		public override string BaseType { get; set; }
 	}
 
 	class TestBaseSupport : GenBaseSupport
@@ -201,14 +197,10 @@ namespace generatortests
 
 	class TestInterface : InterfaceGen
 	{
-		string args_type;
-
 		public TestInterface (string argsType, string javaName) : base (new TestBaseSupport (javaName))
 		{
-			args_type = argsType;
+			ArgsType = argsType;
 		}
-
-		public override string ArgsType => args_type;
 	}
 
 	static class SupportTypeBuilder

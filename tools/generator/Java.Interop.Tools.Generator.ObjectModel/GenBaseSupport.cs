@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 
 namespace MonoDroid.Generation
 {
@@ -31,5 +28,3 @@ namespace MonoDroid.Generation
 		}
 	}
 }
-
-

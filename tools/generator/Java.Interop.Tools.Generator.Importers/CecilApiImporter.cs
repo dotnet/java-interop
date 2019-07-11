@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Java.Interop.Tools.TypeNameMappings;
 using Mono.Cecil;
 using Mono.Collections.Generic;
@@ -11,6 +8,50 @@ namespace MonoDroid.Generation
 {
 	class CecilApiImporter
 	{
+		public static ClassGen CreateClass (TypeDefinition t, CodeGenerationOptions opt)
+		{
+			var klass = new ClassGen (CreateGenBaseSupport (t, opt)) {
+				IsAbstract = t.IsAbstract,
+				IsFinal = t.IsSealed
+			};
+
+			foreach (var ifaceImpl in t.Interfaces) {
+				var iface = ifaceImpl.InterfaceType;
+				var def = ifaceImpl.InterfaceType.Resolve ();
+
+				if (def != null && def.IsNotPublic)
+					continue;
+
+				klass.AddImplementedInterface (iface.FullNameCorrected ());
+			}
+
+			var implements_charsequence = t.Interfaces.Any (it => it.InterfaceType.FullName == "Java.Lang.CharSequence");
+
+			foreach (var m in t.Methods) {
+				if (m.IsPrivate || m.IsAssembly || GetRegisterAttribute (m.CustomAttributes) == null)
+					continue;
+				if (implements_charsequence && t.Methods.Any (mm => mm.Name == m.Name + "Formatted"))
+					continue;
+				if (m.IsConstructor)
+					klass.Ctors.Add (CreateCtor (klass, m));
+				else
+					klass.AddMethod (CreateMethod (klass, m));
+			}
+
+			foreach (var f in t.Fields)
+				if (!f.IsPrivate && GetRegisterAttribute (f.CustomAttributes) == null)
+					klass.AddField (CreateField (f));
+
+			TypeReference nominal_base_type;
+
+			for (nominal_base_type = t.BaseType; nominal_base_type != null && (nominal_base_type.HasGenericParameters || nominal_base_type.IsGenericInstance); nominal_base_type = nominal_base_type.Resolve ().BaseType)
+				; // iterate up to non-generic type, at worst System.Object.
+
+			klass.BaseType = nominal_base_type?.FullNameCorrected ();
+
+			return klass;
+		}
+
 		public static Ctor CreateCtor (GenBase declaringType, MethodDefinition m)
 		{
 			var reg_attr = GetRegisterAttribute (m.CustomAttributes);
@@ -100,6 +141,27 @@ namespace MonoDroid.Generation
 				support.DeprecatedComment = GetObsoleteComment (obs_attr) ?? "This class is obsoleted in this android platform";
 
 			return support;
+		}
+
+		public static InterfaceGen CreateInterface (TypeDefinition t, CodeGenerationOptions opt)
+		{
+			var reg_attr = GetRegisterAttribute (t.CustomAttributes);
+
+			var iface = new InterfaceGen (CreateGenBaseSupport (t, opt));
+
+			foreach (var ifaceImpl in t.Interfaces)
+				iface.AddImplementedInterface (ifaceImpl.InterfaceType.FullNameCorrected ());
+
+			foreach (var m in t.Methods) {
+				if (m.IsPrivate || m.IsAssembly || GetRegisterAttribute (m.CustomAttributes) == null)
+					continue;
+
+				iface.AddMethod (CecilApiImporter.CreateMethod (iface, m));
+			}
+
+			iface.MayHaveManagedGenericArguments = !iface.IsAcw;
+
+			return iface;
 		}
 
 		public static Method CreateMethod (GenBase declaringType, MethodDefinition m)
