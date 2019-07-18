@@ -125,7 +125,7 @@ namespace MonoDroid.Generation
 				Visibility = t.IsPublic || t.IsNestedPublic ? "public" : "protected internal"
 			};
 
-			support.JavaSimpleName = SymbolTable.FilterPrimitiveFullName (t.FullNameCorrected ());
+			support.JavaSimpleName = TypeNameUtilities.FilterPrimitiveFullName (t.FullNameCorrected ());
 
 			if (support.JavaSimpleName == null) {
 				support.JavaSimpleName = idx < 0 ? jn : jn.Substring (idx + 1);
@@ -211,7 +211,7 @@ namespace MonoDroid.Generation
 			// FIXME: safe to use CLR type name? assuming yes as we often use it in metadatamap.
 			// FIXME: IsSender?
 			var isEnumType = GetGeneratedEnumAttribute (p.CustomAttributes) != null;;
-			return new Parameter (SymbolTable.MangleName (p.Name), jnitype ?? p.ParameterType.FullNameCorrected (), null, isEnumType, rawtype);
+			return new Parameter (TypeNameUtilities.MangleName (p.Name), jnitype ?? p.ParameterType.FullNameCorrected (), null, isEnumType, rawtype);
 		}
 
 		public static Parameter CreateParameter (string managedType, string javaType)

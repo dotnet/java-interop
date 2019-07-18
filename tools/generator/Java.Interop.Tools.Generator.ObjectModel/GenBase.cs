@@ -685,7 +685,7 @@ namespace MonoDroid.Generation
 				string.Format ("{0} {1} = {5}global::Java.Lang.Object.GetObject<{4}> ({2}, {3});",
 					       opt.GetOutputName (FullName),
 					       opt.GetSafeIdentifier (var_name),
-					       opt.GetSafeIdentifier (SymbolTable.GetNativeName (var_name)),
+					       opt.GetSafeIdentifier (TypeNameUtilities.GetNativeName (var_name)),
 					       owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer",
 					       opt.GetOutputName (rgm != null ? (rgm.GetGenericJavaObjectTypeOverride () ?? FullName) : FullName),
 					       rgm != null ? "(" + opt.GetOutputName (FullName) + ")" : string.Empty)
