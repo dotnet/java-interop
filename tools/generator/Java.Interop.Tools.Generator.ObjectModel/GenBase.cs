@@ -33,6 +33,12 @@ namespace MonoDroid.Generation
 		public string DefaultValue { get; set; }
 		public bool HasVirtualMethods { get; set; }
 
+		// This means Ctors/Methods/Properties/Fields has not been populated yet.
+		// If this type is retrieved from the SymbolTable, it will call PopulateAction
+		// to fill in members before returning it to the user.
+		internal bool IsShallow { get; set; }
+		internal Action PopulateAction { get; set; }
+
 		public void AddField (Field f)
 		{
 			Fields.Add (f);

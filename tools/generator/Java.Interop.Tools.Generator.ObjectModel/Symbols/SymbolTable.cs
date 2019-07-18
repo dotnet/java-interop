@@ -7,7 +7,12 @@ namespace MonoDroid.Generation {
 
 	public class SymbolTable {
 
+		// The symbols dictionary may contain shallow types (types that have not populated Ctors/Methods/Fields).
+		// If you make any changes to the SymbolTable class that accesses the symbols you need to keep
+		// that in mind.  Also if you add any new public methods that expose symbols from the table you must
+		// EnsurePopulated them before letting them leave this class.
 		Dictionary<string, List<ISymbol>> symbols = new Dictionary<string, List<ISymbol>> ();
+
 		ISymbol char_seq;
 		ISymbol fileinstream_sym;
 		ISymbol fileoutstream_sym;
@@ -30,8 +35,11 @@ namespace MonoDroid.Generation {
 			"void",
 		};
 
-		public IEnumerable<ISymbol> AllRegisteredSymbols ()
+		public IEnumerable<ISymbol> AllRegisteredSymbols (CodeGenerationOptions options)
 		{
+			if (options.UseShallowReferencedTypes)
+				throw new InvalidOperationException ("Not safe to retrieve all registered symbols when using shallow types.");
+
 			return symbols.Values.SelectMany (v => v);
 		}
 
@@ -234,12 +242,17 @@ namespace MonoDroid.Generation {
 			if (symbols.TryGetValue (key, out values)) {
 				sym = values [values.Count-1];
 			} else {
-				sym = AllRegisteredSymbols ().FirstOrDefault (v => v.FullName == key);
+				// Note we're potentially searching shallow types, but this is only looking at the type name
+				// Anything we find we will populate before returning to the user
+				sym = symbols.Values.SelectMany (v => v).FirstOrDefault (v => v.FullName == key);
 			}
 			ISymbol result;
 			if (sym != null) {
 				if (type_params.Length > 0) {
 					GenBase gen = sym as GenBase;
+
+					EnsurePopulated (gen);
+
 					if (gen != null && gen.IsGeneric)
 						result = new GenericSymbol (gen, type_params);
 					// In other case, it is still valid to derive from non-generic type.
@@ -255,6 +268,9 @@ namespace MonoDroid.Generation {
 			} else
 				return null;
 
+			if (result is GenBase gen_base)
+				EnsurePopulated (gen_base);
+
 			return result;
 		}
 		
@@ -266,6 +282,24 @@ namespace MonoDroid.Generation {
 				foreach (var s in p.Value) {
 					Console.Error.WriteLine ("[{0}]: {1} {2}", p.Key, s.GetType (), s.FullName);
 				}
+			}
+		}
+
+		static readonly object populate_lock = new object ();
+
+		void EnsurePopulated (GenBase gen)
+		{
+			if (gen == null || !gen.IsShallow)
+				return;
+
+			foreach (var nested in gen.NestedTypes)
+				EnsurePopulated (nested);
+
+			// We need to fully populate this shallow type
+			lock (populate_lock) {
+				gen.PopulateAction ();
+				gen.IsShallow = false;
+				gen.PopulateAction = null;
 			}
 		}
 	}
