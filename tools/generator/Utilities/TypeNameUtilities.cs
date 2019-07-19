@@ -7,7 +7,19 @@ using System.Threading.Tasks;
 namespace MonoDroid.Generation
 {
 	public static class TypeNameUtilities
-	{		
+	{
+		// These must be sorted for BinarySearch to work
+		// Missing "this" because it's handled elsewhere as "this_"
+		static string [] reserved_keywords = new [] {
+			"abstract", "as", "base", "bool", "break", "byte", "callback", "case", "catch", "char", "checked", "class", "const",
+			"continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false",
+			"finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal",
+			"is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private",
+			"protected", "public", "readonly", "ref", "remove", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
+			"struct", "switch", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort",
+			"using", "virtual", "void", "volatile", "where", "while"
+		};
+
 		public static string FilterPrimitiveFullName (string s)
 		{
 			switch (s) {
@@ -65,40 +77,13 @@ namespace MonoDroid.Generation
 
 		public static string MangleName (string name)
 		{
-			switch (name) {
-			case "event":
+			if (name == "event")
 				return "e";
-			case "base":
-			case "bool":
-			case "byte":
-			case "callback":
-			case "checked":
-			case "decimal":
-			case "delegate":
-			case "fixed":
-			case "foreach":
-			case "in":
-			case "int":
-			case "interface":
-			case "internal":
-			case "is":
-			case "lock":
-			case "namespace":
-			case "new":
-			case "null":
-			case "object":
-			case "out":
-			case "override":
-			case "params":
-			case "readonly":
-			case "ref":
-			case "remove":
-			case "string":
-			case "where":
+			
+			if (Array.BinarySearch (reserved_keywords, name) >= 0)
 				return "@" + name;
-			default:
-				return name;
-			}
+
+			return name;
 		}
 
 		public static string StudlyCase (string name)
