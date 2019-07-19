@@ -13,7 +13,7 @@ namespace MonoDroid.Generation
 			var klass = new ClassGen (CreateGenBaseSupport (t, opt)) {
 				IsAbstract = t.IsAbstract,
 				IsFinal = t.IsSealed,
-				IsShallow = opt.UseShallowReferencedTypes
+				IsShallow = opt.UseShallowReferencedTypes,
 			};
 
 			foreach (var ifaceImpl in t.Interfaces) {
@@ -154,7 +154,7 @@ namespace MonoDroid.Generation
 		public static InterfaceGen CreateInterface (TypeDefinition t, CodeGenerationOptions opt)
 		{
 			var iface = new InterfaceGen (CreateGenBaseSupport (t, opt)) {
-				IsShallow = opt.UseShallowReferencedTypes
+				IsShallow = opt.UseShallowReferencedTypes,
 			};
 
 			foreach (var ifaceImpl in t.Interfaces)
