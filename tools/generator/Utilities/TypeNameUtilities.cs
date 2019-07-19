@@ -17,7 +17,7 @@ namespace MonoDroid.Generation
 			"is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private",
 			"protected", "public", "readonly", "ref", "remove", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
 			"struct", "switch", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort",
-			"using", "virtual", "void", "volatile", "where", "while"
+			"using", "virtual", "void", "volatile", "where", "while",
 		};
 
 		public static string FilterPrimitiveFullName (string s)
