@@ -110,8 +110,13 @@ namespace MonoDroid.Generation
 
 			if (elem.Attribute ("managedName") != null)
 				field.Name = elem.XGetAttribute ("managedName");
-			else
+			else {
 				field.Name = TypeNameUtilities.StudlyCase (char.IsLower (field.JavaName [0]) || field.JavaName.ToLower ().ToUpper () != field.JavaName ? field.JavaName : field.JavaName.ToLower ());
+
+				// Preserve starting underscore if 2nd char is a number (removing it is an invalid C# name)
+				if (field.Name.Length > 0 && char.IsNumber (field.Name [0]) && field.JavaName.StartsWith ("_"))
+					field.Name = $"_{field.Name}";
+			}
 
 			return field;
 		}
