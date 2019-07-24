@@ -149,6 +149,7 @@ namespace MonoDroid.Generation {
 			List<ISymbol> values;
 			if (!symbols.TryGetValue (key, out values)) {
 				symbols.Add (key, new List<ISymbol> { symbol });
+				all_symbols_cache = null;
 			}
 			else {
 				if (!values.Any (v => object.ReferenceEquals (v, symbol)))
@@ -231,6 +232,8 @@ namespace MonoDroid.Generation {
 			return symbol;
 		}
 
+		Dictionary<string, ISymbol> all_symbols_cache;
+
 		public ISymbol Lookup (string java_type)
 		{
 			string type_params;
@@ -244,7 +247,11 @@ namespace MonoDroid.Generation {
 			} else {
 				// Note we're potentially searching shallow types, but this is only looking at the type name
 				// Anything we find we will populate before returning to the user
-				sym = symbols.Values.SelectMany (v => v).FirstOrDefault (v => v.FullName == key);
+				//sym = symbols.Values.SelectMany (v => v).FirstOrDefault (v => v.FullName == key);
+				if (all_symbols_cache == null)
+					all_symbols_cache = symbols.Values.SelectMany (v => v).GroupBy (s => s.FullName).ToDictionary (s => s.Key, s => s.FirstOrDefault ());
+
+				all_symbols_cache.TryGetValue (key, out sym);
 			}
 			ISymbol result;
 			if (sym != null) {
