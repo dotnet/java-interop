@@ -663,7 +663,7 @@ namespace generatortests
 			var method = new TestMethod (@class, "bar");
 
 			Assert.IsTrue (method.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ()), "method.Validate failed!");
-			generator.WriteMethodBody (method, string.Empty);
+			generator.WriteMethodBody (method, string.Empty, @class);
 
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteMethodBody)), writer.ToString ().NormalizeLineEndings ());
 		}

@@ -20,7 +20,7 @@ namespace MonoDroid.Generation
 		public bool IsAbstract { get; set; }
 		public bool IsFinal { get; set; }
 		public bool IsInterfaceDefaultMethod { get; set; }
-		public bool IsInterfaceDefaultMethodOverride { get; set; }
+		public Method OverriddenInterfaceMethod { get; set; }
 		public bool IsReturnEnumified { get; set; }
 		public bool IsStatic { get; set; }
 		public bool IsVirtual { get; set; }
