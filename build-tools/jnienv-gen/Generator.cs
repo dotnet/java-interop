@@ -235,11 +235,11 @@ namespace Xamarin.Java.Interop
 				if (i >= 0) {
 					builder.Append (", ");
 					builder.AppendFormat ("{0} {1}",
-							entry.Parameters [i].Type.GetMarshalType (style, isReturn: false),
+							entry.Parameters [i].Type.GetMarshalType (style, isReturn: false, isPinvoke: true),
 							Escape (entry.Parameters [i].Name));
 				} 
 				
-				var ptype   = entry.Parameters [i].Type.GetManagedType (style, isReturn: false);
+				var ptype   = entry.Parameters [i].Type.GetManagedType (style, isReturn: false, isPinvoke: true);
 				if (ptype == "va_list")
 					return;
 				if (ptype == "char[]")
