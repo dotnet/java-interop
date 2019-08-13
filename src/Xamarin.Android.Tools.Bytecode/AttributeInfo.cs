@@ -46,6 +46,9 @@ namespace Xamarin.Android.Tools.Bytecode {
 		public  const   string  Signature               = "Signature";
 		public  const   string  StackMapTable           = "StackMapTable";
 
+		public  const   string  RuntimeVisibleAnnotations       = "RuntimeVisibleAnnotations";
+		public  const   string  RuntimeInvisibleAnnotations     = "RuntimeInvisibleAnnotations";
+
 		ushort          nameIndex;
 
 		public  ConstantPool    ConstantPool        {get; private set;}
@@ -73,6 +76,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 			{ typeof (InnerClassesAttribute),           InnerClasses },
 			{ typeof (LocalVariableTableAttribute),     LocalVariableTable },
 			{ typeof (MethodParametersAttribute),       MethodParameters },
+			{ typeof (RuntimeVisibleAnnotationsAttribute),          RuntimeVisibleAnnotations },
+			{ typeof (RuntimeInvisibleAnnotationsAttribute),        RuntimeInvisibleAnnotations },
 			{ typeof (SignatureAttribute),              Signature },
 			{ typeof (StackMapTableAttribute),          StackMapTable },
 		};
@@ -104,6 +109,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 			case InnerClasses:          return new InnerClassesAttribute (constantPool, nameIndex, stream);
 			case LocalVariableTable:    return new LocalVariableTableAttribute (constantPool, nameIndex, stream);
 			case MethodParameters:      return new MethodParametersAttribute (constantPool, nameIndex, stream);
+			case RuntimeVisibleAnnotations:        return new RuntimeVisibleAnnotationsAttribute (constantPool, nameIndex, stream);
+			case RuntimeInvisibleAnnotations:      return new RuntimeInvisibleAnnotationsAttribute (constantPool, nameIndex, stream);
 			case Signature:             return new SignatureAttribute (constantPool, nameIndex, stream);
 			case StackMapTable:         return new StackMapTableAttribute (constantPool, nameIndex, stream);
 			default:                    return new UnknownAttribute (constantPool, nameIndex, stream);
@@ -457,6 +464,156 @@ namespace Xamarin.Android.Tools.Bytecode {
 				sb.Append (", ").Append (parameters [i]);
 			sb.Append (")");
 			return sb.ToString ();
+		}
+	}
+
+	// https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.7.16
+	public sealed class RuntimeVisibleAnnotationsAttribute : AttributeInfo {
+
+		public  IList<Annotation>       Annotations     {get;}  = new List<Annotation> ();
+
+		public RuntimeVisibleAnnotationsAttribute (ConstantPool constantPool, ushort nameIndex, Stream stream)
+			: base (constantPool, nameIndex, stream)
+		{
+			var length = stream.ReadNetworkUInt32 ();
+			var count  = stream.ReadNetworkUInt16 ();
+
+			for (int i = 0; i < count; ++i) {
+				Annotations.Add (new Annotation (constantPool, stream));
+			}
+		}
+
+		public override string ToString()
+		{
+			var annotations = string.Join (", ", Annotations.Select (v => v.ToString ()));
+			return $"RuntimeVisibleAnnotations({annotations})";
+		}
+	}
+
+	public sealed class Annotation {
+		public ConstantPool ConstantPool {get;}
+
+		ushort typeIndex;
+		public  string                  Type   =>  ((ConstantPoolUtf8Item) ConstantPool [typeIndex]).Value;
+
+		public  IList<KeyValuePair<string, AnnotationElementValue>>
+			Values  {get;} = new List<KeyValuePair<string, AnnotationElementValue>>();
+
+		public Annotation (ConstantPool constantPool, Stream stream)
+		{
+			ConstantPool    = constantPool;
+			typeIndex       = stream.ReadNetworkUInt16 ();
+
+			var count       = stream.ReadNetworkUInt16 ();
+			for (int i = 0; i < count; ++i) {
+				var elementNameIndex = stream.ReadNetworkUInt16 ();
+				var elementName = ((ConstantPoolUtf8Item) ConstantPool [elementNameIndex]).Value;
+				var elementValue  = new AnnotationElementValue (constantPool, stream);
+				Values.Add (new KeyValuePair<string, AnnotationElementValue>(elementName, elementValue));
+			}
+		}
+
+		public override string ToString ()
+		{
+			var values = new StringBuilder ("{");
+			if (Values.Count > 0) {
+				Append (Values [0]);
+			}
+			for (int i = 1; i < Values.Count; ++i) {
+				values.Append (", ");
+				Append (Values [i]);
+			}
+			values.Append ("}");
+			return $"Annotation('{Type}', {values})";
+
+			void Append (KeyValuePair<string, AnnotationElementValue> value)
+			{
+				values.Append (value.Key).Append (": ");
+				values.Append (value.Value);
+			}
+		}
+	}
+
+	// https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.7.16.1
+	public sealed class AnnotationElementValue {
+
+		public  string  Value   {get;}
+
+		public AnnotationElementValue (ConstantPool constantPool, Stream stream)
+		{
+			var tag = stream.ReadNetworkByte ();
+			switch (tag) {
+				case (byte) 'e': {
+					var typeNameIndex       = stream.ReadNetworkUInt16 ();
+					var constNameIndex      = stream.ReadNetworkUInt16 ();
+
+					var typeName            = ((ConstantPoolUtf8Item) constantPool [typeNameIndex]).Value;
+					var constName           = ((ConstantPoolUtf8Item) constantPool [constNameIndex]).Value;
+
+					Value                   = $"Enum({typeName}.{constName})";
+					break;
+				}
+				case (byte) 'c': {
+					var classInfoIndex      = stream.ReadNetworkUInt16 ();
+					Value                   = ((ConstantPoolUtf8Item) constantPool [classInfoIndex]).Value;
+					break;
+				}
+				case (byte) '@': {
+					Value   = new Annotation (constantPool, stream).ToString ();
+					break;
+				}
+				case (byte) '[': {
+					var numValues = stream.ReadNetworkUInt16 ();
+					var values = new List<string> ();
+					for (int i = 0; i < numValues; i++) {
+						values.Add (new AnnotationElementValue (constantPool, stream).ToString ());
+					}
+					Value   = $"[{string.Join (", ", values)}]";
+					break;
+				}
+				case (byte) 'B':
+				case (byte) 'C':
+				case (byte) 'D':
+				case (byte) 'F':
+				case (byte) 'I':
+				case (byte) 'J':
+				case (byte) 'S':
+				case (byte) 's':
+				case (byte) 'Z': {
+					var constValueIndex     = stream.ReadNetworkUInt16 ();
+					Value                   = constantPool [constValueIndex].ToString ();
+					break;
+				}
+			}
+		}
+
+		public override string ToString ()
+		{
+			return Value;
+		}
+	}
+
+	// https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.7.17
+	public sealed class RuntimeInvisibleAnnotationsAttribute : AttributeInfo {
+
+		public  IList<Annotation>       Annotations     {get;}  = new List<Annotation> ();
+
+		public RuntimeInvisibleAnnotationsAttribute (ConstantPool constantPool, ushort nameIndex, Stream stream)
+			: base (constantPool, nameIndex, stream)
+		{
+			var length = stream.ReadNetworkUInt32 ();
+			var count  = stream.ReadNetworkUInt16 ();
+
+			for (int i = 0; i < count; ++i) {
+				var a = new Annotation (constantPool, stream);
+				Annotations.Add (a);
+			}
+		}
+
+		public override string ToString()
+		{
+			var annotations = string.Join (", ", Annotations.Select (v => v.ToString ()));
+			return $"RuntimeVisibleAnnotations({annotations})";
 		}
 	}
 
