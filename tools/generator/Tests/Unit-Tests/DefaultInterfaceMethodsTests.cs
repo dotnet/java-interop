@@ -57,7 +57,7 @@ namespace generatortests
 			iface.Methods.Add (new TestMethod (iface, "DoSomething").SetDefaultInterfaceMethod ());
 			options.SymbolTable.AddType (iface);
 
-			// Create a second interface that inerhits the first, declaring the method as not default
+			// Create a second interface that inherits the first, declaring the method as not default
 			var iface2 = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface2");
 			iface2.AddImplementedInterface ("java.code.IMyInterface");
 			iface2.Methods.Add (new TestMethod (iface, "DoSomething"));
@@ -107,6 +107,32 @@ namespace generatortests
 			generator.WriteInterfaceDeclaration (iface, string.Empty);
 
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultPropertyGetterOnly)), writer.ToString ().NormalizeLineEndings ());
+		}
+
+		[Test]
+		public void WriteSealedOverriddenDefaultMethod ()
+		{
+			// Create an interface with a default method
+			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+			iface.Methods.Add (new TestMethod (iface, "DoSomething").SetDefaultInterfaceMethod ());
+			options.SymbolTable.AddType (iface);
+
+			// Create a type that inherits the interface, overriding the method as final
+			var klass = new TestClass ("java.code.IMyInterface", "java.code.MyClass");
+			klass.AddImplementedInterface ("java.code.IMyInterface");
+			klass.Methods.Add (new TestMethod (iface, "DoSomething").SetFinal ());
+
+			iface.Validate (options, new GenericParameterDefinitionList (), generator.Context);
+			klass.Validate (options, new GenericParameterDefinitionList (), generator.Context);
+
+			klass.FixupMethodOverrides (options);
+
+			generator.Context.ContextTypes.Push (klass);
+			generator.WriteClass (klass, string.Empty, new GenerationInfo (string.Empty, string.Empty, "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			// The method should not be marked as 'virtual sealed'
+			Assert.False (writer.ToString ().Contains ("virtual sealed"));
 		}
 	}
 }

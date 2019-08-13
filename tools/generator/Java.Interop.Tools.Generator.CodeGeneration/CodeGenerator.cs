@@ -1360,11 +1360,17 @@ namespace MonoDroid.Generation
 
 			var is_explicit = opt.SupportDefaultInterfaceMethods && type is InterfaceGen && method.OverriddenInterfaceMethod != null;
 			var virt_ov = is_explicit ? string.Empty : method.IsOverride ? (opt.SupportDefaultInterfaceMethods && method.OverriddenInterfaceMethod != null ? " virtual" : " override") : method.IsVirtual ? " virtual" : string.Empty;
+			string seal = method.IsOverride && method.IsFinal ? " sealed" : null;
+
+			// When using DIM, don't generate "virtual sealed" methods, remove both modifiers instead
+			if (opt.SupportDefaultInterfaceMethods && method.OverriddenInterfaceMethod != null && virt_ov == " virtual" && seal == " sealed") {
+				virt_ov = string.Empty;
+				seal = string.Empty;
+			}
 
 			if ((string.IsNullOrEmpty (virt_ov) || virt_ov == " virtual") && type.RequiresNew (method.AdjustedName)) {
 				virt_ov = " new" + virt_ov;
 			}
-			string seal = method.IsOverride && method.IsFinal ? " sealed" : null;
 			string ret = opt.GetOutputName (method.RetVal.FullName);
 			WriteMethodIdField (method, indent);
 			if (method.DeclaringType.IsGeneratable)
