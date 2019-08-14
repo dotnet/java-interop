@@ -20,7 +20,7 @@ public partial interface IMyInterface : IJavaObject, IJavaPeerable {
 #pragma warning restore 0169
 
 	// Metadata.xml XPath method reference: path="/api/package[@name='java.code']/interface[@name='IMyInterface']/method[@name='DoSomething' and count(parameter)=0]"
-	[Register ("DoSomething", "()V", "GetDoSomethingHandler")]
+	[Register ("DoSomething", "()V", "GetDoSomethingHandler:java.code.IMyInterface, MyAssembly")]
 	 virtual unsafe void DoSomething ()
 	{
 		const string __id = "DoSomething.()V";

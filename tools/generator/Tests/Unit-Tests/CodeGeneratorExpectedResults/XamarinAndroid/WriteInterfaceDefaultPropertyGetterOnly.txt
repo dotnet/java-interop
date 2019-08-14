@@ -22,7 +22,7 @@ public partial interface IMyInterface : IJavaObject {
 	static IntPtr id_get_Value;
 	 virtual unsafe int Value {
 		// Metadata.xml XPath method reference: path="/api/package[@name='java.code']/interface[@name='IMyInterface']/method[@name='get_Value' and count(parameter)=0]"
-		[Register ("get_Value", "()I", "Getget_ValueHandler")]
+		[Register ("get_Value", "()I", "Getget_ValueHandler:java.code.IMyInterface, MyAssembly")]
 		get {
 			if (id_get_Value == IntPtr.Zero)
 				id_get_Value = JNIEnv.GetMethodID (class_ref, "get_Value", "()I");

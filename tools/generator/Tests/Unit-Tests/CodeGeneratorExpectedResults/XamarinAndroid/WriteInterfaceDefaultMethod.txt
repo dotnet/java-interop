@@ -21,7 +21,7 @@ public partial interface IMyInterface : IJavaObject {
 
 	static IntPtr id_DoSomething;
 	// Metadata.xml XPath method reference: path="/api/package[@name='java.code']/interface[@name='IMyInterface']/method[@name='DoSomething' and count(parameter)=0]"
-	[Register ("DoSomething", "()V", "GetDoSomethingHandler")]
+	[Register ("DoSomething", "()V", "GetDoSomethingHandler:java.code.IMyInterface, MyAssembly")]
 	 virtual unsafe void DoSomething ()
 	{
 		if (id_DoSomething == IntPtr.Zero)

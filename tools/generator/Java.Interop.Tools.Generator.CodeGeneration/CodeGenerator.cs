@@ -1380,7 +1380,7 @@ namespace MonoDroid.Generation
 			if (method.IsReturnEnumified)
 				writer.WriteLine ("{0}[return:global::Android.Runtime.GeneratedEnum]", indent);
 			writer.WriteLine ("{0}[Register (\"{1}\", \"{2}\", \"{3}\"{4})]",
-			    indent, method.JavaName, method.JniSignature, method.IsVirtual ? method.ConnectorName : String.Empty, method.AdditionalAttributeString ());
+			    indent, method.JavaName, method.JniSignature, method.IsVirtual ? method.GetConnectorNameFull (opt) : String.Empty, method.AdditionalAttributeString ());
 			WriteMethodCustomAttributes (method, indent);
 
 			var visibility = type is InterfaceGen && !method.IsStatic ? string.Empty : method.Visibility;
@@ -1490,7 +1490,7 @@ namespace MonoDroid.Generation
 			writer.WriteLine ("{0}{1}{2} unsafe {3} {4} {{", indent, visibility, virtual_override, opt.GetOutputName (property.Getter.ReturnType), decl_name);
 			if (gen.IsGeneratable)
 				writer.WriteLine ("{0}\t// Metadata.xml XPath method reference: path=\"{1}/method[@name='{2}'{3}]\"", indent, gen.MetadataXPathReference, property.Getter.JavaName, property.Getter.Parameters.GetMethodXPathPredicate ());
-			writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, property.Getter.JavaName, property.Getter.JniSignature, property.Getter.ConnectorName, property.Getter.AdditionalAttributeString ());
+			writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, property.Getter.JavaName, property.Getter.JniSignature, property.Getter.GetConnectorNameFull (opt), property.Getter.AdditionalAttributeString ());
 			writer.WriteLine ("{0}\tget {{", indent);
 			WriteMethodBody (property.Getter, indent + "\t\t", gen);
 			writer.WriteLine ("{0}\t}}", indent);
@@ -1498,7 +1498,7 @@ namespace MonoDroid.Generation
 				if (gen.IsGeneratable)
 					writer.WriteLine ("{0}\t// Metadata.xml XPath method reference: path=\"{1}/method[@name='{2}'{3}]\"", indent, gen.MetadataXPathReference, property.Setter.JavaName, property.Setter.Parameters.GetMethodXPathPredicate ());
 				WriteMethodCustomAttributes (property.Setter, indent);
-				writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, property.Setter.JavaName, property.Setter.JniSignature, property.Setter.ConnectorName, property.Setter.AdditionalAttributeString ());
+				writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, property.Setter.JavaName, property.Setter.JniSignature, property.Setter.GetConnectorNameFull (opt), property.Setter.AdditionalAttributeString ());
 				writer.WriteLine ("{0}\tset {{", indent);
 				string pname = property.Setter.Parameters [0].Name;
 				property.Setter.Parameters [0].Name = "value";
@@ -1548,12 +1548,12 @@ namespace MonoDroid.Generation
 			if (property.Getter.IsReturnEnumified)
 				writer.WriteLine ("{0}[return:global::Android.Runtime.GeneratedEnum]", indent);
 			WriteMethodCustomAttributes (property.Getter, indent);
-			writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})] get;", indent, property.Getter.JavaName, property.Getter.JniSignature, property.Getter.ConnectorName, property.Getter.AdditionalAttributeString ());
+			writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})] get;", indent, property.Getter.JavaName, property.Getter.JniSignature, property.Getter.GetConnectorNameFull (opt), property.Getter.AdditionalAttributeString ());
 			if (property.Setter != null) {
 				if (gen.IsGeneratable)
 					writer.WriteLine ("{0}\t// Metadata.xml XPath method reference: path=\"{1}/method[@name='{2}'{3}]\"", indent, gen.MetadataXPathReference, property.Setter.JavaName, property.Setter.Parameters.GetMethodXPathPredicate ());
 				WriteMethodCustomAttributes (property.Setter, indent);
-				writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})] set;", indent, property.Setter.JavaName, property.Setter.JniSignature, property.Setter.ConnectorName, property.Setter.AdditionalAttributeString ());
+				writer.WriteLine ("{0}\t[Register (\"{1}\", \"{2}\", \"{3}\"{4})] set;", indent, property.Setter.JavaName, property.Setter.JniSignature, property.Setter.GetConnectorNameFull (opt), property.Setter.AdditionalAttributeString ());
 			}
 			writer.WriteLine ("{0}}}", indent);
 			writer.WriteLine ();

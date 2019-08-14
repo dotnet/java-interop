@@ -29,6 +29,7 @@ namespace generatortests
 		{
 			var options = base.CreateOptions ();
 
+			options.AssemblyName = "MyAssembly";
 			options.SupportDefaultInterfaceMethods = true;
 
 			return options;
