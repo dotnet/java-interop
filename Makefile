@@ -179,8 +179,8 @@ endef
 
 run-test-jnimarshal: bin/Test$(CONFIGURATION)/Java.Interop.Export-Tests.dll bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB) $(JRE_DLL_CONFIG)
 	mkdir -p test-jni-output
-	$(call run-jnimarshalmethod-gen,"$<",-f -o test-jni-output)
-	test -f test-jni-output/$(notdir $<) || { echo "jnimarshalmethod-gen did not create the assembly in the test-jni-output directory"; exit 1; }
+	$(call run-jnimarshalmethod-gen,"$<",-f -o test-jni-output --keeptemp)
+	(test -f test-jni-output/$(notdir $<) && test -f test-jni-output/Java.Interop.Export-Tests-JniMarshalMethods.dll) || { echo "jnimarshalmethod-gen did not create the expected assemblies in the test-jni-output directory"; exit 1; }
 	$(call run-jnimarshalmethod-gen,"$<")
 	$(call RUN_TEST,$<)
 
