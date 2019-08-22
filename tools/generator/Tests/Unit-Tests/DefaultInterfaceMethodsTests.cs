@@ -104,6 +104,25 @@ namespace generatortests
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultPropertyGetterOnly)), writer.ToString ().NormalizeLineEndings ());
 		}
 
+
+		[Test]
+		public void WriteDefaultInterfaceMethodInvoker ()
+		{
+			// Create an interface with a default method
+			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+
+			iface.Methods.Add (new TestMethod (iface, "DoDeclaration"));
+			iface.Methods.Add (new TestMethod (iface, "DoDefault").SetDefaultInterfaceMethod ());
+
+			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+
+			generator.Context.ContextTypes.Push (iface);
+			generator.WriteInterfaceInvoker (iface, string.Empty);
+			generator.Context.ContextTypes.Pop ();
+
+			Assert.AreEqual (GetTargetedExpected (nameof (WriteDefaultInterfaceMethodInvoker)), writer.ToString ().NormalizeLineEndings ());
+		}
+
 		[Test]
 		public void WriteSealedOverriddenDefaultMethod ()
 		{

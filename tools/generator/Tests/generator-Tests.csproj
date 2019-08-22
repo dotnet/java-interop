@@ -220,6 +220,9 @@
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteConstSugarInterfaceFields.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteDefaultInterfaceMethodInvoker.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteFieldConstant.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -335,6 +338,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XAJavaInterop1\WriteCtorWithStringOverload.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XAJavaInterop1\WriteDefaultInterfaceMethodInvoker.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XAJavaInterop1\WriteFieldConstant.txt">
