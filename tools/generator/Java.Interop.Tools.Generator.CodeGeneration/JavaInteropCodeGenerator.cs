@@ -157,12 +157,12 @@ namespace MonoDroid.Generation {
 				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
 						invokeType,
 						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if (method.IsFinal || method.IsInterfaceDefaultMethod) {
+			} else if (method.IsFinal) {
 				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, {1}this{2});",
 						invokeType,
 						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if (method.IsVirtual && !method.IsAbstract) {
+			} else if ((method.IsVirtual && !method.IsAbstract) || method.IsInterfaceDefaultMethod) {
 				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, {1}this{2});",
 						invokeType,
 						castToPeerable,
