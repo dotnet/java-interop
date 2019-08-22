@@ -556,15 +556,6 @@
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteProperty.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XamarinAndroid\WriteInterfaceDefaultMethod.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XamarinAndroid\WriteInterfaceDefaultProperty.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XamarinAndroid\WriteInterfaceDefaultPropertyGetterOnly.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\XamarinAndroid\WriteMethodAbstractWithVoidReturn.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

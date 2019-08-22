@@ -17,12 +17,6 @@ namespace generatortests
 		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 	}
 
-	[TestFixture]
-	class XamarinAndroidDefaultInterfaceMethodsTests : DefaultInterfaceMethodsTests
-	{
-		protected override CodeGenerationTarget Target => CodeGenerationTarget.XamarinAndroid;
-	}
-
 	abstract class DefaultInterfaceMethodsTests : CodeGeneratorTestBase
 	{
 		protected override CodeGenerationOptions CreateOptions ()
