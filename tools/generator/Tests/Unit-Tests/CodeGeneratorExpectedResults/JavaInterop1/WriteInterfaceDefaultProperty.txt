@@ -41,7 +41,7 @@ public partial interface IMyInterface : IJavaObject, IJavaPeerable {
 		get {
 			const string __id = "get_Value.()I";
 			try {
-				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, (IJavaPeerable) this, null);
+				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, null);
 				return __rm;
 			} finally {
 			}
@@ -53,7 +53,7 @@ public partial interface IMyInterface : IJavaObject, IJavaPeerable {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (value);
-				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, (IJavaPeerable) this, __args);
+				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 			}
 		}

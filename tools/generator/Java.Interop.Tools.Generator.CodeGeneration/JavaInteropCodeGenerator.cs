@@ -151,26 +151,21 @@ namespace MonoDroid.Generation {
 				writer.Write ("var __rm = ");
 			}
 
-			var castToPeerable = type is InterfaceGen ? "(IJavaPeerable) " : string.Empty;
-
 			if (method.IsStatic) {
 				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
 						invokeType,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			} else if (method.IsFinal) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, {1}this{2});",
+				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, this{1});",
 						invokeType,
-						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			} else if ((method.IsVirtual && !method.IsAbstract) || method.IsInterfaceDefaultMethod) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, {1}this{2});",
+				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, this{1});",
 						invokeType,
-						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			} else {
-				writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, {1}this{2});",
+				writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, this{1});",
 						invokeType,
-						castToPeerable,
 						method.Parameters.GetCallArgs (opt, invoker: false));
 			}
 
