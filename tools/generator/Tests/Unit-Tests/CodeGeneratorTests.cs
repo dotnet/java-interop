@@ -163,7 +163,7 @@ namespace generatortests
 			var @class = SupportTypeBuilder.CreateClass ("java.code.MyClass", options);
 
 			generator.Context.ContextTypes.Push (@class);
-			generator.WriteClassProperties (@class, string.Empty);
+			generator.WriteImplementedProperties (@class.Properties, string.Empty, @class.IsFinal, @class);
 			generator.Context.ContextTypes.Pop ();
 
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteClassProperties)), writer.ToString ().NormalizeLineEndings ());

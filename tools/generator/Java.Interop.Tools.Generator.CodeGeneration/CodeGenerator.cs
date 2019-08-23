@@ -310,25 +310,7 @@ namespace MonoDroid.Generation
 			}
 		}
 
-		public void WriteClassProperties (ClassGen @class, string indent)
-		{
-			foreach (Property prop in @class.Properties) {
-				bool get_virt = prop.Getter.IsVirtual;
-				bool set_virt = prop.Setter == null ? false : prop.Setter.IsVirtual;
-				prop.Getter.IsVirtual = !@class.IsFinal && get_virt;
-				if (prop.Setter != null)
-					prop.Setter.IsVirtual = !@class.IsFinal && set_virt;
-				if (prop.Getter.IsAbstract)
-					WritePropertyAbstractDeclaration (prop, indent, @class);
-				else
-					WriteProperty (prop, @class, indent);
-				prop.Getter.IsVirtual = get_virt;
-				if (prop.Setter != null)
-					prop.Setter.IsVirtual = set_virt;
-			}
-		}
-
-		protected void WriteImplementedProperties (IEnumerable<Property> targetProperties, string indent, bool isFinal, GenBase gen)
+		public void WriteImplementedProperties (IEnumerable<Property> targetProperties, string indent, bool isFinal, GenBase gen)
 		{
 			foreach (var prop in targetProperties) {
 				bool get_virt = prop.Getter.IsVirtual;
@@ -345,7 +327,6 @@ namespace MonoDroid.Generation
 					prop.Setter.IsVirtual = set_virt;
 			}
 		}
-
 
 		public void WriteClassPropertyInvokers (ClassGen @class, IEnumerable<Property> properties, string indent, HashSet<string> members)
 		{
