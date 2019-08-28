@@ -1,12 +1,12 @@
-[submodule "lib/mono.linq.expressions"]
-	path = lib/mono.linq.expressions
-	url = https://github.com/jonpryor/mono.linq.expressions.git
-	branch = master
 [submodule "external/cecil"]
-	path = external/cecil
-	url = https://github.com/mono/cecil.git
-	branch = master
+    path = external/cecil
+    url = https://github.com/mono/cecil.git
+    branch = master
 [submodule "external/xamarin-android-tools"]
-	path = external/xamarin-android-tools
-	url = https://github.com/xamarin/xamarin-android-tools.git
-	branch = master
+    path = external/xamarin-android-tools
+    url = https://github.com/xamarin/xamarin-android-tools.git
+    branch = d16-4
+[submodule "lib/mono.linq.expressions"]
+    path = lib/mono.linq.expressions
+    url = https://github.com/jonpryor/mono.linq.expressions.git
+    branch = master
