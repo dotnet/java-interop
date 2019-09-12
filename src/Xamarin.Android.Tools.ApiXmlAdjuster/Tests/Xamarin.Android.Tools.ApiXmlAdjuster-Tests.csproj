@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JavaApiTest.cs" />
+    <Compile Include="StripNonBindablesTests.cs" />
     <Compile Include="TypeResolverTest.cs" />
     <Compile Include="JavaApiTestHelper.cs" />
     <Compile Include="GenericInheritanceMappingTest.cs" />
