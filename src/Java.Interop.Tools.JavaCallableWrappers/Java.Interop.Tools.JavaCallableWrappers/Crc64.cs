@@ -174,7 +174,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 		};
 
 		ulong crc = ulong.MaxValue;
-		ulong length;
+		ulong length = 0;
 
 		public override void Initialize () { }
 
