@@ -105,7 +105,7 @@ namespace MonoDroid.Generation
 
 		public string ConnectorName => $"Get{Name}{IDSignature}Handler";
 
-		public string EscapedCallbackName => $"cb_{JavaName}{IDSignature}".Replace ("-", "_x45_").Replace ("$", "_x36_");
+		public string EscapedCallbackName => TypeNameUtilities.CreateValidIdentifier ($"cb_{JavaName}{IDSignature}", true);
 
 		public string EscapedIdName => "id_" + JavaName.Replace ("<", "_x60_").Replace (">", "_x62_") + IDSignature;
 
