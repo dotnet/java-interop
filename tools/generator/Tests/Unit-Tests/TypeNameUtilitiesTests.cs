@@ -19,18 +19,5 @@ namespace generatortests
 			Assert.AreEqual ("byte_var", TypeNameUtilities.MangleName ("byte_var"));
 			Assert.AreEqual ("foo", TypeNameUtilities.MangleName ("foo"));
 		}
-
-		[Test]
-		public void CreateValidIdentifier_Simple ()
-		{
-			Assert.AreEqual ("my_identifier_test", TypeNameUtilities.CreateValidIdentifier ("my-identifier$test"));
-		}
-
-		[Test]
-		public void CreateValidIdentifier_Encoded ()
-		{
-			Assert.AreEqual ("my_x45_identifier_x36_test", TypeNameUtilities.CreateValidIdentifier ("my-identifier$test", true));
-			Assert.AreEqual ("myidentifier_x55357__x56842_test", TypeNameUtilities.CreateValidIdentifier ("myidentifier😊test", true));
-		}
 	}
 }
