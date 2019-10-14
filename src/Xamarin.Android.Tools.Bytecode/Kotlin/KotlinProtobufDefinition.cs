@@ -7,7 +7,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 {
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class StringTable : global::ProtoBuf.IExtensible
+	partial class StringTable : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -19,7 +19,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class QualifiedNameTable : global::ProtoBuf.IExtensible
+	partial class QualifiedNameTable : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -74,7 +74,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Annotation : global::ProtoBuf.IExtensible
+	partial class Annotation : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -234,7 +234,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Type : global::ProtoBuf.IExtensible
+	partial class Type : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -390,7 +390,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class TypeParameter : global::ProtoBuf.IExtensible
+	partial class TypeParameter : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -442,7 +442,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Class : global::ProtoBuf.IExtensible
+	partial class Class : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -531,7 +531,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Package : global::ProtoBuf.IExtensible
+	partial class Package : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -555,7 +555,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class TypeTable : global::ProtoBuf.IExtensible
+	partial class TypeTable : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -577,7 +577,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Constructor : global::ProtoBuf.IExtensible
+	partial class Constructor : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -602,7 +602,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Function : global::ProtoBuf.IExtensible
+	partial class Function : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -673,7 +673,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Property : global::ProtoBuf.IExtensible
+	partial class Property : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -756,7 +756,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class ValueParameter : global::ProtoBuf.IExtensible
+	partial class ValueParameter : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -802,7 +802,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class TypeAlias : global::ProtoBuf.IExtensible
+	partial class TypeAlias : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -857,7 +857,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class EnumEntry : global::ProtoBuf.IExtensible
+	partial class EnumEntry : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -875,7 +875,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class VersionRequirement : global::ProtoBuf.IExtensible
+	partial class VersionRequirement : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -962,7 +962,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class VersionRequirementTable : global::ProtoBuf.IExtensible
+	partial class VersionRequirementTable : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -974,7 +974,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class PackageFragment : global::ProtoBuf.IExtensible
+	partial class PackageFragment : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -995,7 +995,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Contract : global::ProtoBuf.IExtensible
+	partial class Contract : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1007,7 +1007,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Effect : global::ProtoBuf.IExtensible
+	partial class Effect : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1064,7 +1064,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class Expression : global::ProtoBuf.IExtensible
+	partial class Expression : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1131,7 +1131,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class StringTableTypes : global::ProtoBuf.IExtensible
+	partial class StringTableTypes : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1211,7 +1211,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class JvmMethodSignature : global::ProtoBuf.IExtensible
+	partial class JvmMethodSignature : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1238,7 +1238,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class JvmFieldSignature : global::ProtoBuf.IExtensible
+	partial class JvmFieldSignature : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1265,7 +1265,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public partial class JvmPropertySignature : global::ProtoBuf.IExtensible
+	partial class JvmPropertySignature : global::ProtoBuf.IExtensible
 	{
 		private global::ProtoBuf.IExtension __pbn__extensionData;
 		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject (bool createIfMissing)
@@ -1286,7 +1286,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public enum Modality
+	enum Modality
 	{
 		[global::ProtoBuf.ProtoEnum (Name = @"FINAL")]
 		Final = 0,
@@ -1299,7 +1299,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public enum Visibility
+	enum Visibility
 	{
 		[global::ProtoBuf.ProtoEnum (Name = @"INTERNAL")]
 		Internal = 0,
@@ -1316,7 +1316,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 	}
 
 	[global::ProtoBuf.ProtoContract ()]
-	public enum MemberKind
+	enum MemberKind
 	{
 		[global::ProtoBuf.ProtoEnum (Name = @"DECLARATION")]
 		Declaration = 0,
@@ -1328,7 +1328,7 @@ namespace org.jetbrains.kotlin.metadata.jvm
 		Synthesized = 3,
 	}
 
-	public static class Extensions
+	static class Extensions
 	{
 		//public static bool GetSkipInComparison (this global::Google.Protobuf.Reflection.FieldOptions obj)
 		//    => obj == null ? default : global::ProtoBuf.Extensible.GetValue<bool> (obj, 50000);

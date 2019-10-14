@@ -25,7 +25,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int [] VersionRequirements { get; set; }
 		public KotlinVersionRequirementTable VersionRequirementTable { get; set; }
 
-		public static KotlinClass FromProtobuf (Class c, JvmNameResolver resolver)
+		internal static KotlinClass FromProtobuf (Class c, JvmNameResolver resolver)
 		{
 			return new KotlinClass {
 				CompanionObjectName = c.CompanionObjectName > 0 ? resolver.GetString (c.CompanionObjectName) : null,
@@ -54,7 +54,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public List<KotlinValueParameter> ValueParameters { get; set; }
 		public int [] VersionRequirements { get; set; }
 
-		public static KotlinConstructor FromProtobuf (Constructor c, JvmNameResolver resolver)
+		internal static KotlinConstructor FromProtobuf (Constructor c, JvmNameResolver resolver)
 		{
 			if (c is null)
 				return null;
@@ -72,7 +72,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int Id { get; set; }
 		public List<KotlinAnnotationArgument> Arguments { get; set; }
 
-		public static KotlinAnnotation FromProtobuf (org.jetbrains.kotlin.metadata.jvm.Annotation a, JvmNameResolver resolver)
+		internal static KotlinAnnotation FromProtobuf (org.jetbrains.kotlin.metadata.jvm.Annotation a, JvmNameResolver resolver)
 		{
 			if (a is null)
 				return null;
@@ -89,7 +89,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int NameId { get; set; }
 		public KotlinAnnotationArgumentValue Value { get; set; }
 
-		public static KotlinAnnotationArgument FromProtobuf (org.jetbrains.kotlin.metadata.jvm.Annotation.Argument a, JvmNameResolver resolver)
+		internal static KotlinAnnotationArgument FromProtobuf (org.jetbrains.kotlin.metadata.jvm.Annotation.Argument a, JvmNameResolver resolver)
 		{
 			if (a is null)
 				return null;
@@ -115,7 +115,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int ArrayDimensionCount { get; set; }
 		public int Flags { get; set; }
 
-		public static KotlinAnnotationArgumentValue FromProtobuf (org.jetbrains.kotlin.metadata.jvm.Annotation.Argument.Value value, JvmNameResolver resolver)
+		internal static KotlinAnnotationArgumentValue FromProtobuf (org.jetbrains.kotlin.metadata.jvm.Annotation.Argument.Value value, JvmNameResolver resolver)
 		{
 			if (value is null)
 				return null;
@@ -143,7 +143,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public KotlinExpression ConclusionOfConditionalEffect { get; set; }
 		public KotlinInvocationKind Kind { get; set; }
 
-		public static KotlinEffect FromProtobuf (Effect ef, JvmNameResolver resolver)
+		internal static KotlinEffect FromProtobuf (Effect ef, JvmNameResolver resolver)
 		{
 			if (ef is null)
 				return null;
@@ -167,7 +167,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public List<KotlinExpression> AndArguments { get; set; }
 		public List<KotlinExpression> OrArguments { get; set; }
 
-		public static KotlinExpression FromProtobuf (Expression exp, JvmNameResolver resolver)
+		internal static KotlinExpression FromProtobuf (Expression exp, JvmNameResolver resolver)
 		{
 			if (exp is null)
 				return null;
@@ -198,7 +198,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int [] VersionRequirements { get; set; }
 		public KotlinContract Contract { get; set; }
 
-		public static KotlinFunction FromProtobuf (Function f, JvmNameResolver resolver)
+		internal static KotlinFunction FromProtobuf (Function f, JvmNameResolver resolver)
 		{
 			if (f is null)
 				return null;
@@ -221,7 +221,7 @@ namespace Xamarin.Android.Tools.Bytecode
 	{
 		public List<KotlinEffect> Effects { get; set; }
 
-		public static KotlinContract FromProtobuf (Contract c, JvmNameResolver resolver)
+		internal static KotlinContract FromProtobuf (Contract c, JvmNameResolver resolver)
 		{
 			return new KotlinContract {
 				Effects = c.Effects?.Select (tp => KotlinEffect.FromProtobuf (tp, resolver)).ToList ()
@@ -243,7 +243,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int SetterFlags { get; set; }
 		public int [] VersionRequirements { get; set; }
 
-		public static KotlinProperty FromProtobuf (Property p, JvmNameResolver resolver)
+		internal static KotlinProperty FromProtobuf (Property p, JvmNameResolver resolver)
 		{
 			if (p is null)
 				return null;
@@ -281,7 +281,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int AbbreviatedTypeId { get; set; }
 		public int Flags { get; set; }
 
-		public static KotlinType FromProtobuf (Type t, JvmNameResolver resolver)
+		internal static KotlinType FromProtobuf (Type t, JvmNameResolver resolver)
 		{
 			if (t is null)
 				return null;
@@ -315,7 +315,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public List<Annotation> Annotations { get; set; }
 		public int [] VersionRequirements { get; set; }
 
-		public static KotlinTypeAlias FromProtobuf (TypeAlias ta, JvmNameResolver resolver)
+		internal static KotlinTypeAlias FromProtobuf (TypeAlias ta, JvmNameResolver resolver)
 		{
 			if (ta is null)
 				return null;
@@ -339,7 +339,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public KotlinType Type { get; set; }
 		public int TypeId { get; set; }
 
-		public static KotlinTypeArgument FromProtobuf (Type.Argument ta, JvmNameResolver resolver)
+		internal static KotlinTypeArgument FromProtobuf (Type.Argument ta, JvmNameResolver resolver)
 		{
 			if (ta is null)
 				return null;
@@ -361,7 +361,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public List<KotlinType> UpperBounds { get; set; }
 		public int [] UpperBoundsIds { get; set; }
 
-		public static KotlinTypeParameter FromProtobuf (TypeParameter vp, JvmNameResolver resolver)
+		internal static KotlinTypeParameter FromProtobuf (TypeParameter vp, JvmNameResolver resolver)
 		{
 			if (vp is null)
 				return null;
@@ -382,7 +382,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public List<KotlinType> Types { get; set; }
 		public int FirstNullable { get; set; }
 
-		public static KotlinTypeTable FromProtobuf (TypeTable ta, JvmNameResolver resolver)
+		internal static KotlinTypeTable FromProtobuf (TypeTable ta, JvmNameResolver resolver)
 		{
 			if (ta is null)
 				return null;
@@ -403,7 +403,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public int Message { get; set; }
 		public KotlinVersionKind VersionKind { get; set; }
 
-		public static KotlinVersionRequirement FromProtobuf (VersionRequirement vr, JvmNameResolver resolver)
+		internal static KotlinVersionRequirement FromProtobuf (VersionRequirement vr, JvmNameResolver resolver)
 		{
 			if (vr is null)
 				return null;
@@ -423,7 +423,7 @@ namespace Xamarin.Android.Tools.Bytecode
 	{
 		public List<KotlinVersionRequirement> Requirements { get; set; }
 
-		public static KotlinVersionRequirementTable FromProtobuf (VersionRequirementTable vrt, JvmNameResolver resolver)
+		internal static KotlinVersionRequirementTable FromProtobuf (VersionRequirementTable vrt, JvmNameResolver resolver)
 		{
 			if (vrt is null)
 				return null;
@@ -443,7 +443,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		public KotlinType VarArgElementType { get; set; }
 		public int VarArgElementTypeId { get; set; }
 
-		public static KotlinValueParameter FromProtobuf (ValueParameter vp, JvmNameResolver resolver)
+		internal static KotlinValueParameter FromProtobuf (ValueParameter vp, JvmNameResolver resolver)
 		{
 			if (vp is null)
 				return null;

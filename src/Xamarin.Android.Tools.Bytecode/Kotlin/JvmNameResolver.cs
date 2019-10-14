@@ -5,7 +5,7 @@ using org.jetbrains.kotlin.metadata.jvm;
 namespace Xamarin.Android.Tools.Bytecode
 {
 	// https://github.com/JetBrains/kotlin/blob/master/core/metadata.jvm/src/org/jetbrains/kotlin/metadata/jvm/deserialization/JvmNameResolver.kt
-	public class JvmNameResolver
+	class JvmNameResolver
 	{
 		readonly List<StringTableTypes.Record> records = new List<StringTableTypes.Record> ();
 		readonly List<string> strings;

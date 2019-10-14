@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Xamarin.Android.Tools.Bytecode.Kotlin
 {
-	public static class KotlinFixups
+	static class KotlinFixups
 	{
 		public static void Fixup (IList<ClassFile> classes)
 		{
 			foreach (var c in classes) {
 				// See if this is a Kotlin class
 				var attr = c.Attributes.OfType<RuntimeVisibleAnnotationsAttribute> ().FirstOrDefault ();
-				var kotlin = attr?.Annotations.FirstOrDefault (a => a.Type == "Lkotlin/Metadata;");
+				var kotlin = attr?.Annotations.SingleOrDefault (a => a.Type == "Lkotlin/Metadata;");
 
 				if (kotlin is null)
 					continue;
