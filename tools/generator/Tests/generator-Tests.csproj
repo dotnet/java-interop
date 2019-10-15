@@ -667,6 +667,9 @@
     <Content Include="expected\AccessModifiers\Xamarin.Test.TestClass.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="expected\InterfaceMethodsConflict\Xamarin.Test.FieldMethodNameColisionClass.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="expected\**\*">

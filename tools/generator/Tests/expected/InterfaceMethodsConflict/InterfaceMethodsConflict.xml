@@ -28,6 +28,37 @@
 		<method abstract="false" deprecated="not deprecated" final="false" name="irrelevant" native="false" return="void" static="false" synchronized="false" visibility="public">
 		</method>
 	  </class>
+	  <class abstract="false" deprecated="not deprecated" extends="java.lang.Object" extends-generic-aware="java.lang.Object"
+	        final="false" name="FieldMethodNameColisionClass" static="false" visibility="public">
+	    <field deprecated="not deprecated" final="true" name="ABC" static="true" transient="false" type="boolean" type-generic-aware="boolean" value="true" visibility="public" volatile="false">
+	    </field>
+	    <field deprecated="not deprecated" final="false" name="item" static="false" transient="false" type="int" type-generic-aware="int" visibility="public" volatile="false">
+	    </field>
+	    <field deprecated="not deprecated" final="false" name="name" static="false" transient="false" type="java.lang.String" type-generic-aware="java.lang.String" visibility="public" volatile="false">
+	    </field>
+	     <method abstract="false" deprecated="not deprecated" final="false" name="getNumber" native="false" return="int" static="false" synchronized="false" visibility="public">
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="setNumber" native="false" return="void" jni-return="V" static="false" synchronized="false" synthetic="false" visibility="public">
+	      <parameter name="item" type="int">
+	      </parameter>
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="getYourAge" native="false" return="int" static="false" synchronized="false" visibility="public">
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="setAge" native="false" return="void" jni-return="V" static="false" synchronized="false" synthetic="false" visibility="public">
+	      <parameter name="age" type="int">
+	      </parameter>
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="getAbc" native="false" return="boolean" jni-return="Z" static="false" synchronized="false" synthetic="false" visibility="public">
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="getItem" native="false" return="int" static="false" synchronized="false" visibility="public">
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="setItem" native="false" return="void" jni-return="V" static="false" synchronized="false" synthetic="false" visibility="public">
+	      <parameter name="item" type="int">
+	      </parameter>
+	    </method>
+	    <method abstract="false" deprecated="not deprecated" final="false" name="getName" native="false" return="int" static="false" synchronized="false" visibility="public">
+	    </method>
+	  </class>
 	</package>
 </api>
 

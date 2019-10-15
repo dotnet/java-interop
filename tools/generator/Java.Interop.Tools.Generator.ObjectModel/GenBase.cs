@@ -101,6 +101,10 @@ namespace MonoDroid.Generation
 						// ContainsProperty() check is required here to not exclude such methods
 						// that are known to be property. AbstractSelectionKey.IsValid is an example.
 						unmatched.Add (m);
+					else if (Fields.Any (f => f.Name.Equals (prop_name, StringComparison.OrdinalIgnoreCase)))
+						// This is to filter out those method where there is already a field with same name
+						// i.e.: Item (field) and GetItem (method)
+						unmatched.Add (m);
 					else {
 						if (prop_hash.ContainsKey (prop_name)) {
 							if (m.Name.StartsWith ("Get"))
