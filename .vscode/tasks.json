@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build Java.Interop Tasks",
+            "label": "Build Java.Interop",
             "type": "shell",
             "command": "msbuild Java.Interop.sln /restore /t:Build",
             "group": {
@@ -16,7 +16,7 @@
             ]
         },
         {
-            "label": "Clean Java.Interop Tasks",
+            "label": "Clean Java.Interop",
             "type": "shell",
             "command": "msbuild Java.Interop.sln /restore /t:Clean",
             "group": {
@@ -28,7 +28,7 @@
             ]
         },
         {
-            "label": "Build Generator Tasks",
+            "label": "Build Generator",
             "type": "shell",
             "command": "msbuild tools/generator/generator.sln /restore /t:Build",
             "group": {
@@ -40,7 +40,7 @@
             ]
         },
         {
-            "label": "Clean Java.Interop Tasks",
+            "label": "Clean Generator",
             "type": "shell",
             "command": "msbuild tools/generator/generator.sln /restore /t:Clean",
             "group": {
