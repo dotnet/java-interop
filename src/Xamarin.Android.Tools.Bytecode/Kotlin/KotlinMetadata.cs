@@ -54,33 +54,8 @@ namespace Xamarin.Android.Tools.Bytecode
 			if (Kind != KotlinMetadataKind.Class)
 				return null;
 
-			var md = KotlinBitEncoding.DecodeBytes (Data1);
-
-			using (var ms = ToMemoryStream (md)) {
-
-				// The first element is the length of the string table
-				var first = ms.ReadByte ();
-
-				if (first == -1)
-					return null;
-
-				ms.Position = 0;
-
-				var size = KotlinBitEncoding.ReadRawVarint32 (ms);
-
-				using (var partial = new PartialStream (ms, ms.Position, size)) {
-
-					// Read the string table from the stream
-					var string_table = Serializer.Deserialize<org.jetbrains.kotlin.metadata.jvm.StringTableTypes> (partial);
-					var resolver = new JvmNameResolver (string_table, Data2.ToList ());
-
-					partial.MoveNext ();
-
-					// Read the metadata structure from the stream
-					var metadata = Serializer.Deserialize<org.jetbrains.kotlin.metadata.jvm.Class> (partial);
-					return KotlinClass.FromProtobuf (metadata, resolver);
-				}
-			}
+			var data = ParseStream<org.jetbrains.kotlin.metadata.jvm.Class> ();
+			return KotlinClass.FromProtobuf (data.Item1, data.Item2);
 		}
 
 		public KotlinFile AsFileMetadata ()
@@ -88,6 +63,12 @@ namespace Xamarin.Android.Tools.Bytecode
 			if (Kind != KotlinMetadataKind.File)
 				return null;
 
+			var data = ParseStream<org.jetbrains.kotlin.metadata.jvm.Package> ();
+			return KotlinFile.FromProtobuf (data.Item1, data.Item2);
+		}
+
+		Tuple<T, JvmNameResolver> ParseStream<T> ()
+		{
 			var md = KotlinBitEncoding.DecodeBytes (Data1);
 
 			using (var ms = ToMemoryStream (md)) {
@@ -111,8 +92,8 @@ namespace Xamarin.Android.Tools.Bytecode
 					partial.MoveNext ();
 
 					// Read the metadata structure from the stream
-					var metadata = Serializer.Deserialize<org.jetbrains.kotlin.metadata.jvm.Package> (partial);
-					return KotlinFile.FromProtobuf (metadata, resolver);
+					var metadata = Serializer.Deserialize<T> (partial);
+					return Tuple.Create (metadata, resolver);
 				}
 			}
 		}
