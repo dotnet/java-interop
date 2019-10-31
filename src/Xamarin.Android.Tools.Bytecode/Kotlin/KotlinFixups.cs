@@ -21,32 +21,36 @@ namespace Xamarin.Android.Tools.Bytecode
 
 				try {
 					var km = KotlinMetadata.FromAnnotation (kotlin);
+					var metadata = km.ParseMetadata ();
 
-					if (km.Kind == KotlinMetadataKind.Class) {
-						var class_metadata = km.AsClassMetadata ();
+					if (metadata is null)
+						return;
 
+					// Do fixups only valid for full classes
+					var class_metadata = (metadata as KotlinClass);
+
+					if (class_metadata != null) {
 						FixupClassVisibility (c, class_metadata);
-
-						if (class_metadata.Flags.HasFlag (KotlinClassFlags.EnumClass))
-							continue;
 
 						foreach (var con in class_metadata.Constructors)
 							FixupConstructor (FindJavaConstructor (class_metadata, con, c), con);
-
-						foreach (var met in class_metadata.Functions)
-							FixupFunction (FindJavaMethod (class_metadata, met, c), met, class_metadata);
-
-						foreach (var prop in class_metadata.Properties) {
-							var getter = FindJavaPropertyGetter (class_metadata, prop, c);
-							var setter = FindJavaPropertySetter (class_metadata, prop, c);
-
-							FixupProperty (getter, setter, prop);
-						}
-					} else {
-						// We don't have explicit support for other types of Kotlin constructs yet,
-						// so they are unlikely to work. Mark them as private so they don't get bound.
-						c.AccessFlags = ClassAccessFlags.Private;
 					}
+
+					// Do fixups valid for both classes and modules
+					// (We pass "class_metadata" even though it's sometimes null because it's
+					// used for generic type resolution if available for class types)
+					FixupJavaMethods (c.Methods);
+
+					foreach (var met in metadata.Functions)
+						FixupFunction (FindJavaMethod (class_metadata, met, c), met, class_metadata);
+
+					foreach (var prop in metadata.Properties) {
+						var getter = FindJavaPropertyGetter (class_metadata, prop, c);
+						var setter = FindJavaPropertySetter (class_metadata, prop, c);
+
+						FixupProperty (getter, setter, prop);
+					}
+
 				} catch (Exception ex) {
 					Log.Warning (0, $"class-parse: warning: Unable to parse Kotlin metadata on '{c.ThisClass.Name}': {ex}");
 				}
@@ -61,25 +65,22 @@ namespace Xamarin.Android.Tools.Bytecode
 				klass.AccessFlags = ClassAccessFlags.Private;
 				return;
 			}
+		}
 
-			// We don't have explicit support for these types of Kotlin constructs yet,
-			// so they are unlikely to work. Mark them as private so they don't get bound.
-			if (metadata.Flags.HasFlag (KotlinClassFlags.AnnotationClass) || metadata.Flags.HasFlag (KotlinClassFlags.CompanionObject) || metadata.Flags.HasFlag (KotlinClassFlags.Object)) {
-				Log.Debug ($"Kotlin: Hiding unsupported class {klass.ThisClass.Name.Value} ({metadata.Flags})");
-				klass.AccessFlags = ClassAccessFlags.Private;
+		static void FixupJavaMethods (Methods methods)
+		{
+			// We do the following method level fixups here because we can operate on all methods,
+			// not just ones that have corresponding Kotlin metadata, like FixupFunction does.
+
+			// Hide Kotlin generated methods like "add-impl" that aren't intended for end users
+			foreach (var method in methods.Where (m => m.IsPubliclyVisible && m.Name.Contains ("-impl"))) {
+				Log.Debug ($"Kotlin: Hiding implementation method {method.DeclaringType?.ThisClass.Name.Value} - {method.Name}");
+				method.AccessFlags = MethodAccessFlags.Private;
 			}
 
-			foreach (var method in klass.Methods)
-				if (method.Name.Contains ("-impl")) {
-					Log.Debug ($"Kotlin: Hiding implementation method {method.DeclaringType?.ThisClass.Name.Value} - {method.Name}");
-					method.AccessFlags = MethodAccessFlags.Private;
-				} else if (method.Name.Contains ("-deprecated")) {
-					Log.Debug ($"Kotlin: Hiding deprecated method {method.DeclaringType?.ThisClass.Name.Value} - {method.Name}");
-					method.AccessFlags = MethodAccessFlags.Private;
-				} else if (method.AccessFlags.HasFlag (MethodAccessFlags.Static) && method.GetParameters ().FirstOrDefault ()?.Name == "$this") {
-					Log.Debug ($"Kotlin: Hiding extension method {method.DeclaringType?.ThisClass.Name.Value} - {method.Name}");
-					method.AccessFlags = MethodAccessFlags.Private;
-				}
+			// Better parameter names in extension methods
+			foreach (var method in methods.Where (m => m.IsPubliclyVisible && m.AccessFlags.HasFlag (MethodAccessFlags.Static)))
+				FixupExtensionMethod (method);
 		}
 
 		static void FixupConstructor (MethodInfo method, KotlinConstructor metadata)
@@ -97,16 +98,17 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		static void FixupFunction (MethodInfo method, KotlinFunction metadata, KotlinClass kotlinClass)
 		{
-			if (method is null)
+			if (method is null || !method.IsPubliclyVisible)
 				return;
 
 			// Hide function if it isn't Public/Protected
-			if (method.IsPubliclyVisible && !metadata.Flags.IsPubliclyVisible ()) {
+			if (!metadata.Flags.IsPubliclyVisible ()) {
 				Log.Debug ($"Kotlin: Hiding internal method {method.DeclaringType?.ThisClass.Name.Value} - {metadata.GetSignature ()}");
 				method.AccessFlags = MethodAccessFlags.Private;
 				return;
 			}
 
+			// Kotlin provides actual parameter names
 			var java_parameters = method.GetFilteredParameters ();
 
 			for (var i = 0; i < java_parameters.Length; i++) {
@@ -117,6 +119,18 @@ namespace Xamarin.Android.Tools.Bytecode
 					Log.Debug ($"Kotlin: Renaming parameter {method.DeclaringType?.ThisClass.Name.Value} - {method.Name} - {java_p.Name} -> {kotlin_p.Name}");
 					java_p.Name = kotlin_p.Name;
 				}
+			}
+		}
+
+		static void FixupExtensionMethod (MethodInfo method)
+		{
+			// Kotlin "extension" methods give the first parameter an ugly name
+			// like "$this$toByteString", we change it to "obj" to be a bit nicer.
+			var param = method.GetParameters ();
+
+			if (param.Length > 0 && param [0].Name.StartsWith ("$this$")) {
+				Log.Debug ($"Kotlin: Renaming extension parameter {method.DeclaringType?.ThisClass.Name.Value} - {method.Name} - {param [0].Name} -> obj");
+				param [0].Name = "obj";
 			}
 		}
 
@@ -142,7 +156,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			}
 
 			if (setter != null) {
-				var setter_parameter = setter.GetParameters () [0];
+				var setter_parameter = setter.GetParameters ().First ();
 
 				if (setter_parameter.IsUnnamedParameter () && !metadata.SetterValueParameter.IsUnnamedParameter ()) {
 					Log.Debug ($"Kotlin: Renaming setter parameter {setter.DeclaringType?.ThisClass.Name.Value} - {setter.Name} - {setter_parameter.Name} -> {metadata.SetterValueParameter.Name}");

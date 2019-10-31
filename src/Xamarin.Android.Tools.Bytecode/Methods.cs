@@ -234,6 +234,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 				}
 			}
 		}
+
+		public override string ToString () => Name;
 	}
 
 	public sealed class TypeInfo : IEquatable<TypeInfo> {

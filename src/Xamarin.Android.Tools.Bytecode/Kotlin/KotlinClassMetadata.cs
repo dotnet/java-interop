@@ -7,24 +7,39 @@ using Type = org.jetbrains.kotlin.metadata.jvm.Type;
 
 namespace Xamarin.Android.Tools.Bytecode
 {
-	public class KotlinClass
+	public class KotlinFile
+	{
+		public List<KotlinFunction> Functions { get; set; }
+		public List<KotlinProperty> Properties { get; set; }
+		public List<KotlinTypeAlias> TypeAliases { get; set; }
+		public KotlinTypeTable TypeTable { get; set; }
+		public KotlinVersionRequirementTable VersionRequirementTable { get; set; }
+
+		internal static KotlinFile FromProtobuf (Package c, JvmNameResolver resolver)
+		{
+			return new KotlinFile {
+				Functions = c.Functions?.Select (f => KotlinFunction.FromProtobuf (f, resolver)).ToList (),
+				Properties = c.Properties?.Select (p => KotlinProperty.FromProtobuf (p, resolver)).ToList (),
+				TypeAliases = c.TypeAlias?.Select (tp => KotlinTypeAlias.FromProtobuf (tp, resolver)).ToList (),
+				TypeTable = KotlinTypeTable.FromProtobuf (c.TypeTable, resolver),
+				VersionRequirementTable = KotlinVersionRequirementTable.FromProtobuf (c.VersionRequirementTable, resolver)
+			};
+		}
+	}
+
+	public class KotlinClass : KotlinFile
 	{
 		public string CompanionObjectName { get; set; }
 		public List<KotlinConstructor> Constructors { get; set; }
 		public List<string> EnumEntries { get; set; }
 		public KotlinClassFlags Flags { get; set; }
 		public string FullyQualifiedName { get; set; }
-		public List<KotlinFunction> Functions { get; set; }
 		public List<string> NestedClassNames { get; set; } = new List<string> ();
-		public List<KotlinProperty> Properties { get; set; }
 		public List<string> SealedSubclassFullyQualifiedNames { get; set; }
 		public List<string> SuperTypeIds { get; set; }
 		public List<KotlinType> SuperTypes { get; set; }
-		public List<KotlinTypeAlias> TypeAliases { get; set; }
 		public List<KotlinTypeParameter> TypeParameters { get; set; }
-		public KotlinTypeTable TypeTable { get; set; }
 		public int [] VersionRequirements { get; set; }
-		public KotlinVersionRequirementTable VersionRequirementTable { get; set; }
 
 		internal static KotlinClass FromProtobuf (Class c, JvmNameResolver resolver)
 		{
@@ -228,6 +243,18 @@ namespace Xamarin.Android.Tools.Bytecode
 		}
 
 		public override string ToString () => Name;
+
+		public string GetFlags ()
+		{
+			var sb = new StringBuilder ();
+
+			foreach (var f in Enum.GetNames (typeof (KotlinFunctionFlags))) {
+				if (Flags.HasFlag ((KotlinFunctionFlags)Enum.Parse (typeof (KotlinFunctionFlags), f)))
+					sb.Append (f);
+			}
+
+			return sb.ToString ();
+		}
 	}
 
 	public class KotlinContract
@@ -614,13 +641,13 @@ namespace Xamarin.Android.Tools.Bytecode
 		Delegation =		0b10_00_000_0,
 		Synthesized =		0b11_00_000_0,
 
-		IsOperator =		0b_0000001_000_00_000_0,
-		IsInfix =		0b_0000010_000_00_000_0,
-		IsInline =		0b_0000100_000_00_000_0,
-		IsTailrec =		0b_0001000_000_00_000_0,
-		IsExternalFunction =	0b_0010000_000_00_000_0,
-		IsSuspend =		0b_0100000_000_00_000_0,
-		IsExpectFunction =	0b_1000000_000_00_000_0
+		IsOperator =		0b_0000001_00_00_000_0,
+		IsInfix =		0b_0000010_00_00_000_0,
+		IsInline =		0b_0000100_00_00_000_0,
+		IsTailrec =		0b_0001000_00_00_000_0,
+		IsExternalFunction =	0b_0010000_00_00_000_0,
+		IsSuspend =		0b_0100000_00_00_000_0,
+		IsExpectFunction =	0b_1000000_00_00_000_0
 	}
 
 	[Flags]
