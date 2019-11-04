@@ -74,7 +74,7 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		public static bool IsPubliclyVisible (this ClassAccessFlags flags) => flags.HasFlag (ClassAccessFlags.Public) || flags.HasFlag (ClassAccessFlags.Protected);
 
-		public static bool IsPubliclyVisible (this KotlinClassFlags flags) => flags.HasFlag (KotlinClassFlags.Public) || flags.HasFlag (KotlinClassFlags.Protected);
+		public static bool IsPubliclyVisible (this KotlinClassVisibility flags) => flags == KotlinClassVisibility.Public || flags == KotlinClassVisibility.Protected;
 
 		public static bool IsPubliclyVisible (this KotlinFunctionFlags flags) => flags.HasFlag (KotlinFunctionFlags.Public) || flags.HasFlag (KotlinFunctionFlags.Protected);
 

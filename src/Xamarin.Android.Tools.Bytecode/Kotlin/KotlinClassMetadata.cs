@@ -34,12 +34,15 @@ namespace Xamarin.Android.Tools.Bytecode
 		public List<string> EnumEntries { get; set; }
 		public KotlinClassFlags Flags { get; set; }
 		public string FullyQualifiedName { get; set; }
+		public KotlinClassInheritability Inheritability { get; set; }
 		public List<string> NestedClassNames { get; set; } = new List<string> ();
+		public KotlinClassType ObjectType { get; set; }
 		public List<string> SealedSubclassFullyQualifiedNames { get; set; }
 		public List<string> SuperTypeIds { get; set; }
 		public List<KotlinType> SuperTypes { get; set; }
 		public List<KotlinTypeParameter> TypeParameters { get; set; }
 		public int [] VersionRequirements { get; set; }
+		public KotlinClassVisibility Visibility { get; set; }
 
 		internal static KotlinClass FromProtobuf (Class c, JvmNameResolver resolver)
 		{
@@ -50,7 +53,9 @@ namespace Xamarin.Android.Tools.Bytecode
 				Flags = (KotlinClassFlags)c.Flags,
 				FullyQualifiedName = c.FqName > 0 ? resolver.GetString (c.FqName) : null,
 				Functions = c.Functions?.Select (f => KotlinFunction.FromProtobuf (f, resolver)).ToList (),
+				Inheritability = (KotlinClassInheritability)((c.Flags & 0b110000) >> 4),
 				NestedClassNames = c.NestedClassNames?.Select (n => resolver.GetString (n)).ToList (),
+				ObjectType = (KotlinClassType) ((c.Flags & 0b111000000) >> 6),
 				Properties = c.Properties?.Select (p => KotlinProperty.FromProtobuf (p, resolver)).ToList (),
 				SealedSubclassFullyQualifiedNames = c.SealedSubclassFqNames?.Select (n => resolver.GetString (n)).ToList (),
 				SuperTypeIds = c.SupertypeIds?.Select (n => resolver.GetString (n)).ToList (),
@@ -59,7 +64,8 @@ namespace Xamarin.Android.Tools.Bytecode
 				TypeParameters = c.TypeParameters?.Select (tp => KotlinTypeParameter.FromProtobuf (tp, resolver)).ToList (),
 				VersionRequirements = c.VersionRequirements,
 				TypeTable = KotlinTypeTable.FromProtobuf (c.TypeTable, resolver),
-				VersionRequirementTable = KotlinVersionRequirementTable.FromProtobuf (c.VersionRequirementTable, resolver)
+				VersionRequirementTable = KotlinVersionRequirementTable.FromProtobuf (c.VersionRequirementTable, resolver),
+				Visibility = (KotlinClassVisibility)((c.Flags & 0b1110) >> 1)
 			};
 		}
 	}
@@ -301,6 +307,8 @@ namespace Xamarin.Android.Tools.Bytecode
 				VersionRequirements = p.VersionRequirements
 			};
 		}
+
+		public override string ToString () => Name;
 	}
 
 	public class KotlinType
@@ -577,31 +585,40 @@ namespace Xamarin.Android.Tools.Bytecode
 	{
 		HasAnnotations =	0b00_00_000_1,
 
-		Internal =		0b00_00_000_0,
-		Private =		0b00_00_001_0,
-		Protected =		0b00_00_010_0,
-		Public =		0b00_00_011_0,
-		PrivateToThis =		0b00_00_100_0,
-		Local =			0b00_00_101_0,
-
-		Final =			0b00_00_000_0,
-		Open =			0b00_01_000_0,
-		Abstract =		0b00_10_000_0,
-		Sealed =		0b00_11_000_0,
-
-		Class =			0b000_00_000_0,
-		Interface =		0b001_00_000_0,
-		EnumClass =		0b010_00_000_0,
-		EnumEntry =		0b011_00_000_0,
-		AnnotationClass =	0b100_00_000_0,
-		Object =		0b101_00_000_0,
-		CompanionObject =	0b111_00_000_0,
-
 		IsInner =		0b_00001_000_00_000_0,
 		IsData =		0b_00010_000_00_000_0,
 		IsExternalClass =	0b_00100_000_00_000_0,
 		IsExpectClass =		0b_01000_000_00_000_0,
 		IsInlineClass =		0b_10000_000_00_000_0
+	}
+
+	public enum KotlinClassVisibility
+	{
+		Internal = 0,
+		Private = 1,
+		Protected = 2,
+		Public = 3,
+		PrivateToThis = 4,
+		Local = 5
+	}
+
+	public enum KotlinClassType
+	{
+		Class = 0,
+		Interface = 1,
+		EnumClass = 2,
+		EnumEntry = 3,
+		AnnotationClass = 4,
+		Object = 5,
+		CompanionObject = 6
+	}
+
+	public enum KotlinClassInheritability
+	{
+		Final = 0,
+		Open = 1,
+		Abstract = 2,
+		Sealed = 3
 	}
 
 	[Flags]

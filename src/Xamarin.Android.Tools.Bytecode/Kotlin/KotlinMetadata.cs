@@ -114,7 +114,7 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		static string GetValue (Annotation annotation, string key)
 		{
-			return (annotation.Values.FirstOrDefault (v => v.Key == key).Value as AnnotationElementConstant)?.Value;
+			return annotation.Values.FirstOrDefault (v => v.Key == key).Value?.ToString ();
 		}
 
 		static string[] GetValues (Annotation annotation, string key)

@@ -60,7 +60,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		static void FixupClassVisibility (ClassFile klass, KotlinClass metadata)
 		{
 			// Hide class if it isn't Public/Protected
-			if (klass.AccessFlags.IsPubliclyVisible () && !metadata.Flags.IsPubliclyVisible ()) {
+			if (klass.AccessFlags.IsPubliclyVisible () && !metadata.Visibility.IsPubliclyVisible ()) {
 				Log.Debug ($"Kotlin: Hiding internal class {klass.ThisClass.Name.Value}");
 				klass.AccessFlags = ClassAccessFlags.Private;
 				return;
