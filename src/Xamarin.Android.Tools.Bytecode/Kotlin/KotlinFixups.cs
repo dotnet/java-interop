@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Xamarin.Android.Tools.Bytecode
 {
-	static class KotlinFixups
+	public static class KotlinFixups
 	{
 		public static void Fixup (IList<ClassFile> classes)
 		{
@@ -24,13 +24,16 @@ namespace Xamarin.Android.Tools.Bytecode
 					var metadata = km.ParseMetadata ();
 
 					if (metadata is null)
-						return;
+						continue;
 
 					// Do fixups only valid for full classes
 					var class_metadata = (metadata as KotlinClass);
 
 					if (class_metadata != null) {
 						FixupClassVisibility (c, class_metadata);
+
+						if (!c.AccessFlags.IsPubliclyVisible ())
+							continue;
 
 						foreach (var con in class_metadata.Constructors)
 							FixupConstructor (FindJavaConstructor (class_metadata, con, c), con);
@@ -158,9 +161,9 @@ namespace Xamarin.Android.Tools.Bytecode
 			if (setter != null) {
 				var setter_parameter = setter.GetParameters ().First ();
 
-				if (setter_parameter.IsUnnamedParameter () && !metadata.SetterValueParameter.IsUnnamedParameter ()) {
-					Log.Debug ($"Kotlin: Renaming setter parameter {setter.DeclaringType?.ThisClass.Name.Value} - {setter.Name} - {setter_parameter.Name} -> {metadata.SetterValueParameter.Name}");
-					setter_parameter.Name = metadata.SetterValueParameter.Name;
+				if (setter_parameter.IsUnnamedParameter ()) {
+					Log.Debug ($"Kotlin: Renaming setter parameter {setter.DeclaringType?.ThisClass.Name.Value} - {setter.Name} - {setter_parameter.Name} -> value");
+					setter_parameter.Name = "value";
 				}
 			}
 		}
@@ -209,9 +212,9 @@ namespace Xamarin.Android.Tools.Bytecode
 		static MethodInfo FindJavaPropertySetter (KotlinClass kotlinClass, KotlinProperty property, ClassFile klass)
 		{
 			var possible_methods = klass.Methods.Where (method => string.Compare (method.GetMethodNameWithoutSuffix (), $"set{property.Name}", true) == 0 &&
-									      property.SetterValueParameter != null &&
+									      property.ReturnType != null &&
 									      method.GetParameters ().Length == 1 &&
-									      TypesMatch (method.GetParameters () [0].Type, property.SetterValueParameter.Type, kotlinClass));
+									      TypesMatch (method.GetParameters () [0].Type, property.ReturnType, kotlinClass));
 
 			return possible_methods.FirstOrDefault ();
 		}
