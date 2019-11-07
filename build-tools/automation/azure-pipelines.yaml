@@ -38,7 +38,8 @@ jobs:
     inputs:
       solution: Java.Interop.sln
       configuration: $(Build.Configuration)
-
+      msbuildArguments: '/t:Restore,Build'
+    
   - task: MSBuild@1
     displayName: MSBuild RunNUnitTests.targets
     inputs:
