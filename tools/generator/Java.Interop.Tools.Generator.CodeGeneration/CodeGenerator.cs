@@ -523,9 +523,9 @@ namespace MonoDroid.Generation
 				writer.WriteLine ("{0}[ObsoleteAttribute (@\"{1}\")]", indent, @interface.DeprecatedComment);
 
 			if (!@interface.IsConstSugar) {
-				var signature = string.IsNullOrWhiteSpace (@interface.Namespace) ?
-					@interface.FullName.Replace ('.', '/') :
-					@interface.Namespace + "." + @interface.FullName.Substring (@interface.Namespace.Length + 1).Replace ('.', '/');
+				var signature = string.IsNullOrWhiteSpace (@interface.Namespace)
+					? @interface.FullName.Replace ('.', '/')
+					: @interface.Namespace + "." + @interface.FullName.Substring (@interface.Namespace.Length + 1).Replace ('.', '/');
 
 				writer.WriteLine ("{0}[Register (\"{1}\", \"\", \"{2}\"{3})]", indent, @interface.RawJniName, signature + "Invoker", @interface.AdditionalAttributeString ());
 			}
