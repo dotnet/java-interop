@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,10 +13,10 @@ namespace Java.Interop {
 
 		partial class CreationOptions {
 			public  bool                       UseMarshalMemberBuilder     {get; set;}      = true;
-			public  JniMarshalMemberBuilder    MarshalMemberBuilder        {get; set;}
+			public  JniMarshalMemberBuilder?   MarshalMemberBuilder        {get; set;}
 		}
 
-		JniMarshalMemberBuilder                marshalMemberBuilder;
+		JniMarshalMemberBuilder?               marshalMemberBuilder;
 		public  JniMarshalMemberBuilder        MarshalMemberBuilder        {
 			get {
 				if (marshalMemberBuilder == null)
@@ -51,8 +53,12 @@ namespace Java.Interop {
 
 		public abstract class JniMarshalMemberBuilder : IDisposable, ISetRuntime
 		{
-			public      JniRuntime  Runtime     {get; private set;}
+			JniRuntime?             runtime;
 			bool                    disposed;
+
+			public JniRuntime  Runtime     {
+				get => runtime ?? throw new NotSupportedException ();
+			}
 
 			protected JniMarshalMemberBuilder ()
 			{
@@ -63,7 +69,7 @@ namespace Java.Interop {
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
 
-				Runtime = runtime;
+				this.runtime = runtime;
 			}
 
 			public void Dispose ()
@@ -141,7 +147,7 @@ namespace Java.Interop {
 				if (parameter.ParameterType == typeof (IntPtr))
 					return IntPtrValueMarshaler.Instance;
 
-				JniValueMarshalerAttribute attr;
+				JniValueMarshalerAttribute? attr;
 				try {
 					attr = parameter.GetCustomAttribute<JniValueMarshalerAttribute> ();
 				} catch (System.IndexOutOfRangeException) {
