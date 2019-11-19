@@ -381,7 +381,7 @@ namespace Java.Interop
 			Invoker.DestroyJavaVM (InvocationPointer);
 		}
 
-		public virtual Exception GetExceptionForThrowable (ref JniObjectReference reference, JniObjectReferenceOptions options)
+		public virtual Exception? GetExceptionForThrowable (ref JniObjectReference reference, JniObjectReferenceOptions options)
 		{
 #if XA_INTEGRATION
 			throw new NotSupportedException ("Do not know h ow to convert a JniObjectReference to a System.Exception!");

@@ -1,5 +1,8 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -26,10 +29,13 @@ namespace Java.Interop
 	partial class JniRuntime
 	{
 		partial class CreationOptions {
-			public  JniValueManager         ValueManager                {get; set;}
+			public  JniValueManager?        ValueManager                {get; set;}
 		}
 
-		public  JniValueManager             ValueManager                {get; private set;}
+		JniValueManager?                    valueManager;
+		public  JniValueManager             ValueManager                {
+			get => valueManager ?? throw new NotSupportedException ();
+		}
 
 		partial void SetValueManager (CreationOptions options)
 		{
@@ -38,20 +44,23 @@ namespace Java.Interop
 				throw new ArgumentException (
 						"No JniValueManager specified in JniRuntime.CreationOptions.ValueManager.",
 						nameof (options));
-			ValueManager    = SetRuntime (manager);
+			valueManager    = SetRuntime (manager);
 		}
 
 		public abstract partial class JniValueManager : ISetRuntime, IDisposable {
 
-			public      JniRuntime  Runtime { get; private set; }
+			JniRuntime?             runtime;
 			bool                    disposed;
+			public      JniRuntime  Runtime {
+				get => runtime ?? throw new NotSupportedException ();
+			}
 
 			public virtual void OnSetRuntime (JniRuntime runtime)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
 
-				Runtime = runtime;
+				this.runtime = runtime;
 			}
 
 			public void Dispose ()
@@ -192,7 +201,7 @@ namespace Java.Interop
 
 			public abstract IJavaPeerable PeekPeer (JniObjectReference reference);
 
-			public object PeekValue (JniObjectReference reference)
+			public object? PeekValue (JniObjectReference reference)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -204,13 +213,13 @@ namespace Java.Interop
 				if (t == null)
 					return t;
 
-				object r;
+				object? r;
 				return TryUnboxPeerObject (t, out r)
 					? r
 					: t;
 			}
 
-			protected virtual bool TryUnboxPeerObject (IJavaPeerable value, out object result)
+			protected virtual bool TryUnboxPeerObject (IJavaPeerable value, [NotNullWhen (true)] out object? result)
 			{
 				result  = null;
 				var p   = value as JavaProxyObject;
@@ -226,12 +235,12 @@ namespace Java.Interop
 				return false;
 			}
 
-			object PeekBoxedObject (JniObjectReference reference)
+			object? PeekBoxedObject (JniObjectReference reference)
 			{
 				var t   = PeekPeer (reference);
 				if (t == null)
 					return null;
-				object r;
+				object? r;
 				return TryUnboxPeerObject (t, out r)
 					? r
 					: null;
@@ -252,7 +261,7 @@ namespace Java.Interop
 				return type;
 			}
 
-			public virtual IJavaPeerable CreatePeer (ref JniObjectReference reference, JniObjectReferenceOptions transfer, Type targetType)
+			public virtual IJavaPeerable CreatePeer (ref JniObjectReference reference, JniObjectReferenceOptions transfer, Type? targetType)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -283,12 +292,12 @@ namespace Java.Interop
 
 			static  readonly    Type    ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
 
-			ConstructorInfo GetPeerConstructor (JniObjectReference instance, Type fallbackType)
+			ConstructorInfo? GetPeerConstructor (JniObjectReference instance, Type fallbackType)
 			{
 				var klass       = JniEnvironment.Types.GetObjectClass (instance);
 				var jniTypeName = JniEnvironment.Types.GetJniTypeNameFromClass (klass);
 
-				Type type = null;
+				Type? type = null;
 				while (jniTypeName != null) {
 					JniTypeSignature sig;
 					if (!JniTypeSignature.TryParse (jniTypeName, out sig))
@@ -329,7 +338,7 @@ namespace Java.Interop
 			}
 
 
-			public object CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType = null)
+			public object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -358,13 +367,17 @@ namespace Java.Interop
 				return marshaler.CreateValue (ref reference, options, targetType);
 			}
 
-			public T CreateValue<T> (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType = null)
+			[return: MaybeNull]
+			public T CreateValue<T> (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
 
-				if (!reference.IsValid)
+				if (!reference.IsValid) {
+#pragma warning disable 8653
 					return default (T);
+#pragma warning restore 8653
+				}
 
 				if (targetType != null && !typeof (T).IsAssignableFrom (targetType))
 					throw new ArgumentException (
@@ -390,7 +403,7 @@ namespace Java.Interop
 				return marshaler.CreateGenericValue (ref reference, options, targetType);
 			}
 
-			internal Type GetRuntimeType (JniObjectReference reference)
+			internal Type? GetRuntimeType (JniObjectReference reference)
 			{
 				JniTypeSignature signature;
 				if (!JniTypeSignature.TryParse (JniEnvironment.Types.GetJniTypeNameFromInstance (reference), out signature))
@@ -398,7 +411,7 @@ namespace Java.Interop
 				return Runtime.TypeManager.GetType (signature);
 			}
 
-			public object GetValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType = null)
+			public object? GetValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -431,10 +444,14 @@ namespace Java.Interop
 				return GetValue<T> (ref r, JniObjectReferenceOptions.Copy);
 			}
 
-			public T GetValue<T> (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType = null)
+			[return: MaybeNull]
+			public T GetValue<T> (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType = null)
 			{
-				if (!reference.IsValid)
+				if (!reference.IsValid) {
+#pragma warning disable 8653
 					return default (T);
+#pragma warning restore 8653
+				}
 
 				if (targetType != null && !typeof (T).IsAssignableFrom (targetType))
 					throw new ArgumentException (
@@ -526,7 +543,7 @@ namespace Java.Interop
 					return JavaPeerableValueMarshaler.Instance;
 				}
 
-				JniValueMarshalerAttribute ifaceAttribute = null;
+				JniValueMarshalerAttribute? ifaceAttribute = null;
 				foreach (var iface in type.GetInterfaces ()) {
 					marshalerAttr = iface.GetCustomAttribute<JniValueMarshalerAttribute> ();
 					if (marshalerAttr != null) {
@@ -591,7 +608,7 @@ namespace Java.Interop
 
 		internal    static  JavaPeerableValueMarshaler      Instance    = new JavaPeerableValueMarshaler ();
 
-		public override IJavaPeerable CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+		public override IJavaPeerable CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			var jvm         = JniEnvironment.Runtime;
 			var marshaler   = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof(IJavaPeerable));
@@ -702,7 +719,7 @@ namespace Java.Interop
 
 		internal    static  ProxyValueMarshaler     Instance    = new ProxyValueMarshaler ();
 
-		public override object CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+		public override object CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			var jvm     = JniEnvironment.Runtime;
 
@@ -739,7 +756,7 @@ namespace Java.Interop
 			}
 
 			var p   = JavaProxyObject.GetProxy (value);
-			return new JniValueMarshalerState (p.PeerReference.NewLocalRef ());
+			return new JniValueMarshalerState (p!.PeerReference.NewLocalRef ());
 		}
 
 		public override void DestroyGenericArgumentState (object value, ref JniValueMarshalerState state, ParameterAttributes synchronize)

@@ -70,7 +70,7 @@ namespace Java.Interop
 
 				}
 
-				throw info.Runtime.GetExceptionForThrowable (ref e, JniObjectReferenceOptions.CopyAndDispose);
+				throw info.Runtime.GetExceptionForThrowable (ref e, JniObjectReferenceOptions.CopyAndDispose)!;
 #endif  // !FEATURE_JNIENVIRONMENT_JI_PINVOKES
 #if FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 				var c       = info.Invoker.FindClass (info.EnvironmentPointer, classname);

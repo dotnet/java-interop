@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Java.Interop {
@@ -41,20 +42,21 @@ namespace Java.Interop {
 			return Value.GetHashCode ();
 		}
 
-		public override bool Equals (object obj)
+		public override bool Equals (object? obj)
 		{
 			if (obj is JavaProxyObject other)
 				return object.Equals (Value, other.Value);
 			return object.Equals (Value, obj);
 		}
 
-		public bool Equals (JavaProxyObject other) => object.Equals (Value, other.Value);
+		public bool Equals (JavaProxyObject? other) => object.Equals (Value, other?.Value);
 
 		public override string ToString ()
 		{
 			return Value.ToString ();
 		}
 
+		[return: NotNullIfNotNull ("object")]
 		public static JavaProxyObject? GetProxy (object value)
 		{
 			if (value == null)
