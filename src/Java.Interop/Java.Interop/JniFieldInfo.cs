@@ -55,8 +55,8 @@ namespace Java.Interop
 		public override string ToString ()
 		{
 #if DEBUG
-			bool haveName   = !string.IsNullOrEmpty (Name);
-			bool haveSig    = !string.IsNullOrEmpty (Signature);
+			bool haveName   = !string.IsNullOrEmpty (name);
+			bool haveSig    = !string.IsNullOrEmpty (signature);
 #else   // DEBUG
 			bool haveName   = false;
 			bool haveSig    = false;
