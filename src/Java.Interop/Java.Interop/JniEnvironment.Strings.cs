@@ -9,7 +9,7 @@ namespace Java.Interop
 
 		partial class Strings {
 
-			public static unsafe JniObjectReference NewString (string value)
+			public static unsafe JniObjectReference NewString (string? value)
 			{
 				if (value == null)
 					return new JniObjectReference ();

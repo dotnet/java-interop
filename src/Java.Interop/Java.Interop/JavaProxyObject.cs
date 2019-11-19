@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Java.Interop {
@@ -53,7 +55,7 @@ namespace Java.Interop {
 			return Value.ToString ();
 		}
 
-		public static JavaProxyObject GetProxy (object value)
+		public static JavaProxyObject? GetProxy (object value)
 		{
 			if (value == null)
 				return null;
@@ -73,10 +75,10 @@ namespace Java.Interop {
 		{
 			var envp = new JniTransition (jnienv);
 			try {
-				var self    = (JavaProxyObject) JniEnvironment.Runtime.ValueManager.PeekPeer (new JniObjectReference (n_self));
+				var self    = (JavaProxyObject?) JniEnvironment.Runtime.ValueManager.PeekPeer (new JniObjectReference (n_self));
 				var r_value = new JniObjectReference (n_value);
 				var value   = JniEnvironment.Runtime.ValueManager.GetValue (ref r_value, JniObjectReferenceOptions.Copy);
-				return self.Equals (value);
+				return self?.Equals (value) ?? false;
 			}
 			catch (Exception e) when (JniEnvironment.Runtime.ExceptionShouldTransitionToJni (e)) {
 				envp.SetPendingException (e);
@@ -92,8 +94,8 @@ namespace Java.Interop {
 		{
 			var envp = new JniTransition (jnienv);
 			try {
-				var self = (JavaProxyObject) JniEnvironment.Runtime.ValueManager.PeekPeer (new JniObjectReference (n_self));
-				return self.GetHashCode ();
+				var self = (JavaProxyObject?) JniEnvironment.Runtime.ValueManager.PeekPeer (new JniObjectReference (n_self));
+				return self?.GetHashCode () ?? 0;
 			}
 			catch (Exception e) when (JniEnvironment.Runtime.ExceptionShouldTransitionToJni (e)) {
 				envp.SetPendingException (e);
@@ -108,8 +110,8 @@ namespace Java.Interop {
 		{
 			var envp = new JniTransition (jnienv);
 			try {
-				var self    = (JavaProxyObject) JniEnvironment.Runtime.ValueManager.PeekPeer (new JniObjectReference (n_self));
-				var s       = self.ToString ();
+				var self    = (JavaProxyObject?) JniEnvironment.Runtime.ValueManager.PeekPeer (new JniObjectReference (n_self));
+				var s       = self?.ToString ();
 				var r       = JniEnvironment.Strings.NewString (s);
 				try {
 					return JniEnvironment.References.NewReturnToJniRef (r);
