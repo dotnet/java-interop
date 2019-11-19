@@ -590,17 +590,17 @@ namespace Java.Interop
 			get {return typeof (void);}
 		}
 
-		public override object CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override JniValueMarshalerState CreateObjectReferenceArgumentState (object value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateObjectReferenceArgumentState (object? value, ParameterAttributes synchronize)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override void DestroyArgumentState (object value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		public override void DestroyArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
 			throw new NotSupportedException ();
 		}
@@ -610,12 +610,13 @@ namespace Java.Interop
 
 		internal    static  JavaPeerableValueMarshaler      Instance    = new JavaPeerableValueMarshaler ();
 
+		[return: MaybeNull]
 		public override IJavaPeerable CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			var jvm         = JniEnvironment.Runtime;
 			var marshaler   = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof(IJavaPeerable));
 			if (marshaler != Instance)
-				return (IJavaPeerable) marshaler.CreateValue (ref reference, options, targetType);
+				return (IJavaPeerable) marshaler.CreateValue (ref reference, options, targetType)!;
 			return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
 		}
 
@@ -662,7 +663,7 @@ namespace Java.Interop
 			return ReturnObjectReferenceToJni (context, sourceValue.Name, CreateIntermediaryExpressionFromManagedExpression (context, sourceValue));
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 			var r   = Expression.Variable (targetType, sourceValue.Name + "_val");
 			context.LocalVariables.Add (r);
@@ -686,9 +687,10 @@ namespace Java.Interop
 			ValueMarshaler  = valueMarshaler;
 		}
 
-		public override T CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+		[return: MaybeNull]
+		public override T CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
-			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T));
+			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
 		}
 
 		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState (T value, ParameterAttributes synchronize)
@@ -706,7 +708,7 @@ namespace Java.Interop
 			return ValueMarshaler.CreateParameterFromManagedExpression (context, sourceValue, synchronize);
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 			return ValueMarshaler.CreateParameterToManagedExpression (context, sourceValue, synchronize, targetType);
 		}
@@ -721,6 +723,7 @@ namespace Java.Interop
 
 		internal    static  ProxyValueMarshaler     Instance    = new ProxyValueMarshaler ();
 
+		[return: MaybeNull]
 		public override object CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			var jvm     = JniEnvironment.Runtime;
@@ -731,7 +734,7 @@ namespace Java.Interop
 			if (targetType != null) {
 				var vm  = jvm.ValueManager.GetValueMarshaler (targetType);
 				if (vm != Instance) {
-					return vm.CreateValue (ref reference, options, targetType);
+					return vm.CreateValue (ref reference, options, targetType)!;
 				}
 			}
 

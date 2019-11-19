@@ -102,7 +102,7 @@ namespace Java.Interop
 			return value.ToList ();
 		}
 
-		internal IList<T> ToTargetType (Type targetType, bool dispose)
+		internal IList<T> ToTargetType (Type? targetType, bool dispose)
 		{
 			if (TargetTypeIsCurrentType (targetType))
 				return this;
@@ -117,19 +117,20 @@ namespace Java.Interop
 			throw CreateMarshalNotSupportedException (GetType (), targetType);
 		}
 
-		internal virtual bool TargetTypeIsCurrentType (Type targetType)
+		internal virtual bool TargetTypeIsCurrentType (Type? targetType)
 		{
 			return targetType == null || targetType == typeof (JavaArray<T>);
 		}
 
-		internal static Exception CreateMarshalNotSupportedException (Type sourceType, Type targetType)
+		internal static Exception CreateMarshalNotSupportedException (Type sourceType, Type? targetType)
 		{
-			throw new NotSupportedException (
-					string.Format ("Do not know how to marshal a '{0}' into a '{1}'.",
-						sourceType.FullName, targetType.FullName));
+			return new NotSupportedException (
+					string.Format ("Do not know how to marshal a `{0}`{1}.",
+						sourceType.FullName,
+						targetType != null ? $" into a `{targetType.FullName}`" : ""));
 		}
 
-		internal static IList<T> CreateValue<TArray> (ref JniObjectReference reference, JniObjectReferenceOptions transfer, Type targetType, ArrayCreator<TArray> creator)
+		internal static IList<T> CreateValue<TArray> (ref JniObjectReference reference, JniObjectReferenceOptions transfer, Type? targetType, ArrayCreator<TArray> creator)
 			where TArray : JavaArray<T>
 		{
 			return creator (ref reference, transfer)
@@ -156,7 +157,7 @@ namespace Java.Interop
 		internal static void DestroyArgumentState<TArray> (IList<T> value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 			where TArray : JavaArray<T>
 		{
-			var source = (TArray) state.PeerableValue;
+			var source = (TArray?) state.PeerableValue;
 			if (source == null)
 				return;
 

@@ -191,21 +191,21 @@ namespace Java.Interop {
 				JniEnvironment.Arrays.Set<#= info.JniMarshalType #>ArrayRegion (PeerReference, destinationIndex, length, (b+sourceIndex));
 		}
 
-		internal override bool TargetTypeIsCurrentType (Type targetType)
+		internal override bool TargetTypeIsCurrentType (Type? targetType)
 		{
 			return base.TargetTypeIsCurrentType (targetType) ||
 				typeof (JavaPrimitiveArray<<#= info.ManagedType #>>) == targetType ||
 				typeof (Java<#= info.TypeModifier #>Array) == targetType;
 		}
 
-		public static object CreateMarshaledValue (IntPtr handle, Type targetType)
+		public static object? CreateMarshaledValue (IntPtr handle, Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<<#= info.TypeModifier #>>> {
 
-			public override IList<<#= info.TypeModifier #>> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+			public override IList<<#= info.TypeModifier #>> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 			{
 				return JavaArray<<#= info.TypeModifier #>>.CreateValue (
 						ref reference,
@@ -232,7 +232,7 @@ namespace Java.Interop {
 
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
-	                        Func<IntPtr, Type, object>  m   = Java<#= info.TypeModifier #>Array.CreateMarshaledValue;
+	                        Func<IntPtr, Type?, object?>  m = Java<#= info.TypeModifier #>Array.CreateMarshaledValue;
 
 	                        var call    = Expression.Call (m.GetMethodInfo (), sourceValue, Expression.Constant (targetType, typeof (Type)));
 	                        return targetType == null

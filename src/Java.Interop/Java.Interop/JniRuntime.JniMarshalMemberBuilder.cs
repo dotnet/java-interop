@@ -177,7 +177,7 @@ namespace Java.Interop {
 			return sourceValue;
 		}
 
-		public override Expression CreateParameterToManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type targetType)
+		public override Expression CreateParameterToManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 			return sourceValue;
 		}
@@ -188,17 +188,17 @@ namespace Java.Interop {
 		}
 
 
-		public override object CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override IntPtr CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
+		public override IntPtr CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override JniValueMarshalerState CreateArgumentState (object value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateArgumentState (object? value, ParameterAttributes synchronize)
 		{
 			throw new NotSupportedException ();
 		}
@@ -208,7 +208,7 @@ namespace Java.Interop {
 			throw new NotSupportedException ();
 		}
 
-		public override JniValueMarshalerState CreateObjectReferenceArgumentState (object value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateObjectReferenceArgumentState (object? value, ParameterAttributes synchronize)
 		{
 			throw new NotSupportedException ();
 		}
@@ -218,7 +218,7 @@ namespace Java.Interop {
 			throw new NotSupportedException ();
 		}
 
-		public override void DestroyArgumentState (object value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		public override void DestroyArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
 			throw new NotSupportedException ();
 		}
