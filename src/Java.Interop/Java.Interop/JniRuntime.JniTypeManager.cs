@@ -272,12 +272,12 @@ namespace Java.Interop {
 				yield break;
 			}
 
-			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, string methods)
+			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, string? methods)
 			{
 				TryRegisterNativeMembers (nativeClass, type, methods);
 			}
 
-			protected bool TryRegisterNativeMembers (JniType nativeClass, Type type, string methods)
+			protected bool TryRegisterNativeMembers (JniType nativeClass, Type type, string? methods)
 			{
 				AssertValid ();
 
@@ -286,7 +286,7 @@ namespace Java.Interop {
 
 			static Type [] registerMethodParameters = new Type [] { typeof (JniNativeMethodRegistrationArguments) };
 
-			static bool TryLoadJniMarshalMethods (JniType nativeClass, Type type, string methods)
+			static bool TryLoadJniMarshalMethods (JniType nativeClass, Type type, string? methods)
 			{
 				var marshalType = type?.GetNestedType ("__<$>_jni_marshal_methods", BindingFlags.NonPublic);
 				if (marshalType == null)
@@ -299,7 +299,7 @@ namespace Java.Interop {
 
 			static List<JniNativeMethodRegistration> sharedRegistrations = new List<JniNativeMethodRegistration> ();
 
-			static bool TryRegisterNativeMembers (JniType nativeClass, Type marshalType, string methods, MethodInfo? registerMethod)
+			static bool TryRegisterNativeMembers (JniType nativeClass, Type marshalType, string? methods, MethodInfo? registerMethod)
 			{
 				bool lockTaken = false;
 				bool rv = false;
