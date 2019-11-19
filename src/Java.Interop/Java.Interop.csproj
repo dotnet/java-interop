@@ -69,6 +69,11 @@
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Java.Interop\JavaPrimitiveArrays.cs">
+      <DependentUpon>JavaPrimitiveArrays.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

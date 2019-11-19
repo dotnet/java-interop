@@ -3,6 +3,7 @@
 <#@ import    namespace="System.Collections.Generic" #>
 <#@ import    namespace="System.Linq" #>
 <#@ import    namespace="System.Text" #>
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -130,8 +131,12 @@ namespace Java.Interop {
 
 		public new unsafe Jni<#= info.TypeModifier #>ArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.Get<#= info.JniMarshalType #>ArrayElements (PeerReference, null);
-			return elements == null ? null : new Jni<#= info.TypeModifier #>ArrayElements (PeerReference, elements, Length*sizeof (<#= info.ManagedType #>));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.Get<#= info.JniMarshalType #>ArrayElements()` returned NULL!");
+			return new Jni<#= info.TypeModifier #>ArrayElements (PeerReference, elements, Length*sizeof (<#= info.ManagedType #>));
 		}
 
 		public override unsafe int IndexOf (<#= info.ManagedType #> item)
@@ -225,7 +230,7 @@ namespace Java.Interop {
 				JavaArray<<#= info.ManagedType #>>.DestroyArgumentState<Java<#= info.TypeModifier #>Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = Java<#= info.TypeModifier #>Array.CreateMarshaledValue;
 

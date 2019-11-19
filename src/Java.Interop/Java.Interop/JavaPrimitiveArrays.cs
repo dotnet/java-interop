@@ -1,4 +1,5 @@
-﻿
+﻿#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -140,8 +141,12 @@ namespace Java.Interop {
 
 		public new unsafe JniBooleanArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetBooleanArrayElements (PeerReference, null);
-			return elements == null ? null : new JniBooleanArrayElements (PeerReference, elements, Length*sizeof (Boolean));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetBooleanArrayElements()` returned NULL!");
+			return new JniBooleanArrayElements (PeerReference, elements, Length*sizeof (Boolean));
 		}
 
 		public override unsafe int IndexOf (Boolean item)
@@ -235,7 +240,7 @@ namespace Java.Interop {
 				JavaArray<Boolean>.DestroyArgumentState<JavaBooleanArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaBooleanArray.CreateMarshaledValue;
 
@@ -312,8 +317,12 @@ namespace Java.Interop {
 
 		public new unsafe JniSByteArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetByteArrayElements (PeerReference, null);
-			return elements == null ? null : new JniSByteArrayElements (PeerReference, elements, Length*sizeof (SByte));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetByteArrayElements()` returned NULL!");
+			return new JniSByteArrayElements (PeerReference, elements, Length*sizeof (SByte));
 		}
 
 		public override unsafe int IndexOf (SByte item)
@@ -407,7 +416,7 @@ namespace Java.Interop {
 				JavaArray<SByte>.DestroyArgumentState<JavaSByteArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaSByteArray.CreateMarshaledValue;
 
@@ -484,8 +493,12 @@ namespace Java.Interop {
 
 		public new unsafe JniCharArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetCharArrayElements (PeerReference, null);
-			return elements == null ? null : new JniCharArrayElements (PeerReference, elements, Length*sizeof (Char));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetCharArrayElements()` returned NULL!");
+			return new JniCharArrayElements (PeerReference, elements, Length*sizeof (Char));
 		}
 
 		public override unsafe int IndexOf (Char item)
@@ -579,7 +592,7 @@ namespace Java.Interop {
 				JavaArray<Char>.DestroyArgumentState<JavaCharArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaCharArray.CreateMarshaledValue;
 
@@ -656,8 +669,12 @@ namespace Java.Interop {
 
 		public new unsafe JniInt16ArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetShortArrayElements (PeerReference, null);
-			return elements == null ? null : new JniInt16ArrayElements (PeerReference, elements, Length*sizeof (Int16));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetShortArrayElements()` returned NULL!");
+			return new JniInt16ArrayElements (PeerReference, elements, Length*sizeof (Int16));
 		}
 
 		public override unsafe int IndexOf (Int16 item)
@@ -751,7 +768,7 @@ namespace Java.Interop {
 				JavaArray<Int16>.DestroyArgumentState<JavaInt16Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaInt16Array.CreateMarshaledValue;
 
@@ -828,8 +845,12 @@ namespace Java.Interop {
 
 		public new unsafe JniInt32ArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetIntArrayElements (PeerReference, null);
-			return elements == null ? null : new JniInt32ArrayElements (PeerReference, elements, Length*sizeof (Int32));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetIntArrayElements()` returned NULL!");
+			return new JniInt32ArrayElements (PeerReference, elements, Length*sizeof (Int32));
 		}
 
 		public override unsafe int IndexOf (Int32 item)
@@ -923,7 +944,7 @@ namespace Java.Interop {
 				JavaArray<Int32>.DestroyArgumentState<JavaInt32Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaInt32Array.CreateMarshaledValue;
 
@@ -1000,8 +1021,12 @@ namespace Java.Interop {
 
 		public new unsafe JniInt64ArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetLongArrayElements (PeerReference, null);
-			return elements == null ? null : new JniInt64ArrayElements (PeerReference, elements, Length*sizeof (Int64));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetLongArrayElements()` returned NULL!");
+			return new JniInt64ArrayElements (PeerReference, elements, Length*sizeof (Int64));
 		}
 
 		public override unsafe int IndexOf (Int64 item)
@@ -1095,7 +1120,7 @@ namespace Java.Interop {
 				JavaArray<Int64>.DestroyArgumentState<JavaInt64Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaInt64Array.CreateMarshaledValue;
 
@@ -1172,8 +1197,12 @@ namespace Java.Interop {
 
 		public new unsafe JniSingleArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetFloatArrayElements (PeerReference, null);
-			return elements == null ? null : new JniSingleArrayElements (PeerReference, elements, Length*sizeof (Single));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetFloatArrayElements()` returned NULL!");
+			return new JniSingleArrayElements (PeerReference, elements, Length*sizeof (Single));
 		}
 
 		public override unsafe int IndexOf (Single item)
@@ -1267,7 +1296,7 @@ namespace Java.Interop {
 				JavaArray<Single>.DestroyArgumentState<JavaSingleArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaSingleArray.CreateMarshaledValue;
 
@@ -1344,8 +1373,12 @@ namespace Java.Interop {
 
 		public new unsafe JniDoubleArrayElements GetElements ()
 		{
+			if (!PeerReference.IsValid)
+				throw new ObjectDisposedException (this.GetType ().FullName);
 			var elements = JniEnvironment.Arrays.GetDoubleArrayElements (PeerReference, null);
-			return elements == null ? null : new JniDoubleArrayElements (PeerReference, elements, Length*sizeof (Double));
+			if (elements == null)
+				throw new InvalidOperationException ("`JniEnvironment.Arrays.GetDoubleArrayElements()` returned NULL!");
+			return new JniDoubleArrayElements (PeerReference, elements, Length*sizeof (Double));
 		}
 
 		public override unsafe int IndexOf (Double item)
@@ -1439,7 +1472,7 @@ namespace Java.Interop {
 				JavaArray<Double>.DestroyArgumentState<JavaDoubleArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 	                {
 	                        Func<IntPtr, Type, object>  m   = JavaDoubleArray.CreateMarshaledValue;
 

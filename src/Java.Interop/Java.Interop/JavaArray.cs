@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -217,9 +219,11 @@ namespace Java.Interop
 			}
 		}
 
-		object IList.this [int index] {
+		object? IList.this [int index] {
 			get {return this [index];}
+#pragma warning disable 8601
 			set {this [index] = (T) value;}
+#pragma warning restore 8601
 		}
 
 		void ICollection.CopyTo (Array array, int index)

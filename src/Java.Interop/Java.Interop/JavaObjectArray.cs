@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -84,11 +86,13 @@ namespace Java.Interop
 		{
 			int len = Length;
 			var vm  = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
+#pragma warning disable 8653
 			var s   = vm.CreateArgumentState (default (T));
 			for (int i = 0; i < len; i++) {
 				JniEnvironment.Arrays.SetObjectArrayElement (PeerReference, i, s.ReferenceValue);
 			}
 			vm.DestroyGenericArgumentState (default (T), ref s, 0);
+#pragma warning restore 8653
 		}
 
 		public override int IndexOf (T item)

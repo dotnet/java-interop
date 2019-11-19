@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 
 namespace Java.Interop
@@ -13,22 +15,22 @@ namespace Java.Interop
 		}
 
 #if DEBUG
-		string name, signature;
+		string? name, signature;
 #endif  // !DEBUG
 
 		public      string  Name {
 #if DEBUG
-			get {return name;}
+			get => name ?? throw new NotSupportedException ();
 #else   // !DEBUG
-			get {throw new NotSupportedException ();}
+			get => throw new NotSupportedException ();
 #endif  // !DEBUG
 		}
 
 		public      string  Signature {
 #if DEBUG
-			get {return signature;}
+			get => signature ?? throw new NotSupportedException ();
 #else   // !DEBUG
-			get {throw new NotSupportedException ();}
+			get => throw new NotSupportedException ();
 #endif  // !DEBUG
 		}
 
