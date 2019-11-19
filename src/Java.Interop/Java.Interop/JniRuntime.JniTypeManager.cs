@@ -212,7 +212,9 @@ namespace Java.Interop {
 
 			IEnumerable<Type> CreateGetTypesEnumerator (JniTypeSignature typeSignature)
 			{
-				foreach (var type in GetTypesForSimpleReference (typeSignature.SimpleReference)) {
+				if (!typeSignature.IsValid)
+					yield break;
+				foreach (var type in GetTypesForSimpleReference (typeSignature.SimpleReference ?? throw new InvalidOperationException ("Should not be reached")) ){
 					if (typeSignature.ArrayRank == 0) {
 						yield return type;
 						continue;

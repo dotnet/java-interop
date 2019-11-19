@@ -405,8 +405,10 @@ namespace Java.Interop
 
 			internal Type? GetRuntimeType (JniObjectReference reference)
 			{
+				if (!reference.IsValid)
+					return null;
 				JniTypeSignature signature;
-				if (!JniTypeSignature.TryParse (JniEnvironment.Types.GetJniTypeNameFromInstance (reference), out signature))
+				if (!JniTypeSignature.TryParse (JniEnvironment.Types.GetJniTypeNameFromInstance (reference)!, out signature))
 					return null;
 				return Runtime.TypeManager.GetType (signature);
 			}
