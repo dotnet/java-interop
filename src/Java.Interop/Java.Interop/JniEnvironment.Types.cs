@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -95,16 +97,22 @@ namespace Java.Interop
 #endif  // !FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 			}
 
-			public static JniType GetTypeFromInstance (JniObjectReference instance)
+			public static JniType? GetTypeFromInstance (JniObjectReference instance)
 			{
+				if (!instance.IsValid)
+					return null;
+
 				var lref = JniEnvironment.Types.GetObjectClass (instance);
 				if (lref.IsValid)
 					return new JniType (ref lref, JniObjectReferenceOptions.CopyAndDispose);
 				return null;
 			}
 
-			public static string GetJniTypeNameFromInstance (JniObjectReference instance)
+			public static string? GetJniTypeNameFromInstance (JniObjectReference instance)
 			{
+				if (!instance.IsValid)
+					return null;
+
 				var lref = GetObjectClass (instance);
 				try {
 					return GetJniTypeNameFromClass (lref);
@@ -114,10 +122,13 @@ namespace Java.Interop
 				}
 			}
 
-			public static string GetJniTypeNameFromClass (JniObjectReference type)
+			public static string? GetJniTypeNameFromClass (JniObjectReference type)
 			{
+				if (!type.IsValid)
+					return null;
+
 				var s = JniEnvironment.InstanceMethods.CallObjectMethod (type, Class_getName);
-				return JavaClassToJniType (Strings.ToString (ref s, JniObjectReferenceOptions.CopyAndDispose));
+				return JavaClassToJniType (Strings.ToString (ref s, JniObjectReferenceOptions.CopyAndDispose)!);
 			}
 
 			static string JavaClassToJniType (string value)
