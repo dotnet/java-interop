@@ -73,6 +73,9 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Java.Interop\JavaPrimitiveArrays.cs">
       <DependentUpon>JavaPrimitiveArrays.tt</DependentUpon>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Java.Interop\JniBuiltinMarshalers.cs">
+      <DependentUpon>JniBuiltinMarshalers.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
