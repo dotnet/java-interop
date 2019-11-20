@@ -137,7 +137,7 @@ namespace Java.Interop
 				.ToTargetType (targetType, dispose: true);
 		}
 
-		internal    static  JniValueMarshalerState  CreateArgumentState<TArray> (IList<T> value, ParameterAttributes synchronize, Func<IList<T>, bool, TArray> creator)
+		internal    static  JniValueMarshalerState  CreateArgumentState<TArray> (IList<T>? value, ParameterAttributes synchronize, Func<IList<T>, bool, TArray> creator)
 			where TArray : JavaArray<T>
 		{
 			if (value == null)
@@ -154,7 +154,7 @@ namespace Java.Interop
 			return new JniValueMarshalerState (a);
 		}
 
-		internal static void DestroyArgumentState<TArray> (IList<T> value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		internal static void DestroyArgumentState<TArray> (IList<T>? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 			where TArray : JavaArray<T>
 		{
 			var source = (TArray?) state.PeerableValue;
