@@ -76,6 +76,12 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Java.Interop\JniBuiltinMarshalers.cs">
       <DependentUpon>JniBuiltinMarshalers.tt</DependentUpon>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Java.Interop\JniPeerMembers.JniFields.cs">
+      <DependentUpon>JniPeerMembers.JniFields.tt</DependentUpon>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Java.Interop\JniPeerMembers.JniInstanceMethods_Invoke.cs">
+      <DependentUpon>JniPeerMembers.JniInstanceMethods_Invoke.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
