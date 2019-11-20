@@ -27,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
     <DocumentationFile>..\..\bin\Debug\Java.Interop.xml</DocumentationFile>
     <JNIEnvGenPath>..\..\bin\BuildDebug</JNIEnvGenPath>
   </PropertyGroup>
@@ -39,6 +40,7 @@
     <ConsolePause>false</ConsolePause>
     <DefineConstants>INTEROP;FEATURE_JNIENVIRONMENT_JI_PINVOKES;FEATURE_JNIOBJECTREFERENCE_INTPTRS</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
     <DocumentationFile>..\..\bin\Release\Java.Interop.xml</DocumentationFile>
     <JNIEnvGenPath>..\..\bin\BuildRelease</JNIEnvGenPath>
   </PropertyGroup>

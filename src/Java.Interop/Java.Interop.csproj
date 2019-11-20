@@ -15,6 +15,7 @@
     <JNIEnvGenPath>..\..\bin\BuildDebug</JNIEnvGenPath>
     <DefineConstants>INTEROP;FEATURE_JNIENVIRONMENT_JI_PINVOKES;FEATURE_JNIOBJECTREFERENCE_INTPTRS;DEBUG;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
     <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Gendarme|AnyCPU' ">
     <OutputPath>..\..\bin\GendarmeDebug</OutputPath>
@@ -28,6 +29,7 @@
     <DocumentationFile>..\..\bin\Release\Java.Interop.xml</DocumentationFile>
     <JNIEnvGenPath>..\..\bin\BuildRelease</JNIEnvGenPath>
     <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Java.Interop\JniLocationException.cs" />
