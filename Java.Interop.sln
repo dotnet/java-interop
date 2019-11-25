@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Java.Interop.Dynamic-Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Java.Interop.Export-Tests", "tests\Java.Interop.Export-Tests\Java.Interop.Export-Tests.csproj", "{82F24161-F0CA-44CC-AEC3-885D613605E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogcatParse-Tests", "tests\logcat-parse-Tests\LogcatParse-Tests.csproj", "{DB05D566-0BA0-4935-868D-689E2F03688E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "logcat-parse-Tests", "tests\logcat-parse-Tests\logcat-parse-Tests.csproj", "{DB05D566-0BA0-4935-868D-689E2F03688E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Android.Tools.Bytecode-Tests", "tests\Xamarin.Android.Tools.Bytecode-Tests\Xamarin.Android.Tools.Bytecode-Tests.csproj", "{C9FA4492-DEB0-4932-A6B8-E2C4E0581692}"
 EndProject
