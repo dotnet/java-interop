@@ -15,10 +15,6 @@
     <OutputPath>..\..\bin\Release</OutputPath>
   </PropertyGroup>
 
-  <Import Project="Xamarin.Android.Cecil.targets" />
-
-  <ItemGroup>
-    <None Remove="Xamarin.Android.Cecil.targets" />
-  </ItemGroup>
-
+  <Import Project="..\Xamarin.Android.Cecil\Xamarin.Android.Cecil.targets" />
+  
 </Project>
