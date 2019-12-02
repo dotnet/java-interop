@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\external\cecil\Mono.Cecil.csproj" />
     <ProjectReference Include="..\Java.Interop.Tools.Diagnostics\Java.Interop.Tools.Diagnostics.csproj" />
-    <ProjectReference Include="..\Xamarin.Android.Cecil\Xamarin.Android.Cecil.csproj" />
   </ItemGroup>
 
 </Project>

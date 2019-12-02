@@ -44,6 +44,10 @@
   <Import Project="..\..\src\Java.Interop.NamingCustomAttributes\Java.Interop.NamingCustomAttributes.projitems" Label="Shared" Condition="Exists('..\..\src\Java.Interop.NamingCustomAttributes\Java.Interop.NamingCustomAttributes.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\external\cecil\Mono.Cecil.csproj">
+      <Project>{6996d47d-71ae-4bc7-b4ec-8cff22cbf3e1}</Project>
+      <Name>Mono.Cecil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Java.Interop.Export\Java.Interop.Export.csproj">
       <Project>{B501D075-6183-4E1D-92C9-F7B5002475B1}</Project>
       <Name>Java.Interop.Export</Name>
@@ -55,10 +59,6 @@
     <ProjectReference Include="..\..\src\Java.Runtime.Environment\Java.Runtime.Environment.csproj">
       <Project>{5887B410-D448-4257-A46B-EAC03C80BE93}</Project>
       <Name>Java.Runtime.Environment</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Xamarin.Android.Cecil\Xamarin.Android.Cecil.csproj">
-      <Project>{15945D4B-FF56-4BCC-B598-2718D199DD08}</Project>
-      <Name>Xamarin.Android.Cecil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Java.Interop.Tools.Cecil\Java.Interop.Tools.Cecil.csproj">
       <Project>{D48EE8D0-0A0A-4493-AEF5-DAF5F8CF86AD}</Project>

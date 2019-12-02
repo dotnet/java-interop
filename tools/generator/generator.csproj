@@ -129,6 +129,10 @@
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\external\cecil\Mono.Cecil.csproj">
+      <Project>{6996d47d-71ae-4bc7-b4ec-8cff22cbf3e1}</Project>
+      <Name>Mono.Cecil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Xamarin.Android.Tools.AnnotationSupport\Xamarin.Android.Tools.AnnotationSupport.csproj">
       <Project>{07BC4495-1267-4B78-9EA6-B76FEEA2A64A}</Project>
       <Name>Xamarin.Android.Tools.AnnotationSupport</Name>
@@ -144,10 +148,6 @@
     <ProjectReference Include="..\..\src\Java.Interop.Tools.Cecil\Java.Interop.Tools.Cecil.csproj">
       <Project>{D48EE8D0-0A0A-4493-AEF5-DAF5F8CF86AD}</Project>
       <Name>Java.Interop.Tools.Cecil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Xamarin.Android.Cecil\Xamarin.Android.Cecil.csproj">
-      <Project>{15945D4B-FF56-4BCC-B598-2718D199DD08}</Project>
-      <Name>Xamarin.Android.Cecil</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Java.Interop.Tools.JavaCallableWrappers\Java.Interop.Tools.JavaCallableWrappers.csproj">
       <Project>{D18FCF91-8876-48A0-A693-2DC1E7D3D80A}</Project>

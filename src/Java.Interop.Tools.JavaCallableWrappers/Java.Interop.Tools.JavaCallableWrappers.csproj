@@ -23,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Java.Interop.Tools.Cecil\Java.Interop.Tools.Cecil.csproj" />
     <ProjectReference Include="..\Java.Interop.Tools.Diagnostics\Java.Interop.Tools.Diagnostics.csproj" />
-    <ProjectReference Include="..\Xamarin.Android.Cecil\Xamarin.Android.Cecil.csproj" />
   </ItemGroup>
 
   <Import Project="..\Java.Interop.NamingCustomAttributes\Java.Interop.NamingCustomAttributes.projitems" Label="Shared" Condition="Exists('..\Java.Interop.NamingCustomAttributes\Java.Interop.NamingCustomAttributes.projitems')" />
