@@ -54,6 +54,7 @@
     <Compile Include="Kotlin\KotlinFixups.cs" />
     <Compile Include="Kotlin\KotlinMetadata.cs" />
     <Compile Include="Kotlin\KotlinProtobufDefinition.cs" />
+    <Compile Include="Kotlin\KotlinUtilities.cs" />
     <Compile Include="Kotlin\PartialStream.cs" />
     <Compile Include="StreamCoda.cs" />
     <Compile Include="Interfaces.cs" />
