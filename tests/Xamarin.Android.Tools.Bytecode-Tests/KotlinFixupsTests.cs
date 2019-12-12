@@ -119,5 +119,87 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 			Assert.AreEqual ("value", p.Name);
 		}
+
+		[Test]
+		public void UnsignedMethods ()
+		{
+			var klass = LoadClassFile ("UnsignedTypes.class");
+
+			var uint_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "I");
+			var ushort_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "S");
+			var ulong_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "J");
+			var ubyte_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "B");
+
+			KotlinFixups.Fixup (new [] { klass });
+
+			Assert.AreEqual ("uint", uint_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("uint", uint_method.KotlinReturnType);
+
+			Assert.AreEqual ("ushort", ushort_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("ushort", ushort_method.KotlinReturnType);
+
+			Assert.AreEqual ("ulong", ulong_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("ulong", ulong_method.KotlinReturnType);
+
+			Assert.AreEqual ("ubyte", ubyte_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("ubyte", ubyte_method.KotlinReturnType);
+		}
+
+		[Test]
+		public void UnsignedFields ()
+		{
+			var klass = LoadClassFile ("UnsignedTypesKt.class");
+
+			var uint_field = klass.Fields.Single (m => m.Name == "UINT_CONST");
+			var ushort_field = klass.Fields.Single (m => m.Name == "USHORT_CONST");
+			var ulong_field = klass.Fields.Single (m => m.Name == "ULONG_CONST");
+			var ubyte_field = klass.Fields.Single (m => m.Name == "UBYTE_CONST");
+
+			KotlinFixups.Fixup (new [] { klass });
+
+			Assert.AreEqual ("uint", uint_field.KotlinType);
+			Assert.AreEqual ("ushort", ushort_field.KotlinType);
+			Assert.AreEqual ("ulong", ulong_field.KotlinType);
+			Assert.AreEqual ("ubyte", ubyte_field.KotlinType);
+		}
+
+		[Test]
+		public void UnsignedFieldsXml ()
+		{
+			// Ensure Kotlin unsigned types end up in the xml
+			var klass = LoadClassFile ("UnsignedTypesKt.class");
+
+			KotlinFixups.Fixup (new [] { klass });
+
+			var xml = new XmlClassDeclarationBuilder (klass).ToXElement ();
+
+			Assert.AreEqual ("uint", xml.Elements ("field").Single (f => f.Attribute ("name").Value == "UINT_CONST").Attribute ("type").Value);
+			Assert.AreEqual ("ushort", xml.Elements ("field").Single (f => f.Attribute ("name").Value == "USHORT_CONST").Attribute ("type").Value);
+			Assert.AreEqual ("ulong", xml.Elements ("field").Single (f => f.Attribute ("name").Value == "ULONG_CONST").Attribute ("type").Value);
+			Assert.AreEqual ("ubyte", xml.Elements ("field").Single (f => f.Attribute ("name").Value == "UBYTE_CONST").Attribute ("type").Value);
+		}
+
+		[Test]
+		public void UnsignedMethodsXml ()
+		{
+			// Ensure Kotlin unsigned types end up in the xml
+			var klass = LoadClassFile ("UnsignedTypes.class");
+
+			KotlinFixups.Fixup (new [] { klass });
+
+			var xml = new XmlClassDeclarationBuilder (klass).ToXElement ();
+
+			Assert.AreEqual ("uint", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_uint-WZ4Q5Ns").Attribute ("return").Value);
+			Assert.AreEqual ("uint", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_uint-WZ4Q5Ns").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("ushort", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ushort-xj2QHRw").Attribute ("return").Value);
+			Assert.AreEqual ("ushort", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ushort-xj2QHRw").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("ulong", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ulong-VKZWuLQ").Attribute ("return").Value);
+			Assert.AreEqual ("ulong", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ulong-VKZWuLQ").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("ubyte", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ubyte-7apg3OU").Attribute ("return").Value);
+			Assert.AreEqual ("ubyte", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ubyte-7apg3OU").Element ("parameter").Attribute ("type").Value);
+		}
 	}
 }
