@@ -64,6 +64,8 @@ namespace MonoDroid.Generation {
 			get { return true; }
 		}
 
+		public string ReturnCast => string.Empty;
+
 		public string GetObjectHandleProperty (string variable)
 		{
 			return sym.GetObjectHandleProperty (variable);
