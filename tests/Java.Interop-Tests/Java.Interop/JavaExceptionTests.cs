@@ -17,26 +17,32 @@ namespace Java.InteropTests
 			}
 #if __ANDROID__
 			catch (Java.Lang.Throwable e) {
+				Console.WriteLine ($"# jonp: JavaExceptionTests.StackTrace: (Throwable) e: {e}");
 				Assert.IsTrue (
 						string.Equals ("this/type/had/better/not/exist", e.Message, StringComparison.OrdinalIgnoreCase) ||
-						e.Message.StartsWith ("Didn't find class \"this.type.had.better.not.exist\" on path: DexPathList"));
+						e.Message.StartsWith ("Didn't find class \"this.type.had.better.not.exist\" on path: DexPathList"),
+						$"Throwable.Message: {e.Message}");
 				Assert.IsTrue (
 						// ART
 						e.StackTrace.Contains ("java.lang.ClassNotFoundException: ", StringComparison.Ordinal) ||
 						// Dalvik, JVM
-						e.StackTrace.Contains ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal));
+						e.StackTrace.Contains ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal),
+						$"Throwable.StackTrace: {e.StackTrace}");
 				e.Dispose ();
 			}
 #endif  // __ANDROID__
 			catch (JavaException e) {
+				Console.WriteLine ($"# jonp: JavaExceptionTests.StackTrace: (JavaException) e: {e}");
 				Assert.IsTrue (
 						string.Equals ("this/type/had/better/not/exist", e.Message, StringComparison.OrdinalIgnoreCase) ||
-						e.Message.StartsWith ("Didn't find class \"this.type.had.better.not.exist\" on path: DexPathList"));
+						e.Message.StartsWith ("Didn't find class \"this.type.had.better.not.exist\" on path: DexPathList"),
+						$"JavaException.Message: {e.Message}");
 				Assert.IsTrue (
 						// ART
 						e.JavaStackTrace.StartsWith ("java.lang.ClassNotFoundException: ", StringComparison.Ordinal) ||
 						// Dalvik, JVM
-						e.JavaStackTrace.StartsWith ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal));
+						e.JavaStackTrace.StartsWith ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal),
+						$"JavaException.StackTrace: {e.StackTrace}");
 				e.Dispose ();
 			}
 		}
