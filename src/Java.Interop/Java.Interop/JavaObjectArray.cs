@@ -4,6 +4,27 @@ using System.Reflection;
 
 namespace Java.Interop
 {
+	[AttributeUsage (
+		AttributeTargets.Class
+		| AttributeTargets.Struct
+		| AttributeTargets.Enum
+		| AttributeTargets.Constructor
+		| AttributeTargets.Method
+		| AttributeTargets.Property
+		| AttributeTargets.Field
+		| AttributeTargets.Event
+		| AttributeTargets.Interface
+		| AttributeTargets.Delegate)]
+	sealed class PreserveAttribute : Attribute {
+
+		public bool AllMembers;
+		public bool Conditional;
+
+		public PreserveAttribute ()
+		{
+		}
+	}
+
 	public class JavaObjectArray<T> : JavaArray<T>
 	{
 		public JavaObjectArray (ref JniObjectReference handle, JniObjectReferenceOptions transfer)
@@ -135,6 +156,11 @@ namespace Java.Interop
 		}
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<T>> {
+
+			[Preserve (Conditional=true)]
+			public ValueMarshaler ()
+			{
+			}
 
 			public override IList<T> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type targetType)
 			{
