@@ -12,37 +12,32 @@ namespace Java.InteropTests
 		[Test]
 		public void StackTrace ()
 		{
+			void AssertMembers (string message, string stackTraceMember, string stackTrace) {
+				var containsMessage = message.Replace ('/', '.');
+				Assert.IsTrue (
+						containsMessage.IndexOf ("this.type.had.better.not.exist", StringComparison.OrdinalIgnoreCase) >= 0,
+						$"Message: {message}");
+				Assert.IsTrue (
+						// ART
+						(stackTrace.IndexOf ("java.lang.ClassNotFoundException: ", StringComparison.Ordinal) >= 0) ||
+						// Dalvik, JVM
+						(stackTrace.IndexOf ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal) >= 0),
+						$"{stackTraceMember}: {stackTrace}");
+			}
+
 			try {
 				new JniType ("this/type/had/better/not/exist");
 			}
 #if __ANDROID__
 			catch (Java.Lang.Throwable e) {
 				Console.WriteLine ($"# jonp: JavaExceptionTests.StackTrace: (Throwable) e: {e}");
-				Assert.IsTrue (
-						string.Equals ("this/type/had/better/not/exist", e.Message, StringComparison.OrdinalIgnoreCase) ||
-						e.Message.StartsWith ("Didn't find class \"this.type.had.better.not.exist\" on path: DexPathList"),
-						$"Throwable.Message: {e.Message}");
-				Assert.IsTrue (
-						// ART
-						e.StackTrace.Contains ("java.lang.ClassNotFoundException: ", StringComparison.Ordinal) ||
-						// Dalvik, JVM
-						e.StackTrace.Contains ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal),
-						$"Throwable.StackTrace: {e.StackTrace}");
+				AssertMembers (e.Message, "Throwable.StackTrace", e.StackTrace);
 				e.Dispose ();
 			}
 #endif  // __ANDROID__
 			catch (JavaException e) {
 				Console.WriteLine ($"# jonp: JavaExceptionTests.StackTrace: (JavaException) e: {e}");
-				Assert.IsTrue (
-						string.Equals ("this/type/had/better/not/exist", e.Message, StringComparison.OrdinalIgnoreCase) ||
-						e.Message.StartsWith ("Didn't find class \"this.type.had.better.not.exist\" on path: DexPathList"),
-						$"JavaException.Message: {e.Message}");
-				Assert.IsTrue (
-						// ART
-						e.JavaStackTrace.StartsWith ("java.lang.ClassNotFoundException: ", StringComparison.Ordinal) ||
-						// Dalvik, JVM
-						e.JavaStackTrace.StartsWith ("java.lang.NoClassDefFoundError: this/type/had/better/not/exist", StringComparison.Ordinal),
-						$"JavaException.StackTrace: {e.StackTrace}");
+				AssertMembers (e.Message, "JavaException.JavaStackTrace", e.JavaStackTrace);
 				e.Dispose ();
 			}
 		}
