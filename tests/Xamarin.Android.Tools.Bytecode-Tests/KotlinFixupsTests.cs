@@ -125,10 +125,14 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		{
 			var klass = LoadClassFile ("UnsignedTypes.class");
 
-			var uint_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "I");
-			var ushort_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "S");
-			var ulong_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "J");
-			var ubyte_method = klass.Methods.First (m => m.Name.Contains ('-') && m.GetParameters () [0].Type.BinaryName == "B");
+			var uint_method = klass.Methods.Single (m => m.Name.Contains ("foo_uint-"));
+			var ushort_method = klass.Methods.Single (m => m.Name.Contains ("foo_ushort-"));
+			var ulong_method = klass.Methods.Single (m => m.Name.Contains ("foo_ulong-"));
+			var ubyte_method = klass.Methods.Single (m => m.Name.Contains ("foo_ubyte-"));
+			var uintarray_method = klass.Methods.Single (m => m.Name.Contains ("foo_uintarray-"));
+			var ushortarray_method = klass.Methods.Single (m => m.Name.Contains ("foo_ushortarray-"));
+			var ulongarray_method = klass.Methods.Single (m => m.Name.Contains ("foo_ulongarray-"));
+			var ubytearray_method = klass.Methods.Single (m => m.Name.Contains ("foo_ubytearray-"));
 
 			KotlinFixups.Fixup (new [] { klass });
 
@@ -143,6 +147,18 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 			Assert.AreEqual ("ubyte", ubyte_method.GetParameters () [0].KotlinType);
 			Assert.AreEqual ("ubyte", ubyte_method.KotlinReturnType);
+
+			Assert.AreEqual ("uint[]", uintarray_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("uint[]", uintarray_method.KotlinReturnType);
+
+			Assert.AreEqual ("ushort[]", ushortarray_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("ushort[]", ushortarray_method.KotlinReturnType);
+
+			Assert.AreEqual ("ulong[]", ulongarray_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("ulong[]", ulongarray_method.KotlinReturnType);
+
+			Assert.AreEqual ("ubyte[]", ubytearray_method.GetParameters () [0].KotlinType);
+			Assert.AreEqual ("ubyte[]", ubytearray_method.KotlinReturnType);
 		}
 
 		[Test]
@@ -200,6 +216,18 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 			Assert.AreEqual ("ubyte", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ubyte-7apg3OU").Attribute ("return").Value);
 			Assert.AreEqual ("ubyte", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ubyte-7apg3OU").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("uint[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_uintarray--ajY-9A").Attribute ("return").Value);
+			Assert.AreEqual ("uint[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_uintarray--ajY-9A").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("ushort[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ushortarray-rL5Bavg").Attribute ("return").Value);
+			Assert.AreEqual ("ushort[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ushortarray-rL5Bavg").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("ulong[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ulongarray-QwZRm1k").Attribute ("return").Value);
+			Assert.AreEqual ("ulong[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ulongarray-QwZRm1k").Element ("parameter").Attribute ("type").Value);
+
+			Assert.AreEqual ("ubyte[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ubytearray-GBYM_sE").Attribute ("return").Value);
+			Assert.AreEqual ("ubyte[]", xml.Elements ("method").Single (f => f.Attribute ("name").Value == "foo_ubytearray-GBYM_sE").Element ("parameter").Attribute ("type").Value);
 		}
 	}
 }
