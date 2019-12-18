@@ -302,12 +302,20 @@ namespace Xamarin.Android.Tools.Bytecode
 			// Handle erasure of Kotlin unsigned types
 			if (jvmType == "I" && kotlinClass == "kotlin/UInt;")
 				return "uint";
+			if (jvmType == "[I" && kotlinClass == "kotlin/UIntArray;")
+				return "uint[]";
 			if (jvmType == "S" && kotlinClass == "kotlin/UShort;")
 				return "ushort";
+			if (jvmType == "[S" && kotlinClass == "kotlin/UShortArray;")
+				return "ushort[]";
 			if (jvmType == "J" && kotlinClass == "kotlin/ULong;")
 				return "ulong";
+			if (jvmType == "[J" && kotlinClass == "kotlin/ULongArray;")
+				return "ulong[]";
 			if (jvmType == "B" && kotlinClass == "kotlin/UByte;")
 				return "ubyte";
+			if (jvmType == "[B" && kotlinClass == "kotlin/UByteArray;")
+				return "ubyte[]";
 
 			return null;
 		}
