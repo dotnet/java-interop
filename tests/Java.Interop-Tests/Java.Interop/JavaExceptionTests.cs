@@ -30,13 +30,11 @@ namespace Java.InteropTests
 			}
 #if __ANDROID__
 			catch (Java.Lang.Throwable e) {
-				Console.WriteLine ($"# jonp: JavaExceptionTests.StackTrace: (Throwable) e: {e}");
 				AssertMembers (e.Message, "Throwable.StackTrace", e.StackTrace);
 				e.Dispose ();
 			}
 #endif  // __ANDROID__
 			catch (JavaException e) {
-				Console.WriteLine ($"# jonp: JavaExceptionTests.StackTrace: (JavaException) e: {e}");
 				AssertMembers (e.Message, "JavaException.JavaStackTrace", e.JavaStackTrace);
 				e.Dispose ();
 			}
