@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,6 +41,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\external\cecil\Mono.Cecil.csproj">
+      <Project>{780b5ce1-f4dd-4fad-95a9-9ee918bf8bbe}</Project>
+      <Name>Mono.Cecil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Java.Interop.Tools.JavaCallableWrappers\Java.Interop.Tools.JavaCallableWrappers.csproj">
       <Project>{D18FCF91-8876-48A0-A693-2DC1E7D3D80A}</Project>
       <Name>Java.Interop.Tools.JavaCallableWrappers</Name>
@@ -52,10 +56,6 @@
     <ProjectReference Include="..\..\src\Java.Interop.Tools.Diagnostics\Java.Interop.Tools.Diagnostics.csproj">
       <Project>{64CC4E44-CE3A-4319-BF3F-6CF8BD513870}</Project>
       <Name>Java.Interop.Tools.Diagnostics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Xamarin.Android.Cecil\Xamarin.Android.Cecil.csproj">
-      <Project>{15945D4B-FF56-4BCC-B598-2718D199DD08}</Project>
-      <Name>Xamarin.Android.Cecil</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
