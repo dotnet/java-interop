@@ -133,6 +133,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			var ushortarray_method = klass.Methods.Single (m => m.Name.Contains ("foo_ushortarray-"));
 			var ulongarray_method = klass.Methods.Single (m => m.Name.Contains ("foo_ulongarray-"));
 			var ubytearray_method = klass.Methods.Single (m => m.Name.Contains ("foo_ubytearray-"));
+			var uintarrayarray_method = klass.Methods.Single (m => m.Name.Contains ("foo_uintarrayarray"));
 
 			KotlinFixups.Fixup (new [] { klass });
 
@@ -159,6 +160,12 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 			Assert.AreEqual ("ubyte[]", ubytearray_method.GetParameters () [0].KotlinType);
 			Assert.AreEqual ("ubyte[]", ubytearray_method.KotlinReturnType);
+
+			// Kotlin's Array<UIntArray> does not trigger this code because it is not
+			// encoded as Java's "[[I", instead it is exposed as "UIntArray[]", so
+			// we treat it as a normal class array.
+			Assert.Null (uintarrayarray_method.GetParameters () [0].KotlinType);
+			Assert.Null (uintarrayarray_method.KotlinReturnType);
 		}
 
 		[Test]

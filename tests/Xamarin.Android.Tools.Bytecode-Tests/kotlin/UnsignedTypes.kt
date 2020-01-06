@@ -24,4 +24,5 @@ public class UnsignedTypes {
 	public fun foo_ushortarray (value : UShortArray) : UShortArray { return value; }
 	public fun foo_ulongarray (value : ULongArray) : ULongArray { return value; }
 	public fun foo_ubytearray (value : UByteArray) : UByteArray { return value; }
+	public fun foo_uintarrayarray (value : Array<UIntArray>) : Array<UIntArray> { return value; }
 }
