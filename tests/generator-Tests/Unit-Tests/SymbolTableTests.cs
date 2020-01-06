@@ -28,11 +28,13 @@ namespace generatortests
 
 			table.AddType (dict);
 
-			Assert.NotNull (table.Lookup ("System.Collections.Generic.IList<Java.Util.Locale.LanguageRange>"));
-			Assert.NotNull (table.Lookup ("System.Collections.Generic.IList<List<Java.Util.Locale.LanguageRange>>"));
+			Assert.AreEqual ("System.Collections.Generic.IList`1", table.Lookup ("System.Collections.Generic.IList<Java.Util.Locale.LanguageRange>").FullName);
+			Assert.AreEqual ("System.Collections.Generic.IList`1", table.Lookup ("System.Collections.Generic.IList<List<Java.Util.Locale.LanguageRange>>").FullName);
 
-			Assert.NotNull (table.Lookup ("System.Collections.Generic.IDictionary<string, Java.Util.Locale.LanguageRange>"));
-			Assert.NotNull (table.Lookup ("System.Collections.Generic.IDictionary<string, List<Java.Util.Locale.LanguageRange>>"));
+			Assert.AreEqual ("System.Collections.Generic.IDictionary`2", table.Lookup ("System.Collections.Generic.IDictionary<string, Java.Util.Locale.LanguageRange>").FullName);
+			Assert.AreEqual ("System.Collections.Generic.IDictionary`2", table.Lookup ("System.Collections.Generic.IDictionary<string, List<Java.Util.Locale.LanguageRange>>").FullName);
+
+			Assert.AreEqual ("System.Collections.Generic.IList`1", table.Lookup ("System.Collections.Generic.IList<Dictionary<string, Java.Util.Locale.LanguageRange>>").FullName);
 		}
 	}
 }

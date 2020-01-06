@@ -311,21 +311,13 @@ namespace MonoDroid.Generation {
 			typeParams = typeParams.Substring (1, typeParams.Length - 2);
 
 			foreach (var c in typeParams) {
-				if (nested_count > 0) {
-					if (c == '>') {
-						nested_count--;
-						continue;
-					}
+				if (c == '>')
+					nested_count--;
 
-					if (c == '<') {
-						nested_count++;
-						continue;
-					}
+				if (c == '<')
+					nested_count++;
 
-					continue;
-				}
-
-				if (c == ',')
+				if (nested_count == 0 && c == ',')
 					arity++;
 			}
 
