@@ -161,7 +161,7 @@ namespace Java.Interop
 		public static void SetCurrent (JniRuntime newCurrent)
 		{
 			if (newCurrent == null)
-				throw new ArgumentNullException ("newCurrent");
+				throw new ArgumentNullException (nameof (newCurrent));
 			lock (Runtimes) {
 				Runtimes [newCurrent.InvocationPointer] = newCurrent;
 			}
