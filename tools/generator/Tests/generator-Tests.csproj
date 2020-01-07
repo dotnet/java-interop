@@ -572,6 +572,18 @@
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\Common\WriteInterfacePropertyInvokersWithSkips.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteKotlinUnsignedArrayTypeMethodsClass.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteKotlinUnsignedArrayTypePropertiesClass.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteKotlinUnsignedTypeMethodsClass.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteKotlinUnsignedTypePropertiesClass.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Unit-Tests\CodeGeneratorExpectedResults\JavaInterop1\WriteParameterListCallArgs.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
