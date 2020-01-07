@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <NoWarn>1591</NoWarn>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
-    <DefineConstants>INTEROP;FEATURE_JNIENVIRONMENT_JI_PINVOKES;FEATURE_JNIOBJECTREFERENCE_INTPTRS</DefineConstants>
+    <DefineConstants>INTEROP;FEATURE_JNIENVIRONMENT_JI_PINVOKES;FEATURE_JNIOBJECTREFERENCE_INTPTRS;INTERNAL_NULLABLE_ATTRIBUTES</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>

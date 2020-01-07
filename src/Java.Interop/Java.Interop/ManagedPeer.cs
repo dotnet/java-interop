@@ -154,7 +154,7 @@ namespace Java.Interop {
 		{
 			if (string.IsNullOrEmpty (signature))
 				return Array.Empty<Type> ();
-			var typeNames   = signature.Split (':');
+			var typeNames   = signature!.Split (':');
 			var ptypes      = new Type [typeNames.Length];
 			for (int i = 0; i < typeNames.Length; i++)
 				ptypes [i] = Type.GetType (typeNames [i], throwOnError:true);
