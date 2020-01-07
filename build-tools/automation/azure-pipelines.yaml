@@ -71,7 +71,7 @@ jobs:
       version: $(DotNetCoreVersion)
     
   - script: |
-      dotnet tool install --global boots --version 1.0.0.291   
+      dotnet tool install --global boots  
       boots https://download.mono-project.com/archive/6.4.0/macos-10-universal/MonoFramework-MDK-6.4.0.198.macos10.xamarin.universal.pkg
     displayName: Install Mono 6.4
     
