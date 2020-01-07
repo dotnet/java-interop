@@ -89,3 +89,5 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage ("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>", Scope = "member", Target = "~M:Java.Interop.JniEnvironment.Exceptions.Throw(Java.Interop.JniObjectReference)")]
 [assembly: SuppressMessage ("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>", Scope = "member", Target = "~M:Java.Interop.JniEnvironment.Exceptions.ThrowNew(Java.Interop.JniObjectReference,System.String)")]
+
+[assembly: SuppressMessage ("Usage", "CA2213:Disposable fields should be disposed", Justification = "<Pending>", Scope = "member", Target = "~F:Java.Interop.JniRuntime.valueManager")]
