@@ -47,6 +47,21 @@ namespace Java.InteropTests
 					yield return target;
 			}
 
+			protected override string GetSimpleReference (Type type)
+			{
+				var simpleRef = base.GetSimpleReference (type);
+				if (simpleRef != null)
+					return simpleRef;
+				var mappings = ((TestJVM) Runtime).typeMappings;
+				if (mappings == null)
+					return null;
+				foreach (var e in mappings) {
+					if (e.Value == type)
+						return e.Key;
+				}
+				return null;
+			}
+
 			protected override IEnumerable<string> GetSimpleReferences (Type type)
 			{
 				return base.GetSimpleReferences (type)
