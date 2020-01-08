@@ -58,7 +58,7 @@ namespace Java.InteropTests
 				JniRuntime.SetCurrent (r);
 				Assert.AreEqual (r, JniEnvironment.Runtime);
 				r.Dispose ();
-				Assert.Throws<NotSupportedException>(() => {
+				Assert.Throws<ObjectDisposedException>(() => {
 					var env = JniEnvironment.Runtime;
 				});
 			});
