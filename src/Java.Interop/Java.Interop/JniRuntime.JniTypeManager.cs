@@ -167,23 +167,12 @@ namespace Java.Interop {
 				return type;
 			}
 
-
-			// NOTE: This method needs to be kept in sync with GetSimpleReferences()
-			// This version of the method has removed IEnumerable for performance reasons.
 			// `type` will NOT be an array type.
 			protected virtual string GetSimpleReference (Type type)
 			{
-				AssertValid ();
-
-				if (type == null)
-					throw new ArgumentNullException (nameof (type));
-				if (type.IsArray)
-					throw new ArgumentException ("Array type '" + type.FullName + "' is not supported.", nameof (type));
-
-				return null;
+				return GetSimpleReferences (type).FirstOrDefault ();
 			}
 
-			// NOTE: This method needs to be kept in sync with GetSimpleReference()
 			// `type` will NOT be an array type.
 			protected virtual IEnumerable<string> GetSimpleReferences (Type type)
 			{
