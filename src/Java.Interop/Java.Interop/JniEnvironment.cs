@@ -192,7 +192,7 @@ namespace Java.Interop {
 		public      int                     LocalReferenceCount     {get; internal set;}
 		public      bool                    WithinNewObjectScope    {get; set;}
 		public      JniRuntime              Runtime {
-			get => runtime ?? throw new ObjectDisposedException (nameof (JniEnvironmentInfo));
+			get => runtime ?? throw new NotSupportedException ();
 			private set => runtime = value;
 		}
 
