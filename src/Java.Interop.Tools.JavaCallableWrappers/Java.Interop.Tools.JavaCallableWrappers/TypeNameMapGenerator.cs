@@ -61,6 +61,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		List<TypeDefinition>            Types;
 		DirectoryAssemblyResolver       Resolver;
 		JavaTypeScanner                 Scanner;
+		bool                            LeaveOpen;
 
 		[Obsolete ("Use TypeNameMapGenerator(IEnumerable<string>, Action<TraceLevel, string>)")]
 		public TypeNameMapGenerator (IEnumerable<string> assemblies, Action<string, object []> logMessage)
@@ -73,7 +74,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		public TypeNameMapGenerator (IEnumerable<string> assemblies, Action<TraceLevel, string> logger)
 		{
 			if (assemblies == null)
-				throw new ArgumentNullException ("assemblies");
+				throw new ArgumentNullException (nameof (assemblies));
 			if (logger == null)
 				throw new ArgumentNullException (nameof (logger));
 
@@ -97,6 +98,24 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				ErrorOnCustomJavaObject     = false,
 			};
 			Types       = Scanner.GetJavaTypes (Assemblies, Resolver);
+		}
+
+		public TypeNameMapGenerator (DirectoryAssemblyResolver resolver, IEnumerable<string> assemblies, Action<TraceLevel, string> logger)
+		{
+			if (resolver == null)
+				throw new ArgumentNullException (nameof (resolver));
+			if (assemblies == null)
+				throw new ArgumentNullException (nameof (assemblies));
+			if (logger == null)
+				throw new ArgumentNullException (nameof (logger));
+
+			Log       = logger;
+			Resolver  = resolver;
+			LeaveOpen = true;
+			Scanner   = new JavaTypeScanner (Log) {
+				ErrorOnCustomJavaObject = false,
+			};
+			Types     = Scanner.GetJavaTypes (assemblies, Resolver);
 		}
 
 		[Obsolete ("Use TypeNameMapGenerator(IEnumerable<TypeDefinition>, Action<TraceLevel, string>)")]
@@ -129,7 +148,8 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			if (!disposing || Resolver == null)
 				return;
 
-			Resolver.Dispose ();
+			if (!LeaveOpen)
+				Resolver.Dispose ();
 			Resolver = null;
 		}
 
