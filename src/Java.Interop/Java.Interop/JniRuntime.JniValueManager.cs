@@ -440,6 +440,7 @@ namespace Java.Interop
 				return marshaler.CreateValue (ref reference, options, targetType);
 			}
 
+			[return: MaybeNull]
 			public T GetValue<T> (IntPtr handle)
 			{
 				var r   = new JniObjectReference (handle);

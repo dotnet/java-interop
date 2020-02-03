@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Java.Interop
@@ -47,6 +48,7 @@ namespace Java.Interop
 		{
 		}
 
+		[MaybeNull]
 		public override T this [int index] {
 			get {
 				if (index < 0 || index >= Length)
@@ -60,6 +62,7 @@ namespace Java.Interop
 			}
 		}
 
+		[return: MaybeNull]
 		T GetElementAt (int index)
 		{
 			var lref = JniEnvironment.Arrays.GetObjectArrayElement (PeerReference, index);
@@ -78,7 +81,9 @@ namespace Java.Interop
 		{
 			int len = Length;
 			for (int i = 0; i < len; ++i) {
+#pragma warning disable CS8603 // Possible null reference return.
 				yield return GetElementAt (i);
+#pragma warning restore CS8603 // Possible null reference return.
 			}
 		}
 
@@ -101,7 +106,9 @@ namespace Java.Interop
 			for (int i = 0; i < len; i++) {
 				var at = GetElementAt (i);
 				try {
+#pragma warning disable CS8604 // Possible null reference argument.
 					if (EqualityComparer<T>.Default.Equals (item, at) || JniMarshal.RecursiveEquals (item, at))
+#pragma warning restore CS8604 // Possible null reference argument.
 						return i;
 				} finally {
 					var j = at as IJavaPeerable;
@@ -125,7 +132,9 @@ namespace Java.Interop
 			int len = Length;
 			for (int i = 0; i < len; i++) {
 				var item         = GetElementAt (i);
+#pragma warning disable CS8601 // Possible null reference assignment.
 				list [index + i] = item;
+#pragma warning restore CS8601 // Possible null reference assignment.
 				if (forMarshalCollection) {
 					var d = item as IJavaPeerable;
 					if (d != null)

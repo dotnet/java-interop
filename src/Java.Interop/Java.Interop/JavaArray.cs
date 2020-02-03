@@ -60,7 +60,9 @@ namespace Java.Interop
 		{
 			int len = Length;
 			for (int i = 0; i < len; ++i)
+#pragma warning disable CS8603 // Possible null reference return.
 				yield return this [i];
+#pragma warning restore CS8603 // Possible null reference return.
 		}
 
 		internal static void CheckArrayCopy (int sourceIndex, int sourceLength, int destinationIndex, int destinationLength, int length)
@@ -117,7 +119,7 @@ namespace Java.Interop
 			throw CreateMarshalNotSupportedException (GetType (), targetType);
 		}
 
-		internal virtual bool TargetTypeIsCurrentType (Type? targetType)
+		internal virtual bool TargetTypeIsCurrentType ([NotNullWhen (false)]Type? targetType)
 		{
 			return targetType == null || targetType == typeof (JavaArray<T>);
 		}
@@ -192,7 +194,9 @@ namespace Java.Interop
 		{
 			int len = Length;
 			for (int i = 0; i < len; i++) {
+#pragma warning disable CS8601 // Possible null reference assignment.
 				list [index + i] = this [i];
+#pragma warning restore CS8601 // Possible null reference assignment.
 			}
 		}
 

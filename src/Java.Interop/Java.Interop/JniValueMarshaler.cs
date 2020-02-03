@@ -224,7 +224,7 @@ namespace Java.Interop {
 		}
 
 		public  abstract    JniValueMarshalerState  CreateGenericObjectReferenceArgumentState ([MaybeNull] T value, ParameterAttributes synchronize = 0);
-		public  abstract    void                    DestroyGenericArgumentState ([MaybeNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0);
+		public  abstract    void                    DestroyGenericArgumentState ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0);
 
 		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType = null)
 		{
