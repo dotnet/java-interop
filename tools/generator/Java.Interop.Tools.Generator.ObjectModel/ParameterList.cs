@@ -236,7 +236,7 @@ namespace MonoDroid.Generation {
 					continue;
 				else if (sb.Length > 0)
 					sb.Append (", ");
-				sb.Append (opt.GetOutputName (p.Type));
+				sb.Append (opt.GetTypeReferenceName (p));
 				sb.Append (" ");
 				sb.Append (p.Name);
 			}

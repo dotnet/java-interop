@@ -118,7 +118,7 @@ namespace MonoDroid.Generation {
 			if (method.IsVoid)
 				writer.WriteLine ("{0}{1};", indent, call);
 			else if (method.Parameters.HasCleanup)
-				writer.WriteLine ("{0}{1}__ret = {2};", indent, declare_ret ? opt.GetOutputName (method.RetVal.FullName) + " " : String.Empty, method.RetVal.FromNative (opt, call, true));
+				writer.WriteLine ("{0}{1}__ret = {2};", indent, declare_ret ? opt.GetTypeReferenceName (method.RetVal) + " " : String.Empty, method.RetVal.FromNative (opt, call, true));
 			else
 				writer.WriteLine ("{0}return {1};", indent, method.RetVal.FromNative (opt, call, true));
 		}
@@ -139,7 +139,7 @@ namespace MonoDroid.Generation {
 			} else if (use_non_virtual) {
 				writer.WriteLine ();
 				if (!method.IsVoid && method.Parameters.HasCleanup)
-					writer.WriteLine ("{0}{1} __ret;", indent, opt.GetOutputName (method.RetVal.FullName));
+					writer.WriteLine ("{0}{1} __ret;", indent, opt.GetTypeReferenceName (method.RetVal));
 				writer.WriteLine ("{0}if (((object) this).GetType () == ThresholdType)", indent);
 				GenerateJNICall (method, indent + "\t",
 						"JNIEnv.Call" + method.RetVal.CallMethodPrefix + "Method (" +

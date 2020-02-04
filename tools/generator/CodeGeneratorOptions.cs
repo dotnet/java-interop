@@ -45,6 +45,7 @@ namespace Xamarin.Android.Binder
 		public bool                 SupportInterfaceConstants { get; set; }
 		public bool		    SupportDefaultInterfaceMethods { get; set; }
 		public bool		    SupportNestedInterfaceTypes { get; set; }
+		public bool		    SupportNullableReferenceTypes { get; set; }
 
 		public static CodeGeneratorOptions Parse (string[] args)
 		{
@@ -92,11 +93,12 @@ namespace Xamarin.Android.Binder
 					"SDK Platform {VERSION}/API level.",
 					v => opts.ApiLevel = v },
 				{ "lang-features=",
-					"For internal use. (Flags: interface-constants,default-interface-methods)",
+					"For internal use. (Flags: interface-constants,default-interface-methods,nullable-reference-types)",
 					v => {
 						opts.SupportInterfaceConstants = v?.Contains ("interface-constants") == true;
 						opts.SupportDefaultInterfaceMethods = v?.Contains ("default-interface-methods") == true;
 						opts.SupportNestedInterfaceTypes = v?.Contains ("nested-interface-types") == true;
+						opts.SupportNullableReferenceTypes = v?.Contains ("nullable-reference-types") == true;
 						}},
 				{ "preserve-enums",
 					"For internal use.",
@@ -170,6 +172,8 @@ namespace Xamarin.Android.Binder
 				Console.Error.WriteLine (Report.Format (true, Report.ErrorInvalidArgument, "lang-features=default-interface-methods is not compatible with codegen-target=xamarinandroid."));
 				return null;
 			}
+
+			opts.SupportNullableReferenceTypes = true;
 
 			return opts;
 		}
