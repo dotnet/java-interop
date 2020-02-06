@@ -43,7 +43,7 @@ namespace MonoDroid.Generation {
 			foreach (Parameter p in items) {
 				if (sb.Length > 0)
 					sb.Append (", ");
-				sb.Append (opt.GetSafeIdentifier (p.Name));
+				sb.Append (opt.GetSafeIdentifier (p.Name) + opt.GetNullForgiveness (p));
 			}
 			return sb.ToString ();
 		}

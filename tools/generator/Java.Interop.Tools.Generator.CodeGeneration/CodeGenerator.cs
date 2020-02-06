@@ -449,7 +449,7 @@ namespace MonoDroid.Generation
 					writer.WriteLine ("{0}{1}", indent, field.Annotation);
 
 				// the Value complication is due to constant enum from negative integer value (C# compiler requires explicit parenthesis).
-				writer.WriteLine ("{0}{1} const {2} {3} = ({2}) {4};", indent, field.Visibility, opt.GetTypeReferenceName (field), field.Name, field.Value.Contains ('-') && field.Symbol.FullName.Contains ('.') ? '(' + field.Value + ')' : field.Value);
+				writer.WriteLine ("{0}{1} const {2} {3} = ({2}) {4};", indent, field.Visibility, opt.GetOutputName (field.Symbol.FullName), field.Name, field.Value.Contains ('-') && field.Symbol.FullName.Contains ('.') ? '(' + field.Value + ')' : field.Value);
 			}
 		}
 
@@ -837,7 +837,7 @@ namespace MonoDroid.Generation
 			WriteInterfaceInvokerHandle (@interface, indent + "\t", @interface.Name + "Invoker");
 			writer.WriteLine ("{0}\t{1}IntPtr class_ref;", indent, opt.BuildingCoreAssembly ? "" : "");
 			writer.WriteLine ();
-			writer.WriteLine ("{0}\tpublic static {1} GetObject (IntPtr handle, JniHandleOwnership transfer)", indent, @interface.Name);
+			writer.WriteLine ("{0}\tpublic static {1}? GetObject (IntPtr handle, JniHandleOwnership transfer)", indent, @interface.Name);
 			writer.WriteLine ("{0}\t{{", indent);
 			writer.WriteLine ("{0}\t\treturn global::Java.Lang.Object.GetObject<{1}> (handle, transfer);", indent, @interface.Name);
 			writer.WriteLine ("{0}\t}}", indent);
@@ -1109,7 +1109,7 @@ namespace MonoDroid.Generation
 				writer.WriteLine ($"{indent}[Obsolete]");
 			writer.WriteLine ("{0}{4}static {1} n_{2} (IntPtr jnienv, IntPtr native__this{3})", indent, method.RetVal.NativeType, method.Name + method.IDSignature, method.Parameters.GetCallbackSignature (opt), is_private);
 			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\tvar __this = global::Java.Lang.Object.GetObject<{1}> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);", indent, opt.GetOutputName (type.FullName));
+			writer.WriteLine ("{0}\tvar __this = global::Java.Lang.Object.GetObject<{1}> (jnienv, native__this, JniHandleOwnership.DoNotTransfer)!;", indent, opt.GetOutputName (type.FullName));
 			foreach (string s in method.Parameters.GetCallbackPrep (opt))
 				writer.WriteLine ("{0}\t{1}", indent, s);
 			if (String.IsNullOrEmpty (property_name)) {
@@ -1284,7 +1284,7 @@ namespace MonoDroid.Generation
 			if (method.IsVoid)
 				writer.WriteLine ("{0}{1};", indent, call);
 			else
-				writer.WriteLine ("{0}{1}{2};", indent, method.Parameters.HasCleanup ? "var __ret = " : "return ", method.RetVal.FromNative (opt, call, true));
+				writer.WriteLine ("{0}{1}{2};", indent, method.Parameters.HasCleanup ? "var __ret = " : "return ", method.RetVal.FromNative (opt, call, true) + opt.GetNullForgiveness (method.RetVal));
 
 			foreach (string cleanup in method.Parameters.GetCallCleanup (opt))
 				writer.WriteLine ("{0}{1}", indent, cleanup);
@@ -1307,7 +1307,7 @@ namespace MonoDroid.Generation
 				}
 				if (call.Length > 0)
 					call.Append (", ");
-				call.Append (pname);
+				call.Append (pname + (p.Type == "Java.Lang.ICharSequence" ? opt.GetNullForgiveness (p) : string.Empty));
 			}
 			writer.WriteLine ("{0}{1}{2}{3} ({4});", indent, method.RetVal.IsVoid ? String.Empty : opt.GetTypeReferenceName (method.RetVal) + " __result = ", haveSelf ? "self." : "", method.AdjustedName, call.ToString ());
 			switch (method.RetVal.FullName) {
@@ -1330,7 +1330,7 @@ namespace MonoDroid.Generation
 					writer.WriteLine ("{0}if ({1} != null) foreach (var s in {1}) s?.Dispose ();", indent, p.GetName ("jlca_"));
 			}
 			if (!method.RetVal.IsVoid) {
-				writer.WriteLine ($"{indent}return __rsval;");
+				writer.WriteLine ($"{indent}return __rsval{opt.GetNullForgiveness (method.RetVal)};");
 			}
 		}
 

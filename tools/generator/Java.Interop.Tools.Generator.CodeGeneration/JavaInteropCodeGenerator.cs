@@ -175,7 +175,7 @@ namespace MonoDroid.Generation {
 
 			if (!method.IsVoid) {
 				var r   = invokeType == "Object" ? "__rm.Handle" : "__rm";
-				writer.WriteLine ("{0}return {2}{1};", indent, method.RetVal.FromNative (opt, r, true), method.RetVal.ReturnCast);
+				writer.WriteLine ("{0}return {2}{1};", indent, method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal), method.RetVal.ReturnCast);
 			}
 
 			indent = oldindent;
@@ -213,7 +213,7 @@ namespace MonoDroid.Generation {
 			else if (field.Symbol.NativeType != field.Symbol.FullName) {
 				writer.WriteLine ("{0}return {2}{1};",
 						indent,
-						field.Symbol.FromNative (opt, invokeType != "Object" ? "__v" : "__v.Handle", true),
+						field.Symbol.FromNative (opt, invokeType != "Object" ? "__v" : "__v.Handle", true) + opt.GetNullForgiveness (field),
 						field.Symbol.ReturnCast);
 			} else {
 				writer.WriteLine ("{0}return __v;", indent);
