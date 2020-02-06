@@ -17,6 +17,32 @@
             "request": "attach",
             "address": "localhost",
             "port": 55555
+        },
+        {
+          "name": "Launch Generator",
+          "type": "mono",
+          "request": "launch",
+          "preLaunchTask": "Build Generator",
+          "program": "${workspaceRoot}/bin/TestDebug/generator.exe",
+          "args": [
+            "--public",
+            "--product-version=7",
+            "--api-level=29",
+            "-o=obj/Debug/android-29/mcw/",
+            "--codegen-target=XAJavaInterop1",
+            "--fixup=metadata",
+            "--preserve-enums",
+            "--enumflags=enumflags",
+            "--enumfields=map.csv",
+            "--enummethods=methodmap.csv",
+            "--enummetadata=obj/Debug/android-29/mcw/enummetadata",
+            "--apiversions=${env:HOME}/android-toolchain/sdk/platforms/android-29/data/api-versions.xml",
+            "--annotations=${env:HOME}/android-toolchain/sdk/platforms/android-29/data/annotations.zip",
+            "--type-map-report=obj/Debug/android-29/mcw/type-mapping.txt",
+            "--enumdir=obj/Debug/android-29/mcw",
+            "obj/Debug/android-29/mcw/api.xml"
+          ],
+          "cwd": "${workspaceRoot}/../xamarin-android/src/Mono.Android",
         }
     ]
 }

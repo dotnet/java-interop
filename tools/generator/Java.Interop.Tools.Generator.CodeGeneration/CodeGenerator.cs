@@ -54,7 +54,7 @@ namespace MonoDroid.Generation
 			foreach (ISymbol isym in @class.Interfaces) {
 				GenericSymbol gs = isym as GenericSymbol;
 				InterfaceGen gen = (gs == null ? isym : gs.Gen) as InterfaceGen;
-				if (gen != null && (gen.IsConstSugar || gen.RawVisibility != "public"))
+				if (gen != null && (gen.RawVisibility != "public"))
 					continue;
 				if (sb.Length > 0)
 					sb.Append (", ");
@@ -459,11 +459,6 @@ namespace MonoDroid.Generation
 
 			WriteInterfaceImplementedMembersAlternative (@interface, indent);
 
-			// If this interface is just fields and we can't generate any of them
-			// then we don't need to write the interface
-			if (@interface.IsConstSugar && @interface.GetGeneratableFields (opt).Count () == 0)
-				return;
-
 			WriteInterfaceDeclaration (@interface, indent);
 
 			// If this interface is just constant fields we don't need to write all the invoker bits
@@ -533,7 +528,7 @@ namespace MonoDroid.Generation
 			if (@interface.TypeParameters != null && @interface.TypeParameters.Any ())
 				writer.WriteLine ("{0}{1}", indent, @interface.TypeParameters.ToGeneratedAttributeString ());
 			writer.WriteLine ("{0}{1} partial interface {2}{3} {{", indent, @interface.Visibility, @interface.Name,
-				@interface.IsConstSugar ? string.Empty : @interface.Interfaces.Count == 0 || sb.Length == 0 ? " : " + GetAllInterfaceImplements () : " : " + sb.ToString ());
+				@interface.Interfaces.Count == 0 || sb.Length == 0 ? " : " + GetAllInterfaceImplements () : " : " + sb.ToString ());
 
 			if (opt.SupportDefaultInterfaceMethods && (@interface.HasDefaultMethods || @interface.HasStaticMethods))
 				WriteClassHandle (@interface, indent + "\t", @interface.Name);
