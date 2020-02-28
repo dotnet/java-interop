@@ -80,7 +80,7 @@ namespace Java.Interop {
 			}
 
 			if (type == typeof (void)) {
-				signature = GetCachedTypeSignature (ref __VoidTypeSignature, "V");
+				signature = GetCachedTypeSignature (ref __VoidTypeSignature, "V", arrayRank: 0, keyword: true);
 				return true;
 			}
 
