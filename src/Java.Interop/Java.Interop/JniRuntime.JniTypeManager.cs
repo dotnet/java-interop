@@ -52,6 +52,8 @@ namespace Java.Interop {
 			{
 				AssertValid ();
 
+				if (type == null)
+ 					throw new ArgumentNullException (nameof (type));
 				if (type.ContainsGenericParameters)
 					throw new ArgumentException ($"'{type}' contains a generic type definition. This is not supported.", nameof (type));
 
