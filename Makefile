@@ -2,6 +2,8 @@ OS           ?= $(shell uname)
 
 V             ?= 0
 CONFIGURATION = Debug
+TFNETSTANDARD = netstandard2.0
+TFNETFRAMEWORK = net472
 
 ifeq ($(OS),Darwin)
 NATIVE_EXT = .dylib
@@ -20,24 +22,24 @@ PREPARE_EXTERNAL_FILES  = \
 	external/xamarin-android-tools/src/Xamarin.Android.Tools.AndroidSdk/Xamarin.Android.Tools.AndroidSdk.csproj
 
 DEPENDENCIES = \
-	bin/Test$(CONFIGURATION)/libNativeTiming$(NATIVE_EXT)
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/libNativeTiming$(NATIVE_EXT)
 
 TESTS = \
-	bin/Test$(CONFIGURATION)/Java.Interop-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Dynamic-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Export-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Tools.JavaSource-Tests.dll \
-	bin/Test$(CONFIGURATION)/logcat-parse-Tests.dll \
-	bin/Test$(CONFIGURATION)/generator-Tests.dll \
-	bin/Test$(CONFIGURATION)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll \
-	bin/Test$(CONFIGURATION)/Xamarin.Android.Tools.Bytecode-Tests.dll
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.Dynamic-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.Export-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.Tools.JavaSource-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/logcat-parse-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Xamarin.Android.Tools.Bytecode-Tests.dll
 
 PTESTS = \
-	bin/Test$(CONFIGURATION)/Java.Interop-PerformanceTests.dll
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop-PerformanceTests.dll
 
 ATESTS = \
-	bin/Test$(CONFIGURATION)/Android.Interop-Tests.dll
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Android.Interop-Tests.dll
 
 NUNIT_CONSOLE = packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe
 

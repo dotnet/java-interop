@@ -8,20 +8,9 @@
     <DefineConstants>INTEROP;FEATURE_JNIENVIRONMENT_JI_PINVOKES;FEATURE_JNIOBJECTREFERENCE_INTPTRS;INTERNAL_NULLABLE_ATTRIBUTES</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\bin\Debug</OutputPath>
-    <DocumentationFile>..\..\bin\Debug\Java.Interop.xml</DocumentationFile>
-    <JNIEnvGenPath>..\..\bin\BuildDebug</JNIEnvGenPath>
-    <DefineConstants>$(DefineConstants);DEBUG;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
-    <LangVersion>8.0</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\bin\Release</OutputPath>
-    <DocumentationFile>..\..\bin\Release\Java.Interop.xml</DocumentationFile>
-    <JNIEnvGenPath>..\..\bin\BuildRelease</JNIEnvGenPath>
+    <OutputPath>..\..\bin\$(Configuration)</OutputPath>
+    <JNIEnvGenPath>..\..\bin\Build$(Configuration)</JNIEnvGenPath>
+    <DocumentationFile>$(OutputPath)Java.Interop.xml</DocumentationFile>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
