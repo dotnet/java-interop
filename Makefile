@@ -2,8 +2,6 @@ OS           ?= $(shell uname)
 
 V             ?= 0
 CONFIGURATION = Debug
-TFNETSTANDARD = netstandard2.0
-TFNETFRAMEWORK = net472
 
 ifeq ($(OS),Darwin)
 NATIVE_EXT = .dylib
@@ -14,6 +12,12 @@ NATIVE_EXT = .so
 DLLMAP_OS_NAME = linux
 endif
 
+JAVA_INTEROP_LIB    = libjava-interop$(NATIVE_EXT)
+NATIVE_TIMING_LIB   = libNativeTiming$(NATIVE_EXT)
+
+TFNETFRAMEWORK = net472
+TFNETSTANDARD = netstandard2.0
+
 PACKAGES = \
 	packages/NUnit.3.11.0/NUnit.3.11.0.nupkg \
 	packages/NUnit.Console.3.9.0/NUnit.Console.3.9.0.nupkg
@@ -22,7 +26,7 @@ PREPARE_EXTERNAL_FILES  = \
 	external/xamarin-android-tools/src/Xamarin.Android.Tools.AndroidSdk/Xamarin.Android.Tools.AndroidSdk.csproj
 
 DEPENDENCIES = \
-	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/libNativeTiming$(NATIVE_EXT)
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/$(NATIVE_TIMING_LIB)
 
 TESTS = \
 	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop-Tests.dll \
@@ -96,10 +100,7 @@ src/Java.Runtime.Environment/Java.Runtime.Environment.dll.config: src/Java.Runti
 		bin/Build$(CONFIGURATION)/JdkInfo.props
 	sed -e 's#@JI_JVM_PATH@#$(JI_JVM_PATH)#g' -e 's#@OS_NAME@#$(DLLMAP_OS_NAME)#g' -e $(JAVA_RUNTIME_ENVIRONMENT_DLLMAP_OVERRIDE_CMD) < $< > $@
 
-JAVA_INTEROP_LIB    = libjava-interop$(NATIVE_EXT)
-NATIVE_TIMING_LIB   = libNativeTiming$(NATIVE_EXT)
-
-bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/($(NATIVE_TIMING_LIB): tests/NativeTiming/timing.c $(wildcard $(JI_JDK_INCLUDE_PATHS)/jni.h)
+bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/$(NATIVE_TIMING_LIB): tests/NativeTiming/timing.c $(wildcard $(JI_JDK_INCLUDE_PATHS)/jni.h)
 	mkdir -p `dirname "$@"`
 	gcc -g -shared -m64 -fPIC -o $@ $< $(JI_JDK_INCLUDE_PATHS:%=-I%)
 
@@ -123,14 +124,14 @@ bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Android.Interop-Tests.dll: $(wildcard
 	$(MSBUILD) $(MSBUILD_FLAGS)
 	touch $@
 
-bin/$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.dll: $(wildcard src/Java.Interop/*/*.cs) src/Java.Interop/Java.Interop.csproj
+bin/$(CONFIGURATION)/$(TFNETSTANDARD)/Java.Interop.dll: $(wildcard src/Java.Interop/*/*.cs) src/Java.Interop/Java.Interop.csproj
 	$(MSBUILD) $(if $(V),/v:diag,) /p:Configuration=$(CONFIGURATION) $(if $(SNK),"/p:AssemblyOriginatorKeyFile=$(SNK)",)
 
 CSHARP_REFS = \
-	bin/$(CONFIGURATION)/Java.Interop.dll               \
-	bin/$(CONFIGURATION)/Java.Interop.Export.dll        \
-	bin/$(CONFIGURATION)/Java.Runtime.Environment.dll   \
-	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/TestJVM.dll  \
+	bin/$(CONFIGURATION)/$(TFNETSTANDARD)/Java.Interop.dll               \
+	bin/$(CONFIGURATION)/$(TFNETSTANDARD)/Java.Interop.Export.dll        \
+	bin/$(CONFIGURATION)/$(TFNETSTANDARD)/Java.Runtime.Environment.dll   \
+	bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/TestJVM.dll               \
 	$(PTESTS)                                           \
 	$(TESTS)
 
@@ -156,14 +157,14 @@ run-ptests: $(PTESTS) bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/$(JAVA_INTEROP_
 bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/$(JAVA_INTEROP_LIB): bin/$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
 	cp $< $@
 
-JRE_DLL_CONFIG=bin/$(CONFIGURATION)/Java.Runtime.Environment.dll.config
+JRE_DLL_CONFIG=bin/$(CONFIGURATION)/$(TFNETSTANDARD)/Java.Runtime.Environment.dll.config
 
 $(JRE_DLL_CONFIG): src/Java.Runtime.Environment/Java.Runtime.Environment.csproj
 	$(MSBUILD) $(MSBUILD_FLAGS) $<
 
 define run-jnimarshalmethod-gen
 	MONO_TRACE_LISTENER=Console.Out \
-	$(RUNTIME) bin/$(CONFIGURATION)/jnimarshalmethod-gen.exe -v --jvm "$(JI_JVM_PATH)" -L "$(JI_MONO_LIB_PATH)mono/4.5" -L "$(JI_MONO_LIB_PATH)mono/4.5/Facades" $(2) $(1)
+	$(RUNTIME) bin/$(CONFIGURATION)/$(TFNETFRAMEWORK))/jnimarshalmethod-gen.exe -v --jvm "$(JI_JVM_PATH)" -L "$(JI_MONO_LIB_PATH)mono/4.5" -L "$(JI_MONO_LIB_PATH)mono/4.5/Facades" $(2) $(1)
 endef
 
 run-test-jnimarshal: bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.Export-Tests.dll bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/$(JAVA_INTEROP_LIB) $(JRE_DLL_CONFIG)
@@ -191,7 +192,7 @@ run-test-generator-core: bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator.ex
 	$(call GEN_CORE_OUTPUT,bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator-core,-cp)
 	diff -rup --strip-trailing-cr tests/generator-Tests/Tests-Core/expected.cp bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator-core
 
-bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator.exe: bin/$(CONFIGURATION)/generator.exe
+bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator.exe: bin/$(CONFIGURATION)/$(TFNETFRAMEWORK)/generator.exe
 	cp $<* `dirname "$@"`
 
 update-test-generator-core:
