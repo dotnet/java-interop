@@ -164,7 +164,7 @@ $(JRE_DLL_CONFIG): src/Java.Runtime.Environment/Java.Runtime.Environment.csproj
 
 define run-jnimarshalmethod-gen
 	MONO_TRACE_LISTENER=Console.Out \
-	$(RUNTIME) bin/$(CONFIGURATION)/$(TFNETFRAMEWORK))/jnimarshalmethod-gen.exe -v --jvm "$(JI_JVM_PATH)" -L "$(JI_MONO_LIB_PATH)mono/4.5" -L "$(JI_MONO_LIB_PATH)mono/4.5/Facades" $(2) $(1)
+	$(RUNTIME) bin/$(CONFIGURATION)/$(TFNETFRAMEWORK)/jnimarshalmethod-gen.exe -v --jvm "$(JI_JVM_PATH)" -L "$(JI_MONO_LIB_PATH)mono/4.5" -L "$(JI_MONO_LIB_PATH)mono/4.5/Facades" $(2) $(1)
 endef
 
 run-test-jnimarshal: bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/Java.Interop.Export-Tests.dll bin/Test$(CONFIGURATION)/$(TFNETFRAMEWORK)/$(JAVA_INTEROP_LIB) $(JRE_DLL_CONFIG)
