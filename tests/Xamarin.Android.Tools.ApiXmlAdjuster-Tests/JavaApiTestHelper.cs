@@ -9,7 +9,6 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 		static  readonly    string  TopDir  = Path.Combine (
 				Path.GetDirectoryName (typeof (JavaApiTestHelper).Assembly.Location),
 				"..",
-				"..",
 				"..");
 
 		static  readonly    string  ApiPath = Path.Combine (

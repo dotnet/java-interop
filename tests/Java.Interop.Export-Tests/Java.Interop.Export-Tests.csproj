@@ -4,6 +4,7 @@
     <TargetFramework>net472</TargetFramework>
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -37,7 +38,7 @@
 
   <Target Name="BuildExportTestJar" BeforeTargets="BeforeBuild" Inputs="@(JavaExportTestJar)" Outputs="$(OutputPath)export-test.jar">
     <MakeDir Directories="$(IntermediateOutputPath)et-classes" />
-    <Exec Command="&quot;$(JavaCPath)&quot; -classpath &quot;$(OutputPath)..\..\$(Configuration)\netstandard2.0\java-interop.jar&quot; $(_JavacSourceOptions) -d &quot;$(IntermediateOutputPath)et-classes&quot; @(JavaExportTestJar->'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(JavaCPath)&quot; -classpath &quot;$(OutputPath)..\$(Configuration)\java-interop.jar&quot; $(_JavacSourceOptions) -d &quot;$(IntermediateOutputPath)et-classes&quot; @(JavaExportTestJar->'%(Identity)', ' ')" />
     <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(OutputPath)export-test.jar&quot; -C &quot;$(IntermediateOutputPath)et-classes&quot; ." />
   </Target>
 

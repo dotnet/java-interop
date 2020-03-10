@@ -21,7 +21,7 @@ namespace generatortests
 				// Comments on this here: https://stackoverflow.com/a/40311406/132442
 				// They added an environment variable as a workaround: https://github.com/aspnet/RoslynCodeDomProvider/pull/12
 				if (string.IsNullOrEmpty (Environment.GetEnvironmentVariable (RoslynEnvironmentVariable, EnvironmentVariableTarget.Process))) {
-					string roslynPath = Path.GetFullPath (Path.Combine (unitTestFrameworkAssemblyPath, "..", "..", "..", "..", "packages", "microsoft.codedom.providers.dotnetcompilerplatform", "2.0.1", "tools", "RoslynLatest"));
+					string roslynPath = Path.GetFullPath (Path.Combine (unitTestFrameworkAssemblyPath, "..", "..", "..", "packages", "microsoft.codedom.providers.dotnetcompilerplatform", "2.0.1", "tools", "RoslynLatest"));
 					Environment.SetEnvironmentVariable (RoslynEnvironmentVariable, roslynPath, EnvironmentVariableTarget.Process);
 				}
 
