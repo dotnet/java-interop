@@ -769,7 +769,7 @@ namespace MonoDroid.Generation
 					var original = m.Deprecated;
 
 					if (should_obsolete && string.IsNullOrWhiteSpace (m.Deprecated))
-						m.Deprecated = $"Use member on type `{@interface.FullName}`. This class will be removed in a future release.";
+						m.Deprecated = $"Use '{@interface.FullName}.{m.AdjustedName}'. This class will be removed in a future release.";
 
 					WriteMethod (m, indent + "\t", @interface, true);
 
@@ -809,7 +809,7 @@ namespace MonoDroid.Generation
 				// Only use this derprecation if it's not already deprecated for another reason
 				if (!f.IsDeprecated) {
 					f.IsDeprecated = true;
-					f.DeprecatedComment = $"Use member on type `{iface.FullName}`. This class will be removed in a future release."; ;
+					f.DeprecatedComment = $"Use '{iface.FullName}.{f.Name}'. This class will be removed in a future release."; ;
 				}
 			}
 
