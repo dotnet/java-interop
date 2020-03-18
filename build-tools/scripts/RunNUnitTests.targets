@@ -12,7 +12,7 @@
       Condition=" Exists('..\..\bin\Build$(Configuration)\JdkInfo.props') "
       Project="..\..\bin\Build$(Configuration)\JdkInfo.props"
   />
-  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll" TaskName="Java.Interop.BootstrapTasks.SetEnvironmentVariable" />
+  <Import Project="$(_TopDir)\build-tools\tasks\SetEnvironmentVariable.targets" />
   <ItemGroup>
     <_TestAssembly Include="$(_TopDir)\bin\Test$(Configuration)\*-*Tests.dll" Condition=" '$(TestAssembly)' == '' " />
     <_TestAssembly Include="$(TestAssembly)" Condition=" '$(TestAssembly)' != '' " />

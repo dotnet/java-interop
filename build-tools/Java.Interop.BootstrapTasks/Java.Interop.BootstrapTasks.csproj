@@ -37,10 +37,7 @@
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Java.Interop.BootstrapTasks\DownloadUri.cs" />
     <Compile Include="Java.Interop.BootstrapTasks\JdkInfo.cs" />
-    <Compile Include="Java.Interop.BootstrapTasks\OS.cs" />
-    <Compile Include="Java.Interop.BootstrapTasks\SetEnvironmentVariable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
