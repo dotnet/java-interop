@@ -410,7 +410,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		public static bool IsApplication (TypeDefinition type) =>
 			IsApplication (type, cache: null);
 
-		public static bool IsApplication (TypeDefinition type, TypeDefinitionCache cache)
+		public static bool IsApplication (TypeDefinition type, TypeDefinitionCache? cache)
 		{
 			return type.GetBaseTypes (cache).Any (b => b.FullName == "Android.App.Application");
 		}
@@ -419,17 +419,17 @@ namespace Java.Interop.Tools.TypeNameMappings
 		public static bool IsInstrumentation (TypeDefinition type) =>
 			IsInstrumentation (type, cache: null);
 
-		public static bool IsInstrumentation (TypeDefinition type, TypeDefinitionCache cache)
+		public static bool IsInstrumentation (TypeDefinition type, TypeDefinitionCache? cache)
 		{
 			return type.GetBaseTypes (cache).Any (b => b.FullName == "Android.App.Instrumentation");
 		}
 
 		// moved from JavaTypeInfo
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
-		public static string GetJniSignature (MethodDefinition method) =>
+		public static string? GetJniSignature (MethodDefinition method) =>
 			GetJniSignature (method, cache: null);
 
-		public static string GetJniSignature (MethodDefinition method, TypeDefinitionCache cache)
+		public static string? GetJniSignature (MethodDefinition method, TypeDefinitionCache? cache)
 		{
 			return GetJniSignature<TypeReference,ParameterDefinition> (
 				method.Parameters,
@@ -443,15 +443,15 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		// moved from JavaTypeInfo
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
-		public static string GetJniTypeName (TypeReference typeRef) =>
+		public static string? GetJniTypeName (TypeReference typeRef) =>
 			GetJniTypeName (typeRef, cache: null);
 
-		public static string GetJniTypeName (TypeReference typeRef, TypeDefinitionCache cache)
+		public static string? GetJniTypeName (TypeReference typeRef, TypeDefinitionCache? cache)
 		{
 			return GetJniTypeName (typeRef, ExportParameterKind.Unspecified, cache);
 		}
 
-		internal static string GetJniTypeName (TypeReference typeRef, ExportParameterKind exportKind, TypeDefinitionCache cache)
+		internal static string? GetJniTypeName (TypeReference typeRef, ExportParameterKind exportKind, TypeDefinitionCache? cache)
 		{
 			return GetJniTypeName<TypeReference, TypeDefinition> (typeRef, exportKind, t => t.Resolve (), t => {
 				TypeReference etype;
@@ -464,7 +464,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		public static string ToCompatJniName (TypeDefinition type) =>
 			ToCompatJniName (type, cache: null);
 
-		public static string ToCompatJniName (TypeDefinition type, TypeDefinitionCache cache)
+		public static string ToCompatJniName (TypeDefinition type, TypeDefinitionCache? cache)
 		{
 			return ToJniName (type, t => t.DeclaringType, t => t.Name, ToCompatPackageName, ToJniNameFromAttributes, t => IsNonStaticInnerClass (t as TypeDefinition, cache));
 		}
@@ -478,13 +478,13 @@ namespace Java.Interop.Tools.TypeNameMappings
 		public static string ToJniName (TypeDefinition type) =>
 			ToJniName (type, cache: null);
 
-		public static string ToJniName (TypeDefinition type, TypeDefinitionCache cache)
+		public static string ToJniName (TypeDefinition type, TypeDefinitionCache? cache)
 		{
 			return ToJniName (type, ExportParameterKind.Unspecified, cache) ??
 				"java/lang/Object";
 		}
 
-		static string ToJniName (TypeDefinition type, ExportParameterKind exportKind, TypeDefinitionCache cache)
+		static string? ToJniName (TypeDefinition type, ExportParameterKind exportKind, TypeDefinitionCache? cache)
 		{
 			if (type == null)
 				throw new ArgumentNullException ("type");
@@ -502,13 +502,13 @@ namespace Java.Interop.Tools.TypeNameMappings
 			return ToJniName (type, t => t.DeclaringType, t => t.Name, t => GetPackageName (t, cache), ToJniNameFromAttributes, t => IsNonStaticInnerClass (t as TypeDefinition, cache));
 		}
 
-		static string ToJniNameFromAttributes (TypeDefinition type)
+		static string? ToJniNameFromAttributes (TypeDefinition type)
 		{
 			#region CustomAttribute alternate name support
 			var attrs = type.CustomAttributes.Where (a => a.AttributeType.Resolve ().Interfaces.Any (it => it.InterfaceType.FullName == typeof (IJniNameProviderAttribute).FullName));
 			return attrs.Select (attr => {
 				var ap = attr.Properties.FirstOrDefault (p => p.Name == "Name");
-				string name = null;
+				string? name = null;
 				if (ap.Name == null) {
 					var ca = attr.ConstructorArguments.FirstOrDefault ();
 					if (ca.Type == null || ca.Type.FullName != "System.String")
@@ -536,7 +536,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 			return rank;
 		}
 
-		static string GetPrimitiveClass (Mono.Cecil.TypeDefinition type)
+		static string? GetPrimitiveClass (Mono.Cecil.TypeDefinition type)
 		{
 			if (type.IsEnum)
 				return GetPrimitiveClass (type.Fields.First (f => f.IsSpecialName).FieldType.Resolve ());
@@ -563,7 +563,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		public static string GetPackageName (TypeDefinition type) =>
 			GetPackageName (type, cache: null);
 
-		public static string GetPackageName (TypeDefinition type, TypeDefinitionCache cache)
+		public static string GetPackageName (TypeDefinition type, TypeDefinitionCache? cache)
 		{
 			if (IsPackageNamePreservedForAssembly (type.GetPartialAssemblyName (cache)))
 				return type.Namespace.ToLowerInvariant ();
@@ -620,7 +620,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 
 #if HAVE_CECIL
-		internal static bool IsNonStaticInnerClass (TypeDefinition type, TypeDefinitionCache cache)
+		internal static bool IsNonStaticInnerClass (TypeDefinition? type, TypeDefinitionCache? cache)
 		{
 			if (type == null)
 				return false;
@@ -634,7 +634,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 				.Any (ctor => ctor.Parameters.Any (p => p.Name == "__self"));
 		}
 
-		static IEnumerable<MethodDefinition> GetBaseConstructors (TypeDefinition type, TypeDefinitionCache cache)
+		static IEnumerable<MethodDefinition> GetBaseConstructors (TypeDefinition type, TypeDefinitionCache? cache)
 		{
 			var baseType = type.GetBaseTypes (cache).FirstOrDefault (t => t.GetCustomAttributes (typeof (RegisterAttribute)).Any ());
 			if (baseType != null)

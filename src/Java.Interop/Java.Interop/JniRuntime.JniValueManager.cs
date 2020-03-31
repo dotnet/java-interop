@@ -625,7 +625,7 @@ namespace Java.Interop
 			return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
 		}
 
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState (IJavaPeerable? value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]IJavaPeerable? value, ParameterAttributes synchronize)
 		{
 			if (value == null || !value.PeerReference.IsValid)
 				return new JniValueMarshalerState ();
@@ -633,7 +633,7 @@ namespace Java.Interop
 			return new JniValueMarshalerState (r);
 		}
 
-		public override void DestroyGenericArgumentState (IJavaPeerable? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		public override void DestroyGenericArgumentState ([MaybeNull]IJavaPeerable? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
 			var r   = state.ReferenceValue;
 			JniObjectReference.Dispose (ref r);
@@ -698,12 +698,12 @@ namespace Java.Interop
 			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
 		}
 
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState (T value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]T value, ParameterAttributes synchronize)
 		{
 			return ValueMarshaler.CreateObjectReferenceArgumentState (value, synchronize);
 		}
 
-		public override void DestroyGenericArgumentState (T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		public override void DestroyGenericArgumentState ([AllowNull]T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
 			ValueMarshaler.DestroyArgumentState (value, ref state, synchronize);
 		}
@@ -752,7 +752,7 @@ namespace Java.Interop
 			return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
 		}
 
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState (object? value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]object? value, ParameterAttributes synchronize)
 		{
 			if (value == null)
 				return new JniValueMarshalerState ();
