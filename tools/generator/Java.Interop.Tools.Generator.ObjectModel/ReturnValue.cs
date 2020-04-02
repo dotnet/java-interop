@@ -111,9 +111,10 @@ namespace MonoDroid.Generation {
 			if (targetType == "string")
 				return string.Format ("{0}?.ToString ()", name);
 			var rgm = opt.SymbolTable.Lookup (targetType) as IRequireGenericMarshal;
-			return string.Format ("global::Java.Interop.JavaObjectExtensions.JavaCast<{0}>({1})",
+			return string.Format ("global::Java.Interop.JavaObjectExtensions.JavaCast<{0}>({1}){2}",
 			                      rgm != null ? (rgm.GetGenericJavaObjectTypeOverride () ?? sym.FullName) : sym.FullName,
-			                      opt.GetSafeIdentifier (rgm != null ? rgm.ToInteroperableJavaObject (name) : name)); 
+			                      opt.GetSafeIdentifier (rgm != null ? rgm.ToInteroperableJavaObject (name) : name),
+			                      opt.NullForgivingOperator); 
 		}
 
 		public bool Validate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params, CodeGeneratorContext context)
