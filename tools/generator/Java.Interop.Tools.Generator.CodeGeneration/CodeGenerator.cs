@@ -837,7 +837,7 @@ namespace MonoDroid.Generation
 			WriteInterfaceInvokerHandle (@interface, indent + "\t", @interface.Name + "Invoker");
 			writer.WriteLine ("{0}\t{1}IntPtr class_ref;", indent, opt.BuildingCoreAssembly ? "" : "");
 			writer.WriteLine ();
-			writer.WriteLine ("{0}\tpublic static {1}? GetObject (IntPtr handle, JniHandleOwnership transfer)", indent, @interface.Name);
+			writer.WriteLine ("{0}\tpublic static {1}{2} GetObject (IntPtr handle, JniHandleOwnership transfer)", indent, @interface.Name, opt.NullableOperator);
 			writer.WriteLine ("{0}\t{{", indent);
 			writer.WriteLine ("{0}\t\treturn global::Java.Lang.Object.GetObject<{1}> (handle, transfer);", indent, @interface.Name);
 			writer.WriteLine ("{0}\t}}", indent);
@@ -1109,7 +1109,7 @@ namespace MonoDroid.Generation
 				writer.WriteLine ($"{indent}[Obsolete]");
 			writer.WriteLine ("{0}{4}static {1} n_{2} (IntPtr jnienv, IntPtr native__this{3})", indent, method.RetVal.NativeType, method.Name + method.IDSignature, method.Parameters.GetCallbackSignature (opt), is_private);
 			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\tvar __this = global::Java.Lang.Object.GetObject<{1}> (jnienv, native__this, JniHandleOwnership.DoNotTransfer)!;", indent, opt.GetOutputName (type.FullName));
+			writer.WriteLine ("{0}\tvar __this = global::Java.Lang.Object.GetObject<{1}> (jnienv, native__this, JniHandleOwnership.DoNotTransfer){2};", indent, opt.GetOutputName (type.FullName), opt.NullForgivingOperator);
 			foreach (string s in method.Parameters.GetCallbackPrep (opt))
 				writer.WriteLine ("{0}\t{1}", indent, s);
 			if (String.IsNullOrEmpty (property_name)) {
