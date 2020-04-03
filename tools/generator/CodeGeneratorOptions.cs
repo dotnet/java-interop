@@ -173,8 +173,6 @@ namespace Xamarin.Android.Binder
 				return null;
 			}
 
-			opts.SupportNullableReferenceTypes = true;
-
 			return opts;
 		}
 
