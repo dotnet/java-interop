@@ -715,7 +715,7 @@ namespace MonoDroid.Generation
 					       opt.GetSafeIdentifier (TypeNameUtilities.GetNativeName (var_name)),
 					       owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer",
 					       opt.GetOutputName (rgm != null ? (rgm.GetGenericJavaObjectTypeOverride () ?? FullName) : FullName),
-					       rgm != null ? "(" + opt.GetOutputName (FullName) + ")" : string.Empty)
+					       rgm != null ? "(" + opt.GetOutputName (FullName) + opt.NullableOperator + ")" : string.Empty)
 			};
 		}
 
