@@ -353,8 +353,6 @@ namespace MonoDroid.Generation
 				var localFullName = Namespace + (Namespace.Length > 0 ? "." : string.Empty) + attrClassNameBase;
 
 				using (var sw = gen_info.OpenStream (opt.GetFileName (localFullName))) {
-					sw.WriteLine ("#nullable enable");
-					sw.WriteLine ();
 					sw.WriteLine ("using System;");
 					sw.WriteLine ();
 					sw.WriteLine ("namespace {0} {{", Namespace);
@@ -711,13 +709,13 @@ namespace MonoDroid.Generation
 			var rgm = this as IRequireGenericMarshal;
 
 			return new string []{
-				string.Format ("{0} {1} = global::Java.Lang.Object.GetObject<{4}> ({2}, {3});",
+				string.Format ("{0} {1} = {5}global::Java.Lang.Object.GetObject<{4}> ({2}, {3});",
 					       "var",
 					       opt.GetSafeIdentifier (var_name),
 					       opt.GetSafeIdentifier (TypeNameUtilities.GetNativeName (var_name)),
 					       owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer",
-					       opt.GetOutputName (rgm != null ? (rgm.GetGenericJavaObjectTypeOverride () ?? FullName) : FullName))//,
-					       //rgm != null ? "(" + opt.GetOutputName (FullName) + ")" : string.Empty)
+					       opt.GetOutputName (rgm != null ? (rgm.GetGenericJavaObjectTypeOverride () ?? FullName) : FullName),
+					       rgm != null ? "(" + opt.GetOutputName (FullName) + ")" : string.Empty)
 			};
 		}
 

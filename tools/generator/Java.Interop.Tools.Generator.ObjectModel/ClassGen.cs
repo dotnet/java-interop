@@ -130,8 +130,6 @@ namespace MonoDroid.Generation
 		public override void Generate (CodeGenerationOptions opt, GenerationInfo gen_info)
 		{
 			using (var sw = gen_info.OpenStream (opt.GetFileName (FullName))) {
-				sw.WriteLine ("#nullable enable");
-				sw.WriteLine ();
 				sw.WriteLine ("using System;");
 				sw.WriteLine ("using System.Collections.Generic;");
 				sw.WriteLine ("using Android.Runtime;");
@@ -178,8 +176,6 @@ namespace MonoDroid.Generation
 					v.Add (new KeyValuePair<string, string> (reg.Key, reg.Value));
 				}
 
-				sw.WriteLine ("#nullable enable");
-				sw.WriteLine ();
 				sw.WriteLine ("using System;");
 				sw.WriteLine ("using System.Collections.Generic;");
 				sw.WriteLine ("using Android.Runtime;");

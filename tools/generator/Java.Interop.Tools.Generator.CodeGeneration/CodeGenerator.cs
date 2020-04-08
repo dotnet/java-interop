@@ -835,7 +835,7 @@ namespace MonoDroid.Generation
 			writer.WriteLine ("{0}internal partial class {1}Invoker : global::Java.Lang.Object, {1} {{", indent, @interface.Name);
 			writer.WriteLine ();
 			WriteInterfaceInvokerHandle (@interface, indent + "\t", @interface.Name + "Invoker");
-			writer.WriteLine ("{0}\t{1}IntPtr class_ref;", indent, opt.BuildingCoreAssembly ? "" : "");
+			writer.WriteLine ("{0}\t{1}IntPtr class_ref;", indent, opt.BuildingCoreAssembly ? "new " : "");
 			writer.WriteLine ();
 			writer.WriteLine ("{0}\tpublic static {1}{2} GetObject (IntPtr handle, JniHandleOwnership transfer)", indent, @interface.Name, opt.NullableOperator);
 			writer.WriteLine ("{0}\t{{", indent);
@@ -1352,7 +1352,7 @@ namespace MonoDroid.Generation
 			if (!method.CanHaveStringOverload)
 				return;
 
-			string ret = opt.GetTypeReferenceName (method.RetVal).Replace ("Java.Lang.ICharSequence", "string");
+			string ret = opt.GetTypeReferenceName (method.RetVal).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
 			writer.WriteLine ();
 
 			var parameters = method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
