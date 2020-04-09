@@ -171,9 +171,9 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 
 			if (!type.GetInterfaces ().Any (t => t.FullName == "Android.Runtime.IJavaObject"))
-				return GetSpecialExportJniType (type.FullName, exportKind);
+				return GetSpecialExportJniType (type.FullName!, exportKind);
 
-			return ToJniName (type, t => t.DeclaringType, t => t.Name, GetPackageName, t => {
+			return ToJniName (type, t => t.DeclaringType!, t => t.Name, GetPackageName, t => {
 				return ToJniNameFromAttributes (t);
 			}, _ => false);
 		}
@@ -197,10 +197,10 @@ namespace Java.Interop.Tools.TypeNameMappings
 		{
 			string assemblyName = GetAssemblyName (type.Assembly);
 			if (IsPackageNamePreservedForAssembly (assemblyName))
-				return type.Namespace.ToLowerInvariant ();
+				return type.Namespace!.ToLowerInvariant ();
 			switch (PackageNamingPolicy) {
 			case PackageNamingPolicy.Lowercase:
-				return type.Namespace.ToLowerInvariant ();
+				return type.Namespace!.ToLowerInvariant ();
 			case PackageNamingPolicy.LowercaseWithAssemblyName:
 				return "assembly_" + (assemblyName.Replace ('.', '_') + "." + type.Namespace).ToLowerInvariant ();
 			case PackageNamingPolicy.LowercaseCrc64:
@@ -216,7 +216,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		/// </summary>
 		static string GetAssemblyName (Assembly assembly)
 		{
-			var name = assembly.FullName;
+			var name = assembly.FullName!;
 			int index = name.IndexOf (',');
 			if (index != -1) {
 				return name.Substring (0, index);
@@ -230,7 +230,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 			int rank = 0;
 			while (type.IsArray) {
 				rank++;
-				elementType = type = type.GetElementType ();
+				elementType = type = type.GetElementType ()!;
 			}
 			return rank;
 		}
@@ -382,7 +382,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 				Type etype;
 				int rank = GetArrayInfo (t, out etype);
 				return new KeyValuePair<int,Type> (rank, etype);
-			}, t => t.FullName, (t, k) => ToJniNameWhichShouldReplaceExistingToJniName (t, k));
+			}, t => t.FullName!, (t, k) => ToJniNameWhichShouldReplaceExistingToJniName (t, k));
 		}
 
 		static string? ToJniNameWhichShouldReplaceExistingToJniName (Type type, ExportParameterKind exportKind)
