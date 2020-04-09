@@ -79,13 +79,13 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}\tSetHandle (", indent);
 			writer.WriteLine ("{0}\t\t\tglobal::Android.Runtime.JNIEnv.StartCreateInstance (((object) this).GetType (), \"{1}\"{2}),",
 					indent,
-					ctor.IsNonStaticNestedType ? "(" + ctor.Parameters.JniNestedDerivedSignature + ")V" : ctor.JniSignature,
+					ctor.IsNonStaticNestedType ? "(" + ctor.Parameters.GetJniNestedDerivedSignature (opt) + ")V" : ctor.JniSignature,
 					ctor.Parameters.GetCallArgs (opt, invoker:false));
 			writer.WriteLine ("{0}\t\t\tJniHandleOwnership.TransferLocalRef);", indent);
 			writer.WriteLine ("{0}\tglobal::Android.Runtime.JNIEnv.FinishCreateInstance ({1}, \"{2}\"{3});",
 					indent,
 					Context.ContextType.GetObjectHandleProperty ("this"),
-					ctor.IsNonStaticNestedType ? "(" + ctor.Parameters.JniNestedDerivedSignature + ")V" : ctor.JniSignature,
+					ctor.IsNonStaticNestedType ? "(" + ctor.Parameters.GetJniNestedDerivedSignature (opt) + ")V" : ctor.JniSignature,
 					ctor.Parameters.GetCallArgs (opt, invoker:false));
 			writer.WriteLine ("{0}\treturn;", indent);
 			writer.WriteLine ("{0}}}", indent);

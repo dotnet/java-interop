@@ -205,18 +205,17 @@ namespace MonoDroid.Generation {
 			}
 		}
 
-		public string JniNestedDerivedSignature {
-			get {
-				StringBuilder sb = new StringBuilder ();
-				foreach (Parameter p in items) {
-					if (p.Name == "__self") {
-						sb.Append ("L\" + global::Android.Runtime.JNIEnv.GetJniName (GetType ().DeclaringType) + \";");
-						continue;
-					}
-					sb.Append (p.JniType);
+		public string GetJniNestedDerivedSignature (CodeGenerationOptions opt)
+		{
+			StringBuilder sb = new StringBuilder ();
+			foreach (Parameter p in items) {
+				if (p.Name == "__self") {
+					sb.AppendFormat ("L\" + global::Android.Runtime.JNIEnv.GetJniName (GetType ().DeclaringType{0}) + \";", opt.NullForgivingOperator);
+					continue;
 				}
-				return sb.ToString ();
+				sb.Append (p.JniType);
 			}
+			return sb.ToString ();
 		}
 
 		public string SenderName {

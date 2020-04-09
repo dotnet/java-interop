@@ -111,7 +111,7 @@ namespace MonoDroid.Generation {
 					indent,
 					ctor.IsNonStaticNestedType ? "" : "const ",
 					ctor.IsNonStaticNestedType
-					? "(" + ctor.Parameters.JniNestedDerivedSignature + ")V"
+					? "(" + ctor.Parameters.GetJniNestedDerivedSignature (opt) + ")V"
 					: ctor.JniSignature);
 			writer.WriteLine ();
 			writer.WriteLine ("{0}if ({1} != IntPtr.Zero)", indent, Context.ContextType.GetObjectHandleProperty ("this"));
