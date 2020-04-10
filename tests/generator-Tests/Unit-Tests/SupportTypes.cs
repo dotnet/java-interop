@@ -236,6 +236,27 @@ namespace generatortests
 			return @class;
 		}
 
+		public static TestClass CreateClassWithBase(string className, string baseName, CodeGenerationOptions options)
+		{
+			var @class = new TestClass (baseName, className);
+
+			var ctor_name = className.Contains ('.') ? className.Substring (className.LastIndexOf ('.')) : className;
+			@class.Ctors.Add (CreateConstructor (@class, ctor_name, options));
+			@class.Ctors.Add (CreateConstructor (@class, ctor_name, options, new Parameter ("p0", "java.lang.String", "string", false)));
+
+			@class.Properties.Add (CreateProperty (@class, "Count", "int", options));
+			@class.Properties.Add (CreateProperty (@class, "Key", "java.lang.String", options));
+			@class.Properties.Add (CreateProperty (@class, "StaticCount", "int", options, true));
+			@class.Properties.Add (CreateProperty (@class, "AbstractCount", "int", options, false, true));
+
+			@class.Methods.Add (CreateMethod (@class, "GetCountForKey", options, "int", false, parameters: new Parameter ("key", "java.lang.String", "string", false)));
+			@class.Methods.Add (CreateMethod (@class, "Key", options, "java.lang.String"));
+			@class.Methods.Add (CreateMethod (@class, "StaticMethod", options, "void", true));
+			@class.Methods.Add (CreateMethod (@class, "AbstractMethod", options, "void", false, true));
+
+			return @class;
+		}
+
 		public static TestClass CreateClassWithProperty (string className, string classJavaName, string propertyName, string propertyType, CodeGenerationOptions options)
 		{
 			var @class = new TestClass (className, classJavaName);

@@ -1016,5 +1016,47 @@ namespace generatortests
 			var result = writer.ToString ().NormalizeLineEndings ();
 			Assert.False (result.Contains ("p0"));
 		}
+
+		[Test]
+		public void WriteClassExternalBase ()
+		{
+			// Tests the case where a class inherits from a class that is not in the same assembly.
+			// Specifically, the internal class_ref field does NOT need the new modifier.
+			//  - This prevents a CS0109 warning from being generated.
+
+			options.SymbolTable.AddType (new TestClass(null, "Java.Lang.Object"));
+
+			var @class = SupportTypeBuilder.CreateClassWithBase ("java.code.MyClass", "Java.Lang.Object", options);
+			@class.Validate (options, new GenericParameterDefinitionList (), generator.Context);
+
+			generator.Context.ContextTypes.Push (@class);
+			generator.WriteClass (@class, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			Assert.AreEqual (GetTargetedExpected (nameof (WriteClassExternalBase)), writer.ToString ().NormalizeLineEndings ());
+		}
+
+		[Test]
+		public void WriteClassInternalBase ()
+		{
+			// Tests the case where a class inherits from Java.Lang.Object and is in the same assembly.
+			// Specifically, the internal class_ref field does need the new modifier.
+			// - This prevents a CS0108 warning from being generated.
+
+			options.SymbolTable.AddType (new TestClass (null, "Java.Lang.Object"));
+
+			var @class = SupportTypeBuilder.CreateClassWithBase ("java.code.MyClass", "Java.Lang.Object", options);
+			@class.Validate (options, new GenericParameterDefinitionList (), generator.Context);
+
+			// FromXml is set to true when a class is set to true when the api.xml contains an entry for the class. 
+			// Therefore, if a class's base has FromXml set to true, the class and its base will be in the same C# assembly. 
+			@class.BaseGen.FromXml = true;  
+
+			generator.Context.ContextTypes.Push (@class);
+			generator.WriteClass (@class, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			Assert.AreEqual (GetTargetedExpected (nameof (WriteClassInternalBase)), writer.ToString ().NormalizeLineEndings ());
+		}
 	}
 }
