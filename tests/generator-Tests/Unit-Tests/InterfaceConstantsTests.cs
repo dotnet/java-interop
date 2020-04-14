@@ -69,5 +69,28 @@ namespace generatortests
 
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteConstSugarInterfaceFields)), writer.ToString ().NormalizeLineEndings ());
 		}
+
+		[Test]
+		public void DeprecateInterfaceConstsClass ()
+		{
+			// This is an interface that has a field
+			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+
+			iface.Fields.Add (new TestField ("int", "MyConstantField").SetConstant ().SetValue ("7"));
+
+			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+
+			// This is a class that inherits the interface
+			var klass = new TestClass ("Object", "java.code.MyClass");
+			klass.Interfaces.Add (iface);
+
+			klass.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+
+			generator.Context.ContextTypes.Push (klass);
+			generator.WriteClass (klass, string.Empty, new GenerationInfo (null, null, null));
+			generator.Context.ContextTypes.Pop ();
+			
+			Assert.True (writer.ToString ().Contains ("[Obsolete (@\"Use the 'java.code.IMyInterface' type. This type will be removed in a future release.\")]"));
+		}
 	}
 }

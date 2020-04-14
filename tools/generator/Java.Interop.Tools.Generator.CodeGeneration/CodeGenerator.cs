@@ -105,6 +105,8 @@ namespace MonoDroid.Generation
 					.Where (i => i.Fields.Count > 0)) {
 				if (!haveNested) {
 					writer.WriteLine ();
+					if (opt.SupportInterfaceConstants)
+						writer.WriteLine ("{0}\t[Obsolete (@\"Use the '{1}' type. This type will be removed in a future release.\")]", indent, iface.FullName);
 					writer.WriteLine ("{0}\tpublic static class InterfaceConsts {{", indent);
 					haveNested = true;
 				}
