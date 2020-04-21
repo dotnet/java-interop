@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Text;
 using Java.Interop.Tools.JavaCallableWrappers;
 
 using Xamarin.Android.Binder;
@@ -43,6 +43,9 @@ namespace MonoDroid.Generation
 		}
 
 		public      SymbolTable             SymbolTable             { get; } = new SymbolTable ();
+
+		readonly SortedSet<string> jni_marshal_delegates = new SortedSet<string> ();
+		readonly object jni_marshal_delegates_lock = new object ();
 
 		public bool UseGlobal { get; set; }
 		public bool IgnoreNonPublicType { get; set; }
@@ -129,9 +132,10 @@ namespace MonoDroid.Generation
 			return string.Empty;
 		}
 
-		string GetNullable (string s)
+		string GetNullable(string s)
 		{
-			switch (s) {
+			switch (s)
+			{
 				case "void":
 				case "int":
 				//case "int[]":
@@ -154,6 +158,46 @@ namespace MonoDroid.Generation
 			}
 
 			return NullableOperator;
+		}
+
+		// Encoding format:
+		// - Type name prefix: _JniMarshal_PP
+		// - Parameter types, using JNI encoding, e.g. Z is boolean, I is int, etc. Exception: Reference types, normally encoded as L…;, are instead just L.
+		// - Another _.
+		// - Return type, encoded as with parameters. A void return type is V.
+		internal string GetJniMarshalDelegate (Method method)
+		{
+			var sb = new StringBuilder ("_JniMarshal_PP");
+
+			foreach (var p in method.Parameters)
+				sb.Append (GetJniTypeCode (p.Symbol));
+
+			sb.Append ("_");
+
+			sb.Append (method.IsVoid ? "V" : GetJniTypeCode (method.RetVal.Symbol));
+
+			var result = sb.ToString ();
+
+			lock (jni_marshal_delegates_lock)
+				jni_marshal_delegates.Add (result);
+
+			return result;
+		}
+
+		string GetJniTypeCode (ISymbol symbol)
+		{
+			var jni_name = symbol.JniName;
+
+			if (jni_name.StartsWith ("L") || jni_name.StartsWith ("["))
+				return "L";
+
+			return symbol.JniName;
+		}
+
+		internal IEnumerable<string> GetJniMarshalDelegates ()
+		{
+			lock (jni_marshal_delegates_lock)
+				return jni_marshal_delegates;
 		}
 
 		public string GetOutputName (string s)
