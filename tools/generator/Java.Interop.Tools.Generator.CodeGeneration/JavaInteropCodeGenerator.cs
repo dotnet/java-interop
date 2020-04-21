@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using generator.SourceWriters;
 using Mono.Options;
+using Xamarin.SourceWriter;
 
 namespace MonoDroid.Generation {
 
@@ -98,6 +100,30 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}\tget {{ return _members.ManagedPeerType; }}", indent, declaringType);
 			writer.WriteLine ("{0}}}", indent);
 			writer.WriteLine ();
+		}
+
+		public override void WriteClassConstructors (ClassGen @class, string indent)
+		{
+			var klass = new ClassWriter ();
+
+			// Add required constructor for all JLO inheriting classes
+			if (@class.FullName != "Java.Lang.Object" && @class.InheritsObject)
+				klass.Constructors.Add (new JavaLangObjectConstructor (@class));
+
+			foreach (var ctor in @class.Ctors) {
+				// Don't bind final or protected constructors
+				if (@class.IsFinal && ctor.Visibility == "protected")
+					continue;
+
+				// Bind Java declared constructor
+				klass.Constructors.Add (new Constructor (ctor, @class, @class.InheritsObject, opt, Context));
+
+				// If the constructor takes ICharSequence, create an overload constructor that takes a string
+				if (ctor.Parameters.HasCharSequence && !@class.ContainsCtor (ctor.JniSignature.Replace ("java/lang/CharSequence", "java/lang/String")))
+					klass.Constructors.Add (new StringOverloadConstructor (ctor, @class, @class.InheritsObject, opt, Context));
+			}
+
+			klass.WriteConstructors (new CodeWriter (writer, indent));
 		}
 
 		internal override void WriteConstructorIdField (Ctor ctor, string indent)

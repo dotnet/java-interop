@@ -5,7 +5,9 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
+using generator.SourceWriters;
 using Xamarin.Android.Binder;
+using Xamarin.SourceWriter;
 
 namespace MonoDroid.Generation
 {
@@ -199,7 +201,7 @@ namespace MonoDroid.Generation
 				WriteInterfaceAbstractMembers (gen, @class, indent);
 		}
 
-		public void WriteClassConstructors (ClassGen @class, string indent)
+		public virtual void WriteClassConstructors (ClassGen @class, string indent)
 		{
 			if (@class.FullName != "Java.Lang.Object" && @class.InheritsObject) {
 				writer.WriteLine ("{0}{1} {2} (IntPtr javaReference, JniHandleOwnership transfer) : base (javaReference, transfer) {{}}", indent, @class.IsFinal ? "internal" : "protected", @class.Name);
