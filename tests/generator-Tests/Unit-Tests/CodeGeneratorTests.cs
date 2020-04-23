@@ -1024,16 +1024,18 @@ namespace generatortests
 			// Specifically, the internal class_ref field does NOT need the new modifier.
 			//  - This prevents a CS0109 warning from being generated.
 
-			options.SymbolTable.AddType (new TestClass(null, "Java.Lang.Object"));
+			options.SymbolTable.AddType (new TestClass (null, "Java.Lang.Object"));
 
-			var @class = SupportTypeBuilder.CreateClassWithBase ("java.code.MyClass", "Java.Lang.Object", options);
+			var @class = SupportTypeBuilder.CreateClass ("java.code.MyClass", options, "Java.Lang.Object");
 			@class.Validate (options, new GenericParameterDefinitionList (), generator.Context);
 
 			generator.Context.ContextTypes.Push (@class);
 			generator.WriteClass (@class, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
 			generator.Context.ContextTypes.Pop ();
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteClassExternalBase)), writer.ToString ().NormalizeLineEndings ());
+			var result = writer.ToString ().NormalizeLineEndings ();
+			Assert.True (result.Contains ("internal static IntPtr class_ref"));
+			Assert.False (result.Contains ("internal static new IntPtr class_ref"));
 		}
 
 		[Test]
@@ -1045,7 +1047,7 @@ namespace generatortests
 
 			options.SymbolTable.AddType (new TestClass (null, "Java.Lang.Object"));
 
-			var @class = SupportTypeBuilder.CreateClassWithBase ("java.code.MyClass", "Java.Lang.Object", options);
+			var @class = SupportTypeBuilder.CreateClass ("java.code.MyClass", options, "Java.Lang.Object");
 			@class.Validate (options, new GenericParameterDefinitionList (), generator.Context);
 
 			// FromXml is set to true when a class is set to true when the api.xml contains an entry for the class. 
@@ -1056,7 +1058,9 @@ namespace generatortests
 			generator.WriteClass (@class, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
 			generator.Context.ContextTypes.Pop ();
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteClassInternalBase)), writer.ToString ().NormalizeLineEndings ());
+			var result = writer.ToString ().NormalizeLineEndings ();
+			Assert.True (result.Contains ("internal static new IntPtr class_ref"));
+			Assert.False (result.Contains ("internal static IntPtr class_ref"));
 		}
 	}
 }

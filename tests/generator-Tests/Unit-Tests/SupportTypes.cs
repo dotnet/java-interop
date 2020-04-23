@@ -215,30 +215,9 @@ namespace generatortests
 
 	static class SupportTypeBuilder
 	{
-		public static TestClass CreateClass (string className, CodeGenerationOptions options)
+		public static TestClass CreateClass (string className, CodeGenerationOptions options, string baseClass = "Object")
 		{
-			var @class = new TestClass ("Object", className);
-
-			var ctor_name = className.Contains ('.') ? className.Substring (className.LastIndexOf ('.')) : className;
-			@class.Ctors.Add (CreateConstructor (@class, ctor_name, options));
-			@class.Ctors.Add (CreateConstructor (@class, ctor_name, options, new Parameter ("p0", "java.lang.String", "string", false)));
-
-			@class.Properties.Add (CreateProperty (@class, "Count", "int", options));
-			@class.Properties.Add (CreateProperty (@class, "Key", "java.lang.String", options));
-			@class.Properties.Add (CreateProperty (@class, "StaticCount", "int", options, true));
-			@class.Properties.Add (CreateProperty (@class, "AbstractCount", "int", options, false, true));
-
-			@class.Methods.Add (CreateMethod (@class, "GetCountForKey", options, "int", false, parameters: new Parameter ("key", "java.lang.String", "string", false)));
-			@class.Methods.Add (CreateMethod (@class, "Key", options, "java.lang.String"));
-			@class.Methods.Add (CreateMethod (@class, "StaticMethod", options, "void", true));
-			@class.Methods.Add (CreateMethod (@class, "AbstractMethod", options, "void", false, true));
-
-			return @class;
-		}
-
-		public static TestClass CreateClassWithBase(string className, string baseName, CodeGenerationOptions options)
-		{
-			var @class = new TestClass (baseName, className);
+			var @class = new TestClass (baseClass, className);
 
 			var ctor_name = className.Contains ('.') ? className.Substring (className.LastIndexOf ('.')) : className;
 			@class.Ctors.Add (CreateConstructor (@class, ctor_name, options));
