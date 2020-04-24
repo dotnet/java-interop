@@ -173,8 +173,7 @@ namespace MonoDroid.Generation
 				sb.Append (GetJniTypeCode (p.Symbol));
 
 			sb.Append ("_");
-
-			sb.Append (method.IsVoid ? "V" : GetJniTypeCode (method.RetVal.Symbol));
+			sb.Append (GetJniTypeCode (method.RetVal.Symbol));
 
 			var result = sb.ToString ();
 
@@ -186,6 +185,16 @@ namespace MonoDroid.Generation
 
 		string GetJniTypeCode (ISymbol symbol)
 		{
+			// The JniName for our Kotlin unsigned types is the same
+			// as the Java signed types, so check the original symbol
+			// name and encode lowercase for unsigned version.
+			switch (symbol.JavaName) {
+				case "ubyte": return "b";
+				case "uint": return "i";
+				case "ulong": return "j";
+				case "ushort": return "s";
+			}
+
 			var jni_name = symbol.JniName;
 
 			if (jni_name.StartsWith ("L") || jni_name.StartsWith ("["))

@@ -57,12 +57,16 @@ namespace MonoDroid.Generation
 		{
 			switch (c) {
 				case 'B': return "sbyte";
+				case 'b': return "byte";
 				case 'C': return "char";
 				case 'D': return "double";
 				case 'F': return "float";
 				case 'I': return "int";
+				case 'i': return "uint";
 				case 'J': return "long";
+				case 'j': return "ulong";
 				case 'S': return "short";
+				case 's': return "ushort";
 				case 'Z': return "bool";
 				case 'V': return "void";
 				default:
