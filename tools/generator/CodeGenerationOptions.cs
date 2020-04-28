@@ -132,10 +132,9 @@ namespace MonoDroid.Generation
 			return string.Empty;
 		}
 
-		string GetNullable(string s)
+		string GetNullable (string s)
 		{
-			switch (s)
-			{
+			switch (s) {
 				case "void":
 				case "int":
 				//case "int[]":
@@ -162,7 +161,9 @@ namespace MonoDroid.Generation
 
 		// Encoding format:
 		// - Type name prefix: _JniMarshal_PP
-		// - Parameter types, using JNI encoding, e.g. Z is boolean, I is int, etc. Exception: Reference types, normally encoded as L…;, are instead just L.
+		// - Parameter types, using JNI encoding, e.g. Z is boolean, I is int, etc.
+		//   - Exception: Reference types, normally encoded as L…;, are instead just L.
+		//   - Lowercase JNI encoding indicates unsigned type, e.g. i is uint.
 		// - Another _.
 		// - Return type, encoded as with parameters. A void return type is V.
 		internal string GetJniMarshalDelegate (Method method)
