@@ -34,8 +34,9 @@ ATESTS = \
 
 BUILD_PROPS = bin/Build$(CONFIGURATION)/MonoInfo.props
 
-all: $(TESTS)
-
+all: 
+	$(MSBUILD) $(MSBUILD_FLAGS) /restore Java.Interop.sln
+  
 run-all-tests:
 	r=0; \
 	$(MAKE) run-tests                 || r=1 ; \
