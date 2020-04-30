@@ -34,14 +34,13 @@ ATESTS = \
 
 BUILD_PROPS = bin/Build$(CONFIGURATION)/MonoInfo.props
 
-all: $(DEPENDENCIES) $(TESTS)
+all: $(TESTS)
 
 run-all-tests:
 	r=0; \
 	$(MAKE) run-tests                 || r=1 ; \
 	$(MAKE) run-test-jnimarshal       || r=1 ; \
 	$(MAKE) run-test-generator-core   || r=1 ; \
-	$(MAKE) run-ptests                || r=1 ; \
 	exit $$r;
 
 include build-tools/scripts/msbuild.mk
