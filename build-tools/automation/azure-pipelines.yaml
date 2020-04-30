@@ -72,9 +72,6 @@ jobs:
       boots --stable Mono
     displayName: Install Mono-Stable
     
-  - script: make prepare CONFIGURATION=$(Build.Configuration)
-    displayName: make prepare
-    
   - script: make all CONFIGURATION=$(Build.Configuration)
     displayName: make all
     
