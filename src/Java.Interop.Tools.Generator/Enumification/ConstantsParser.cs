@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace Java.Interop.Tools.Common.Enumification
+namespace Java.Interop.Tools.Generator.Enumification
 {
 	public static class ConstantsParser
 	{

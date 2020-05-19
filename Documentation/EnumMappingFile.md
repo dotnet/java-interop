@@ -26,7 +26,7 @@ The basic format since the beginning of Xamarin contains up to 6 fields:
 * **JNI Signature** - The JNI signature of the Java constant to convert. For example:
   `android/view/Window.PROGRESS_START`.
 * **Flags** - If this field contains `flags` the enum will be created with the
-  `[Flags]` attribute.
+  `[Flags]` attribute. (Any member will `flags` will make the whole enum `[Flags]`.)
 
 Full example:
 ```
@@ -49,7 +49,8 @@ file can contain a line like this at any point:
 - ENTER TRANSIENT MODE -
 ```
 
-Any constants referenced *AFTER* this line will be removed from the bindings.
+Any v1 constants referenced *AFTER* this line will be removed from the bindings.
+(This will not affect v2 constants.)
 
 ## CSV Format v2
 
@@ -87,7 +88,7 @@ A "v2" line contains up to 8 fields:
   * `remove` - Remove the Java constant
   * `keep` - Keeps the Java constant
 * **Flags** - If this field contains `flags` the enum will be created with the
-  `[Flags]` attribute.
+  `[Flags]` attribute. (Any member will `flags` will make the whole enum `[Flags]`.)
 
 Full example:
 ```

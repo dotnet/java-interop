@@ -1,6 +1,6 @@
 using System;
 
-namespace Java.Interop.Tools.Common
+namespace Java.Interop.Tools.Generator
 {
 	public class CsvParser
 	{

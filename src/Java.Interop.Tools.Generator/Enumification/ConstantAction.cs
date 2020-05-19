@@ -1,4 +1,4 @@
-﻿namespace Java.Interop.Tools.Common.Enumification
+namespace Java.Interop.Tools.Generator.Enumification
 {
 	public enum ConstantAction
 	{

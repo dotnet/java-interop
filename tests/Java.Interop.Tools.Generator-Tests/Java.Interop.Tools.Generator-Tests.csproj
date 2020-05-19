@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Java.Interop.Tools.Common\Java.Interop.Tools.Common.csproj" />
+    <ProjectReference Include="..\..\src\Java.Interop.Tools.Generator\Java.Interop.Tools.Generator.csproj" />
   </ItemGroup>
 
 </Project>

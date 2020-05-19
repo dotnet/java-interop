@@ -87,9 +87,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Java.Interop.Tools.JavaSour
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "param-name-importer", "tools\param-name-importer\param-name-importer.csproj", "{0E3AF6C1-7638-464D-9174-485D494499DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Java.Interop.Tools.Common", "src\Java.Interop.Tools.Common\Java.Interop.Tools.Common.csproj", "{C2FD2F12-DE3B-4FB9-A0D3-FA3EF597DD04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Java.Interop.Tools.Generator", "src\Java.Interop.Tools.Generator\Java.Interop.Tools.Generator.csproj", "{C2FD2F12-DE3B-4FB9-A0D3-FA3EF597DD04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Java.Interop.Tools.Common-Tests", "tests\Java.Interop.Tools.Common-Tests\Java.Interop.Tools.Common-Tests.csproj", "{7F4828AB-3908-458C-B09F-33C74A1368F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Java.Interop.Tools.Generator-Tests", "tests\Java.Interop.Tools.Generator-Tests\Java.Interop.Tools.Generator-Tests.csproj", "{7F4828AB-3908-458C-B09F-33C74A1368F9}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

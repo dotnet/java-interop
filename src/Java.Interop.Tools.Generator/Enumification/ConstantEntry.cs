@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Linq;
 
-namespace Java.Interop.Tools.Common.Enumification
+namespace Java.Interop.Tools.Generator.Enumification
 {
 	/// <summary>
 	/// This represents a Java int constant and/or a C# enum entry.

@@ -1,8 +1,8 @@
 using System;
-using Java.Interop.Tools.Common.Enumification;
+using Java.Interop.Tools.Generator.Enumification;
 using NUnit.Framework;
 
-namespace Java.Interop.Tools.Common_Tests
+namespace Java.Interop.Tools.Generator_Tests
 {
 	public class ConstantEntryTests
 	{

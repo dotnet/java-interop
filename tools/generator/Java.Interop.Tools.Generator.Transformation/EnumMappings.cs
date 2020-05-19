@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Java.Interop.Tools.Common;
-using Java.Interop.Tools.Common.Enumification;
+using Java.Interop.Tools.Generator;
+using Java.Interop.Tools.Generator.Enumification;
 using Mono.Options;
 
 using Xamarin.Android.Tools;
