@@ -290,7 +290,11 @@ namespace Java.Interop
 		public virtual void FailFast (string? message)
 		{
 			var m = typeof (Environment).GetMethod ("FailFast");
-			m?.Invoke (null, new object?[]{ message });
+
+			if (m is null)
+				Environment.Exit (1);
+
+			m!.Invoke (null, new object?[]{ message });
 		}
 
 		public override string ToString ()

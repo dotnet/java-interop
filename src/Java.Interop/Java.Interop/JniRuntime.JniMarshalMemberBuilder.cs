@@ -48,8 +48,8 @@ namespace Java.Interop {
 			var t   = jie.GetType ("Java.Interop.MarshalMemberBuilder");
 			if (t == null)
 				throw new InvalidOperationException ("Could not find Java.Interop.MarshalMemberBuilder from Java.Interop.Export.dll!");
-			var b   = (JniMarshalMemberBuilder?) Activator.CreateInstance (t);
-			marshalMemberBuilder    = SetRuntime (b!);
+			var b   = (JniMarshalMemberBuilder) Activator.CreateInstance (t)!;
+			marshalMemberBuilder    = SetRuntime (b);
 		}
 
 		public abstract class JniMarshalMemberBuilder : IDisposable, ISetRuntime
@@ -87,7 +87,7 @@ namespace Java.Interop {
 			{
 				if (value == null)
 					throw new ArgumentNullException (nameof (value));
-				return CreateMarshalToManagedExpression (value.GetMethodInfo ()!).Compile ();
+				return CreateMarshalToManagedExpression (value.GetMethodInfo ()).Compile ();
 			}
 
 			public  abstract    LambdaExpression                            CreateMarshalToManagedExpression (MethodInfo method);
