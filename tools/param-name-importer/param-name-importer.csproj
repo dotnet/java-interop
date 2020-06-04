@@ -9,7 +9,7 @@
   <ItemGroup>
     <!-- Not sure why needed, but only System.IO.Compression.FileSystem.dll is
       included by default, and ZipArchive is type forwarded to System.IO.Compression -->
-    <Reference Include="System.IO.Compression" Condition="'$(TargetFramework)' == 'net472'" />
+    <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
   <ItemGroup>
     <!-- This package erroneously contains /netcoreapp3.1/SgmlReader.exe and /netcoreapp3.1/SgmlReaderDll.dll.
