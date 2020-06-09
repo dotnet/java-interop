@@ -42,7 +42,7 @@ namespace MonoDroid.Generation {
 				var bitfield = e.XGetAttribute ("bitfield") == "true";
 
 				foreach (var m in e.XPathSelectElements ("field")) {
-					var verstr = m.XGetAttribute ("api-level") ?? "0";
+					var verstr   = m.XGetAttribute ("api-level") ?? "0";
 					var member   = GetMandatoryAttribute (m, "clr-name");
 					var jni_name = m.XGetAttribute ("jni-name");
 					var value    = GetMandatoryAttribute (m, "value");
