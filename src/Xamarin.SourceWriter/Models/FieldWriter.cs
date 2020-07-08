@@ -21,6 +21,7 @@ namespace Xamarin.SourceWriter
 		public bool IsReadonly { get; set; }
 		public bool IsPrivate { get => visibility == Visibility.Private; set => visibility = value ? Visibility.Private : Visibility.Default; }
 		public bool IsProtected { get => visibility == Visibility.Protected; set => visibility = value ? Visibility.Protected : Visibility.Default; }
+		public int Priority { get; set; }
 
 		public FieldWriter ()
 		{

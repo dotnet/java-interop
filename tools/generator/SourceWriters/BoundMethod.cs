@@ -10,18 +10,16 @@ namespace generator.SourceWriters
 {
 	public class BoundMethod : MethodWriter
 	{
-		GenBase type;
-		Method method;
-		CodeGenerationOptions opt;
+		readonly Method method;
+		readonly CodeGenerationOptions opt;
 
 		public BoundMethod (GenBase type, Method method, TypeWriter @class, CodeGenerationOptions opt, bool generateCallbacks) : base ()
 		{
-			this.type = type;
 			this.method = method;
 			this.opt = opt;
 
 			if (generateCallbacks && method.IsVirtual)
-				@class.Methods.Add (new MethodCallback (type, method, opt, null, method.IsReturnCharSequence));
+				@class.Methods.Add (new MethodCallback (type, method, opt, null, method.IsReturnCharSequence) { Priority = @class.GetNextPriority () });
 
 			Name = method.AdjustedName;
 
@@ -65,7 +63,10 @@ namespace generator.SourceWriters
 
 		protected override void WriteBody (CodeWriter writer)
 		{
+			var old_virtual = method.IsVirtual;
+			method.IsVirtual = IsVirtual || IsOverride;
 			SourceWriterExtensions.WriteMethodBody (writer, method, opt);
+			method.IsVirtual = old_virtual;
 		}
 
 		protected override void WriteParameters (CodeWriter writer)

@@ -55,105 +55,13 @@ namespace MonoDroid.Generation
 				gen_info.Enums.Add (@class.RawJniName.Replace ('/', '.') + ":" + @class.Namespace + ":" + @class.JavaSimpleName);
 
 
-			var klass = new JavaLangObjectClass { IsPartial = true };
-
-
-			StringBuilder sb = new StringBuilder ();
-			foreach (ISymbol isym in @class.Interfaces) {
-				GenericSymbol gs = isym as GenericSymbol;
-				InterfaceGen gen = (gs == null ? isym : gs.Gen) as InterfaceGen;
-				if (gen != null && (gen.IsConstSugar || gen.RawVisibility != "public"))
-					continue;
-				if (sb.Length > 0)
-					sb.Append (", ");
-				sb.Append (opt.GetOutputName (isym.FullName));
-				klass.Implements.Add (opt.GetOutputName (isym.FullName));
-			}
-
-			string obj_type = null;
-			if (@class.base_symbol != null) {
-				GenericSymbol gs = @class.base_symbol as GenericSymbol;
-				obj_type = gs != null && gs.IsConcrete ? gs.GetGenericType (null) : opt.GetOutputName (@class.base_symbol.FullName);
-			}
-
-			klass.Comments.Add ($"// Metadata.xml XPath class reference: path=\"{@class.MetadataXPathReference}\"");
-			//writer.WriteLine ("{0}// Metadata.xml XPath class reference: path=\"{1}\"", indent, @class.MetadataXPathReference);
-
-			if (@class.IsDeprecated) {
-				//writer.WriteLine ("{0}[ObsoleteAttribute (@\"{1}\")]", indent, @class.DeprecatedComment);
-				klass.Attributes.Add (new ObsoleteAttr (@class.DeprecatedComment));
-			}
-
-			//writer.WriteLine ("{0}[global::Android.Runtime.Register (\"{1}\", DoNotGenerateAcw=true{2})]", indent, @class.RawJniName, @class.AdditionalAttributeString ());
-			klass.Attributes.Add (new RegisterAttr (@class.RawJniName, null, null, true, @class.AdditionalAttributeString ()) { UseGlobal = true, UseShortForm = true });
-
-			if (@class.TypeParameters != null && @class.TypeParameters.Any ()) {
-				//writer.WriteLine ("{0}{1}", indent, @class.TypeParameters.ToGeneratedAttributeString ());
-				klass.Attributes.Add (new CustomAttr (@class.TypeParameters.ToGeneratedAttributeString ()));
-			}
-
-			string inherits = "";
-			if (@class.InheritsObject && obj_type != null) {
-				inherits = ": " + obj_type;
-				klass.Inherits = obj_type;
-			}
-			if (sb.Length > 0) {
-				if (string.IsNullOrEmpty (inherits))
-					inherits = ": ";
-				else
-					inherits += ", ";
-			}
-
-			klass.SetVisibility (@class.Visibility);
-			klass.IsShadow = @class.NeedsNew;
-			klass.IsAbstract = @class.IsAbstract;
-			klass.IsSealed = @class.IsFinal;
-			klass.Name = @class.Name;
+			var klass = new JavaLangObjectClass (@class, opt, Context);
 
 			var cw = new CodeWriter (writer, indent);
 			klass.WriteComments (cw);
 			klass.WriteAttributes (cw);
 			klass.WriteSignature (cw);
-
-			//writer.WriteLine ("{0}{1} {2}{3}{4}partial class {5} {6}{7} {{",
-			//		indent,
-			//		@class.Visibility,
-			//		@class.NeedsNew ? "new " : String.Empty,
-			//		@class.IsAbstract ? "abstract " : String.Empty,
-			//		@class.IsFinal ? "sealed " : String.Empty,
-			//		@class.Name,
-			//		inherits,
-			//		sb.ToString ());
-			//writer.WriteLine ();
-
-			var seen = new HashSet<string> ();
-			WriteFields (@class.Fields, indent + "\t", @class, seen);
-			//bool haveNested = false;
-
-			var ic = new InterfaceConsts ();
-
-			foreach (var iface in @class.GetAllImplementedInterfaces ()
-					.Except (@class.BaseGen == null
-						? new InterfaceGen [0]
-						: @class.BaseGen.GetAllImplementedInterfaces ())
-					.Where (i => i.Fields.Count > 0)) {
-				//if (!haveNested) {
-				//	writer.WriteLine ();
-				//	writer.WriteLine ("{0}\tpublic static class InterfaceConsts {{", indent);
-				//	haveNested = true;
-				//}
-				//writer.WriteLine ();
-				//writer.WriteLine ("{0}\t\t// The following are fields from: {1}", indent, iface.JavaName);
-				WriteFields (iface.Fields, indent + "\t\t", iface, seen, ic);
-			}
-
-			if (ic.Fields.Any () || ic.Properties.Any ())
-				ic.Write (cw);
-
-			//if (haveNested) {
-			//	writer.WriteLine ("{0}\t}}", indent);
-			//	writer.WriteLine ();
-			//}
+			klass.WriteMembersByPriority (cw);
 
 			foreach (GenBase nest in @class.NestedTypes) {
 				if (@class.BaseGen != null && @class.BaseGen.ContainsNestedType (nest))
@@ -167,14 +75,19 @@ namespace MonoDroid.Generation
 			// If @class's base class is defined in the same api.xml file, then it requires the new keyword to overshadow the internal
 			// members of its baseclass since the two classes will be defined in the same assembly. If the base class is not from the
 			// same api.xml file, the new keyword is not needed because the internal access modifier already prevents it from being seen.
-			bool baseFromSameAssembly = @class?.BaseGen?.FromXml ?? false;
-			bool requireNew = @class.InheritsObject && baseFromSameAssembly;
-			WriteClassHandle (@class, indent, requireNew);
+			//bool baseFromSameAssembly = @class?.BaseGen?.FromXml ?? false;
+			//bool requireNew = @class.InheritsObject && baseFromSameAssembly;
+			//WriteClassHandle (@class, indent, requireNew);
 
-			WriteClassConstructors (@class, indent + "\t");
+			klass.BuildPhase2 (@class, opt, Context);
+			cw = new CodeWriter (writer, indent);
+			klass.WriteMembersByPriority (cw);
 
-			WriteImplementedProperties (@class.Properties, indent + "\t", @class.IsFinal, @class);
-			WriteClassMethods (@class, indent + "\t");
+
+			//WriteClassConstructors (@class, indent + "\t");
+
+			//WriteImplementedProperties (@class.Properties, indent + "\t", @class.IsFinal, @class);
+			//WriteClassMethods (@class, indent + "\t");
 
 			if (@class.IsAbstract)
 				WriteClassAbstractMembers (@class, indent + "\t");
@@ -451,19 +364,23 @@ namespace MonoDroid.Generation
 			return needsProperty;
 		}
 
-		internal virtual void WriteField (Field field, string indent, GenBase type, TypeWriter tw = null)
+		internal void WriteField (Field field, string indent, GenBase type, TypeWriter tw = null)
 		{
 			var cw = new CodeWriter (writer, indent);
+			var priority = 0;
+
+			if (tw != null)
+				priority = tw.GetNextPriority ();
 
 			if (field.NeedsProperty) {
-				var prop = new BoundFieldAsProperty (type, field, opt);
+				var prop = new BoundFieldAsProperty (type, field, opt) { Priority = priority };
 
 				if (tw != null)
 					tw.Properties.Add (prop);
 				else
 					prop.Write (cw);
 			} else {
-				var f = new BoundField (type, field, opt);
+				var f = new BoundField (type, field, opt) { Priority = priority };
 
 				if (tw != null)
 					tw.Fields.Add (f);
@@ -904,33 +821,35 @@ namespace MonoDroid.Generation
 
 		public void WriteInterfaceListenerEvent (InterfaceGen @interface, string indent, string name, string nameSpec, string methodName, string full_delegate_name, bool needs_sender, string wrefSuffix, string add, string remove, bool hasHandlerArgument = false)
 		{
-			writer.WriteLine ("{0}public event {1} {2} {{", indent, opt.GetOutputName (full_delegate_name), name);
-			writer.WriteLine ("{0}\tadd {{", indent);
-			writer.WriteLine ("{0}\t\tglobal::Java.Interop.EventHelper.AddEventHandler<{1}, {1}Implementor>(",
-					indent, opt.GetOutputName (@interface.FullName));
-			writer.WriteLine ("{0}\t\t\t\tref weak_implementor_{1},", indent, wrefSuffix);
-			writer.WriteLine ("{0}\t\t\t\t__Create{1}Implementor,", indent, @interface.Name);
-			writer.WriteLine ("{0}\t\t\t\t{1},", indent, add + (hasHandlerArgument ? "_Event_With_Handler_Helper" : null));
-			writer.WriteLine ("{0}\t\t\t\t__h => __h.{1}Handler += value);", indent, nameSpec);
-			writer.WriteLine ("{0}\t}}", indent);
-			writer.WriteLine ("{0}\tremove {{", indent);
-			writer.WriteLine ("{0}\t\tglobal::Java.Interop.EventHelper.RemoveEventHandler<{1}, {1}Implementor>(",
-					indent, opt.GetOutputName (@interface.FullName));
-			writer.WriteLine ("{0}\t\t\t\tref weak_implementor_{1},", indent, wrefSuffix);
-			writer.WriteLine ("{0}\t\t\t\t{1}Implementor.__IsEmpty,", indent, opt.GetOutputName (@interface.FullName));
-			writer.WriteLine ("{0}\t\t\t\t{1},", indent, remove);
-			writer.WriteLine ("{0}\t\t\t\t__h => __h.{1}Handler -= value);", indent, nameSpec);
-			writer.WriteLine ("{0}\t}}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
 
-			if (hasHandlerArgument) {
-				writer.WriteLine ("{0}void {1} ({2} value)", indent, add + "_Event_With_Handler_Helper", opt.GetOutputName (@interface.FullName));
-				writer.WriteLine ("{0}{{", indent);
-				writer.WriteLine ("{0}\t{1} (value, null);", indent, add);
-				writer.WriteLine ("{0}}}", indent);
-				writer.WriteLine ();
-			}
+			new InterfaceListenerEvent (@interface, name, nameSpec, full_delegate_name, wrefSuffix, add, remove, hasHandlerArgument, opt).Write (cw);
+
+			//writer.WriteLine ("{0}public event {1} {2} {{", indent, opt.GetOutputName (full_delegate_name), name);
+			//writer.WriteLine ("{0}\tadd {{", indent);
+			//writer.WriteLine ($"{indent}\t\tglobal::Java.Interop.EventHelper.AddEventHandler<{opt.GetOutputName (@interface.FullName)}, {opt.GetOutputName (@interface.FullName)}Implementor>(");
+			//writer.WriteLine ($"{indent}\t\t\t\tref weak_implementor_{wrefSuffix},");
+			//writer.WriteLine ($"{indent}\t\t\t\t__Create{@interface.Name}Implementor,");
+			//writer.WriteLine ($"{indent}\t\t\t\t{add + (hasHandlerArgument ? "_Event_With_Handler_Helper" : null)},");
+			//writer.WriteLine ($"{indent}\t\t\t\t__h => __h.{nameSpec}Handler += value);");
+			//writer.WriteLine ("{0}\t}}", indent);
+			//writer.WriteLine ("{0}\tremove {{", indent);
+			//writer.WriteLine ($"{indent}\t\tglobal::Java.Interop.EventHelper.RemoveEventHandler<{opt.GetOutputName (@interface.FullName)}, {opt.GetOutputName (@interface.FullName)}Implementor>(");
+			//writer.WriteLine ($"{indent}\t\t\t\tref weak_implementor_{wrefSuffix},");
+			//writer.WriteLine ($"{indent}\t\t\t\t{opt.GetOutputName (@interface.FullName)}Implementor.__IsEmpty,");
+			//writer.WriteLine ($"{indent}\t\t\t\t{remove},");
+			//writer.WriteLine ($"{indent}\t\t\t\t__h => __h.{nameSpec}Handler -= value);");
+			//writer.WriteLine ("{0}\t}}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
+
+			//if (hasHandlerArgument) {
+			//	writer.WriteLine ("{0}void {1} ({2} value)", indent, add + "_Event_With_Handler_Helper", opt.GetOutputName (@interface.FullName));
+			//	writer.WriteLine ("{0}{{", indent);
+			//	writer.WriteLine ($"{indent}\t{add} (value, null);");
+			//	writer.WriteLine ("{0}}}", indent);
+			//	writer.WriteLine ();
+			//}
 		}
 
 		public void WriteInterfaceListenerEventsAndProperties (InterfaceGen @interface, string indent, ClassGen target, string name, string connector_fmt, string add, string remove)
@@ -995,10 +914,9 @@ namespace MonoDroid.Generation
 				writer.WriteLine ("{0}WeakReference{2} weak_implementor_{1};", indent, r, opt.NullableOperator);
 			}
 			writer.WriteLine ();
-			writer.WriteLine ("{0}{1}Implementor __Create{2}Implementor ()", indent, opt.GetOutputName (@interface.FullName), @interface.Name);
+			writer.WriteLine ($"{indent}{opt.GetOutputName (@interface.FullName)}Implementor __Create{@interface.Name}Implementor ()");
 			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\treturn new {1}Implementor ({2});", indent, opt.GetOutputName (@interface.FullName),
-				@interface.NeedsSender ? "this" : "");
+			writer.WriteLine ($"{indent}\treturn new {opt.GetOutputName (@interface.FullName)}Implementor ({(@interface.NeedsSender ? "this" : "")});");
 			writer.WriteLine ("{0}}}", indent);
 		}
 
@@ -1030,38 +948,44 @@ namespace MonoDroid.Generation
 					Report.Warning (0, Report.WarningInterfaceGen + 6, "event property name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", @interface.FullName, name);
 					return;
 				}
-				writer.WriteLine ("{0}WeakReference{2} weak_implementor_{1};", indent, name, opt.NullableOperator);
-				writer.WriteLine ("{0}{1}Implementor{3} Impl{2} {{", indent, opt.GetOutputName (@interface.FullName), name, opt.NullableOperator);
-				writer.WriteLine ("{0}\tget {{", indent);
-				writer.WriteLine ("{0}\t\tif (weak_implementor_{1} == null || !weak_implementor_{1}.IsAlive)", indent, name);
-				writer.WriteLine ("{0}\t\t\treturn null;", indent);
-				writer.WriteLine ("{0}\t\treturn weak_implementor_{1}.Target as {2}Implementor;", indent, name, opt.GetOutputName (@interface.FullName));
-				writer.WriteLine ("{0}\t}}", indent);
-				writer.WriteLine ("{0}\tset {{ weak_implementor_{1} = new WeakReference (value, true); }}", indent, name);
-				writer.WriteLine ("{0}}}", indent);
-				writer.WriteLine ();
+
+				var cw = new CodeWriter (writer, indent);
+				new InterfaceListenerPropertyImplementor (@interface, name, opt).Write (cw);
+				//writer.WriteLine ($"{indent}WeakReference{opt.NullableOperator} weak_implementor_{name};");
+				//writer.WriteLine (string.Format("{0}{1}Implementor{3} Impl{2} {{", indent, opt.GetOutputName (@interface.FullName), name, opt.NullableOperator));
+				//writer.WriteLine ("{0}\tget {{", indent);
+				//writer.WriteLine ($"{indent}\t\tif (weak_implementor_{name} == null || !weak_implementor_{name}.IsAlive)");
+				//writer.WriteLine ($"{indent}\t\t\treturn null;");
+				//writer.WriteLine ($"{indent}\t\treturn weak_implementor_{name}.Target as {opt.GetOutputName (@interface.FullName)}Implementor;");
+				//writer.WriteLine ("{0}\t}}", indent);
+				//writer.WriteLine ($"{indent}\tset {{ weak_implementor_{name} = new WeakReference (value, true); }}");
+				//writer.WriteLine ("{0}}}", indent);
+				//writer.WriteLine ();
 				WriteInterfaceListenerProperty (@interface, indent, name, nameSpec, m.AdjustedName, connector_fmt, full_delegate_name);
 			}
 		}
 
 		public void WriteInterfaceListenerProperty (InterfaceGen @interface, string indent, string name, string nameSpec, string methodName, string connector_fmt, string full_delegate_name)
 		{
-			string handlerPrefix = @interface.Methods.Count > 1 ? methodName : string.Empty;
-			writer.WriteLine ("{0}public {1}{3} {2} {{", indent, opt.GetOutputName (full_delegate_name), name, opt.NullableOperator);
-			writer.WriteLine ("{0}\tget {{", indent);
-			writer.WriteLine ("{0}\t\t{1}Implementor{3} impl = Impl{2};", indent, opt.GetOutputName (@interface.FullName), name, opt.NullableOperator);
-			writer.WriteLine ("{0}\t\treturn impl == null ? null : impl.{1}Handler;", indent, handlerPrefix);
-			writer.WriteLine ("{0}\t}}", indent);
-			writer.WriteLine ("{0}\tset {{", indent);
-			writer.WriteLine ("{0}\t\t{1}Implementor{3} impl = Impl{2};", indent, opt.GetOutputName (@interface.FullName), name, opt.NullableOperator);
-			writer.WriteLine ("{0}\t\tif (impl == null) {{", indent);
-			writer.WriteLine ("{0}\t\t\timpl = new {1}Implementor ({2});", indent, opt.GetOutputName (@interface.FullName), @interface.NeedsSender ? "this" : string.Empty);
-			writer.WriteLine ("{0}\t\t\tImpl{1} = impl;", indent, name);
-			writer.WriteLine ("{0}\t\t}} else", indent);
-			writer.WriteLine ("{0}\t\t\timpl.{1}Handler = value;", indent, nameSpec);
-			writer.WriteLine ("{0}\t}}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+			new InterfaceListenerProperty (@interface, name, nameSpec, methodName, full_delegate_name, opt).Write (cw);
+
+			//string handlerPrefix = @interface.Methods.Count > 1 ? methodName : string.Empty;
+			//writer.WriteLine ("{0}public {1}{3} {2} {{", indent, opt.GetOutputName (full_delegate_name), name, opt.NullableOperator);
+			//writer.WriteLine ("{0}\tget {{", indent);
+			//writer.WriteLine ($"{indent}\t\t{opt.GetOutputName (@interface.FullName)}Implementor{opt.NullableOperator} impl = Impl{name};");
+			//writer.WriteLine ($"{indent}\t\treturn impl == null ? null : impl.{handlerPrefix}Handler;");
+			//writer.WriteLine ("{0}\t}}", indent);
+			//writer.WriteLine ("{0}\tset {{", indent);
+			//writer.WriteLine ($"{indent}\t\t{opt.GetOutputName (@interface.FullName)}Implementor{opt.NullableOperator} impl = Impl{name};");
+			//writer.WriteLine ($"{indent}\t\tif (impl == null) {{");
+			//writer.WriteLine ($"{indent}\t\t\timpl = new {opt.GetOutputName (@interface.FullName)}Implementor ({(@interface.NeedsSender ? "this" : string.Empty)});");
+			//writer.WriteLine ($"{indent}\t\t\tImpl{name} = impl;");
+			//writer.WriteLine ($"{indent}\t\t}} else");
+			//writer.WriteLine ($"{indent}\t\t\timpl.{nameSpec}Handler = value;");
+			//writer.WriteLine ("{0}\t}}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
 		}
 
 		public void WriteInterfaceMethodInvokers (InterfaceGen @interface, IEnumerable<Method> methods, string indent, HashSet<string> members)

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Xamarin.SourceWriter
 {
 	public abstract class TypeWriter : ISourceWriter
 	{
 		private Visibility visibility;
+		private int current_priority;
 
 		public string Name { get; set; }
 		public string Inherits { get; set; }
@@ -22,8 +24,14 @@ namespace Xamarin.SourceWriter
 		public List<MethodWriter> Methods { get; } = new List<MethodWriter> ();
 		public List<string> Comments { get; } = new List<string> ();
 		public List<AttributeWriter> Attributes { get; } = new List<AttributeWriter> ();
+		public List<EventWriter> Events { get; } = new List<EventWriter> ();
 		public List<FieldWriter> Fields { get; } = new List<FieldWriter> ();
 		public List<PropertyWriter> Properties { get; } = new List<PropertyWriter> ();
+		public List<CommentWriter> InlineComments { get; } = new List<CommentWriter> ();
+		public int Priority { get; set; }
+		public int GetNextPriority () => current_priority++;
+
+		public List<TypeWriter> NestedTypes { get; } = new List<TypeWriter> ();
 
 		public void SetVisibility (string visibility)
 		{
@@ -122,12 +130,52 @@ namespace Xamarin.SourceWriter
 			WriteConstructors (writer);
 
 			writer.WriteLine ();
+			WriteEvents (writer);
+			writer.WriteLine ();
 			WriteProperties (writer);
 			writer.WriteLine ();
 			WriteMethods (writer);
 		}
 
+		public void AddInlineComment (string comment)
+		{
+			InlineComments.Add (new CommentWriter (comment) { Priority = GetNextPriority () });
+		}
+
+		public virtual void WriteMembersByPriority (CodeWriter writer)
+		{
+			var members = Fields.Cast<ISourceWriter> ().Concat (Properties).Concat (Methods).Concat (NestedTypes).Concat (Events).Concat (InlineComments);
+
+			if (this is ClassWriter klass)
+				members = members.Concat (klass.Constructors);
+
+			foreach (var member in members.OrderBy (p => p.Priority))
+				member.Write (writer);
+		}
+
+		public virtual void ClearMembers ()
+		{
+			Fields.Clear ();
+			Events.Clear ();
+			Properties.Clear ();
+			Methods.Clear ();
+			NestedTypes.Clear ();
+
+			if (this is ClassWriter klass)
+				klass.Constructors.Clear ();
+
+			current_priority = 0;
+		}
+
 		public virtual void WriteConstructors (CodeWriter writer) { }
+
+		public virtual void WriteEvents (CodeWriter writer)
+		{
+			foreach (var ev in Events) {
+				ev.Write (writer);
+				writer.WriteLine ();
+			}
+		}
 
 		public virtual void WriteFields (CodeWriter writer)
 		{

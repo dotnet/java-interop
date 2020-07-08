@@ -26,6 +26,7 @@ namespace Xamarin.SourceWriter
 		public bool IsVirtual { get; set; }
 		public bool IsShadow { get; set; }
 		public bool IsAbstract { get; set; }
+		public int Priority { get; set; }
 
 		public string ExplicitInterfaceImplementation { get; set; }
 
