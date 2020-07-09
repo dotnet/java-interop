@@ -89,54 +89,57 @@ namespace MonoDroid.Generation
 			//WriteImplementedProperties (@class.Properties, indent + "\t", @class.IsFinal, @class);
 			//WriteClassMethods (@class, indent + "\t");
 
-			if (@class.IsAbstract)
-				WriteClassAbstractMembers (@class, indent + "\t");
+			//if (@class.IsAbstract)
+			//	WriteClassAbstractMembers (@class, indent + "\t");
 
-			bool is_char_seq = false;
-			foreach (ISymbol isym in @class.Interfaces) {
-				if (isym is GenericSymbol) {
-					GenericSymbol gs = isym as GenericSymbol;
-					if (gs.IsConcrete) {
-						// FIXME: not sure if excluding default methods is a valid idea...
-						foreach (Method m in gs.Gen.Methods) {
-							if (m.IsInterfaceDefaultMethod || m.IsStatic)
-								continue;
-							if (m.IsGeneric)
-								WriteMethodExplicitIface (m, indent + "\t", gs);
-						}
+			//bool is_char_seq = false;
+			//foreach (ISymbol isym in @class.Interfaces) {
+			//	if (isym is GenericSymbol) {
+			//		GenericSymbol gs = isym as GenericSymbol;
+			//		if (gs.IsConcrete) {
+			//			// FIXME: not sure if excluding default methods is a valid idea...
+			//			foreach (Method m in gs.Gen.Methods) {
+			//				if (m.IsInterfaceDefaultMethod || m.IsStatic)
+			//					continue;
+			//				if (m.IsGeneric)
+			//					WriteMethodExplicitIface (m, indent + "\t", gs);
+			//			}
 
-						var adapter = gs.Gen.AssemblyQualifiedName + "Invoker";
-						foreach (Property p in gs.Gen.Properties) {
-							if (p.Getter != null) {
-								if (p.Getter.IsInterfaceDefaultMethod || p.Getter.IsStatic)
-									continue;
-							}
-							if (p.Setter != null) {
-								if (p.Setter.IsInterfaceDefaultMethod || p.Setter.IsStatic)
-									continue;
-							}
-							if (p.IsGeneric)
-								WritePropertyExplicitInterface (p, indent + "\t", gs, adapter);
-						}
-					}
-				} else if (isym.FullName == "Java.Lang.ICharSequence")
-					is_char_seq = true;
-			}
+			//			var adapter = gs.Gen.AssemblyQualifiedName + "Invoker";
+			//			foreach (Property p in gs.Gen.Properties) {
+			//				if (p.Getter != null) {
+			//					if (p.Getter.IsInterfaceDefaultMethod || p.Getter.IsStatic)
+			//						continue;
+			//				}
+			//				if (p.Setter != null) {
+			//					if (p.Setter.IsInterfaceDefaultMethod || p.Setter.IsStatic)
+			//						continue;
+			//				}
+			//				if (p.IsGeneric)
+			//					WritePropertyExplicitInterface (p, indent + "\t", gs, adapter);
+			//			}
+			//		}
+			//	} else if (isym.FullName == "Java.Lang.ICharSequence")
+			//		is_char_seq = true;
+			//}
 
-			if (is_char_seq)
-				WriteCharSequenceEnumerator (indent + "\t");
+			//if (is_char_seq)
+			//	WriteCharSequenceEnumerator (indent + "\t");
 
 			writer.WriteLine (indent + "}");
+			klass.WriteSiblingClasses (cw);
+			//if (!@class.AssemblyQualifiedName.Contains ('/')) {
+			//	foreach (InterfaceExtensionInfo nestedIface in @class.GetNestedInterfaceTypes ())
+			//		if (nestedIface.Type.Methods.Any (m => m.CanHaveStringOverload) || nestedIface.Type.Methods.Any (m => m.Asyncify))
+			//			new InterfaceExtensionsClass (nestedIface.Type, nestedIface.DeclaringType, opt).Write (cw);
+			//				//WriteInterfaceExtensionsDeclaration (nestedIface.Type, indent, nestedIface.DeclaringType);
+			//}
 
-			if (!@class.AssemblyQualifiedName.Contains ('/')) {
-				foreach (InterfaceExtensionInfo nestedIface in @class.GetNestedInterfaceTypes ())
-					WriteInterfaceExtensionsDeclaration (nestedIface.Type, indent, nestedIface.DeclaringType);
-			}
-
-			if (@class.IsAbstract) {
-				writer.WriteLine ();
-				WriteClassInvoker (@class, indent);
-			}
+			//if (@class.IsAbstract) {
+			//	writer.WriteLine ();
+			//	new ClassInvokerClass (@class, opt).Write (cw);
+			//	//WriteClassInvoker (@class, indent);
+			//}
 
 			Context.ContextGeneratedMethods.Clear ();
 
@@ -640,7 +643,7 @@ namespace MonoDroid.Generation
 			if (!@interface.Methods.Any (m => m.CanHaveStringOverload) && !@interface.Methods.Any (m => m.Asyncify))
 				return;
 
-			writer.WriteLine ("{0}public static partial class {1}{2}Extensions {{", indent, declaringTypeName, @interface.Name);
+			writer.WriteLine ($"{indent}public static partial class {declaringTypeName}{@interface.Name}Extensions {{");
 			WriteInterfaceExtensionMethods (@interface, indent + "\t");
 			writer.WriteLine (indent + "}");
 			writer.WriteLine ();
@@ -1057,7 +1060,7 @@ namespace MonoDroid.Generation
 		{
 			//writer.WriteLine ("// explicitly implemented method from " + iface.FullName);
 			WriteMethodCustomAttributes (method, indent);
-			writer.WriteLine ("{0}{1} {2}.{3} ({4})", indent, opt.GetTypeReferenceName (method.RetVal), opt.GetOutputName (iface.FullName), method.Name, method.GetSignature (opt));
+			writer.WriteLine ($"{indent}{opt.GetTypeReferenceName (method.RetVal)} {opt.GetOutputName (iface.FullName)}.{method.Name} ({method.GetSignature (opt)})");
 			writer.WriteLine ("{0}{{", indent);
 			writer.WriteLine ("{0}\treturn {1} ({2});", indent, method.Name, method.Parameters.GetCall (opt));
 			writer.WriteLine ("{0}}}", indent);

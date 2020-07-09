@@ -30,6 +30,7 @@ namespace Xamarin.SourceWriter
 		public List<CommentWriter> InlineComments { get; } = new List<CommentWriter> ();
 		public int Priority { get; set; }
 		public int GetNextPriority () => current_priority++;
+		public bool UsePriorityOrder { get; set; }
 
 		public List<TypeWriter> NestedTypes { get; } = new List<TypeWriter> ();
 
@@ -122,6 +123,11 @@ namespace Xamarin.SourceWriter
 
 		public virtual void WriteMembers (CodeWriter writer)
 		{
+			if (UsePriorityOrder) {
+				WriteMembersByPriority (writer);
+				return;
+			}
+
 			if (Fields.Count > 0) {
 				writer.WriteLine ();
 				WriteFields (writer);
@@ -149,8 +155,10 @@ namespace Xamarin.SourceWriter
 			if (this is ClassWriter klass)
 				members = members.Concat (klass.Constructors);
 
-			foreach (var member in members.OrderBy (p => p.Priority))
+			foreach (var member in members.OrderBy (p => p.Priority)) {
 				member.Write (writer);
+				writer.WriteLine ();
+			}
 		}
 
 		public virtual void ClearMembers ()

@@ -34,6 +34,7 @@ namespace Xamarin.SourceWriter
 		public List<AttributeWriter> GetterAttributes { get; } = new List<AttributeWriter> ();
 		public List<AttributeWriter> SetterAttributes { get; } = new List<AttributeWriter> ();
 		public int Priority { get; set; }
+		public string ExplicitInterfaceImplementation { get; set; }
 
 		public PropertyWriter ()
 		{
@@ -134,7 +135,10 @@ namespace Xamarin.SourceWriter
 			if (IsUnsafe)
 				writer.Write ("unsafe ");
 
-			WriteReturnType (writer);
+			WritePropertyType (writer);
+
+			if (ExplicitInterfaceImplementation.HasValue ())
+				writer.Write (ExplicitInterfaceImplementation + ".");
 
 			writer.Write (Name + " ");
 
@@ -231,7 +235,7 @@ namespace Xamarin.SourceWriter
 				writer.WriteLine (b);
 		}
 
-		protected virtual void WriteReturnType (CodeWriter writer)
+		protected virtual void WritePropertyType (CodeWriter writer)
 		{
 			PropertyType.WriteTypeReference (writer);
 		}

@@ -11,7 +11,8 @@ namespace generator.SourceWriters
 {
 	public class JavaLangObjectClass : ClassWriter
 	{
-		protected CodeGenerationOptions opt;
+		readonly CodeGenerationOptions opt;
+		readonly List<TypeWriter> sibling_classes = new List<TypeWriter> ();
 
 		public JavaLangObjectClass (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
@@ -52,12 +53,22 @@ namespace generator.SourceWriters
 
 			SourceWriterExtensions.AddFields (this, klass, klass.Fields, seen, opt, context);
 
-			var ic = new InterfaceConsts (klass, seen, opt, context);
+			var ic = new InterfaceConstsClass (klass, seen, opt, context);
 
 			if (ic.ShouldGenerate) {
 				ic.Priority = GetNextPriority ();
 				NestedTypes.Add (ic);
 			}
+
+			// Sibling classes
+			if (!klass.AssemblyQualifiedName.Contains ('/')) {
+				foreach (InterfaceExtensionInfo nestedIface in klass.GetNestedInterfaceTypes ())
+					if (nestedIface.Type.Methods.Any (m => m.CanHaveStringOverload) || nestedIface.Type.Methods.Any (m => m.Asyncify))
+						sibling_classes.Add (new InterfaceExtensionsClass (nestedIface.Type, nestedIface.DeclaringType, opt));
+			}
+
+			if (klass.IsAbstract)
+				sibling_classes.Add (new ClassInvokerClass (klass, opt));
 		}
 
 		public void BuildPhase2 (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
@@ -69,6 +80,9 @@ namespace generator.SourceWriters
 			AddConstructors (klass, opt, context);
 			AddProperties (klass, opt);
 			AddMethods (klass, opt, context);
+			AddAbstractMembers (klass, opt, context);
+			AddExplicitGenericInterfaceMembers (klass, opt);
+			AddCharSequenceEnumerator (klass);
 		}
 
 		void AddBindingInfrastructure (ClassGen klass)
@@ -110,6 +124,14 @@ namespace generator.SourceWriters
 			}
 		}
 
+		void AddCharSequenceEnumerator (ClassGen klass)
+		{
+			if (klass.Interfaces.Any (p => p.FullName == "Java.Lang.ICharSequence")) {
+				Methods.Add (new CharSequenceEnumeratorMethod { Priority = GetNextPriority () });
+				Methods.Add (new CharSequenceGenericEnumeratorMethod { Priority = GetNextPriority () });
+			}
+		}
+
 		void AddImplementedInterfaces (ClassGen klass)
 		{
 			foreach (var isym in klass.Interfaces) {
@@ -117,6 +139,80 @@ namespace generator.SourceWriters
 					continue;
 
 				Implements.Add (opt.GetOutputName (isym.FullName));
+			}
+		}
+
+		void AddExplicitGenericInterfaceMembers (ClassGen @class, CodeGenerationOptions opt)
+		{
+			foreach (var gs in @class.Interfaces.Where (sym => sym is GenericSymbol).Cast<GenericSymbol> ().Where (sym => sym.IsConcrete)) {
+
+				// FIXME: not sure if excluding default methods is a valid idea...
+				foreach (var m in gs.Gen.Methods) {
+					if (m.IsInterfaceDefaultMethod || m.IsStatic)
+						continue;
+					if (m.IsGeneric)
+						Methods.Add (new GenericExplicitInterfaceImplementationMethod (m, gs, opt) { Priority = GetNextPriority () });
+				}
+
+				foreach (var p in gs.Gen.Properties) {
+					if (p.Getter?.IsInterfaceDefaultMethod == true || p.Getter?.IsStatic == true)
+						continue;
+
+					if (p.Setter?.IsInterfaceDefaultMethod == true || p.Setter?.IsStatic == true)
+						continue;
+
+					if (p.IsGeneric) {
+						var mappings = new Dictionary<string, string> ();
+						for (var i = 0; i < gs.TypeParams.Length; i++)
+							mappings [gs.Gen.TypeParameters [i].Name] = gs.TypeParams [i].FullName;
+
+						//If the property type is Java.Lang.Object, we don't need to generate an explicit implementation
+						if (p.Getter?.RetVal.GetGenericType (mappings) == "Java.Lang.Object")
+							return;
+						if (p.Setter?.Parameters [0].GetGenericType (mappings) == "Java.Lang.Object")
+							return;
+
+						Properties.Add (new GenericExplicitInterfaceImplementationProperty (p, gs, gs.Gen.AssemblyQualifiedName + "Invoker", mappings, opt) { Priority = GetNextPriority () });
+					}
+				}
+			}
+
+		}
+
+		void AddAbstractMembers (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			if (!klass.IsAbstract)
+				return;
+
+			foreach (var gen in klass.GetAllDerivedInterfaces ())
+				AddInterfaceAbstractMembers (gen, klass, opt, context);
+		}
+
+		// For each interface, generate either an abstract method or an explicit implementation method.
+		void AddInterfaceAbstractMembers (InterfaceGen @interface, ClassGen gen, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			foreach (var m in @interface.Methods.Where (m => !m.IsInterfaceDefaultMethod && !m.IsStatic)) {
+				bool mapped = false;
+				string sig = m.GetSignature ();
+				if (context.ContextGeneratedMethods.Any (_ => _.Name == m.Name && _.JniSignature == m.JniSignature))
+					continue;
+				for (var cls = gen; cls != null; cls = cls.BaseGen)
+					if (cls.ContainsMethod (m, false) || cls != gen && gen.ExplicitlyImplementedInterfaceMethods.Contains (sig)) {
+						mapped = true;
+						break;
+					}
+				if (mapped)
+					continue;
+				if (gen.ExplicitlyImplementedInterfaceMethods.Contains (sig))
+					Methods.Add (new MethodExplicitInterfaceImplementation (m, @interface, opt) { Priority = GetNextPriority () });
+				else
+					AddAbstractMethodDeclaration (gen, m, @interface);
+				context.ContextGeneratedMethods.Add (m);
+			}
+			foreach (var prop in @interface.Properties.Where (p => !p.Getter.IsInterfaceDefaultMethod && !p.Getter.IsStatic)) {
+				if (gen.ContainsProperty (prop.Name, false))
+					continue;
+				AddAbstractPropertyDeclaration (gen, prop, opt);
 			}
 		}
 
@@ -144,7 +240,7 @@ namespace generator.SourceWriters
 				m.IsVirtual = !@class.IsFinal && virt;
 
 				if (m.IsAbstract && m.OverriddenInterfaceMethod == null && (opt.SupportDefaultInterfaceMethods || !m.IsInterfaceDefaultMethod))
-					AddAbstractMethodDeclaration (@class, m);
+					AddAbstractMethodDeclaration (@class, m, null);
 				else
 					AddMethod (@class, m, opt);
 
@@ -161,9 +257,9 @@ namespace generator.SourceWriters
 
 		}
 
-		void AddAbstractMethodDeclaration (GenBase klass, Method method)
+		void AddAbstractMethodDeclaration (GenBase klass, Method method, InterfaceGen gen)
 		{
-			Methods.Add (new BoundMethodAbstractDeclaration (null, method, opt, klass) { Priority = GetNextPriority () });
+			Methods.Add (new BoundMethodAbstractDeclaration (gen, method, opt, klass) { Priority = GetNextPriority () });
 
 			if (method.IsReturnCharSequence || method.Parameters.HasCharSequence)
 				Methods.Add (new BoundMethodStringOverload (method, opt) { Priority = GetNextPriority () });
@@ -223,7 +319,7 @@ namespace generator.SourceWriters
 			if (baseProp != null) {
 				if (baseProp.Type != property.Getter.Return) {
 					// This may not be required if we can change generic parameter support to return constrained type (not just J.L.Object).
-					//writer.WriteLine ("{0}// skipped generating property {1} because its Java method declaration is variant that we cannot represent in C#", indent, property.Name);
+					AddInlineComment ($"// skipped generating property {property.Name} because its Java method declaration is variant that we cannot represent in C#");
 					return;
 				}
 			}
@@ -232,6 +328,19 @@ namespace generator.SourceWriters
 
 			if (property.Type.StartsWith ("Java.Lang.ICharSequence"))
 				Properties.Add (new BoundPropertyStringVariant (property, opt) { Priority = GetNextPriority () });
+		}
+
+		public override void Write (CodeWriter writer)
+		{
+			base.Write (writer);
+
+			WriteSiblingClasses (writer);
+		}
+
+		public void WriteSiblingClasses (CodeWriter writer)
+		{
+			foreach (var sibling in sibling_classes)
+				sibling.Write (writer);
 		}
 	}
 }

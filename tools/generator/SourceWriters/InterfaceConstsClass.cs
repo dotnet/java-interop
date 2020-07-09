@@ -8,9 +8,9 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceConsts : ClassWriter
+	public class InterfaceConstsClass : ClassWriter
 	{
-		public InterfaceConsts (ClassGen @class, HashSet<string> seen, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public InterfaceConstsClass (ClassGen @class, HashSet<string> seen, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			Name = "InterfaceConsts";
 
