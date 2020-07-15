@@ -7,7 +7,11 @@ namespace Xamarin.SourceWriter
 	public class ConstructorWriter : MethodWriter
 	{
 		public string BaseCall { get; set; }
-		
+
+		public ConstructorWriter ()
+		{
+		}
+
 		public ConstructorWriter (string name) : base (name)
 		{
 			Name = name;

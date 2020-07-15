@@ -27,6 +27,7 @@ namespace Xamarin.SourceWriter
 		public bool IsShadow { get; set; }
 		public bool IsAbstract { get; set; }
 		public int Priority { get; set; }
+		public bool IsDeclaration { get; set; }
 
 		public string ExplicitInterfaceImplementation { get; set; }
 
@@ -119,7 +120,7 @@ namespace Xamarin.SourceWriter
 
 			writer.Write (")");
 
-			if (IsAbstract) {
+			if (IsAbstract || IsDeclaration) {
 				writer.WriteLine (";");
 				return;
 			}

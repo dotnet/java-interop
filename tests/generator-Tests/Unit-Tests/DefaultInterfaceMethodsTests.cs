@@ -30,80 +30,80 @@ namespace generatortests
 			return options;
 		}
 
-		[Test]
-		public void WriteInterfaceDefaultMethod ()
-		{
-			// Create an interface with a default method
-			var iface = SupportTypeBuilder.CreateEmptyInterface("java.code.IMyInterface");
+		//[Test]
+		//public void WriteInterfaceDefaultMethod ()
+		//{
+		//	// Create an interface with a default method
+		//	var iface = SupportTypeBuilder.CreateEmptyInterface("java.code.IMyInterface");
 
-			iface.Methods.Add (new TestMethod (iface, "DoSomething").SetDefaultInterfaceMethod ());
+		//	iface.Methods.Add (new TestMethod (iface, "DoSomething").SetDefaultInterfaceMethod ());
 
-			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+		//	iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
 
-			generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
+		//	generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultMethod)), writer.ToString ().NormalizeLineEndings ());
-		}
+		//	Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultMethod)), writer.ToString ().NormalizeLineEndings ());
+		//}
 
-		[Test]
-		public void WriteInterfaceRedeclaredDefaultMethod ()
-		{
-			// Create an interface with a default method
-			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
-			iface.Methods.Add (new TestMethod (iface, "DoSomething").SetDefaultInterfaceMethod ());
-			options.SymbolTable.AddType (iface);
+		//[Test]
+		//public void WriteInterfaceRedeclaredDefaultMethod ()
+		//{
+		//	// Create an interface with a default method
+		//	var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+		//	iface.Methods.Add (new TestMethod (iface, "DoSomething").SetDefaultInterfaceMethod ());
+		//	options.SymbolTable.AddType (iface);
 
-			// Create a second interface that inherits the first, declaring the method as not default
-			var iface2 = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface2");
-			iface2.AddImplementedInterface ("java.code.IMyInterface");
-			iface2.Methods.Add (new TestMethod (iface, "DoSomething"));
+		//	// Create a second interface that inherits the first, declaring the method as not default
+		//	var iface2 = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface2");
+		//	iface2.AddImplementedInterface ("java.code.IMyInterface");
+		//	iface2.Methods.Add (new TestMethod (iface, "DoSomething"));
 
-			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
-			iface2.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+		//	iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+		//	iface2.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
 
-			generator.WriteInterfaceDeclaration (iface2, string.Empty, new GenerationInfo (null, null, null));
+		//	generator.WriteInterfaceDeclaration (iface2, string.Empty, new GenerationInfo (null, null, null));
 
-			// IMyInterface2 should generate the method as abstract, not a default method
-			Assert.AreEqual (GetExpected (nameof (WriteInterfaceRedeclaredDefaultMethod)), writer.ToString ().NormalizeLineEndings ());
-		}
+		//	// IMyInterface2 should generate the method as abstract, not a default method
+		//	Assert.AreEqual (GetExpected (nameof (WriteInterfaceRedeclaredDefaultMethod)), writer.ToString ().NormalizeLineEndings ());
+		//}
 
-		[Test]
-		public void WriteInterfaceDefaultProperty ()
-		{
-			// Create an interface with a default method
-			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
-			var prop = SupportTypeBuilder.CreateProperty (iface, "Value", "int", options);
+		//[Test]
+		//public void WriteInterfaceDefaultProperty ()
+		//{
+		//	// Create an interface with a default method
+		//	var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+		//	var prop = SupportTypeBuilder.CreateProperty (iface, "Value", "int", options);
 
-			prop.Getter.IsInterfaceDefaultMethod = true;
-			prop.Setter.IsInterfaceDefaultMethod = true;
+		//	prop.Getter.IsInterfaceDefaultMethod = true;
+		//	prop.Setter.IsInterfaceDefaultMethod = true;
 
-			iface.Properties.Add (prop);
+		//	iface.Properties.Add (prop);
 
-			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+		//	iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
 
-			generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
+		//	generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultProperty)), writer.ToString ().NormalizeLineEndings ());
-		}
+		//	Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultProperty)), writer.ToString ().NormalizeLineEndings ());
+		//}
 
-		[Test]
-		public void WriteInterfaceDefaultPropertyGetterOnly ()
-		{
-			// Create an interface with a default method
-			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
-			var prop = SupportTypeBuilder.CreateProperty (iface, "Value", "int", options);
+		//[Test]
+		//public void WriteInterfaceDefaultPropertyGetterOnly ()
+		//{
+		//	// Create an interface with a default method
+		//	var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+		//	var prop = SupportTypeBuilder.CreateProperty (iface, "Value", "int", options);
 
-			prop.Getter.IsInterfaceDefaultMethod = true;
-			prop.Setter = null;
+		//	prop.Getter.IsInterfaceDefaultMethod = true;
+		//	prop.Setter = null;
 
-			iface.Properties.Add (prop);
+		//	iface.Properties.Add (prop);
 
-			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+		//	iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
 
-			generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
+		//	generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultPropertyGetterOnly)), writer.ToString ().NormalizeLineEndings ());
-		}
+		//	Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDefaultPropertyGetterOnly)), writer.ToString ().NormalizeLineEndings ());
+		//}
 
 
 		[Test]
@@ -206,26 +206,26 @@ namespace generatortests
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteStaticInterfaceMethod)), writer.ToString ().NormalizeLineEndings ());
 		}
 
-		[Test]
-		public void WriteStaticInterfaceProperty ()
-		{
-			// Create an interface with a static property
-			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
-			var prop = SupportTypeBuilder.CreateProperty (iface, "Value", "int", options);
+		//[Test]
+		//public void WriteStaticInterfaceProperty ()
+		//{
+		//	// Create an interface with a static property
+		//	var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+		//	var prop = SupportTypeBuilder.CreateProperty (iface, "Value", "int", options);
 
-			prop.Getter.IsStatic = true;
-			prop.Getter.IsVirtual = false;
-			prop.Setter.IsStatic = true;
-			prop.Setter.IsVirtual = false;
+		//	prop.Getter.IsStatic = true;
+		//	prop.Getter.IsVirtual = false;
+		//	prop.Setter.IsStatic = true;
+		//	prop.Setter.IsVirtual = false;
 
-			iface.Properties.Add (prop);
+		//	iface.Properties.Add (prop);
 
-			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+		//	iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
 
-			generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
+		//	generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteStaticInterfaceProperty)), writer.ToString ().NormalizeLineEndings ());
-		}
+		//	Assert.AreEqual (GetTargetedExpected (nameof (WriteStaticInterfaceProperty)), writer.ToString ().NormalizeLineEndings ());
+		//}
 
 		readonly string nested_interface_api = @"<api>
 			  <package name='java.lang' jni-name='java/lang'>

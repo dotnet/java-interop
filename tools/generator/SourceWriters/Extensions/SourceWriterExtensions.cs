@@ -240,6 +240,31 @@ namespace generator.SourceWriters
 			writer.WriteLine ("}");
 		}
 
+		public static void WriteMethodInvokerBody (CodeWriter writer, Method method, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			writer.WriteLine ($"if ({method.EscapedIdName} == IntPtr.Zero)");
+			writer.WriteLine ($"\t{method.EscapedIdName} = JNIEnv.GetMethodID (class_ref, \"{method.JavaName}\", \"{method.JniSignature}\");");
+
+			foreach (var prep in method.Parameters.GetCallPrep (opt))
+				writer.WriteLine (prep);
+
+			WriteParameterListCallArgs (writer, method.Parameters, opt, invoker: true);
+
+			var env_method = $"Call{method.RetVal.CallMethodPrefix}Method";
+			var call = $"{method.RetVal.ReturnCast}JNIEnv.{env_method} ({context.ContextType.GetObjectHandleProperty ("this")}, {method.EscapedIdName}{method.Parameters.GetCallArgs (opt, invoker: true)})";
+
+			if (method.IsVoid)
+				writer.WriteLine (call + ";");
+			else
+				writer.WriteLine ($"{(method.Parameters.HasCleanup ? "var __ret = " : "return ")}{method.RetVal.FromNative (opt, call, true) + opt.GetNullForgiveness (method.RetVal)};");
+
+			foreach (var cleanup in method.Parameters.GetCallCleanup (opt))
+				writer.WriteLine (cleanup);
+
+			if (!method.IsVoid && method.Parameters.HasCleanup)
+				writer.WriteLine ("return __ret;");
+		}
+
 		public static void WriteParameterListCallArgs (CodeWriter writer, ParameterList parameters, CodeGenerationOptions opt, bool invoker)
 		{
 			if (parameters.Count == 0)
@@ -300,6 +325,16 @@ namespace generator.SourceWriters
 
 			if (!method.RetVal.IsVoid)
 				writer.WriteLine ($"return __rsval{opt.GetNullForgiveness (method.RetVal)};");
+		}
+
+		public static TypeWriter BuildManagedTypeModel (GenBase gen, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			if (gen is ClassGen klass)
+				return new BoundClass (klass, opt, context);
+			else if (gen is InterfaceGen iface)
+				return new BoundInterface (iface, opt, context);
+
+			throw new ArgumentOutOfRangeException ("no idea what gen is");
 		}
 	}
 }

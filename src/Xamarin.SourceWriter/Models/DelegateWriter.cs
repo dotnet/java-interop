@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Xamarin.SourceWriter
 {
-	public class FieldWriter : ISourceWriter
+	public class DelegateWriter : ISourceWriter
 	{
 		private Visibility visibility;
 
@@ -23,12 +23,13 @@ namespace Xamarin.SourceWriter
 		public bool IsProtected { get => visibility == Visibility.Protected; set => visibility = value ? Visibility.Protected : Visibility.Default; }
 		public int Priority { get; set; }
 		public bool IsShadow { get; set; }
+		public string Signature { get; set; }
 
-		public FieldWriter ()
+		public DelegateWriter ()
 		{
 		}
 
-		public FieldWriter (string name, TypeReferenceWriter Type = null)
+		public DelegateWriter (string name, TypeReferenceWriter Type = null)
 		{
 			Name = name;
 			this.Type = Type ?? TypeReferenceWriter.Void;
@@ -92,13 +93,8 @@ namespace Xamarin.SourceWriter
 
 			WriteType (writer);
 
-			if (Value.HasValue ()) {
-				writer.Write (Name + " = ");
-				writer.Write (Value);
-				writer.WriteLine (";");
-			} else {
-				writer.WriteLine ($"{Name};");
-			}
+			writer.Write (Name + " ");
+			writer.Write ($"({Signature})");
 		}
 
 		protected virtual void WriteType (CodeWriter writer)

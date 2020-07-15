@@ -505,17 +505,17 @@ namespace generatortests
 			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterface)), writer.ToString ().NormalizeLineEndings ());
 		}
 
-		[Test]
-		public void WriteInterfaceDeclaration ()
-		{
-			var iface = SupportTypeBuilder.CreateInterface ("java.code.IMyInterface", options);
+		//[Test]
+		//public void WriteInterfaceDeclaration ()
+		//{
+		//	var iface = SupportTypeBuilder.CreateInterface ("java.code.IMyInterface", options);
 
-			generator.Context.ContextTypes.Push (iface);
-			generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
-			generator.Context.ContextTypes.Pop ();
+		//	generator.Context.ContextTypes.Push (iface);
+		//	generator.WriteInterfaceDeclaration (iface, string.Empty, new GenerationInfo (null, null, null));
+		//	generator.Context.ContextTypes.Pop ();
 
-			Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDeclaration)), writer.ToString ().NormalizeLineEndings ());
-		}
+		//	Assert.AreEqual (GetTargetedExpected (nameof (WriteInterfaceDeclaration)), writer.ToString ().NormalizeLineEndings ());
+		//}
 
 		[Test]
 		public void WriteInterfaceExtensionMethods ()

@@ -17,6 +17,7 @@ namespace Xamarin.SourceWriter
 		public static TypeReferenceWriter Delegate => new TypeReferenceWriter ("Delegate");
 		public static TypeReferenceWriter IntPtr => new TypeReferenceWriter ("IntPtr");
 		public static TypeReferenceWriter Float => new TypeReferenceWriter ("float");
+		public static TypeReferenceWriter Object => new TypeReferenceWriter ("object");
 		public static TypeReferenceWriter Void => new TypeReferenceWriter ("void");
 
 		public TypeReferenceWriter (string name)

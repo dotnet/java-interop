@@ -55,79 +55,81 @@ namespace MonoDroid.Generation
 				gen_info.Enums.Add (@class.RawJniName.Replace ('/', '.') + ":" + @class.Namespace + ":" + @class.JavaSimpleName);
 
 
-			var klass = new JavaLangObjectClass (@class, opt, Context);
+			var klass = new BoundClass (@class, opt, Context);
 
 			var cw = new CodeWriter (writer, indent);
-			klass.WriteComments (cw);
-			klass.WriteAttributes (cw);
-			klass.WriteSignature (cw);
-			klass.WriteMembersByPriority (cw);
 
-			foreach (GenBase nest in @class.NestedTypes) {
-				if (@class.BaseGen != null && @class.BaseGen.ContainsNestedType (nest))
-					if (nest is ClassGen)
-						(nest as ClassGen).NeedsNew = true;
-				WriteType (nest, indent + "\t", gen_info);
-				writer.WriteLine ();
-			}
+			klass.Write (cw);
+			//klass.WriteComments (cw);
+			//klass.WriteAttributes (cw);
+			//klass.WriteSignature (cw);
+			//klass.WriteMembersByPriority (cw);
 
-			// @class.InheritsObject is true unless @class refers to java.lang.Object or java.lang.Throwable. (see ClassGen constructor)
-			// If @class's base class is defined in the same api.xml file, then it requires the new keyword to overshadow the internal
-			// members of its baseclass since the two classes will be defined in the same assembly. If the base class is not from the
-			// same api.xml file, the new keyword is not needed because the internal access modifier already prevents it from being seen.
-			//bool baseFromSameAssembly = @class?.BaseGen?.FromXml ?? false;
-			//bool requireNew = @class.InheritsObject && baseFromSameAssembly;
-			//WriteClassHandle (@class, indent, requireNew);
-
-			klass.BuildPhase2 (@class, opt, Context);
-			cw = new CodeWriter (writer, indent);
-			klass.WriteMembersByPriority (cw);
-
-
-			//WriteClassConstructors (@class, indent + "\t");
-
-			//WriteImplementedProperties (@class.Properties, indent + "\t", @class.IsFinal, @class);
-			//WriteClassMethods (@class, indent + "\t");
-
-			//if (@class.IsAbstract)
-			//	WriteClassAbstractMembers (@class, indent + "\t");
-
-			//bool is_char_seq = false;
-			//foreach (ISymbol isym in @class.Interfaces) {
-			//	if (isym is GenericSymbol) {
-			//		GenericSymbol gs = isym as GenericSymbol;
-			//		if (gs.IsConcrete) {
-			//			// FIXME: not sure if excluding default methods is a valid idea...
-			//			foreach (Method m in gs.Gen.Methods) {
-			//				if (m.IsInterfaceDefaultMethod || m.IsStatic)
-			//					continue;
-			//				if (m.IsGeneric)
-			//					WriteMethodExplicitIface (m, indent + "\t", gs);
-			//			}
-
-			//			var adapter = gs.Gen.AssemblyQualifiedName + "Invoker";
-			//			foreach (Property p in gs.Gen.Properties) {
-			//				if (p.Getter != null) {
-			//					if (p.Getter.IsInterfaceDefaultMethod || p.Getter.IsStatic)
-			//						continue;
-			//				}
-			//				if (p.Setter != null) {
-			//					if (p.Setter.IsInterfaceDefaultMethod || p.Setter.IsStatic)
-			//						continue;
-			//				}
-			//				if (p.IsGeneric)
-			//					WritePropertyExplicitInterface (p, indent + "\t", gs, adapter);
-			//			}
-			//		}
-			//	} else if (isym.FullName == "Java.Lang.ICharSequence")
-			//		is_char_seq = true;
+			//foreach (GenBase nest in @class.NestedTypes) {
+			//	if (@class.BaseGen != null && @class.BaseGen.ContainsNestedType (nest))
+			//		if (nest is ClassGen)
+			//			(nest as ClassGen).NeedsNew = true;
+			//	WriteType (nest, indent + "\t", gen_info);
+			//	writer.WriteLine ();
 			//}
 
-			//if (is_char_seq)
-			//	WriteCharSequenceEnumerator (indent + "\t");
+			//// @class.InheritsObject is true unless @class refers to java.lang.Object or java.lang.Throwable. (see ClassGen constructor)
+			//// If @class's base class is defined in the same api.xml file, then it requires the new keyword to overshadow the internal
+			//// members of its baseclass since the two classes will be defined in the same assembly. If the base class is not from the
+			//// same api.xml file, the new keyword is not needed because the internal access modifier already prevents it from being seen.
+			////bool baseFromSameAssembly = @class?.BaseGen?.FromXml ?? false;
+			////bool requireNew = @class.InheritsObject && baseFromSameAssembly;
+			////WriteClassHandle (@class, indent, requireNew);
 
-			writer.WriteLine (indent + "}");
-			klass.WriteSiblingClasses (cw);
+			//klass.BuildPhase2 (@class, opt, Context);
+			//cw = new CodeWriter (writer, indent);
+			//klass.WriteMembersByPriority (cw);
+
+
+			////WriteClassConstructors (@class, indent + "\t");
+
+			////WriteImplementedProperties (@class.Properties, indent + "\t", @class.IsFinal, @class);
+			////WriteClassMethods (@class, indent + "\t");
+
+			////if (@class.IsAbstract)
+			////	WriteClassAbstractMembers (@class, indent + "\t");
+
+			////bool is_char_seq = false;
+			////foreach (ISymbol isym in @class.Interfaces) {
+			////	if (isym is GenericSymbol) {
+			////		GenericSymbol gs = isym as GenericSymbol;
+			////		if (gs.IsConcrete) {
+			////			// FIXME: not sure if excluding default methods is a valid idea...
+			////			foreach (Method m in gs.Gen.Methods) {
+			////				if (m.IsInterfaceDefaultMethod || m.IsStatic)
+			////					continue;
+			////				if (m.IsGeneric)
+			////					WriteMethodExplicitIface (m, indent + "\t", gs);
+			////			}
+
+			////			var adapter = gs.Gen.AssemblyQualifiedName + "Invoker";
+			////			foreach (Property p in gs.Gen.Properties) {
+			////				if (p.Getter != null) {
+			////					if (p.Getter.IsInterfaceDefaultMethod || p.Getter.IsStatic)
+			////						continue;
+			////				}
+			////				if (p.Setter != null) {
+			////					if (p.Setter.IsInterfaceDefaultMethod || p.Setter.IsStatic)
+			////						continue;
+			////				}
+			////				if (p.IsGeneric)
+			////					WritePropertyExplicitInterface (p, indent + "\t", gs, adapter);
+			////			}
+			////		}
+			////	} else if (isym.FullName == "Java.Lang.ICharSequence")
+			////		is_char_seq = true;
+			////}
+
+			////if (is_char_seq)
+			////	WriteCharSequenceEnumerator (indent + "\t");
+
+			//writer.WriteLine (indent + "}");
+			//klass.WriteSiblingClasses (cw);
 			//if (!@class.AssemblyQualifiedName.Contains ('/')) {
 			//	foreach (InterfaceExtensionInfo nestedIface in @class.GetNestedInterfaceTypes ())
 			//		if (nestedIface.Type.Methods.Any (m => m.CanHaveStringOverload) || nestedIface.Type.Methods.Any (m => m.Asyncify))
@@ -403,23 +405,27 @@ namespace MonoDroid.Generation
 				writer.WriteLine ();
 			}
 
-			WriteInterfaceImplementedMembersAlternative (@interface, indent);
+			//WriteInterfaceImplementedMembersAlternative (@interface, indent);
 
-			// If this interface is just fields and we can't generate any of them
-			// then we don't need to write the interface
-			if (@interface.IsConstSugar && @interface.GetGeneratableFields (opt).Count () == 0)
-				return;
+			//// If this interface is just fields and we can't generate any of them
+			//// then we don't need to write the interface
+			//if (@interface.IsConstSugar && @interface.GetGeneratableFields (opt).Count () == 0)
+			//	return;
 
-			WriteInterfaceDeclaration (@interface, indent, gen_info);
+			var iface = new BoundInterface (@interface, opt, Context);
+			var cw = new CodeWriter (writer, indent);
 
-			// If this interface is just constant fields we don't need to write all the invoker bits
-			if (@interface.IsConstSugar)
-				return;
+			iface.Write (cw);
+			//WriteInterfaceDeclaration (@interface, indent, gen_info);
 
-			if (!@interface.AssemblyQualifiedName.Contains ('/'))
-				WriteInterfaceExtensionsDeclaration (@interface, indent, null);
-			WriteInterfaceInvoker (@interface, indent);
-			WriteInterfaceEventHandler (@interface, indent);
+			//// If this interface is just constant fields we don't need to write all the invoker bits
+			//if (@interface.IsConstSugar)
+			//	return;
+
+			//if (!@interface.AssemblyQualifiedName.Contains ('/'))
+			//	WriteInterfaceExtensionsDeclaration (@interface, indent, null);
+			//WriteInterfaceInvoker (@interface, indent);
+			//WriteInterfaceEventHandler (@interface, indent);
 			Context.ContextTypes.Pop ();
 		}
 
@@ -453,50 +459,59 @@ namespace MonoDroid.Generation
 
 		public void WriteInterfaceDeclaration (InterfaceGen @interface, string indent, GenerationInfo gen_info)
 		{
-			StringBuilder sb = new StringBuilder ();
-			foreach (ISymbol isym in @interface.Interfaces) {
-				InterfaceGen igen = (isym is GenericSymbol ? (isym as GenericSymbol).Gen : isym) as InterfaceGen;
-				if (igen.IsConstSugar || igen.RawVisibility != "public")
-					continue;
-				if (sb.Length > 0)
-					sb.Append (", ");
-				sb.Append (opt.GetOutputName (isym.FullName));
-			}
+			var iface = new BoundInterface (@interface, opt, Context);
 
-			writer.WriteLine ("{0}// Metadata.xml XPath interface reference: path=\"{1}\"", indent, @interface.MetadataXPathReference);
+			var cw = new CodeWriter (writer, indent);
+			iface.Write (cw);
+			//klass.WriteComments (cw);
+			//klass.WriteAttributes (cw);
+			//klass.WriteSignature (cw);
+			//klass.WriteMembersByPriority (cw);
 
-			if (@interface.IsDeprecated)
-				writer.WriteLine ("{0}[ObsoleteAttribute (@\"{1}\")]", indent, @interface.DeprecatedComment);
+			//StringBuilder sb = new StringBuilder ();
+			//foreach (ISymbol isym in @interface.Interfaces) {
+			//	InterfaceGen igen = (isym is GenericSymbol ? (isym as GenericSymbol).Gen : isym) as InterfaceGen;
+			//	if (igen.IsConstSugar || igen.RawVisibility != "public")
+			//		continue;
+			//	if (sb.Length > 0)
+			//		sb.Append (", ");
+			//	sb.Append (opt.GetOutputName (isym.FullName));
+			//}
 
-			if (!@interface.IsConstSugar) {
-				var signature = string.IsNullOrWhiteSpace (@interface.Namespace)
-					? @interface.FullName.Replace ('.', '/')
-					: @interface.Namespace + "." + @interface.FullName.Substring (@interface.Namespace.Length + 1).Replace ('.', '/');
+			//writer.WriteLine ($"{indent}// Metadata.xml XPath interface reference: path=\"{@interface.MetadataXPathReference}\"");
 
-				writer.WriteLine ("{0}[Register (\"{1}\", \"\", \"{2}\"{3})]", indent, @interface.RawJniName, signature + "Invoker", @interface.AdditionalAttributeString ());
-			}
+			//if (@interface.IsDeprecated)
+			//	writer.WriteLine ("{0}[ObsoleteAttribute (@\"{1}\")]", indent, @interface.DeprecatedComment);
 
-			if (@interface.TypeParameters != null && @interface.TypeParameters.Any ())
-				writer.WriteLine ("{0}{1}", indent, @interface.TypeParameters.ToGeneratedAttributeString ());
-			writer.WriteLine ("{0}{1} partial interface {2}{3} {{", indent, @interface.Visibility, @interface.Name,
-				@interface.IsConstSugar ? string.Empty : @interface.Interfaces.Count == 0 || sb.Length == 0 ? " : " + GetAllInterfaceImplements () : " : " + sb.ToString ());
+			//if (!@interface.IsConstSugar) {
+			//	var signature = string.IsNullOrWhiteSpace (@interface.Namespace)
+			//		? @interface.FullName.Replace ('.', '/')
+			//		: @interface.Namespace + "." + @interface.FullName.Substring (@interface.Namespace.Length + 1).Replace ('.', '/');
 
-			if (opt.SupportDefaultInterfaceMethods && (@interface.HasDefaultMethods || @interface.HasStaticMethods))
-				WriteClassHandle (@interface, indent + "\t", @interface.Name);
+			//	writer.WriteLine ("{0}[Register (\"{1}\", \"\", \"{2}\"{3})]", indent, @interface.RawJniName, signature + "Invoker", @interface.AdditionalAttributeString ());
+			//}
 
-			WriteInterfaceFields (@interface, indent + "\t");
-			writer.WriteLine ();
-			WriteInterfaceProperties (@interface, indent + "\t");
-			WriteInterfaceMethods (@interface, indent + "\t");
+			//if (@interface.TypeParameters != null && @interface.TypeParameters.Any ())
+			//	writer.WriteLine ("{0}{1}", indent, @interface.TypeParameters.ToGeneratedAttributeString ());
+			//writer.WriteLine ("{0}{1} partial interface {2}{3} {{", indent, @interface.Visibility, @interface.Name,
+			//	@interface.IsConstSugar ? string.Empty : @interface.Interfaces.Count == 0 || sb.Length == 0 ? " : " + GetAllInterfaceImplements () : " : " + sb.ToString ());
+
+			//if (opt.SupportDefaultInterfaceMethods && (@interface.HasDefaultMethods || @interface.HasStaticMethods))
+			//	WriteClassHandle (@interface, indent + "\t", @interface.Name);
+
+			//WriteInterfaceFields (@interface, indent + "\t");
+			//writer.WriteLine ();
+			//WriteInterfaceProperties (@interface, indent + "\t");
+			//WriteInterfaceMethods (@interface, indent + "\t");
 
 			// Generate nested types for supported nested types
-			foreach (var nest in @interface.NestedTypes.Where (t => !t.Unnest)) {
-				WriteType (nest, indent + "\t", gen_info);
-				writer.WriteLine ();
-			}
+			//foreach (var nest in @interface.NestedTypes.Where (t => !t.Unnest)) {
+			//	WriteType (nest, indent + "\t", gen_info);
+			//	writer.WriteLine ();
+			//}
 
-			writer.WriteLine (indent + "}");
-			writer.WriteLine ();
+			//writer.WriteLine (indent + "}");
+			//writer.WriteLine ();
 		}
 
 		public void WriteInterfaceExtensionMethods (InterfaceGen @interface, string indent)
@@ -578,10 +593,10 @@ namespace MonoDroid.Generation
 			writer.WriteLine ();
 			writer.WriteLine ("{0}\tpublic {1}Implementor ({2})", indent, @interface.Name, needs_sender ? "object sender" : "");
 			writer.WriteLine ("{0}\t\t: base (", indent);
-			writer.WriteLine ("{0}\t\t\tglobal::Android.Runtime.JNIEnv.StartCreateInstance (\"{1}\", \"()V\"),", indent, jniClass);
+			writer.WriteLine ($"{indent}\t\t\tglobal::Android.Runtime.JNIEnv.StartCreateInstance (\"{jniClass}\", \"()V\"),");
 			writer.WriteLine ("{0}\t\t\tJniHandleOwnership.TransferLocalRef)", indent);
 			writer.WriteLine ("{0}\t{{", indent);
-			writer.WriteLine ("{0}\t\tglobal::Android.Runtime.JNIEnv.FinishCreateInstance ({1}, \"()V\");", indent, @interface.GetObjectHandleProperty ("this"));
+			writer.WriteLine ($"{indent}\t\tglobal::Android.Runtime.JNIEnv.FinishCreateInstance ({@interface.GetObjectHandleProperty ("this")}, \"()V\");");
 			if (needs_sender)
 				writer.WriteLine ("{0}\t\tthis.sender = sender;", indent);
 			writer.WriteLine ("{0}\t}}", indent);
@@ -609,7 +624,7 @@ namespace MonoDroid.Generation
 			string args_name = @interface.GetArgsName (m);
 			if (m.EventName != string.Empty) {
 				writer.WriteLine ("#pragma warning disable 0649");
-				writer.WriteLine ("{0}\tpublic {1}{3} {2}Handler;", indent, @interface.GetEventDelegateName (m), methodSpec, opt.NullableOperator);
+				writer.WriteLine ($"{indent}\tpublic {@interface.GetEventDelegateName (m)}{opt.NullableOperator} {methodSpec}Handler;");
 				writer.WriteLine ("#pragma warning restore 0649");
 			}
 			writer.WriteLine ();
@@ -620,20 +635,18 @@ namespace MonoDroid.Generation
 			} else if (m.IsVoid) {
 				writer.WriteLine ("{0}\t\tvar __h = {1}Handler;", indent, methodSpec);
 				writer.WriteLine ("{0}\t\tif (__h != null)", indent);
-				writer.WriteLine ("{0}\t\t\t__h ({1}, new {2} ({3}));", indent, needs_sender ? "sender" : m.Parameters.SenderName, args_name, m.Parameters.CallDropSender);
+				writer.WriteLine ($"{indent}\t\t\t__h ({(needs_sender ? "sender" : m.Parameters.SenderName)}, new {args_name} ({m.Parameters.CallDropSender}));");
 			} else if (m.IsEventHandlerWithHandledProperty) {
 				writer.WriteLine ("{0}\t\tvar __h = {1}Handler;", indent, methodSpec);
 				writer.WriteLine ("{0}\t\tif (__h == null)", indent);
 				writer.WriteLine ("{0}\t\t\treturn {1};", indent, m.RetVal.DefaultValue);
 				var call = m.Parameters.CallDropSender;
-				writer.WriteLine ("{0}\t\tvar __e = new {1} (true{2}{3});", indent, args_name,
-						call.Length != 0 ? ", " : "",
-						call);
-				writer.WriteLine ("{0}\t\t__h ({1}, __e);", indent, needs_sender ? "sender" : m.Parameters.SenderName);
+				writer.WriteLine ($"{indent}\t\tvar __e = new {args_name} (true{(call.Length != 0 ? ", " : "")}{call});");
+				writer.WriteLine ($"{indent}\t\t__h ({(needs_sender ? "sender" : m.Parameters.SenderName)}, __e);");
 				writer.WriteLine ("{0}\t\treturn __e.Handled;", indent);
 			} else {
 				writer.WriteLine ("{0}\t\tvar __h = {1}Handler;", indent, methodSpec);
-				writer.WriteLine ("{0}\t\treturn __h != null ? __h ({1}) : default ({2});", indent, m.Parameters.GetCall (opt), opt.GetTypeReferenceName (m.RetVal));
+				writer.WriteLine ($"{indent}\t\treturn __h != null ? __h ({m.Parameters.GetCall (opt)}) : default ({opt.GetTypeReferenceName (m.RetVal)});");
 			}
 			writer.WriteLine ("{0}\t}}", indent);
 		}
@@ -785,8 +798,8 @@ namespace MonoDroid.Generation
 			writer.WriteLine ("{0}\tstatic IntPtr Validate (IntPtr handle)", indent);
 			writer.WriteLine ("{0}\t{{", indent);
 			writer.WriteLine ("{0}\t\tif (!JNIEnv.IsInstanceOf (handle, java_class_ref))", indent);
-			writer.WriteLine ("{0}\t\t\tthrow new InvalidCastException (string.Format (\"Unable to convert instance of type '{{0}}' to type '{{1}}'.\",", indent);
-			writer.WriteLine ("{0}\t\t\t\t\t\tJNIEnv.GetClassNameFromInstance (handle), \"{1}\"));", indent, @interface.JavaName);
+			writer.WriteLine ($"{indent}\t\t\tthrow new InvalidCastException (string.Format (\"Unable to convert instance of type '{{0}}' to type '{{1}}'.\",");
+			writer.WriteLine ($"{indent}\t\t\t\t\t\tJNIEnv.GetClassNameFromInstance (handle), \"{@interface.JavaName}\"));");
 			writer.WriteLine ("{0}\t\treturn handle;", indent);
 			writer.WriteLine ("{0}\t}}", indent);
 			writer.WriteLine ();

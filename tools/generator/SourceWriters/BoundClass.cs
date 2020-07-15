@@ -9,12 +9,12 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class JavaLangObjectClass : ClassWriter
+	public class BoundClass : ClassWriter
 	{
 		readonly CodeGenerationOptions opt;
 		readonly List<TypeWriter> sibling_classes = new List<TypeWriter> ();
 
-		public JavaLangObjectClass (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public BoundClass (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			this.opt = opt;
 
@@ -25,6 +25,8 @@ namespace generator.SourceWriters
 			IsAbstract = klass.IsAbstract;
 			IsSealed = klass.IsFinal;
 			IsPartial = true;
+
+			UsePriorityOrder = true;
 
 			AddImplementedInterfaces (klass);
 
@@ -69,13 +71,8 @@ namespace generator.SourceWriters
 
 			if (klass.IsAbstract)
 				sibling_classes.Add (new ClassInvokerClass (klass, opt));
-		}
 
-		public void BuildPhase2 (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
-		{
-			// So hacky!  :/
-			ClearMembers ();
-
+			AddNestedTypes (klass, opt, context);
 			AddBindingInfrastructure (klass);
 			AddConstructors (klass, opt, context);
 			AddProperties (klass, opt);
@@ -328,6 +325,18 @@ namespace generator.SourceWriters
 
 			if (property.Type.StartsWith ("Java.Lang.ICharSequence"))
 				Properties.Add (new BoundPropertyStringVariant (property, opt) { Priority = GetNextPriority () });
+		}
+
+		void AddNestedTypes (ClassGen klass, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			foreach (var nest in klass.NestedTypes) {
+				if (klass.BaseGen?.ContainsNestedType (nest) == true && nest is ClassGen c)
+					c.NeedsNew = true;
+
+				var type = SourceWriterExtensions.BuildManagedTypeModel (nest, opt, context);
+				type.Priority = GetNextPriority ();
+				NestedTypes.Add (type);
+			}
 		}
 
 		public override void Write (CodeWriter writer)

@@ -54,7 +54,7 @@ namespace generator.SourceWriters
 				Attributes.Add (new ObsoleteAttr (method.Deprecated.Replace ("\"", "\"\"")));
 
 			if (method.IsReturnEnumified)
-				Attributes.Add (new GeneratedEnumReturnAttr (true));
+				Attributes.Add (new GeneratedEnumAttr (true));
 
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.IsVirtual ? method.GetConnectorNameFull (opt) : string.Empty, additionalProperties: method.AdditionalAttributeString ()));
 

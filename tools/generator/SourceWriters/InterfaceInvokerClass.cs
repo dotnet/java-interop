@@ -1,0 +1,190 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Schema;
+using MonoDroid.Generation;
+using Xamarin.SourceWriter;
+
+namespace generator.SourceWriters
+{
+	public class InterfaceInvokerClass : ClassWriter
+	{
+		public InterfaceInvokerClass (InterfaceGen @interface, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			Name = $"{@interface.Name}Invoker";
+
+			IsInternal = true;
+			IsPartial = true;
+			UsePriorityOrder = true;
+
+			Inherits = "global::Java.Lang.Object";
+			Implements.Add (@interface.Name);
+
+			Attributes.Add (new RegisterAttr (@interface.RawJniName, noAcw: true, additionalProperties: @interface.AdditionalAttributeString ()) { UseGlobal = true });
+
+			Fields.Add (new PeerMembersField (opt, @interface.RawJniName, $"{@interface.Name}Invoker", false) { Priority = GetNextPriority () });
+
+			Properties.Add (new InterfaceHandleGetter { Priority = GetNextPriority () });
+			Properties.Add (new JniPeerMembersGetter { Priority = GetNextPriority () });
+			Properties.Add (new InterfaceThresholdClassGetter { Priority = GetNextPriority () });
+			Properties.Add (new ThresholdTypeGetter { Priority = GetNextPriority () });
+
+			Fields.Add (new FieldWriter ("class_ref", TypeReferenceWriter.IntPtr) { IsShadow = opt.BuildingCoreAssembly, Priority = GetNextPriority () });
+
+			Methods.Add (new GetObjectMethod (@interface, opt) { Priority = GetNextPriority () });
+			Methods.Add (new ValidateMethod (@interface) { Priority = GetNextPriority () });
+			Methods.Add (new DisposeMethod () { Priority = GetNextPriority () });
+
+			Constructors.Add (new InterfaceInvokerConstructor (@interface, context) { Priority = GetNextPriority () });
+
+			AddMemberInvokers (@interface, new HashSet<string> (), opt, context);
+		}
+
+		void AddMemberInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			var add_char_enumerator = iface.FullName == "Java.Lang.ICharSequence";
+
+			AddPropertyInvokers (iface, members, opt, context);
+			AddMethodInvokers (iface, members, opt, context);
+
+			foreach (var i in iface.GetAllDerivedInterfaces ()) {
+				AddPropertyInvokers (i, members, opt, context);
+				AddMethodInvokers (i, members, opt, context);
+
+				if (i.FullName == "Java.Lang.ICharSequence")
+					add_char_enumerator = true;
+			}
+
+			if (add_char_enumerator) {
+				Methods.Add (new CharSequenceEnumeratorMethod { Priority = GetNextPriority () });
+				Methods.Add (new CharSequenceGenericEnumeratorMethod { Priority = GetNextPriority () });
+			}
+		}
+
+		void AddPropertyInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			foreach (var prop in iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod)) {
+				if (members.Contains (prop.Name))
+					continue;
+
+				members.Add (prop.Name);
+
+				Properties.Add (new InterfaceInvokerProperty (iface, prop, opt, context) { Priority = GetNextPriority () });
+			}
+		}
+
+		void AddMethodInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
+		{
+			foreach (var m in iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
+				var sig = m.GetSignature ();
+
+				if (members.Contains (sig))
+					continue;
+
+				members.Add (sig);
+
+				Methods.Add (new InterfaceInvokerMethod (iface, m, opt, context) { Priority = GetNextPriority () });
+			}
+		}
+	}
+
+	public class GetObjectMethod : MethodWriter
+	{
+		// public static IInterface? GetObject (IntPtr handle, JniHandleOwnership transfer)
+		// {
+		//     return global::Java.Lang.Object.GetObject<IInterface> (handle, transfer);
+		// }
+		public GetObjectMethod (InterfaceGen iface, CodeGenerationOptions opt)
+		{
+			Name = "GetObject";
+
+			ReturnType = new TypeReferenceWriter (iface.Name) { Nullable = opt.SupportNullableReferenceTypes };
+
+			IsPublic = true;
+			IsStatic = true;
+
+			Parameters.Add (new MethodParameterWriter ("handle", TypeReferenceWriter.IntPtr));
+			Parameters.Add (new MethodParameterWriter ("transfer", new TypeReferenceWriter ("JniHandleOwnership")));
+
+			Body.Add ($"return global::Java.Lang.Object.GetObject<{iface.Name}> (handle, transfer);");
+		}
+	}
+
+	public class ValidateMethod : MethodWriter
+	{
+		// static IntPtr Validate (IntPtr handle)
+		// {
+		//     if (!JNIEnv.IsInstanceOf (handle, java_class_ref))
+		//         throw new InvalidCastException (string.Format (\"Unable to convert instance of type '{{0}}' to type '{{1}}'.\", JNIEnv.GetClassNameFromInstance (handle), \"{iface.JavaName}\"));
+		//
+		//     return handle;
+		// }
+		public ValidateMethod (InterfaceGen iface)
+		{
+			Name = "Validate";
+
+			ReturnType = TypeReferenceWriter.IntPtr;
+
+			IsStatic = true;
+
+			Parameters.Add (new MethodParameterWriter ("handle", TypeReferenceWriter.IntPtr));
+
+			Body.Add ("if (!JNIEnv.IsInstanceOf (handle, java_class_ref))");
+			Body.Add ($"\tthrow new InvalidCastException (string.Format (\"Unable to convert instance of type '{{0}}' to type '{{1}}'.\", JNIEnv.GetClassNameFromInstance (handle), \"{iface.JavaName}\"));");
+			Body.Add ("return handle;");
+		}
+	}
+
+	public class DisposeMethod : MethodWriter
+	{
+		// protected override void Dispose (bool disposing)
+		// {
+		//     if (this.class_ref != IntPtr.Zero)
+		//         JNIEnv.DeleteGlobalRef (this.class_ref);
+		//     this.class_ref = IntPtr.Zero;
+		//     base.Dispose (disposing);
+		// }
+		public DisposeMethod ()
+		{
+			Name = "Dispose";
+
+			IsProtected = true;
+			IsOverride = true;
+
+			Parameters.Add (new MethodParameterWriter ("disposing", TypeReferenceWriter.Bool));
+			ReturnType = TypeReferenceWriter.Void;
+
+			Body.Add ("if (this.class_ref != IntPtr.Zero)");
+			Body.Add ("\tJNIEnv.DeleteGlobalRef (this.class_ref);");
+			Body.Add ("this.class_ref = IntPtr.Zero;");
+			Body.Add ("base.Dispose (disposing);");
+		}
+	}
+
+	public class InterfaceInvokerConstructor : ConstructorWriter
+	{
+		// public IfaceInvoker (IntPtr handle, JniHandleOwnership transfer) : base (Validate (handle), transfer)
+		// {
+		//     IntPtr local_ref = JNIEnv.GetObjectClass (this)
+		//     this.class_ref = JNIEnv.NewGlobalRef (local_ref);
+		//     JNIEnv.DeleteLocalRef (local_ref);
+		// }
+		public InterfaceInvokerConstructor (InterfaceGen iface, CodeGeneratorContext context)
+		{
+			Name = iface.Name + "Invoker";
+
+			IsPublic = true;
+
+			Parameters.Add (new MethodParameterWriter ("handle", TypeReferenceWriter.IntPtr));
+			Parameters.Add (new MethodParameterWriter ("transfer", new TypeReferenceWriter ("JniHandleOwnership")));
+
+			BaseCall = "base (Validate (handle), transfer)";
+
+			Body.Add ($"IntPtr local_ref = JNIEnv.GetObjectClass ({context.ContextType.GetObjectHandleProperty ("this")});");
+			Body.Add ("this.class_ref = JNIEnv.NewGlobalRef (local_ref);");
+			Body.Add ("JNIEnv.DeleteLocalRef (local_ref);");
+		}
+	}
+}

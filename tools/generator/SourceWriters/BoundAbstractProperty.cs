@@ -8,8 +8,6 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	// This is a field that is not a constant, and thus we need to generate it as a
-	// property so it can access the Java field.
 	public class BoundAbstractProperty : PropertyWriter
 	{
 		readonly MethodCallback getter_callback;
@@ -41,7 +39,7 @@ namespace generator.SourceWriters
 			if (gen.IsGeneratable)
 				GetterComments.Add ($"// Metadata.xml XPath method reference: path=\"{gen.MetadataXPathReference}/method[@name='{property.Getter.JavaName}'{property.Getter.Parameters.GetMethodXPathPredicate ()}]\"");
 			if (property.Getter.IsReturnEnumified)
-				GetterAttributes.Add (new GeneratedEnumReturnAttr (true));
+				GetterAttributes.Add (new GeneratedEnumAttr (true));
 
 			GetterAttributes.Add (new RegisterAttr (property.Getter.JavaName, property.Getter.JniSignature, property.Getter.GetConnectorNameFull (opt), additionalProperties: property.Getter.AdditionalAttributeString ()));
 

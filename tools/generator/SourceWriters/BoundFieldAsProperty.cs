@@ -30,7 +30,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (field.JavaName, additionalProperties: field.AdditionalAttributeString ()));
 
 			if (field.IsEnumified)
-				Attributes.Add (new GeneratedEnumReturnAttr ());
+				Attributes.Add (new GeneratedEnumAttr ());
 			if (field.IsDeprecated)
 				Attributes.Add (new ObsoleteAttr (field.DeprecatedComment, field.IsDeprecatedError) { NoAtSign = true });
 
