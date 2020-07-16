@@ -10,20 +10,23 @@ namespace generator.SourceWriters
 {
 	public class BoundInterface : InterfaceWriter
 	{
-		readonly List<TypeWriter> pre_sibling_classes = new List<TypeWriter> ();
-		readonly List<TypeWriter> post_sibling_classes = new List<TypeWriter> ();
+		readonly List<TypeWriter> pre_sibling_types = new List<TypeWriter> ();
+		readonly List<TypeWriter> post_sibling_types = new List<TypeWriter> ();
 		readonly bool dont_generate;
 
-		public BoundInterface (InterfaceGen @interface, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public BoundInterface (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context, GenerationInfo genInfo)
 		{
-			Name = @interface.Name;
+			context.ContextTypes.Push (iface);
 
-			AddAlternativesClass (@interface, opt, context);
+			Name = iface.Name;
+
+			AddNestedSiblingTypes (iface, opt, context, genInfo);
+			AddAlternativesClass (iface, opt, context);
 
 			// If this interface is just fields and we can't generate any of them
 			// then we don't need to write the interface.  We still keep this type
 			// because it may have nested types or need an InterfaceMemberAlternativeClass.
-			if (@interface.IsConstSugar && @interface.GetGeneratableFields (opt).Count () == 0) {
+			if (iface.IsConstSugar && iface.GetGeneratableFields (opt).Count () == 0) {
 				dont_generate = true;
 				return;
 			}
@@ -32,45 +35,56 @@ namespace generator.SourceWriters
 
 			UsePriorityOrder = true;
 
-			SetVisibility (@interface.Visibility);
+			SetVisibility (iface.Visibility);
 
-			Comments.Add ($"// Metadata.xml XPath interface reference: path=\"{@interface.MetadataXPathReference}\"");
+			Comments.Add ($"// Metadata.xml XPath interface reference: path=\"{iface.MetadataXPathReference}\"");
 
-			if (@interface.IsDeprecated)
-				Attributes.Add (new ObsoleteAttr (@interface.DeprecatedComment) { WriteAttributeSuffix = true, WriteEmptyString = true });
+			if (iface.IsDeprecated)
+				Attributes.Add (new ObsoleteAttr (iface.DeprecatedComment) { WriteAttributeSuffix = true, WriteEmptyString = true });
 
-			if (!@interface.IsConstSugar) {
-				var signature = string.IsNullOrWhiteSpace (@interface.Namespace)
-					? @interface.FullName.Replace ('.', '/')
-					: @interface.Namespace + "." + @interface.FullName.Substring (@interface.Namespace.Length + 1).Replace ('.', '/');
+			if (!iface.IsConstSugar) {
+				var signature = string.IsNullOrWhiteSpace (iface.Namespace)
+					? iface.FullName.Replace ('.', '/')
+					: iface.Namespace + "." + iface.FullName.Substring (iface.Namespace.Length + 1).Replace ('.', '/');
 
-				Attributes.Add (new RegisterAttr (@interface.RawJniName, string.Empty, signature + "Invoker", additionalProperties: @interface.AdditionalAttributeString ()));
+				Attributes.Add (new RegisterAttr (iface.RawJniName, string.Empty, signature + "Invoker", additionalProperties: iface.AdditionalAttributeString ()));
 			}
 
-			if (@interface.TypeParameters != null && @interface.TypeParameters.Any ())
-				Attributes.Add (new CustomAttr (@interface.TypeParameters.ToGeneratedAttributeString ()));
+			if (iface.TypeParameters != null && iface.TypeParameters.Any ())
+				Attributes.Add (new CustomAttr (iface.TypeParameters.ToGeneratedAttributeString ()));
 
-			AddInheritedInterfaces (@interface, opt);
+			AddInheritedInterfaces (iface, opt);
 
-			AddClassHandle (@interface, opt);
-			AddFields (@interface, opt, context);
-			AddProperties (@interface, opt);
-			AddMethods (@interface, opt);
-			AddNestedTypes (@interface, opt, context);
+			AddClassHandle (iface, opt);
+			AddFields (iface, opt, context);
+			AddProperties (iface, opt);
+			AddMethods (iface, opt);
+			AddNestedTypes (iface, opt, context, genInfo);
 
 			// If this interface is just constant fields we don't need to add all the invoker bits
-			if (@interface.IsConstSugar)
+			if (iface.IsConstSugar)
 				return;
 
-			if (!@interface.AssemblyQualifiedName.Contains ('/')) {
-				if (@interface.Methods.Any (m => m.CanHaveStringOverload) || @interface.Methods.Any (m => m.Asyncify))
-					post_sibling_classes.Add (new InterfaceExtensionsClass (@interface, null, opt));
+			if (!iface.AssemblyQualifiedName.Contains ('/')) {
+				if (iface.Methods.Any (m => m.CanHaveStringOverload) || iface.Methods.Any (m => m.Asyncify))
+					post_sibling_types.Add (new InterfaceExtensionsClass (iface, null, opt));
 			}
 
-			post_sibling_classes.Add (new InterfaceInvokerClass (@interface, opt, context));
+			post_sibling_types.Add (new InterfaceInvokerClass (iface, opt, context));
 
-			AddInterfaceEventHandler (@interface, opt, context);
+			AddInterfaceEventHandler (iface, opt, context);
+
+			context.ContextTypes.Pop ();
 		}
+
+
+		void AddNestedSiblingTypes (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context, GenerationInfo genInfo)
+		{
+			// Generate sibling types for nested types we don't want to nest
+			foreach (var nest in iface.NestedTypes.Where (t => t.Unnest))
+				pre_sibling_types.Add (SourceWriterExtensions.BuildManagedTypeModel (nest, opt, context, genInfo));
+		}
+
 
 		void AddAlternativesClass (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
@@ -80,36 +94,35 @@ namespace generator.SourceWriters
 			var staticMethods = iface.Methods.Where (m => m.IsStatic);
 
 			if (iface.Fields.Any () || staticMethods.Any ())
-				pre_sibling_classes.Add (new InterfaceMemberAlternativeClass (iface, opt, context));
+				pre_sibling_types.Add (new InterfaceMemberAlternativeClass (iface, opt, context));
 		}
 
-		void AddInterfaceEventHandler (InterfaceGen @interface, CodeGenerationOptions opt, CodeGeneratorContext context)
+		void AddInterfaceEventHandler (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			if (!@interface.IsListener)
+			if (!iface.IsListener)
 				return;
 
-			foreach (var method in @interface.Methods.Where (m => m.EventName != string.Empty)) {
+			foreach (var method in iface.Methods.Where (m => m.EventName != string.Empty)) {
 				if (method.RetVal.IsVoid || method.IsEventHandlerWithHandledProperty) {
 					if (!method.IsSimpleEventHandler || method.IsEventHandlerWithHandledProperty)
-						post_sibling_classes.Add (new InterfaceEventArgsClass (@interface, method, opt, context));
+						post_sibling_types.Add (new InterfaceEventArgsClass (iface, method, opt, context));
 				} else {
 					var del = new DelegateWriter {
-						Name = @interface.GetEventDelegateName (method),
+						Name = iface.GetEventDelegateName (method),
 						Type = new TypeReferenceWriter (opt.GetTypeReferenceName (method.RetVal)),
-						IsPublic = true,
-						Priority = GetNextPriority ()
+						IsPublic = true
 					};
 
 					Delegates.Add (del);
 				}
 			}
 
-			post_sibling_classes.Add (new InterfaceEventHandlerImplClass (@interface, opt, context));
+			post_sibling_types.Add (new InterfaceEventHandlerImplClass (iface, opt, context));
 		}
 
-		void AddInheritedInterfaces (InterfaceGen @interface, CodeGenerationOptions opt)
+		void AddInheritedInterfaces (InterfaceGen iface, CodeGenerationOptions opt)
 		{
-			foreach (var isym in @interface.Interfaces) {
+			foreach (var isym in iface.Interfaces) {
 				var igen = (isym is GenericSymbol ? (isym as GenericSymbol).Gen : isym) as InterfaceGen;
 
 				if (igen.IsConstSugar || igen.RawVisibility != "public")
@@ -118,41 +131,41 @@ namespace generator.SourceWriters
 				Implements.Add (opt.GetOutputName (isym.FullName));
 			}
 
-			if (Implements.Count == 0 && !@interface.IsConstSugar)
+			if (Implements.Count == 0 && !iface.IsConstSugar)
 				Implements.AddRange (new [] { "IJavaObject", "IJavaPeerable" });
 		}
 
-		void AddClassHandle (InterfaceGen @interface, CodeGenerationOptions opt)
+		void AddClassHandle (InterfaceGen iface, CodeGenerationOptions opt)
 		{
-			if (opt.SupportDefaultInterfaceMethods && (@interface.HasDefaultMethods || @interface.HasStaticMethods))
-				Fields.Add (new PeerMembersField (opt, @interface.RawJniName, @interface.Name, true) { Priority = GetNextPriority () });
+			if (opt.SupportDefaultInterfaceMethods && (iface.HasDefaultMethods || iface.HasStaticMethods))
+				Fields.Add (new PeerMembersField (opt, iface.RawJniName, iface.Name, true));
 		}
 
-		void AddFields (InterfaceGen @interface, CodeGenerationOptions opt, CodeGeneratorContext context)
+		void AddFields (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			// Interface fields are only supported with DIM
 			if (!opt.SupportInterfaceConstants)
 				return;
 
 			var seen = new HashSet<string> ();
-			var fields = @interface.GetGeneratableFields (opt).ToList ();
+			var fields = iface.GetGeneratableFields (opt).ToList ();
 
-			SourceWriterExtensions.AddFields (this, @interface, fields, seen, opt, context);
+			SourceWriterExtensions.AddFields (this, iface, fields, seen, opt, context);
 		}
 
-		void AddProperties (InterfaceGen @interface, CodeGenerationOptions opt)
+		void AddProperties (InterfaceGen iface, CodeGenerationOptions opt)
 		{
-			foreach (var prop in @interface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod))
-				Properties.Add (new BoundInterfacePropertyDeclaration (prop, @interface, @interface.AssemblyQualifiedName + "Invoker", opt));
+			foreach (var prop in iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod))
+				Properties.Add (new BoundInterfacePropertyDeclaration(iface, prop, iface.AssemblyQualifiedName + "Invoker", opt));
 
 			if (!opt.SupportDefaultInterfaceMethods)
 				return;
 
-			var dim_properties = @interface.Properties.Where (p => p.Getter.IsInterfaceDefaultMethod || p.Getter.IsStatic);
+			var dim_properties = iface.Properties.Where (p => p.Getter.IsInterfaceDefaultMethod || p.Getter.IsStatic);
 
 			foreach (var prop in dim_properties) {
 				if (prop.Getter.IsAbstract) {
-					var baseProp = @interface.BaseSymbol != null ? @interface.BaseSymbol.GetPropertyByName (prop.Name, true) : null;
+					var baseProp = iface.BaseSymbol != null ? iface.BaseSymbol.GetPropertyByName (prop.Name, true) : null;
 					if (baseProp != null) {
 						if (baseProp.Type != prop.Getter.Return) {
 							// This may not be required if we can change generic parameter support to return constrained type (not just J.L.Object).
@@ -161,58 +174,55 @@ namespace generator.SourceWriters
 						}
 					}
 
-					Properties.Add (new BoundAbstractProperty (@interface, prop, opt) { Priority = GetNextPriority () });
+					Properties.Add (new BoundAbstractProperty (iface, prop, opt));
 
 					if (prop.Type.StartsWith ("Java.Lang.ICharSequence"))
-						Properties.Add (new BoundPropertyStringVariant (prop, opt) { Priority = GetNextPriority () });
+						Properties.Add (new BoundPropertyStringVariant (prop, opt));
 				} else {
-					Properties.Add (new BoundProperty (@interface, prop, opt, true, false) { Priority = GetNextPriority () });
+					Properties.Add (new BoundProperty (iface, prop, opt, true, false));
 
 					if (prop.Type.StartsWith ("Java.Lang.ICharSequence"))
-						Properties.Add (new BoundPropertyStringVariant (prop, opt) { Priority = GetNextPriority () });
+						Properties.Add (new BoundPropertyStringVariant (prop, opt));
 				}
 			}
 		}
 
-		void AddMethods (InterfaceGen @interface, CodeGenerationOptions opt)
+		void AddMethods (InterfaceGen iface, CodeGenerationOptions opt)
 		{
-			foreach (var m in @interface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
-				if (m.Name == @interface.Name || @interface.ContainsProperty (m.Name, true))
+			foreach (var m in iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
+				if (m.Name == iface.Name || iface.ContainsProperty (m.Name, true))
 					m.Name = "Invoke" + m.Name;
 
-				Methods.Add (new BoundInterfaceMethodDeclaration (@interface, m, @interface.AssemblyQualifiedName + "Invoker", opt));
+				Methods.Add (new BoundInterfaceMethodDeclaration(m, iface.AssemblyQualifiedName + "Invoker", opt));
 			}
 
 			if (!opt.SupportDefaultInterfaceMethods)
 				return;
 
-			foreach (var method in @interface.Methods.Where (m => m.IsInterfaceDefaultMethod || m.IsStatic)) {
+			foreach (var method in iface.Methods.Where (m => m.IsInterfaceDefaultMethod || m.IsStatic)) {
 				if (!method.IsValid)
 					continue;
 
-				Methods.Add (new BoundMethod (@interface, method, this, opt, true) { Priority = GetNextPriority () });
+				Methods.Add (new BoundMethod(iface, method, opt, true));
 
 				var name_and_jnisig = method.JavaName + method.JniSignature.Replace ("java/lang/CharSequence", "java/lang/String");
-				var gen_string_overload = !method.IsOverride && method.Parameters.HasCharSequence && !@interface.ContainsMethod (name_and_jnisig);
+				var gen_string_overload = !method.IsOverride && method.Parameters.HasCharSequence && !iface.ContainsMethod (name_and_jnisig);
 
 				if (gen_string_overload || method.IsReturnCharSequence)
-					Methods.Add (new BoundMethodStringOverload (method, opt) { Priority = GetNextPriority () });
+					Methods.Add (new BoundMethodStringOverload (method, opt));
 
 				if (method.Asyncify)
-					Methods.Add (new MethodAsyncWrapper (method, opt) { Priority = GetNextPriority () });
+					Methods.Add (new MethodAsyncWrapper (method, opt));
 			}
 		}
 
-		void AddNestedTypes (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
+		void AddNestedTypes (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context, GenerationInfo genInfo)
 		{
 			// Generate nested types for supported nested types.  This is a new addition in C#8.
 			// Prior to this, types nested in an interface had to be generated as sibling types.
 			// The "Unnest" property is used to support backwards compatibility with pre-C#8 bindings.
-			foreach (var nest in iface.NestedTypes.Where (t => !t.Unnest)) {
-				var type = SourceWriterExtensions.BuildManagedTypeModel (nest, opt, context);
-				type.Priority = GetNextPriority ();
-				NestedTypes.Add (type);
-			}
+			foreach (var nest in iface.NestedTypes.Where (t => !t.Unnest))
+				NestedTypes.Add (SourceWriterExtensions.BuildManagedTypeModel (nest, opt, context, genInfo));
 		}
 
 		public override void Write (CodeWriter writer)
@@ -227,13 +237,13 @@ namespace generator.SourceWriters
 
 		public void WritePreSiblingClasses (CodeWriter writer)
 		{
-			foreach (var sibling in pre_sibling_classes)
+			foreach (var sibling in pre_sibling_types)
 				sibling.Write (writer);
 		}
 
 		public void WritePostSiblingClasses (CodeWriter writer)
 		{
-			foreach (var sibling in post_sibling_classes)
+			foreach (var sibling in post_sibling_types)
 				sibling.Write (writer);
 		}
 	}

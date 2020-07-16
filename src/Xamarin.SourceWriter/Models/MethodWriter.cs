@@ -31,16 +31,6 @@ namespace Xamarin.SourceWriter
 
 		public string ExplicitInterfaceImplementation { get; set; }
 
-		public MethodWriter ()
-		{
-		}
-
-		public MethodWriter (string name, TypeReferenceWriter returnType = null)
-		{
-			Name = name;
-			ReturnType = returnType ?? TypeReferenceWriter.Void;
-		}
-
 		public void SetVisibility (string visibility)
 		{
 			switch (visibility?.ToLowerInvariant ()) {

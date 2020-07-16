@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Xamarin.SourceWriter
 {
 	public abstract class TypeWriter : ISourceWriter
 	{
-		private Visibility visibility;
-		private int current_priority;
+		Visibility visibility;
+		int current_priority;
 
 		public string Name { get; set; }
 		public string Inherits { get; set; }
@@ -21,19 +22,37 @@ namespace Xamarin.SourceWriter
 		public bool IsStatic { get; set; }
 		public bool IsPrivate { get => visibility.HasFlag (Visibility.Private); set => visibility = value ? Visibility.Private : Visibility.Default; }
 		public bool IsProtected { get => visibility.HasFlag (Visibility.Protected); set => visibility = value ? Visibility.Protected : Visibility.Default; }
-		public List<MethodWriter> Methods { get; } = new List<MethodWriter> ();
+		public ObservableCollection<MethodWriter> Methods { get; } = new ObservableCollection<MethodWriter> ();
 		public List<string> Comments { get; } = new List<string> ();
 		public List<AttributeWriter> Attributes { get; } = new List<AttributeWriter> ();
-		public List<EventWriter> Events { get; } = new List<EventWriter> ();
-		public List<FieldWriter> Fields { get; } = new List<FieldWriter> ();
-		public List<PropertyWriter> Properties { get; } = new List<PropertyWriter> ();
-		public List<CommentWriter> InlineComments { get; } = new List<CommentWriter> ();
-		public List<DelegateWriter> Delegates { get; } = new List<DelegateWriter> ();
+		public ObservableCollection<EventWriter> Events { get; } = new ObservableCollection<EventWriter> ();
+		public ObservableCollection<FieldWriter> Fields { get; } = new ObservableCollection<FieldWriter> ();
+		public ObservableCollection<PropertyWriter> Properties { get; } = new ObservableCollection<PropertyWriter> ();
+		public ObservableCollection<CommentWriter> InlineComments { get; } = new ObservableCollection<CommentWriter> ();
+		public ObservableCollection<DelegateWriter> Delegates { get; } = new ObservableCollection<DelegateWriter> ();
 		public int Priority { get; set; }
 		public int GetNextPriority () => current_priority++;
 		public bool UsePriorityOrder { get; set; }
 
-		public List<TypeWriter> NestedTypes { get; } = new List<TypeWriter> ();
+		public ObservableCollection<TypeWriter> NestedTypes { get; } = new ObservableCollection<TypeWriter> ();
+
+		protected TypeWriter ()
+		{
+			Methods.CollectionChanged += MemberAdded;
+			Events.CollectionChanged += MemberAdded;
+			Fields.CollectionChanged += MemberAdded;
+			Properties.CollectionChanged += MemberAdded;
+			InlineComments.CollectionChanged += MemberAdded;
+			Delegates.CollectionChanged += MemberAdded;
+			NestedTypes.CollectionChanged += MemberAdded;
+		}
+
+		protected void MemberAdded (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			foreach (var member in e.NewItems.OfType<ISourceWriter> ())
+				if (member.Priority == 0)
+					member.Priority = GetNextPriority ();
+		}
 
 		public void SetVisibility (string visibility)
 		{
@@ -151,7 +170,7 @@ namespace Xamarin.SourceWriter
 
 		public void AddInlineComment (string comment)
 		{
-			InlineComments.Add (new CommentWriter (comment) { Priority = GetNextPriority () });
+			InlineComments.Add (new CommentWriter (comment));
 		}
 
 		public virtual void WriteMembersByPriority (CodeWriter writer)
@@ -165,20 +184,6 @@ namespace Xamarin.SourceWriter
 				member.Write (writer);
 				writer.WriteLine ();
 			}
-		}
-
-		public virtual void ClearMembers ()
-		{
-			Fields.Clear ();
-			Events.Clear ();
-			Properties.Clear ();
-			Methods.Clear ();
-			NestedTypes.Clear ();
-
-			if (this is ClassWriter klass)
-				klass.Constructors.Clear ();
-
-			current_priority = 0;
 		}
 
 		public virtual void WriteConstructors (CodeWriter writer) { }

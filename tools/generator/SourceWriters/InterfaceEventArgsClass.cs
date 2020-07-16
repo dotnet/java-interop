@@ -10,9 +10,9 @@ namespace generator.SourceWriters
 {
 	public class InterfaceEventArgsClass : ClassWriter
 	{
-		public InterfaceEventArgsClass (InterfaceGen @interface, Method method, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public InterfaceEventArgsClass (InterfaceGen iface, Method method, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			Name = @interface.GetArgsName (method);
+			Name = iface.GetArgsName (method);
 			Inherits = "global::System.EventArgs";
 
 			IsPublic = true;
@@ -20,22 +20,21 @@ namespace generator.SourceWriters
 
 			UsePriorityOrder = true;
 
-			Comments.Add ($"// event args for {@interface.JavaName}.{method.JavaName}");
+			Comments.Add ($"// event args for {iface.JavaName}.{method.JavaName}");
 
-			AddConstructor (@interface, method, opt);
+			AddConstructor (iface, method, opt);
 
 			if (method.IsEventHandlerWithHandledProperty)
-				Properties.Add (new HandledProperty { Priority = GetNextPriority () });
+				Properties.Add (new HandledProperty ());
 
 			AddProperties (method, opt);
 		}
 
-		void AddConstructor (InterfaceGen @interface, Method method, CodeGenerationOptions opt)
+		void AddConstructor (InterfaceGen iface, Method method, CodeGenerationOptions opt)
 		{
 			var ctor = new ConstructorWriter {
-				Name = @interface.GetArgsName (method),
-				IsPublic = true,
-				Priority = GetNextPriority ()
+				Name = iface.GetArgsName (method),
+				IsPublic = true
 			};
 
 			if (method.IsEventHandlerWithHandledProperty) {
@@ -62,16 +61,14 @@ namespace generator.SourceWriters
 
 				Fields.Add (new FieldWriter {
 					Name = opt.GetSafeIdentifier (p.Name),
-					Type = new TypeReferenceWriter (opt.GetTypeReferenceName (p)),
-					Priority = GetNextPriority ()
+					Type = new TypeReferenceWriter (opt.GetTypeReferenceName (p))
 				});
 
 				var prop = new PropertyWriter {
 					Name = p.PropertyName,
 					PropertyType = new TypeReferenceWriter (opt.GetTypeReferenceName (p)),
 					IsPublic = true,
-					HasGet = true,
-					Priority = GetNextPriority ()
+					HasGet = true
 				};
 
 				prop.GetBody.Add ($"return {opt.GetSafeIdentifier (p.Name)};");

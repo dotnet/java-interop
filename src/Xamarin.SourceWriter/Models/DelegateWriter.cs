@@ -25,16 +25,6 @@ namespace Xamarin.SourceWriter
 		public bool IsShadow { get; set; }
 		public string Signature { get; set; }
 
-		public DelegateWriter ()
-		{
-		}
-
-		public DelegateWriter (string name, TypeReferenceWriter Type = null)
-		{
-			Name = name;
-			this.Type = Type ?? TypeReferenceWriter.Void;
-		}
-
 		public void SetVisibility (string visibility)
 		{
 			switch (visibility?.ToLowerInvariant ()) {

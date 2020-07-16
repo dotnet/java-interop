@@ -14,14 +14,17 @@ namespace generator.SourceWriters
 		protected Ctor constructor;
 		protected CodeGenerationOptions opt;
 		protected CodeGeneratorContext context;
+		readonly string context_this;
 
-		public BoundConstructor (Ctor constructor, ClassGen type, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) : base (type.Name)
+		public BoundConstructor (ClassGen klass, Ctor constructor, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			this.constructor = constructor;
 			this.opt = opt;
 			this.context = context;
 
-			Comments.Add (string.Format ("// Metadata.xml XPath constructor reference: path=\"{0}/constructor[@name='{1}'{2}]\"", type.MetadataXPathReference, type.JavaSimpleName, constructor.Parameters.GetMethodXPathPredicate ()));
+			Name = klass.Name;
+
+			Comments.Add (string.Format ("// Metadata.xml XPath constructor reference: path=\"{0}/constructor[@name='{1}'{2}]\"", klass.MetadataXPathReference, klass.JavaSimpleName, constructor.Parameters.GetMethodXPathPredicate ()));
 
 			Attributes.Add (new RegisterAttr (".ctor", constructor.JniSignature, string.Empty, additionalProperties: constructor.AdditionalAttributeString ()));
 
@@ -38,6 +41,7 @@ namespace generator.SourceWriters
 			IsUnsafe = true;
 
 			BaseCall = $"{(useBase ? "base" : "this")} (IntPtr.Zero, JniHandleOwnership.DoNotTransfer)";
+			context_this = context.ContextType.GetObjectHandleProperty ("this");
 		}
 
 		protected override void WriteBody (CodeWriter writer)
@@ -48,7 +52,7 @@ namespace generator.SourceWriters
 						? "(" + constructor.Parameters.GetJniNestedDerivedSignature (opt) + ")V"
 						: constructor.JniSignature);
 			writer.WriteLine ();
-			writer.WriteLine ($"if ({context.ContextType.GetObjectHandleProperty ("this")} != IntPtr.Zero)");
+			writer.WriteLine ($"if ({context_this} != IntPtr.Zero)");
 			writer.WriteLine ("\treturn;");
 			writer.WriteLine ();
 
@@ -75,7 +79,7 @@ namespace generator.SourceWriters
 			writer.WriteLine ("}");
 		}
 
-		private void WriteParamterListCallArgs (CodeWriter writer, ParameterList parameters, bool invoker, CodeGenerationOptions opt)
+		void WriteParamterListCallArgs (CodeWriter writer, ParameterList parameters, bool invoker, CodeGenerationOptions opt)
 		{
 			if (parameters.Count == 0)
 				return;
@@ -105,8 +109,8 @@ namespace generator.SourceWriters
 
 	public class StringOverloadConstructor : BoundConstructor
 	{
-		public StringOverloadConstructor (Ctor constructor, ClassGen type, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) :
-			base (constructor, type, useBase, opt, context)
+		public StringOverloadConstructor (ClassGen klass, Ctor constructor, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) :
+			base (klass, constructor, useBase, opt, context)
 		{
 			Comments.Clear ();
 		}

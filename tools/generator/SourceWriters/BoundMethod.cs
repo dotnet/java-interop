@@ -12,14 +12,15 @@ namespace generator.SourceWriters
 	{
 		readonly Method method;
 		readonly CodeGenerationOptions opt;
+		readonly MethodCallback callback;
 
-		public BoundMethod (GenBase type, Method method, TypeWriter @class, CodeGenerationOptions opt, bool generateCallbacks) : base ()
+		public BoundMethod (GenBase type, Method method, CodeGenerationOptions opt, bool generateCallbacks)
 		{
 			this.method = method;
 			this.opt = opt;
 
 			if (generateCallbacks && method.IsVirtual)
-				@class.Methods.Add (new MethodCallback (type, method, opt, null, method.IsReturnCharSequence) { Priority = @class.GetNextPriority () });
+				callback = new MethodCallback (type, method, opt, null, method.IsReturnCharSequence);
 
 			Name = method.AdjustedName;
 
@@ -59,6 +60,13 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.IsVirtual ? method.GetConnectorNameFull (opt) : string.Empty, additionalProperties: method.AdditionalAttributeString ()));
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
+		}
+
+		public override void Write (CodeWriter writer)
+		{
+			callback?.Write (writer);
+
+			base.Write (writer);
 		}
 
 		protected override void WriteBody (CodeWriter writer)

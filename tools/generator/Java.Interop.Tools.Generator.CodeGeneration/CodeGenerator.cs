@@ -46,16 +46,16 @@ namespace MonoDroid.Generation
 
 		public void WriteClass (ClassGen @class, string indent, GenerationInfo gen_info)
 		{
-			Context.ContextTypes.Push (@class);
-			Context.ContextGeneratedMethods = new List<Method> ();
+			//Context.ContextTypes.Push (@class);
+			//Context.ContextGeneratedMethods = new List<Method> ();
 
-			gen_info.TypeRegistrations.Add (new KeyValuePair<string, string> (@class.RawJniName, @class.AssemblyQualifiedName));
-			bool is_enum = @class.base_symbol != null && @class.base_symbol.FullName == "Java.Lang.Enum";
-			if (is_enum)
-				gen_info.Enums.Add (@class.RawJniName.Replace ('/', '.') + ":" + @class.Namespace + ":" + @class.JavaSimpleName);
+			//gen_info.TypeRegistrations.Add (new KeyValuePair<string, string> (@class.RawJniName, @class.AssemblyQualifiedName));
+			//bool is_enum = @class.base_symbol != null && @class.base_symbol.FullName == "Java.Lang.Enum";
+			//if (is_enum)
+			//	gen_info.Enums.Add (@class.RawJniName.Replace ('/', '.') + ":" + @class.Namespace + ":" + @class.JavaSimpleName);
 
 
-			var klass = new BoundClass (@class, opt, Context);
+			var klass = new BoundClass (@class, opt, Context, gen_info);
 
 			var cw = new CodeWriter (writer, indent);
 
@@ -143,9 +143,9 @@ namespace MonoDroid.Generation
 			//	//WriteClassInvoker (@class, indent);
 			//}
 
-			Context.ContextGeneratedMethods.Clear ();
+			//Context.ContextGeneratedMethods.Clear ();
 
-			Context.ContextTypes.Pop ();
+			//Context.ContextTypes.Pop ();
 		}
 
 		public void WriteClassAbstractMembers (ClassGen @class, string indent)
@@ -378,14 +378,14 @@ namespace MonoDroid.Generation
 				priority = tw.GetNextPriority ();
 
 			if (field.NeedsProperty) {
-				var prop = new BoundFieldAsProperty (type, field, opt) { Priority = priority };
+				var prop = new BoundFieldAsProperty (type, field, opt);
 
 				if (tw != null)
 					tw.Properties.Add (prop);
 				else
 					prop.Write (cw);
 			} else {
-				var f = new BoundField (type, field, opt) { Priority = priority };
+				var f = new BoundField (type, field, opt);
 
 				if (tw != null)
 					tw.Fields.Add (f);
@@ -397,13 +397,13 @@ namespace MonoDroid.Generation
 
 		public void WriteInterface (InterfaceGen @interface, string indent, GenerationInfo gen_info)
 		{
-			Context.ContextTypes.Push (@interface);
+			//Context.ContextTypes.Push (@interface);
 
-			// Generate sibling types for nested types we don't want to nest
-			foreach (var nest in @interface.NestedTypes.Where (t => t.Unnest)) {
-				WriteType (nest, indent, gen_info);
-				writer.WriteLine ();
-			}
+			//// Generate sibling types for nested types we don't want to nest
+			//foreach (var nest in @interface.NestedTypes.Where (t => t.Unnest)) {
+			//	WriteType (nest, indent, gen_info);
+			//	writer.WriteLine ();
+			//}
 
 			//WriteInterfaceImplementedMembersAlternative (@interface, indent);
 
@@ -412,7 +412,7 @@ namespace MonoDroid.Generation
 			//if (@interface.IsConstSugar && @interface.GetGeneratableFields (opt).Count () == 0)
 			//	return;
 
-			var iface = new BoundInterface (@interface, opt, Context);
+			var iface = new BoundInterface (@interface, opt, Context, gen_info);
 			var cw = new CodeWriter (writer, indent);
 
 			iface.Write (cw);
@@ -426,7 +426,7 @@ namespace MonoDroid.Generation
 			//	WriteInterfaceExtensionsDeclaration (@interface, indent, null);
 			//WriteInterfaceInvoker (@interface, indent);
 			//WriteInterfaceEventHandler (@interface, indent);
-			Context.ContextTypes.Pop ();
+			//Context.ContextTypes.Pop ();
 		}
 
 		// For each interface, generate either an abstract method or an explicit implementation method.
@@ -459,7 +459,7 @@ namespace MonoDroid.Generation
 
 		public void WriteInterfaceDeclaration (InterfaceGen @interface, string indent, GenerationInfo gen_info)
 		{
-			var iface = new BoundInterface (@interface, opt, Context);
+			var iface = new BoundInterface (@interface, opt, Context, gen_info);
 
 			var cw = new CodeWriter (writer, indent);
 			iface.Write (cw);
@@ -1347,7 +1347,7 @@ namespace MonoDroid.Generation
 				return;
 
 			var c = new ClassWriter ();
-			var m = new BoundMethod (type, method, c, opt, generate_callbacks);
+			var m = new BoundMethod(type, method, opt, generate_callbacks);
 
 			var cw = new CodeWriter (writer, indent);
 			c.Methods.FirstOrDefault ()?.Write (cw);

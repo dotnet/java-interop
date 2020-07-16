@@ -13,8 +13,11 @@ namespace generator.SourceWriters
 		// {
 		// 	return GetEnumerator ();
 		// }
-		public CharSequenceEnumeratorMethod () : base ("System.Collections.IEnumerable.GetEnumerator", new TypeReferenceWriter ("System.Collections.IEnumerator"))
+		public CharSequenceEnumeratorMethod ()
 		{
+			Name = "System.Collections.IEnumerable.GetEnumerator";
+			ReturnType = new TypeReferenceWriter ("System.Collections.IEnumerator");
+
 			Body.Add ("return GetEnumerator ();");
 		}		
 	}
@@ -26,8 +29,11 @@ namespace generator.SourceWriters
 		// 	for (int i = 0; i < Length(); i++)
 		// 		yield return CharAt (i);
 		// }
-		public CharSequenceGenericEnumeratorMethod () : base ("GetEnumerator", new TypeReferenceWriter ("System.Collections.Generic.IEnumerator<char>"))
+		public CharSequenceGenericEnumeratorMethod ()
 		{
+			Name = "GetEnumerator";
+			ReturnType = new TypeReferenceWriter ("System.Collections.Generic.IEnumerator<char>");
+
 			IsPublic = true;
 
 			Body.Add ("for (int i = 0; i < Length (); i++)");

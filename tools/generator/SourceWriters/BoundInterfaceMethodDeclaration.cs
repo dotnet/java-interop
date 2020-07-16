@@ -13,7 +13,7 @@ namespace generator.SourceWriters
 		readonly Method method;
 		readonly CodeGenerationOptions opt;
 
-		public BoundInterfaceMethodDeclaration (GenBase gen, Method method, string adapter, CodeGenerationOptions opt)
+		public BoundInterfaceMethodDeclaration (Method method, string adapter, CodeGenerationOptions opt)
 		{
 			this.method = method;
 			this.opt = opt;

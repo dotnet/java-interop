@@ -10,13 +10,13 @@ namespace generator.SourceWriters
 {
 	public class CreateImplementorMethod : MethodWriter
 	{
-		public CreateImplementorMethod (InterfaceGen @interface, CodeGenerationOptions opt)
+		public CreateImplementorMethod (InterfaceGen iface, CodeGenerationOptions opt)
 		{
-			Name = $"__Create{@interface.Name}Implementor";
+			Name = $"__Create{iface.Name}Implementor";
 
-			ReturnType = new TypeReferenceWriter ($"{opt.GetOutputName (@interface.FullName)}Implementor");
+			ReturnType = new TypeReferenceWriter ($"{opt.GetOutputName (iface.FullName)}Implementor");
 
-			Body.Add ($"return new {opt.GetOutputName (@interface.FullName)}Implementor ({(@interface.NeedsSender ? "this" : "")});");
+			Body.Add ($"return new {opt.GetOutputName (iface.FullName)}Implementor ({(iface.NeedsSender ? "this" : "")});");
 		}
 	}
 }

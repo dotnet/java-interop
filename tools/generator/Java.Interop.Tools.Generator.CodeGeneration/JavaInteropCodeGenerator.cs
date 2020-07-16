@@ -138,11 +138,11 @@ namespace MonoDroid.Generation {
 					continue;
 
 				// Bind Java declared constructor
-				klass.Constructors.Add (new BoundConstructor (ctor, @class, @class.InheritsObject, opt, Context));
+				klass.Constructors.Add (new BoundConstructor(@class, ctor, @class.InheritsObject, opt, Context));
 
 				// If the constructor takes ICharSequence, create an overload constructor that takes a string
 				if (ctor.Parameters.HasCharSequence && !@class.ContainsCtor (ctor.JniSignature.Replace ("java/lang/CharSequence", "java/lang/String")))
-					klass.Constructors.Add (new StringOverloadConstructor (ctor, @class, @class.InheritsObject, opt, Context));
+					klass.Constructors.Add (new StringOverloadConstructor(@class, ctor, @class.InheritsObject, opt, Context));
 			}
 
 			klass.WriteConstructors (new CodeWriter (writer, indent));

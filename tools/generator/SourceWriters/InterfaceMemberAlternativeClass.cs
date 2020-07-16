@@ -41,13 +41,13 @@ namespace generator.SourceWriters
 			if (should_obsolete)
 				Attributes.Add (new ObsoleteAttr ($"Use the '{iface.FullName}' type. This class will be removed in a future release.") { WriteGlobal = true, NoAtSign = true });
 
-			Constructors.Add (new ConstructorWriter (Name) { IsInternal = true, Priority = GetNextPriority () });
+			Constructors.Add (new ConstructorWriter { Name = Name, IsInternal = true });
 
 			var needs_class_ref = AddFields (iface, should_obsolete, opt, context);
 			AddMethods (iface, should_obsolete, opt);
 
 			if (needs_class_ref || iface.Methods.Where (m => m.IsStatic).Any ())
-				Fields.Add (new PeerMembersField (opt, iface.RawJniName, Name, false) { Priority = GetNextPriority () });
+				Fields.Add (new PeerMembersField (opt, iface.RawJniName, Name, false));
 
 			if (!iface.HasManagedName && !opt.SupportInterfaceConstants)
 				sibling_classes.Add (new InterfaceConstsForwardClass (iface));
@@ -61,16 +61,16 @@ namespace generator.SourceWriters
 				if (shouldObsolete && string.IsNullOrWhiteSpace (method.Deprecated))
 					method.Deprecated = $"Use '{iface.FullName}.{method.AdjustedName}'. This class will be removed in a future release.";
 
-				Methods.Add (new BoundMethod (iface, method, this, opt, true) { Priority = GetNextPriority () });
+				Methods.Add (new BoundMethod(iface, method, opt, true));
 
 				var name_and_jnisig = method.JavaName + method.JniSignature.Replace ("java/lang/CharSequence", "java/lang/String");
 				var gen_string_overload = !method.IsOverride && method.Parameters.HasCharSequence && !iface.ContainsMethod (name_and_jnisig);
 
 				if (gen_string_overload || method.IsReturnCharSequence)
-					Methods.Add (new BoundMethodStringOverload (method, opt) { Priority = GetNextPriority () });
+					Methods.Add (new BoundMethodStringOverload (method, opt));
 
 				if (method.Asyncify)
-					Methods.Add (new MethodAsyncWrapper (method, opt) { Priority = GetNextPriority () });
+					Methods.Add (new MethodAsyncWrapper (method, opt));
 
 				method.Deprecated = original;
 			}
@@ -115,9 +115,9 @@ namespace generator.SourceWriters
 					needs_property = needs_property || f.NeedsProperty;
 
 					if (f.NeedsProperty)
-						Properties.Add (new BoundFieldAsProperty (iface, f, opt) { Priority = GetNextPriority () });
+						Properties.Add (new BoundFieldAsProperty (iface, f, opt));
 					else
-						Fields.Add (new BoundField (iface, f, opt) { Priority = GetNextPriority () });
+						Fields.Add (new BoundField (iface, f, opt));
 				}
 			}
 

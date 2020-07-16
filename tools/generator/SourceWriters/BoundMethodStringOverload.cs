@@ -13,7 +13,7 @@ namespace generator.SourceWriters
 		readonly Method method;
 		readonly CodeGenerationOptions opt;
 
-		public BoundMethodStringOverload (Method method, CodeGenerationOptions opt) : base ()
+		public BoundMethodStringOverload (Method method, CodeGenerationOptions opt)
 		{
 			this.method = method;
 			this.opt = opt;

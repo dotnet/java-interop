@@ -8,15 +8,6 @@ namespace Xamarin.SourceWriter
 	{
 		public string BaseCall { get; set; }
 
-		public ConstructorWriter ()
-		{
-		}
-
-		public ConstructorWriter (string name) : base (name)
-		{
-			Name = name;
-		}
-
 		protected override void WriteReturnType (CodeWriter writer)
 		{
 		}

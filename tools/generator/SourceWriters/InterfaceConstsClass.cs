@@ -10,17 +10,19 @@ namespace generator.SourceWriters
 {
 	public class InterfaceConstsClass : ClassWriter
 	{
-		public InterfaceConstsClass (ClassGen @class, HashSet<string> seen, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public InterfaceConstsClass (ClassGen klass, HashSet<string> seen, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			Name = "InterfaceConsts";
 
 			IsPublic = true;
 			IsStatic = true;
 			
-			foreach (var iface in @class.GetAllImplementedInterfaces ()
-				.Except (@class.BaseGen?.GetAllImplementedInterfaces () ?? new InterfaceGen [0])
+			foreach (var iface in klass.GetAllImplementedInterfaces ()
+				.Except (klass.BaseGen?.GetAllImplementedInterfaces () ?? new InterfaceGen [0])
 				.Where (i => i.Fields.Count > 0)) {
-				//writer.WriteLine ("{0}\t\t// The following are fields from: {1}", indent, iface.JavaName);
+
+				AddInlineComment ($"// The following are fields from: {iface.JavaName}");
+
 				SourceWriterExtensions.AddFields (this, iface, iface.Fields, seen, opt, context);
 			}
 		}

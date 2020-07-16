@@ -45,10 +45,6 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.ConnectorName, additionalProperties: method.AdditionalAttributeString ()));
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
-
-			if (method.IsReturnCharSequence || method.Parameters.HasCharSequence) {
-				// TODO: WriteMethodStringOverload
-			}
 		}
 
 		public override void Write (CodeWriter writer)

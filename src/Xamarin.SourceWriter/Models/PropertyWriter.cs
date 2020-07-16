@@ -36,16 +36,6 @@ namespace Xamarin.SourceWriter
 		public int Priority { get; set; }
 		public string ExplicitInterfaceImplementation { get; set; }
 
-		public PropertyWriter ()
-		{
-		}
-
-		public PropertyWriter (string name, TypeReferenceWriter propertyType = null)
-		{
-			Name = name;
-			PropertyType = propertyType ?? TypeReferenceWriter.Void;
-		}
-
 		public void SetVisibility (string visibility)
 		{
 			switch (visibility?.ToLowerInvariant ()) {

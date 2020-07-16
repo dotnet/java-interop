@@ -13,13 +13,12 @@ namespace generator.SourceWriters
 		readonly MethodCallback method_callback;
 		readonly Method method;
 		readonly CodeGenerationOptions opt;
-		readonly CodeGeneratorContext context;
+		readonly string context_this;
 
 		public InterfaceInvokerMethod (InterfaceGen iface, Method method, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			this.method = method;
 			this.opt = opt;
-			this.context = context;
 
 			Name = method.AdjustedName;
 			ReturnType = new TypeReferenceWriter (opt.GetTypeReferenceName (method.RetVal));
@@ -29,6 +28,7 @@ namespace generator.SourceWriters
 			IsStatic = method.IsStatic;
 
 			method_callback = new MethodCallback (iface, method, opt, null, method.IsReturnCharSequence);
+			context_this = context.ContextType.GetObjectHandleProperty ("this");
 		}
 
 		public override void Write (CodeWriter writer)
@@ -47,7 +47,7 @@ namespace generator.SourceWriters
 
 		protected override void WriteBody (CodeWriter writer)
 		{
-			SourceWriterExtensions.WriteMethodInvokerBody (writer, method, opt, context);
+			SourceWriterExtensions.WriteMethodInvokerBody (writer, method, opt, context_this);
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace generator.SourceWriters
 {
 	public class BoundInterfacePropertyDeclaration : PropertyWriter
 	{
-		public BoundInterfacePropertyDeclaration (Property property, GenBase gen, string adapter, CodeGenerationOptions opt)
+		public BoundInterfacePropertyDeclaration (GenBase gen, Property property, string adapter, CodeGenerationOptions opt)
 		{
 			Name = property.AdjustedName;
 

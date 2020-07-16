@@ -8,8 +8,6 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	// This is a field that is not a constant, and thus we need to generate it as a
-	// property so it can access the Java field.
 	public class BoundProperty : PropertyWriter
 	{
 		readonly MethodCallback getter_callback;

@@ -11,12 +11,10 @@ namespace generator.SourceWriters
 {
 	public class JavaLangObjectConstructor : ConstructorWriter
 	{
-		protected Ctor constructor;
-		protected CodeGenerationOptions opt;
-		protected CodeGeneratorContext context;
-
-		public JavaLangObjectConstructor (ClassGen klass) : base (klass.Name)
+		public JavaLangObjectConstructor (ClassGen klass)
 		{
+			Name = klass.Name;
+
 			if (klass.IsFinal)
 				IsInternal = true;
 			else

@@ -34,16 +34,6 @@ namespace Xamarin.SourceWriter
 		public List<AttributeWriter> SetterAttributes { get; } = new List<AttributeWriter> ();
 		public int Priority { get; set; }
 
-		public EventWriter ()
-		{
-		}
-
-		public EventWriter (string name, TypeReferenceWriter eventType = null)
-		{
-			Name = name;
-			EventType = eventType ?? TypeReferenceWriter.Void;
-		}
-
 		public void SetVisibility (string visibility)
 		{
 			switch (visibility?.ToLowerInvariant ()) {

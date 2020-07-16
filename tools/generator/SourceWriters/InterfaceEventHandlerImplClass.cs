@@ -25,28 +25,27 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (jni_class, additionalProperties: iface.AdditionalAttributeString ()) { UseGlobal = true });
 
 			if (iface.NeedsSender)
-				Fields.Add (new FieldWriter ("sender", TypeReferenceWriter.Object) { Priority = GetNextPriority () });
+				Fields.Add (new FieldWriter { Name = "sender", Type = TypeReferenceWriter.Object });
 
 			AddConstructor (iface, jni_class, opt);
 			AddMethods (iface, opt);
 		}
 
-		void AddConstructor (InterfaceGen @interface, string jniClass, CodeGenerationOptions opt)
+		void AddConstructor (InterfaceGen iface, string jniClass, CodeGenerationOptions opt)
 		{
 			var ctor = new ConstructorWriter {
-				Name = @interface.Name + "Implementor",
-				IsPublic = true,
-				Priority = GetNextPriority ()
+				Name = iface.Name + "Implementor",
+				IsPublic = true
 			};
 
-			if (@interface.NeedsSender)
+			if (iface.NeedsSender)
 				ctor.Parameters.Add (new MethodParameterWriter ("sender", TypeReferenceWriter.Object));
 
 			ctor.BaseCall = $"base (global::Android.Runtime.JNIEnv.StartCreateInstance (\"{jniClass}\", \"()V\"), JniHandleOwnership.TransferLocalRef)";
 
-			ctor.Body.Add ($"global::Android.Runtime.JNIEnv.FinishCreateInstance ({@interface.GetObjectHandleProperty ("this")}, \"()V\");");
+			ctor.Body.Add ($"global::Android.Runtime.JNIEnv.FinishCreateInstance ({iface.GetObjectHandleProperty ("this")}, \"()V\");");
 
-			if (@interface.NeedsSender)
+			if (iface.NeedsSender)
 				ctor.Body.Add ("this.sender = sender;");
 
 			Constructors.Add (ctor);
@@ -57,14 +56,13 @@ namespace generator.SourceWriters
 			var handlers = new List<string> ();
 
 			foreach (var m in iface.Methods)
-				Methods.Add (new InterfaceEventHandlerImplMethod (iface, m, handlers, opt) { Priority = GetNextPriority () });
+				Methods.Add (new InterfaceEventHandlerImplMethod (iface, m, handlers, opt));
 
 			var is_empty_method = new MethodWriter {
 				Name = "__IsEmpty",
 				IsInternal = true,
 				IsStatic = true,
-				ReturnType = TypeReferenceWriter.Bool,
-				Priority = GetNextPriority ()
+				ReturnType = TypeReferenceWriter.Bool
 			};
 
 			is_empty_method.Parameters.Add (new MethodParameterWriter ("value", new TypeReferenceWriter (iface.Name + "Implementor")));

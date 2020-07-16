@@ -11,35 +11,35 @@ namespace generator.SourceWriters
 {
 	public class InterfaceInvokerClass : ClassWriter
 	{
-		public InterfaceInvokerClass (InterfaceGen @interface, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public InterfaceInvokerClass (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			Name = $"{@interface.Name}Invoker";
+			Name = $"{iface.Name}Invoker";
 
 			IsInternal = true;
 			IsPartial = true;
 			UsePriorityOrder = true;
 
 			Inherits = "global::Java.Lang.Object";
-			Implements.Add (@interface.Name);
+			Implements.Add (iface.Name);
 
-			Attributes.Add (new RegisterAttr (@interface.RawJniName, noAcw: true, additionalProperties: @interface.AdditionalAttributeString ()) { UseGlobal = true });
+			Attributes.Add (new RegisterAttr (iface.RawJniName, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()) { UseGlobal = true });
 
-			Fields.Add (new PeerMembersField (opt, @interface.RawJniName, $"{@interface.Name}Invoker", false) { Priority = GetNextPriority () });
+			Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", false));
 
-			Properties.Add (new InterfaceHandleGetter { Priority = GetNextPriority () });
-			Properties.Add (new JniPeerMembersGetter { Priority = GetNextPriority () });
-			Properties.Add (new InterfaceThresholdClassGetter { Priority = GetNextPriority () });
-			Properties.Add (new ThresholdTypeGetter { Priority = GetNextPriority () });
+			Properties.Add (new InterfaceHandleGetter ());
+			Properties.Add (new JniPeerMembersGetter ());
+			Properties.Add (new InterfaceThresholdClassGetter ());
+			Properties.Add (new ThresholdTypeGetter ());
 
-			Fields.Add (new FieldWriter ("class_ref", TypeReferenceWriter.IntPtr) { IsShadow = opt.BuildingCoreAssembly, Priority = GetNextPriority () });
+			Fields.Add (new FieldWriter { Name = "class_ref", Type = TypeReferenceWriter.IntPtr, IsShadow = opt.BuildingCoreAssembly });
 
-			Methods.Add (new GetObjectMethod (@interface, opt) { Priority = GetNextPriority () });
-			Methods.Add (new ValidateMethod (@interface) { Priority = GetNextPriority () });
-			Methods.Add (new DisposeMethod () { Priority = GetNextPriority () });
+			Methods.Add (new GetObjectMethod (iface, opt));
+			Methods.Add (new ValidateMethod (iface));
+			Methods.Add (new DisposeMethod ());
 
-			Constructors.Add (new InterfaceInvokerConstructor (@interface, context) { Priority = GetNextPriority () });
+			Constructors.Add (new InterfaceInvokerConstructor (iface, context));
 
-			AddMemberInvokers (@interface, new HashSet<string> (), opt, context);
+			AddMemberInvokers (iface, new HashSet<string> (), opt, context);
 		}
 
 		void AddMemberInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
@@ -58,8 +58,8 @@ namespace generator.SourceWriters
 			}
 
 			if (add_char_enumerator) {
-				Methods.Add (new CharSequenceEnumeratorMethod { Priority = GetNextPriority () });
-				Methods.Add (new CharSequenceGenericEnumeratorMethod { Priority = GetNextPriority () });
+				Methods.Add (new CharSequenceEnumeratorMethod ());
+				Methods.Add (new CharSequenceGenericEnumeratorMethod ());
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace generator.SourceWriters
 
 				members.Add (prop.Name);
 
-				Properties.Add (new InterfaceInvokerProperty (iface, prop, opt, context) { Priority = GetNextPriority () });
+				Properties.Add (new InterfaceInvokerProperty (iface, prop, opt, context));
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace generator.SourceWriters
 
 				members.Add (sig);
 
-				Methods.Add (new InterfaceInvokerMethod (iface, m, opt, context) { Priority = GetNextPriority () });
+				Methods.Add (new InterfaceInvokerMethod (iface, m, opt, context));
 			}
 		}
 	}

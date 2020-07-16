@@ -12,8 +12,8 @@ namespace generator.SourceWriters
 	// property so it can access the Java field.
 	public class BoundFieldAsProperty : PropertyWriter
 	{
-		Field field;
-		CodeGenerationOptions opt;
+		readonly Field field;
+		readonly CodeGenerationOptions opt;
 
 		public BoundFieldAsProperty (GenBase type, Field field, CodeGenerationOptions opt)
 		{

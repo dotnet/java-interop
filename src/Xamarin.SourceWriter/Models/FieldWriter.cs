@@ -24,16 +24,6 @@ namespace Xamarin.SourceWriter
 		public int Priority { get; set; }
 		public bool IsShadow { get; set; }
 
-		public FieldWriter ()
-		{
-		}
-
-		public FieldWriter (string name, TypeReferenceWriter Type = null)
-		{
-			Name = name;
-			this.Type = Type ?? TypeReferenceWriter.Void;
-		}
-
 		public void SetVisibility (string visibility)
 		{
 			switch (visibility?.ToLowerInvariant ()) {

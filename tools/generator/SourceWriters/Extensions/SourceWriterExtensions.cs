@@ -13,14 +13,14 @@ namespace generator.SourceWriters
 		public static void AddField (TypeWriter tw, GenBase type, Field field, CodeGenerationOptions opt)
 		{
 			if (field.NeedsProperty)
-				tw.Properties.Add (new BoundFieldAsProperty (type, field, opt) { Priority = tw.GetNextPriority () });
+				tw.Properties.Add (new BoundFieldAsProperty (type, field, opt));
 			else
-				tw.Fields.Add (new BoundField (type, field, opt) { Priority = tw.GetNextPriority () });
+				tw.Fields.Add (new BoundField (type, field, opt));
 		}
 
 		public static bool AddFields (TypeWriter tw, GenBase gen, List<Field> fields, HashSet<string> seen, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			bool needsProperty = false;
+			var needsProperty = false;
 
 			foreach (var f in fields) {
 				if (gen.ContainsName (f.Name)) {
@@ -36,6 +36,7 @@ namespace generator.SourceWriters
 				if (f.Validate (opt, gen.TypeParameters, context)) {
 					if (seen != null)
 						seen.Add (f.Name);
+
 					needsProperty = needsProperty || f.NeedsProperty;
 					AddField (tw, gen, f, opt);
 				}
@@ -44,34 +45,41 @@ namespace generator.SourceWriters
 			return needsProperty;
 		}
 
-		public static void AddInterfaceListenerEventsAndProperties (TypeWriter tw, InterfaceGen @interface, ClassGen target, CodeGenerationOptions opt)
+		public static void AddInterfaceListenerEventsAndProperties (TypeWriter tw, InterfaceGen iface, ClassGen target, CodeGenerationOptions opt)
 		{
 			var methods = target.Methods.Concat (target.Properties.Where (p => p.Setter != null).Select (p => p.Setter));
 			var props = new HashSet<string> ();
 			var refs = new HashSet<string> ();
-			var eventMethods = methods.Where (m => m.IsListenerConnector && m.EventName != String.Empty && m.ListenerType == @interface).OrderBy (m => m.Parameters.Count).GroupBy (m => m.Name).Select (g => g.First ()).Distinct ();
+			var eventMethods = methods.Where (m => m.IsListenerConnector && m.EventName != string.Empty && m.ListenerType == iface).OrderBy (m => m.Parameters.Count).GroupBy (m => m.Name).Select (g => g.First ()).Distinct ();
+
 			foreach (var method in eventMethods) {
-				string name = method.CalculateEventName (target.ContainsName);
-				if (String.IsNullOrEmpty (name)) {
-					Report.Warning (0, Report.WarningInterfaceGen + 1, "empty event name in {0}.{1}.", @interface.FullName, method.Name);
+				var name = method.CalculateEventName (target.ContainsName);
+
+				if (string.IsNullOrEmpty (name)) {
+					Report.Warning (0, Report.WarningInterfaceGen + 1, "empty event name in {0}.{1}.", iface.FullName, method.Name);
 					continue;
 				}
+
 				if (opt.GetSafeIdentifier (name) != name) {
-					Report.Warning (0, Report.WarningInterfaceGen + 4, "event name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", @interface.FullName, method.Name);
+					Report.Warning (0, Report.WarningInterfaceGen + 4, "event name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", iface.FullName, method.Name);
 					continue;
 				}
+
 				var prop = target.Properties.FirstOrDefault (p => p.Setter == method);
+
 				if (prop != null) {
-					string setter = "__Set" + prop.Name;
+					var setter = "__Set" + prop.Name;
 					props.Add (prop.Name);
 					refs.Add (setter);
-					AddInterfaceListenerEventsAndProperties (tw, @interface, target, name, setter,
+
+					AddInterfaceListenerEventsAndProperties (tw, iface, target, name, setter,
 						string.Format ("__v => {0} = __v", prop.Name),
 						string.Format ("__v => {0} = null", prop.Name), opt);
 				} else {
 					refs.Add (method.Name);
 					string rm = null;
 					string remove;
+
 					if (method.Name.StartsWith ("Set"))
 						remove = string.Format ("__v => {0} (null)", method.Name);
 					else if (method.Name.StartsWith ("Add") &&
@@ -80,88 +88,74 @@ namespace generator.SourceWriters
 						remove = string.Format ("__v => {0} (__v)", rm);
 					else
 						remove = string.Format ("__v => {{throw new NotSupportedException (\"Cannot unregister from {0}.{1}\");}}",
-							@interface.FullName, method.Name);
-					AddInterfaceListenerEventsAndProperties (tw, @interface, target, name, method.Name,
+							iface.FullName, method.Name);
+
+					AddInterfaceListenerEventsAndProperties (tw, iface, target, name, method.Name,
 						method.Name,
 						remove, opt);
 				}
 			}
 
-			foreach (var r in refs) {
-				tw.Fields.Add (new WeakImplementorField (r, opt) { Priority = tw.GetNextPriority () });
-				//writer.WriteLine ("{0}WeakReference{2} weak_implementor_{1};", indent, r, opt.NullableOperator);
-			}
-			//writer.WriteLine ();
+			foreach (var r in refs)
+				tw.Fields.Add (new WeakImplementorField (r, opt));
 
-			tw.Methods.Add (new CreateImplementorMethod (@interface, opt) { Priority = tw.GetNextPriority () });
-			//writer.WriteLine ("{0}{1}Implementor __Create{2}Implementor ()", indent, opt.GetOutputName (@interface.FullName), @interface.Name);
-			//writer.WriteLine ("{0}{{", indent);
-			//writer.WriteLine ("{0}\treturn new {1}Implementor ({2});", indent, opt.GetOutputName (@interface.FullName),
-			//	@interface.NeedsSender ? "this" : "");
-			//writer.WriteLine ("{0}}}", indent);
+			tw.Methods.Add (new CreateImplementorMethod (iface, opt));
 		}
 
-		public static void AddInterfaceListenerEventsAndProperties (TypeWriter tw, InterfaceGen @interface, ClassGen target, string name, string connector_fmt, string add, string remove, CodeGenerationOptions opt)
+		public static void AddInterfaceListenerEventsAndProperties (TypeWriter tw, InterfaceGen iface, ClassGen target, string name, string connector_fmt, string add, string remove, CodeGenerationOptions opt)
 		{
-			if (!@interface.IsValid)
+			if (!iface.IsValid)
 				return;
 
-			foreach (var m in @interface.Methods) {
-				string nameSpec = @interface.Methods.Count > 1 ? m.EventName ?? m.AdjustedName : String.Empty;
-				string nameUnique = String.IsNullOrEmpty (nameSpec) ? name : nameSpec;
+			foreach (var method in iface.Methods) {
+				var nameSpec = iface.Methods.Count > 1 ? method.EventName ?? method.AdjustedName : string.Empty;
+				var nameUnique = string.IsNullOrEmpty (nameSpec) ? name : nameSpec;
+
 				if (nameUnique.StartsWith ("On"))
 					nameUnique = nameUnique.Substring (2);
+
 				if (target.ContainsName (nameUnique))
 					nameUnique += "Event";
-				AddInterfaceListenerEventOrProperty (tw, @interface, m, target, nameUnique, connector_fmt, add, remove, opt);
+
+				AddInterfaceListenerEventOrProperty (tw, iface, method, target, nameUnique, connector_fmt, add, remove, opt);
 			}
 		}
 
-		public static void AddInterfaceListenerEventOrProperty (TypeWriter tw, InterfaceGen @interface, Method m, ClassGen target, string name, string connector_fmt, string add, string remove, CodeGenerationOptions opt)
+		public static void AddInterfaceListenerEventOrProperty (TypeWriter tw, InterfaceGen iface, Method method, ClassGen target, string name, string connector_fmt, string add, string remove, CodeGenerationOptions opt)
 		{
-			if (m.EventName == string.Empty)
+			if (method.EventName == string.Empty)
 				return;
-			string nameSpec = @interface.Methods.Count > 1 ? m.AdjustedName : String.Empty;
-			int idx = @interface.FullName.LastIndexOf (".");
-			int start = @interface.Name.StartsWith ("IOn") ? 3 : 1;
-			string full_delegate_name = @interface.FullName.Substring (0, idx + 1) + @interface.Name.Substring (start, @interface.Name.Length - start - 8) + nameSpec;
-			if (m.IsSimpleEventHandler)
+
+			var nameSpec = iface.Methods.Count > 1 ? method.AdjustedName : string.Empty;
+			var idx = iface.FullName.LastIndexOf (".");
+			var start = iface.Name.StartsWith ("IOn") ? 3 : 1;
+			var full_delegate_name = iface.FullName.Substring (0, idx + 1) + iface.Name.Substring (start, iface.Name.Length - start - 8) + nameSpec;
+
+			if (method.IsSimpleEventHandler)
 				full_delegate_name = "EventHandler";
-			else if (m.RetVal.IsVoid || m.IsEventHandlerWithHandledProperty)
-				full_delegate_name = "EventHandler<" + @interface.FullName.Substring (0, idx + 1) + @interface.GetArgsName (m) + ">";
+			else if (method.RetVal.IsVoid || method.IsEventHandlerWithHandledProperty)
+				full_delegate_name = "EventHandler<" + iface.FullName.Substring (0, idx + 1) + iface.GetArgsName (method) + ">";
 			else
 				full_delegate_name += "Handler";
-			if (m.RetVal.IsVoid || m.IsEventHandlerWithHandledProperty) {
+
+			if (method.RetVal.IsVoid || method.IsEventHandlerWithHandledProperty) {
 				if (opt.GetSafeIdentifier (name) != name) {
-					Report.Warning (0, Report.WarningInterfaceGen + 5, "event name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", @interface.FullName, name);
+					Report.Warning (0, Report.WarningInterfaceGen + 5, "event name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", iface.FullName, name);
 					return;
 				} else {
 					var mt = target.Methods.Where (method => string.Compare (method.Name, connector_fmt, StringComparison.OrdinalIgnoreCase) == 0 && method.IsListenerConnector).FirstOrDefault ();
 					var hasHandlerArgument = mt != null && mt.IsListenerConnector && mt.Parameters.Count == 2 && mt.Parameters [1].Type == "Android.OS.Handler";
 
-					tw.Events.Add (new InterfaceListenerEvent (@interface, name, nameSpec, full_delegate_name, connector_fmt, add, remove, hasHandlerArgument, opt));
-					//WriteInterfaceListenerEvent (@interface, indent, name, nameSpec, m.AdjustedName, full_delegate_name, !m.Parameters.HasSender, connector_fmt, add, remove, hasHandlerArgument);
+					tw.Events.Add (new InterfaceListenerEvent (iface, name, nameSpec, full_delegate_name, connector_fmt, add, remove, hasHandlerArgument, opt));
 				}
 			} else {
 				if (opt.GetSafeIdentifier (name) != name) {
-					Report.Warning (0, Report.WarningInterfaceGen + 6, "event property name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", @interface.FullName, name);
+					Report.Warning (0, Report.WarningInterfaceGen + 6, "event property name for {0}.{1} is invalid. `eventName' or `argsType` can be used to assign a valid member name.", iface.FullName, name);
 					return;
 				}
 
-				//var cw = new CodeWriter (writer, indent);
-				tw.Properties.Add (new InterfaceListenerPropertyImplementor (@interface, name, opt) { Priority = tw.GetNextPriority () });
-				//writer.WriteLine ($"{indent}WeakReference{opt.NullableOperator} weak_implementor_{name};");
-				//writer.WriteLine (string.Format("{0}{1}Implementor{3} Impl{2} {{", indent, opt.GetOutputName (@interface.FullName), name, opt.NullableOperator));
-				//writer.WriteLine ("{0}\tget {{", indent);
-				//writer.WriteLine ($"{indent}\t\tif (weak_implementor_{name} == null || !weak_implementor_{name}.IsAlive)");
-				//writer.WriteLine ($"{indent}\t\t\treturn null;");
-				//writer.WriteLine ($"{indent}\t\treturn weak_implementor_{name}.Target as {opt.GetOutputName (@interface.FullName)}Implementor;");
-				//writer.WriteLine ("{0}\t}}", indent);
-				//writer.WriteLine ($"{indent}\tset {{ weak_implementor_{name} = new WeakReference (value, true); }}");
-				//writer.WriteLine ("{0}}}", indent);
-				//writer.WriteLine ();
-				tw.Properties.Add (new InterfaceListenerProperty (@interface, name, nameSpec, m.AdjustedName, full_delegate_name, opt) { Priority = tw.GetNextPriority () });
-				//WriteInterfaceListenerProperty (@interface, indent, name, nameSpec, m.AdjustedName, connector_fmt, full_delegate_name);
+				tw.Properties.Add (new InterfaceListenerPropertyImplementor (iface, name, opt));
+				tw.Properties.Add (new InterfaceListenerProperty (iface, name, nameSpec, method.AdjustedName, full_delegate_name, opt));
 			}
 		}
 
@@ -205,9 +199,8 @@ namespace generator.SourceWriters
 
 			var invokeType = JavaInteropCodeGenerator.GetInvokeType (method.RetVal.CallMethodPrefix);
 
-			if (!method.IsVoid) {
+			if (!method.IsVoid)
 				writer.Write ("var __rm = ");
-			}
 
 			if (method.IsStatic) {
 				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
@@ -240,7 +233,7 @@ namespace generator.SourceWriters
 			writer.WriteLine ("}");
 		}
 
-		public static void WriteMethodInvokerBody (CodeWriter writer, Method method, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public static void WriteMethodInvokerBody (CodeWriter writer, Method method, CodeGenerationOptions opt, string contextThis)
 		{
 			writer.WriteLine ($"if ({method.EscapedIdName} == IntPtr.Zero)");
 			writer.WriteLine ($"\t{method.EscapedIdName} = JNIEnv.GetMethodID (class_ref, \"{method.JavaName}\", \"{method.JniSignature}\");");
@@ -251,7 +244,7 @@ namespace generator.SourceWriters
 			WriteParameterListCallArgs (writer, method.Parameters, opt, invoker: true);
 
 			var env_method = $"Call{method.RetVal.CallMethodPrefix}Method";
-			var call = $"{method.RetVal.ReturnCast}JNIEnv.{env_method} ({context.ContextType.GetObjectHandleProperty ("this")}, {method.EscapedIdName}{method.Parameters.GetCallArgs (opt, invoker: true)})";
+			var call = $"{method.RetVal.ReturnCast}JNIEnv.{env_method} ({contextThis}, {method.EscapedIdName}{method.Parameters.GetCallArgs (opt, invoker: true)})";
 
 			if (method.IsVoid)
 				writer.WriteLine (call + ";");
@@ -327,14 +320,14 @@ namespace generator.SourceWriters
 				writer.WriteLine ($"return __rsval{opt.GetNullForgiveness (method.RetVal)};");
 		}
 
-		public static TypeWriter BuildManagedTypeModel (GenBase gen, CodeGenerationOptions opt, CodeGeneratorContext context)
+		public static TypeWriter BuildManagedTypeModel (GenBase gen, CodeGenerationOptions opt, CodeGeneratorContext context, GenerationInfo genInfo)
 		{
 			if (gen is ClassGen klass)
-				return new BoundClass (klass, opt, context);
+				return new BoundClass (klass, opt, context, genInfo);
 			else if (gen is InterfaceGen iface)
-				return new BoundInterface (iface, opt, context);
+				return new BoundInterface (iface, opt, context, genInfo);
 
-			throw new ArgumentOutOfRangeException ("no idea what gen is");
+			throw new InvalidOperationException ("Unknown GenBase type");
 		}
 	}
 }

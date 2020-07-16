@@ -25,7 +25,7 @@ namespace generator.SourceWriters
 		// 	var __this = global::Java.Lang.Object.GetObject<Android.Icu.Math.BigDecimal> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 		// 	return __this.ByteValueExact ();
 		// }
-		public MethodCallback (GenBase type, Method method, CodeGenerationOptions options, string propertyName, bool isFormatted) : base ("n_" + method.Name + method.IDSignature, new TypeReferenceWriter (method.RetVal.NativeType))
+		public MethodCallback (GenBase type, Method method, CodeGenerationOptions options, string propertyName, bool isFormatted)
 		{
 			this.type = type;
 			this.method = method;
@@ -36,6 +36,9 @@ namespace generator.SourceWriters
 
 			delegate_field = new MethodCallbackDelegateField (method, options);
 			delegate_getter = new GetDelegateHandlerMethod (method, options);
+
+			Name = "n_" + method.Name + method.IDSignature;
+			ReturnType = new TypeReferenceWriter (method.RetVal.NativeType);
 
 			IsStatic = true;
 			IsPrivate = method.IsInterfaceDefaultMethod;
@@ -92,8 +95,11 @@ namespace generator.SourceWriters
 	public class MethodCallbackDelegateField : FieldWriter
 	{
 		// static Delegate cb_byteValueExact;
-		public MethodCallbackDelegateField (Method method, CodeGenerationOptions options) : base (method.EscapedCallbackName, TypeReferenceWriter.Delegate)
+		public MethodCallbackDelegateField (Method method, CodeGenerationOptions options)
 		{
+			Name = method.EscapedCallbackName;
+			Type = TypeReferenceWriter.Delegate;
+
 			IsStatic = true;
 			IsPrivate = method.IsInterfaceDefaultMethod;
 
@@ -105,7 +111,7 @@ namespace generator.SourceWriters
 	public class GetDelegateHandlerMethod : MethodWriter
 	{
 		readonly Method method;
-		readonly CodeGenerationOptions options;
+		readonly CodeGenerationOptions opt;
 
 		// static Delegate GetByteValueExactHandler ()
 		// {
@@ -113,10 +119,13 @@ namespace generator.SourceWriters
 		// 		cb_byteValueExact = JNINativeWrapper.CreateDelegate ((_JniMarshal_PP_B) n_ByteValueExact);
 		// 	return cb_byteValueExact;
 		// }
-		public GetDelegateHandlerMethod (Method method, CodeGenerationOptions options) : base (method.ConnectorName, TypeReferenceWriter.Delegate)
+		public GetDelegateHandlerMethod (Method method, CodeGenerationOptions opt)
 		{
 			this.method = method;
-			this.options = options;
+			this.opt = opt;
+
+			Name = method.ConnectorName;
+			ReturnType = TypeReferenceWriter.Delegate;
 
 			IsStatic = true;
 			IsPrivate = method.IsInterfaceDefaultMethod;
@@ -130,7 +139,7 @@ namespace generator.SourceWriters
 			var callback_name = method.EscapedCallbackName;
 
 			writer.WriteLine ($"if ({callback_name} == null)");
-			writer.WriteLine ($"\t{callback_name} = JNINativeWrapper.CreateDelegate (({method.GetDelegateType (options)}) n_{method.Name + method.IDSignature});");
+			writer.WriteLine ($"\t{callback_name} = JNINativeWrapper.CreateDelegate (({method.GetDelegateType (opt)}) n_{method.Name + method.IDSignature});");
 			writer.WriteLine ($"return {callback_name};");
 		}
 	}

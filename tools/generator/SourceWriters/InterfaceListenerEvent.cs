@@ -12,7 +12,7 @@ namespace generator.SourceWriters
 	{
 		readonly InterfaceListenerEventHandlerHelper helper_method;
 
-		public InterfaceListenerEvent (InterfaceGen @interface, string name, string nameSpec, string fullDelegateName, string wrefSuffix, string add, string remove, bool hasHandlerArgument, CodeGenerationOptions opt)
+		public InterfaceListenerEvent (InterfaceGen iface, string name, string nameSpec, string fullDelegateName, string wrefSuffix, string add, string remove, bool hasHandlerArgument, CodeGenerationOptions opt)
 		{
 			Name = name;
 			EventType = new TypeReferenceWriter (opt.GetOutputName (fullDelegateName));
@@ -21,22 +21,22 @@ namespace generator.SourceWriters
 
 			HasAdd = true;
 
-			AddBody.Add ($"global::Java.Interop.EventHelper.AddEventHandler<{opt.GetOutputName (@interface.FullName)}, {opt.GetOutputName (@interface.FullName)}Implementor>(");
+			AddBody.Add ($"global::Java.Interop.EventHelper.AddEventHandler<{opt.GetOutputName (iface.FullName)}, {opt.GetOutputName (iface.FullName)}Implementor>(");
 			AddBody.Add ($"ref weak_implementor_{wrefSuffix},");
-			AddBody.Add ($"__Create{@interface.Name}Implementor,");
+			AddBody.Add ($"__Create{iface.Name}Implementor,");
 			AddBody.Add ($"{add + (hasHandlerArgument ? "_Event_With_Handler_Helper" : null)},");
 			AddBody.Add ($"__h => __h.{nameSpec}Handler += value);");
 
 			HasRemove = true;
 
-			RemoveBody.Add ($"global::Java.Interop.EventHelper.RemoveEventHandler<{opt.GetOutputName (@interface.FullName)}, {opt.GetOutputName (@interface.FullName)}Implementor>(");
+			RemoveBody.Add ($"global::Java.Interop.EventHelper.RemoveEventHandler<{opt.GetOutputName (iface.FullName)}, {opt.GetOutputName (iface.FullName)}Implementor>(");
 			RemoveBody.Add ($"ref weak_implementor_{wrefSuffix},");
-			RemoveBody.Add ($"{opt.GetOutputName (@interface.FullName)}Implementor.__IsEmpty,");
+			RemoveBody.Add ($"{opt.GetOutputName (iface.FullName)}Implementor.__IsEmpty,");
 			RemoveBody.Add ($"{remove},");
 			RemoveBody.Add ($"__h => __h.{nameSpec}Handler -= value);");
 
 			if (hasHandlerArgument)
-				helper_method = new InterfaceListenerEventHandlerHelper (@interface, add, opt);
+				helper_method = new InterfaceListenerEventHandlerHelper (iface, add, opt);
 		}
 
 		public override void Write (CodeWriter writer)
@@ -49,10 +49,10 @@ namespace generator.SourceWriters
 
 	public class InterfaceListenerEventHandlerHelper : MethodWriter
 	{
-		public InterfaceListenerEventHandlerHelper (InterfaceGen @interface, string add, CodeGenerationOptions opt)
+		public InterfaceListenerEventHandlerHelper (InterfaceGen iface, string add, CodeGenerationOptions opt)
 		{
 			Name = add + "_Event_With_Handler_Helper";
-			Parameters.Add (new MethodParameterWriter ("value", new TypeReferenceWriter (opt.GetOutputName (@interface.FullName))));
+			Parameters.Add (new MethodParameterWriter ("value", new TypeReferenceWriter (opt.GetOutputName (iface.FullName))));
 			ReturnType = TypeReferenceWriter.Void;
 
 			Body.Add ($"{add} (value, null);");

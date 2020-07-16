@@ -10,20 +10,20 @@ namespace generator.SourceWriters
 {
 	public class InterfaceExtensionsClass : ClassWriter
 	{
-		public InterfaceExtensionsClass (InterfaceGen @interface, string declaringTypeName, CodeGenerationOptions opt)
+		public InterfaceExtensionsClass (InterfaceGen iface, string declaringTypeName, CodeGenerationOptions opt)
 		{
-			Name = $"{declaringTypeName}{@interface.Name}Extensions";
+			Name = $"{declaringTypeName}{iface.Name}Extensions";
 
 			IsPublic = true;
 			IsStatic = true;
 			IsPartial = true;
 
-			foreach (var method in @interface.Methods.Where (m => !m.IsStatic)) {
+			foreach (var method in iface.Methods.Where (m => !m.IsStatic)) {
 				if (method.CanHaveStringOverload)
-					Methods.Add (new BoundMethodExtensionStringOverload (method, opt, @interface.FullName) { Priority = GetNextPriority () });
+					Methods.Add (new BoundMethodExtensionStringOverload (method, opt, iface.FullName));
 
 				if (method.Asyncify)
-					Methods.Add (new MethodExtensionAsyncWrapper (method, opt, @interface.FullName) { Priority = GetNextPriority () });
+					Methods.Add (new MethodExtensionAsyncWrapper (method, opt, iface.FullName));
 			}
 		}
 

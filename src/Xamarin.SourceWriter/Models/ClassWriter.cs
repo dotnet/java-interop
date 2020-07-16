@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Xamarin.SourceWriter
 {
 	public class ClassWriter : TypeWriter
 	{
-		public List<ConstructorWriter> Constructors { get; } = new List<ConstructorWriter> ();
+		public ObservableCollection<ConstructorWriter> Constructors { get; } = new ObservableCollection<ConstructorWriter> ();
+
+		public ClassWriter ()
+		{
+			Constructors.CollectionChanged += MemberAdded;
+		}
 
 		public override void WriteConstructors (CodeWriter writer)
 		{

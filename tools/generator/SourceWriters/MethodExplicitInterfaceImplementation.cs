@@ -13,7 +13,7 @@ namespace generator.SourceWriters
 		readonly Method method;
 		readonly CodeGenerationOptions opt;
 
-		public MethodExplicitInterfaceImplementation (Method method, GenBase iface, CodeGenerationOptions opt)
+		public MethodExplicitInterfaceImplementation (GenBase iface, Method method, CodeGenerationOptions opt)
 		{
 			this.method = method;
 			this.opt = opt;

@@ -19,7 +19,7 @@ namespace generator.SourceWriters
 			Name = property.AdjustedName;
 
 			PropertyType = new TypeReferenceWriter ("string" + (is_array ? "[]" : string.Empty)) {
-				Nullable = opt.NullableOperator == "?"
+				Nullable = opt.SupportNullableReferenceTypes
 			};
 
 			SetVisibility ((property.Setter ?? property.Getter).Visibility);

@@ -13,7 +13,7 @@ namespace generator.SourceWriters
 		readonly Method method;
 		readonly CodeGenerationOptions opt;
 
-		public ExplicitInterfaceInvokerMethod (Method method, GenBase iface, CodeGenerationOptions opt)
+		public ExplicitInterfaceInvokerMethod (GenBase iface, Method method, CodeGenerationOptions opt)
 		{
 			this.method = method;
 			this.opt = opt;

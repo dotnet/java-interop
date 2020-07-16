@@ -14,13 +14,12 @@ namespace generator.SourceWriters
 		readonly MethodCallback setter_callback;
 		readonly Property property;
 		readonly CodeGenerationOptions opt;
-		readonly CodeGeneratorContext context;
+		readonly string context_this;
 
 		public InterfaceInvokerProperty (InterfaceGen iface, Property property, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			this.property = property;
 			this.opt = opt;
-			this.context = context;
 
 			Name = property.AdjustedName;
 			PropertyType = new TypeReferenceWriter (opt.GetTypeReferenceName (property));
@@ -39,6 +38,8 @@ namespace generator.SourceWriters
 				HasSet = true;
 				setter_callback = new MethodCallback (iface, property.Setter, opt, property.AdjustedName, false);
 			}
+
+			context_this = context.ContextType.GetObjectHandleProperty ("this");
 		}
 
 		public override void Write (CodeWriter writer)
@@ -57,7 +58,7 @@ namespace generator.SourceWriters
 
 		protected override void WriteGetterBody (CodeWriter writer)
 		{
-			SourceWriterExtensions.WriteMethodInvokerBody (writer, property.Getter, opt, context);
+			SourceWriterExtensions.WriteMethodInvokerBody (writer, property.Getter, opt, context_this);
 		}
 
 		protected override void WriteSetterBody (CodeWriter writer)
@@ -65,7 +66,7 @@ namespace generator.SourceWriters
 			var pname = property.Setter.Parameters [0].Name;
 			property.Setter.Parameters [0].Name = "value";
 
-			SourceWriterExtensions.WriteMethodInvokerBody (writer, property.Setter, opt, context);
+			SourceWriterExtensions.WriteMethodInvokerBody (writer, property.Setter, opt, context_this);
 
 			property.Setter.Parameters [0].Name = pname;
 		}
