@@ -7,7 +7,7 @@ namespace Android.Text {
 
 	// Metadata.xml XPath class reference: path="/api/package[@name='android.text']/class[@name='SpannableStringInternal']"
 	[global::Android.Runtime.Register ("android/text/SpannableStringInternal", DoNotGenerateAcw=true)]
-	public abstract partial class SpannableStringInternal : Java.Lang.Object {
+	public abstract partial class SpannableStringInternal : global::Java.Lang.Object {
 
 		static readonly JniPeerMembers _members = new JniPeerMembers ("android/text/SpannableStringInternal", typeof (SpannableStringInternal));
 		internal static new IntPtr class_ref {
@@ -41,24 +41,23 @@ namespace Android.Text {
 
 		static int n_GetSpanFlags_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
-			var __this = global::Java.Lang.Object.GetObject<Android.Text.SpannableStringInternal> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			var p0 = global::Java.Lang.Object.GetObject<Java.Lang.Object> (native_p0, JniHandleOwnership.DoNotTransfer);
-			int __ret = (int) __this.GetSpanFlags (p0);
+			var __this = global::Java.Lang.Object.GetObject<global::Android.Text.SpannableStringInternal> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+			var p0 = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_p0, JniHandleOwnership.DoNotTransfer);
+			int __ret = __this.GetSpanFlags (p0);
 			return __ret;
 		}
 #pragma warning restore 0169
 
 		// Metadata.xml XPath method reference: path="/api/package[@name='android.text']/class[@name='SpannableStringInternal']/method[@name='getSpanFlags' and count(parameter)=1 and parameter[1][@type='java.lang.Object']]"
-		[return:global::Android.Runtime.GeneratedEnum]
 		[Register ("getSpanFlags", "(Ljava/lang/Object;)I", "GetGetSpanFlags_Ljava_lang_Object_Handler")]
-		public virtual unsafe Android.Text.SpanTypes GetSpanFlags (Java.Lang.Object p0)
+		public virtual unsafe int GetSpanFlags (global::Java.Lang.Object p0)
 		{
 			const string __id = "getSpanFlags.(Ljava/lang/Object;)I";
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue ((p0 == null) ? IntPtr.Zero : ((global::Java.Lang.Object) p0).Handle);
 				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, __args);
-				return (Android.Text.SpanTypes) __rm;
+				return __rm;
 			} finally {
 			}
 		}

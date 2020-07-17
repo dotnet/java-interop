@@ -139,11 +139,22 @@ namespace generatortests
 			Options.ApiDescriptionFile                          = FullPath (apiDescriptionFile);
 			Options.ManagedCallableWrapperSourceOutputDirectory = FullPath (outputPath);
 
+			var adjuster_output = Path.Combine (Path.GetTempPath (), "generator-tests");
+			Directory.CreateDirectory (adjuster_output);
+
+			// Put this in a temp folder so it doesn't end up in "expected", which breaks the compare.
+			Options.ApiXmlAdjusterOutput			    = Path.Combine (adjuster_output, Path.GetFileName (apiDescriptionFile) + ".adjusted");
+
 			if (additionalSupportPaths != null) {
 				AdditionalSourceDirectories.AddRange (additionalSupportPaths.Select (p => FullPath (p)));
 			}
 
 			Execute ();
+
+			// Try to clean up after ourselves.
+			try {
+				Directory.Delete (adjuster_output, true);
+			} catch { }
 
 			CompareOutputs (expectedPath, outputPath);
 		}
