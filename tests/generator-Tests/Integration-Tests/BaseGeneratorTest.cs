@@ -119,10 +119,10 @@ namespace generatortests
 			}
 		}
 
-		protected void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string[] additionalSupportPaths = null)
+		protected void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string[] additionalSupportPaths = null, string enumFieldsMapFile = null, string enumMethodMapFile = null)
 		{
-			Run (CodeGenerationTarget.XamarinAndroid,   Path.Combine ("out", outputRelativePath),       apiDescriptionFile,     Path.Combine ("expected", expectedRelativePath),        additionalSupportPaths);
-			Run (CodeGenerationTarget.JavaInterop1,     Path.Combine ("out.ji", outputRelativePath),    apiDescriptionFile,     Path.Combine ("expected.ji", expectedRelativePath),     additionalSupportPaths);
+			Run (CodeGenerationTarget.XamarinAndroid,   Path.Combine ("out", outputRelativePath),       apiDescriptionFile,     Path.Combine ("expected", expectedRelativePath),        additionalSupportPaths, enumFieldsMapFile, enumMethodMapFile);
+			Run (CodeGenerationTarget.JavaInterop1,     Path.Combine ("out.ji", outputRelativePath),    apiDescriptionFile,     Path.Combine ("expected.ji", expectedRelativePath),     additionalSupportPaths, enumFieldsMapFile, enumMethodMapFile);
 		}
 
 		protected string FullPath (string path)
@@ -131,13 +131,19 @@ namespace generatortests
 			return Path.Combine (dir, path.Replace ('/', Path.DirectorySeparatorChar));
 		}
 
-		protected void Run (CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string[] additionalSupportPaths = null)
+		protected void Run (CodeGenerationTarget target, string outputPath, string apiDescriptionFile, string expectedPath, string[] additionalSupportPaths = null, string enumFieldsMapFile = null, string enumMethodMapFile = null)
 		{
 			Cleanup (outputPath);
 
 			Options.CodeGenerationTarget                        = target;
 			Options.ApiDescriptionFile                          = FullPath (apiDescriptionFile);
 			Options.ManagedCallableWrapperSourceOutputDirectory = FullPath (outputPath);
+
+			if (!string.IsNullOrWhiteSpace (enumFieldsMapFile))
+				Options.EnumFieldsMapFile = FullPath (enumFieldsMapFile);
+
+			if (!string.IsNullOrWhiteSpace (enumMethodMapFile))
+				Options.EnumMethodsMapFile = FullPath (enumMethodMapFile);
 
 			var adjuster_output = Path.Combine (Path.GetTempPath (), "generator-tests");
 			Directory.CreateDirectory (adjuster_output);

@@ -9,16 +9,6 @@ namespace Android.Text {
 	[global::Android.Runtime.Register ("android/text/SpannableString", DoNotGenerateAcw=true)]
 	public partial class SpannableString : global::Android.Text.SpannableStringInternal, global::Android.Text.ISpannable {
 
-
-		public static class InterfaceConsts {
-
-			// The following are fields from: android.text.Spanned
-
-			// Metadata.xml XPath field reference: path="/api/package[@name='android.text']/interface[@name='Spanned']/field[@name='SPAN_COMPOSING']"
-			[Register ("SPAN_COMPOSING")]
-			public const int SpanComposing = (int) 256;
-		}
-
 		static readonly JniPeerMembers _members = new JniPeerMembers ("android/text/SpannableString", typeof (SpannableString));
 		internal static new IntPtr class_ref {
 			get {
@@ -96,21 +86,21 @@ namespace Android.Text {
 		{
 			var __this = global::Java.Lang.Object.GetObject<global::Android.Text.SpannableString> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			var what = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_what, JniHandleOwnership.DoNotTransfer);
-			int __ret = __this.GetSpanFlags (what);
+			int __ret = (int) __this.GetSpanFlags (what);
 			return __ret;
 		}
 #pragma warning restore 0169
 
 		// Metadata.xml XPath method reference: path="/api/package[@name='android.text']/class[@name='SpannableString']/method[@name='getSpanFlags' and count(parameter)=1 and parameter[1][@type='java.lang.Object']]"
 		[Register ("getSpanFlags", "(Ljava/lang/Object;)I", "GetGetSpanFlags_Ljava_lang_Object_Handler")]
-		public override unsafe int GetSpanFlags (global::Java.Lang.Object what)
+		public override unsafe global::Android.Text.SpanTypes GetSpanFlags (global::Java.Lang.Object what)
 		{
 			const string __id = "getSpanFlags.(Ljava/lang/Object;)I";
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue ((what == null) ? IntPtr.Zero : ((global::Java.Lang.Object) what).Handle);
 				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, __args);
-				return __rm;
+				return (global::Android.Text.SpanTypes) __rm;
 			} finally {
 			}
 		}

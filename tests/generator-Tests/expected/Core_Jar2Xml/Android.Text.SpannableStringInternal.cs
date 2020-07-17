@@ -38,15 +38,16 @@ namespace Android.Text {
 		{
 			var __this = global::Java.Lang.Object.GetObject<global::Android.Text.SpannableStringInternal> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			var p0 = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_p0, JniHandleOwnership.DoNotTransfer);
-			int __ret = __this.GetSpanFlags (p0);
+			int __ret = (int) __this.GetSpanFlags (p0);
 			return __ret;
 		}
 #pragma warning restore 0169
 
 		static IntPtr id_getSpanFlags_Ljava_lang_Object_;
 		// Metadata.xml XPath method reference: path="/api/package[@name='android.text']/class[@name='SpannableStringInternal']/method[@name='getSpanFlags' and count(parameter)=1 and parameter[1][@type='java.lang.Object']]"
+		[return:global::Android.Runtime.GeneratedEnum]
 		[Register ("getSpanFlags", "(Ljava/lang/Object;)I", "GetGetSpanFlags_Ljava_lang_Object_Handler")]
-		public virtual unsafe int GetSpanFlags (global::Java.Lang.Object p0)
+		public virtual unsafe global::Android.Text.SpanTypes GetSpanFlags (global::Java.Lang.Object p0)
 		{
 			if (id_getSpanFlags_Ljava_lang_Object_ == IntPtr.Zero)
 				id_getSpanFlags_Ljava_lang_Object_ = JNIEnv.GetMethodID (class_ref, "getSpanFlags", "(Ljava/lang/Object;)I");
@@ -54,11 +55,11 @@ namespace Android.Text {
 				JValue* __args = stackalloc JValue [1];
 				__args [0] = new JValue (p0);
 
-				int __ret;
+				global::Android.Text.SpanTypes __ret;
 				if (((object) this).GetType () == ThresholdType)
-					__ret = JNIEnv.CallIntMethod (((global::Java.Lang.Object) this).Handle, id_getSpanFlags_Ljava_lang_Object_, __args);
+					__ret = (global::Android.Text.SpanTypes) JNIEnv.CallIntMethod (((global::Java.Lang.Object) this).Handle, id_getSpanFlags_Ljava_lang_Object_, __args);
 				else
-					__ret = JNIEnv.CallNonvirtualIntMethod (((global::Java.Lang.Object) this).Handle, ThresholdClass, JNIEnv.GetMethodID (ThresholdClass, "getSpanFlags", "(Ljava/lang/Object;)I"), __args);
+					__ret = (global::Android.Text.SpanTypes) JNIEnv.CallNonvirtualIntMethod (((global::Java.Lang.Object) this).Handle, ThresholdClass, JNIEnv.GetMethodID (ThresholdClass, "getSpanFlags", "(Ljava/lang/Object;)I"), __args);
 				return __ret;
 			} finally {
 			}
