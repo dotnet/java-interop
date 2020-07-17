@@ -6,7 +6,7 @@ namespace Xamarin.SourceWriter
 {
 	public class MethodWriter : ISourceWriter
 	{
-		private Visibility visibility;
+		Visibility visibility;
 
 		public string Name { get; set; }
 		public List<MethodParameterWriter> Parameters { get; } = new List<MethodParameterWriter> ();

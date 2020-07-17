@@ -24,16 +24,13 @@ namespace generator.SourceWriters
 
 			ReturnType = new TypeReferenceWriter (opt.GetTypeReferenceName (method.RetVal));
 			ExplicitInterfaceImplementation = opt.GetOutputName (iface.FullName);
+
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
 		{
 			SourceWriterExtensions.WriteMethodBody (writer, method, opt);
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 	}
 }

@@ -60,6 +60,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.IsVirtual ? method.GetConnectorNameFull (opt) : string.Empty, additionalProperties: method.AdditionalAttributeString ()));
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		public override void Write (CodeWriter writer)
@@ -75,11 +76,6 @@ namespace generator.SourceWriters
 			method.IsVirtual = IsVirtual || IsOverride;
 			SourceWriterExtensions.WriteMethodBody (writer, method, opt);
 			method.IsVirtual = old_virtual;
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 	}
 }

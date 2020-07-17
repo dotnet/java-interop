@@ -45,6 +45,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.ConnectorName, additionalProperties: method.AdditionalAttributeString ()));
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		public override void Write (CodeWriter writer)
@@ -53,11 +54,6 @@ namespace generator.SourceWriters
 			method_callback?.Write (writer);
 
 			base.Write (writer);
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 	}
 }

@@ -42,6 +42,8 @@ namespace generator.SourceWriters
 
 			BaseCall = $"{(useBase ? "base" : "this")} (IntPtr.Zero, JniHandleOwnership.DoNotTransfer)";
 			context_this = context.ContextType.GetObjectHandleProperty ("this");
+
+			this.AddMethodParameters (constructor.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
@@ -100,11 +102,6 @@ namespace generator.SourceWriters
 				writer.WriteLine ("__args [{0}] = new {1} ({2});", i, JValue, p.GetCall (opt));
 			}
 		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (constructor.GetSignature (opt));
-		}
 	}
 
 	public class StringOverloadConstructor : BoundConstructor
@@ -113,11 +110,9 @@ namespace generator.SourceWriters
 			base (klass, constructor, useBase, opt, context)
 		{
 			Comments.Clear ();
-		}
+			Parameters.Clear ();
 
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (constructor.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string"));
+			this.AddMethodParametersStringOverloads (constructor.Parameters, opt);
 		}
 	}
 }

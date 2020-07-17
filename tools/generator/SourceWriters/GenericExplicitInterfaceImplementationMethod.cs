@@ -29,6 +29,7 @@ namespace generator.SourceWriters
 			Comments.Add ($"// This method is explicitly implemented as a member of an instantiated {gen.FullName}");
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
@@ -40,11 +41,6 @@ namespace generator.SourceWriters
 
 			var call = method.Name + " (" + method.Parameters.GetGenericCall (opt, mappings) + ")";
 			writer.WriteLine ($"{(method.IsVoid ? string.Empty : "return ")}{method.RetVal.GetGenericReturn (opt, call, mappings)};");
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 	}
 }

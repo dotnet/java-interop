@@ -26,16 +26,13 @@ namespace generator.SourceWriters
 
 			if (method.Deprecated != null)
 				Attributes.Add (new ObsoleteAttr (method.Deprecated.Replace ("\"", "\"\"").Trim ()));
+
+			this.AddMethodParametersStringOverloads (method.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
 		{
 			SourceWriterExtensions.WriteMethodStringOverloadBody (writer, method, opt, false);
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string"));
 		}
 	}
 }

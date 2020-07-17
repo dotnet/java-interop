@@ -31,12 +31,9 @@ namespace generator.SourceWriters
 				ReturnType.Name += "<" + opt.GetTypeReferenceName (method.RetVal) + ">";
 
 			Body.Add ($"return global::System.Threading.Tasks.Task.Run (() => self.{method.AdjustedName} ({method.Parameters.GetCall (opt)}));");
-		}
 
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write ($"this {self_type} self{(method.Parameters.Count > 0 ? ", " : "")}");
-			writer.Write (method.GetSignature (opt));
+			Parameters.Add (new MethodParameterWriter ("self", new TypeReferenceWriter (selfType)) { IsExtension = true });
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 	}
 }

@@ -169,6 +169,35 @@ namespace generator.SourceWriters
 				attributes.Add (new CustomAttr (method.Annotation));
 		}
 
+		public static void AddMethodParameters (this MethodWriter method, ParameterList parameters, CodeGenerationOptions opt)
+		{
+			foreach (var p in parameters) {
+				var para = new MethodParameterWriter (opt.GetSafeIdentifier (p.Name), new TypeReferenceWriter (opt.GetTypeReferenceName (p)));
+
+				if (p.IsEnumified)
+					para.Attributes.Add (new GeneratedEnumAttr ());
+				if (p.Annotation != null)
+					para.Attributes.Add (new CustomAttr (p.Annotation));
+
+				method.Parameters.Add (para);
+			}
+		}
+
+		// This replaces any `Java.Lang.ICharSequence` parameters with `string`.
+		public static void AddMethodParametersStringOverloads (this MethodWriter method, ParameterList parameters, CodeGenerationOptions opt)
+		{
+			foreach (var p in parameters) {
+				var para = new MethodParameterWriter (opt.GetSafeIdentifier (p.Name), new TypeReferenceWriter (opt.GetTypeReferenceName (p).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string")));
+
+				if (p.IsEnumified)
+					para.Attributes.Add (new GeneratedEnumAttr ());
+				if (p.Annotation != null)
+					para.Attributes.Add (new CustomAttr (p.Annotation));
+
+				method.Parameters.Add (para);
+			}
+		}
+
 		public static string GetInvokeType (string type)
 		{
 			switch (type) {

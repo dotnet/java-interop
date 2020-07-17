@@ -9,7 +9,7 @@ namespace Xamarin.SourceWriter
 		public string Namespace { get; set; }
 		public string Name { get; set; }
 		public bool Nullable { get; set; }
-
+		
 		// These purposely create new instances, as they are not immutable.
 		// For example you may intend to make an instance null, but if there
 		// was only one, you would make them all null.

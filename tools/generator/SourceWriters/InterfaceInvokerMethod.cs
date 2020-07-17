@@ -29,6 +29,8 @@ namespace generator.SourceWriters
 
 			method_callback = new MethodCallback (iface, method, opt, null, method.IsReturnCharSequence);
 			context_this = context.ContextType.GetObjectHandleProperty ("this");
+
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		public override void Write (CodeWriter writer)
@@ -38,11 +40,6 @@ namespace generator.SourceWriters
 			writer.WriteLine ($"IntPtr {method.EscapedIdName};");
 
 			base.Write (writer);
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 
 		protected override void WriteBody (CodeWriter writer)

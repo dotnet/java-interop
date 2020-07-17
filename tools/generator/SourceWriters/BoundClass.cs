@@ -321,7 +321,6 @@ namespace generator.SourceWriters
 				if (prop.Setter != null)
 					prop.Setter.IsVirtual = set_virt;
 			}
-
 		}
 
 		void AddProperty (ClassGen klass, Property property, CodeGenerationOptions opt)

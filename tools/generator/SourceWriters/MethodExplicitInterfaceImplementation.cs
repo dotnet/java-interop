@@ -24,16 +24,13 @@ namespace generator.SourceWriters
 			ExplicitInterfaceImplementation = opt.GetOutputName (iface.FullName);
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
+
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
 		{
 			writer.WriteLine ($"return {Name} ({method.Parameters.GetCall (opt)})");
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 	}
 }

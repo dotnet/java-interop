@@ -28,17 +28,14 @@ namespace generator.SourceWriters
 
 			if (method.Deprecated != null)
 				Attributes.Add (new ObsoleteAttr (method.Deprecated.Replace ("\"", "\"\"").Trim ()));
+
+			Parameters.Add (new MethodParameterWriter ("self", new TypeReferenceWriter (selfType)) { IsExtension = true });
+			this.AddMethodParametersStringOverloads (method.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
 		{
 			SourceWriterExtensions.WriteMethodStringOverloadBody (writer, method, opt, true);
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write ($"this {self_type} self{(method.Parameters.Count > 0 ? ", " : "")}");
-			writer.Write (method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string"));
 		}
 	}
 }

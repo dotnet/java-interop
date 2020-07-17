@@ -34,11 +34,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.ConnectorName + ":" + method.GetAdapterName (opt, adapter), additionalProperties: method.AdditionalAttributeString ()));
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 	}
 }

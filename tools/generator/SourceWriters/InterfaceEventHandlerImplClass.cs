@@ -101,6 +101,8 @@ namespace generator.SourceWriters
 			ReturnType = new TypeReferenceWriter (opt.GetTypeReferenceName (method.RetVal));
 
 			IsPublic = true;
+
+			this.AddMethodParameters (method.Parameters, opt);
 		}
 
 		protected override void WriteBody (CodeWriter writer)
@@ -130,11 +132,6 @@ namespace generator.SourceWriters
 
 			writer.WriteLine ($"var __h = {method_spec}Handler;");
 			writer.WriteLine ($"return __h != null ? __h ({method.Parameters.GetCall (opt)}) : default ({opt.GetTypeReferenceName (method.RetVal)});");
-		}
-
-		protected override void WriteParameters (CodeWriter writer)
-		{
-			writer.Write (method.GetSignature (opt));
 		}
 
 		public override void Write (CodeWriter writer)
