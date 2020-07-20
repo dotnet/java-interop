@@ -9,13 +9,13 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class Constructor : ConstructorWriter
+	public class BoundConstructor : ConstructorWriter
 	{
 		protected Ctor constructor;
 		protected CodeGenerationOptions opt;
 		protected CodeGeneratorContext context;
 
-		public Constructor (Ctor constructor, ClassGen type, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) : base (type.Name)
+		public BoundConstructor (Ctor constructor, ClassGen type, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) : base (type.Name)
 		{
 			this.constructor = constructor;
 			this.opt = opt;
@@ -103,7 +103,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class StringOverloadConstructor : Constructor
+	public class StringOverloadConstructor : BoundConstructor
 	{
 		public StringOverloadConstructor (Ctor constructor, ClassGen type, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) :
 			base (constructor, type, useBase, opt, context)

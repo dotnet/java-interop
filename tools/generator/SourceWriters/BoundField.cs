@@ -26,7 +26,7 @@ namespace generator.SourceWriters
 			if (field.IsEnumified)
 				Attributes.Add (new GeneratedEnumReturnAttr ());
 			if (field.IsDeprecated)
-				Attributes.Add (new ObsoleteAttr (field.DeprecatedComment, field.IsDeprecatedError) { NoAtSign = true });
+				Attributes.Add (new ObsoleteAttr (field.DeprecatedComment, field.IsDeprecatedError) { NoAtSign = true, WriteEmptyString = true });
 			if (field.Annotation.HasValue ())
 				Attributes.Add (new CustomAttr (field.Annotation));
 

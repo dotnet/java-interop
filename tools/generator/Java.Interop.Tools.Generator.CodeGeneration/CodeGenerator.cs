@@ -55,7 +55,7 @@ namespace MonoDroid.Generation
 				gen_info.Enums.Add (@class.RawJniName.Replace ('/', '.') + ":" + @class.Namespace + ":" + @class.JavaSimpleName);
 
 
-			var klass = new JavaLangObjectClass ();
+			var klass = new JavaLangObjectClass { IsPartial = true };
 
 
 			StringBuilder sb = new StringBuilder ();
@@ -378,17 +378,21 @@ namespace MonoDroid.Generation
 
 		internal void WriteCharSequenceEnumerator (string indent)
 		{
-			writer.WriteLine ("{0}System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()", indent);
-			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\treturn GetEnumerator ();", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
-			writer.WriteLine ("{0}public System.Collections.Generic.IEnumerator<char> GetEnumerator ()", indent);
-			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\tfor (int i = 0; i < Length(); i++)", indent);
-			writer.WriteLine ("{0}\t\tyield return CharAt (i);", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+
+			new CharSequenceEnumeratorMethod ().Write (cw);
+			new CharSequenceGenericEnumeratorMethod ().Write (cw);
+			//writer.WriteLine ("{0}System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()", indent);
+			//writer.WriteLine ("{0}{{", indent);
+			//writer.WriteLine ("{0}\treturn GetEnumerator ();", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}public System.Collections.Generic.IEnumerator<char> GetEnumerator ()", indent);
+			//writer.WriteLine ("{0}{{", indent);
+			//writer.WriteLine ("{0}\tfor (int i = 0; i < Length(); i++)", indent);
+			//writer.WriteLine ("{0}\t\tyield return CharAt (i);", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
 		}
 
 		internal virtual void WriteConstructor (Ctor constructor, string indent, bool useBase, ClassGen type)
@@ -1125,16 +1129,6 @@ namespace MonoDroid.Generation
 				writer.WriteLine ("{0}{1}", indent, method.Annotation);
 		}
 
-		public static void AddMethodCustomAttributes (List<AttributeWriter> attributes, Method method)
-		{
-			if (method.GenericArguments != null && method.GenericArguments.Any ())
-				attributes.Add (new CustomAttr (method.GenericArguments.ToGeneratedAttributeString ()));
-			if (method.CustomAttributes != null)
-				attributes.Add (new CustomAttr (method.CustomAttributes));
-			if (method.Annotation != null)
-				attributes.Add (new CustomAttr (method.Annotation));
-		}
-
 		public void WriteMethodExplicitInterfaceImplementation (Method method, string indent, GenBase iface)
 		{
 			//writer.WriteLine ("// explicitly implemented method from " + iface.FullName);
@@ -1160,29 +1154,34 @@ namespace MonoDroid.Generation
 
 		public void WriteMethodAbstractDeclaration (Method method, string indent, InterfaceGen gen, GenBase impl)
 		{
+			var m = new BoundMethodAbstractDeclaration (gen, method, opt, impl);
+
+			var cw = new CodeWriter (writer, indent);
+			m.Write (cw);
+
 			if (method.RetVal.IsGeneric && gen != null) {
-				WriteMethodCustomAttributes (method, indent);
-				writer.WriteLine ("{0}{1} {2}.{3} ({4})", indent, opt.GetTypeReferenceName (method.RetVal), opt.GetOutputName (gen.FullName), method.Name, method.GetSignature (opt));
-				writer.WriteLine ("{0}{{", indent);
-				writer.WriteLine ("{0}\tthrow new NotImplementedException ();", indent);
-				writer.WriteLine ("{0}}}", indent);
-				writer.WriteLine ();
+				//WriteMethodCustomAttributes (method, indent);
+				//writer.WriteLine ("{0}{1} {2}.{3} ({4})", indent, opt.GetTypeReferenceName (method.RetVal), opt.GetOutputName (gen.FullName), method.Name, method.GetSignature (opt));
+				//writer.WriteLine ("{0}{{", indent);
+				//writer.WriteLine ("{0}\tthrow new NotImplementedException ();", indent);
+				//writer.WriteLine ("{0}}}", indent);
+				//writer.WriteLine ();
 			} else {
 				bool gen_as_formatted = method.IsReturnCharSequence;
-				string name = method.AdjustedName;
-				WriteMethodCallback (method, indent, impl, null, gen_as_formatted);
-				if (method.DeclaringType.IsGeneratable)
-					writer.WriteLine ("{0}// Metadata.xml XPath method reference: path=\"{1}\"", indent, method.GetMetadataXPathReference (method.DeclaringType));
-				writer.WriteLine ("{0}[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, method.JavaName, method.JniSignature, method.ConnectorName, method.AdditionalAttributeString ());
-				WriteMethodCustomAttributes (method, indent);
-				writer.WriteLine ("{0}{1}{2} abstract {3} {4} ({5});",
-					indent,
-					impl.RequiresNew (method.Name, method) ? "new " : "",
-					method.Visibility,
-					opt.GetTypeReferenceName (method.RetVal),
-					name,
-					method.GetSignature (opt));
-				writer.WriteLine ();
+				//string name = method.AdjustedName;
+				//WriteMethodCallback (method, indent, impl, null, gen_as_formatted);
+				//if (method.DeclaringType.IsGeneratable)
+				//	writer.WriteLine ("{0}// Metadata.xml XPath method reference: path=\"{1}\"", indent, method.GetMetadataXPathReference (method.DeclaringType));
+				//writer.WriteLine ("{0}[Register (\"{1}\", \"{2}\", \"{3}\"{4})]", indent, method.JavaName, method.JniSignature, method.ConnectorName, method.AdditionalAttributeString ());
+				//WriteMethodCustomAttributes (method, indent);
+				//writer.WriteLine ("{0}{1}{2} abstract {3} {4} ({5});",
+				//	indent,
+				//	impl.RequiresNew (method.Name, method) ? "new " : "",
+				//	method.Visibility,
+				//	opt.GetTypeReferenceName (method.RetVal),
+				//	name,
+				//	method.GetSignature (opt));
+				//writer.WriteLine ();
 
 				if (gen_as_formatted || method.Parameters.HasCharSequence)
 					WriteMethodStringOverload (method, indent);
@@ -1284,58 +1283,62 @@ namespace MonoDroid.Generation
 				writer.WriteLine ("{0}return __ret;", indent);
 		}
 
-		void WriteMethodStringOverloadBody (Method method, string indent, bool haveSelf)
-		{
-			var call = new System.Text.StringBuilder ();
-			foreach (Parameter p in method.Parameters) {
-				string pname = p.Name;
-				if (p.Type == "Java.Lang.ICharSequence") {
-					pname = p.GetName ("jls_");
-					writer.WriteLine ("{0}var {1} = {2} == null ? null : new global::Java.Lang.String ({2});", indent, pname, p.Name);
-				} else if (p.Type == "Java.Lang.ICharSequence[]" || p.Type == "params Java.Lang.ICharSequence[]") {
-					pname = p.GetName ("jlca_");
-					writer.WriteLine ("{0}var {1} = CharSequence.ArrayFromStringArray({2});", indent, pname, p.Name);
-				}
-				if (call.Length > 0)
-					call.Append (", ");
-				call.Append (pname + (p.Type == "Java.Lang.ICharSequence" ? opt.GetNullForgiveness (p) : string.Empty));
-			}
-			writer.WriteLine ("{0}{1}{2}{3} ({4});", indent, method.RetVal.IsVoid ? String.Empty : opt.GetTypeReferenceName (method.RetVal) + " __result = ", haveSelf ? "self." : "", method.AdjustedName, call.ToString ());
-			switch (method.RetVal.FullName) {
-				case "void":
-					break;
-				case "Java.Lang.ICharSequence[]":
-					writer.WriteLine ("{0}var __rsval = CharSequence.ArrayToStringArray (__result);", indent);
-					break;
-				case "Java.Lang.ICharSequence":
-					writer.WriteLine ("{0}var __rsval = __result?.ToString ();", indent);
-					break;
-				default:
-					writer.WriteLine ("{0}var __rsval = __result;", indent);
-					break;
-			}
-			foreach (Parameter p in method.Parameters) {
-				if (p.Type == "Java.Lang.ICharSequence")
-					writer.WriteLine ("{0}{1}?.Dispose ();", indent, p.GetName ("jls_"));
-				else if (p.Type == "Java.Lang.ICharSequence[]")
-					writer.WriteLine ("{0}if ({1} != null) foreach (var s in {1}) s?.Dispose ();", indent, p.GetName ("jlca_"));
-			}
-			if (!method.RetVal.IsVoid) {
-				writer.WriteLine ($"{indent}return __rsval{opt.GetNullForgiveness (method.RetVal)};");
-			}
-		}
+		//void WriteMethodStringOverloadBody (Method method, string indent, bool haveSelf)
+		//{
+		//	var call = new System.Text.StringBuilder ();
+		//	foreach (Parameter p in method.Parameters) {
+		//		string pname = p.Name;
+		//		if (p.Type == "Java.Lang.ICharSequence") {
+		//			pname = p.GetName ("jls_");
+		//			writer.WriteLine ("{0}var {1} = {2} == null ? null : new global::Java.Lang.String ({2});", indent, pname, p.Name);
+		//		} else if (p.Type == "Java.Lang.ICharSequence[]" || p.Type == "params Java.Lang.ICharSequence[]") {
+		//			pname = p.GetName ("jlca_");
+		//			writer.WriteLine ("{0}var {1} = CharSequence.ArrayFromStringArray({2});", indent, pname, p.Name);
+		//		}
+		//		if (call.Length > 0)
+		//			call.Append (", ");
+		//		call.Append (pname + (p.Type == "Java.Lang.ICharSequence" ? opt.GetNullForgiveness (p) : string.Empty));
+		//	}
+		//	writer.WriteLine ("{0}{1}{2}{3} ({4});", indent, method.RetVal.IsVoid ? String.Empty : opt.GetTypeReferenceName (method.RetVal) + " __result = ", haveSelf ? "self." : "", method.AdjustedName, call.ToString ());
+		//	switch (method.RetVal.FullName) {
+		//		case "void":
+		//			break;
+		//		case "Java.Lang.ICharSequence[]":
+		//			writer.WriteLine ("{0}var __rsval = CharSequence.ArrayToStringArray (__result);", indent);
+		//			break;
+		//		case "Java.Lang.ICharSequence":
+		//			writer.WriteLine ("{0}var __rsval = __result?.ToString ();", indent);
+		//			break;
+		//		default:
+		//			writer.WriteLine ("{0}var __rsval = __result;", indent);
+		//			break;
+		//	}
+		//	foreach (Parameter p in method.Parameters) {
+		//		if (p.Type == "Java.Lang.ICharSequence")
+		//			writer.WriteLine ("{0}{1}?.Dispose ();", indent, p.GetName ("jls_"));
+		//		else if (p.Type == "Java.Lang.ICharSequence[]")
+		//			writer.WriteLine ("{0}if ({1} != null) foreach (var s in {1}) s?.Dispose ();", indent, p.GetName ("jlca_"));
+		//	}
+		//	if (!method.RetVal.IsVoid) {
+		//		writer.WriteLine ($"{indent}return __rsval{opt.GetNullForgiveness (method.RetVal)};");
+		//	}
+		//}
 
 		void WriteMethodStringOverload (Method method, string indent)
 		{
-			string static_arg = method.IsStatic ? " static" : String.Empty;
-			string ret = opt.GetTypeReferenceName (method.RetVal).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
-			if (method.Deprecated != null)
-				writer.WriteLine ("{0}[Obsolete (@\"{1}\")]", indent, method.Deprecated.Replace ("\"", "\"\"").Trim ());
-			writer.WriteLine ("{0}{1}{2} {3} {4} ({5})", indent, method.Visibility, static_arg, ret, method.Name, method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string"));
-			writer.WriteLine ("{0}{{", indent);
-			WriteMethodStringOverloadBody (method, indent + "\t", false);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+
+			new BoundMethodStringOverload (method, opt).Write (cw);
+
+			//string static_arg = method.IsStatic ? " static" : String.Empty;
+			//string ret = opt.GetTypeReferenceName (method.RetVal).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
+			//if (method.Deprecated != null)
+			//	writer.WriteLine ("{0}[Obsolete (@\"{1}\")]", indent, method.Deprecated.Replace ("\"", "\"\"").Trim ());
+			//writer.WriteLine ("{0}{1}{2} {3} {4} ({5})", indent, method.Visibility, static_arg, ret, method.Name, method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string"));
+			//writer.WriteLine ("{0}{{", indent);
+			//WriteMethodStringOverloadBody (method, indent + "\t", false);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
 		}
 
 		public void WriteMethodExtensionOverload (Method method, string indent, string selfType)
@@ -1343,15 +1346,20 @@ namespace MonoDroid.Generation
 			if (!method.CanHaveStringOverload)
 				return;
 
-			string ret = opt.GetTypeReferenceName (method.RetVal).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
 
-			var parameters = method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
-			writer.WriteLine ("{0}public static {1} {2} (this {3} self{4}{5})", indent, ret, method.Name, selfType, parameters.Length > 0 ? ", " : "", parameters);
+			new BoundMethodExtensionStringOverload (method, opt, selfType).Write (cw);
 
-			writer.WriteLine ("{0}{{", indent);
-			WriteMethodStringOverloadBody (method, indent + "\t", true);
-			writer.WriteLine ("{0}}}", indent);
+
+			//string ret = opt.GetTypeReferenceName (method.RetVal).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
+			//writer.WriteLine ();
+
+			//var parameters = method.GetSignature (opt).Replace ("Java.Lang.ICharSequence", "string").Replace ("global::string", "string");
+			//writer.WriteLine ("{0}public static {1} {2} (this {3} self{4}{5})", indent, ret, method.Name, selfType, parameters.Length > 0 ? ", " : "", parameters);
+
+			//writer.WriteLine ("{0}{{", indent);
+			//WriteMethodStringOverloadBody (method, indent + "\t", true);
+			//writer.WriteLine ("{0}}}", indent);
 		}
 
 		static string GetDeclaringTypeOfExplicitInterfaceMethod (Method method)
@@ -1367,19 +1375,8 @@ namespace MonoDroid.Generation
 			if (!method.Asyncify)
 				return;
 
-			string static_arg = method.IsStatic ? " static" : String.Empty;
-			string ret;
-
-			if (method.IsVoid)
-				ret = "global::System.Threading.Tasks.Task";
-			else
-				ret = "global::System.Threading.Tasks.Task<" + opt.GetTypeReferenceName (method.RetVal) + ">";
-
-			writer.WriteLine ("{0}{1}{2} {3} {4}Async ({5})", indent, method.Visibility, static_arg, ret, method.AdjustedName, method.GetSignature (opt));
-			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\treturn global::System.Threading.Tasks.Task.Run (() => {1} ({2}));", indent, method.AdjustedName, method.Parameters.GetCall (opt));
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+			new MethodAsyncWrapper (method, opt).Write (cw);
 		}
 
 		public void WriteMethodExtensionAsyncWrapper (Method method, string indent, string selfType)
@@ -1387,18 +1384,21 @@ namespace MonoDroid.Generation
 			if (!method.Asyncify)
 				return;
 
-			string ret;
+			var cw = new CodeWriter (writer, indent);
+			new MethodExtensionAsyncWrapper (method, opt, selfType).Write (cw);
 
-			if (method.IsVoid)
-				ret = "global::System.Threading.Tasks.Task";
-			else
-				ret = "global::System.Threading.Tasks.Task<" + opt.GetTypeReferenceName (method.RetVal) + ">";
+			//string ret;
 
-			writer.WriteLine ("{0}public static {1} {2}Async (this {3} self{4}{5})", indent, ret, method.AdjustedName, selfType, method.Parameters.Count > 0 ? ", " : string.Empty, method.GetSignature (opt));
-			writer.WriteLine ("{0}{{", indent);
-			writer.WriteLine ("{0}\treturn global::System.Threading.Tasks.Task.Run (() => self.{1} ({2}));", indent, method.AdjustedName, method.Parameters.GetCall (opt));
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			//if (method.IsVoid)
+			//	ret = "global::System.Threading.Tasks.Task";
+			//else
+			//	ret = "global::System.Threading.Tasks.Task<" + opt.GetTypeReferenceName (method.RetVal) + ">";
+
+			//writer.WriteLine ("{0}public static {1} {2}Async (this {3} self{4}{5})", indent, ret, method.AdjustedName, selfType, method.Parameters.Count > 0 ? ", " : string.Empty, method.GetSignature (opt));
+			//writer.WriteLine ("{0}{{", indent);
+			//writer.WriteLine ("{0}\treturn global::System.Threading.Tasks.Task.Run (() => self.{1} ({2}));", indent, method.AdjustedName, method.Parameters.GetCall (opt));
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
 		}
 
 		public void WriteMethod (Method method, string indent, GenBase type, bool generate_callbacks)
@@ -1474,20 +1474,9 @@ namespace MonoDroid.Generation
 
 		public void WriteParameterListCallArgs (ParameterList parameters, string indent, bool invoker)
 		{
-			if (parameters.Count == 0)
-				return;
-			string JValue = "JValue";
-			switch (opt.CodeGenerationTarget) {
-				case CodeGenerationTarget.XAJavaInterop1:
-				case CodeGenerationTarget.JavaInterop1:
-					JValue = invoker ? JValue : "JniArgumentValue";
-					break;
-			}
-			writer.WriteLine ("{0}{1}* __args = stackalloc {1} [{2}];", indent, JValue, parameters.Count);
-			for (int i = 0; i < parameters.Count; ++i) {
-				var p = parameters [i];
-				writer.WriteLine ("{0}__args [{1}] = new {2} ({3});", indent, i, JValue, p.GetCall (opt));
-			}
+			var cw = new CodeWriter (writer, indent);
+
+			SourceWriterExtensions.WriteParameterListCallArgs (cw, parameters, opt, invoker);
 		}
 
 		public void WriteProperty (Property property, GenBase gen, string indent, bool with_callbacks = true, bool force_override = false)
@@ -1746,29 +1735,8 @@ namespace MonoDroid.Generation
 
 		public void WritePropertyStringVariant (Property property, string indent)
 		{
-			bool is_array = property.Getter.RetVal.IsArray;
-			writer.WriteLine ("{0}{1} string{2}{4} {3} {{", indent, (property.Setter ?? property.Getter).Visibility, is_array ? "[]" : String.Empty, property.Name, opt.NullableOperator);
-			if (is_array)
-				writer.WriteLine ("{0}\tget {{ return CharSequence.ArrayToStringArray ({1}); }}", indent, property.AdjustedName);
-			else
-				writer.WriteLine ("{0}\tget {{ return {1} == null ? null : {1}.ToString (); }}", indent, property.AdjustedName);
-			if (property.Setter != null) {
-				if (is_array) {
-					writer.WriteLine ("{0}\tset {{", indent);
-					writer.WriteLine ("{0}\t\tglobal::Java.Lang.ICharSequence[] jlsa = CharSequence.ArrayFromStringArray (value);", indent);
-					writer.WriteLine ("{0}\t\t{1} = jlsa;", indent, property.AdjustedName);
-					writer.WriteLine ("{0}\t\tforeach (var jls in jlsa) if (jls != null) jls.Dispose ();", indent);
-					writer.WriteLine ("{0}\t}}", indent);
-				} else {
-					writer.WriteLine ("{0}\tset {{", indent);
-					writer.WriteLine ("{0}\t\tvar jls = value == null ? null : new global::Java.Lang.String (value);", indent);
-					writer.WriteLine ("{0}\t\t{1} = jls;", indent, property.AdjustedName);
-					writer.WriteLine ("{0}\t\tif (jls != null) jls.Dispose ();", indent);
-					writer.WriteLine ("{0}\t}}", indent);
-				}
-			}
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+			new BoundPropertyStringVariant (property, opt).Write (cw);
 		}
 
 		public void WriteType (GenBase gen, string indent, GenerationInfo gen_info)

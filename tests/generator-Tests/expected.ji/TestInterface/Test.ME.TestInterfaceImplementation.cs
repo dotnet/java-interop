@@ -12,7 +12,6 @@ namespace Test.ME {
 
 		public static class InterfaceConsts {
 
-			// The following are fields from: test.me.TestInterface
 
 			// Metadata.xml XPath field reference: path="/api/package[@name='test.me']/interface[@name='TestInterface']/field[@name='SPAN_COMPOSING']"
 			[Register ("SPAN_COMPOSING")]

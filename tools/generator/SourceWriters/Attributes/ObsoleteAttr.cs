@@ -11,7 +11,9 @@ namespace generator.SourceWriters
 	{
 		public string Message { get; set; }
 		public bool IsError { get; set; }
-		public bool NoAtSign { get; set; }	// TODO: Temporary to match unit tests
+		public bool NoAtSign { get; set; }		// TODO: Temporary to match unit tests
+		public bool WriteEmptyString { get; set; }      // TODO: Temporary to match unit tests
+
 		public ObsoleteAttr (string message = null, bool isError = false)
 		{
 			Message = message;
@@ -20,7 +22,7 @@ namespace generator.SourceWriters
 
 		public override void WriteAttribute (CodeWriter writer)
 		{
-			if (!Message.HasValue () && !IsError) {
+			if (Message is null && !WriteEmptyString && !IsError) {
 				writer.Write ($"[Obsolete]");
 				return;
 			}

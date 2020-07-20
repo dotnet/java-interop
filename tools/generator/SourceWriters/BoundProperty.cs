@@ -65,7 +65,7 @@ namespace generator.SourceWriters
 			if (property.Getter.Deprecated != null && (property.Setter == null || property.Setter.Deprecated != null))
 				Attributes.Add (new ObsoleteAttr (property.Getter.Deprecated.Replace ("\"", "\"\"").Trim () + (property.Setter != null && property.Setter.Deprecated != property.Getter.Deprecated ? " " + property.Setter.Deprecated.Replace ("\"", "\"\"").Trim () : null)));
 
-			CodeGenerator.AddMethodCustomAttributes (GetterAttributes, property.Getter);
+			SourceWriterExtensions.AddMethodCustomAttributes (GetterAttributes, property.Getter);
 
 			if (gen.IsGeneratable)
 				GetterComments.Add ($"// Metadata.xml XPath method reference: path=\"{gen.MetadataXPathReference}/method[@name='{property.Getter.JavaName}'{property.Getter.Parameters.GetMethodXPathPredicate ()}]\"");
@@ -78,7 +78,7 @@ namespace generator.SourceWriters
 				if (gen.IsGeneratable)
 					SetterComments.Add ($"// Metadata.xml XPath method reference: path=\"{gen.MetadataXPathReference}/method[@name='{property.Setter.JavaName}'{property.Setter.Parameters.GetMethodXPathPredicate ()}]\"");
 
-				CodeGenerator.AddMethodCustomAttributes (SetterAttributes, property.Setter);
+				SourceWriterExtensions.AddMethodCustomAttributes (SetterAttributes, property.Setter);
 				SetterAttributes.Add (new RegisterAttr (property.Setter.JavaName, property.Setter.JniSignature, property.Setter.IsVirtual ? property.Setter.GetConnectorNameFull (opt) : string.Empty, additionalProperties: property.Setter.AdditionalAttributeString ()));
 			} else if (property.GenerateDispatchingSetter) {
 				HasSet = true;
@@ -102,7 +102,11 @@ namespace generator.SourceWriters
 
 		protected override void WriteSetterBody (CodeWriter writer)
 		{
+			// TODO: Don't modify the property while writing
+			var pname = property.Setter.Parameters [0].Name;
+			property.Setter.Parameters [0].Name = "value";
 			SourceWriterExtensions.WriteMethodBody (writer, property.Setter, opt);
+			property.Setter.Parameters [0].Name = pname;
 		}
 
 		bool ShouldForceOverride (Property property)

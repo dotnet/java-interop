@@ -138,7 +138,7 @@ namespace MonoDroid.Generation {
 					continue;
 
 				// Bind Java declared constructor
-				klass.Constructors.Add (new Constructor (ctor, @class, @class.InheritsObject, opt, Context));
+				klass.Constructors.Add (new BoundConstructor (ctor, @class, @class.InheritsObject, opt, Context));
 
 				// If the constructor takes ICharSequence, create an overload constructor that takes a string
 				if (ctor.Parameters.HasCharSequence && !@class.ContainsCtor (ctor.JniSignature.Replace ("java/lang/CharSequence", "java/lang/String")))
@@ -155,6 +155,7 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteConstructorBody (Ctor ctor, string indent, System.Collections.Specialized.StringCollection call_cleanup)
 		{
+			// CONVERTED
 			writer.WriteLine ("{0}{1}string __id = \"{2}\";",
 					indent,
 					ctor.IsNonStaticNestedType ? "" : "const ",
@@ -188,49 +189,52 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteMethodBody (Method method, string indent, GenBase type)
 		{
-			writer.WriteLine ("{0}const string __id = \"{1}.{2}\";", indent, method.JavaName, method.JniSignature);
-			foreach (string prep in method.Parameters.GetCallPrep (opt))
-				writer.WriteLine ("{0}{1}", indent, prep);
-			writer.WriteLine ("{0}try {{", indent);
-			var oldindent = indent;
-			indent += "\t";
-			WriteParameterListCallArgs (method.Parameters, indent, invoker: false);
+			var cw = new CodeWriter (writer, indent);
+			SourceWriterExtensions.WriteMethodBody (cw, method, opt);
 
-			var invokeType  = GetInvokeType (method.RetVal.CallMethodPrefix);
+			//writer.WriteLine ("{0}const string __id = \"{1}.{2}\";", indent, method.JavaName, method.JniSignature);
+			//foreach (string prep in method.Parameters.GetCallPrep (opt))
+			//	writer.WriteLine ("{0}{1}", indent, prep);
+			//writer.WriteLine ("{0}try {{", indent);
+			//var oldindent = indent;
+			//indent += "\t";
+			//WriteParameterListCallArgs (method.Parameters, indent, invoker: false);
 
-			writer.Write (indent);
-			if (!method.IsVoid) {
-				writer.Write ("var __rm = ");
-			}
+			//var invokeType  = GetInvokeType (method.RetVal.CallMethodPrefix);
 
-			if (method.IsStatic) {
-				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if (method.IsFinal) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, this{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if ((method.IsVirtual && !method.IsAbstract) || method.IsInterfaceDefaultMethod) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, this{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else {
-				writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, this{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			}
+			//writer.Write (indent);
+			//if (!method.IsVoid) {
+			//	writer.Write ("var __rm = ");
+			//}
 
-			if (!method.IsVoid) {
-				var r   = invokeType == "Object" ? "__rm.Handle" : "__rm";
-				writer.WriteLine ("{0}return {2}{1};", indent, method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal), method.RetVal.ReturnCast);
-			}
+			//if (method.IsStatic) {
+			//	writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
+			//			invokeType,
+			//			method.Parameters.GetCallArgs (opt, invoker: false));
+			//} else if (method.IsFinal) {
+			//	writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, this{1});",
+			//			invokeType,
+			//			method.Parameters.GetCallArgs (opt, invoker: false));
+			//} else if ((method.IsVirtual && !method.IsAbstract) || method.IsInterfaceDefaultMethod) {
+			//	writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, this{1});",
+			//			invokeType,
+			//			method.Parameters.GetCallArgs (opt, invoker: false));
+			//} else {
+			//	writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, this{1});",
+			//			invokeType,
+			//			method.Parameters.GetCallArgs (opt, invoker: false));
+			//}
 
-			indent = oldindent;
-			writer.WriteLine ("{0}}} finally {{", indent);
-			foreach (string cleanup in method.Parameters.GetCallCleanup (opt))
-				writer.WriteLine ("{0}\t{1}", indent, cleanup);
-			writer.WriteLine ("{0}}}", indent);
+			//if (!method.IsVoid) {
+			//	var r   = invokeType == "Object" ? "__rm.Handle" : "__rm";
+			//	writer.WriteLine ("{0}return {2}{1};", indent, method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal), method.RetVal.ReturnCast);
+			//}
+
+			//indent = oldindent;
+			//writer.WriteLine ("{0}}} finally {{", indent);
+			//foreach (string cleanup in method.Parameters.GetCallCleanup (opt))
+			//	writer.WriteLine ("{0}\t{1}", indent, cleanup);
+			//writer.WriteLine ("{0}}}", indent);
 		}
 
 		internal override void WriteFieldIdField (Field field, string indent)
@@ -240,6 +244,7 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteFieldGetBody (Field field, string indent, GenBase type)
 		{
+			// CONVERTED
 			writer.WriteLine ("{0}const string __id = \"{1}.{2}\";", indent, field.JavaName, field.Symbol.JniName);
 			writer.WriteLine ();
 
@@ -270,6 +275,7 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteFieldSetBody (Field field, string indent, GenBase type)
 		{
+			// CONVERTED
 			writer.WriteLine ("{0}const string __id = \"{1}.{2}\";", indent, field.JavaName, field.Symbol.JniName);
 			writer.WriteLine ();
 
@@ -318,7 +324,7 @@ namespace MonoDroid.Generation {
 
 		void WritePeerMembers (string indent, string rawJniType, string declaringType, bool isInterface)
 		{
-			var field = new PeerMembersField (rawJniType, declaringType, isInterface);
+			var field = new PeerMembersField (opt, rawJniType, declaringType, isInterface);
 			var cw = new CodeWriter (writer, indent);
 
 			field.Write (cw);

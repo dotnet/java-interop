@@ -10,11 +10,11 @@ namespace generatortests
 		protected override Xamarin.Android.Binder.CodeGenerationTarget Target => Xamarin.Android.Binder.CodeGenerationTarget.JavaInterop1;
 	}
 
-	[TestFixture]
-	class XamarinAndroidInterfaceConstantsTests : InterfaceConstantsTests
-	{
-		protected override Xamarin.Android.Binder.CodeGenerationTarget Target => Xamarin.Android.Binder.CodeGenerationTarget.XamarinAndroid;
-	}
+	//[TestFixture]
+	//class XamarinAndroidInterfaceConstantsTests : InterfaceConstantsTests
+	//{
+	//	protected override Xamarin.Android.Binder.CodeGenerationTarget Target => Xamarin.Android.Binder.CodeGenerationTarget.XamarinAndroid;
+	//}
 
 	abstract class InterfaceConstantsTests : CodeGeneratorTestBase
 	{

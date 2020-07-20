@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoDroid.Generation;
 using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
@@ -10,7 +11,7 @@ namespace generator.SourceWriters
 	public class PeerMembersField : FieldWriter
 	{
 		// static readonly JniPeerMembers _members = new XAPeerMembers ("android/provider/ContactsContract$AggregationExceptions", typeof (AggregationExceptions));
-		public PeerMembersField (string rawJniType, string declaringType, bool isInterface)
+		public PeerMembersField (CodeGenerationOptions opt, string rawJniType, string declaringType, bool isInterface)
 		{
 			Name = "_members";
 			Type = new TypeReferenceWriter ("JniPeerMembers");
@@ -19,7 +20,9 @@ namespace generator.SourceWriters
 			IsStatic = true;
 			IsReadonly = true;
 
-			Value = $"new XAPeerMembers (\"{rawJniType}\", typeof ({declaringType}){(isInterface ? ", isInterface: true" : string.Empty)})";
+			var peer = opt.CodeGenerationTarget == Xamarin.Android.Binder.CodeGenerationTarget.XAJavaInterop1 ? "XAPeerMembers" : "JniPeerMembers";
+
+			Value = $"new {peer} (\"{rawJniType}\", typeof ({declaringType}){(isInterface ? ", isInterface: true" : string.Empty)})";
 		}		
 	}
 }

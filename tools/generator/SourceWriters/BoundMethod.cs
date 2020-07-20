@@ -60,9 +60,7 @@ namespace generator.SourceWriters
 
 			Attributes.Add (new RegisterAttr (method.JavaName, method.JniSignature, method.IsVirtual ? method.GetConnectorNameFull (opt) : string.Empty, additionalProperties: method.AdditionalAttributeString ()));
 
-			// TODO: WriteMethodCustomAttributes
-
-
+			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
 		}
 
 		protected override void WriteBody (CodeWriter writer)

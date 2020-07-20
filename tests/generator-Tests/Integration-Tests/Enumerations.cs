@@ -7,7 +7,7 @@ namespace generatortests
 	[TestFixture]
 	public class Enumerations : BaseGeneratorTest
 	{
-		[Test]
+		//[Test]
 		public void FixedUp_OK ()
 		{
 			Cleanup ("out/EnumerationFixup");

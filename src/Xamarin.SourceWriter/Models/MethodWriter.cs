@@ -25,6 +25,9 @@ namespace Xamarin.SourceWriter
 		public bool IsUnsafe { get; set; }
 		public bool IsVirtual { get; set; }
 		public bool IsShadow { get; set; }
+		public bool IsAbstract { get; set; }
+
+		public string ExplicitInterfaceImplementation { get; set; }
 
 		public MethodWriter ()
 		{
@@ -91,6 +94,8 @@ namespace Xamarin.SourceWriter
 				writer.Write ("override ");
 			else if (IsVirtual)
 				writer.Write ("virtual ");
+			else if (IsAbstract)
+				writer.Write ("abstract ");
 
 			if (IsSealed)
 				writer.Write ("sealed ");
@@ -103,12 +108,20 @@ namespace Xamarin.SourceWriter
 
 			WriteReturnType (writer);
 
+			if (ExplicitInterfaceImplementation.HasValue ())
+				writer.Write (ExplicitInterfaceImplementation + ".");
+
 			writer.Write (Name + " ");
 			writer.Write ("(");
 
 			WriteParameters (writer);
 
 			writer.Write (")");
+
+			if (IsAbstract) {
+				writer.WriteLine (";");
+				return;
+			}
 
 			WriteConstructorBaseCall (writer);
 

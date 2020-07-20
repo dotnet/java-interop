@@ -10,7 +10,7 @@ namespace Xamarin.SourceWriter
 		public string Name { get; set; }
 		public string Inherits { get; set; }
 		public List<string> Implements { get; } = new List<string> ();
-		public bool IsPartial { get; set; } = true;
+		public bool IsPartial { get; set; }
 		public bool IsPublic { get => visibility == Visibility.Public; set => visibility = value ? Visibility.Public : Visibility.Default; }
 		public bool IsAbstract { get; set; }
 		public bool IsInternal { get => visibility == Visibility.Internal; set => visibility = value ? Visibility.Internal : Visibility.Default; }

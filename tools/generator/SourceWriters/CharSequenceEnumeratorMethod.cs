@@ -30,7 +30,7 @@ namespace generator.SourceWriters
 		{
 			IsPublic = true;
 
-			Body.Add ("for (int i = 0; i < Length(); i++)");
+			Body.Add ("for (int i = 0; i < Length (); i++)");
 			Body.Add ("\tyield return CharAt (i);");
 		}
 	}

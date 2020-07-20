@@ -107,11 +107,11 @@ namespace generatortests
 		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 	}
 
-	[TestFixture]
-	class XamarinAndroidCodeGeneratorTests : CodeGeneratorTests
-	{
-		protected override CodeGenerationTarget Target => CodeGenerationTarget.XamarinAndroid;
-	}
+	//[TestFixture]
+	//class XamarinAndroidCodeGeneratorTests : CodeGeneratorTests
+	//{
+	//	protected override CodeGenerationTarget Target => CodeGenerationTarget.XamarinAndroid;
+	//}
 
 	abstract class CodeGeneratorTests : CodeGeneratorTestBase
 	{

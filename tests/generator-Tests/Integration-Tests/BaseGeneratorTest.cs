@@ -121,7 +121,7 @@ namespace generatortests
 
 		protected void RunAllTargets (string outputRelativePath, string apiDescriptionFile, string expectedRelativePath, string[] additionalSupportPaths = null, string enumFieldsMapFile = null, string enumMethodMapFile = null)
 		{
-			Run (CodeGenerationTarget.XamarinAndroid,   Path.Combine ("out", outputRelativePath),       apiDescriptionFile,     Path.Combine ("expected", expectedRelativePath),        additionalSupportPaths, enumFieldsMapFile, enumMethodMapFile);
+			//Run (CodeGenerationTarget.XamarinAndroid,   Path.Combine ("out", outputRelativePath),       apiDescriptionFile,     Path.Combine ("expected", expectedRelativePath),        additionalSupportPaths, enumFieldsMapFile, enumMethodMapFile);
 			Run (CodeGenerationTarget.JavaInterop1,     Path.Combine ("out.ji", outputRelativePath),    apiDescriptionFile,     Path.Combine ("expected.ji", expectedRelativePath),     additionalSupportPaths, enumFieldsMapFile, enumMethodMapFile);
 		}
 

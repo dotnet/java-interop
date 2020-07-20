@@ -48,7 +48,7 @@ namespace generator.SourceWriters
 			writer.WriteLine ($"const string __id = \"{field.JavaName}.{field.Symbol.JniName}\";");
 			writer.WriteLine ();
 
-			var invokeType = JavaInteropCodeGenerator.GetInvokeType (field.GetMethodPrefix);
+			var invokeType = SourceWriterExtensions.GetInvokeType (field.GetMethodPrefix);
 			var indirect = field.IsStatic ? "StaticFields" : "InstanceFields";
 			var invoke = "Get{0}Value";
 
@@ -70,7 +70,7 @@ namespace generator.SourceWriters
 			writer.WriteLine ($"const string __id = \"{field.JavaName}.{field.Symbol.JniName}\";");
 			writer.WriteLine ();
 
-			var invokeType = JavaInteropCodeGenerator.GetInvokeType (field.GetMethodPrefix);
+			var invokeType = SourceWriterExtensions.GetInvokeType (field.GetMethodPrefix);
 			var indirect = field.IsStatic ? "StaticFields" : "InstanceFields";
 
 			string arg;
