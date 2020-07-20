@@ -46,12 +46,12 @@ namespace generator.SourceWriters
 		{
 			var add_char_enumerator = iface.FullName == "Java.Lang.ICharSequence";
 
-			AddPropertyInvokers (iface, members, opt, context);
-			AddMethodInvokers (iface, members, opt, context);
+			AddPropertyInvokers (iface, iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), members, opt, context);
+			AddMethodInvokers (iface, iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod), members, opt, context);
 
 			foreach (var i in iface.GetAllDerivedInterfaces ()) {
-				AddPropertyInvokers (i, members, opt, context);
-				AddMethodInvokers (i, members, opt, context);
+				AddPropertyInvokers (iface, i.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), members, opt, context);
+				AddMethodInvokers (iface, i.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod), members, opt, context);
 
 				if (i.FullName == "Java.Lang.ICharSequence")
 					add_char_enumerator = true;
@@ -63,9 +63,9 @@ namespace generator.SourceWriters
 			}
 		}
 
-		void AddPropertyInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
+		void AddPropertyInvokers (InterfaceGen iface, IEnumerable<Property> properties, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			foreach (var prop in iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod)) {
+			foreach (var prop in properties) {
 				if (members.Contains (prop.Name))
 					continue;
 
@@ -75,9 +75,9 @@ namespace generator.SourceWriters
 			}
 		}
 
-		void AddMethodInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
+		void AddMethodInvokers (InterfaceGen iface, IEnumerable<Method> methods, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			foreach (var m in iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
+			foreach (var m in methods) {
 				var sig = m.GetSignature ();
 
 				if (members.Contains (sig))
