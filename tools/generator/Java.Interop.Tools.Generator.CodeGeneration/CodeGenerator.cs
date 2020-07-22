@@ -1414,9 +1414,13 @@ namespace MonoDroid.Generation
 
 		public void WriteParameterListCallArgs (ParameterList parameters, string indent, bool invoker)
 		{
+			var lines = new List<string> ();
+			SourceWriterExtensions.AddParameterListCallArgs (lines, parameters, opt, invoker);
+
 			var cw = new CodeWriter (writer, indent);
 
-			SourceWriterExtensions.WriteParameterListCallArgs (cw, parameters, opt, invoker);
+			foreach (var l in lines)
+				cw.WriteLine (l);
 		}
 
 		public void WriteProperty (Property property, GenBase gen, string indent, bool with_callbacks = true, bool force_override = false)

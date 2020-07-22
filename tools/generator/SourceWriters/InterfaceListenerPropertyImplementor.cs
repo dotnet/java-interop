@@ -18,7 +18,7 @@ namespace generator.SourceWriters
 			this.name = name;
 			this.opt = opt;
 
-			Name = name;
+			Name = "Impl" + name;
 			PropertyType = new TypeReferenceWriter (opt.GetOutputName (iface.FullName) + "Implementor") { Nullable = opt.SupportNullableReferenceTypes };
 
 			HasGet = true;

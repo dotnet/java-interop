@@ -112,6 +112,13 @@ namespace generator.SourceWriters
 			Comments.Clear ();
 			Parameters.Clear ();
 
+			// TODO: This is likely incorrect but done for compat with old generator.
+			// A string overload for an obsolete ctor will not be marked obsolete.
+			var obsolete_attr = Attributes.OfType<ObsoleteAttr> ().FirstOrDefault ();
+
+			if (obsolete_attr != null)
+				Attributes.Remove (obsolete_attr);
+
 			this.AddMethodParametersStringOverloads (constructor.Parameters, opt);
 		}
 	}

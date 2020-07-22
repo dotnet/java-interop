@@ -16,6 +16,7 @@ namespace generator.SourceWriters
 		public string AdditionalProperties { get; set; }
 		public bool UseGlobal { get; set; }	// TODO: Temporary for matching existing unit tests
 		public bool UseShortForm { get; set; }  // TODO: Temporary for matching existing unit tests
+		public bool AcwLast { get; set; }       // TODO: Temporary for matching existing unit tests
 
 		public RegisterAttr (string name, string signature = null, string connector = null, bool noAcw = false, string additionalProperties = null)
 		{
@@ -38,11 +39,14 @@ namespace generator.SourceWriters
 			if ((Signature.HasValue () || Connector.HasValue ()) && !UseShortForm)
 				sb.Append ($", \"{Signature}\", \"{Connector}\"");
 
-			if (DoNotGenerateAcw)
+			if (DoNotGenerateAcw && !AcwLast)
 				sb.Append (", DoNotGenerateAcw=true");
 
 			if (AdditionalProperties.HasValue ())
 				sb.Append (AdditionalProperties);
+
+			if (DoNotGenerateAcw && AcwLast)
+				sb.Append (", DoNotGenerateAcw=true");
 
 			sb.Append (")]");
 

@@ -67,13 +67,13 @@ namespace generator.SourceWriters
 
 				members.Add (prop.Name);
 
-				if ((prop.Getter != null && !prop.Getter.IsAbstract) ||
-						(prop.Setter != null && !prop.Setter.IsAbstract))
+				if ((prop.Getter != null && !prop.Getter.IsAbstract) || (prop.Setter != null && !prop.Setter.IsAbstract))
 					continue;
 
-				Properties.Add (new BoundProperty (klass, prop, opt, false, true));
+				var bound_property = new BoundProperty (klass, prop, opt, false, true);
+				Properties.Add (bound_property);
 
-				if (prop.Type.StartsWith ("Java.Lang.ICharSequence"))
+				if (prop.Type.StartsWith ("Java.Lang.ICharSequence") && !bound_property.IsOverride)
 					Properties.Add (new BoundPropertyStringVariant (prop, opt));
 			}
 		}
@@ -87,11 +87,12 @@ namespace generator.SourceWriters
 					continue;
 
 				members.Add (sig);
-				if (!m.IsAbstract)
 
+				if (!m.IsAbstract)
 					continue;
+
 				if (klass.IsExplicitlyImplementedMethod (sig)) {
-					Methods.Add (new ExplicitInterfaceInvokerMethod(gen, m, opt));
+					Methods.Add (new ExplicitInterfaceInvokerMethod (gen, m, opt));
 				} else {
 					m.IsOverride = true;
 					Methods.Add (new BoundMethod (klass, m, opt, false));

@@ -10,15 +10,10 @@ namespace generator.SourceWriters
 {
 	public class BoundMethod : MethodWriter
 	{
-		readonly Method method;
-		readonly CodeGenerationOptions opt;
 		readonly MethodCallback callback;
 
 		public BoundMethod (GenBase type, Method method, CodeGenerationOptions opt, bool generateCallbacks)
 		{
-			this.method = method;
-			this.opt = opt;
-
 			if (generateCallbacks && method.IsVirtual)
 				callback = new MethodCallback (type, method, opt, null, method.IsReturnCharSequence);
 
@@ -43,6 +38,9 @@ namespace generator.SourceWriters
 				IsSealed = false;
 			}
 
+			if (is_explicit)
+				ExplicitInterfaceImplementation = GetDeclaringTypeOfExplicitInterfaceMethod (method.OverriddenInterfaceMethod);
+
 			if ((IsVirtual || !IsOverride) && type.RequiresNew (method.AdjustedName, method))
 				IsShadow = true;
 
@@ -61,6 +59,15 @@ namespace generator.SourceWriters
 
 			SourceWriterExtensions.AddMethodCustomAttributes (Attributes, method);
 			this.AddMethodParameters (method.Parameters, opt);
+
+			SourceWriterExtensions.AddMethodBody (Body, method, opt);
+		}
+
+		static string GetDeclaringTypeOfExplicitInterfaceMethod (Method method)
+		{
+			return method.OverriddenInterfaceMethod != null ?
+				     GetDeclaringTypeOfExplicitInterfaceMethod (method.OverriddenInterfaceMethod) :
+				     method.DeclaringType.FullName;
 		}
 
 		public override void Write (CodeWriter writer)
@@ -68,14 +75,6 @@ namespace generator.SourceWriters
 			callback?.Write (writer);
 
 			base.Write (writer);
-		}
-
-		protected override void WriteBody (CodeWriter writer)
-		{
-			var old_virtual = method.IsVirtual;
-			method.IsVirtual = IsVirtual || IsOverride;
-			SourceWriterExtensions.WriteMethodBody (writer, method, opt);
-			method.IsVirtual = old_virtual;
 		}
 	}
 }

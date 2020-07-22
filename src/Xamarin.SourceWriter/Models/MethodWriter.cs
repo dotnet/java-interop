@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Xamarin.SourceWriter
 {
-	public class MethodWriter : ISourceWriter
+	public class MethodWriter : ISourceWriter, ITakeParameters
 	{
 		Visibility visibility;
 
@@ -30,6 +30,7 @@ namespace Xamarin.SourceWriter
 		public bool IsDeclaration { get; set; }
 
 		public string ExplicitInterfaceImplementation { get; set; }
+		public bool NewFirst { get; set; }           // TODO: Temporary to match unit tests
 
 		public void SetVisibility (string visibility)
 		{
@@ -70,6 +71,9 @@ namespace Xamarin.SourceWriter
 
 		public virtual void WriteSignature (CodeWriter writer)
 		{
+			if (IsShadow && NewFirst)
+				writer.Write ("new ");
+
 			if (IsPublic)
 				writer.Write ("public ");
 			if (IsInternal)
@@ -79,7 +83,7 @@ namespace Xamarin.SourceWriter
 			if (IsPrivate)
 				writer.Write ("private ");
 
-			if (IsShadow)
+			if (IsShadow && !NewFirst)
 				writer.Write ("new ");
 
 			if (IsOverride)

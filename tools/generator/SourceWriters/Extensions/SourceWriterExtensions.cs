@@ -169,7 +169,7 @@ namespace generator.SourceWriters
 				attributes.Add (new CustomAttr (method.Annotation));
 		}
 
-		public static void AddMethodParameters (this MethodWriter method, ParameterList parameters, CodeGenerationOptions opt)
+		public static void AddMethodParameters (this ITakeParameters method, ParameterList parameters, CodeGenerationOptions opt)
 		{
 			foreach (var p in parameters) {
 				var para = new MethodParameterWriter (opt.GetSafeIdentifier (p.Name), new TypeReferenceWriter (opt.GetTypeReferenceName (p)));
@@ -215,51 +215,61 @@ namespace generator.SourceWriters
 			}
 		}
 
-		public static void WriteMethodBody (CodeWriter writer, Method method, CodeGenerationOptions opt)
+		public static void AddMethodBody (List<string> body, Method method, CodeGenerationOptions opt)
 		{
-			writer.WriteLine ($"const string __id = \"{method.JavaName}.{method.JniSignature}\";");
+			body.Add ($"const string __id = \"{method.JavaName}.{method.JniSignature}\";");
 
 			foreach (string prep in method.Parameters.GetCallPrep (opt))
-				writer.WriteLine (prep);
+				body.Add (prep);
 
-			writer.WriteLine ("try {");
+			body.Add ("try {");
 
-			WriteParameterListCallArgs (writer, method.Parameters, opt, false);
+			AddParameterListCallArgs (body, method.Parameters, opt, false);
 
 			var invokeType = JavaInteropCodeGenerator.GetInvokeType (method.RetVal.CallMethodPrefix);
 
-			if (!method.IsVoid)
-				writer.Write ("var __rm = ");
+			var return_var = method.IsVoid ? string.Empty : "var __rm = ";
+			var method_type = method.IsStatic ? "StaticMethods" : "InstanceMethods";
+			var virt_type = method switch
+			{
+				{ IsStatic: true } => string.Empty,
+				{ IsFinal: true } => "Nonvirtual",
+				{ IsVirtual: true, IsAbstract: false } => "Virtual",
+				{ IsInterfaceDefaultMethod: true } => "Virtual",
+				_ => "Abstract"
+			};
+			var call_args = method.Parameters.GetCallArgs (opt, invoker: false);
+			var this_param = method.IsStatic ? $"__id{call_args}" : $"__id, this{call_args}";
 
-			if (method.IsStatic) {
-				writer.WriteLine ("_members.StaticMethods.Invoke{0}Method (__id{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if (method.IsFinal) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeNonvirtual{0}Method (__id, this{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else if ((method.IsVirtual && !method.IsAbstract) || method.IsInterfaceDefaultMethod) {
-				writer.WriteLine ("_members.InstanceMethods.InvokeVirtual{0}Method (__id, this{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			} else {
-				writer.WriteLine ("_members.InstanceMethods.InvokeAbstract{0}Method (__id, this{1});",
-						invokeType,
-						method.Parameters.GetCallArgs (opt, invoker: false));
-			}
+			// Example: var __rm = _members.InstanceMethods.InvokeVirtualObjectMethod (__id, this, __args);
+			body.Add ($"{return_var}_members.{method_type}.Invoke{virt_type}{invokeType}Method ({this_param});");
 
 			if (!method.IsVoid) {
 				var r = invokeType == "Object" ? "__rm.Handle" : "__rm";
-				writer.WriteLine ($"return {method.RetVal.ReturnCast}{method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal)};");
+				body.Add ($"return {method.RetVal.ReturnCast}{method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal)};");
 			}
 
-			writer.WriteLine ("} finally {");
+			body.Add ("} finally {");
 
 			foreach (string cleanup in method.Parameters.GetCallCleanup (opt))
-				writer.WriteLine (cleanup);
+				body.Add (cleanup);
 
-			writer.WriteLine ("}");
+			body.Add ("}");
+		}
+
+		public static void AddParameterListCallArgs (List<string> body, ParameterList parameters, CodeGenerationOptions opt, bool invoker)
+		{
+			if (parameters.Count == 0)
+				return;
+
+			var JValue = invoker ? "JValue" : "JniArgumentValue";
+
+			body.Add ($"{JValue}* __args = stackalloc {JValue} [{parameters.Count}];");
+
+			for (var i = 0; i < parameters.Count; ++i) {
+				var p = parameters [i];
+				body.Add ($"__args [{i}] = new {JValue} ({p.GetCall (opt)});");
+			}
 		}
 
 		public static void WriteMethodInvokerBody (CodeWriter writer, Method method, CodeGenerationOptions opt, string contextThis)

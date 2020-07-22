@@ -12,20 +12,14 @@ namespace generator.SourceWriters
 	{
 		readonly MethodCallback getter_callback;
 		readonly MethodCallback setter_callback;
-		readonly Property property;
-		readonly CodeGenerationOptions opt;
 
 		public BoundProperty (GenBase gen, Property property, CodeGenerationOptions opt, bool withCallbacks = true, bool forceOverride = false)
 		{
-			this.property = property;
-			this.opt = opt;
-
 			Name = property.AdjustedName;
 			PropertyType = new TypeReferenceWriter (opt.GetTypeReferenceName (property.Getter.RetVal));
 
 			SetVisibility (gen is InterfaceGen ? string.Empty : property.Getter.IsAbstract && property.Getter.RetVal.IsGeneric ? "protected" : (property.Setter ?? property.Getter).Visibility);
 
-			IsShadow = gen.RequiresNew (property);
 			IsUnsafe = true;
 			HasGet = true;
 
@@ -33,6 +27,8 @@ namespace generator.SourceWriters
 
 			if (is_virtual && withCallbacks) {
 				IsVirtual = true;
+				IsShadow = gen.RequiresNew (property);
+
 				getter_callback = new MethodCallback (gen, property.Getter, opt, property.AdjustedName, false);
 
 				if (property.Setter != null)
@@ -70,6 +66,8 @@ namespace generator.SourceWriters
 
 			GetterAttributes.Add (new RegisterAttr (property.Getter.JavaName, property.Getter.JniSignature, property.Getter.IsVirtual ? property.Getter.GetConnectorNameFull (opt) : string.Empty, additionalProperties: property.Getter.AdditionalAttributeString ()));
 
+			SourceWriterExtensions.AddMethodBody (GetBody, property.Getter, opt);
+
 			if (property.Setter != null) {
 				HasSet = true;
 
@@ -78,8 +76,16 @@ namespace generator.SourceWriters
 
 				SourceWriterExtensions.AddMethodCustomAttributes (SetterAttributes, property.Setter);
 				SetterAttributes.Add (new RegisterAttr (property.Setter.JavaName, property.Setter.JniSignature, property.Setter.IsVirtual ? property.Setter.GetConnectorNameFull (opt) : string.Empty, additionalProperties: property.Setter.AdditionalAttributeString ()));
+
+
+				var pname = property.Setter.Parameters [0].Name;
+				property.Setter.Parameters [0].Name = "value";
+				SourceWriterExtensions.AddMethodBody (SetBody, property.Setter, opt);
+				property.Setter.Parameters [0].Name = pname;
+
 			} else if (property.GenerateDispatchingSetter) {
 				HasSet = true;
+				SetterComments.Add ("// This is a dispatching setter");
 				SetBody.Add ($"Set{property.Name} (value);");
 			}
 		}
@@ -91,20 +97,6 @@ namespace generator.SourceWriters
 			setter_callback?.Write (writer);
 
 			base.Write (writer);
-		}
-
-		protected override void WriteGetterBody (CodeWriter writer)
-		{
-			SourceWriterExtensions.WriteMethodBody (writer, property.Getter, opt);
-		}
-
-		protected override void WriteSetterBody (CodeWriter writer)
-		{
-			// TODO: Don't modify the property while writing
-			var pname = property.Setter.Parameters [0].Name;
-			property.Setter.Parameters [0].Name = "value";
-			SourceWriterExtensions.WriteMethodBody (writer, property.Setter, opt);
-			property.Setter.Parameters [0].Name = pname;
 		}
 
 		bool ShouldForceOverride (Property property)

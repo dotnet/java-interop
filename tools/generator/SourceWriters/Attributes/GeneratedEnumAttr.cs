@@ -15,7 +15,10 @@ namespace generator.SourceWriters
 
 		public override void WriteAttribute (CodeWriter writer)
 		{
-			writer.WriteLine ($"[{(is_return ? "return:" : string.Empty)}global::Android.Runtime.GeneratedEnum]");
+			if (is_return)
+				writer.WriteLine ($"[return:global::Android.Runtime.GeneratedEnum]");
+			else
+				writer.Write ($"[global::Android.Runtime.GeneratedEnum] ");
 		}
 	}
 }

@@ -27,20 +27,42 @@ namespace generator.SourceWriters
 
 			Comments.Add ($"// Metadata.xml XPath field reference: path=\"{type.MetadataXPathReference}/field[@name='{field.JavaName}']\"");
 
-			Attributes.Add (new RegisterAttr (field.JavaName, additionalProperties: field.AdditionalAttributeString ()));
-
 			if (field.IsEnumified)
 				Attributes.Add (new GeneratedEnumAttr ());
+
+			Attributes.Add (new RegisterAttr (field.JavaName, additionalProperties: field.AdditionalAttributeString ()));
+
 			if (field.IsDeprecated)
 				Attributes.Add (new ObsoleteAttr (field.DeprecatedComment, field.IsDeprecatedError) { NoAtSign = true });
 
 			SetVisibility (field.Visibility);
+			UseExplicitPrivateKeyword = true;
+
 			IsStatic = field.IsStatic;
 
 			HasGet = true;
 
 			if (!field.IsConst)
 				HasSet = true;
+		}
+
+		public override void Write (CodeWriter writer)
+		{
+			// This is just a temporary hack to write the [GeneratedEnum] attribute before the // Metadata.xml
+			// comment so that we are 100% equal to pre-refactor.
+			var generated_attr = Attributes.OfType<GeneratedEnumAttr> ().FirstOrDefault ();
+
+			generated_attr?.WriteAttribute (writer);
+			writer.WriteLine ();
+
+			base.Write (writer);
+		}
+
+		public override void WriteAttributes (CodeWriter writer)
+		{
+			// Part of above hack ^^
+			foreach (var att in Attributes.Where (p => !(p is GeneratedEnumAttr)))
+				att.WriteAttribute (writer);
 		}
 
 		protected override void WriteGetterBody (CodeWriter writer)

@@ -11,7 +11,7 @@ namespace generator.SourceWriters
 	public class BoundInterface : InterfaceWriter
 	{
 		readonly List<TypeWriter> pre_sibling_types = new List<TypeWriter> ();
-		readonly List<TypeWriter> post_sibling_types = new List<TypeWriter> ();
+		readonly List<ISourceWriter> post_sibling_types = new List<ISourceWriter> ();
 		readonly bool dont_generate;
 
 		public BoundInterface (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context, GenerationInfo genInfo)
@@ -113,7 +113,9 @@ namespace generator.SourceWriters
 						IsPublic = true
 					};
 
-					Delegates.Add (del);
+					SourceWriterExtensions.AddMethodParameters (del, method.Parameters, opt);
+
+					post_sibling_types.Add (del);
 				}
 			}
 
@@ -174,14 +176,16 @@ namespace generator.SourceWriters
 						}
 					}
 
-					Properties.Add (new BoundAbstractProperty (iface, prop, opt));
+					var bound_property = new BoundAbstractProperty (iface, prop, opt);
+					Properties.Add (bound_property);
 
-					if (prop.Type.StartsWith ("Java.Lang.ICharSequence"))
+					if (prop.Type.StartsWith ("Java.Lang.ICharSequence") && !bound_property.IsOverride)
 						Properties.Add (new BoundPropertyStringVariant (prop, opt));
 				} else {
-					Properties.Add (new BoundProperty (iface, prop, opt, true, false));
+					var bound_property = new BoundProperty (iface, prop, opt, true, false);
+					Properties.Add (bound_property);
 
-					if (prop.Type.StartsWith ("Java.Lang.ICharSequence"))
+					if (prop.Type.StartsWith ("Java.Lang.ICharSequence") && !bound_property.IsOverride)
 						Properties.Add (new BoundPropertyStringVariant (prop, opt));
 				}
 			}

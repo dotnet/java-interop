@@ -16,7 +16,9 @@ namespace generator.SourceWriters
 
 			IsPublic = true;
 			IsStatic = true;
-			
+
+			UsePriorityOrder = true;
+
 			foreach (var iface in klass.GetAllImplementedInterfaces ()
 				.Except (klass.BaseGen?.GetAllImplementedInterfaces () ?? new InterfaceGen [0])
 				.Where (i => i.Fields.Count > 0)) {

@@ -8,7 +8,7 @@ namespace Xamarin.SourceWriter
 	public abstract class TypeWriter : ISourceWriter
 	{
 		Visibility visibility;
-		int current_priority;
+		int current_priority = 1;
 
 		public string Name { get; set; }
 		public string Inherits { get; set; }
@@ -56,7 +56,7 @@ namespace Xamarin.SourceWriter
 
 		public void SetVisibility (string visibility)
 		{
-			switch (visibility?.ToLowerInvariant ()) {
+			switch (visibility?.ToLowerInvariant ().Trim ()) {
 				case "public":
 					IsPublic = true;
 					break;

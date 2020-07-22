@@ -42,7 +42,7 @@ namespace generator.SourceWriters
 			Comments.Add ($"// Metadata.xml XPath class reference: path=\"{klass.MetadataXPathReference}\"");
 
 			if (klass.IsDeprecated)
-				Attributes.Add (new ObsoleteAttr (klass.DeprecatedComment));
+				Attributes.Add (new ObsoleteAttr (klass.DeprecatedComment) { WriteAttributeSuffix = true });
 
 			Attributes.Add (new RegisterAttr (klass.RawJniName, null, null, true, klass.AdditionalAttributeString ()) { UseGlobal = true, UseShortForm = true });
 
@@ -325,9 +325,10 @@ namespace generator.SourceWriters
 
 		void AddProperty (ClassGen klass, Property property, CodeGenerationOptions opt)
 		{
-			Properties.Add (new BoundProperty (klass, property, opt, true, false));
+			var bound_property = new BoundProperty (klass, property, opt, true, false);
+			Properties.Add (bound_property);
 
-			if (property.Type.StartsWith ("Java.Lang.ICharSequence"))
+			if (property.Type.StartsWith ("Java.Lang.ICharSequence") && !bound_property.IsOverride)
 				Properties.Add (new BoundPropertyStringVariant (property, opt));
 		}
 

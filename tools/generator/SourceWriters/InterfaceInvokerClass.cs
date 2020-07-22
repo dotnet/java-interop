@@ -44,20 +44,20 @@ namespace generator.SourceWriters
 
 		void AddMemberInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
-			var add_char_enumerator = iface.FullName == "Java.Lang.ICharSequence";
-
 			AddPropertyInvokers (iface, iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), members, opt, context);
 			AddMethodInvokers (iface, iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod), members, opt, context);
+			AddCharSequenceEnumerators (iface);
 
 			foreach (var i in iface.GetAllDerivedInterfaces ()) {
 				AddPropertyInvokers (iface, i.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), members, opt, context);
-				AddMethodInvokers (iface, i.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod), members, opt, context);
-
-				if (i.FullName == "Java.Lang.ICharSequence")
-					add_char_enumerator = true;
+				AddMethodInvokers (iface, i.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod && !iface.IsCovariantMethod (m) && !(i.FullName.StartsWith ("Java.Lang.ICharSequence") && m.Name.EndsWith ("Formatted"))), members, opt, context);
+				AddCharSequenceEnumerators (i);
 			}
+		}
 
-			if (add_char_enumerator) {
+		void AddCharSequenceEnumerators (InterfaceGen iface)
+		{
+			if (iface.FullName == "Java.Lang.ICharSequence") {
 				Methods.Add (new CharSequenceEnumeratorMethod ());
 				Methods.Add (new CharSequenceGenericEnumeratorMethod ());
 			}

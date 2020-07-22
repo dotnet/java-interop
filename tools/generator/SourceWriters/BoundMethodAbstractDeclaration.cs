@@ -37,6 +37,8 @@ namespace generator.SourceWriters
 			SetVisibility (method.Visibility);
 			ReturnType = new TypeReferenceWriter (opt.GetTypeReferenceName (method.RetVal));
 
+			NewFirst = true;
+
 			method_callback = new MethodCallback (impl, method, opt, null, method.IsReturnCharSequence);
 
 			if (method.DeclaringType.IsGeneratable)

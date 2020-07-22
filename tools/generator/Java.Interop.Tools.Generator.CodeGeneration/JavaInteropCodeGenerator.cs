@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using generator.SourceWriters;
 using Mono.Options;
@@ -189,8 +190,13 @@ namespace MonoDroid.Generation {
 
 		internal override void WriteMethodBody (Method method, string indent, GenBase type)
 		{
+			var body = new List<string> ();
+			SourceWriterExtensions.AddMethodBody (body, method, opt);
+
 			var cw = new CodeWriter (writer, indent);
-			SourceWriterExtensions.WriteMethodBody (cw, method, opt);
+
+			foreach (var s in body)
+				cw.WriteLine (s);
 
 			//writer.WriteLine ("{0}const string __id = \"{1}.{2}\";", indent, method.JavaName, method.JniSignature);
 			//foreach (string prep in method.Parameters.GetCallPrep (opt))

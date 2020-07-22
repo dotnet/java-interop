@@ -36,7 +36,7 @@ namespace generator.SourceWriters
 
 			UsePriorityOrder = true;
 
-			Attributes.Add (new RegisterAttr (iface.RawJniName, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()));
+			Attributes.Add (new RegisterAttr (iface.RawJniName, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()) { AcwLast = true });
 
 			if (should_obsolete)
 				Attributes.Add (new ObsoleteAttr ($"Use the '{iface.FullName}' type. This class will be removed in a future release.") { WriteGlobal = true, NoAtSign = true });
@@ -61,7 +61,7 @@ namespace generator.SourceWriters
 				if (shouldObsolete && string.IsNullOrWhiteSpace (method.Deprecated))
 					method.Deprecated = $"Use '{iface.FullName}.{method.AdjustedName}'. This class will be removed in a future release.";
 
-				Methods.Add (new BoundMethod(iface, method, opt, true));
+				Methods.Add (new BoundMethod (iface, method, opt, true));
 
 				var name_and_jnisig = method.JavaName + method.JniSignature.Replace ("java/lang/CharSequence", "java/lang/String");
 				var gen_string_overload = !method.IsOverride && method.Parameters.HasCharSequence && !iface.ContainsMethod (name_and_jnisig);
@@ -85,9 +85,9 @@ namespace generator.SourceWriters
 			RestoreDeprecatedFields (original_fields);
 
 			foreach (var i in iface.GetAllImplementedInterfaces ().OfType<InterfaceGen> ()) {
-				AddInlineComment ($"// The following are fields from: {iface.JavaName}");
+				AddInlineComment ($"// The following are fields from: {i.JavaName}");
 
-				original_fields = DeprecateFields (iface, shouldObsolete);
+				original_fields = DeprecateFields (i, shouldObsolete);
 				needs_class_ref = AddInterfaceFields (i, i.Fields, seen, opt, context) || needs_class_ref;
 				RestoreDeprecatedFields (original_fields);
 			}

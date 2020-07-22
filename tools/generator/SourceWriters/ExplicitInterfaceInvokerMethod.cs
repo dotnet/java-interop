@@ -26,11 +26,7 @@ namespace generator.SourceWriters
 			ExplicitInterfaceImplementation = opt.GetOutputName (iface.FullName);
 
 			this.AddMethodParameters (method.Parameters, opt);
-		}
-
-		protected override void WriteBody (CodeWriter writer)
-		{
-			SourceWriterExtensions.WriteMethodBody (writer, method, opt);
+			SourceWriterExtensions.AddMethodBody (Body, method, opt);
 		}
 	}
 }

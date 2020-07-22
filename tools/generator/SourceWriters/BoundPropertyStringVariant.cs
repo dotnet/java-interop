@@ -16,7 +16,7 @@ namespace generator.SourceWriters
 		{
 			var is_array = property.Getter.RetVal.IsArray;
 
-			Name = property.AdjustedName;
+			Name = property.Name;
 
 			PropertyType = new TypeReferenceWriter ("string" + (is_array ? "[]" : string.Empty)) {
 				Nullable = opt.SupportNullableReferenceTypes

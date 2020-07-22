@@ -19,8 +19,14 @@ namespace generator.SourceWriters
 			IsPartial = true;
 
 			foreach (var method in iface.Methods.Where (m => !m.IsStatic)) {
-				if (method.CanHaveStringOverload)
+				if (method.CanHaveStringOverload) {
+					// TODO: Don't allow obsolete here to match old generator.
+					// Probably should allow this in the future.
+					var deprecated = method.Deprecated;
+					method.Deprecated = null;
 					Methods.Add (new BoundMethodExtensionStringOverload (method, opt, iface.FullName));
+					method.Deprecated = deprecated;
+				}
 
 				if (method.Asyncify)
 					Methods.Add (new MethodExtensionAsyncWrapper (method, opt, iface.FullName));

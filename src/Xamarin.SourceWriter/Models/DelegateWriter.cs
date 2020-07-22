@@ -4,11 +4,12 @@ using System.Text;
 
 namespace Xamarin.SourceWriter
 {
-	public class DelegateWriter : ISourceWriter
+	public class DelegateWriter : ISourceWriter, ITakeParameters
 	{
 		private Visibility visibility;
 
 		public string Name { get; set; }
+		public List<MethodParameterWriter> Parameters { get; } = new List<MethodParameterWriter> ();
 		public TypeReferenceWriter Type { get; set; }
 		public List<string> Comments { get; } = new List<string> ();
 		public List<AttributeWriter> Attributes { get; } = new List<AttributeWriter> ();
@@ -23,7 +24,6 @@ namespace Xamarin.SourceWriter
 		public bool IsProtected { get => visibility == Visibility.Protected; set => visibility = value ? Visibility.Protected : Visibility.Default; }
 		public int Priority { get; set; }
 		public bool IsShadow { get; set; }
-		public string Signature { get; set; }
 
 		public void SetVisibility (string visibility)
 		{
@@ -81,10 +81,29 @@ namespace Xamarin.SourceWriter
 			if (IsShadow)
 				writer.Write ("new ");
 
+			writer.Write ("delegate ");
+
 			WriteType (writer);
 
 			writer.Write (Name + " ");
-			writer.Write ($"({Signature})");
+			writer.Write ("(");
+
+			WriteParameters (writer);
+
+			writer.Write (")");
+
+			writer.Write (";");
+		}
+
+		protected virtual void WriteParameters (CodeWriter writer)
+		{
+			for (var i = 0; i < Parameters.Count; i++) {
+				var p = Parameters [i];
+				p.WriteParameter (writer);
+
+				if (i < Parameters.Count - 1)
+					writer.Write (", ");
+			}
 		}
 
 		protected virtual void WriteType (CodeWriter writer)

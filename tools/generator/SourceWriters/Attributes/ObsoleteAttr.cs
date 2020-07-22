@@ -30,7 +30,7 @@ namespace generator.SourceWriters
 				attr_name = "global::System." + attr_name;
 
 			if (Message is null && !WriteEmptyString && !IsError) {
-				writer.Write ($"[{attr_name}]");
+				writer.WriteLine ($"[{attr_name}]");
 				return;
 			}
 
