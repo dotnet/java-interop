@@ -12,18 +12,26 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		ClassFile       classFile;
 		ClassSignature  signature;
+		XElement        javadocsSource;
 
 		bool IsInterface {
 			get {return (classFile.AccessFlags & ClassAccessFlags.Interface) != 0;}
 		}
 
 		public XmlClassDeclarationBuilder (ClassFile classFile)
+			: this (classFile, null)
+		{
+		}
+
+		public XmlClassDeclarationBuilder (ClassFile classFile, XElement javadocsSource)
 		{
 			if (classFile == null)
 				throw new ArgumentNullException ("classFile");
 
 			this.classFile  = classFile;
 			signature       = classFile.GetSignature ();
+
+			this.javadocsSource = javadocsSource;
 		}
 
 		public XElement ToXElement ()
@@ -45,10 +53,19 @@ namespace Xamarin.Android.Tools.Bytecode {
 					new XAttribute ("visibility",               GetVisibility (classFile.Visibility)),
 					GetTypeParmeters (signature == null ? null : signature.TypeParameters),
 					GetImplementedInterfaces (),
+					GetTypeJavadoc (),
 					GetConstructors (),
 					GetMethods (),
 					GetFields ()
 			);
+		}
+
+		XElement GetTypeJavadoc ()
+		{
+			if (javadocsSource == null)
+				return null;
+			return javadocsSource.Element ("javadoc");
+
 		}
 
 		string GetElementName ()
@@ -355,7 +372,21 @@ namespace Xamarin.Android.Tools.Bytecode {
 				GetNotNull (method),
 				GetTypeParmeters (msig == null ? null : msig.TypeParameters),
 				GetMethodParameters (method),
-				GetExceptions (method));
+				GetExceptions (method),
+				GetMethodJavadoc (element, name, method.Descriptor));
+		}
+
+		XElement GetMethodJavadoc (string element, string name, string descriptor)
+		{
+			if (javadocsSource == null)
+				return null;
+			var r= javadocsSource.Elements (element)
+				.Where (e => element == "constructor"
+					? descriptor == (string) e.Attribute ("jni-signature")
+					: name == (string) e.Attribute ("name") && descriptor == (string) e.Attribute ("jni-signature"))
+				.Elements ("javadoc")
+				.FirstOrDefault ();
+			return r;
 		}
 
 		static XAttribute GetNative (MethodInfo method)
@@ -500,8 +531,20 @@ namespace Xamarin.Android.Tools.Bytecode {
 						GetNotNull (field),
 						GetValue (field),
 						new XAttribute ("visibility",           visibility),
-						new XAttribute ("volatile",             (field.AccessFlags & FieldAccessFlags.Volatile) != 0));
+						new XAttribute ("volatile",             (field.AccessFlags & FieldAccessFlags.Volatile) != 0),
+						GetFieldJavadoc (field.Name));
 			}
+		}
+
+		XElement GetFieldJavadoc (string fieldName)
+		{
+			if (javadocsSource == null)
+				return null;
+			return javadocsSource
+				.Elements ("field")
+				.Where (f => fieldName == (string) f.Attribute ("name"))
+				.Elements ("javadoc")
+				.FirstOrDefault ();
 		}
 
 		string GetGenericType (FieldInfo field)

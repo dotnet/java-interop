@@ -27,7 +27,29 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public string ApiSource { get; set; }
 
-		public IEnumerable<string> DocumentationPaths { get; set; }
+		IEnumerable<string> docPaths;
+		Dictionary<string, XDocument> xmlDocPaths;
+
+		public IEnumerable<string> DocumentationPaths {
+			get {return docPaths;}
+			set {
+				if (xmlDocPaths != null)
+					xmlDocPaths = null;
+				this.docPaths = value;
+				if (this.docPaths == null) {
+					return;
+				}
+				foreach (var path in docPaths) {
+					if (path == null)
+						continue;
+					if (JavaMethodParameterNameProvider.GetDocletType (path) != JavaDocletType._ApiXml)
+						continue;
+					if (xmlDocPaths == null)
+						xmlDocPaths = new Dictionary<string, XDocument> ();
+					xmlDocPaths [path] = XDocument.Load (path);
+				}
+			}
+		}
 
 		public string AndroidFrameworkPlatform { get; set; }
 
@@ -244,13 +266,15 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		IJavaMethodParameterNameProvider CreateDocScraper (string src)
 		{
+			if (xmlDocPaths != null && xmlDocPaths.TryGetValue (src, out var doc)) {
+				return new ApiXmlDocScraper (doc);
+			}
 			switch (JavaMethodParameterNameProvider.GetDocletType (src)) {
 			default: return new DroidDoc2Scraper (src);
 			case JavaDocletType.DroidDoc: return new DroidDocScraper (src);
 			case JavaDocletType.Java6: return new JavaDocScraper (src);
 			case JavaDocletType.Java7: return new Java7DocScraper (src);
 			case JavaDocletType.Java8: return new Java8DocScraper (src);
-			case JavaDocletType._ApiXml: return new ApiXmlDocScraper (src);
 			case JavaDocletType.JavaApiParameterNamesXml: return new JavaParameterNamesLoader (src);
 			}
 		}
@@ -310,9 +334,28 @@ namespace Xamarin.Android.Tools.Bytecode {
 						new XAttribute ("name", p),
 						new XAttribute ("jni-name", p.Replace ('.', '/')),
 						packagesDictionary [p].OrderBy (c => c.ThisClass.Name.Value, StringComparer.OrdinalIgnoreCase)
-						.Select (c => new XmlClassDeclarationBuilder (c).ToXElement ()))));
+						.Select (c => new XmlClassDeclarationBuilder (c, GetJavadocsElement (c)).ToXElement ()))));
 			FixupParametersFromDocs (api);
 			return api;
+		}
+
+		XElement GetJavadocsElement (ClassFile type)
+		{
+			if (xmlDocPaths == null)
+				return null;
+			foreach (var path in docPaths) {
+				if (!xmlDocPaths.TryGetValue (path, out var doc))
+					continue;
+				var typeXml = doc.Elements ("api")
+					.Elements ("package")
+					.Where (p => type.PackageName == (string) p.Attribute ("name"))
+					.Elements ()
+					.Where (e => type.FullJniName == (string) e.Attribute ("jni-signature"))
+					.FirstOrDefault ();
+				if (typeXml != null)
+					return typeXml;
+			}
+			return null;
 		}
 
 		public void SaveXmlDescription (string fileName)

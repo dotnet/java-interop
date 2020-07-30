@@ -31,6 +31,21 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		}
 
 		[Test]
+		public void XmlDeclaration_FixedUpFromApiXmlJavadocs ()
+		{
+			string tempFile = null;
+
+			try {
+				tempFile = LoadToTempFile ("ParameterFixupApiXmlJavadocs.xml");
+
+				AssertXmlDeclaration ("Collection.class", "ParameterFixupFromJavadocs.xml", tempFile);
+			} finally {
+				if (File.Exists (tempFile))
+					File.Delete (tempFile);
+			}
+		}
+
+		[Test]
 		public void XmlDeclaration_FixedUpFromApiXmlDocumentation ()
 		{
 			string tempFile = null;

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<api>
+	<package name="java.util">
+		<class name="Collection" jni-signature="Ljava/util/Collection;">
+			<javadoc><![CDATA[Imported Collection documentation? Maybe!]]></javadoc>
+			<method name="add" jni-signature="(Ljava/lang/Object;)Z">
+				<parameter name="e" type="E" />
+				<javadoc><![CDATA[Imported Collection.add documentation? Maybe!]]></javadoc>
+			</method>
+		</class>
+	</package>
+</api>

@@ -328,7 +328,7 @@ namespace Xamarin.Android.Tools.Bytecode
 					int len = reader.ReadBlock (buf, 0, buf.Length);
 					rawXML = new string (buf, 0, len).Trim ();
 				}
-				if (rawXML.Contains ("<api>") && rawXML.Contains ("<package"))
+				if ((rawXML.Contains ("<api>") || rawXML.Contains ("<api ")) && rawXML.Contains ("<package"))
 					kind = JavaDocletType._ApiXml;
 				else if (rawXML.StartsWith ("package", StringComparison.Ordinal) ||
 						rawXML.StartsWith (";", StringComparison.Ordinal)) {
@@ -342,9 +342,9 @@ namespace Xamarin.Android.Tools.Bytecode
 
 	public class ApiXmlDocScraper : IJavaMethodParameterNameProvider
 	{
-		public ApiXmlDocScraper (string apiXmlFile)
+		public ApiXmlDocScraper (XDocument document)
 		{
-			xdoc = XDocument.Load (apiXmlFile);
+			xdoc = document;
 		}
 
 		XDocument xdoc;
