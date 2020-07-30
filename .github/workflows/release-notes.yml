@@ -1,0 +1,41 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out wiki repo
+      uses: actions/checkout@v2
+      with: 
+        repository: xamarin/java.interop.wiki
+        path: wiki
+        
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+        
+    - name: Install Noted
+      run: dotnet tool install -g noted
+      
+    - name: Run Noted
+      run: >
+        noted
+        --repository-owner xamarin 
+        --repository java.interop 
+        --output-directory ${{ github.workspace }}/wiki
+        --repository-name Java.Interop 
+        --token ${{ github.token }}
+         
+    - name: Commit release note changes
+      run: |
+        git add ${{ github.workspace }}/wiki/*
+        git commit -m "Update release notes" || echo "No changes to commit"
+        git push origin master || echo "No changes to commit"
