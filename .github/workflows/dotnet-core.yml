@@ -12,8 +12,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-18.04]
       fail-fast: false
-      
-    name: ${{ runner.os }}
+
     runs-on: ${{ matrix.os }}
 
     steps:
