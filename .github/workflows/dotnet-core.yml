@@ -8,7 +8,13 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-18.04]
+      fail-fast: false
+      
+    name: ${{ runner.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -20,6 +26,12 @@ jobs:
       with:
         dotnet-version: 3.1.301        
     
+    - name: Install Stable Mono
+      if: runner.os != 'Windows'
+      run: 
+          dotnet tool install --global boots  
+          boots --stable Mono
+      
     - name: Prepare Solution
       run: dotnet build Java.Interop.sln --configuration Release -target:Prepare
 
