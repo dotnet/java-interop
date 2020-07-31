@@ -1,0 +1,49 @@
+name: .NET Core Build
+
+on:
+  push:
+    branches: [ master, d16-* ]
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+        
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301        
+    
+    - name: Prepare Solution
+      run: dotnet build Java.Interop.sln --configuration Release --target:Prepare
+
+    - name: Build Solution
+      run: dotnet build Java.Interop.sln --configuration Release -m:1
+      
+    - name: Tests - generator
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/generator-Tests.dll
+      
+    - name: Tests - JavaCallableWrappers
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/Java.Interop.Tools.JavaCallableWrappers-Tests.dll
+            
+    - name: Tests - logcat-parse
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/logcat-parse-Tests.dll
+            
+    - name: Tests - ApiXmlAdjuster
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll
+            
+    - name: Tests - Bytecode
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/Xamarin.Android.Tools.Bytecode-Tests.dll
+            
+    - name: Tests - Java.Interop.Tools.Generator
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/Java.Interop.Tools.Generator-Tests.dll
+            
+    - name: Tests - Java.Interop.Tools.JavaSource
+      run: dotnet test --no-restore --verbosity normal bin/TestRelease/Java.Interop.Tools.JavaSource-Tests.dll
+      
