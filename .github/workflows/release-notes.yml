@@ -39,6 +39,8 @@ jobs:
     - name: Commit release note changes
       working-directory: ${{ github.workspace }}/wiki
       run: |
+        git config user.email "you@example.com"
+        git config user.name "Release Notes Bot"
         git add -A
         git commit -m "Update release notes" || echo "No changes to commit"
         git push origin master || echo "No changes to commit"
