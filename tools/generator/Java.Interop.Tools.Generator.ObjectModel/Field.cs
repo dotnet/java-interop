@@ -25,6 +25,8 @@ namespace MonoDroid.Generation
 		public string Value { get; set; }
 		public string Visibility { get; set; }
 
+		public string Javadoc { get; set; }
+
 		internal string GetMethodPrefix => TypeNameUtilities.GetCallPrefix (Symbol);
 
 		internal string ID => JavaName + "_jfieldId";

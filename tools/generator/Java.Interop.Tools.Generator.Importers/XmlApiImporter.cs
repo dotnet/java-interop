@@ -19,6 +19,7 @@ namespace MonoDroid.Generation
 				FromXml = true,
 				IsAbstract = elem.XGetAttribute ("abstract") == "true",
 				IsFinal = elem.XGetAttribute ("final") == "true",
+				Javadoc = elem.Element ("javadoc")?.Value,
 				// Only use an explicitly set XML attribute
 				Unnest = elem.XGetAttribute ("unnest") == "true" ? true :
 					 elem.XGetAttribute ("unnest") == "false" ? false :
@@ -43,8 +44,9 @@ namespace MonoDroid.Generation
 					case "field":
 						klass.AddField (CreateField (klass, child));
 						break;
-					case "typeParameters":
-						break; // handled at GenBaseSupport
+					case "javadoc":         // Handled in `new ClassGen() {…}`
+					case "typeParameters":	// handled at GenBaseSupport
+						break;
 					default:
 						Report.Warning (0, Report.WarningClassGen + 1, "unexpected class child {0}.", child.Name);
 						break;
@@ -61,6 +63,7 @@ namespace MonoDroid.Generation
 				CustomAttributes = elem.XGetAttribute ("customAttributes"),
 				Deprecated = elem.Deprecated (),
 				GenericArguments = elem.GenericArguments (),
+				Javadoc = elem.Element ("javadoc")?.Value,
 				Name = elem.XGetAttribute ("name"),
 				Visibility = elem.Visibility ()
 			};
@@ -108,6 +111,7 @@ namespace MonoDroid.Generation
 				IsDeprecatedError = elem.XGetAttribute ("deprecated-error") == "true",
 				IsFinal = elem.XGetAttribute ("final") == "true",
 				IsStatic = elem.XGetAttribute ("static") == "true",
+				Javadoc = elem.Element ("javadoc")?.Value,
 				JavaName = elem.XGetAttribute ("name"),
 				NotNull = elem.XGetAttribute ("not-null") == "true",
 				SetterParameter = CreateParameter (elem),
@@ -206,6 +210,7 @@ namespace MonoDroid.Generation
 			var iface = new InterfaceGen (CreateGenBaseSupport (pkg, elem, true)) {
 				ArgsType = elem.XGetAttribute ("argsType"),
 				HasManagedName = elem.Attribute ("managedName") != null,
+				Javadoc = elem.Element ("javadoc")?.Value,
 				NoAlternatives = elem.XGetAttribute ("no-alternatives") == "true",
 				// Only use an explicitly set XML attribute
 				Unnest = elem.XGetAttribute ("unnest") == "true" ? true :
@@ -228,8 +233,9 @@ namespace MonoDroid.Generation
 					case "field":
 						iface.AddField (CreateField (iface, child));
 						break;
-					case "typeParameters":
-						break; // handled at GenBaseSupport
+					case "javadoc":         // Handled in `new InterfaceGen() {…}`
+					case "typeParameters":	// handled at GenBaseSupport
+						break;
 					default:
 						Report.Warning (0, Report.WarningInterfaceGen + 0, "unexpected interface child {0}.", child);
 						break;
@@ -255,6 +261,7 @@ namespace MonoDroid.Generation
 				IsFinal = elem.XGetAttribute ("final") == "true",
 				IsReturnEnumified = elem.Attribute ("enumReturn") != null,
 				IsStatic = elem.XGetAttribute ("static") == "true",
+				Javadoc = elem.Element ("javadoc")?.Value,
 				JavaName = elem.XGetAttribute ("name"),
 				ManagedReturn = elem.XGetAttribute ("managedReturn"),
 				PropertyNameOverride = elem.XGetAttribute ("propertyName"),

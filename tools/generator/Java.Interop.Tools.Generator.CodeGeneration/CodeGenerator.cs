@@ -67,6 +67,8 @@ namespace MonoDroid.Generation
 				obj_type = gs != null && gs.IsConcrete ? gs.GetGenericType (null) : opt.GetOutputName (@class.base_symbol.FullName);
 			}
 
+			Javadoc.WriteJavadocs (writer, indent, @class.Javadoc);
+
 			writer.WriteLine ("{0}// Metadata.xml XPath class reference: path=\"{1}\"", indent, @class.MetadataXPathReference);
 
 			if (@class.IsDeprecated)
@@ -412,6 +414,8 @@ namespace MonoDroid.Generation
 
 		internal virtual void WriteField (Field field, string indent, GenBase type)
 		{
+			Javadoc.WriteJavadocs (writer, indent, field.Javadoc);
+
 			if (field.IsEnumified)
 				writer.WriteLine ("[global::Android.Runtime.GeneratedEnum]");
 			if (field.NeedsProperty) {
@@ -519,6 +523,8 @@ namespace MonoDroid.Generation
 					sb.Append (", ");
 				sb.Append (opt.GetOutputName (isym.FullName));
 			}
+
+			Javadoc.WriteJavadocs (writer, indent, @interface.Javadoc);
 
 			writer.WriteLine ("{0}// Metadata.xml XPath interface reference: path=\"{1}\"", indent, @interface.MetadataXPathReference);
 
@@ -1436,6 +1442,7 @@ namespace MonoDroid.Generation
 			}
 			string ret = opt.GetTypeReferenceName (method.RetVal);
 			WriteMethodIdField (method, indent);
+			Javadoc.WriteJavadocs (writer, indent, method.Javadoc);
 			if (method.DeclaringType.IsGeneratable)
 				writer.WriteLine ("{0}// Metadata.xml XPath method reference: path=\"{1}\"", indent, method.GetMetadataXPathReference (method.DeclaringType));
 			if (method.Deprecated != null)

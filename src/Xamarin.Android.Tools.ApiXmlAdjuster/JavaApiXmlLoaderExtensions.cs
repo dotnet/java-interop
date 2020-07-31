@@ -117,6 +117,8 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 				var tp = new JavaTypeParameters (type);
 				tp.Load (reader);
 				type.TypeParameters = tp;
+			} else if (reader.LocalName == "javadoc") {
+				type.Javadoc = LoadJavadoc (reader);
 			} else if (reader.LocalName == "field") {
 				var field = new JavaField (type);
 				field.Load (reader);
@@ -128,6 +130,13 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 			} else
 				return false;
 			return true;
+		}
+
+		static string LoadJavadoc (XmlReader reader)
+		{
+			var javadoc = reader.ReadElementContentAsString ();
+			reader.Skip ();
+			return javadoc;
 		}
 		
 		public static void Load (this JavaInterface iface, XmlReader reader)
@@ -172,14 +181,14 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					if (reader.NodeType == XmlNodeType.EndElement)
 						break; // </interface>
 					if (reader.NodeType != XmlNodeType.Element)
-						throw XmlUtil.UnexpectedElementOrContent ("class", reader, "implements", "typeParameters", "field", "constructor", "method");
+						throw XmlUtil.UnexpectedElementOrContent ("class", reader, "implements", "typeParameters", "javadoc", "field", "constructor", "method");
 					if (!kls.TryLoadCommonElement (reader)) {
 						if (reader.LocalName == "constructor") {
 							var constructor = new JavaConstructor (kls);
 							constructor.Load (reader);
 							kls.Members.Add (constructor);
 						} else
-							throw XmlUtil.UnexpectedElementOrContent ("class", reader, "implements", "typeParameters", "field", "constructor", "method");
+							throw XmlUtil.UnexpectedElementOrContent ("class", reader, "implements", "typeParameters", "javadoc", "field", "constructor", "method");
 					}
 				} while (true);
 				XmlUtil.VerifyEndElement (reader, "class");
@@ -221,6 +230,12 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 			field.Value = reader.GetAttribute ("value");
 			field.NotNull = reader.GetAttribute ("not-null") == "true";
 
+			if (!reader.IsEmptyElement) {
+				reader.Read ();
+				reader.MoveToContent ();
+				field.Javadoc = LoadJavadoc (reader);
+			}
+
 			reader.Skip ();
 		}
 
@@ -252,6 +267,8 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 						var p = new JavaParameter (methodBase);
 						p.Load (reader);
 						methodBase.Parameters.Add (p);
+					} else if (reader.LocalName == "javadoc") {
+						methodBase.Javadoc = LoadJavadoc (reader);
 					} else if (reader.LocalName == "exception") {
 						var p = new JavaException ();
 						p.Load (reader);

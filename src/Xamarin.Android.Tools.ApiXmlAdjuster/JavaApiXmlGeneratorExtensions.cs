@@ -89,6 +89,12 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 			if (cls.TypeParameters != null)
 				cls.TypeParameters.Save (writer, "      ");
 			
+			if (cls.Javadoc != null) {
+				writer.WriteStartElement ("javadoc");
+				writer.WriteCData (cls.Javadoc);
+				writer.WriteFullEndElement ();
+			}
+
 			foreach (var m in cls.Members.OfType<JavaConstructor> ().OrderBy (m => m.Name, StringComparer.Ordinal).ThenBy (m => string.Join (", ", m.Parameters.Select (p => p.Type))).ThenBy (m => m.ExtendedSynthetic))
 				m.Save (writer);
 			foreach (var m in cls.Members.OfType<JavaMethod> ().OrderBy (m => m.Name, StringComparer.Ordinal).ThenBy (m => string.Join (", ", m.Parameters.Select (p => p.Type))).ThenBy (m => m.ExtendedSynthetic))
@@ -286,6 +292,12 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					writer.WriteString ("\n        ");
 					writer.WriteFullEndElement ();
 				}
+			}
+
+			if (m.Javadoc != null) {
+				writer.WriteStartElement ("javadoc");
+				writer.WriteCData (m.Javadoc);
+				writer.WriteFullEndElement ();
 			}
 
 			if (exceptions != null) {

@@ -59,6 +59,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		public string Name { get; set; }
 		public bool Static { get; set; }
 		public string Visibility { get; set; }
+		public string Javadoc { get; set; }
 
 		public string ExtendedJniSignature { get; set; }
 
@@ -168,6 +169,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		public bool Static { get; set; }
 		public string Visibility { get; set; }
 		public string ExtendedJniSignature { get; set; }
+		public string Javadoc { get; set; }
 	}
 
 	public partial class JavaField : JavaMember

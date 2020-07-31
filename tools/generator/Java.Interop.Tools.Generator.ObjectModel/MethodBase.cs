@@ -24,6 +24,8 @@ namespace MonoDroid.Generation
 		public ParameterList Parameters { get; } = new ParameterList ();
 		public string Visibility { get; set; }
 
+		public string Javadoc { get; set; }
+
 		public string [] AutoDetectEnumifiedOverrideParameters (AncestorDescendantCache cache)
 		{
 			if (Parameters.All (p => p.Type != "int"))
