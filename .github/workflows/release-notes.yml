@@ -1,10 +1,11 @@
-name: .NET Core
+# This action runs every day and updates the draft release notes on the wiki
+# from comments put on PR's tagged with the `release-notes` label.
+name: Update Release Notes
 
+# Runs every day at 06:00 UTC
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  schedule:
+    - cron: 0 6 * * *
   workflow_dispatch:
 
 jobs:
