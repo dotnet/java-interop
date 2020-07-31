@@ -36,7 +36,7 @@ jobs:
         --repository-name Java.Interop 
         --token ${{ github.token }}
          
-    - name: Commit release note changes
+    - name: Commit release notes changes
       working-directory: ${{ github.workspace }}/wiki
       run: |
         git config user.email "you@example.com"
