@@ -27,7 +27,7 @@ jobs:
     
     - name: Install Stable Mono
       if: runner.os != 'Windows'
-      run: 
+      run: |
           dotnet tool install --global boots  
           boots --stable Mono
       
