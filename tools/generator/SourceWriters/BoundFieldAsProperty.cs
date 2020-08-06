@@ -117,9 +117,10 @@ namespace generator.SourceWriters
 
 			writer.WriteLine ("try {");
 
-			writer.WriteLine ($"_members.{indirect}.SetValue (__id{(field.IsStatic ? "" : ", this")}, {(invokeType != "Object" ? arg : "new JniObjectReference (" + arg + ")")});");
+			writer.WriteLine ($"\t_members.{indirect}.SetValue (__id{(field.IsStatic ? "" : ", this")}, {(invokeType != "Object" ? arg : "new JniObjectReference (" + arg + ")")});");
 
 			writer.WriteLine ("} finally {");
+			writer.Indent ();
 
 			if (field.Symbol.IsArray) {
 				writer.WriteLine ($"global::Android.Runtime.JNIEnv.DeleteLocalRef ({arg});");
@@ -131,6 +132,7 @@ namespace generator.SourceWriters
 				}
 			}
 
+			writer.Unindent ();
 			writer.WriteLine ("}");
 		}
 	}

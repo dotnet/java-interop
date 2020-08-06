@@ -242,17 +242,17 @@ namespace generator.SourceWriters
 			var this_param = method.IsStatic ? $"__id{call_args}" : $"__id, this{call_args}";
 
 			// Example: var __rm = _members.InstanceMethods.InvokeVirtualObjectMethod (__id, this, __args);
-			body.Add ($"{return_var}_members.{method_type}.Invoke{virt_type}{invokeType}Method ({this_param});");
+			body.Add ($"\t{return_var}_members.{method_type}.Invoke{virt_type}{invokeType}Method ({this_param});");
 
 			if (!method.IsVoid) {
 				var r = invokeType == "Object" ? "__rm.Handle" : "__rm";
-				body.Add ($"return {method.RetVal.ReturnCast}{method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal)};");
+				body.Add ($"\treturn {method.RetVal.ReturnCast}{method.RetVal.FromNative (opt, r, true) + opt.GetNullForgiveness (method.RetVal)};");
 			}
 
 			body.Add ("} finally {");
 
 			foreach (string cleanup in method.Parameters.GetCallCleanup (opt))
-				body.Add (cleanup);
+				body.Add ("\t" + cleanup);
 
 			body.Add ("}");
 		}
@@ -264,11 +264,11 @@ namespace generator.SourceWriters
 
 			var JValue = invoker ? "JValue" : "JniArgumentValue";
 
-			body.Add ($"{JValue}* __args = stackalloc {JValue} [{parameters.Count}];");
+			body.Add ($"\t{JValue}* __args = stackalloc {JValue} [{parameters.Count}];");
 
 			for (var i = 0; i < parameters.Count; ++i) {
 				var p = parameters [i];
-				body.Add ($"__args [{i}] = new {JValue} ({p.GetCall (opt)});");
+				body.Add ($"\t__args [{i}] = new {JValue} ({p.GetCall (opt)});");
 			}
 		}
 

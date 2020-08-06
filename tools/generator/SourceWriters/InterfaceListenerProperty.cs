@@ -28,8 +28,8 @@ namespace generator.SourceWriters
 
 			SetBody.Add ($"{opt.GetOutputName (iface.FullName)}Implementor{opt.NullableOperator} impl = Impl{name};");
 			SetBody.Add ($"if (impl == null) {{");
-			SetBody.Add ($"impl = new {opt.GetOutputName (iface.FullName)}Implementor ({(iface.NeedsSender ? "this" : string.Empty)});");
-			SetBody.Add ($"Impl{name} = impl;");
+			SetBody.Add ($"\timpl = new {opt.GetOutputName (iface.FullName)}Implementor ({(iface.NeedsSender ? "this" : string.Empty)});");
+			SetBody.Add ($"\tImpl{name} = impl;");
 			SetBody.Add ($"}} else");
 			SetBody.Add ($"impl.{nameSpec}Handler = value;");
 		}
