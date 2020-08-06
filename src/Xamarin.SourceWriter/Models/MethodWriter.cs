@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Xamarin.SourceWriter
 {
-	public class MethodWriter
+	public class MethodWriter : ISourceWriter
 	{
 		private Visibility visibility;
 
@@ -13,14 +13,22 @@ namespace Xamarin.SourceWriter
 		public TypeReferenceWriter ReturnType { get; set; }
 		public List<string> Comments { get; } = new List<string> ();
 		public List<AttributeWriter> Attributes { get; } = new List<AttributeWriter> ();
-		public bool IsPublic { get => visibility.HasFlag (Visibility.Public); set => visibility |= Visibility.Public; }
+		public bool IsPublic { get => visibility == Visibility.Public; set => visibility = value ? Visibility.Public : Visibility.Default; }
 		public bool UseExplicitPrivateKeyword { get; set; }
-		public bool IsInternal { get => visibility.HasFlag (Visibility.Internal); set => visibility |= Visibility.Internal; }
+		public bool IsInternal { get => visibility == Visibility.Internal; set => visibility = value ? Visibility.Internal : Visibility.Default; }
 		public List<string> Body { get; set; } = new List<string> ();
+		public bool IsSealed { get; set; }
 		public bool IsStatic { get; set; }
-		public bool IsProtected { get => visibility.HasFlag (Visibility.Protected); set => visibility |= Visibility.Protected; }
+		public bool IsPrivate { get => visibility == Visibility.Private; set => visibility = value ? Visibility.Private : Visibility.Default; }
+		public bool IsProtected { get => visibility == Visibility.Protected; set => visibility = value ? Visibility.Protected : Visibility.Default; }
 		public bool IsOverride { get; set; }
 		public bool IsUnsafe { get; set; }
+		public bool IsVirtual { get; set; }
+		public bool IsShadow { get; set; }
+
+		public MethodWriter ()
+		{
+		}
 
 		public MethodWriter (string name, TypeReferenceWriter returnType = null)
 		{
@@ -39,6 +47,9 @@ namespace Xamarin.SourceWriter
 					break;
 				case "protected":
 					IsProtected = true;
+					break;
+				case "private":
+					IsPrivate = true;
 					break;
 			}
 		}
@@ -70,17 +81,25 @@ namespace Xamarin.SourceWriter
 				writer.Write ("internal ");
 			if (IsProtected)
 				writer.Write ("protected ");
-			if (visibility == Visibility.Private && UseExplicitPrivateKeyword)
+			if (IsPrivate)
 				writer.Write ("private ");
 
-			if (IsUnsafe)
-				writer.Write ("unsafe ");
+			if (IsShadow)
+				writer.Write ("new ");
 
 			if (IsOverride)
 				writer.Write ("override ");
+			else if (IsVirtual)
+				writer.Write ("virtual ");
+
+			if (IsSealed)
+				writer.Write ("sealed ");
 
 			if (IsStatic)
 				writer.Write ("static ");
+
+			if (IsUnsafe)
+				writer.Write ("unsafe ");
 
 			WriteReturnType (writer);
 

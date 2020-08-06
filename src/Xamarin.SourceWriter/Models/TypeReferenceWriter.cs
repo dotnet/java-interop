@@ -8,11 +8,16 @@ namespace Xamarin.SourceWriter
 	{
 		public string Namespace { get; set; }
 		public string Name { get; set; }
+		public bool Nullable { get; set; }
 
-		public static TypeReferenceWriter Bool = new TypeReferenceWriter ("bool");
-		public static TypeReferenceWriter IntPtr = new TypeReferenceWriter ("IntPtr");
-		public static TypeReferenceWriter Float = new TypeReferenceWriter ("float");
-		public static TypeReferenceWriter Void = new TypeReferenceWriter ("void");
+		// These purposely create new instances, as they are not immutable.
+		// For example you may intend to make an instance null, but if there
+		// was only one, you would make them all null.
+		public static TypeReferenceWriter Bool => new TypeReferenceWriter ("bool");
+		public static TypeReferenceWriter Delegate => new TypeReferenceWriter ("Delegate");
+		public static TypeReferenceWriter IntPtr => new TypeReferenceWriter ("IntPtr");
+		public static TypeReferenceWriter Float => new TypeReferenceWriter ("float");
+		public static TypeReferenceWriter Void => new TypeReferenceWriter ("void");
 
 		public TypeReferenceWriter (string name)
 		{
@@ -35,9 +40,11 @@ namespace Xamarin.SourceWriter
 		public virtual void WriteTypeReference (CodeWriter writer)
 		{
 			if (Namespace.HasValue ())
-				writer.Write ($"{Namespace}.{Name} ");
+				writer.Write ($"{Namespace}.{Name}{NullableOperator} ");
 			else
-				writer.Write ($"{Name} ");
+				writer.Write ($"{Name}{NullableOperator} ");
 		}
+
+		string NullableOperator => Nullable ? "?" : string.Empty;
 	}
 }

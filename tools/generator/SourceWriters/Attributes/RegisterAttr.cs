@@ -14,8 +14,10 @@ namespace generator.SourceWriters
 		public string Connector { get; set; }
 		public bool DoNotGenerateAcw { get; set; }
 		public string AdditionalProperties { get; set; }
+		public bool UseGlobal { get; set; }	// TODO: Temporary for matching existing unit tests
+		public bool UseShortForm { get; set; }  // TODO: Temporary for matching existing unit tests
 
-		public RegisterAttr (string name, string signature, string connector, bool noAcw = false, string additionalProperties = null)
+		public RegisterAttr (string name, string signature = null, string connector = null, bool noAcw = false, string additionalProperties = null)
 		{
 			Name = name;
 			Signature = signature;
@@ -28,11 +30,12 @@ namespace generator.SourceWriters
 		{
 			var sb = new StringBuilder ();
 
-			sb.Append ($"[Register (\"{Name}\"");
+			if (UseGlobal)
+				sb.Append ($"[global::Android.Runtime.Register (\"{Name}\"");
+			else
+				sb.Append ($"[Register (\"{Name}\"");
 
-			// TODO: We shouldn't write these when they aren't needed, but to be compatible
-			// with existing unit tests we're always writing them currently
-			//if (Signature.HasValue () || Connector.HasValue ())
+			if ((Signature.HasValue () || Connector.HasValue ()) && !UseShortForm)
 				sb.Append ($", \"{Signature}\", \"{Connector}\"");
 
 			if (DoNotGenerateAcw)

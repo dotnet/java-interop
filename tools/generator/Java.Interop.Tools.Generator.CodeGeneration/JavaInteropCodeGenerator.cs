@@ -12,7 +12,7 @@ namespace MonoDroid.Generation {
 		{
 		}
 
-		static string GetInvokeType (string type)
+		public static string GetInvokeType (string type)
 		{
 			switch (type) {
 			case "Bool":            return "Boolean";
@@ -37,26 +37,36 @@ namespace MonoDroid.Generation {
 		{
 			WritePeerMembers (indent + '\t', type.RawJniName, type.Name, false);
 
-			writer.WriteLine ("{0}\tinternal static {1}IntPtr class_ref {{", indent, requireNew ? "new " : string.Empty);
-			writer.WriteLine ("{0}\t\tget {{", indent);
-			writer.WriteLine ("{0}\t\t\treturn _members.JniPeerType.PeerReference.Handle;", indent);
-			writer.WriteLine ("{0}\t\t}}", indent);
-			writer.WriteLine ("{0}\t}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+
+			new ClassHandleGetter (requireNew).Write (cw);
+
 			if (type.BaseGen != null && type.InheritsObject) {
-				writer.WriteLine ("{0}\tpublic override global::Java.Interop.JniPeerMembers JniPeerMembers {{", indent);
-				writer.WriteLine ("{0}\t\tget {{ return _members; }}", indent);
-				writer.WriteLine ("{0}\t}}", indent);
-				writer.WriteLine ();
-				writer.WriteLine ("{0}\tprotected override IntPtr ThresholdClass {{", indent);
-				writer.WriteLine ("{0}\t\tget {{ return _members.JniPeerType.PeerReference.Handle; }}", indent);
-				writer.WriteLine ("{0}\t}}", indent);
-				writer.WriteLine ();
-				writer.WriteLine ("{0}\tprotected override global::System.Type ThresholdType {{", indent);
-				writer.WriteLine ("{0}\t\tget {{ return _members.ManagedPeerType; }}", indent);
-				writer.WriteLine ("{0}\t}}", indent);
-				writer.WriteLine ();
+				new JniPeerMembersGetter ().Write (cw);
+				new ClassThresholdClassGetter ().Write (cw);
+				new ThresholdTypeGetter ().Write (cw);
 			}
+
+			//writer.WriteLine ("{0}\tinternal static {1}IntPtr class_ref {{", indent, requireNew ? "new " : string.Empty);
+			//writer.WriteLine ("{0}\t\tget {{", indent);
+			//writer.WriteLine ("{0}\t\t\treturn _members.JniPeerType.PeerReference.Handle;", indent);
+			//writer.WriteLine ("{0}\t\t}}", indent);
+			//writer.WriteLine ("{0}\t}}", indent);
+			//writer.WriteLine ();
+			//if (type.BaseGen != null && type.InheritsObject) {
+			//	writer.WriteLine ("{0}\tpublic override global::Java.Interop.JniPeerMembers JniPeerMembers {{", indent);
+			//	writer.WriteLine ("{0}\t\tget {{ return _members; }}", indent);
+			//	writer.WriteLine ("{0}\t}}", indent);
+			//	writer.WriteLine ();
+			//	writer.WriteLine ("{0}\tprotected override IntPtr ThresholdClass {{", indent);
+			//	writer.WriteLine ("{0}\t\tget {{ return _members.JniPeerType.PeerReference.Handle; }}", indent);
+			//	writer.WriteLine ("{0}\t}}", indent);
+			//	writer.WriteLine ();
+			//	writer.WriteLine ("{0}\tprotected override global::System.Type ThresholdType {{", indent);
+			//	writer.WriteLine ("{0}\t\tget {{ return _members.ManagedPeerType; }}", indent);
+			//	writer.WriteLine ("{0}\t}}", indent);
+			//	writer.WriteLine ();
+			//}
 		}
 
 		internal override void WriteClassHandle (InterfaceGen type, string indent, string declaringType)
@@ -68,38 +78,50 @@ namespace MonoDroid.Generation {
 		{
 			WritePeerMembers (indent, type.RawJniName, declaringType, false);
 
-			writer.WriteLine ();
-			writer.WriteLine ("{0}public override global::Java.Interop.JniPeerMembers JniPeerMembers {{", indent);
-			writer.WriteLine ("{0}\tget {{ return _members; }}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
-			writer.WriteLine ("{0}protected override global::System.Type ThresholdType {{", indent);
-			writer.WriteLine ("{0}\tget {{ return _members.ManagedPeerType; }}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+
+			new JniPeerMembersGetter ().Write (cw);
+			new ThresholdTypeGetter ().Write (cw);
+
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}public override global::Java.Interop.JniPeerMembers JniPeerMembers {{", indent);
+			//writer.WriteLine ("{0}\tget {{ return _members; }}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}protected override global::System.Type ThresholdType {{", indent);
+			//writer.WriteLine ("{0}\tget {{ return _members.ManagedPeerType; }}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
 		}
 
 		internal override void WriteInterfaceInvokerHandle (InterfaceGen type, string indent, string declaringType)
 		{
 			WritePeerMembers (indent, type.RawJniName, declaringType, false);
 
-			writer.WriteLine ();
-			writer.WriteLine ("{0}static IntPtr java_class_ref {{", indent);
-			writer.WriteLine ("{0}\tget {{ return _members.JniPeerType.PeerReference.Handle; }}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
-			writer.WriteLine ("{0}public override global::Java.Interop.JniPeerMembers JniPeerMembers {{", indent);
-			writer.WriteLine ("{0}\tget {{ return _members; }}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
-			writer.WriteLine ("{0}protected override IntPtr ThresholdClass {{", indent);
-			writer.WriteLine ("{0}\tget {{ return class_ref; }}", indent);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
-			writer.WriteLine ("{0}protected override global::System.Type ThresholdType {{", indent);
-			writer.WriteLine ("{0}\tget {{ return _members.ManagedPeerType; }}", indent, declaringType);
-			writer.WriteLine ("{0}}}", indent);
-			writer.WriteLine ();
+			var cw = new CodeWriter (writer, indent);
+
+			new InterfaceHandleGetter ().Write (cw);
+			new JniPeerMembersGetter ().Write (cw);
+			new InterfaceThresholdClassGetter ().Write (cw);
+			new ThresholdTypeGetter ().Write (cw);
+
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}static IntPtr java_class_ref {{", indent);
+			//writer.WriteLine ("{0}\tget {{ return _members.JniPeerType.PeerReference.Handle; }}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}public override global::Java.Interop.JniPeerMembers JniPeerMembers {{", indent);
+			//writer.WriteLine ("{0}\tget {{ return _members; }}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}protected override IntPtr ThresholdClass {{", indent);
+			//writer.WriteLine ("{0}\tget {{ return class_ref; }}", indent);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
+			//writer.WriteLine ("{0}protected override global::System.Type ThresholdType {{", indent);
+			//writer.WriteLine ("{0}\tget {{ return _members.ManagedPeerType; }}", indent, declaringType);
+			//writer.WriteLine ("{0}}}", indent);
+			//writer.WriteLine ();
 		}
 
 		public override void WriteClassConstructors (ClassGen @class, string indent)
@@ -296,10 +318,14 @@ namespace MonoDroid.Generation {
 
 		void WritePeerMembers (string indent, string rawJniType, string declaringType, bool isInterface)
 		{
-			var signature = $"{(isInterface ? "private " : "")}static readonly JniPeerMembers _members = ";
-			var type = $"new {GetPeerMembersType ()} (\"{rawJniType}\", typeof ({declaringType}){(isInterface ? ", isInterface: true" : string.Empty)});";
+			var field = new PeerMembersField (rawJniType, declaringType, isInterface);
+			var cw = new CodeWriter (writer, indent);
 
-			writer.WriteLine ($"{indent}{signature}{type}");
+			field.Write (cw);
+			//var signature = $"{(isInterface ? "private " : "")}static readonly JniPeerMembers _members = ";
+			//var type = $"new {GetPeerMembersType ()} (\"{rawJniType}\", typeof ({declaringType}){(isInterface ? ", isInterface: true" : string.Empty)});";
+
+			//writer.WriteLine ($"{indent}{signature}{type}");
 		}
 	}
 }

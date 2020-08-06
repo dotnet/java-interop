@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Xamarin.SourceWriter
 {
-	public class PropertyWriter
+	public class PropertyWriter : ISourceWriter
 	{
 		private Visibility visibility;
 
@@ -20,9 +20,23 @@ namespace Xamarin.SourceWriter
 		public List<string> SetBody { get; } = new List<string> ();
 		public bool IsStatic { get; set; }
 		public bool IsProtected { get => visibility.HasFlag (Visibility.Protected); set => visibility |= Visibility.Protected; }
+		public bool IsPrivate { get => visibility == Visibility.Private; set => visibility = value ? Visibility.Private : Visibility.Default; }
 		public bool IsOverride { get; set; }
 		public bool HasGet { get; set; }
 		public bool HasSet { get; set; }
+		public bool IsShadow { get; set; }
+		public bool IsAutoProperty { get; set; }
+		public bool IsAbstract { get; set; }
+		public bool IsVirtual { get; set; }
+		public bool IsUnsafe { get; set; }
+		public List<string> GetterComments { get; } = new List<string> ();
+		public List<string> SetterComments { get; } = new List<string> ();
+		public List<AttributeWriter> GetterAttributes { get; } = new List<AttributeWriter> ();
+		public List<AttributeWriter> SetterAttributes { get; } = new List<AttributeWriter> ();
+
+		public PropertyWriter ()
+		{
+		}
 
 		public PropertyWriter (string name, TypeReferenceWriter propertyType = null)
 		{
@@ -30,7 +44,25 @@ namespace Xamarin.SourceWriter
 			PropertyType = propertyType ?? TypeReferenceWriter.Void;
 		}
 
-		public virtual void WriteMethod (CodeWriter writer)
+		public void SetVisibility (string visibility)
+		{
+			switch (visibility?.ToLowerInvariant ()) {
+				case "public":
+					IsPublic = true;
+					break;
+				case "internal":
+					IsInternal = true;
+					break;
+				case "protected":
+					IsProtected = true;
+					break;
+				case "private":
+					IsPrivate = true;
+					break;
+			}
+		}
+
+		public virtual void Write (CodeWriter writer)
 		{
 			WriteComments (writer);
 			WriteAttributes (writer);
@@ -43,9 +75,33 @@ namespace Xamarin.SourceWriter
 				writer.WriteLine (c);
 		}
 
+		public virtual void WriteGetterComments (CodeWriter writer)
+		{
+			foreach (var c in GetterComments)
+				writer.WriteLine (c);
+		}
+
+		public virtual void WriteSetterComments (CodeWriter writer)
+		{
+			foreach (var c in SetterComments)
+				writer.WriteLine (c);
+		}
+
 		public virtual void WriteAttributes (CodeWriter writer)
 		{
 			foreach (var att in Attributes)
+				att.WriteAttribute (writer);
+		}
+
+		public virtual void WriteGetterAttributes (CodeWriter writer)
+		{
+			foreach (var att in GetterAttributes)
+				att.WriteAttribute (writer);
+		}
+
+		public virtual void WriteSetterAttributes (CodeWriter writer)
+		{
+			foreach (var att in SetterAttributes)
 				att.WriteAttribute (writer);
 		}
 
@@ -66,6 +122,17 @@ namespace Xamarin.SourceWriter
 			if (IsStatic)
 				writer.Write ("static ");
 
+			if (IsShadow)
+				writer.Write ("new ");
+
+			if (IsAbstract)
+				writer.Write ("abstract ");
+			if (IsVirtual)
+				writer.Write ("virtual ");
+
+			if (IsUnsafe)
+				writer.Write ("unsafe ");
+
 			WriteReturnType (writer);
 
 			writer.Write (Name + " ");
@@ -75,7 +142,7 @@ namespace Xamarin.SourceWriter
 
 		protected virtual void WriteBody (CodeWriter writer)
 		{
-			if (GetBody.Count == 0 && SetBody.Count == 0) {
+			if (IsAutoProperty || IsAbstract) {
 				WriteAutomaticPropertyBody (writer);
 				return;
 			}
@@ -96,10 +163,17 @@ namespace Xamarin.SourceWriter
 		{
 			writer.Write ("{ ");
 
-			if (HasGet)
+			if (HasGet) {
+				WriteGetterComments (writer);
+				WriteGetterAttributes (writer);
 				writer.Write ("get; ");
-			if (HasSet)
+			}
+
+			if (HasSet) {
+				WriteSetterComments (writer);
+				WriteSetterAttributes (writer);
 				writer.Write ("set; ");
+			}
 
 			writer.WriteLine ("}");
 		}
@@ -107,14 +181,16 @@ namespace Xamarin.SourceWriter
 		protected virtual void WriteGetter (CodeWriter writer)
 		{
 			if (HasGet) {
+				WriteGetterComments (writer);
+				WriteGetterAttributes (writer);
+
 				if (GetBody.Count == 1)
 					writer.WriteLine ("get { " + GetBody [0] + " }");
 				else {
 					writer.WriteLine ("get {");
 					writer.Indent ();
 
-					foreach (var b in GetBody)
-						writer.WriteLine (b);
+					WriteGetterBody (writer);
 
 					writer.Unindent ();
 					writer.WriteLine ("}");
@@ -122,22 +198,36 @@ namespace Xamarin.SourceWriter
 			}
 		}
 
+		protected virtual void WriteGetterBody (CodeWriter writer)
+		{
+			foreach (var b in GetBody)
+				writer.WriteLine (b);
+		}
+
 		protected virtual void WriteSetter (CodeWriter writer)
 		{
 			if (HasSet) {
+				WriteSetterComments (writer);
+				WriteSetterAttributes (writer);
+
 				if (SetBody.Count == 1)
 					writer.WriteLine ("set { " + SetBody [0] + " }");
 				else {
 					writer.WriteLine ("set {");
 					writer.Indent ();
 
-					foreach (var b in SetBody)
-						writer.WriteLine (b);
+					WriteSetterBody (writer);
 
 					writer.Unindent ();
 					writer.WriteLine ("}");
 				}
 			}
+		}
+
+		protected virtual void WriteSetterBody (CodeWriter writer)
+		{
+			foreach (var b in SetBody)
+				writer.WriteLine (b);
 		}
 
 		protected virtual void WriteReturnType (CodeWriter writer)

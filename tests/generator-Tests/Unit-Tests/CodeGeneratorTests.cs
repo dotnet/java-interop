@@ -1034,8 +1034,8 @@ namespace generatortests
 			generator.Context.ContextTypes.Pop ();
 
 			var result = writer.ToString ().NormalizeLineEndings ();
-			Assert.True (result.Contains ("internal static IntPtr class_ref"));
-			Assert.False (result.Contains ("internal static new IntPtr class_ref"));
+			Assert.True (result.Contains ("internal static IntPtr class_ref".NormalizeLineEndings ()));
+			Assert.False (result.Contains ("internal static new IntPtr class_ref".NormalizeLineEndings ()));
 		}
 
 		[Test]
@@ -1059,8 +1059,8 @@ namespace generatortests
 			generator.Context.ContextTypes.Pop ();
 
 			var result = writer.ToString ().NormalizeLineEndings ();
-			Assert.True (result.Contains ("internal static new IntPtr class_ref"));
-			Assert.False (result.Contains ("internal static IntPtr class_ref"));
+			Assert.True (result.Contains ("internal static new IntPtr class_ref".NormalizeLineEndings ()));
+			Assert.False (result.Contains ("internal static IntPtr class_ref".NormalizeLineEndings ()));
 		}
 	}
 }

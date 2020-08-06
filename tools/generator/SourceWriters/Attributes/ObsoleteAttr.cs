@@ -11,8 +11,8 @@ namespace generator.SourceWriters
 	{
 		public string Message { get; set; }
 		public bool IsError { get; set; }
-
-		public ObsoleteAttr (string message, bool isError = false)
+		public bool NoAtSign { get; set; }	// TODO: Temporary to match unit tests
+		public ObsoleteAttr (string message = null, bool isError = false)
 		{
 			Message = message;
 			IsError = isError;
@@ -25,7 +25,7 @@ namespace generator.SourceWriters
 				return;
 			}
 
-			writer.Write ($"[Obsolete (@\"{Message}\"");
+			writer.Write ($"[Obsolete ({(NoAtSign ? "" : "@")}\"{Message}\"");
 
 			if (IsError)
 				writer.Write (", error: true");

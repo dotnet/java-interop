@@ -4,19 +4,27 @@ using System.Text;
 
 namespace Xamarin.SourceWriter
 {
-	public class FieldWriter
+	public class FieldWriter : ISourceWriter
 	{
+		private Visibility visibility;
+
 		public string Name { get; set; }
 		public TypeReferenceWriter Type { get; set; }
 		public List<string> Comments { get; } = new List<string> ();
 		public List<AttributeWriter> Attributes { get; } = new List<AttributeWriter> ();
-		public bool IsPublic { get; set; }
+		public bool IsPublic { get => visibility == Visibility.Public; set => visibility = value ? Visibility.Public : Visibility.Default; }
 		public bool UseExplicitPrivateKeyword { get; set; }
-		public bool IsInternal { get; set; }
+		public bool IsInternal { get => visibility == Visibility.Internal; set => visibility = value ? Visibility.Internal : Visibility.Default; }
 		public bool IsConst { get; set; }
 		public string Value { get; set; }
 		public bool IsStatic { get; set; }
 		public bool IsReadonly { get; set; }
+		public bool IsPrivate { get => visibility == Visibility.Private; set => visibility = value ? Visibility.Private : Visibility.Default; }
+		public bool IsProtected { get => visibility == Visibility.Protected; set => visibility = value ? Visibility.Protected : Visibility.Default; }
+
+		public FieldWriter ()
+		{
+		}
 
 		public FieldWriter (string name, TypeReferenceWriter Type = null)
 		{
@@ -24,7 +32,25 @@ namespace Xamarin.SourceWriter
 			this.Type = Type ?? TypeReferenceWriter.Void;
 		}
 
-		public virtual void WriteField (CodeWriter writer)
+		public void SetVisibility (string visibility)
+		{
+			switch (visibility?.ToLowerInvariant ()) {
+				case "public":
+					IsPublic = true;
+					break;
+				case "internal":
+					IsInternal = true;
+					break;
+				case "protected":
+					IsProtected = true;
+					break;
+				case "private":
+					IsPrivate = true;
+					break;
+			}
+		}
+
+		public virtual void Write (CodeWriter writer)
 		{
 			WriteComments (writer);
 			WriteAttributes (writer);
@@ -49,7 +75,7 @@ namespace Xamarin.SourceWriter
 				writer.Write ("public ");
 			else if (IsInternal)
 				writer.Write ("internal ");
-			else if (UseExplicitPrivateKeyword)
+			else if (IsPrivate)
 				writer.Write ("private ");
 
 			if (IsStatic)
