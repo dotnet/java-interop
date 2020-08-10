@@ -6,7 +6,7 @@ namespace Xamarin.SourceWriter
 {
 	public class EventWriter : ISourceWriter
 	{
-		private Visibility visibility;
+		Visibility visibility;
 
 		public string Name { get; set; }
 		public TypeReferenceWriter EventType { get; set; }
