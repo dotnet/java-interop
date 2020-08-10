@@ -10,6 +10,7 @@
       "src\\Xamarin.Android.Tools.ApiXmlAdjuster\\Xamarin.Android.Tools.ApiXmlAdjuster.csproj",
       "src\\Xamarin.SourceWriter\\Xamarin.SourceWriter.csproj",
       "tests\\generator-Tests\\generator-Tests.csproj",
+      "tests\\Xamarin.SourceWriter-Tests\\Xamarin.SourceWriter-Tests.csproj",
       "tools\\generator\\generator.csproj",
     ]
   }

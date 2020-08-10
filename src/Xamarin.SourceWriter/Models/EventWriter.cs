@@ -126,13 +126,20 @@ namespace Xamarin.SourceWriter
 			writer.Write ("event ");
 
 			WriteEventType (writer);
-			writer.Write (Name + " ");
+			writer.Write (Name);
 
 			WriteBody (writer);
 		}
 
 		protected virtual void WriteBody (CodeWriter writer)
 		{
+			if (!HasAdd && !HasRemove) {
+				writer.WriteLine (";");
+				return;
+			}
+
+			writer.Write (" ");
+
 			if (IsAutoProperty || IsAbstract) {
 				WriteAutomaticEventBody (writer);
 				return;
