@@ -10,16 +10,8 @@ namespace generator.SourceWriters
 {
 	public class MethodExtensionAsyncWrapper : MethodWriter
 	{
-		readonly Method method;
-		readonly CodeGenerationOptions opt;
-		readonly string self_type;
-
 		public MethodExtensionAsyncWrapper (Method method, CodeGenerationOptions opt, string selfType)
 		{
-			this.method = method;
-			this.opt = opt;
-			self_type = selfType;
-
 			Name = method.AdjustedName + "Async";
 			IsStatic = true;
 
@@ -33,6 +25,7 @@ namespace generator.SourceWriters
 			Body.Add ($"return global::System.Threading.Tasks.Task.Run (() => self.{method.AdjustedName} ({method.Parameters.GetCall (opt)}));");
 
 			Parameters.Add (new MethodParameterWriter ("self", new TypeReferenceWriter (selfType)) { IsExtension = true });
+
 			this.AddMethodParameters (method.Parameters, opt);
 		}
 	}
