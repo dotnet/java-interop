@@ -118,8 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Generator_BG4000" xml:space="preserve">
-    <value>ERROR: failed to remove old constants: {0}.</value>
-    <comment>{0} - The list of constants that could not be removed.</comment>
+    <value>Failed to remove old constants: {0}.</value>
+    <comment>{0} - The list of constants that could not be removed.
+In this message, the term "constants" refers to class or interface members that have constant values.</comment>
   </data>
   <data name="Generator_BG4100" xml:space="preserve">
     <value>Failed to process enum mapping. Text line: {0}.</value>
@@ -138,12 +139,12 @@
     <comment>{0} - The invalid XPath line.</comment>
   </data>
   <data name="Generator_BG4400" xml:space="preserve">
-    <value>Unexpected 'global::' specification. This error happens if it is specified in the Metadata API fixup for example.</value>
-    <comment>Value in quotes should not be translated. "Metadata API" should not be translated.</comment>
+    <value>Unexpected 'global::' specification. This error happens if 'global::' is specified in the Metadata.xml transform file, for example.</value>
+    <comment>The following are literal names and should not be translated: global::, Metadata.xml.</comment>
   </data>
   <data name="Generator_BG4500" xml:space="preserve">
     <value>'lang-features=default-interface-methods' is not compatible with 'codegen-target=xamarinandroid'.</value>
-    <comment>Values in quotes are command line arguments and should not be translated.</comment>
+    <comment>The following are literal command line arguments and should not be translated: 'lang-features=default-interface-methods', 'codegen-target=xamarinandroid'.</comment>
   </data>
   <data name="Generator_BG8101" xml:space="preserve">
     <value>Unexpected class child {0}.</value>

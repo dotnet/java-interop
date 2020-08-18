@@ -3,9 +3,10 @@
   <file datatype="xml" source-language="en" target-language="pt-BR" original="../Resources.resx">
     <body>
       <trans-unit id="Generator_BG4000">
-        <source>ERROR: failed to remove old constants: {0}.</source>
-        <target state="new">ERROR: failed to remove old constants: {0}.</target>
-        <note>{0} - The list of constants that could not be removed.</note>
+        <source>Failed to remove old constants: {0}.</source>
+        <target state="new">Failed to remove old constants: {0}.</target>
+        <note>{0} - The list of constants that could not be removed.
+In this message, the term "constants" refers to class or interface members that have constant values.</note>
       </trans-unit>
       <trans-unit id="Generator_BG4100">
         <source>Failed to process enum mapping. Text line: {0}.</source>
@@ -28,14 +29,14 @@
         <note>{0} - The invalid XPath line.</note>
       </trans-unit>
       <trans-unit id="Generator_BG4400">
-        <source>Unexpected 'global::' specification. This error happens if it is specified in the Metadata API fixup for example.</source>
-        <target state="new">Unexpected 'global::' specification. This error happens if it is specified in the Metadata API fixup for example.</target>
-        <note>Value in quotes should not be translated. "Metadata API" should not be translated.</note>
+        <source>Unexpected 'global::' specification. This error happens if 'global::' is specified in the Metadata.xml transform file, for example.</source>
+        <target state="new">Unexpected 'global::' specification. This error happens if 'global::' is specified in the Metadata.xml transform file, for example.</target>
+        <note>The following are literal names and should not be translated: global::, Metadata.xml.</note>
       </trans-unit>
       <trans-unit id="Generator_BG4500">
         <source>'lang-features=default-interface-methods' is not compatible with 'codegen-target=xamarinandroid'.</source>
         <target state="new">'lang-features=default-interface-methods' is not compatible with 'codegen-target=xamarinandroid'.</target>
-        <note>Values in quotes are command line arguments and should not be translated.</note>
+        <note>The following are literal command line arguments and should not be translated: 'lang-features=default-interface-methods', 'codegen-target=xamarinandroid'.</note>
       </trans-unit>
       <trans-unit id="Generator_BG8101">
         <source>Unexpected class child {0}.</source>

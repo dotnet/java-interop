@@ -106,7 +106,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected &apos;global::&apos; specification. This error happens if it is specified in the Metadata API fixup for example..
+        ///   Looks up a localized string similar to Unexpected &apos;global::&apos; specification. This error happens if &apos;global::&apos; is specified in the Metadata.xml transform file, for example..
         /// </summary>
         public static string Generator_BG4400 {
             get {
