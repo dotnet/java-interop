@@ -173,15 +173,26 @@ In this message, the term "constants" refers to class or interface members that 
     <comment>{0} - .NET type.
 {1} - .NET field signature.</comment>
   </data>
-  <data name="Generator_BG8401" xml:space="preserve">
-    <value>Skipping '{0}.{1}', due to a duplicate field, method or nested type name. {2} (Java type: '{3}')</value>
+  <data name="Generator_BG8401_Method" xml:space="preserve">
+    <value>Skipping '{0}.{1}' due to a duplicate method name. (Java type: '{2}')</value>
     <comment>{0} - .NET type.
 {1} - .NET field name.
-{2} - Duplicated type.
-{3} - Java type.</comment>
+{2} - Java type.</comment>
+  </data>
+  <data name="Generator_BG8401_NestedType" xml:space="preserve">
+    <value>Skipping '{0}.{1}' due to a duplicate nested type name. (Java type: '{2}')</value>
+    <comment>{0} - .NET type.
+{1} - .NET field name.
+{2} - Java type.</comment>
+  </data>
+  <data name="Generator_BG8401_Property" xml:space="preserve">
+    <value>Skipping '{0}.{1}' due to a duplicate field/property name. (Java type: '{2}')</value>
+    <comment>{0} - .NET type.
+{1} - .NET field name.
+{2} - Java type.</comment>
   </data>
   <data name="Generator_BG8402" xml:space="preserve">
-    <value>Skipping '{0}.{1}', due to a duplicate field. (Java type: '{2}')</value>
+    <value>Skipping '{0}.{1}' due to a duplicate field. (Java type: '{2}')</value>
     <comment>{0} - .NET type.
 {1} - .NET field name.
 {2} - Java type.</comment>
@@ -197,24 +208,24 @@ In this message, the term "constants" refers to class or interface members that 
 {1} - .NET member.</comment>
   </data>
   <data name="Generator_BG8502" xml:space="preserve">
-    <value>Invalidating '{0}' and all nested types because some of its interfaces were invalid.</value>
+    <value>Invalidating '{0}' and all its nested types because some of its interfaces were invalid.</value>
     <comment>{0} - .NET type name.</comment>
   </data>
   <data name="Generator_BG8503" xml:space="preserve">
-    <value>Invalidating '{0}' and all nested types because some of its methods were invalid.</value>
+    <value>Invalidating '{0}' and all its nested types because some of its methods were invalid.</value>
     <comment>{0} - .NET type name.</comment>
   </data>
   <data name="Generator_BG8504" xml:space="preserve">
-    <value>Event name for '{0}.{1}' is invalid. A valid 'eventName' or 'argsType' can be assigned using the Metadata API.</value>
+    <value>Event name for '{0}.{1}' is invalid. A valid 'eventName' or 'argsType' can be assigned by adding a rule to the Metadata.xml transforms file.</value>
     <comment>{0} - .NET type name
 {1} - .NET member.
-Values in quotes and "Metadata API" should not be translated.</comment>
+The following terms should not be translated: eventName, argsType, Metadata.xml.</comment>
   </data>
   <data name="Generator_BG8506" xml:space="preserve">
-    <value>Event property name for '{0}.{1}' is invalid. A valid 'eventName' or 'argsType' can be assigned using the Metadata API.</value>
+    <value>Event property name for '{0}.{1}' is invalid. A valid 'eventName' or 'argsType' can be assigned by adding a rule to the Metadata.xml transforms file.</value>
     <comment>{0} - .NET type name
 {1} - .NET member.
-Values in quotes and "Metadata API" should not be translated.</comment>
+The following terms should not be translated: eventName, argsType, Metadata.xml.</comment>
   </data>
   <data name="Generator_BG8600" xml:space="preserve">
     <value>Invalid XML file '{0}': {1}.</value>
@@ -223,7 +234,7 @@ Values in quotes and "Metadata API" should not be translated.</comment>
   </data>
   <data name="Generator_BG8601" xml:space="preserve">
     <value>No '&lt;package&gt;' elements found.</value>
-    <comment>Values in quotes should not be translated.</comment>
+    <comment>The following terms should not be translated: &lt;package&gt;.</comment>
   </data>
   <data name="Generator_BG8602" xml:space="preserve">
     <value>Unexpected root child node: '&lt;{0}&gt;'.</value>
@@ -232,7 +243,7 @@ Values in quotes and "Metadata API" should not be translated.</comment>
   <data name="Generator_BG8603" xml:space="preserve">
     <value>Unexpected '&lt;package&gt;' child node: '&lt;{0}&gt;'.</value>
     <comment>{0} - XML element name.
-Values in quotes should not be translated.</comment>
+The following terms should not be translated: &lt;package&gt;.</comment>
   </data>
   <data name="Generator_BG8604" xml:space="preserve">
     <value>Could not find top ancestor type '{0}' for nested type '{1}'.</value>
@@ -259,8 +270,9 @@ Values in quotes should not be translated.</comment>
 {1} - .NET member.</comment>
   </data>
   <data name="Generator_BG8A00" xml:space="preserve">
-    <value>Metadata element '{0}' matched no nodes.</value>
-    <comment>{0} - XML transform. (ex: '&lt;remove-node path="/api/package[@name='javax.sql']"')</comment>
+    <value>Metadata.xml element '{0}' matched no nodes.</value>
+    <comment>{0} - XML transform. (ex: '&lt;remove-node path="/api/package[@name='javax.sql']"')
+The following terms should not be translated: Metadata.xml.</comment>
   </data>
   <data name="Generator_BG8B00" xml:space="preserve">
     <value>Unknown generic argument constraint type '{0}' for member '{1}'.</value>

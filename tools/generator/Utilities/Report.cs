@@ -39,7 +39,9 @@ namespace MonoDroid.Generation
 		public static LocalizedMessage WarningAssemblyParseFailure => new LocalizedMessage (8200, Java.Interop.Localization.Resources.Generator_BG8200);
 		public static LocalizedMessage WarningMissingClassForConstructor => new LocalizedMessage (8300, Java.Interop.Localization.Resources.Generator_BG8300);
 		public static LocalizedMessage WarningUnexpectedFieldType => new LocalizedMessage (8400, Java.Interop.Localization.Resources.Generator_BG8400);
-		public static LocalizedMessage WarningFieldNameCollision => new LocalizedMessage (8401, Java.Interop.Localization.Resources.Generator_BG8401);
+		public static LocalizedMessage WarningFieldNameCollision_Property => new LocalizedMessage (8401, Java.Interop.Localization.Resources.Generator_BG8401_Property);
+		public static LocalizedMessage WarningFieldNameCollision_Method => new LocalizedMessage (8401, Java.Interop.Localization.Resources.Generator_BG8401_Method);
+		public static LocalizedMessage WarningFieldNameCollision_NestedType => new LocalizedMessage (8401, Java.Interop.Localization.Resources.Generator_BG8401_NestedType);
 		public static LocalizedMessage WarningDuplicateField => new LocalizedMessage (8402, Java.Interop.Localization.Resources.Generator_BG8402);
 		public static LocalizedMessage WarningUnexpectedInterfaceChild => new LocalizedMessage (8500, Java.Interop.Localization.Resources.Generator_BG8500);
 		public static LocalizedMessage WarningEmptyEventName => new LocalizedMessage (8501, Java.Interop.Localization.Resources.Generator_BG8501);

@@ -24,7 +24,7 @@ namespace generator.SourceWriters
 
 			foreach (var f in fields) {
 				if (gen.ContainsName (f.Name)) {
-					Report.LogCodedWarning (0, Report.WarningFieldNameCollision, gen.FullName, f.Name, gen.HasNestedType (f.Name) ? "(Nested type)" : gen.ContainsProperty (f.Name, false) ? "(Property)" : "(Method)", gen.JavaName);
+					Report.LogCodedWarning (0, GetFieldCollisionMessage (gen, f), gen.FullName, f.Name, gen.JavaName);
 					continue;
 				}
 
@@ -43,6 +43,16 @@ namespace generator.SourceWriters
 			}
 
 			return needsProperty;
+		}
+
+		public static Report.LocalizedMessage GetFieldCollisionMessage (GenBase gen, Field f)
+		{
+			if (gen.HasNestedType (f.Name))
+				return Report.WarningFieldNameCollision_NestedType;
+			if (gen.ContainsProperty (f.Name, false))
+				return Report.WarningFieldNameCollision_Property;
+
+			return Report.WarningFieldNameCollision_Method;
 		}
 
 		public static void AddInterfaceListenerEventsAndProperties (TypeWriter tw, InterfaceGen iface, ClassGen target, CodeGenerationOptions opt)

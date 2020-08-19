@@ -61,7 +61,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERROR: failed to remove old constants: {0}..
+        ///   Looks up a localized string similar to Failed to remove old constants: {0}..
         /// </summary>
         public static string Generator_BG4000 {
             get {
@@ -178,16 +178,34 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos;, due to a duplicate field, method or nested type name. {2} (Java type: &apos;{3}&apos;).
+        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos; due to a duplicate method name. (Java type: &apos;{2}&apos;).
         /// </summary>
-        public static string Generator_BG8401 {
+        public static string Generator_BG8401_Method {
             get {
-                return ResourceManager.GetString("Generator_BG8401", resourceCulture);
+                return ResourceManager.GetString("Generator_BG8401_Method", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos;, due to a duplicate field. (Java type: &apos;{2}&apos;).
+        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos; due to a duplicate nested type name. (Java type: &apos;{2}&apos;).
+        /// </summary>
+        public static string Generator_BG8401_NestedType {
+            get {
+                return ResourceManager.GetString("Generator_BG8401_NestedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos; due to a duplicate field/property name. (Java type: &apos;{2}&apos;).
+        /// </summary>
+        public static string Generator_BG8401_Property {
+            get {
+                return ResourceManager.GetString("Generator_BG8401_Property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos; due to a duplicate field. (Java type: &apos;{2}&apos;).
         /// </summary>
         public static string Generator_BG8402 {
             get {
@@ -214,7 +232,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalidating &apos;{0}&apos; and all nested types because some of its interfaces were invalid..
+        ///   Looks up a localized string similar to Invalidating &apos;{0}&apos; and all its nested types because some of its interfaces were invalid..
         /// </summary>
         public static string Generator_BG8502 {
             get {
@@ -223,7 +241,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalidating &apos;{0}&apos; and all nested types because some of its methods were invalid..
+        ///   Looks up a localized string similar to Invalidating &apos;{0}&apos; and all its nested types because some of its methods were invalid..
         /// </summary>
         public static string Generator_BG8503 {
             get {
@@ -232,7 +250,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event name for &apos;{0}.{1}&apos; is invalid. A valid &apos;eventName&apos; or &apos;argsType&apos; can be assigned using the Metadata API..
+        ///   Looks up a localized string similar to Event name for &apos;{0}.{1}&apos; is invalid. A valid &apos;eventName&apos; or &apos;argsType&apos; can be assigned by adding a rule to the Metadata.xml transforms file..
         /// </summary>
         public static string Generator_BG8504 {
             get {
@@ -241,7 +259,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event property name for &apos;{0}.{1}&apos; is invalid. A valid &apos;eventName&apos; or &apos;argsType&apos; can be assigned using the Metadata API..
+        ///   Looks up a localized string similar to Event property name for &apos;{0}.{1}&apos; is invalid. A valid &apos;eventName&apos; or &apos;argsType&apos; can be assigned by adding a rule to the Metadata.xml transforms file..
         /// </summary>
         public static string Generator_BG8506 {
             get {
@@ -331,7 +349,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Metadata element &apos;{0}&apos; matched no nodes..
+        ///   Looks up a localized string similar to Metadata.xml element &apos;{0}&apos; matched no nodes..
         /// </summary>
         public static string Generator_BG8A00 {
             get {

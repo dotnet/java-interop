@@ -101,7 +101,7 @@ namespace generator.SourceWriters
 
 			foreach (var f in fields) {
 				if (iface.ContainsName (f.Name)) {
-					Report.LogCodedWarning (0, Report.WarningFieldNameCollision, iface.FullName, f.Name, iface.HasNestedType (f.Name) ? "(Nested type)" : iface.ContainsProperty (f.Name, false) ? "(Property)" : "(Method)", iface.JavaName);
+					Report.LogCodedWarning (0, SourceWriterExtensions.GetFieldCollisionMessage (iface, f), iface.FullName, f.Name, iface.JavaName);
 					continue;
 				}
 

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
+using generator.SourceWriters;
 using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation
@@ -392,7 +393,7 @@ namespace MonoDroid.Generation
 			bool needsProperty = false;
 			foreach (Field f in fields) {
 				if (gen.ContainsName (f.Name)) {
-					Report.LogCodedWarning (0, Report.WarningFieldNameCollision, gen.FullName, f.Name, gen.HasNestedType (f.Name) ? "(Nested type)" : gen.ContainsProperty (f.Name, false) ? "(Property)" : "(Method)", gen.JavaName);
+					Report.LogCodedWarning (0, SourceWriterExtensions.GetFieldCollisionMessage (gen, f), gen.FullName, f.Name, gen.JavaName);
 					continue;
 				}
 				if (seen != null && seen.Contains (f.Name)) {
