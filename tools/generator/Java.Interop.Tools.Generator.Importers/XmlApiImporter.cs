@@ -46,7 +46,7 @@ namespace MonoDroid.Generation
 					case "typeParameters":
 						break; // handled at GenBaseSupport
 					default:
-						Report.LogCodedWarning (0, Report.WarningUnexpectedChild, child.Name);
+						Report.LogCodedWarning (0, Report.WarningUnexpectedChild, child.Name.ToString ());
 						break;
 				}
 			}
@@ -231,7 +231,7 @@ namespace MonoDroid.Generation
 					case "typeParameters":
 						break; // handled at GenBaseSupport
 					default:
-						Report.LogCodedWarning (0, Report.WarningUnexpectedInterfaceChild, child);
+						Report.LogCodedWarning (0, Report.WarningUnexpectedInterfaceChild, child.ToString ());
 						break;
 				}
 			}

@@ -69,13 +69,13 @@ namespace MonoDroid.Generation
 		public static LocalizedMessage WarningBaseInterfaceNotFound => new LocalizedMessage (0x8C00, Java.Interop.Localization.Resources.Generator_BG8C00);
 		public static LocalizedMessage WarningBaseInterfaceInvalid => new LocalizedMessage (0x8C01, Java.Interop.Localization.Resources.Generator_BG8C01);
 
-		public static void LogCodedError (LocalizedMessage message, params object [] args)
+		public static void LogCodedError (LocalizedMessage message, params string [] args)
 			=> LogCodedError (message, null, null, -1, -1, args);
 
-		public static void LogCodedError (LocalizedMessage message, Exception innerException, params object[] args)
+		public static void LogCodedError (LocalizedMessage message, Exception innerException, params string [] args)
 			=> LogCodedError (message, innerException, null, -1, -1, args);
 
-		public static void LogCodedError (LocalizedMessage message, Exception innerException, XNode node, params object[] args)
+		public static void LogCodedError (LocalizedMessage message, Exception innerException, XNode node, params string [] args)
 		{
 			var file = Uri.TryCreate (node.BaseUri, UriKind.Absolute, out var uri) ? uri.LocalPath : null;
 			var line_info = (node as IXmlLineInfo)?.HasLineInfo () == true ? node as IXmlLineInfo : null;
@@ -83,18 +83,18 @@ namespace MonoDroid.Generation
 			LogCodedError (message, innerException, file, line_info?.LineNumber ?? -1, line_info?.LinePosition ?? -1, args);
 		}
 
-		public static void LogCodedError (LocalizedMessage message, Exception innerException, string sourceFile, int line, int column, params object[] args)
+		public static void LogCodedError (LocalizedMessage message, Exception innerException, string sourceFile, int line, int column, params string [] args)
 		{
 			throw new BindingGeneratorException (message.Code, sourceFile, line, column, string.Format (message.Value, args), innerException);
 		}
 
-		public static void LogCodedWarning (int verbosity, LocalizedMessage message, params object [] args)
+		public static void LogCodedWarning (int verbosity, LocalizedMessage message, params string [] args)
 			=> LogCodedWarning (verbosity, message, null, null, -1, -1, args);
 
-		public static void LogCodedWarning (int verbosity, LocalizedMessage message, Exception innerException, params object [] args)
+		public static void LogCodedWarning (int verbosity, LocalizedMessage message, Exception innerException, params string [] args)
 			=> LogCodedWarning (verbosity, message, innerException, null, -1, -1, args);
 
-		public static void LogCodedWarning (int verbosity, LocalizedMessage message, Exception innerException, XNode node, params object [] args)
+		public static void LogCodedWarning (int verbosity, LocalizedMessage message, Exception innerException, XNode node, params string [] args)
 		{
 			var file = Uri.TryCreate (node.BaseUri, UriKind.Absolute, out var uri) ? uri.LocalPath : null;
 			var line_info = (node as IXmlLineInfo)?.HasLineInfo () == true ? node as IXmlLineInfo : null;
@@ -102,7 +102,7 @@ namespace MonoDroid.Generation
 			LogCodedWarning (verbosity, message, innerException, file, line_info?.LineNumber ?? -1, line_info?.LinePosition ?? -1, args);
 		}
 
-		public static void LogCodedWarning (int verbosity, LocalizedMessage message, Exception innerException, string sourceFile, int line, int column, params object [] args)
+		public static void LogCodedWarning (int verbosity, LocalizedMessage message, Exception innerException, string sourceFile, int line, int column, params string [] args)
 		{
 			if (verbosity > (Verbosity ?? 0))
 				return;

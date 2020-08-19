@@ -78,7 +78,7 @@ namespace MonoDroid.Generation
 					opt.SymbolTable.AddType (elem.XGetAttribute ("name"), sym);
 					continue;
 				default:
-					Report.LogCodedWarning (0, Report.WarningUnexpectedRootChildNode, elem.Name);
+					Report.LogCodedWarning (0, Report.WarningUnexpectedRootChildNode, elem.Name.ToString ());
 					break;
 				}
 			}
@@ -113,7 +113,7 @@ namespace MonoDroid.Generation
 					gen = XmlApiImporter.CreateInterface (ns, elem, opt);
 					break;
 				default:
-					Report.LogCodedWarning (0, Report.WarningUnexpectedPackageChildNode, elem.Name);
+					Report.LogCodedWarning (0, Report.WarningUnexpectedPackageChildNode, elem.Name.ToString ());
 					break;
 				}
 
