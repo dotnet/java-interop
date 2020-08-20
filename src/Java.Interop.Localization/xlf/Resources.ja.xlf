@@ -86,8 +86,8 @@ In this message, the term "constants" refers to class or interface members that 
 {2} - Java type.</note>
       </trans-unit>
       <trans-unit id="Generator_BG8401_Property">
-        <source>Skipping '{0}.{1}' due to a duplicate field/property name. (Java type: '{2}')</source>
-        <target state="new">Skipping '{0}.{1}' due to a duplicate field/property name. (Java type: '{2}')</target>
+        <source>Skipping '{0}.{1}' due to a duplicate field or property name. (Java type: '{2}')</source>
+        <target state="new">Skipping '{0}.{1}' due to a duplicate field or property name. (Java type: '{2}')</target>
         <note>{0} - .NET type.
 {1} - .NET field name.
 {2} - Java type.</note>
@@ -189,7 +189,7 @@ The following terms should not be translated: &lt;package&gt;.</note>
       <trans-unit id="Generator_BG8A00">
         <source>Metadata.xml element '{0}' matched no nodes.</source>
         <target state="new">Metadata.xml element '{0}' matched no nodes.</target>
-        <note>{0} - XML transform. (ex: '&lt;remove-node path="/api/package[@name='javax.sql']"')
+        <note>{0} - XML transform. (example: '&lt;remove-node path="/api/package[@name='javax.sql']"')
 The following terms should not be translated: Metadata.xml.</note>
       </trans-unit>
       <trans-unit id="Generator_BG8B00">

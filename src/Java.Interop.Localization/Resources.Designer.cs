@@ -196,7 +196,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos; due to a duplicate field/property name. (Java type: &apos;{2}&apos;).
+        ///   Looks up a localized string similar to Skipping &apos;{0}.{1}&apos; due to a duplicate field or property name. (Java type: &apos;{2}&apos;).
         /// </summary>
         public static string Generator_BG8401_Property {
             get {
