@@ -21,7 +21,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		public static bool IsImplementing (this JavaMethod derived, JavaMethod basis, IDictionary<JavaTypeReference,JavaTypeReference> genericInstantiation)
 		{
 			if (genericInstantiation == null)
-				throw new ArgumentNullException ("genericInstantiation");
+				throw new ArgumentNullException (nameof (genericInstantiation));
 
 			if (basis.Name != derived.Name)
 				return false;

@@ -8,4 +8,8 @@
     <OutputPath>$(TestOutputFullPath)</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Java.Interop.Localization\Java.Interop.Localization.csproj" />
+  </ItemGroup>
+
 </Project>

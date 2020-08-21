@@ -12,7 +12,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			var log = OnLog;
 			if (log == null)
 				return;
-			log (TraceLevel.Warning, verbosity, format, args);
+			log (TraceLevel.Warning, verbosity, "class-parse: warning: " + format, args);
 		}
 
 		public static void Error (string format, params object[] args)
@@ -20,7 +20,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			var log = OnLog;
 			if (log == null)
 				return;
-			log (TraceLevel.Error, 0, format, args);
+			log (TraceLevel.Error, 0, "class-parse: error: " + format, args);
 		}
 
 		public static void Message (string format, params object[] args)

@@ -57,7 +57,7 @@ namespace Xamarin.Android.Tools.Bytecode
 					}
 
 				} catch (Exception ex) {
-					Log.Warning (0, $"class-parse: warning: Unable to parse Kotlin metadata on '{c.ThisClass.Name}': {ex}");
+					Log.Warning (0, Java.Interop.Localization.Resources.Bytecode_0005, c.ThisClass.Name, ex);
 				}
 			}
 		}

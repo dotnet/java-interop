@@ -30,12 +30,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					cls.GenericInheritanceMapping = empty;
 				else if (cls.ResolvedExtends.ReferencedType.TypeParameters == null) {
 					// FIXME: I guess this should not happen. But this still happens.
-					Log.LogWarning ("Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.", cls.ExtendsGeneric, cls.FullName);
+					Log.LogWarning (Java.Interop.Localization.Resources.ApiXmlAdjuster_0002, cls.ExtendsGeneric, cls.FullName);
 					cls.GenericInheritanceMapping = empty;
 				} else {
 					if (cls.ResolvedExtends.ReferencedType.TypeParameters.TypeParameters.Count != cls.ResolvedExtends.TypeParameters.Count)
-						throw new Exception (string.Format ("On {0}.{1}, referenced generic arguments count do not match the base type parameters definition",
-							cls.Parent.Name, cls.Name));
+						throw new Exception (string.Format (Java.Interop.Localization.Resources.ApiXmlAdjuster_0007, cls.Parent.Name, cls.Name));
 					var dic = empty;
 					foreach (var kvp in cls.ResolvedExtends.ReferencedType.TypeParameters.TypeParameters.Zip (
 						 cls.ResolvedExtends.TypeParameters,

@@ -69,8 +69,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 							var c   = new ClassFile (s);
 							Add (c);
 						} catch (Exception e) {
-							Log.Warning (0, "class-parse: warning: Could not load .jar entry '{0}': {1}",
-									entry.Name, e);
+							Log.Warning (0, Java.Interop.Localization.Resources.Bytecode_0001, entry.Name, e);
 						}
 					}
 				}

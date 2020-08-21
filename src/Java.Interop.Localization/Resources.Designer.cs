@@ -61,6 +61,195 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning: method &apos;{0}&apos; in type &apos;{1}&apos; has unnamed parameters..
+        /// </summary>
+        public static string ApiXmlAdjuster_0001 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0001", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: &apos;{0}&apos; is referenced as base type of &apos;{1}&apos; and expected to have generic type parameters, but it does not..
+        /// </summary>
+        public static string ApiXmlAdjuster_0002 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0002", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while processing Java class &apos;{0}&apos;: {1}..
+        /// </summary>
+        public static string ApiXmlAdjuster_0003 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0003", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while processing Java interface &apos;{0}&apos;: {1}..
+        /// </summary>
+        public static string ApiXmlAdjuster_0004 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0004", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while resolving &apos;{0}&apos; in &apos;{1}&apos;: {2}..
+        /// </summary>
+        public static string ApiXmlAdjuster_0005 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0005", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: failed to resolve generic constraint: &apos;{0}&apos;: {1}..
+        /// </summary>
+        public static string ApiXmlAdjuster_0006 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0006", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For &apos;{0}.{1}&apos;, referenced generic arguments count does not match the base type parameters definition..
+        /// </summary>
+        public static string ApiXmlAdjuster_0007 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0007", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; was not found..
+        /// </summary>
+        public static string ApiXmlAdjuster_0008 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0008", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal error: XmlReader should be positioned on attribute, but it is on &apos;{0}&apos;..
+        /// </summary>
+        public static string ApiXmlAdjuster_0009 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0009", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: Element &apos;{1}&apos; requires attribute &apos;{2}&apos;..
+        /// </summary>
+        public static string ApiXmlAdjuster_0010 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0010", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: EndElement of &apos;{1}&apos; was expected, but is type &apos;{2}&apos; with name &apos;{3}&apos; instead..
+        /// </summary>
+        public static string ApiXmlAdjuster_0011 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0011", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: Unexpected element or content in &apos;{1}&apos;: node is &apos;{2}&apos;, name is &apos;{3}&apos;. Allowed elements are: &apos;{4}&apos;..
+        /// </summary>
+        public static string ApiXmlAdjuster_0012 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0012", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: Element &apos;{1}&apos; has an unexpected attribute: &apos;{2}&apos;. Allowed attributes are: &apos;{3}&apos;..
+        /// </summary>
+        public static string ApiXmlAdjuster_0013 {
+            get {
+                return ResourceManager.GetString("ApiXmlAdjuster_0013", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not load .jar entry &apos;{0}&apos;: {1}..
+        /// </summary>
+        public static string Bytecode_0001 {
+            get {
+                return ResourceManager.GetString("Bytecode_0001", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation file not found: &apos;{0}&apos;..
+        /// </summary>
+        public static string Bytecode_0002 {
+            get {
+                return ResourceManager.GetString("Bytecode_0002", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to match expression &apos;{0}&apos;, expected {1} parameter(s) but got {2} parameter(s)..
+        /// </summary>
+        public static string Bytecode_0003 {
+            get {
+                return ResourceManager.GetString("Bytecode_0003", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No parameter match for &apos;{0}.{1}&apos;. (expression: &apos;{2}&apos;).
+        /// </summary>
+        public static string Bytecode_0004 {
+            get {
+                return ResourceManager.GetString("Bytecode_0004", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to parse Kotlin metadata on &apos;{0}&apos;: {1}..
+        /// </summary>
+        public static string Bytecode_0005 {
+            get {
+                return ResourceManager.GetString("Bytecode_0005", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Differing number of &apos;throws&apos; declarations on &apos;{0}{1}&apos;..
+        /// </summary>
+        public static string Bytecode_0006 {
+            get {
+                return ResourceManager.GetString("Bytecode_0006", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to get parameter names for &apos;{0}.{1}&apos;: {2}..
+        /// </summary>
+        public static string Bytecode_0007 {
+            get {
+                return ResourceManager.GetString("Bytecode_0007", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to parse annotation XML file: {0}..
+        /// </summary>
+        public static string Bytecode_0008 {
+            get {
+                return ResourceManager.GetString("Bytecode_0008", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to remove old constants: {0}..
         /// </summary>
         public static string Generator_BG4000 {

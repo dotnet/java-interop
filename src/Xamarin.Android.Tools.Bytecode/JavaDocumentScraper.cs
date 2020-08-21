@@ -197,7 +197,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			string path = package.Replace ('.', '/') + '/' + type.Replace ('$', '.') + ".html";
 			string file = Path.Combine (root, path);
 			if (!File.Exists (file)) {
-				Log.Warning (1,"Warning: no document found : " + file);
+				Log.Warning (1, Java.Interop.Localization.Resources.Bytecode_0002, file);
 				return null;
 			}
 	
@@ -238,7 +238,7 @@ namespace Xamarin.Android.Tools.Bytecode
 						var plist = matcher.Groups [1];
 						String[] parms = StripTagsFromParameters (plist.Value).Split (new string [] { ", " }, StringSplitOptions.RemoveEmptyEntries);
 						if (parms.Length != ptypes.Length) {
-							Log.Warning (1, "failed matching {0} (expected {1} params, got {2} params)", buffer, ptypes.Length, parms.Length);
+							Log.Warning (1, Java.Interop.Localization.Resources.Bytecode_0003, buffer, ptypes.Length, parms.Length);
 							return null;
 						}
 						String[] result = new String [ptypes.Length];
@@ -254,11 +254,11 @@ namespace Xamarin.Android.Tools.Bytecode
 						prev = text;
 				}
 			} catch (Exception e) {
-				Log.Error ("ERROR in {0}.{1}: {2}", type, method, e);
+				Log.Error (Java.Interop.Localization.Resources.Bytecode_0007, type, method, e);
 				return null;
 			}
 	
-			Log.Warning (1, "Warning : no match for {0}.{1} (rex: {2})", type, method, buffer);
+			Log.Warning (1, Java.Interop.Localization.Resources.Bytecode_0004, type, method, buffer);
 			return null;
 		}
 		
@@ -287,7 +287,7 @@ namespace Xamarin.Android.Tools.Bytecode
 				}
 			
 			} catch (Exception ex) {
-				Log.Error ("Annotations parser error: " + ex);
+				Log.Error (Java.Interop.Localization.Resources.Bytecode_0008, ex);
 			}
 		}
 	}

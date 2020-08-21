@@ -2,6 +2,140 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="fr" original="../Resources.resx">
     <body>
+      <trans-unit id="ApiXmlAdjuster_0001">
+        <source>Warning: method '{0}' in type '{1}' has unnamed parameters.</source>
+        <target state="new">Warning: method '{0}' in type '{1}' has unnamed parameters.</target>
+        <note>{0} - Java method name.
+{1} - Java type name.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0002">
+        <source>Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.</source>
+        <target state="new">Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.</target>
+        <note>{0}, {1} - Java type names.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0003">
+        <source>Error while processing Java class '{0}': {1}.</source>
+        <target state="new">Error while processing Java class '{0}': {1}.</target>
+        <note>{0} - Java class name.
+{1} - Exception message.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0004">
+        <source>Error while processing Java interface '{0}': {1}.</source>
+        <target state="new">Error while processing Java interface '{0}': {1}.</target>
+        <note>{0} - Java interface name.
+{1} - Exception message.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0005">
+        <source>Error while resolving '{0}' in '{1}': {2}.</source>
+        <target state="new">Error while resolving '{0}' in '{1}': {2}.</target>
+        <note>{0} - Java member.
+{1} - Java type.
+{2} - Exception message.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0006">
+        <source>Warning: failed to resolve generic constraint: '{0}': {1}.</source>
+        <target state="new">Warning: failed to resolve generic constraint: '{0}': {1}.</target>
+        <note>{0} - Java constraint type.
+{1} - Exception message.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0007">
+        <source>For '{0}.{1}', referenced generic arguments count does not match the base type parameters definition.</source>
+        <target state="new">For '{0}.{1}', referenced generic arguments count does not match the base type parameters definition.</target>
+        <note>{0} - Java type.
+{1} - Java member.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0008">
+        <source>Type '{0}' was not found.</source>
+        <target state="new">Type '{0}' was not found.</target>
+        <note>{0} - Java type.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0009">
+        <source>Internal error: XmlReader should be positioned on attribute, but it is on '{0}'.</source>
+        <target state="new">Internal error: XmlReader should be positioned on attribute, but it is on '{0}'.</target>
+        <note>{0} - XML node type.
+The following are literal type names and should not be translated: XmlReader.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0010">
+        <source>{0}: Element '{1}' requires attribute '{2}'.</source>
+        <target state="new">{0}: Element '{1}' requires attribute '{2}'.</target>
+        <note>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML attribute name.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0011">
+        <source>{0}: EndElement of '{1}' was expected, but is type '{2}' with name '{3}' instead.</source>
+        <target state="new">{0}: EndElement of '{1}' was expected, but is type '{2}' with name '{3}' instead.</target>
+        <note>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML node type.
+{3} - XML element name.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0012">
+        <source>{0}: Unexpected element or content in '{1}': node is '{2}', name is '{3}'. Allowed elements are: '{4}'.</source>
+        <target state="new">{0}: Unexpected element or content in '{1}': node is '{2}', name is '{3}'. Allowed elements are: '{4}'.</target>
+        <note>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML node type.
+{3} - XML element name.
+{4} - Allowed XML element names.</note>
+      </trans-unit>
+      <trans-unit id="ApiXmlAdjuster_0013">
+        <source>{0}: Element '{1}' has an unexpected attribute: '{2}'. Allowed attributes are: '{3}'.</source>
+        <target state="new">{0}: Element '{1}' has an unexpected attribute: '{2}'. Allowed attributes are: '{3}'.</target>
+        <note>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML attribute name.
+{3} - Allowed XML attribute names.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0001">
+        <source>Could not load .jar entry '{0}': {1}.</source>
+        <target state="new">Could not load .jar entry '{0}': {1}.</target>
+        <note>{0} - Java .jar entry.
+{1} - .NET exception.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0002">
+        <source>Documentation file not found: '{0}'.</source>
+        <target state="new">Documentation file not found: '{0}'.</target>
+        <note>{0} - File name.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0003">
+        <source>Failed to match expression '{0}', expected {1} parameter(s) but got {2} parameter(s).</source>
+        <target state="new">Failed to match expression '{0}', expected {1} parameter(s) but got {2} parameter(s).</target>
+        <note>{0} - Regex expression.
+{1}, {2} - Integer.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0004">
+        <source>No parameter match for '{0}.{1}'. (expression: '{2}')</source>
+        <target state="new">No parameter match for '{0}.{1}'. (expression: '{2}')</target>
+        <note>{0} - Java type.
+{1} - Java method.
+{2} - Regex expression.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0005">
+        <source>Unable to parse Kotlin metadata on '{0}': {1}.</source>
+        <target state="new">Unable to parse Kotlin metadata on '{0}': {1}.</target>
+        <note>{0} - Java type.
+{1} - Exception.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0006">
+        <source>Differing number of 'throws' declarations on '{0}{1}'.</source>
+        <target state="new">Differing number of 'throws' declarations on '{0}{1}'.</target>
+        <note>{0} - Java type name.
+{1} - Java type descriptor.
+The following are literal names and should not be translated: throws.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0007">
+        <source>Failed to get parameter names for '{0}.{1}': {2}.</source>
+        <target state="new">Failed to get parameter names for '{0}.{1}': {2}.</target>
+        <note>{0} - Java type.
+{1} - Java method.
+{2} - Exception.</note>
+      </trans-unit>
+      <trans-unit id="Bytecode_0008">
+        <source>Failed to parse annotation XML file: {0}.</source>
+        <target state="new">Failed to parse annotation XML file: {0}.</target>
+        <note>{0} - Exception.</note>
+      </trans-unit>
       <trans-unit id="Generator_BG4000">
         <source>Failed to remove old constants: {0}.</source>
         <target state="new">Failed to remove old constants: {0}.</target>

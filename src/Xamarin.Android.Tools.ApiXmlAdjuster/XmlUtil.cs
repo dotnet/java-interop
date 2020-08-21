@@ -16,15 +16,15 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		
 		public static Exception UnexpectedElementOrContent (string elementName, XmlReader reader, params string [] expected)
 		{
-			return new Exception (string.Format ("{0}: Unexpected element or content in '{1}': node is {2}, name is '{3}'. Expected elements are: {4}",
+			return new Exception (string.Format (Java.Interop.Localization.Resources.ApiXmlAdjuster_0012,
 				GetLocation (reader), elementName ?? "(top level)", reader.NodeType, reader.LocalName, string.Join (", ", expected)));
 		}
 		
 		public static Exception UnexpectedAttribute (XmlReader reader, string elementName, params string [] expected)
 		{
 			if (reader.NodeType != XmlNodeType.Attribute)
-				throw new ArgumentException (string.Format ("Internal error: XmlReader should be positioned on attribute, but it is on {0}", reader.NodeType));
-			return new Exception (string.Format ("{0}: Element '{1}' has an unexpected attribute: '{2}'. Expected attributes are: {3}",
+				throw new ArgumentException (string.Format (Java.Interop.Localization.Resources.ApiXmlAdjuster_0009, reader.NodeType));
+			return new Exception (string.Format (Java.Interop.Localization.Resources.ApiXmlAdjuster_0013,
 				GetLocation (reader), elementName, reader.LocalName, string.Join (", ", expected)));
 		}
 
@@ -32,14 +32,14 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 		{
 			var value = reader.GetAttribute (name);
 			if (value == null)
-				throw new Exception (string.Format ("{0}: Element '{1}' requires attribute '{2}'", GetLocation (reader), reader.LocalName, name));
+				throw new Exception (string.Format (Java.Interop.Localization.Resources.ApiXmlAdjuster_0010, GetLocation (reader), reader.LocalName, name));
 			return value;
 		}
 
 		internal static void VerifyEndElement (XmlReader reader, string elementName)
 		{
 			if (reader.NodeType != XmlNodeType.EndElement || reader.LocalName != elementName)
-				throw new Exception (string.Format ("{0}: EndElement of '{1}' was expected, but got {2} with name '{3}' instead.",
+				throw new Exception (string.Format (Java.Interop.Localization.Resources.ApiXmlAdjuster_0011,
 					GetLocation (reader), elementName, reader.NodeType, reader.LocalName));
 		}
 

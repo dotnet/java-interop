@@ -117,6 +117,119 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApiXmlAdjuster_0001" xml:space="preserve">
+    <value>Warning: method '{0}' in type '{1}' has unnamed parameters.</value>
+    <comment>{0} - Java method name.
+{1} - Java type name.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0002" xml:space="preserve">
+    <value>Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.</value>
+    <comment>{0}, {1} - Java type names.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0003" xml:space="preserve">
+    <value>Error while processing Java class '{0}': {1}.</value>
+    <comment>{0} - Java class name.
+{1} - Exception message.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0004" xml:space="preserve">
+    <value>Error while processing Java interface '{0}': {1}.</value>
+    <comment>{0} - Java interface name.
+{1} - Exception message.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0005" xml:space="preserve">
+    <value>Error while resolving '{0}' in '{1}': {2}.</value>
+    <comment>{0} - Java member.
+{1} - Java type.
+{2} - Exception message.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0006" xml:space="preserve">
+    <value>Warning: failed to resolve generic constraint: '{0}': {1}.</value>
+    <comment>{0} - Java constraint type.
+{1} - Exception message.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0007" xml:space="preserve">
+    <value>For '{0}.{1}', referenced generic arguments count does not match the base type parameters definition.</value>
+    <comment>{0} - Java type.
+{1} - Java member.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0008" xml:space="preserve">
+    <value>Type '{0}' was not found.</value>
+    <comment>{0} - Java type.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0009" xml:space="preserve">
+    <value>Internal error: XmlReader should be positioned on attribute, but it is on '{0}'.</value>
+    <comment>{0} - XML node type.
+The following are literal type names and should not be translated: XmlReader.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0010" xml:space="preserve">
+    <value>{0}: Element '{1}' requires attribute '{2}'.</value>
+    <comment>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML attribute name.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0011" xml:space="preserve">
+    <value>{0}: EndElement of '{1}' was expected, but is type '{2}' with name '{3}' instead.</value>
+    <comment>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML node type.
+{3} - XML element name.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0012" xml:space="preserve">
+    <value>{0}: Unexpected element or content in '{1}': node is '{2}', name is '{3}'. Allowed elements are: '{4}'.</value>
+    <comment>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML node type.
+{3} - XML element name.
+{4} - Allowed XML element names.</comment>
+  </data>
+  <data name="ApiXmlAdjuster_0013" xml:space="preserve">
+    <value>{0}: Element '{1}' has an unexpected attribute: '{2}'. Allowed attributes are: '{3}'.</value>
+    <comment>{0} - File/line/column of error.
+{1} - XML element name.
+{2} - XML attribute name.
+{3} - Allowed XML attribute names.</comment>
+  </data>
+  <data name="Bytecode_0001" xml:space="preserve">
+    <value>Could not load .jar entry '{0}': {1}.</value>
+    <comment>{0} - Java .jar entry.
+{1} - .NET exception.</comment>
+  </data>
+  <data name="Bytecode_0002" xml:space="preserve">
+    <value>Documentation file not found: '{0}'.</value>
+    <comment>{0} - File name.</comment>
+  </data>
+  <data name="Bytecode_0003" xml:space="preserve">
+    <value>Failed to match expression '{0}', expected {1} parameter(s) but got {2} parameter(s).</value>
+    <comment>{0} - Regex expression.
+{1}, {2} - Integer.</comment>
+  </data>
+  <data name="Bytecode_0004" xml:space="preserve">
+    <value>No parameter match for '{0}.{1}'. (expression: '{2}')</value>
+    <comment>{0} - Java type.
+{1} - Java method.
+{2} - Regex expression.</comment>
+  </data>
+  <data name="Bytecode_0005" xml:space="preserve">
+    <value>Unable to parse Kotlin metadata on '{0}': {1}.</value>
+    <comment>{0} - Java type.
+{1} - Exception.</comment>
+  </data>
+  <data name="Bytecode_0006" xml:space="preserve">
+    <value>Differing number of 'throws' declarations on '{0}{1}'.</value>
+    <comment>{0} - Java type name.
+{1} - Java type descriptor.
+The following are literal names and should not be translated: throws.</comment>
+  </data>
+  <data name="Bytecode_0007" xml:space="preserve">
+    <value>Failed to get parameter names for '{0}.{1}': {2}.</value>
+    <comment>{0} - Java type.
+{1} - Java method.
+{2} - Exception.</comment>
+  </data>
+  <data name="Bytecode_0008" xml:space="preserve">
+    <value>Failed to parse annotation XML file: {0}.</value>
+    <comment>{0} - Exception.</comment>
+  </data>
   <data name="Generator_BG4000" xml:space="preserve">
     <value>Failed to remove old constants: {0}.</value>
     <comment>{0} - The list of constants that could not be removed.

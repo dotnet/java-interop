@@ -196,8 +196,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				return throws;
 
 			if (signature.Throws.Count > 0 && throws.Count != signature.Throws.Count) {
-				Log.Warning (1, "class-parse: warning: differing number of `throws` declarations on `{0}{1}`!",
-						Name, Descriptor);
+				Log.Warning (1, Java.Interop.Localization.Resources.Bytecode_0006, Name, Descriptor);
 			}
 			int c = Math.Min (signature.Throws.Count, throws.Count);
 			for (int i = 0; i < c; ++i)
