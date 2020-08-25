@@ -30,7 +30,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 			if (App.Debug) {
 				consoleWriteLine = GetSingleParameterMethod (resolver, Destination.MainModule, "mscorlib", "System.Console", "WriteLine", "System.String");
 				if (consoleWriteLine == null) {
-					App.Warning ("Unable to find System.Console::WriteLine method. Disabling debug injection");
+					App.Warning (Message.WarningUnableToFindSCWriteLine);
 					App.Debug = false;
 				}
 			}
@@ -49,7 +49,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 			}
 
 			if (movedTypesCount <= 0) {
-				App.Warning ("No type was moved => nothing to write, no new assembly created.");
+				App.Warning (Message.WarningNoTypeWasMovedNothingToWrite);
 				return;
 			}
 
@@ -504,7 +504,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 
 
 			if (isRegisterMethod && improvements < 2)
-				App.Warning ($"Method {md} was not improved. There should have been at least 2 improvements in this registration method.");
+				App.Warning (Message.WarningMethodWasNotImproved, md);
 
 			if (src.Body.HasExceptionHandlers)
 				foreach (var eh in src.Body.ExceptionHandlers)
