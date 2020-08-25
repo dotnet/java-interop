@@ -28,6 +28,6 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 		public static Message WarningUnableToFindMethodDefinition = new Message (Resources.JniMarshalMethodGen_JM8006);
 		public static Message WarningUnableToFindSCWriteLine = new Message (Resources.JniMarshalMethodGen_JM8007);
 		public static Message WarningNoTypeWasMovedNothingToWrite = new Message (Resources.JniMarshalMethodGen_JM8008);
-		public static Message WarningMethodWasNotImproved = new Message (Resources.JniMarshalMethodGen_JM8008);
+		public static Message WarningMethodWasNotImproved = new Message (Resources.JniMarshalMethodGen_JM8009);
 	}
 }
