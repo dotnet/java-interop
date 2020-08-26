@@ -189,7 +189,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					resolver.AddToCache (ad);
 				} catch (Exception) {
 					if (Verbose)
-						Warning (Message.WarningUnableToReadWithSymbols, assembly);
+						Information ($"Unable to read assembly '{assembly}' with symbols. Retrying to load it without them.");
 
 					ad = AssemblyDefinition.ReadAssembly (assembly, readerParametersNoSymbols);
 					resolver.AddToCache (ad);
@@ -528,6 +528,8 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 		}
 
 		public static void Warning (Message message, params object[] args) => ColorMessage ($"warning JM{message.Code:X04}: {Name}: {string.Format (message.Localized, args)}", ConsoleColor.Yellow, Console.Error);
+
+		public static void Information (string message) => ColorMessage (message, ConsoleColor.Yellow, Console.Out);
 
 		static void AddToTypeMap (TypeDefinition type)
 		{

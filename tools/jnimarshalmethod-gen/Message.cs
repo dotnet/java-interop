@@ -20,7 +20,6 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 		public static Message ErrorUnableToProcessAssembly = new Message (0x4006, Resources.JniMarshalMethodGen_JM4006);
 
 		public static Message WarningCouldntFindInterface = new Message (0x8001, Resources.JniMarshalMethodGen_JM8001);
-		public static Message WarningUnableToReadWithSymbols = new Message (0x8002, Resources.JniMarshalMethodGen_JM8002);
 		public static Message WarningTypeLoadException = new Message (0x8003, Resources.JniMarshalMethodGen_JM8003);
 		public static Message WarningUnableToFindTypeDefinition = new Message (0x8004, Resources.JniMarshalMethodGen_JM8004);
 		public static Message WarningMarshalMethodsTypeAlreadyExists = new Message (0x8005, Resources.JniMarshalMethodGen_JM8005);

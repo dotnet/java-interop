@@ -502,7 +502,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to read profile &apos;{0}&apos;.{1}{2}.
+        ///   Looks up a localized string similar to Unable to read profile file &apos;{0}&apos;.{1}{2}.
         /// </summary>
         public static string JniMarshalMethodGen_JM4004 {
             get {
@@ -534,15 +534,6 @@ namespace Java.Interop.Localization {
         public static string JniMarshalMethodGen_JM8001 {
             get {
                 return ResourceManager.GetString("JniMarshalMethodGen_JM8001", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to read assembly &apos;{0}&apos; with symbols. Retrying to load it without them..
-        /// </summary>
-        public static string JniMarshalMethodGen_JM8002 {
-            get {
-                return ResourceManager.GetString("JniMarshalMethodGen_JM8002", resourceCulture);
             }
         }
         

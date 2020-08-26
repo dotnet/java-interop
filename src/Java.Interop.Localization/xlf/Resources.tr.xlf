@@ -271,7 +271,7 @@ Name, com.example.MyClass.</note>
       <trans-unit id="JniMarshalMethodGen_JM4002">
         <source>Please specify at least one ASSEMBLY to process.</source>
         <target state="new">Please specify at least one ASSEMBLY to process.</target>
-        <note />
+        <note>The following terms should not be translated or have any capitalization changes: ASSEMBLY. This is a special case for this particular message. In most messages, "assembly" would be translated.</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM4003">
         <source>Unable to create Java VM{0}{1}</source>
@@ -279,9 +279,9 @@ Name, com.example.MyClass.</note>
         <note>{0} - newline, {1} - exception</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM4004">
-        <source>Unable to read profile '{0}'.{1}{2}</source>
-        <target state="new">Unable to read profile '{0}'.{1}{2}</target>
-        <note>{0} - path, {1} - newline, {2} - exception</note>
+        <source>Unable to read profile file '{0}'.{1}{2}</source>
+        <target state="new">Unable to read profile file '{0}'.{1}{2}</target>
+        <note>{0} - path, {1} - newline, {2} - exception. In this message, the term "profile" refers to a customized list of types to process.</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM4005">
         <source>Path '{0}' does not exist.</source>
@@ -297,11 +297,6 @@ Name, com.example.MyClass.</note>
         <source>Couln't find interface {0}</source>
         <target state="new">Couln't find interface {0}</target>
         <note>{0} - interface name</note>
-      </trans-unit>
-      <trans-unit id="JniMarshalMethodGen_JM8002">
-        <source>Unable to read assembly '{0}' with symbols. Retrying to load it without them.</source>
-        <target state="new">Unable to read assembly '{0}' with symbols. Retrying to load it without them.</target>
-        <note>{0} - assembly</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8003">
         <source>Type Load exception{0}{1}</source>
