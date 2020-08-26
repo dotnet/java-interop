@@ -394,7 +394,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot generate Java wrapper for type &apos;{0}&apos;, only &apos;class&apos; types are supported..
+        ///   Looks up a localized string similar to Cannot generate Java wrapper for type &apos;{0}&apos;. Only &apos;class&apos; types are supported..
         /// </summary>
         public static string JavaCallableWrappers_XA4200 {
             get {
@@ -412,7 +412,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;Name&apos; property must be a fully qualified &apos;package.TypeName&apos; value, and no package was found for &apos;{0}&apos;..
+        ///   Looks up a localized string similar to The &apos;Name&apos; property must be a fully qualified type like &apos;com.example.MyClass&apos; and no package was found for &apos;{0}&apos;..
         /// </summary>
         public static string JavaCallableWrappers_XA4203 {
             get {
@@ -457,7 +457,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [ExportField] cannot be used on a method returning void..
+        ///   Looks up a localized string similar to [ExportField] cannot be used on a method returning &apos;void&apos;..
         /// </summary>
         public static string JavaCallableWrappers_XA4208 {
             get {
