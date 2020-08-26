@@ -129,7 +129,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			}
 
 			if (assemblies.Count < 1)
-				ErrorAndExit (Message.ErrorAtLeastOneAssembly, 2);
+				ErrorAndExit (Message.ErrorAtLeastOneAssembly);
 
 			return assemblies;
 		}
@@ -147,7 +147,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					typeNameRegexes.Add (new Regex (line));
 				}
 			} catch (Exception e) {
-				ErrorAndExit (Message.ErrorUnableToReadProfile, 4, typesPath, Environment.NewLine, e);
+				ErrorAndExit (Message.ErrorUnableToReadProfile, typesPath, Environment.NewLine, e);
 			}
 		}
 
@@ -172,14 +172,14 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 				try {
 					Assembly.LoadFile (Path.GetFullPath (r));
 				} catch (Exception) {
-					ErrorAndExit (Message.ErrorUnableToPreloadReference, 1, r);
+					ErrorAndExit (Message.ErrorUnableToPreloadReference, r);
 				}
 				resolver.SearchDirectories.Add (Path.GetDirectoryName (r));
 			}
 
 			foreach (var assembly in assemblies) {
 				if (!File.Exists (assembly)) {
-					ErrorAndExit (Message.ErrorPathDoesNotExist, 5, assembly);
+					ErrorAndExit (Message.ErrorPathDoesNotExist, assembly);
 				}
 
 				resolver.SearchDirectories.Add (Path.GetDirectoryName (assembly));
@@ -203,7 +203,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					CreateMarshalMethodAssembly (assembly);
 					definedTypes.Clear ();
 				} catch (Exception e) {
-					ErrorAndExit (Message.ErrorUnableToProcessAssembly, 6, assembly, Environment.NewLine, e.Message, e);
+					ErrorAndExit (Message.ErrorUnableToProcessAssembly, assembly, Environment.NewLine, e.Message, e);
 				}
 			}
 		}
@@ -217,7 +217,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			try {
 				builder.CreateJreVM ();
 			} catch (Exception e) {
-				ErrorAndExit (Message.ErrorUnableToCreateJavaVM, 3, Environment.NewLine, e);
+				ErrorAndExit (Message.ErrorUnableToCreateJavaVM, Environment.NewLine, e);
 			}
 		}
 
@@ -522,12 +522,12 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 		public static void ColorWrite (string message, ConsoleColor color) => ColorMessage (message, color, Console.Out, false);
 
-		public static void ErrorAndExit (Message message, int code, params object[] args) {
-			ColorMessage ($"Error: {Name}: {string.Format (message.Localized, args)}", ConsoleColor.Red, Console.Error);
-			Environment.Exit (code);
+		public static void ErrorAndExit (Message message, params object[] args) {
+			ColorMessage ($"error JM{message.Code:X04}: {Name}: {string.Format (message.Localized, args)}", ConsoleColor.Red, Console.Error);
+			Environment.Exit (message.Code - 0x4000);
 		}
 
-		public static void Warning (Message message, params object[] args) => ColorMessage ($"Warning: {Name}: {string.Format (message.Localized, args)}", ConsoleColor.Yellow, Console.Error);
+		public static void Warning (Message message, params object[] args) => ColorMessage ($"warning JM{message.Code:X04}: {Name}: {string.Format (message.Localized, args)}", ConsoleColor.Yellow, Console.Error);
 
 		static void AddToTypeMap (TypeDefinition type)
 		{
