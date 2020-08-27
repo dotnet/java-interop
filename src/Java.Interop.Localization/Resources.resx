@@ -370,7 +370,7 @@ Name, com.example.MyClass.</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8005" xml:space="preserve">
     <value>Marshal methods type '{0}' already exists. Skipped generation of marshal methods in assembly '{1}'. Use -f to force regeneration when desired.</value>
-    <comment>{0} - type, {1} - assembly name</comment>
+    <comment>{0} - type, {1} - assembly name. In this message, the term "marshal methods" refers to methods that allow interaction between the managed methods and Java methods, similar to the methods of the .NET System.Runtime.InteropServices.Marshal class.</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8006" xml:space="preserve">
     <value>Unable to find cecil's MethodDefinition of method {0}.  Make sure the paths to all reference assemblies are passed to the tool with the -L option.</value>
