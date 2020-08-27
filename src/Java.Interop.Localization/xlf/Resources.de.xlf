@@ -299,13 +299,13 @@ Name, com.example.MyClass.</note>
         <note>{0} - interface name</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8003">
-        <source>Type Load exception{0}{1}</source>
-        <target state="new">Type Load exception{0}{1}</target>
+        <source>Catched type Load exception. Make sure all the references are available. For details check the exception: {0}{1}</source>
+        <target state="new">Catched type Load exception. Make sure all the references are available. For details check the exception: {0}{1}</target>
         <note>{0} - newline, {1} - exception</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8004">
-        <source>Unable to find cecil's TypeDefinition of type {0}</source>
-        <target state="new">Unable to find cecil's TypeDefinition of type {0}</target>
+        <source>Unable to find cecil's TypeDefinition of type {0}. Make sure the paths to all reference assemblies are passed to the tool with the -L option.</source>
+        <target state="new">Unable to find cecil's TypeDefinition of type {0}. Make sure the paths to all reference assemblies are passed to the tool with the -L option.</target>
         <note>{0} - type</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8005">
@@ -314,18 +314,13 @@ Name, com.example.MyClass.</note>
         <note>{0} - type, {1} - assembly name</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8006">
-        <source>Unable to find cecil's MethodDefinition of method {0}</source>
-        <target state="new">Unable to find cecil's MethodDefinition of method {0}</target>
+        <source>Unable to find cecil's MethodDefinition of method {0}.  Make sure the paths to all reference assemblies are passed to the tool with the -L option.</source>
+        <target state="new">Unable to find cecil's MethodDefinition of method {0}.  Make sure the paths to all reference assemblies are passed to the tool with the -L option.</target>
         <note>{0} - method</note>
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8007">
-        <source>Unable to find System.Console::WriteLine method. Disabling debug injection.</source>
-        <target state="new">Unable to find System.Console::WriteLine method. Disabling debug injection.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="JniMarshalMethodGen_JM8008">
-        <source>No type was moved =&gt; nothing to write, no new assembly created.</source>
-        <target state="new">No type was moved =&gt; nothing to write, no new assembly created.</target>
+        <source>Unable to find System.Console::WriteLine method. Disabling debug injection. Make sure the paths to corlib assembly is passed to the tool with the -L option.</source>
+        <target state="new">Unable to find System.Console::WriteLine method. Disabling debug injection. Make sure the paths to corlib assembly is passed to the tool with the -L option.</target>
         <note />
       </trans-unit>
       <trans-unit id="JniMarshalMethodGen_JM8009">

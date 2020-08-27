@@ -49,7 +49,8 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 			}
 
 			if (movedTypesCount <= 0) {
-				App.Warning (Message.WarningNoTypeWasMovedNothingToWrite);
+				if (App.Verbose)
+					App.Information ("No type was moved => nothing to write, no new assembly created.");
 				return;
 			}
 
@@ -504,7 +505,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator
 
 
 			if (isRegisterMethod && improvements < 2)
-				App.Warning (Message.WarningMethodWasNotImproved, md);
+				App.Information ($"Method {md} was not improved. There should have been at least 2 performance improvements in this registration method.");
 
 			if (src.Body.HasExceptionHandlers)
 				foreach (var eh in src.Body.ExceptionHandlers)

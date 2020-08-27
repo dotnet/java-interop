@@ -538,7 +538,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type Load exception{0}{1}.
+        ///   Looks up a localized string similar to Catched type Load exception. Make sure all the references are available. For details check the exception: {0}{1}.
         /// </summary>
         public static string JniMarshalMethodGen_JM8003 {
             get {
@@ -547,7 +547,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find cecil&apos;s TypeDefinition of type {0}.
+        ///   Looks up a localized string similar to Unable to find cecil&apos;s TypeDefinition of type {0}. Make sure the paths to all reference assemblies are passed to the tool with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8004 {
             get {
@@ -565,7 +565,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find cecil&apos;s MethodDefinition of method {0}.
+        ///   Looks up a localized string similar to Unable to find cecil&apos;s MethodDefinition of method {0}.  Make sure the paths to all reference assemblies are passed to the tool with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8006 {
             get {
@@ -574,29 +574,11 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find System.Console::WriteLine method. Disabling debug injection..
+        ///   Looks up a localized string similar to Unable to find System.Console::WriteLine method. Disabling debug injection. Make sure the paths to corlib assembly is passed to the tool with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8007 {
             get {
                 return ResourceManager.GetString("JniMarshalMethodGen_JM8007", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No type was moved =&gt; nothing to write, no new assembly created..
-        /// </summary>
-        public static string JniMarshalMethodGen_JM8008 {
-            get {
-                return ResourceManager.GetString("JniMarshalMethodGen_JM8008", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Method {0} was not improved. There should have been at least 2 improvements in this registration method..
-        /// </summary>
-        public static string JniMarshalMethodGen_JM8009 {
-            get {
-                return ResourceManager.GetString("JniMarshalMethodGen_JM8009", resourceCulture);
             }
         }
     }

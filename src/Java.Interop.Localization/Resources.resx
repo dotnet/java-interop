@@ -361,11 +361,11 @@ Name, com.example.MyClass.</comment>
     <comment>{0} - interface name</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8003" xml:space="preserve">
-    <value>Type Load exception{0}{1}</value>
+    <value>Catched type Load exception. Make sure all the references are available. For details check the exception: {0}{1}</value>
     <comment>{0} - newline, {1} - exception</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8004" xml:space="preserve">
-    <value>Unable to find cecil's TypeDefinition of type {0}</value>
+    <value>Unable to find cecil's TypeDefinition of type {0}. Make sure the paths to all reference assemblies are passed to the tool with the -L option.</value>
     <comment>{0} - type</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8005" xml:space="preserve">
@@ -373,17 +373,10 @@ Name, com.example.MyClass.</comment>
     <comment>{0} - type, {1} - assembly name</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8006" xml:space="preserve">
-    <value>Unable to find cecil's MethodDefinition of method {0}</value>
+    <value>Unable to find cecil's MethodDefinition of method {0}.  Make sure the paths to all reference assemblies are passed to the tool with the -L option.</value>
     <comment>{0} - method</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8007" xml:space="preserve">
-    <value>Unable to find System.Console::WriteLine method. Disabling debug injection.</value>
-  </data>
-  <data name="JniMarshalMethodGen_JM8008" xml:space="preserve">
-    <value>No type was moved =&gt; nothing to write, no new assembly created.</value>
-  </data>
-  <data name="JniMarshalMethodGen_JM8009" xml:space="preserve">
-    <value>Method {0} was not improved. There should have been at least 2 improvements in this registration method.</value>
-    <comment>{0} - method</comment>
+    <value>Unable to find System.Console::WriteLine method. Disabling debug injection. Make sure the paths to corlib assembly is passed to the tool with the -L option.</value>
   </data>
 </root>
