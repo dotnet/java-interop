@@ -323,11 +323,6 @@ Name, com.example.MyClass.</note>
         <target state="new">Unable to find System.Console::WriteLine method. Disabling debug injection. Make sure the paths to corlib assembly is passed to the tool with the -L option.</target>
         <note />
       </trans-unit>
-      <trans-unit id="JniMarshalMethodGen_JM8009">
-        <source>Method {0} was not improved. There should have been at least 2 improvements in this registration method.</source>
-        <target state="new">Method {0} was not improved. There should have been at least 2 improvements in this registration method.</target>
-        <note>{0} - method</note>
-      </trans-unit>
     </body>
   </file>
 </xliff>
