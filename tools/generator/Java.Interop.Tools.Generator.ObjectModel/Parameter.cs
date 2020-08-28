@@ -224,6 +224,8 @@ namespace MonoDroid.Generation {
 			get { return managed_type ?? sym.FullName; }
 		}
 
+		public string RawType => type;
+
 		public string Annotation { get; internal set; }
 
 		public void SetGeneratedEnumType (string enumType)
@@ -260,11 +262,11 @@ namespace MonoDroid.Generation {
 		{
 			sym = opt.SymbolTable.Lookup (type, type_params);
 			if (sym == null) {
-				Report.LogCodedWarning (0, Report.WarningUnknownParameterType, type, context.ContextTypeMember);
+				Report.LogCodedWarning (0, Report.WarningUnknownParameterType, type, context.GetContextTypeMember ());
 				return false;
 			}
 			if (!sym.Validate (opt, type_params, context)) {
-				Report.LogCodedWarning (0, Report.WarningInvalidParameterType, type, context.ContextTypeMember);
+				Report.LogCodedWarning (0, Report.WarningInvalidParameterType, type, context.GetContextTypeMember ());
 				return false;
 			}
 			return true;
