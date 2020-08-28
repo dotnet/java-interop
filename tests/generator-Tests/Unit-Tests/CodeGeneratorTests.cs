@@ -105,7 +105,7 @@ namespace generatortests
 		{
 			var xml = @"<api>
 			  <package name='java.lang' jni-name='java/lang'>
-			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/EmptyOverrideClass;' />
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
 			  </package>
 			  <package name='com.xamarin.android' jni-name='com/xamarin/android'>
 			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='MyClass' static='false' visibility='public' jni-signature='Lcom/xamarin/android/MyClass;'>
@@ -129,7 +129,7 @@ namespace generatortests
 		{
 			var xml = @"<api>
 			  <package name='java.lang' jni-name='java/lang'>
-			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/EmptyOverrideClass;' />
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
 			  </package>
 			  <package name='com.xamarin.android' jni-name='com/xamarin/android'>
 			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='MyClass' static='false' visibility='public' jni-signature='Lcom/xamarin/android/MyClass;'>
@@ -153,7 +153,7 @@ namespace generatortests
 		{
 			var xml = @"<api>
 			  <package name='java.lang' jni-name='java/lang'>
-			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/EmptyOverrideClass;' />
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
 			  </package>
 			  <package name='com.xamarin.android' jni-name='com/xamarin/android'>
 			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='MyClass' static='false' visibility='public' jni-signature='Lcom/xamarin/android/MyClass;'>
@@ -177,7 +177,7 @@ namespace generatortests
 		{
 			var xml = @"<api>
 			  <package name='java.lang' jni-name='java/lang'>
-			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/EmptyOverrideClass;' />
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
 			  </package>
 			  <package name='com.xamarin.android' jni-name='com/xamarin/android'>
 			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='MyClass' static='false' visibility='public' jni-signature='Lcom/xamarin/android/MyClass;'>
