@@ -260,11 +260,11 @@ namespace MonoDroid.Generation {
 		{
 			sym = opt.SymbolTable.Lookup (type, type_params);
 			if (sym == null) {
-				Report.LogCodedWarning (0, Report.WarningUnknownParameterType, type, context.ContextString);
+				Report.LogCodedWarning (0, Report.WarningUnknownParameterType, type, context.ContextTypeMember);
 				return false;
 			}
 			if (!sym.Validate (opt, type_params, context)) {
-				Report.LogCodedWarning (0, Report.WarningInvalidParameterType, type, context.ContextString);
+				Report.LogCodedWarning (0, Report.WarningInvalidParameterType, type, context.ContextTypeMember);
 				return false;
 			}
 			return true;

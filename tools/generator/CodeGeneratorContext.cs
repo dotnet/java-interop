@@ -16,5 +16,6 @@ namespace MonoDroid.Generation
 		string ContextMethodString => ContextMethod != null ? "in method " + ContextMethod.Name + " " : null;
 		string ContextTypeString => ContextType != null ? "in managed type " + ContextType.FullName : null;
 		public string ContextString => ContextFieldString + ContextMethodString + ContextTypeString;
+		public string ContextTypeMember => (ContextType != null ? $"{ContextType.FullName}." : string.Empty) + ContextMethod?.Name ?? ContextField?.Name;
 	}
 }
