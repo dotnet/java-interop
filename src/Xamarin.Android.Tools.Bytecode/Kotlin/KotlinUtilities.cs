@@ -87,12 +87,9 @@ namespace Xamarin.Android.Tools.Bytecode
 			if (parameters.Length < 2)
 				return false;
 
-			// Final parameter is DefaultConstructorMarker
-			if (parameters.Last ().Type.TypeSignature != "Lkotlin/jvm/internal/DefaultConstructorMarker;")
-				return false;
-
-			// Next to final parameter is int
-			return parameters [parameters.Length - 2].Type.TypeSignature == "I";
+			// Parameter list ends with `int, DefaultConstructorMarker`.
+			return parameters [parameters.Length - 2].Type.TypeSignature == "I" &&
+				parameters [parameters.Length - 1].Type.TypeSignature == "Lkotlin/jvm/internal/DefaultConstructorMarker;";
 		}
 
 		public static bool IsPubliclyVisible (this ClassAccessFlags flags) => flags.HasFlag (ClassAccessFlags.Public) || flags.HasFlag (ClassAccessFlags.Protected);
