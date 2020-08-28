@@ -22,7 +22,7 @@ namespace MonoDroid.Generation
 			var output = ContextType?.FullName ?? string.Empty;
 
 			if (ContextMethod != null) {
-				output += $"{ContextMethod.Name} ({string.Join (", ", ContextMethod?.Parameters.Select (p => p.RawType).ToArray ())})";
+				output += $"{ContextMethod.Name} ({string.Join (", ", ContextMethod?.Parameters.Select (p => p.InternalType).ToArray ())})";
 				return output;
 			}
 

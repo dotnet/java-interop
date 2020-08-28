@@ -224,7 +224,7 @@ namespace MonoDroid.Generation {
 			get { return managed_type ?? sym.FullName; }
 		}
 
-		public string RawType => type;
+		public string InternalType => managed_type ?? sym?.FullName ?? type;
 
 		public string Annotation { get; internal set; }
 
