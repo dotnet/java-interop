@@ -538,7 +538,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Catched type Load exception. Make sure all the references are available. For details check the exception: {0}{1}.
+        ///   Looks up a localized string similar to Caught an exception while loading types. The types which cannot be loaded will not be processed. Make sure all referenced assemblies are available, use -r option. For details, check the exception:{0}{1}.
         /// </summary>
         public static string JniMarshalMethodGen_JM8003 {
             get {
@@ -547,7 +547,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find cecil&apos;s TypeDefinition of type {0}. Make sure the paths to all reference assemblies are passed to the tool with the -L option..
+        ///   Looks up a localized string similar to Unable to find type &apos;{0}&apos;. The type will not be processed. Make sure the paths to all reference assemblies are provided with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8004 {
             get {
@@ -565,7 +565,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find cecil&apos;s MethodDefinition of method {0}.  Make sure the paths to all reference assemblies are passed to the tool with the -L option..
+        ///   Looks up a localized string similar to Unable to find MethodDefinition of method {0}. It will not be processed. Make sure the paths to all reference assemblies are provided with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8006 {
             get {
@@ -574,7 +574,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find System.Console::WriteLine method. Disabling debug injection. Make sure the paths to corlib assembly is passed to the tool with the -L option..
+        ///   Looks up a localized string similar to Unable to find the System.Console.WriteLine() method. Disabling debug injection. To enable debug injection, ensure the path to mscorlib is provided with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8007 {
             get {
