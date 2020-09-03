@@ -361,11 +361,11 @@ Name, com.example.MyClass.</comment>
     <comment>{0} - interface name</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8003" xml:space="preserve">
-    <value>Caught an exception while loading types. The types which cannot be loaded will not be processed. Make sure all referenced assemblies are available, use -r option. For details, check the exception:{0}{1}</value>
-    <comment>{0} - newline, {1} - exception</comment>
+    <value>Caught an exception while loading types. The types that cannot be loaded will not be processed. Make sure that any additional assembly references required for those types are provided using the -r option. Exception:{0}{1}</value>
+    <comment>{0} - newline, {1} - exception. The following terms should not be translated: -r</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8004" xml:space="preserve">
-    <value>Unable to find type '{0}'. The type will not be processed. Make sure the paths to all reference assemblies are provided with the -L option.</value>
+    <value>Unable to find type '{0}'. The type will not be processed. Make sure the directories for all referenced assemblies are provided with the -L option.</value>
     <comment>{0} - type
 The following terms should not be translated: -L</comment>
   </data>
@@ -374,12 +374,12 @@ The following terms should not be translated: -L</comment>
     <comment>{0} - type, {1} - assembly name. The following terms should not be translated: -f. In this message, the term "marshal methods" refers to methods that allow interaction between the managed methods and Java methods, similar to the methods of the .NET System.Runtime.InteropServices.Marshal class.</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8006" xml:space="preserve">
-    <value>Unable to find MethodDefinition of method {0}. It will not be processed. Make sure the paths to all reference assemblies are provided with the -L option.</value>
+    <value>Unable to find definition of method '{0}' in assembly metadata. It will not be processed. Make sure the directories for all referenced assemblies are provided with the -L option.</value>
     <comment>{0} - method
 The following terms should not be translated: -L</comment>
   </data>
   <data name="JniMarshalMethodGen_JM8007" xml:space="preserve">
-    <value>Unable to find the System.Console.WriteLine() method. Disabling debug injection. To enable debug injection, ensure the path to mscorlib is provided with the -L option.</value>
+    <value>Unable to find the System.Console.WriteLine() method. Disabling debug injection. To enable debug injection, ensure the directory containing mscorlib is provided with the -L option.</value>
     <comment>The following terms should not be translated: -L</comment>
   </data>
 </root>

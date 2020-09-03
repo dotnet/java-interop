@@ -538,7 +538,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Caught an exception while loading types. The types which cannot be loaded will not be processed. Make sure all referenced assemblies are available, use -r option. For details, check the exception:{0}{1}.
+        ///   Looks up a localized string similar to Caught an exception while loading types. The types that cannot be loaded will not be processed. Make sure that any additional assembly references required for those types are provided using the -r option. Exception:{0}{1}.
         /// </summary>
         public static string JniMarshalMethodGen_JM8003 {
             get {
@@ -547,7 +547,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find type &apos;{0}&apos;. The type will not be processed. Make sure the paths to all reference assemblies are provided with the -L option..
+        ///   Looks up a localized string similar to Unable to find type &apos;{0}&apos;. The type will not be processed. Make sure the directories for all referenced assemblies are provided with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8004 {
             get {
@@ -565,7 +565,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find MethodDefinition of method {0}. It will not be processed. Make sure the paths to all reference assemblies are provided with the -L option..
+        ///   Looks up a localized string similar to Unable to find definition of method &apos;{0}&apos; in assembly metadata. It will not be processed. Make sure the directories for all referenced assemblies are provided with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8006 {
             get {
@@ -574,7 +574,7 @@ namespace Java.Interop.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find the System.Console.WriteLine() method. Disabling debug injection. To enable debug injection, ensure the path to mscorlib is provided with the -L option..
+        ///   Looks up a localized string similar to Unable to find the System.Console.WriteLine() method. Disabling debug injection. To enable debug injection, ensure the directory containing mscorlib is provided with the -L option..
         /// </summary>
         public static string JniMarshalMethodGen_JM8007 {
             get {
