@@ -512,7 +512,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 							CallingConventions.Standard, new Type [] { typeof (object), typeof (IntPtr) });
 						dc.SetImplementationFlags (System.Reflection.MethodImplAttributes.Runtime | System.Reflection.MethodImplAttributes.Managed);
 
-						CreateDelegateRuntimeManagedMethod (dtb, "Invoke", null, parameterTypes.ToArray ());
+						CreateDelegateRuntimeManagedMethod (dtb, "Invoke", typeof (bool), parameterTypes.ToArray ());
 
 						parameterTypes.Add (typeof (AsyncCallback));
 						parameterTypes.Add (typeof (object));
