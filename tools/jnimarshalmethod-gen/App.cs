@@ -292,6 +292,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			var destDir         = string.IsNullOrEmpty (outDirectory) ? Path.GetDirectoryName (path) : outDirectory;
 			var builder         = CreateExportedMemberBuilder ();
 			var matchType       = typeNameRegexes.Count > 0;
+			var newDelegates    = new List<Type> ();
 
 			if (Verbose)
 				ColorWriteLine ($"Preparing marshal method assembly '{assemblyName}'", ConsoleColor.Cyan);
@@ -421,7 +422,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					if (signature == null)
 						signature = builder.GetJniMethodSignature (method);
 
-					registrationElements.Add (CreateRegistration (name, signature, lambda, targetType, methodName, dm));
+					registrationElements.Add (CreateRegistration (name, signature, lambda, targetType, methodName, dm, newDelegates));
 
 					addedMethods.Add (methodName);
 				}
@@ -443,7 +444,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			if (!string.IsNullOrEmpty (outDirectory))
 				path = Path.Combine (outDirectory, Path.GetFileName (path));
 
-			var mover = new TypeMover (dstAssembly, ad, path, definedTypes, resolver, cache);
+			var mover = new TypeMover (dstAssembly, ad, path, newDelegates, definedTypes, resolver, cache);
 			mover.Move ();
 
 			if (!keepTemporary)
@@ -478,7 +479,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			mb.SetImplementationFlags (System.Reflection.MethodImplAttributes.Runtime | System.Reflection.MethodImplAttributes.Managed);
 		}
 
-		static Expression CreateRegistration (string method, string signature, LambdaExpression lambda, ParameterExpression targetType, string methodName, ModuleBuilder dm)
+		static Expression CreateRegistration (string method, string signature, LambdaExpression lambda, ParameterExpression targetType, string methodName, ModuleBuilder dm, List<Type> createdDelegateList)
 		{
 			Expression registrationDelegateType = null;
 			if (lambda.Type.Assembly == typeof (object).Assembly ||
@@ -521,6 +522,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 						CreateDelegateRuntimeManagedMethod (dtb, "EndInvoke", typeof (bool), new Type [] { typeof (IAsyncResult) });
 
 						existingType = dtb.CreateType ();
+						createdDelegateList.Add (existingType);
 					}
 
 					delegateTypeName = existingType.FullName;
