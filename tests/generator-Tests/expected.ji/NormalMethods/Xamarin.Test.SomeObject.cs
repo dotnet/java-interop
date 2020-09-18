@@ -257,7 +257,6 @@ namespace Xamarin.Test {
 				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_astring);
-				global::System.GC.KeepAlive (astring);
 				global::System.GC.KeepAlive (anObject);
 			}
 		}

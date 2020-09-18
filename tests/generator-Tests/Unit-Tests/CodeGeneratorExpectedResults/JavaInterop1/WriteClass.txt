@@ -261,7 +261,6 @@ public partial class MyClass  {
 			return __rm;
 		} finally {
 			JNIEnv.DeleteLocalRef (native_key);
-			global::System.GC.KeepAlive (key);
 		}
 	}
 

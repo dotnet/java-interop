@@ -73,7 +73,6 @@ namespace Xamarin.Test {
 				return JNIEnv.GetString (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_this);
-				global::System.GC.KeepAlive (this_);
 			}
 		}
 

@@ -207,6 +207,8 @@ namespace MonoDroid.Generation {
 				"ushort" => false,
 				"ulong" => false,
 				"byte" => false,
+				"ubyte" => false,	// Not a C# type, but we will see it from Kotlin unsigned types support
+				"string" => false,
 				"Android.Graphics.Color" => false,
 				_ => true
 			};

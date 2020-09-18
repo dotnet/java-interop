@@ -76,7 +76,6 @@ namespace Xamarin.Test {
 					_members.StaticMethods.InvokeVoidMethod (__id, __args);
 				} finally {
 					JNIEnv.DeleteLocalRef (native_value);
-					global::System.GC.KeepAlive (value);
 				}
 			}
 		}
