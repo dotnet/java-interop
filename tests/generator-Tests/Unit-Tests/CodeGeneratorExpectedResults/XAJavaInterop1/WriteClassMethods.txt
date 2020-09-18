@@ -29,6 +29,7 @@ public virtual unsafe int GetCountForKey (string key)
 		return __rm;
 	} finally {
 		JNIEnv.DeleteLocalRef (native_key);
+		global::System.GC.KeepAlive (key);
 	}
 }
 

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Mono.Options;
 
 namespace MonoDroid.Generation {
@@ -182,7 +183,33 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}}} finally {{", indent);
 			foreach (string cleanup in method.Parameters.GetCallCleanup (opt))
 				writer.WriteLine ("{0}\t{1}", indent, cleanup);
+			foreach (var p in method.Parameters.Where (GenerateKeepAlive))
+				writer.WriteLine ($"{indent}\tglobal::System.GC.KeepAlive ({opt.GetSafeIdentifier (p.Name)});");
+
 			writer.WriteLine ("{0}}}", indent);
+		}
+
+		bool GenerateKeepAlive (Parameter p)
+		{
+			if (p.Symbol.IsEnum)
+				return false;
+
+			return p.Type switch {
+				"bool" => false,
+				"sbyte" => false,
+				"char" => false,
+				"double" => false,
+				"float" => false,
+				"int" => false,
+				"long" => false,
+				"short" => false,
+				"uint" => false,
+				"ushort" => false,
+				"ulong" => false,
+				"byte" => false,
+				"Android.Graphics.Color" => false,
+				_ => true
+			};
 		}
 
 		internal override void WriteFieldIdField (Field field, string indent)

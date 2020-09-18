@@ -216,6 +216,7 @@ namespace Java.IO {
 					JNIEnv.CopyArray (native_buffer, buffer);
 					JNIEnv.DeleteLocalRef (native_buffer);
 				}
+				global::System.GC.KeepAlive (buffer);
 			}
 		}
 
@@ -257,6 +258,7 @@ namespace Java.IO {
 					JNIEnv.CopyArray (native_buffer, buffer);
 					JNIEnv.DeleteLocalRef (native_buffer);
 				}
+				global::System.GC.KeepAlive (buffer);
 			}
 		}
 

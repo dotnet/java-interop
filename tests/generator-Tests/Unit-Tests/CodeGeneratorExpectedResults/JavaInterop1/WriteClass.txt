@@ -162,6 +162,7 @@ public partial class MyClass  {
 				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_value);
+				global::System.GC.KeepAlive (value);
 			}
 		}
 	}
@@ -260,6 +261,7 @@ public partial class MyClass  {
 			return __rm;
 		} finally {
 			JNIEnv.DeleteLocalRef (native_key);
+			global::System.GC.KeepAlive (key);
 		}
 	}
 
