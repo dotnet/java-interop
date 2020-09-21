@@ -49,6 +49,7 @@ namespace Android.Text {
 				_members.InstanceMethods.FinishCreateInstance (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_source);
+				global::System.GC.KeepAlive (source);
 			}
 		}
 
@@ -70,6 +71,7 @@ namespace Android.Text {
 				_members.InstanceMethods.FinishCreateInstance (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_source);
+				global::System.GC.KeepAlive (source);
 			}
 		}
 
@@ -102,6 +104,7 @@ namespace Android.Text {
 				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, __args);
 				return (global::Android.Text.SpanTypes) __rm;
 			} finally {
+				global::System.GC.KeepAlive (what);
 			}
 		}
 

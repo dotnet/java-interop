@@ -17,6 +17,7 @@
 		_members.InstanceMethods.FinishCreateInstance (__id, this, __args);
 	} finally {
 		JNIEnv.DeleteLocalRef (native_mystring);
+		global::System.GC.KeepAlive (mystring);
 	}
 }
 
@@ -38,6 +39,7 @@
 		_members.InstanceMethods.FinishCreateInstance (__id, this, __args);
 	} finally {
 		JNIEnv.DeleteLocalRef (native_mystring);
+		global::System.GC.KeepAlive (mystring);
 	}
 }
 

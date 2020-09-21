@@ -47,6 +47,7 @@ namespace Xamarin.Test {
 				SetHandle (__r.Handle, JniHandleOwnership.TransferLocalRef);
 				_members.InstanceMethods.FinishCreateInstance (__id, this, __args);
 			} finally {
+				global::System.GC.KeepAlive (c);
 			}
 		}
 
@@ -109,6 +110,8 @@ namespace Xamarin.Test {
 				var __rm = _members.InstanceMethods.InvokeVirtualInt32Method (__id, this, __args);
 				return __rm;
 			} finally {
+				global::System.GC.KeepAlive (o);
+				global::System.GC.KeepAlive (t);
 			}
 		}
 
@@ -255,6 +258,7 @@ namespace Xamarin.Test {
 				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_astring);
+				global::System.GC.KeepAlive (anObject);
 			}
 		}
 
@@ -318,6 +322,7 @@ namespace Xamarin.Test {
 				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_p0);
+				global::System.GC.KeepAlive (p0);
 			}
 		}
 
