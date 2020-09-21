@@ -131,6 +131,8 @@ namespace MonoDroid.Generation {
 			writer.WriteLine ("{0}}} finally {{", indent);
 			foreach (string cleanup in call_cleanup)
 				writer.WriteLine ("{0}\t{1}", indent, cleanup);
+			foreach (var p in ctor.Parameters.Where (GenerateKeepAlive))
+				writer.WriteLine ($"{indent}\tglobal::System.GC.KeepAlive ({opt.GetSafeIdentifier (p.Name)});");
 			writer.WriteLine ("{0}}}", indent);
 		}
 
@@ -209,6 +211,7 @@ namespace MonoDroid.Generation {
 				"byte" => false,
 				"ubyte" => false,	// Not a C# type, but we will see it from Kotlin unsigned types support
 				"string" => false,
+				"java.lang.String" => false,
 				"Android.Graphics.Color" => false,
 				_ => true
 			};
