@@ -28,7 +28,6 @@ namespace Java.Interop
 			get {return JniEnvironment.Arrays.GetArrayLength (PeerReference);}
 		}
 
-		[MaybeNull]
 		public abstract T this [int index] {
 			get;
 			set;
