@@ -51,7 +51,7 @@
     <None Include="Documentation\Java.Interop\JniManagedPeerStates.xml" />
     <None Include="Documentation\Java.Interop\JniEnvironment.References.xml" />
     <ProjectReference Include="..\..\build-tools\jnienv-gen\jnienv-gen.csproj"
-        ReferenceOutputAssembly="false"
+        ReferenceOutputAssembly="false" NoWarn="NU1702"
     />
   </ItemGroup>
   <ItemGroup>
