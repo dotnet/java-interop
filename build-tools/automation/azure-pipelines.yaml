@@ -16,7 +16,7 @@ pr:
 
 # Global variables
 variables:
-  DotNetCoreVersion: 3.1.300
+  DotNetCoreVersion: 5.0.100-rc.2.20479.15
   HostedMac: Hosted Mac Internal
   HostedWinVS2019: Hosted Windows 2019 with VS2019
 
