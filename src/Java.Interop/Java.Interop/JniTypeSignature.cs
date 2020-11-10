@@ -172,7 +172,7 @@ namespace Java.Interop
 
 		public override int GetHashCode ()
 		{
-#if NETCOREAPP
+#if NET5_0
 			return QualifiedReference.GetHashCode (StringComparison.Ordinal);
 #else
 			return QualifiedReference.GetHashCode ();
