@@ -7,6 +7,12 @@ steps:
   inputs:
     version: $(DotNetCoreVersion)
   
+- task: UseDotNet@2
+  displayName: Use .NET Core 3.1.201 for Mono
+  inputs:
+    version: 3.1.201
+  condition: eq(variables['agent.os'], 'Darwin')
+
 - script: |
     dotnet tool install --global boots  
     boots --stable Mono
