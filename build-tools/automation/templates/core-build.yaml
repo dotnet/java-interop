@@ -6,10 +6,10 @@ steps:
   displayName: Prepare Solution
   inputs:
     projects: Java.Interop.sln
-    arguments: '-c $(Build.Configuration) -target:Prepare'
+    arguments: '-v:diag -c $(Build.Configuration) -target:Prepare'
 
 - task: DotNetCoreCLI@2
   displayName: Build Solution
   inputs:
     projects: Java.Interop.sln
-    arguments: '-c $(Build.Configuration) -m:1'
+    arguments: '-v:diag -c $(Build.Configuration) -m:1'
