@@ -70,11 +70,11 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					if (reader.LocalName == "class") {
 						var kls = new JavaClass (package) { IsReferenceOnly = isReferenceOnly };
 						kls.Load (reader);
-						package.AddType (kls.Name!, kls);
+						package.AddType (kls);
 					} else if (reader.LocalName == "interface") {
 						var iface = new JavaInterface (package) { IsReferenceOnly = isReferenceOnly };
 						iface.Load (reader);
-						package.AddType (iface.Name!, iface);
+						package.AddType (iface);
 					} else
 						throw XmlUtil.UnexpectedElementOrContent ("package", reader, "class", "interface");
 				} while (true);

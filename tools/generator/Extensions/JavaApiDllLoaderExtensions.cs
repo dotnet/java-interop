@@ -21,12 +21,12 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					var iface = new JavaInterface (pkg);
 					iface.Load (iface_gen);
 
-					pkg.AddType (iface.Name, iface);
+					pkg.AddType (iface);
 				} else if (gen is ClassGen class_gen) {
 					var kls = new JavaClass (pkg);
 					kls.Load (opt, class_gen);
 
-					pkg.AddType (kls.Name, kls);
+					pkg.AddType (kls);
 				}
 				else
 					throw new InvalidOperationException ();

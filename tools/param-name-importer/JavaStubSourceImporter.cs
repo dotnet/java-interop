@@ -82,7 +82,7 @@ namespace Xamarin.Android.ApiTools.JavaStubImporter
 				pkg = parsedPackage;
 			} else
 				foreach (var t in parsedPackage.AllTypes)
-					pkg.AddType (t.Name, t);
+					pkg.AddType (t);
 
 			return true;
 		}

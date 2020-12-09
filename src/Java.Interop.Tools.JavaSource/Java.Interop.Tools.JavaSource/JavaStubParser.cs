@@ -318,7 +318,7 @@ namespace Java.Interop.Tools.JavaSource {
 				var pkg = new JavaPackage (null) { Name = (string) node.ChildNodes [0].AstNode };
 
 				foreach (var t in (IEnumerable<JavaType>) node.ChildNodes [2].AstNode)
-					pkg.AddType (t.Name!, t);
+					pkg.AddType (t);
 
 				node.AstNode = pkg;
 			};
@@ -648,7 +648,7 @@ namespace Java.Interop.Tools.JavaSource {
 			package.ClearTypes ();
 
 			foreach (var t in results)
-				package.AddType (t.Name!, t);
+				package.AddType (t);
 
 			void Flatten (List<JavaType> list, JavaType t)
 			{

@@ -87,7 +87,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					catch (JavaTypeResolutionException ex) {
 						Log.LogError ("Error while processing type '{0}': {1}", t, ex.Message);
 						errors = true;
-						t.Parent?.RemoveType (t.Name!, t);
+						t.Parent?.RemoveType (t);
 					}
 				foreach (var t in api.AllPackages.SelectMany (p => p.AllTypes).OfType<JavaInterface> ().ToArray ())
 					try {
@@ -95,7 +95,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 					} catch (JavaTypeResolutionException ex) {
 						Log.LogError ("Error while processing type '{0}': {1}", t, ex.Message);
 						errors = true;
-						t.Parent?.RemoveType (t.Name!, t);
+						t.Parent?.RemoveType (t);
 					}
 				if (!errors)
 					break;

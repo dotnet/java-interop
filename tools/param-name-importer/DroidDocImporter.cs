@@ -105,7 +105,7 @@ namespace Xamarin.Android.ApiTools.DroidDocImporter
 
 				var javaType = isClass ? (JavaType)new JavaClass (javaPackage) : new JavaInterface (javaPackage);
 				javaType.Name = apiSignatureTokens.Substring (apiSignatureTokens.LastIndexOf (' ') + 1);
-				javaPackage.AddType (javaType.Name, javaType);
+				javaPackage.AddType (javaType);
 
 				string sectionType = null;
 				var sep = new string [] { ", " };

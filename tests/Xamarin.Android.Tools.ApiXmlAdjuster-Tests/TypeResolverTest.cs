@@ -82,14 +82,14 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 			// Remove "android.app.IntentService" type
 			var android_app = api.AllPackages.Single (p => p.Name == "android.app");
 			var intent_service = android_app.AllTypes.Single (t => t.Name == "IntentService");
-			android_app.RemoveType (intent_service.Name, intent_service);
+			android_app.RemoveType (intent_service);
 
 			// Create new "mono.android.app.IntentService" type
 			var new_intent_service = new JavaClass (mono_android_app) {
 				Name = intent_service.Name,
 			};
 
-			mono_android_app.AddType (new_intent_service.Name, new_intent_service);
+			mono_android_app.AddType (new_intent_service);
 
 			api.Resolve ();
 
