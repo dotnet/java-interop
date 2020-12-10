@@ -10,7 +10,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 	{
 		public JavaApi ()
 		{
-			Packages = new Dictionary<string, JavaPackage> (StringComparer.OrdinalIgnoreCase);
+			Packages = new Dictionary<string, JavaPackage> ();
 		}
 
 		public  string?                 ExtendedApiSource   { get; set; }
@@ -22,7 +22,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 
 	public partial class JavaPackage
 	{
-		private Dictionary<string, List<JavaType>> types = new Dictionary<string, List<JavaType>> (StringComparer.OrdinalIgnoreCase);
+		private Dictionary<string, List<JavaType>> types = new Dictionary<string, List<JavaType>> ();
 
 		public JavaPackage (JavaApi? parent)
 		{
