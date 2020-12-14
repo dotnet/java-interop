@@ -248,9 +248,9 @@ namespace Java.Interop
 				}
 			}
 
-#if !XA_INTEGRATION
+#if !XA_JI_EXCLUDE
 			ManagedPeer.Init ();
-#endif  // !XA_INTEGRATION
+#endif
 		}
 
 		T SetRuntime<T> (T value)
