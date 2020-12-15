@@ -71,14 +71,14 @@ namespace Java.Interop.Tools.Cecil {
 		};
 
 		[Obsolete ("Use DirectoryAssemblyResolver(Action<TraceLevel, string>, bool, ReaderParameters)")]
-		public DirectoryAssemblyResolver (Action<string, object[]> logWarnings, bool loadDebugSymbols, ReaderParameters loadReaderParameters = null)
+		public DirectoryAssemblyResolver (Action<string, object[]> logWarnings, bool loadDebugSymbols, ReaderParameters? loadReaderParameters = null)
 			: this ((TraceLevel level, string value) => logWarnings?.Invoke ("{0}", new[]{value}), loadDebugSymbols, loadReaderParameters)
 		{
 			if (logWarnings == null)
 				throw new ArgumentNullException (nameof (logWarnings));
 		}
 
-		public DirectoryAssemblyResolver (Action<TraceLevel, string> logger, bool loadDebugSymbols, ReaderParameters loadReaderParameters = null)
+		public DirectoryAssemblyResolver (Action<TraceLevel, string> logger, bool loadDebugSymbols, ReaderParameters? loadReaderParameters = null)
 		{
 			if (logger == null)
 				throw new ArgumentNullException (nameof (logger));
@@ -102,7 +102,7 @@ namespace Java.Interop.Tools.Cecil {
 			foreach (var e in cache) {
 				e.Value.Dispose ();
 			}
-			cache = null;
+			cache.Clear ();
 		}
 
 		public Dictionary<string, AssemblyDefinition> ToResolverCache ()
@@ -122,12 +122,12 @@ namespace Java.Interop.Tools.Cecil {
 			return true;
 		}
 
-		public virtual AssemblyDefinition Load (string fileName, bool forceLoad = false)
+		public virtual AssemblyDefinition? Load (string fileName, bool forceLoad = false)
 		{
 			if (!File.Exists (fileName))
 				return null;
 
-			AssemblyDefinition assembly = null;
+			AssemblyDefinition? assembly = null;
 			var name = Path.GetFileNameWithoutExtension (fileName);
 			if (!forceLoad && cache.TryGetValue (name, out assembly))
 				return assembly;
@@ -137,7 +137,7 @@ namespace Java.Interop.Tools.Cecil {
 			} catch (Exception e) {
 				Diagnostic.Error (9, e, Localization.Resources.CecilResolver_XA0009, fileName);
 			}
-			cache [name] = assembly;
+			cache [name] = assembly!;
 			return assembly;
 		}
 
@@ -181,7 +181,7 @@ namespace Java.Interop.Tools.Cecil {
 			return Resolve (fullName, null);
 		}
 
-		public AssemblyDefinition Resolve (string fullName, ReaderParameters parameters)
+		public AssemblyDefinition Resolve (string fullName, ReaderParameters? parameters)
 		{
 			return Resolve (AssemblyNameReference.Parse (fullName), parameters);
 		}
@@ -200,7 +200,7 @@ namespace Java.Interop.Tools.Cecil {
 		{
 			var name = reference.Name;
 
-			string assembly;
+			string? assembly;
 			foreach (var dir in SearchDirectories)
 				if ((assembly = SearchDirectory (name, dir)) != null)
 					return assembly;
@@ -216,7 +216,7 @@ namespace Java.Interop.Tools.Cecil {
 				name + ".dll");
 		}
 
-		public AssemblyDefinition Resolve (AssemblyNameReference reference, ReaderParameters parameters)
+		public AssemblyDefinition Resolve (AssemblyNameReference reference, ReaderParameters? parameters)
 		{
 			var name = reference.Name;
 
@@ -224,12 +224,12 @@ namespace Java.Interop.Tools.Cecil {
 			if (cache.TryGetValue (name, out assembly))
 				return assembly;
 
-			string assemblyFile;
-			AssemblyDefinition candidate = null;
+			string? assemblyFile;
+			AssemblyDefinition? candidate = null;
 			foreach (var dir in SearchDirectories) {
 				if ((assemblyFile = SearchDirectory (name, dir)) != null) {
 					var loaded = Load (assemblyFile);
-					if (Array.Equals (loaded.Name.MetadataToken, reference.MetadataToken))
+					if (Array.Equals (loaded!.Name.MetadataToken, reference.MetadataToken))
 						return loaded;
 					candidate = candidate ?? loaded;
 				}
@@ -249,7 +249,7 @@ namespace Java.Interop.Tools.Cecil {
 					name + ".dll");
 		}
 
-		string SearchDirectory (string name, string directory)
+		string? SearchDirectory (string name, string directory)
 		{
 			if (Path.IsPathRooted (name) && File.Exists (name))
 				return name;
