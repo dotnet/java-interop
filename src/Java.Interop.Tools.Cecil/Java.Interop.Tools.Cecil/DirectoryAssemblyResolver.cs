@@ -61,7 +61,7 @@ namespace Java.Interop.Tools.Cecil {
 
 		public ICollection<string> SearchDirectories {get; private set;}
 
-		Dictionary<string, AssemblyDefinition> cache;
+		Dictionary<string, AssemblyDefinition?> cache;
 		bool loadDebugSymbols;
 		Action<TraceLevel, string>              logger;
 
@@ -82,7 +82,7 @@ namespace Java.Interop.Tools.Cecil {
 		{
 			if (logger == null)
 				throw new ArgumentNullException (nameof (logger));
-			cache = new Dictionary<string, AssemblyDefinition> ();
+			cache = new Dictionary<string, AssemblyDefinition?> ();
 			this.loadDebugSymbols = loadDebugSymbols;
 			this.logger       = logger;
 			SearchDirectories = new List<string> ();
@@ -100,14 +100,14 @@ namespace Java.Interop.Tools.Cecil {
 			if (!disposing || cache == null)
 				return;
 			foreach (var e in cache) {
-				e.Value.Dispose ();
+				e.Value?.Dispose ();
 			}
 			cache.Clear ();
 		}
 
-		public Dictionary<string, AssemblyDefinition> ToResolverCache ()
+		public Dictionary<string, AssemblyDefinition?> ToResolverCache ()
 		{
-			return new Dictionary<string, AssemblyDefinition>(cache);
+			return new Dictionary<string, AssemblyDefinition?>(cache);
 		}
 
 		public bool AddToCache (AssemblyDefinition assembly)
@@ -137,7 +137,7 @@ namespace Java.Interop.Tools.Cecil {
 			} catch (Exception e) {
 				Diagnostic.Error (9, e, Localization.Resources.CecilResolver_XA0009, fileName);
 			}
-			cache [name] = assembly!;
+			cache [name] = assembly;
 			return assembly;
 		}
 
@@ -220,16 +220,20 @@ namespace Java.Interop.Tools.Cecil {
 		{
 			var name = reference.Name;
 
-			AssemblyDefinition assembly;
-			if (cache.TryGetValue (name, out assembly))
+			AssemblyDefinition? assembly;
+			if (cache.TryGetValue (name, out assembly)) {
+				if (assembly is null)
+					throw CreateLoadException (reference);
+
 				return assembly;
+			}
 
 			string? assemblyFile;
 			AssemblyDefinition? candidate = null;
 			foreach (var dir in SearchDirectories) {
 				if ((assemblyFile = SearchDirectory (name, dir)) != null) {
 					var loaded = Load (assemblyFile);
-					if (Array.Equals (loaded!.Name.MetadataToken, reference.MetadataToken))
+					if (Array.Equals (loaded?.Name.MetadataToken, reference.MetadataToken))
 						return loaded;
 					candidate = candidate ?? loaded;
 				}
@@ -238,15 +242,20 @@ namespace Java.Interop.Tools.Cecil {
 			if (candidate != null)
 				return candidate;
 
-			throw new System.IO.FileNotFoundException (
+			throw CreateLoadException (reference);
+		}
+
+		static FileNotFoundException CreateLoadException (AssemblyNameReference reference)
+		{
+			return new System.IO.FileNotFoundException (
 					string.Format ("Could not load assembly '{0}, Version={1}, Culture={2}, PublicKeyToken={3}'. Perhaps it doesn't exist in the Mono for Android profile?",
-						name, 
-						reference.Version, 
-						string.IsNullOrEmpty (reference.Culture) ? "neutral" : reference.Culture, 
+						reference.Name,
+						reference.Version,
+						string.IsNullOrEmpty (reference.Culture) ? "neutral" : reference.Culture,
 						reference.PublicKeyToken == null
 						? "null"
-						: string.Join ("", reference.PublicKeyToken.Select(b => b.ToString ("x2")))),
-					name + ".dll");
+						: string.Join ("", reference.PublicKeyToken.Select (b => b.ToString ("x2")))),
+					reference.Name + ".dll");
 		}
 
 		string? SearchDirectory (string name, string directory)
