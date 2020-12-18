@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <XAConfigPath>..\..\bin\Build$(Configuration)\XAConfig.props</XAConfigPath>
+  </PropertyGroup>
+  <Import Condition="Exists ('$(XAConfigPath)')" Project="$(XAConfigPath)" />
+  <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
     <NoWarn>1591</NoWarn>
     <SignAssembly>true</SignAssembly>
