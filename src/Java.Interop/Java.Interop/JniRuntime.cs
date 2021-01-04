@@ -250,7 +250,7 @@ namespace Java.Interop
 
 #if !XA_JI_EXCLUDE
 			ManagedPeer.Init ();
-#endif
+#endif  // !XA_JI_EXCLUDE
 		}
 
 		T SetRuntime<T> (T value)
