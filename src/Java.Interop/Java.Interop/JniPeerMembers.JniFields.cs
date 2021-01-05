@@ -1,7 +1,5 @@
 ﻿#nullable enable
 
-using System;
-
 namespace Java.Interop {
 
 	partial class JniPeerMembers {
@@ -14,9 +12,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetBooleanField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetBooleanField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, bool value)
@@ -25,7 +21,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetBooleanField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public sbyte GetSByteValue (
@@ -35,9 +30,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetByteField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetByteField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, sbyte value)
@@ -46,7 +39,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetByteField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public char GetCharValue (
@@ -56,9 +48,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetCharField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetCharField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, char value)
@@ -67,7 +57,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetCharField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public short GetInt16Value (
@@ -77,9 +66,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetShortField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetShortField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, short value)
@@ -88,7 +75,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetShortField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public int GetInt32Value (
@@ -98,9 +84,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetIntField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetIntField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, int value)
@@ -109,7 +93,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetIntField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public long GetInt64Value (
@@ -119,9 +102,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetLongField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetLongField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, long value)
@@ -130,7 +111,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetLongField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public float GetSingleValue (
@@ -140,9 +120,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetFloatField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetFloatField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, float value)
@@ -151,7 +129,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetFloatField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public double GetDoubleValue (
@@ -161,9 +138,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetDoubleField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetDoubleField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, double value)
@@ -172,7 +147,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetDoubleField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 
 		public JniObjectReference GetObjectValue (
@@ -182,9 +156,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.GetObjectField (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.GetObjectField (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, JniObjectReference value)
@@ -193,7 +165,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.SetObjectField (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 	}
 

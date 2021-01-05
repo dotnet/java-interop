@@ -37,9 +37,8 @@ namespace Java.Interop {
 
 				var m   = GetMethodInfo (encodedMember);
 
-				<#= returnType.ReturnType != "void" ? "var r   = " : "" #>JniEnvironment.InstanceMethods.Call<#= returnType.JniCallType #>Method (self.PeerReference, m, parameters);
-				GC.KeepAlive (self);
-				return<#= returnType.ReturnType == "void" ? "" : " r" #>;
+				<#= returnType.ReturnType != "void" ? "return " : "" #>JniEnvironment.InstanceMethods.Call<#= returnType.JniCallType #>Method (self.PeerReference, m, parameters);
+				<#= returnType.ReturnType == "void" ? "return;" : "" #>
 			}
 
 			public unsafe <#= returnType.ReturnType #> InvokeVirtual<#= returnType.ManagedType #>Method (string encodedMember, IJavaPeerable self, JniArgumentValue* parameters)
@@ -49,15 +48,13 @@ namespace Java.Interop {
 				var declaringType   = DeclaringType;
 				if (Members.UsesVirtualDispatch (self, declaringType)) {
 					var m   = GetMethodInfo (encodedMember);
-					<#= returnType.ReturnType != "void" ? "var _nr = " : "" #>JniEnvironment.InstanceMethods.Call<#= returnType.JniCallType #>Method (self.PeerReference, m, parameters);
-					GC.KeepAlive (self);
-					return<#= returnType.ReturnType == "void" ? "" : " _nr" #>;
+					<#= returnType.ReturnType != "void" ? "return " : "" #>JniEnvironment.InstanceMethods.Call<#= returnType.JniCallType #>Method (self.PeerReference, m, parameters);
+					<#= returnType.ReturnType == "void" ? "return;" : "" #>
 				}
 				var j = Members.GetPeerMembers (self);
 				var n = j.InstanceMethods.GetMethodInfo (encodedMember);
-				<#= returnType.ReturnType != "void" ? "var r = " : "" #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, j.JniPeerType.PeerReference, n, parameters);
-				GC.KeepAlive (self);
-				return<#= returnType.ReturnType == "void" ? "" : " r" #>;
+				<#= returnType.ReturnType != "void" ? "return " : "" #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, j.JniPeerType.PeerReference, n, parameters);
+				<#= returnType.ReturnType == "void" ? "return;" : "" #>
 			}
 
 			public unsafe <#= returnType.ReturnType #> InvokeNonvirtual<#= returnType.ManagedType #>Method (string encodedMember, IJavaPeerable self, JniArgumentValue* parameters)
@@ -66,9 +63,8 @@ namespace Java.Interop {
 
 				var m   = GetMethodInfo (encodedMember);
 
-				<#= returnType.ReturnType != "void" ? "var r   = " : "" #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, JniPeerType.PeerReference, m, parameters);
-				GC.KeepAlive (self);
-				return<#= returnType.ReturnType == "void" ? "" : " r" #>;
+				<#= returnType.ReturnType != "void" ? "return " : "" #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, JniPeerType.PeerReference, m, parameters);
+				<#= returnType.ReturnType == "void" ? "return;" : "" #>
 			}
 <#
 	}

@@ -19,8 +19,6 @@
 #>
 #nullable enable
 
-using System;
-
 namespace Java.Interop {
 
 	partial class JniPeerMembers {
@@ -36,9 +34,7 @@ namespace Java.Interop {
 			JniPeerMembers.AssertSelf (self);
 
 			var f   = GetFieldInfo (encodedMember);
-			var r   = JniEnvironment.InstanceFields.Get<#= info.JniCallType #>Field (self.PeerReference, f);
-			GC.KeepAlive (self);
-			return r;
+			return JniEnvironment.InstanceFields.Get<#= info.JniCallType #>Field (self.PeerReference, f);
 		}
 
 		public void SetValue (string encodedMember, IJavaPeerable self, <#= info.ParameterType #> value)
@@ -47,7 +43,6 @@ namespace Java.Interop {
 
 			var f  = GetFieldInfo (encodedMember);
 			JniEnvironment.InstanceFields.Set<#= info.JniCallType #>Field (self.PeerReference, f, value);
-			GC.KeepAlive (self);
 		}
 <#
 	}
