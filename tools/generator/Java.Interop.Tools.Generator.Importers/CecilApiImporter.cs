@@ -191,7 +191,7 @@ namespace MonoDroid.Generation
 				IsAbstract = m.IsAbstract,
 				IsAcw = reg_attr != null,
 				IsFinal = m.IsFinal,
-				IsInterfaceDefaultMethod = IsDefaultInterfaceMethod (declaringType, m),
+				IsInterfaceDefaultMethod = GetJavaDefaultInterfaceMethodAttribute (m.CustomAttributes) != null,
 				IsReturnEnumified = GetGeneratedEnumAttribute (m.MethodReturnType.CustomAttributes) != null,
 				IsStatic = m.IsStatic,
 				IsVirtual = m.IsVirtual,
@@ -248,16 +248,5 @@ namespace MonoDroid.Generation
 
 		static CustomAttribute GetRegisterAttribute (Collection<CustomAttribute> attributes) =>
 			attributes.FirstOrDefault (a => a.AttributeType.FullNameCorrected () == "Android.Runtime.RegisterAttribute");
-
-		static bool IsDefaultInterfaceMethod (GenBase declaringType, MethodDefinition method)
-		{
-			if (!(declaringType is InterfaceGen))
-				return false;
-
-			if (GetJavaDefaultInterfaceMethodAttribute (method.CustomAttributes) != null)
-				return true;
-
-			return !method.IsAbstract && !method.IsStatic;
-		}
 	}
 }
