@@ -53,37 +53,9 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 			length = 0;
 		}
 
-		unsafe protected override void HashCore (byte [] array, int ibStart, int cbSize)
+		protected override unsafe void HashCore (byte [] array, int ibStart, int cbSize)
 		{
-			int len = cbSize;
-			int idx = ibStart;
-
-			fixed (ulong* tptr = Table) {
-				fixed (byte* aptr = array) {
-					while (len >= 8) {
-						crc ^= *((ulong*)(aptr + idx));
-						crc =
-							tptr [7 * 256 + (crc & 0xff)] ^
-							tptr [6 * 256 + ((crc >> 8) & 0xff)] ^
-							tptr [5 * 256 + ((crc >> 16) & 0xff)] ^
-							tptr [4 * 256 + ((crc >> 24) & 0xff)] ^
-							tptr [3 * 256 + ((crc >> 32) & 0xff)] ^
-							tptr [2 * 256 + ((crc >> 40) & 0xff)] ^
-							tptr [1 * 256 + ((crc >> 48) & 0xff)] ^
-							tptr [0 * 256 + (crc >> 56)];
-						idx += 8;
-						len -= 8;
-					}
-
-					while (len > 0) {
-						crc = tptr [0 * 256 + ((crc ^ aptr[idx]) & 0xff)] ^ (crc >> 8);
-						idx++;
-						len--;
-					}
-				}
-			}
-
-			length += (ulong) cbSize;
+			Crc64Helper.HashCore (array, ibStart, cbSize, ref crc, ref length);
 		}
 
 		protected override byte [] HashFinal () => BitConverter.GetBytes (crc ^ length);
