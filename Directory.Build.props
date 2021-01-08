@@ -23,10 +23,6 @@
       Project="$(_OutputPath)MonoInfo.props"
       Condition="Exists('$(_OutputPath)MonoInfo.props')"
   />
-  <Import
-      Project="$(_OutputPath)XamarinAndroid.props"
-      Condition="Exists('$(_OutputPath)XamarinAndroid.props')"
-  />
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath Condition=" '$(AppendTargetFrameworkToOutputPath)' == '' ">False</AppendTargetFrameworkToOutputPath>
     <BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)' == '' ">obj\</BaseIntermediateOutputPath>
