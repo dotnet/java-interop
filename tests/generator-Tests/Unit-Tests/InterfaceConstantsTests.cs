@@ -50,7 +50,7 @@ namespace generatortests
 		{
 			// Need a JLO class "FromXml" to trigger ConstSugar logic. (ie: this is "building" Mono.Android.dll)
 			var klass = new TestClass ("java.lang.Object", "java.lang.Object") {
-				FromXml = true
+				FromXml = true,
 			};
 
 			options.SymbolTable.AddType (klass);
