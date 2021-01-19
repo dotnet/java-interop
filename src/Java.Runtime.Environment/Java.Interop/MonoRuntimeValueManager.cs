@@ -1,7 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Java.Interop {
 
@@ -227,6 +231,58 @@ namespace Java.Interop {
 					RegisteredInstances.Remove (key);
 			}
 			return null;
+		}
+
+		static Exception CreateMissingConstructorException (Type type, Type [] ptypes)
+		{
+			var message = new StringBuilder ();
+			message.Append ("Unable to find constructor ");
+			message.Append (type.FullName);
+			message.Append ("(");
+			if (ptypes.Length > 0) {
+				message.Append (ptypes [0].FullName);
+				for (int i = 1; i < ptypes.Length; ++i)
+					message.Append (", ").Append (ptypes [i].FullName);
+			}
+			message.Append (")");
+			message.Append (". Please provide the missing constructor.");
+			return new NotSupportedException (message.ToString (), CreateJniLocationException ());
+		}
+
+		static Exception CreateJniLocationException ()
+		{
+			using (var e = new JavaException ()) {
+				return new JniLocationException (e.ToString ());
+			}
+		}
+
+		public override void ActivatePeer (JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
+		{
+			var ctor = peerType.GetConstructors (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+				.FirstOrDefault (c => c.GetParameters ().Select (p => p.ParameterType).SequenceEqual (constructorArguments));
+			if (ctor == null) {
+				throw CreateMissingConstructorException (peerType, constructorArguments);
+			}
+			var runtime = JniEnvironment.Runtime;
+			var self = runtime.ValueManager.PeekPeer (reference);
+			if (self != null) {
+				ctor.Invoke (self, argumentValues);
+				return;
+			}
+
+			try {
+				var f = JniEnvironment.Runtime.MarshalMemberBuilder.CreateConstructActivationPeerFunc (ctor);
+				f (ctor, reference, argumentValues);
+			} catch (Exception e) {
+				var m = string.Format ("Could not activate {{ PeerReference={0} IdentityHashCode=0x{1} Java.Type={2} }} for managed type '{3}'.",
+						reference,
+						runtime.ValueManager.GetJniIdentityHashCode (reference).ToString ("x"),
+						JniEnvironment.Types.GetJniTypeNameFromInstance (reference),
+						peerType.FullName);
+				Debug.WriteLine (m);
+
+				throw new NotSupportedException (m, e);
+			}
 		}
 
 		public override void FinalizePeer (IJavaPeerable value)

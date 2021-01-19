@@ -86,6 +86,8 @@ namespace Java.Interop
 
 			public abstract List<JniSurfacedPeerInfo>   GetSurfacedPeers ();
 
+			public abstract void ActivatePeer (JniObjectReference reference, Type peerType, Type []? constructorArguments, object? []? argumentValues);
+
 			public void ConstructPeer (IJavaPeerable peer, ref JniObjectReference reference, JniObjectReferenceOptions options)
 			{
 				if (peer == null)
