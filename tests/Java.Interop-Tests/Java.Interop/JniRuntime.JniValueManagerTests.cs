@@ -60,7 +60,7 @@ namespace Java.InteropTests {
 				return null;
 			}
 
-			public override void ActivatePeer (JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
+			public override void ActivatePeer (IJavaPeerable self, JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
 			{
 				throw new NotImplementedException ();
 			}

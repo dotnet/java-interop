@@ -94,7 +94,7 @@ namespace Java.Interop {
 				var ptypes  = GetParameterTypes (JniEnvironment.Strings.ToString (n_constructorSignature));
 				var pvalues = GetValues (runtime, new JniObjectReference (n_constructorArguments), ptypes);
 
-				JniEnvironment.Runtime.ValueManager.ActivatePeer (new JniObjectReference (n_self), type, ptypes, pvalues);
+				JniEnvironment.Runtime.ValueManager.ActivatePeer (self, new JniObjectReference (n_self), type, ptypes, pvalues);
 			}
 			catch (Exception e) when (JniEnvironment.Runtime.ExceptionShouldTransitionToJni (e)) {
 				envp.SetPendingException (e);

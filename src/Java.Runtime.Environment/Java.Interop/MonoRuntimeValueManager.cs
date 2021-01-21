@@ -256,7 +256,7 @@ namespace Java.Interop {
 			}
 		}
 
-		public override void ActivatePeer (JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
+		public override void ActivatePeer (IJavaPeerable self, JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
 		{
 			var ctor = peerType.GetConstructors (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 				.FirstOrDefault (c => c.GetParameters ().Select (p => p.ParameterType).SequenceEqual (constructorArguments));
@@ -264,7 +264,6 @@ namespace Java.Interop {
 				throw CreateMissingConstructorException (peerType, constructorArguments);
 			}
 			var runtime = JniEnvironment.Runtime;
-			var self = runtime.ValueManager.PeekPeer (reference);
 			if (self != null) {
 				ctor.Invoke (self, argumentValues);
 				return;
