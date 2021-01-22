@@ -233,22 +233,6 @@ namespace Java.Interop {
 			return null;
 		}
 
-		static Exception CreateMissingConstructorException (Type type, Type [] ptypes)
-		{
-			var message = new StringBuilder ();
-			message.Append ("Unable to find constructor ");
-			message.Append (type.FullName);
-			message.Append ("(");
-			if (ptypes.Length > 0) {
-				message.Append (ptypes [0].FullName);
-				for (int i = 1; i < ptypes.Length; ++i)
-					message.Append (", ").Append (ptypes [i].FullName);
-			}
-			message.Append (")");
-			message.Append (". Please provide the missing constructor.");
-			return new NotSupportedException (message.ToString (), CreateJniLocationException ());
-		}
-
 		static Exception CreateJniLocationException ()
 		{
 			using (var e = new JavaException ()) {
@@ -256,28 +240,19 @@ namespace Java.Interop {
 			}
 		}
 
-		public override void ActivatePeer (IJavaPeerable self, JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
+		public override void ActivatePeer (IJavaPeerable self, JniObjectReference reference, ConstructorInfo cinfo, object [] argumentValues)
 		{
-			var ctor = peerType.GetConstructors (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-				.FirstOrDefault (c => c.GetParameters ().Select (p => p.ParameterType).SequenceEqual (constructorArguments));
-			if (ctor == null) {
-				throw CreateMissingConstructorException (peerType, constructorArguments);
-			}
 			var runtime = JniEnvironment.Runtime;
-			if (self != null) {
-				ctor.Invoke (self, argumentValues);
-				return;
-			}
 
 			try {
-				var f = JniEnvironment.Runtime.MarshalMemberBuilder.CreateConstructActivationPeerFunc (ctor);
-				f (ctor, reference, argumentValues);
+				var f = runtime.MarshalMemberBuilder.CreateConstructActivationPeerFunc (cinfo);
+				f (cinfo, reference, argumentValues);
 			} catch (Exception e) {
 				var m = string.Format ("Could not activate {{ PeerReference={0} IdentityHashCode=0x{1} Java.Type={2} }} for managed type '{3}'.",
 						reference,
 						runtime.ValueManager.GetJniIdentityHashCode (reference).ToString ("x"),
 						JniEnvironment.Types.GetJniTypeNameFromInstance (reference),
-						peerType.FullName);
+						cinfo.DeclaringType.FullName);
 				Debug.WriteLine (m);
 
 				throw new NotSupportedException (m, e);

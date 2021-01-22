@@ -93,8 +93,17 @@ namespace Java.Interop {
 
 				var ptypes  = GetParameterTypes (JniEnvironment.Strings.ToString (n_constructorSignature));
 				var pvalues = GetValues (runtime, new JniObjectReference (n_constructorArguments), ptypes);
+				var cinfo = type.GetConstructor (ptypes);
+				if (cinfo == null) {
+					throw CreateMissingConstructorException (type, ptypes);
+				}
 
-				JniEnvironment.Runtime.ValueManager.ActivatePeer (self, new JniObjectReference (n_self), type, ptypes, pvalues);
+				if (self != null) {
+					cinfo.Invoke (self, pvalues);
+					return;
+				}
+
+				JniEnvironment.Runtime.ValueManager.ActivatePeer (self, new JniObjectReference (n_self), cinfo, pvalues);
 			}
 			catch (Exception e) when (JniEnvironment.Runtime.ExceptionShouldTransitionToJni (e)) {
 				envp.SetPendingException (e);
@@ -103,6 +112,26 @@ namespace Java.Interop {
 				envp.Dispose ();
 			}
 		}
+
+		static Exception CreateMissingConstructorException (Type type, Type [] ptypes)
+		{
+			var message = new StringBuilder ();
+			message.Append ("Unable to find constructor ");
+			message.Append (type.FullName);
+			message.Append ("(");
+
+			if (ptypes.Length > 0) {
+				message.Append (ptypes [0].FullName);
+				for (int i = 1; i < ptypes.Length; ++i)
+					message.Append (", ").Append (ptypes [i].FullName);
+			}
+
+			message.Append (")");
+			message.Append (". Please provide the missing constructor.");
+
+			return new NotSupportedException (message.ToString (), CreateJniLocationException ());
+		}
+
 
 		static Exception CreateJniLocationException ()
 		{

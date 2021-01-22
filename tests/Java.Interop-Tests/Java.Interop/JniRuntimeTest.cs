@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -151,7 +152,7 @@ namespace Java.InteropTests
 				return null;
 			}
 
-			public override void ActivatePeer (IJavaPeerable self, JniObjectReference reference, Type peerType, Type [] constructorArguments, object [] argumentValues)
+			public override void ActivatePeer (IJavaPeerable self, JniObjectReference reference, ConstructorInfo cinfo, object [] argumentValues)
 			{
 				throw new NotImplementedException ();
 			}
