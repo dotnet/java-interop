@@ -200,7 +200,7 @@ namespace Java.Interop {
 		}
 	}
 
-	internal sealed class JniLocationException : Exception {
+	sealed class JniLocationException : Exception {
 
 		string stackTrace;
 
