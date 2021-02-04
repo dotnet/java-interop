@@ -420,7 +420,7 @@ namespace Java.Interop
 		{
 			lock (TrackedInstances) {
 				foreach (var k in TrackedInstances.Keys.ToList ()) {
-					if (TrackedInstances.TryGetValue (k, out var d) {
+					if (TrackedInstances.TryGetValue (k, out var d)) {
 						TrackedInstances.Remove (k);
 						d.Dispose ();
 					}
