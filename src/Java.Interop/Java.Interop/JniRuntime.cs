@@ -418,16 +418,14 @@ namespace Java.Interop
 
 		void ClearTrackedReferences ()
 		{
+			List<IDisposable> values;
 			lock (TrackedInstances) {
-				foreach (var k in TrackedInstances.Keys.ToList ()) {
-					if (TrackedInstances.TryGetValue (k, out var d)) {
-						TrackedInstances.Remove (k);
-						d.Dispose ();
-					}
-				}
-
+				values = new List<IDisposable> (TrackedInstances.Values);
 				TrackedInstances.Clear ();
 			}
+
+			foreach (var d in values)
+				d.Dispose ();
 		}
 
 		public virtual bool ExceptionShouldTransitionToJni (Exception e)
