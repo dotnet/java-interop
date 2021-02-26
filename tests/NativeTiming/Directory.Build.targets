@@ -27,6 +27,7 @@
     </ItemGroup>
     <PropertyGroup Condition=" '@(_Cl->Count())' != '0' ">
       <_ClPath>%(_Cl.Identity)</_ClPath>
+      <_ClPath>$(_ClPath.Replace('%5c', '/'))</_ClPath>
     </PropertyGroup>
     <PropertyGroup>
       <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
@@ -34,7 +35,6 @@
       <_CmakeGenerator Condition=" '$(OS)' != 'Windows_NT' ">-G "Unix Makefiles"</_CmakeGenerator>
       <_CmakeGenerator Condition=" '$(OS)' == 'Windows_NT' ">-G "NMake Makefiles"</_CmakeGenerator>
     </PropertyGroup>
-    <Exec Condition=" '$(CL64PATH)' != '' " Command="&quot;$(CL64PATH)\cl&quot;" />
     <Exec
         ContinueOnError="WarnAndContinue"
         Command="$(CmakePath) $(_CmakeGenerator) -S . -B $(IntermediateOutputPath) $(_JdkDirs) $(_Cc)"
