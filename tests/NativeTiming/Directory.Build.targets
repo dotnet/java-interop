@@ -49,7 +49,26 @@
     </ReadLinesFromFile>
     <Message
         Condition=" '$(_CmakeStatus)' == 'false' "
-        Text="@(_CmakeLog)"
+        Text="CMakeOutput.log"
+    />
+    <Message
+        Condition=" '$(_CmakeStatus)' == 'false' "
+        Text="@(_CmakeLog, '
+')"
+    />
+    <ReadLinesFromFile
+        Condition=" '$(_CmakeStatus)' == 'false' "
+        File="$(IntermediateOutputPath)CMakeFiles/CMakeError.log">
+      <Output TaskParameter="Lines" ItemName="_CmakeErrorLog" />
+    </ReadLinesFromFile>
+    <Message
+        Condition=" '$(_CmakeStatus)' == 'false' "
+        Text="CMakeError.log"
+    />
+    <Message
+        Condition=" '$(_CmakeStatus)' == 'false' "
+        Text="@(_CmakeErrorLog, '
+')"
     />
     <Error
         Condition=" '$(_CmakeStatus)' == 'false' "
