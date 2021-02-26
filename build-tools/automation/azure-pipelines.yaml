@@ -23,7 +23,7 @@ variables:
   HostedWinVS2019: Hosted Windows 2019 with VS2019
   NetCoreTargetFrameworkPathSuffix: -netcoreapp3.1
   VSInstallDir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise
-  Cl64Path: $(VSInstallDir)\VC\Tools\MSVC\14.28.29334\bin\Hostx64\x64
+  MsvcDir: $(VSInstallDir)\VC\Tools\MSVC
 
 jobs:
 - job: windows_build
@@ -37,10 +37,6 @@ jobs:
     submodules: recursive
 
   - template: templates\install-dependencies.yaml
-
-  - script: >
-      echo "##vso[task.setvariable variable=PATH]%PATH%;$(Cl64Path)"
-    displayName: 'Add cl to PATH'
 
   - task: NuGetToolInstaller@0
     inputs:
@@ -91,10 +87,6 @@ jobs:
     submodules: recursive
 
   - template: templates\install-dependencies.yaml
-
-  - script: >
-      echo "##vso[task.setvariable variable=PATH]%PATH%;$(Cl64Path)"
-    displayName: 'Add cl to PATH'
 
   - template: templates\core-build.yaml
 

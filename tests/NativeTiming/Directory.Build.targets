@@ -22,9 +22,15 @@
       Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);NativeTiming.csproj"
       Outputs="$(IntermediateOutputPath)CMakeCache.txt">
     <MakeDir Directories="$(IntermediateOutputPath)" />
+    <ItemGroup Condition=" '$(MSVCDIR)' != '' ">
+      <_Cl Include="$(MSVCDIR)\*\bin\Hostx64\x64\cl.exe" />
+    </ItemGroup>
+    <PropertyGroup Condition=" '@(_Cl->Count())' != '0' ">
+      <_ClPath>%(_Cl.Identity)</_ClPath>
+    </PropertyGroup>
     <PropertyGroup>
       <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
-      <_Cc Condition=" '$(CL64PATH)' != '' " >"-DCMAKE_C_COMPILER=$(CL64PATH)/cl"</_Cc>
+      <_Cc Condition=" '$(_ClPath)' != '' " >"-DCMAKE_C_COMPILER=$(_ClPath)"</_Cc>
       <_CmakeGenerator Condition=" '$(OS)' != 'Windows_NT' ">-G "Unix Makefiles"</_CmakeGenerator>
       <_CmakeGenerator Condition=" '$(OS)' == 'Windows_NT' ">-G "NMake Makefiles"</_CmakeGenerator>
     </PropertyGroup>
