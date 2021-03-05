@@ -54,7 +54,7 @@ jobs:
       configuration: $(Build.Configuration)
       msbuildArguments: /restore /t:Prepare
 
-  - task: MSBuild@1
+  - task: VSBuild@1
     displayName: MSBuild Java.Interop.sln
     inputs:
       solution: Java.Interop.sln
