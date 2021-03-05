@@ -35,14 +35,10 @@
       <_Cc Condition=" '$(_ClPath)' != '' " >"-DCMAKE_C_COMPILER=$(_ClPath)"</_Cc>
       -->
       <_CmakeGenerator Condition=" '$(OS)' != 'Windows_NT' ">-G "Unix Makefiles"</_CmakeGenerator>
+      <!--
       <_CmakeGenerator Condition=" '$(OS)' == 'Windows_NT' ">-G "NMake Makefiles"</_CmakeGenerator>
+      -->
     </PropertyGroup>
-    <!-- does `cl` work? is it in %PATH%? -->
-    <Exec
-        Condition=" '$(OS)' == 'Windows_NT' "
-        ContinueOnError="WarnAndContinue"
-        Command="cl /?"
-    />
     <Exec
         ContinueOnError="WarnAndContinue"
         Command="$(CmakePath) $(_CmakeGenerator) -S . -B $(IntermediateOutputPath) $(_JdkDirs) $(_Cc)"
