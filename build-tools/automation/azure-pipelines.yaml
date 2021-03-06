@@ -53,7 +53,7 @@ jobs:
       msbuildArguments: /restore /t:Prepare
 
   - task: MSBuild@1
-    displayName: VSBuild Java.Interop.sln
+    displayName: MSBuild Java.Interop.sln
     inputs:
       solution: Java.Interop.sln
       configuration: $(Build.Configuration)
@@ -78,6 +78,9 @@ jobs:
   displayName: Windows - .NET Core
   pool: $(HostedWinVS2019)
   timeoutInMinutes: 20
+  variables:
+  - name: VSInstallRoot
+    value: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise
   workspace:
     clean: all
   steps:

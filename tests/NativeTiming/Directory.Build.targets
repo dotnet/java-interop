@@ -19,10 +19,13 @@
   </Target>
 
   <Target Name="_GetBuildComands">
-    <ItemGroup Condition=" '$(VSINSTALLROOT)' != '' ">
-      <_Vcvarsall Include="$(VSINSTALLROOT)\VC\Auxiliary\Build\vcvarsall.bat" />
+    <ItemGroup>
+      <_Vcvarsall
+          Condition=" '$(VSINSTALLROOT)' != '' And Exists('$(VSINSTALLROOT)') "
+          Include="$(VSINSTALLROOT)\VC\Auxiliary\Build\vcvarsall.bat"
+      />
     </ItemGroup>
-    <PropertyGroup Condition=" '$(VSINSTALLROOT)' != '' And '$(_Vcvarsall->Count())' != '0' ">
+    <PropertyGroup Condition=" '@(_Vcvarsall->Count())' != '0' ">
       <_Vcvarsall>%(_Vcvarsall.Identity)</_Vcvarsall>
       <_PrepareToolchain>call "$(_Vcvarsall)" x86_amd64 &amp;&amp; </_PrepareToolchain>
     </PropertyGroup>
