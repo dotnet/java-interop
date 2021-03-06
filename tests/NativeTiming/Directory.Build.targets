@@ -18,30 +18,33 @@
       DependsOnTargets="_PrepareCmake;_BuildNativeTiming">
   </Target>
 
+  <Target Name="_GetBuildComands">
+    <ItemGroup Condition=" '$(VSINSTALLROOT)' != '' ">
+      <_Vcvarsall Include="$(VSINSTALLROOT)\VC\Auxiliary\Build\vcvarsall.bat" />
+    </ItemGroup>
+    <PropertyGroup Condition=" '$(VSINSTALLROOT)' != '' And '$(_Vcvarsall->Count())' != '0' ">
+      <_Vcvarsall>%(_Vcvarsall.Identity)</_Vcvarsall>
+      <_PrepareToolchain>call "$(_Vcvarsall)" x86_amd64 &amp;&amp; </_PrepareToolchain>
+    </PropertyGroup>
+    <PropertyGroup>
+      <_Make Condition=" '$(OS)' != 'Windows_NT' ">make</_Make>
+      <_Make Condition=" '$(OS)' == 'Windows_NT' ">nmake</_Make>
+    </PropertyGroup>
+  </Target>
+
   <Target Name="_PrepareCmake"
+      DependsOnTargets="_GetBuildComands"
       Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);NativeTiming.csproj"
       Outputs="$(IntermediateOutputPath)CMakeCache.txt">
     <MakeDir Directories="$(IntermediateOutputPath)" />
-    <ItemGroup Condition=" '$(MSVCDIR)' != '' ">
-      <_Cl Include="$(MSVCDIR)\*\bin\Hostx64\x64\cl.exe" />
-    </ItemGroup>
-    <PropertyGroup Condition=" '@(_Cl->Count())' != '0' ">
-      <_ClPath>%(_Cl.Identity)</_ClPath>
-      <_ClPath>$(_ClPath.Replace('%5c', '/'))</_ClPath>
-    </PropertyGroup>
     <PropertyGroup>
       <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
-      <!--
-      <_Cc Condition=" '$(_ClPath)' != '' " >"-DCMAKE_C_COMPILER=$(_ClPath)"</_Cc>
-      -->
       <_CmakeGenerator Condition=" '$(OS)' != 'Windows_NT' ">-G "Unix Makefiles"</_CmakeGenerator>
-      <!--
       <_CmakeGenerator Condition=" '$(OS)' == 'Windows_NT' ">-G "NMake Makefiles"</_CmakeGenerator>
-      -->
     </PropertyGroup>
     <Exec
         ContinueOnError="WarnAndContinue"
-        Command="$(CmakePath) $(_CmakeGenerator) -S . -B $(IntermediateOutputPath) $(_JdkDirs) $(_Cc)"
+        Command="$(_PrepareToolchain) $(CmakePath) $(_CmakeGenerator) -S . -B $(IntermediateOutputPath) $(_JdkDirs)"
     />
     <PropertyGroup>
       <_CmakeStatus>$(MSBuildLastTaskResult)</_CmakeStatus>
@@ -82,14 +85,11 @@
   </Target>
 
   <Target Name="_BuildNativeTiming"
+      DependsOnTargets="_GetBuildComands"
       Inputs="timing.c"
       Outputs="$(_NativeTimingOutputPath)">
-    <PropertyGroup>
-      <_Make Condition=" '$(OS)' != 'Windows_NT' ">make</_Make>
-      <_Make Condition=" '$(OS)' == 'Windows_NT' ">nmake</_Make>
-    </PropertyGroup>
     <Exec
-        Command="$(_Make) VERBOSE=1"
+        Command="$(_PrepareToolchain) $(_Make) VERBOSE=1"
         WorkingDirectory="$(IntermediateOutputPath)"
     />
     <ItemGroup>
