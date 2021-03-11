@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Prepare" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="GetNativeBuildCommands">
+    <ItemGroup>
+      <_Vcvarsall
+          Condition=" '$(VSINSTALLROOT)' != '' And Exists('$(VSINSTALLROOT)') "
+          Include="$(VSINSTALLROOT)\VC\Auxiliary\Build\vcvarsall.bat"
+      />
+    </ItemGroup>
+    <PropertyGroup Condition=" '@(_Vcvarsall->Count())' != '0' ">
+      <_Vcvarsall>%(_Vcvarsall.Identity)</_Vcvarsall>
+      <PrepareNativeToolchain>call "$(_Vcvarsall)" x86_amd64 &amp;&amp; </PrepareNativeToolchain>
+    </PropertyGroup>
+    <PropertyGroup>
+      <NativeToolchainMake Condition=" '$(OS)' != 'Windows_NT' ">make</NativeToolchainMake>
+      <NativeToolchainMake Condition=" '$(OS)' == 'Windows_NT' ">nmake</NativeToolchainMake>
+    </PropertyGroup>
+    <PropertyGroup>
+      <CmakeGenerator Condition=" '$(OS)' != 'Windows_NT' ">-G "Unix Makefiles"</CmakeGenerator>
+      <CmakeGenerator Condition=" '$(OS)' == 'Windows_NT' ">-G "NMake Makefiles"</CmakeGenerator>
+    </PropertyGroup>
+  </Target>
+</Project>

@@ -1,0 +1,86 @@
+<Project>
+
+  <Import Project="..\..\build-tools\scripts\NativeToolchain.targets" />
+
+  <PropertyGroup>
+    <_JavaInteropLibName Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/') ">libjava-interop.dylib</_JavaInteropLibName>
+    <_JavaInteropLibName Condition=" '$(OS)' != 'Windows_NT' And !Exists ('/Library/Frameworks/') ">libjava-interop.so</_JavaInteropLibName>
+    <_JavaInteropLibName Condition=" '$(OS)' == 'Windows_NT' ">java-interop.dll</_JavaInteropLibName>
+    <_JavaInteropOutputPath>$(OutputPath)$(_JavaInteropLibName)</_JavaInteropOutputPath>
+    <_BuildDir>$(MSBuildThisFileDirectory)$(IntermediateOutputPath)</_BuildDir>
+    <_BuildDir>$(_BuildDir.Replace('%5c', '/'))</_BuildDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(_JavaInteropOutputPath)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="_BuildJni_c"
+      Inputs="$(_JNIEnvGenPath)"
+      Outputs="$(IntermediateOutputPath)jni.c">
+    <MakeDir Directories="$(OutputPath)" />
+    <Exec Command="$(_RunJNIEnvGen) $(IntermediateOutputPath)jni.g.cs $(IntermediateOutputPath)jni.c" />
+  </Target>
+
+  <Target Name="_BuildLibs"
+      BeforeTargets="Build"
+      DependsOnTargets="_PrepareCmake;_BuildJavaInterop">
+  </Target>
+
+  <Target Name="_PrepareCmake"
+      DependsOnTargets="GetNativeBuildCommands;_BuildJni_c"
+      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);NativeTiming.csproj"
+      Outputs="$(IntermediateOutputPath)CMakeCache.txt">
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' And '@(MonoIncludePath->Count())' != '0' ">
+      <_MonoDirs>"-DMONO_INCLUDE_LIST=@(MonoIncludePath, ';')"</_MonoDirs>
+      <_MonoLib>"-DMONO_LINK_FLAGS=$(MonoLibs)"</_MonoLib>
+      <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
+    </PropertyGroup>
+    <PropertyGroup>
+      <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
+      <_Jni_c>"-DJNI_C_PATH=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)jni.c"</_Jni_c>
+      <_ExtraArgs>$([MSBuild]::Escape('$(_JdkDirs) $(_Jni_c) $(_EnableMono) $(_MonoDirs) $(_MonoLib)').Replace('%5c', '/'))</_ExtraArgs>
+    </PropertyGroup>
+    <ItemGroup>
+      <_Cmake Include="PrepareNativeToolchain=$(PrepareNativeToolchain)" />
+      <_Cmake Include="CmakePath=$(CmakePath)" />
+      <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
+      <_Cmake Include="CmakeSourceDir=$(MSBuildThisFileDirectory)" />
+      <_Cmake Include="CmakeBuildDir=$(_BuildDir)" />
+      <_Cmake Include="CmakeExtraArgs=$(_ExtraArgs)" />
+    </ItemGroup>
+    <MSBuild
+        Projects="..\..\build-tools\scripts\RunCmake.proj"
+        Properties="@(_Cmake)"
+        Targets="Cmake"
+    />
+    <Touch Files="$(IntermediateOutputPath)CMakeCache.txt" />
+  </Target>
+
+  <Target Name="_BuildJavaInterop"
+      DependsOnTargets="GetNativeBuildCommands"
+      Inputs="timing.c;$(MSBuildThisFileFullPath);NativeTiming.csproj"
+      Outputs="$(_JavaInteropOutputPath)">
+    <Exec
+        Command="$(PrepareNativeToolchain) $(CmakePath) --build &quot;$(_BuildDir)&quot; -v"
+        WorkingDirectory="$(IntermediateOutputPath)"
+    />
+    <ItemGroup>
+      <_Libs Include="$(IntermediateOutputPath)$(_NativeTimingLibName)*" />
+    </ItemGroup>
+    <Copy
+        SourceFiles="@(_Libs)"
+        DestinationFolder="$(OutputPath)"
+    />
+    <Touch Files="$(_NativeTimingOutputPath)" />
+  </Target>
+
+  <Target Name="_Clean"
+      AfterTargets="Clean">
+    <Delete Files="$(_NativeTimingOutputPath)" />
+  </Target>
+
+</Project>

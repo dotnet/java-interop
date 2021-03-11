@@ -51,8 +51,6 @@
     <ClCompile Include="java-interop-gc-bridge-mono.cc" />
   </ItemGroup>
 
-  <Import Project="java-interop.targets" />
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0" />
   </ItemGroup>
