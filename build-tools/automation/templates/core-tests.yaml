@@ -72,7 +72,7 @@ steps:
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:
     command: test
-    arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-Tests.dll
+    arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-Tests.dll -- RunConfiguration.TargetPlatform=x64
   continueOnError: true
 
 - task: DotNetCoreCLI@2
