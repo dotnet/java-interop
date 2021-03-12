@@ -38,7 +38,7 @@ jobs:
   - template: templates\install-dependencies.yaml
 
   - script: |
-      dumpbin /headers C:\hostedtoolcache\windows\dotnet\dotnet.exe
+      call "%VSInstallRoot%\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64 && dumpbin /headers C:\hostedtoolcache\windows\dotnet\dotnet.exe
     displayName: dumpbin headers dotnet.exe
 
   - task: NuGetToolInstaller@0
