@@ -93,6 +93,13 @@ jobs:
     parameters:
       runNativeTests: true
 
+  - task: PublishPipelineArtifact@1
+    displayName: Publish `bin` folder
+    inputs:
+      targetPath: bin
+      artifactName: bin-dotnet
+    condition: succeededOrFailed()
+
   - template: templates\fail-on-issue.yaml
     
 - job: mac_build
