@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Prepare" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="Cmake">
-
+  <Target Name="Cmake"
+      DependsOnTargets="_ValidateCmake;_RunCmake"
+  />
+  <Target Name="_ValidateCmake">
     <Error
         Condition=" '$(CmakePath)' == '' "
         Text="Set the `%24(CmakePath)` property."
@@ -18,12 +20,18 @@
         Condition=" '$(CmakeBuildDir)' == '' "
         Text="Set the `%24(CmakeBuildDir)` property."
     />
+  </Target>
 
+  <Target Name="_RunCmake">
+    <PropertyGroup>
+      <_SourceDir>$(CmakeSourceDir.Replace('%5c', '/'))</_SourceDir>
+      <_BuildDir>$(CmakeBuildDir.Replace('%5c', '/'))</_BuildDir>
+      <_ExtraArgs>$(CmakeExtraArgs.Replace('%5c', '/'))</_ExtraArgs>
+    </PropertyGroup>
     <Exec
         ContinueOnError="WarnAndContinue"
-        Command="$(PrepareNativeToolchain) $(CmakePath) $(CmakeGenerator) -S $(CmakeSourceDir) -B $(CmakeBuildDir) $(CmakeExtraArgs)"
+        Command="$(PrepareNativeToolchain) $(CmakePath) $(CmakeGenerator) -S &quot;$(_SourceDir)&quot; -B &quot;$(_BuildDir)&quot; $(_ExtraArgs) &amp;&amp; $(CmakePath) --build &quot;$(_BuildDir)&quot; -v"
     />
-
     <PropertyGroup>
       <_CmakeStatus>$(MSBuildLastTaskResult)</_CmakeStatus>
     </PropertyGroup>
