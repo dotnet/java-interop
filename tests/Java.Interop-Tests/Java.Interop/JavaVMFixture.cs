@@ -12,8 +12,6 @@ namespace Java.InteropTests {
 
 		static partial void CreateJavaVM ()
 		{
-			Console.Error.WriteLine($"# jonp: 64-bit process? {Environment.Is64BitProcess}");
-			Console.Error.Flush();
 			var c = new TestJVM (
 					jars:           new[]{ "interop-test.jar" },
 					typeMappings:   new Dictionary<string, Type> () {
