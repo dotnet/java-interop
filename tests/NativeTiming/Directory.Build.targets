@@ -17,19 +17,22 @@
 
   <Target Name="_BuildLibs"
       BeforeTargets="Build"
-      DependsOnTargets="_PrepareCmake;_BuildNativeTiming">
+      DependsOnTargets="_BuildNativeTiming">
   </Target>
 
-  <Target Name="_PrepareCmake"
+  <Target Name="_BuildNativeTiming"
       DependsOnTargets="GetNativeBuildCommands"
-      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);NativeTiming.csproj"
-      Outputs="$(IntermediateOutputPath)CMakeCache.txt">
+      Inputs="CMakeLists.txt;timing.c;$(MSBuildThisFileFullPath);NativeTiming.csproj"
+      Outputs="$(_NativeTimingOutputPath)">
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <PropertyGroup>
       <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
     </PropertyGroup>
     <ItemGroup>
-      <_Cmake Include="PrepareNativeToolchain=$(PrepareNativeToolchain)" />
+      <_Cmake
+          Condition=" '$(PrepareNativeToolchain)' != '' "
+          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) x86_amd64"
+      />
       <_Cmake Include="CmakePath=$(CmakePath)" />
       <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
       <_Cmake Include="CmakeSourceDir=$(MSBuildThisFileDirectory)" />
@@ -40,17 +43,6 @@
         Projects="..\..\build-tools\scripts\RunCmake.proj"
         Properties="@(_Cmake)"
         Targets="Cmake"
-    />
-    <Touch Files="$(IntermediateOutputPath)CMakeCache.txt" />
-  </Target>
-
-  <Target Name="_BuildNativeTiming"
-      DependsOnTargets="GetNativeBuildCommands"
-      Inputs="timing.c;$(MSBuildThisFileFullPath);NativeTiming.csproj"
-      Outputs="$(_NativeTimingOutputPath)">
-    <Exec
-        Command="$(PrepareNativeToolchain) $(NativeToolchainMake) VERBOSE=1"
-        WorkingDirectory="$(IntermediateOutputPath)"
     />
     <ItemGroup>
       <_Libs Include="$(IntermediateOutputPath)$(_NativeTimingLibName)*" />
