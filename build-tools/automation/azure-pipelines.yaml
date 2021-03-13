@@ -37,10 +37,6 @@ jobs:
 
   - template: templates\install-dependencies.yaml
 
-  - script: |
-      dumpbin /headers C:\hostedtoolcache\windows\dotnet\dotnet.exe
-    displayName: dumpbin headers dotnet.exe
-
   - task: NuGetToolInstaller@0
     inputs:
       versionSpec: 5.x
