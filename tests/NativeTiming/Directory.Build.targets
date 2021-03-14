@@ -31,7 +31,7 @@
     <ItemGroup>
       <_Cmake
           Condition=" '$(PrepareNativeToolchain)' != '' "
-          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) x86_amd64"
+          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) x86_amd64 &amp;&amp; "
       />
       <_Cmake Include="CmakePath=$(CmakePath)" />
       <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
