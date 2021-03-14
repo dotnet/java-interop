@@ -24,13 +24,15 @@
 
   <Target Name="_RunCmake">
     <PropertyGroup>
+      <_Prepare>$(PrepareNativeToolchain)</_Prepare>
+      <_Prepare Condition=" '$(_Prepare)' != '' And !$(_Prepare.Trim().EndsWith('&amp;&amp;')) ">$(_Prepare) &amp;&amp;</_Prepare>
       <_SourceDir>$(CmakeSourceDir.Replace('%5c', '/'))</_SourceDir>
       <_BuildDir>$(CmakeBuildDir.Replace('%5c', '/'))</_BuildDir>
       <_ExtraArgs>$(CmakeExtraArgs.Replace('%5c', '/'))</_ExtraArgs>
     </PropertyGroup>
     <Exec
         ContinueOnError="WarnAndContinue"
-        Command="$(PrepareNativeToolchain) $(CmakePath) $(CmakeGenerator) -S &quot;$(_SourceDir)&quot; -B &quot;$(_BuildDir)&quot; $(_ExtraArgs) &amp;&amp; $(CmakePath) --build &quot;$(_BuildDir)&quot; -v"
+        Command="$(_Prepare) $(CmakePath) $(CmakeGenerator) -S &quot;$(_SourceDir)&quot; -B &quot;$(_BuildDir)&quot; $(_ExtraArgs) &amp;&amp; $(CmakePath) --build &quot;$(_BuildDir)&quot; -v"
     />
     <PropertyGroup>
       <_CmakeStatus>$(MSBuildLastTaskResult)</_CmakeStatus>

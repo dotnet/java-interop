@@ -91,7 +91,7 @@ jobs:
 
   - template: templates\core-tests.yaml
     parameters:
-      runNativeTests: true
+      runNativeDotnetTests: true
 
   - task: PublishPipelineArtifact@1
     displayName: Publish `bin` folder
