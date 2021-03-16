@@ -8,15 +8,6 @@
     <_JavaInteropLibName Condition=" '$(OS)' == 'Windows_NT' ">java-interop.dll</_JavaInteropLibName>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ClInclude Include="*.h" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ClCompile Include="$(IntermediateOutputPath)jni.c" />
-    <ClCompile Include="*.cc" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <_JavaInteropNativeLib Include="CMakeLists.txt">
       <Arch>x86_amd64</Arch>
@@ -27,6 +18,7 @@
       <Dir>win-x86\</Dir>
     </_JavaInteropNativeLib>
   </ItemGroup>
+
   <ItemGroup Condition=" '$(OS)' != 'Windows_NT' ">
     <_JavaInteropNativeLib Include="CMakeLists.txt" />
   </ItemGroup>
@@ -36,6 +28,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>%(Dir)$(_JavaInteropLibName)</Link>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="*.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="$(IntermediateOutputPath)jni.c" />
+    <ClCompile Include="*.cc" />
   </ItemGroup>
 
   <Target Name="_BuildJni_c"
