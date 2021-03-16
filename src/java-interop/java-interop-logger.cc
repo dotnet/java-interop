@@ -9,11 +9,11 @@
 
 #define LOG_VA_ARGS(_kind_,_category_,_format_)                                 \
 	do {                                                                    \
-		const char*     kind      = (_kind_);                           \
-		LogCategories   category  = (_category_);                       \
+		const char*     _kind     = (_kind_);                           \
+		LogCategories   _cat      = (_category_);                       \
 		va_list args;                                                   \
 		va_start (args, _format_);                                      \
-		log_vprint (kind, CATEGORY_NAME (category), (_format_), args);  \
+		log_vprint (_kind, CATEGORY_NAME (_cat), (_format_), args);  \
 		va_end (args);                                                  \
 	} while (0)
 

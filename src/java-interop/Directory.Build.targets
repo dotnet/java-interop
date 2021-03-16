@@ -62,7 +62,7 @@
   <Target Name="_BuildLibs"
       DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetCmakeOptions"
       BeforeTargets="Build"
-      Inputs="@(_JavaInteropNativeLib);$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);$(ClCompile)"
+      Inputs="@(_JavaInteropNativeLib);$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);@(ClCompile)"
       Outputs="$(OutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)">
     <Message Text="# jonp: _Test: Building: @(_JavaInteropNativeLib->'%(Identity) for %(Arch)', ' ')" />
     <MakeDir Directories="$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)" />
