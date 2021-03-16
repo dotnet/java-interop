@@ -3,12 +3,12 @@
   <Import Project="..\..\build-tools\scripts\NativeToolchain.targets" />
 
   <PropertyGroup>
-    <_NativeTimingLibName Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/') ">libNativeTiming.dylib</_NativeTimingLibName>
-    <_NativeTimingLibName Condition=" '$(OS)' != 'Windows_NT' And !Exists ('/Library/Frameworks/') ">libNativeTiming.so</_NativeTimingLibName>
-    <_NativeTimingLibName Condition=" '$(OS)' == 'Windows_NT' ">NativeTiming.dll</_NativeTimingLibName>
+    <_NativeTimingLibName Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">libNativeTiming.dylib</_NativeTimingLibName>
+    <_NativeTimingLibName Condition=" $([MSBuild]::IsOSPlatform ('linux')) ">libNativeTiming.so</_NativeTimingLibName>
+    <_NativeTimingLibName Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">NativeTiming.dll</_NativeTimingLibName>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
     <_NativeTimingLib Include="CMakeLists.txt">
       <Arch>x86_amd64</Arch>
       <Dir>win-x64\</Dir>
@@ -19,7 +19,7 @@
     </_NativeTimingLib>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(OS)' != 'Windows_NT' ">
+  <ItemGroup Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">
     <_NativeTimingLib Include="CMakeLists.txt" />
   </ItemGroup>
 

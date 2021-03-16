@@ -11,8 +11,8 @@
       <PrepareNativeToolchain>call "$(_Vcvarsall)" </PrepareNativeToolchain>
     </PropertyGroup>
     <PropertyGroup>
-      <CmakeGenerator Condition=" '$(OS)' != 'Windows_NT' ">-G "Unix Makefiles"</CmakeGenerator>
-      <CmakeGenerator Condition=" '$(OS)' == 'Windows_NT' ">-G "NMake Makefiles"</CmakeGenerator>
+      <CmakeGenerator Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">-G "NMake Makefiles"</CmakeGenerator>
+      <CmakeGenerator Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">-G "Unix Makefiles"</CmakeGenerator>
     </PropertyGroup>
   </Target>
 </Project>

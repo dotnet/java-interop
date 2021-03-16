@@ -3,12 +3,12 @@
   <Import Project="..\..\build-tools\scripts\NativeToolchain.targets" />
 
   <PropertyGroup>
-    <_JavaInteropLibName Condition=" '$(OS)' != 'Windows_NT' And Exists ('/Library/Frameworks/') ">libjava-interop.dylib</_JavaInteropLibName>
-    <_JavaInteropLibName Condition=" '$(OS)' != 'Windows_NT' And !Exists ('/Library/Frameworks/') ">libjava-interop.so</_JavaInteropLibName>
-    <_JavaInteropLibName Condition=" '$(OS)' == 'Windows_NT' ">java-interop.dll</_JavaInteropLibName>
+    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">libjava-interop.dylib</_JavaInteropLibName>
+    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('linux')) ">libjava-interop.so</_JavaInteropLibName>
+    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">java-interop.dll</_JavaInteropLibName>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
     <_JavaInteropNativeLib Include="CMakeLists.txt">
       <Arch>x86_amd64</Arch>
       <Dir>win-x64\</Dir>
@@ -19,7 +19,7 @@
     </_JavaInteropNativeLib>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(OS)' != 'Windows_NT' ">
+  <ItemGroup Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">
     <_JavaInteropNativeLib Include="CMakeLists.txt" />
   </ItemGroup>
 
