@@ -7,32 +7,34 @@
     <_JavaInteropLibName Condition=" '$(OS)' != 'Windows_NT' And !Exists ('/Library/Frameworks/') ">libjava-interop.so</_JavaInteropLibName>
     <_JavaInteropLibName Condition=" '$(OS)' == 'Windows_NT' ">java-interop.dll</_JavaInteropLibName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
-    <_PrimaryOutputPath>$(OutputPath)$(_JavaInteropLibName)</_PrimaryOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-    <_PrimaryDir>win-x64</_PrimaryDir>
-    <_PrimaryArch>x86_amd64</_PrimaryArch>
-    <_PrimaryOutputPath>$(OutputPath)$(_PrimaryDir)\$(_JavaInteropLibName)</_PrimaryOutputPath>
-    <_SecondaryDir>win-x86</_SecondaryDir>
-    <_SecondaryArch>x86</_SecondaryArch>
-    <_SecondaryOutputPath>$(OutputPath)$(_SecondaryDir)\$(_JavaInteropLibName)</_SecondaryOutputPath>
-  </PropertyGroup>
 
-  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
-    <None Include="$(_PrimaryOutputPath)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>$(_PrimaryDir)\$(_JavaInteropLibName)</Link>
-    </None>
-    <None Include="$(_SecondaryOutputPath)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>$(_SecondaryDir)\$(_JavaInteropLibName)</Link>
-    </None>
+  <ItemGroup>
+    <ClInclude Include="*.h" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ClCompile Include="$(IntermediateOutputPath)jni.c" />
+    <ClCompile Include="*.cc" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+    <_JavaInteropNativeLib Include="CMakeLists.txt">
+      <Arch>x86_amd64</Arch>
+      <Dir>win-x64\</Dir>
+    </_JavaInteropNativeLib>
+    <_JavaInteropNativeLib Include="CMakeLists.txt">
+      <Arch>x86</Arch>
+      <Dir>win-x86\</Dir>
+    </_JavaInteropNativeLib>
+  </ItemGroup>
   <ItemGroup Condition=" '$(OS)' != 'Windows_NT' ">
-    <None Include="$(_PrimaryOutputPath)">
+    <_JavaInteropNativeLib Include="CMakeLists.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="@(_JavaInteropNativeLib->'$(OutputPath)%(Dir)$(_JavaInteropLibName)')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>%(Dir)$(_JavaInteropLibName)</Link>
     </None>
   </ItemGroup>
 
@@ -41,11 +43,6 @@
       Outputs="$(IntermediateOutputPath)jni.c">
     <MakeDir Directories="$(OutputPath)" />
     <Exec Command="$(_RunJNIEnvGen) $(IntermediateOutputPath)jni.g.cs $(IntermediateOutputPath)jni.c" />
-  </Target>
-
-  <Target Name="_BuildLibs"
-      BeforeTargets="Build"
-      DependsOnTargets="_BuildPrimaryLib;_BuildSecondaryLib">
   </Target>
 
   <Target Name="_GetCmakeOptions">
@@ -61,20 +58,22 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="_BuildPrimaryLib"
+  <Target Name="_BuildLibs"
       DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetCmakeOptions"
-      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj"
-      Outputs="$(_PrimaryOutputPath)">
-    <MakeDir Directories="$(IntermediateOutputPath)$(_PrimaryDir)" />
+      BeforeTargets="Build"
+      Inputs="@(_JavaInteropNativeLib);$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);$(ClCompile)"
+      Outputs="$(OutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)">
+    <Message Text="# jonp: _Test: Building: @(_JavaInteropNativeLib->'%(Identity) for %(Arch)', ' ')" />
+    <MakeDir Directories="$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)" />
     <ItemGroup>
       <_Cmake
           Condition=" '$(PrepareNativeToolchain)' != '' "
-          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) $(_PrimaryArch)"
+          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) %(_JavaInteropNativeLib.Arch)"
       />
       <_Cmake Include="CmakePath=$(CmakePath)" />
       <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
       <_Cmake Include="CmakeSourceDir=$(MSBuildThisFileDirectory)" />
-      <_Cmake Include="CmakeBuildDir=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)$(_PrimaryDir)" />
+      <_Cmake Include="CmakeBuildDir=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)" />
       <_Cmake Include="CmakeExtraArgs=$(_ExtraArgs)" />
     </ItemGroup>
     <MSBuild
@@ -82,48 +81,15 @@
         Properties="@(_Cmake)"
         Targets="Cmake"
     />
-    <MakeDir Directories="$(OutputPath)$(_PrimaryDir)" />
+    <MakeDir Directories="$(OutputPath)%(_JavaInteropNativeLib.Dir)" />
     <ItemGroup>
-      <_Libs Include="$(IntermediateOutputPath)$(_PrimaryDir)\$(_JavaInteropLibName)*" />
+      <_Libs Include="$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)*" />
     </ItemGroup>
     <Copy
         SourceFiles="@(_Libs)"
-        DestinationFolder="$(OutputPath)$(_PrimaryDir)"
+        DestinationFolder="$(OutputPath)%(_JavaInteropNativeLib.Dir)"
     />
-    <Touch Files="$(_PrimaryOutputPath)" />
-  </Target>
-
-  <Target Name="_BuildSecondaryLib"
-      Condition=" '$(_SecondaryOutputPath)' != '' "
-      DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetCmakeOptions"
-      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj"
-      Outputs="$(_SecondaryOutputPath)">
-    <MakeDir Directories="$(IntermediateOutputPath)$(_SecondaryDir)" />
-    <ItemGroup>
-      <_Cmake
-          Condition=" '$(PrepareNativeToolchain)' != '' "
-          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) $(_SecondaryArch)"
-      />
-      <_Cmake Include="CmakePath=$(CmakePath)" />
-      <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
-      <_Cmake Include="CmakeSourceDir=$(MSBuildThisFileDirectory)" />
-      <_Cmake Include="CmakeBuildDir=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)$(_SecondaryDir)" />
-      <_Cmake Include="CmakeExtraArgs=$(_ExtraArgs)" />
-    </ItemGroup>
-    <MSBuild
-        Projects="..\..\build-tools\scripts\RunCmake.proj"
-        Properties="@(_Cmake)"
-        Targets="Cmake"
-    />
-    <MakeDir Directories="$(OutputPath)$(_SecondaryDir)" />
-    <ItemGroup>
-      <_Libs Include="$(IntermediateOutputPath)$(_SecondaryDir)\$(_JavaInteropLibName)*" />
-    </ItemGroup>
-    <Copy
-        SourceFiles="@(_Libs)"
-        DestinationFolder="$(OutputPath)$(_SecondaryDir)"
-    />
-    <Touch Files="$(_SecondaryOutputPath)" />
+    <Touch Files="$(OutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)" />
   </Target>
 
   <Target Name="_Clean"
