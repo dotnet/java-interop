@@ -42,7 +42,7 @@
   <Target Name="_BuildLibs"
       BeforeTargets="Build"
       DependsOnTargets="GetNativeBuildCommands"
-      Inputs="@(_NativeTimingLib);$(MSBuildThisFileFullPath);NativeTiming.csproj;@(ClInclude);$(ClCompile)"
+      Inputs="@(_NativeTimingLib);$(MSBuildThisFileFullPath);NativeTiming.csproj;@(ClInclude);@(ClCompile)"
       Outputs="$(OutputPath)%(_NativeTimingLib.Dir)$(_NativeTimingLibName)">
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <PropertyGroup>
