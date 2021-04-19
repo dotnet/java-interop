@@ -108,10 +108,10 @@ jobs:
 
   - template: templates\install-dependencies.yaml
     
-  - script: make prepare CONFIGURATION=$(Build.Configuration)
+  - script: make prepare CONFIGURATION=$(Build.Configuration) JI_MAX_JDK=11
     displayName: make prepare
     
-  - script: make all CONFIGURATION=$(Build.Configuration)
+  - script: make all CONFIGURATION=$(Build.Configuration) JI_MAX_JDK=11
     displayName: make all
     
   - script: |
