@@ -78,7 +78,7 @@ namespace Java.Interop.Tools.Generator
 						// BG4302
 						Report.LogCodedError (Report.ErrorAddNodeInvalidXPath, e, metaitem, path);
 					}
-						break;
+					break;
 				case "change-node":
 					try {
 						var nodes = apiDocument.ApiDocument.XPathSelectElements (path);

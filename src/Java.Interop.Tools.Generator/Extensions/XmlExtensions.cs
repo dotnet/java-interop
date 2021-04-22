@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -16,7 +17,7 @@ namespace Xamarin.Android.Tools
 		{
 			var value = element.XGetAttribute (name);
 
-			if (int.TryParse (value, out var result))
+			if (int.TryParse (value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result))
 				return result;
 
 			return null;

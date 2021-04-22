@@ -35,8 +35,9 @@ namespace MonoDroid.Generation
 						gens.AddRange (ParsePackage (elem, options));
 						break;
 					case "enum":
-						var sym = new EnumSymbol (elem.XGetAttribute ("name"));
-						options.SymbolTable.AddType (elem.XGetAttribute ("name"), sym);
+						var name = elem.XGetAttribute ("name");
+						var sym = new EnumSymbol (name);
+						options.SymbolTable.AddType (name, sym);
 						continue;
 					default:
 						Report.LogCodedWarning (0, Report.WarningUnexpectedRootChildNode, elem.Name.ToString ());
