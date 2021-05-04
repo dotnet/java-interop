@@ -12,7 +12,7 @@
     <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
   <ItemGroup>
-    <!-- This package erroneously contains /net6.0/SgmlReader.exe and /net6.0/SgmlReaderDll.dll.
+    <!-- This package erroneously contains /netcoreapp3.1/SgmlReader.exe and /netcoreapp3.1/SgmlReaderDll.dll.
          We are going to use a package reference to download the nuget, and a regular reference to actually
          reference the correct assembly. -->
     <PackageReference Include="Microsoft.Xml.SgmlReader" Version="1.8.16" ExcludeAssets="Compile" GeneratePathProperty="true" />
