@@ -50,7 +50,7 @@
     <XamarinAndroidToolsDirectory   Condition=" '$(XamarinAndroidToolsDirectory)' == '' ">$(MSBuildThisFileDirectory)external\xamarin-android-tools</XamarinAndroidToolsDirectory>
   </PropertyGroup>
   <PropertyGroup>
-    <DotNetToolPath Condition=" '$(DotNetToolPath)' == '' ">dotnet</DotNetToolPath>
+    <DotnetToolPath Condition=" '$(DotnetToolPath)' == '' ">dotnet</DotnetToolPath>
     <CmakePath Condition=" '$(CmakePath)' == '' ">cmake</CmakePath>
     <GradleHome Condition=" '$(GradleHome)' == '' ">$(MSBuildThisFileDirectory)build-tools\gradle</GradleHome>
     <GradleWPath Condition=" '$(GradleWPath)' == '' ">$(GradleHome)\gradlew</GradleWPath>
@@ -68,7 +68,7 @@
     <Runtime Condition="'$(OS)' != 'Windows_NT'">mono</Runtime>
     <_JNIEnvGenPath Condition=" '$(JIBuildingForNetCoreApp)' == 'True' ">$(BuildToolOutputFullPath)jnienv-gen.dll</_JNIEnvGenPath>
     <_JNIEnvGenPath Condition=" '$(JIBuildingForNetCoreApp)' != 'True' ">$(BuildToolOutputFullPath)jnienv-gen.exe</_JNIEnvGenPath>
-    <_RunJNIEnvGen Condition=" '$(JIBuildingForNetCoreApp)' == 'True' ">$(DotNetToolPath) "$(_JNIEnvGenPath)"</_RunJNIEnvGen>
+    <_RunJNIEnvGen Condition=" '$(JIBuildingForNetCoreApp)' == 'True' ">$(DotnetToolPath) "$(_JNIEnvGenPath)"</_RunJNIEnvGen>
     <_RunJNIEnvGen Condition=" '$(JIBuildingForNetCoreApp)' != 'True' ">$(Runtime) "$(_JNIEnvGenPath)"</_RunJNIEnvGen>
   </PropertyGroup>
   
