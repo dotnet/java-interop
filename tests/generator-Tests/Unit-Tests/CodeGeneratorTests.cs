@@ -1286,15 +1286,13 @@ namespace generatortests
 			  </package>
 
 			  <package name='com.example' jni-name='com/example'>
-			    <interface abstract='true' deprecated='not deprecated' final='false' name='FlowIterator' static='false' visibility='public' jni-signature='Lcom/mob/tools/java8/FlowIterator;'>
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='FlowIterator' static='false' visibility='public' jni-signature='Lcom/example/FlowIterator;'
 			      <typeParameters>
 			        <typeParameter name='R' classBound='java.lang.Object' jni-classBound='Ljava/lang/Object;'></typeParameter>
 			      </typeParameters>
-			      <method abstract='true' deprecated='not deprecated' final='false' name='next' jni-signature='(I)R' bridge='false' native='false' return='R' jni-return='TR;' static='false' synchronized='false' synthetic='false' visibility='public'>
-			        <parameter name='count' type='int' jni-type='I'></parameter>
-			      </method>
+			      <method abstract='true' deprecated='not deprecated' final='false' name='next' jni-signature='()Ljava/lang/Object;' bridge='false' native='false' return='R' jni-return='TR;' static='false' synchronized='false' synthetic='false' visibility='public' />
 			    </interface>
-			    <class abstract='true' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='RangeIterator' static='true' visibility='public' jni-signature='Lcom/example/RangeIterator;'>
+			    <class abstract='true' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='FlowIterator.RangeIterator' static='true' visibility='public' jni-signature='Lcom/example/FlowIterator$RangeIterator;'>
 			      <implements name='com.example.FlowIterator' name-generic-aware='com.example.FlowIterator&lt;T&gt;' jni-type='Lcom/example/FlowIterator&lt;TT;&gt;;'></implements>
 			      <typeParameters>
 			        <typeParameter name='T' interfaceBounds='java.lang.Comparable&lt;T&gt;' jni-interfaceBounds='Ljava/lang/Comparable&lt;TT;&gt;;'>
@@ -1303,14 +1301,12 @@ namespace generatortests
 			          </genericConstraints>
 			        </typeParameter>
 			      </typeParameters>
-			      <method abstract='false' deprecated='not deprecated' final='false' name='next' jni-signature='(I)Ljava/lang/Comparable;' bridge='false' native='false' return='T' jni-return='TT;' static='false' synchronized='false' synthetic='false' visibility='public'>
-			        <parameter name='count' type='int' jni-type='I'></parameter>
-			      </method>
+			      <method abstract='false' deprecated='not deprecated' final='false' name='next' jni-signature='()Ljava/lang/Comparable;' bridge='false' native='false' return='T' jni-return='TT;' static='false' synchronized='false' synthetic='false' visibility='public' />
 			    </class>
 			  </package>
 			</api>");
 
-			var iface = gens.OfType<ClassGen> ().Single (c => c.Name == "RangeIterator");
+			var iface = gens.OfType<ClassGen> ().Single (c => c.Name == "FlowIterator.RangeIterator");
 			var method = iface.Methods.Single ();
 
 			var bmad = new BoundMethodAbstractDeclaration (iface, method, options, null);
@@ -1318,7 +1314,7 @@ namespace generatortests
 
 			bmad.Write (source_writer);
 
-			var expected = @"Java.Lang.Object Com.Example.RangeIterator.Next (int count)
+			var expected = @"Java.Lang.Object Com.Example.RangeIterator.Next ()
 					{
 					  throw new NotImplementedException ();
 					}";
