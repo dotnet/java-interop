@@ -121,13 +121,10 @@ namespace Java.Interop.Tools.JavaSource {
 							AstNodeToXmlContent (parseNode.ChildNodes [1]));
 						FinishParse (context, parseNode).Returns.Add (r);
 						parseNode.AstNode = r;
-
 					} else {
 						var r = jdi.Returns.First () as XElement;
 						if (r != null) {
 							r.Add (" ", AstNodeToXmlContent (parseNode.ChildNodes [1]));
-							FinishParse (context, parseNode).Returns.Clear ();
-							FinishParse (context, parseNode).Returns.Add (r);
 							parseNode.AstNode = r;
 						}
 					}
