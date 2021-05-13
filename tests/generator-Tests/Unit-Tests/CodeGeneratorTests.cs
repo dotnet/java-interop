@@ -1306,15 +1306,16 @@ namespace generatortests
 			  </package>
 			</api>");
 
-			var iface = gens.OfType<ClassGen> ().Single (c => c.Name == "FlowIterator.RangeIterator");
-			var method = iface.Methods.Single ();
+			var declIface = gens.OfType<InterfaceGen> ().Single (c => c.Name == "IFlowIterator");
+			var declClass = declIface.NestedTypes.OfType<ClassGen> ().Single (c => c.Name == "FlowIteratorRangeIterator");
+			var method = declClass.Methods.Single ();
 
-			var bmad = new BoundMethodAbstractDeclaration (iface, method, options, null);
+			var bmad = new BoundMethodAbstractDeclaration (declClass, method, options, null);
 			var source_writer = new CodeWriter (writer);
 
 			bmad.Write (source_writer);
 
-			var expected = @"Java.Lang.Object Com.Example.RangeIterator.Next ()
+			var expected = @"Java.Lang.Object Com.Example.FlowIteratorRangeIterator.Next ()
 					{
 					  throw new NotImplementedException ();
 					}";
