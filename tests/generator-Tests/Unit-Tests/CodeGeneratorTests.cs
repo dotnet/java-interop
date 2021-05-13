@@ -1286,7 +1286,7 @@ namespace generatortests
 			  </package>
 
 			  <package name='com.example' jni-name='com/example'>
-			    <interface abstract='true' deprecated='not deprecated' final='false' name='FlowIterator' static='false' visibility='public' jni-signature='Lcom/example/FlowIterator;'
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='FlowIterator' static='false' visibility='public' jni-signature='Lcom/example/FlowIterator;'>
 			      <typeParameters>
 			        <typeParameter name='R' classBound='java.lang.Object' jni-classBound='Ljava/lang/Object;'></typeParameter>
 			      </typeParameters>
