@@ -263,7 +263,7 @@ namespace Java.Interop {
 				JavaArray<Boolean>.DestroyArgumentState<JavaBooleanArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaBooleanArray.CreateMarshaledValue;
 
@@ -439,7 +439,7 @@ namespace Java.Interop {
 				JavaArray<SByte>.DestroyArgumentState<JavaSByteArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaSByteArray.CreateMarshaledValue;
 
@@ -615,7 +615,7 @@ namespace Java.Interop {
 				JavaArray<Char>.DestroyArgumentState<JavaCharArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaCharArray.CreateMarshaledValue;
 
@@ -791,7 +791,7 @@ namespace Java.Interop {
 				JavaArray<Int16>.DestroyArgumentState<JavaInt16Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaInt16Array.CreateMarshaledValue;
 
@@ -967,7 +967,7 @@ namespace Java.Interop {
 				JavaArray<Int32>.DestroyArgumentState<JavaInt32Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaInt32Array.CreateMarshaledValue;
 
@@ -1143,7 +1143,7 @@ namespace Java.Interop {
 				JavaArray<Int64>.DestroyArgumentState<JavaInt64Array> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaInt64Array.CreateMarshaledValue;
 
@@ -1319,7 +1319,7 @@ namespace Java.Interop {
 				JavaArray<Single>.DestroyArgumentState<JavaSingleArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaSingleArray.CreateMarshaledValue;
 
@@ -1495,7 +1495,7 @@ namespace Java.Interop {
 				JavaArray<Double>.DestroyArgumentState<JavaDoubleArray> (value, ref state, synchronize);
 			}
 
-			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType = null, ParameterAttributes synchronize = 0)
 	                {
 	                        Func<IntPtr, Type?, object?>  m = JavaDoubleArray.CreateMarshaledValue;
 

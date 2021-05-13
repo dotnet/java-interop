@@ -209,7 +209,7 @@ namespace Java.InteropTests
 			throw new NotImplementedException ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type targetType, ParameterAttributes synchronize)
 		{
 			var c = typeof (MyColor).GetConstructor (new[]{typeof (int)});
 			var v = Expression.Variable (typeof (MyColor), sourceValue.Name + "_val");
@@ -253,7 +253,7 @@ namespace Java.InteropTests
 			throw new NotImplementedException ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type targetType, ParameterAttributes synchronize)
 		{
 			var c = typeof (MyLegacyColor).GetConstructor (new[]{typeof (int)});
 			var v = Expression.Variable (typeof (MyLegacyColor), sourceValue.Name + "_val");

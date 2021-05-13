@@ -57,7 +57,7 @@ namespace Java.Interop {
 			return ReturnObjectReferenceToJni (context, sourceValue.Name, obj);
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type targetType, ParameterAttributes synchronize)
 		{
 			Func<IntPtr, string?>   m   = JniEnvironment.Strings.ToString;
 

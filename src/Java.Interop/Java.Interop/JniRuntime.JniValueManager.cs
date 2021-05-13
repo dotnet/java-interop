@@ -333,7 +333,7 @@ namespace Java.Interop
 				return GetActivationConstructor (fallbackType);
 			}
 
-			static ConstructorInfo GetActivationConstructor (Type type)
+			static ConstructorInfo? GetActivationConstructor (Type type)
 			{
 				return
 					(from c in type.GetConstructors (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -673,7 +673,7 @@ namespace Java.Interop
 			return ReturnObjectReferenceToJni (context, sourceValue.Name, CreateIntermediaryExpressionFromManagedExpression (context, sourceValue));
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type targetType, ParameterAttributes synchronize)
 		{
 			var r   = Expression.Variable (targetType, sourceValue.Name + "_val");
 			context.LocalVariables.Add (r);
@@ -718,9 +718,9 @@ namespace Java.Interop
 			return ValueMarshaler.CreateParameterFromManagedExpression (context, sourceValue, synchronize);
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type targetType, ParameterAttributes synchronize)
 		{
-			return ValueMarshaler.CreateParameterToManagedExpression (context, sourceValue, synchronize, targetType);
+			return ValueMarshaler.CreateParameterToManagedExpression (context, sourceValue, targetType, synchronize);
 		}
 
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)

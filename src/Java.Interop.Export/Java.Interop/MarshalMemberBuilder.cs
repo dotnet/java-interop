@@ -158,7 +158,7 @@ namespace Java.Interop {
 			var marshalerContext    = new JniValueMarshalerContext (jvm, useVmVariable ? vm : null);
 			if (!method.IsStatic) {
 				var selfMarshaler   = Runtime.ValueManager.GetValueMarshaler (type);
-				self                = selfMarshaler.CreateParameterToManagedExpression (marshalerContext, context, 0, type);
+				self                = selfMarshaler.CreateParameterToManagedExpression (marshalerContext, context, type, 0);
 			}
 
 			var marshalParameters   = new List<ParameterExpression> (methodParameters.Length);
@@ -176,7 +176,7 @@ namespace Java.Interop {
 					else
 						throw new InvalidOperationException ("Should not be reached.");
 				}
-				var p           = marshaler.CreateParameterToManagedExpression (marshalerContext, np, methodParameters [i].Attributes, methodParameters [i].ParameterType);
+				var p           = marshaler.CreateParameterToManagedExpression (marshalerContext, np, methodParameters [i].ParameterType, methodParameters [i].Attributes);
 				marshalParameters.Add (np);
 				invokeParameters.Add (p);
 			}

@@ -15,7 +15,7 @@ namespace Java.Interop.Expressions {
 
 		protected override string GetKeyForItem (ParameterExpression item)
 		{
-			return item.Name;
+			return item.Name!;
 		}
 	}
 
@@ -142,7 +142,7 @@ namespace Java.Interop {
 			return CreateValue (ref r, JniObjectReferenceOptions.Copy, targetType);
 		}
 
-		public  virtual     Expression              CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
+		public  virtual     Expression              CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type targetType, ParameterAttributes synchronize = 0)
 		{
 			Func<IntPtr, Type, object?> m   = CreateValue;
 
@@ -169,7 +169,7 @@ namespace Java.Interop {
 			return ReturnObjectReferenceToJni (context, sourceValue.Name, Expression.Property (s, "ReferenceValue"));
 		}
 
-		protected Expression ReturnObjectReferenceToJni (JniValueMarshalerContext context, string namePrefix, Expression sourceValue)
+		protected Expression ReturnObjectReferenceToJni (JniValueMarshalerContext context, string? namePrefix, Expression sourceValue)
 		{
 			Func<JniObjectReference, IntPtr>    m = JniEnvironment.References.NewReturnToJniRef;
 			var r   = Expression.Variable (MarshalType, namePrefix + "_rtn");

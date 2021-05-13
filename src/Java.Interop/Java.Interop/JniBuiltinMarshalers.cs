@@ -259,7 +259,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -386,7 +386,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -513,7 +513,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -640,7 +640,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -767,7 +767,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -894,7 +894,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -1021,7 +1021,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}
@@ -1148,7 +1148,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 		    return sourceValue;
 		}

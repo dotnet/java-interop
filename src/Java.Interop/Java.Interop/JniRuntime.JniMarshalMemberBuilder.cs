@@ -178,7 +178,7 @@ namespace Java.Interop {
 			return sourceValue;
 		}
 
-		public override Expression CreateParameterToManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
+		public override Expression CreateParameterToManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue, Type? targetType, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
