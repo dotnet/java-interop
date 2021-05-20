@@ -26,7 +26,12 @@ namespace Xamarin.Android.Binder
 			if (options == null)
 				return 1;
 
-			Run (options);
+			try {
+				Run (options);
+			} catch (BindingGeneratorException) {
+				return 1;
+			}
+
 			return 0;
 		}
 
