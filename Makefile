@@ -66,7 +66,7 @@ bin/Build$(CONFIGURATION)/Java.Interop.BootstrapTasks.dll: build-tools/Java.Inte
 prepare-external $(PREPARE_EXTERNAL_FILES):
 	git submodule update --init --recursive
 	(cd external/xamarin-android-tools && $(MAKE) prepare)
-	nuget restore
+	dotnet restore /v:n
 
 prepare-core: bin/Build$(CONFIGURATION)/MonoInfo.props src/Java.Runtime.Environment/Java.Runtime.Environment.dll.config
 
