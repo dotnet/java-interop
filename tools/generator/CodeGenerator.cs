@@ -15,6 +15,7 @@ using Java.Interop.Tools.TypeNameMappings;
 using MonoDroid.Generation.Utilities;
 using Java.Interop.Tools.Generator.Transformation;
 using Java.Interop.Tools.Generator;
+using Java.Interop.Tools.JavaTypeSystem;
 
 namespace Xamarin.Android.Binder
 {
@@ -101,10 +102,42 @@ namespace Xamarin.Android.Binder
 				apiSourceAttr = xr.GetAttribute ("api-source");
 			}
 
+			var is_classparse = apiSourceAttr == "class-parse";
+
+			if (is_classparse) {
+				// Parse api.xml
+				var type_collection = JavaXmlApiImporter.Parse (filename);
+
+				// Add in reference types from assemblies
+				foreach (var reference in references.Distinct ()) {
+					Report.Verbose (0, "resolving assembly {0}.", reference);
+					var assembly = resolver.Load (reference);
+
+					ManagedApiImporter.Parse (assembly, type_collection);
+				}
+
+				// Run the type resolution pass
+				type_collection.ResolveCollection ();
+
+				// Output the adjusted xml
+				var output_xml = api_xml_adjuster_output ?? Path.Combine (Path.GetDirectoryName (filename), Path.GetFileName (filename) + ".adjusted");
+
+				JavaXmlApiExporter.Save (type_collection, output_xml);
+
+				// Use this output for future steps
+				filename = output_xml;
+				apiXmlFile = filename;
+				is_classparse = false;
+			}
+
+			if (only_xml_adjuster)
+				return;
+
+
 			// We don't use shallow referenced types with class-parse because the Adjuster process
 			// enumerates every ctor/method/property/field to build its model, so we will need
 			// every type to be fully populated.
-			opt.UseShallowReferencedTypes = apiSourceAttr != "class-parse";
+			opt.UseShallowReferencedTypes = !is_classparse;
 
 			foreach (var reference in references.Distinct ()) {
 				try {
@@ -129,7 +162,7 @@ namespace Xamarin.Android.Binder
 			}
 
 			// For class-parse API description, transform it to jar2xml style.
-			if (apiSourceAttr == "class-parse") {
+			if (is_classparse) {
 				apiXmlFile = api_xml_adjuster_output ?? Path.Combine (Path.GetDirectoryName (filename), Path.GetFileName (filename) + ".adjusted");
 				new Adjuster ().Process (filename, opt, opt.SymbolTable.AllRegisteredSymbols (opt).OfType<GenBase> ().ToArray (), apiXmlFile, Report.Verbosity ?? 0);
 			}
