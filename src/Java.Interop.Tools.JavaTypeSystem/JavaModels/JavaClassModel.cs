@@ -8,6 +8,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 {
 	public class JavaClassModel : JavaTypeModel
 	{
+		private IDictionary<JavaTypeReference, JavaTypeReference>? generic_inheritance_mapping;
+
 		public string BaseType { get; }
 		public string BaseTypeGeneric { get; }
 		public string BaseTypeJni { get; }
@@ -69,28 +71,33 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				nested.ResolveBaseMembers ();
 		}
 
-		public IDictionary<JavaTypeReference, JavaTypeReference>? GenericInheritanceMapping { get; set; }
+		public IDictionary<JavaTypeReference, JavaTypeReference>? GenericInheritanceMapping {
+			get {
+				PrepareGenericInheritanceMapping ();
+				return generic_inheritance_mapping;
+			}
+		}
 
 		public void PrepareGenericInheritanceMapping ()
 		{
-			if (GenericInheritanceMapping != null)
+			if (generic_inheritance_mapping != null)
 				return; // already done.
 
 			var empty = new Dictionary<JavaTypeReference, JavaTypeReference> ();
 
 			var bt = BaseTypeReference == null ? null : BaseTypeReference.ReferencedType as JavaClassModel;
 			if (bt == null)
-				GenericInheritanceMapping = new Dictionary<JavaTypeReference, JavaTypeReference> (); // empty
+				generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> (); // empty
 			else {
 				// begin processing from the base class.
 				bt.PrepareGenericInheritanceMapping ();
 
 				if (BaseTypeReference?.TypeParameters == null)
-					GenericInheritanceMapping = empty;
+					generic_inheritance_mapping = empty;
 				else if (BaseTypeReference?.ReferencedType is null || BaseTypeReference?.ReferencedType?.TypeParameters.Count == 0) {
 					// FIXME: I guess this should not happen. But this still happens.
 					//Log.LogWarning ("Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.", cls.ExtendsGeneric, cls.FullName);
-					GenericInheritanceMapping = empty;
+					generic_inheritance_mapping = empty;
 				} else {
 					if (BaseTypeReference.ReferencedType.TypeParameters.Count != BaseTypeReference.TypeParameters.Count)
 						throw new Exception (string.Format ("On {0}.{1}, referenced generic arguments count do not match the base type parameters definition",
@@ -102,9 +109,9 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 						 .Where (p => p.Value.ReferencedTypeParameter == null || p.Key.Name != p.Value.ReferencedTypeParameter.Name))
 						dic.Add (new JavaTypeReference (kvp.Key, null), kvp.Value);
 					if (dic.Any ()) {
-						GenericInheritanceMapping = dic;
+						generic_inheritance_mapping = dic;
 					} else
-						GenericInheritanceMapping = empty;
+						generic_inheritance_mapping = empty;
 				}
 			}
 		}

@@ -49,20 +49,19 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				return;
 			}
 
-			var full_name = item.FullName;
+			var full_name = item.FullName.ChompLast ('.');
 
 			// Nested type, find parent model to put it in
-			while ((full_name = full_name.ChompLast ('.')).Length > 0) {
-				if (TypesFlattened.TryGetValue (full_name, out var parent)) {
-					parent.NestedTypes.Add (item);
-					item.ParentType = parent;
-					TypesFlattened [item.FullName] = item;
+			if (TypesFlattened.TryGetValue (full_name, out var parent)) {
+				parent.NestedTypes.Add (item);
+				item.ParentType = parent;
+				TypesFlattened [item.FullName] = item;
 
-					return;
-				}
+				return;
 			}
 
-			throw new Exception ();
+			// TODO: Probably want to log this
+			//throw new Exception ();
 		}
 
 		public void AddReferenceType (JavaTypeModel item)
@@ -261,8 +260,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 			// Fixing this here is the least disruptive way to add these abstract members
 			//JavaInterfacesMustBeImplementedInAbstractTypesFixup.Fixup (this);
-			foreach (var klass in TypesFlattened.Values.OfType<JavaClassModel> ())
-				klass.PrepareGenericInheritanceMapping ();
+			//foreach (var klass in TypesFlattened.Values.OfType<JavaClassModel> ())
+			//	klass.PrepareGenericInheritanceMapping ();
 
 			foreach (var klass in Types.Values.OfType<JavaClassModel> ()) {
 				//if (klass.Name == "BaseDexClassLoader")

@@ -58,6 +58,9 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				SaveType (type, writer, "class", XmlConvert.ToString (cls.IsAbstract), cls.BaseType, cls.BaseTypeGeneric, cls.BaseTypeJni);
 			else
 				SaveType (type, writer, "interface", "true", null, null, null);
+
+			foreach (var nested in type.NestedTypes)
+				SaveType (nested, writer);
 		}
 
 		static void SaveType (JavaTypeModel cls, XmlWriter writer, string elementName, string abs, string? ext, string? extgen, string? jniExt)
@@ -264,7 +267,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			if (GetVisibleNonSpecialType (parameter.ParentMethod, parameter.TypeModel) is JavaTypeReference jtr)
 				return jtr.ToString ();
 
-			return parameter.Type;
+			return parameter.GenericType;
 		}
 
 		private static JavaTypeReference? GetVisibleNonSpecialType (JavaMethodModel method, JavaTypeReference? r)

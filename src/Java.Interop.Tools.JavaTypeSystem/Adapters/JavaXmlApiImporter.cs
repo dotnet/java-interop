@@ -40,14 +40,18 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				collection.Packages.Add (pkg.Name, pkg);
 
 			// First add all non-nested types
-			foreach (var type in packages.SelectMany (p => p.Types))
-				if (!type.Name!.Contains ('.'))
-					collection.Add (type);
+			foreach (var type in packages.SelectMany (p => p.Types).Where (t => !t.NestedName.Contains ('.')))
+				collection.Add (type);
 
 			// Add all nested types
-			foreach (var type in packages.SelectMany (p => p.Types))
-				if (type.Name!.Contains ('.'))
-					collection.Add (type);
+			// This needs to be done ordered from least nested to most nested, in order for nesting to work.
+			// That is, 'android.foo.blah' needs to be added before 'android.foo.blah.bar'.
+			foreach (var type in packages.SelectMany (p => p.Types).Where (t => t.NestedName.Contains ('.')).OrderBy (t => t.FullName.Count (c => c == '.')).ToArray ()) {
+				collection.Add (type);
+
+				// Remove nested types from Package
+				type.Package.Types.Remove (type);
+			}
 
 			// Remove any package-private classes
 			//foreach (var klass in collection.Types.Values.OfType<JavaClassModel> ())
@@ -137,7 +141,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			foreach (var child in element.Elements ()) {
 				switch (child.Name.LocalName) {
 					case "constructor":
-						if (child.XGetAttribute ("synthetic") != "true")
+						//if (child.XGetAttribute ("synthetic") != "true")
 							model.Constructors.Add (ParseConstructor (model, child));
 						break;
 					case "field":

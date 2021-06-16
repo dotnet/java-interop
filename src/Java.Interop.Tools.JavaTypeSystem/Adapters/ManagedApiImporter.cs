@@ -115,8 +115,8 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				javaDeprecated: obs_attr != null ? "deprecated" : "not-deprecated",
 				javaStatic: false,
 				jniSignature: FormatJniSignature (package, nested_name),
-				baseTypeJni: $"L{base_jni};"
-			);
+				baseTypeJni: base_jni.HasValue () ? $"L{base_jni};" : string.Empty
+			); ;
 
 			ParseImplementedInterfaces (type, model);
 
@@ -271,7 +271,11 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				if (base_type is null)
 					break;
 
-				if (base_type != null && (base_type.HasGenericParameters || base_type.IsGenericInstance))
+				// These are the base types for Java.Lang.Object and Java.Lang.Throwable
+				if (base_type.FullName == "System.Object" || base_type.FullName == "System.Exception")
+					return string.Empty;
+
+				if (base_type.HasGenericParameters || base_type.IsGenericInstance)
 					continue;
 
 				if (GetRegisterAttribute (base_type.CustomAttributes) is CustomAttribute reg_attr)
