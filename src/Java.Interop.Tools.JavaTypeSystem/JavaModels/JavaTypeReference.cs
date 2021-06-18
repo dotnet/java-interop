@@ -141,7 +141,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				return false;
 			if (tr1.ReferencedType.Package != tr2.ReferencedType.Package)
 				return false;
-			if (tr1.ReferencedType.Name != tr2.ReferencedType.Name)
+			if (tr1.ReferencedType.NestedName != tr2.ReferencedType.NestedName)
 				return false;
 			return true;
 		}

@@ -17,22 +17,30 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		{
 			foreach (var md in assembly.Modules)
 				foreach (var td in md.Types) {
-					// Currently we do not support generic types because they conflict.
-					// ex: AdapterView`1 and AdapterView both have:
-					// [Register ("android/widget/AdapterView")]
-					// So we do not import the generic type if we also find a non-generic type.
-					var non_generic_type = td.HasGenericParameters
-						? md.GetType (td.FullName.Substring (0, td.FullName.IndexOf ('`')))
-						: null;
-
-					if (ShouldSkipGeneric (td, non_generic_type, null))
-						continue;
-
-					if (ParseType (td, collection) is JavaTypeModel type)
+					if (!ShouldSkipType (td) && ParseType (td, collection) is JavaTypeModel type)
 						collection.AddReferenceTypeRecursive (type);
 				}
 
 			return collection;
+		}
+
+		static bool ShouldSkipType (TypeDefinition type)
+		{
+			if (type.FullName == "Android.Runtime.JavaList")
+				return true;
+
+			// Currently we do not support generic types because they conflict.
+			// ex: AdapterView`1 and AdapterView both have:
+			// [Register ("android/widget/AdapterView")]
+			// So we do not import the generic type if we also find a non-generic type.
+			var non_generic_type = type.HasGenericParameters
+				? type.Module.GetType (type.FullName.Substring (0, type.FullName.IndexOf ('`')))
+				: null;
+
+			if (ShouldSkipGeneric (type, non_generic_type, null))
+				return true;
+
+			return false;
 		}
 
 		static bool ShouldSkipGeneric (TypeDefinition? a, TypeDefinition? b, TypeDefinitionCache? cache)
@@ -214,9 +222,11 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			// We need to try to rebuild the generic signature from the [Register] attributes
 			// on the type components that make up the signature:
 			// java.util.List<mypackage.MyType>
-			if (managedParameter.ParameterType is GenericInstanceType)
-				if (TypeReferenceToJavaType (managedParameter.ParameterType) is string s)
-					raw_type = s;
+
+			// TODO: THis is more correct, but differs from ApiXmlAdjuster.
+			//if (managedParameter.ParameterType is GenericInstanceType)
+			//	if (TypeReferenceToJavaType (managedParameter.ParameterType) is string s)
+			//		raw_type = s;
 
 			return new JavaParameterModel (parent, managedParameter.Name, raw_type, jniParameter.Jni, false);
 		}

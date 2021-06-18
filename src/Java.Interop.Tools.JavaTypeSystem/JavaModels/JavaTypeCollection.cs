@@ -263,7 +263,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			//foreach (var klass in TypesFlattened.Values.OfType<JavaClassModel> ())
 			//	klass.PrepareGenericInheritanceMapping ();
 
-			foreach (var klass in Types.Values.OfType<JavaClassModel> ()) {
+			foreach (var klass in TypesFlattened.Values.OfType<JavaClassModel> ()) {
 				//if (klass.Name == "BaseDexClassLoader")
 				//	Debugger.Break ();
 
