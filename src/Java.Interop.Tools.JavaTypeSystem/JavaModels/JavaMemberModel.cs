@@ -9,7 +9,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		public bool IsStatic { get; }
 		public JavaTypeModel ParentType { get; }
 		public bool IsFinal { get; }
-		public string Visibility { get; set; }
+		public string Visibility { get; }
 		public string Deprecated { get; }
 		public string JniSignature { get; }
 

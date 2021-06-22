@@ -107,6 +107,16 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 					ArrayPart);
 		}
 
+		public override int GetHashCode ()
+		{
+			// it's skipping TypeParameters because it's too annoying...
+			if (SpecialName != null)
+				return SpecialName.GetHashCode ();
+			return (ReferencedType != null ? ReferencedType.Name?.GetHashCode () ?? 0 : 0) << 15 +
+				(ReferencedTypeParameter != null ? ReferencedTypeParameter.Name?.GetHashCode () ?? 0 : 0) << 7 +
+				(ArrayPart != null ? ArrayPart.GetHashCode () : 0);
+		}
+
 		public override bool Equals (object? obj)
 		{
 			return AreEqual (this, obj as JavaTypeReference);

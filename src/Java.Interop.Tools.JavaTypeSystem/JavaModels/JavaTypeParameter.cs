@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Java.Interop.Tools.JavaTypeSystem.Models
 {
 	public class JavaTypeParameter : IJavaResolvable
 	{
 		public string Name { get; set; }
+
+		public JavaTypeParameters Parent { get; }
 
 		public string? ExtendedJniClassBound { get; set; }
 		public string? ExtendedClassBound { get; set; }
@@ -17,9 +16,10 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 		public List<JavaGenericConstraint> GenericConstraints { get; } = new List<JavaGenericConstraint> ();
 
-		public JavaTypeParameter (string name)
+		public JavaTypeParameter (string name, JavaTypeParameters parent)
 		{
 			Name = name;
+			Parent = parent;
 		}
 
 		public void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)

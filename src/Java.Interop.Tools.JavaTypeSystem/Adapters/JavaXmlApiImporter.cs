@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Java.Interop.Tools.JavaTypeSystem.Models;
 
@@ -11,84 +8,52 @@ namespace Java.Interop.Tools.JavaTypeSystem
 {
 	public class JavaXmlApiImporter
 	{
-		public static JavaTypeCollection Parse (string filename)
+		public static JavaTypeCollection Parse (string filename, JavaTypeCollection? collection = null)
 		{
-			var collection = new JavaTypeCollection ();
+			collection ??= new JavaTypeCollection ();
 
-			return Parse (filename, collection);
-		}
-
-		public static JavaTypeCollection Parse (string filename, JavaTypeCollection collection)
-		{
 			var doc = XDocument.Load (filename, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
 			var root = doc.Root;
 
 			if (root is null)
-				throw new Exception ();
+				throw new Exception ("Invalid XML file");
+
+			collection.ApiSource = root.XGetAttributeOrNull ("api-source");
+			collection.Platform = root.XGetAttributeOrNull ("platform");
 
 			var packages = new List<JavaPackage> ();
 
 			foreach (var elem in root.Elements ()) {
 				switch (elem.Name.LocalName) {
 					case "package":
-						packages.Add (ParsePackage (elem));
+						packages.Add (ParsePackage (elem, collection));
 						break;
 				}
 			}
 
-			foreach (var pkg in packages)
-				collection.Packages.Add (pkg.Name, pkg);
-
 			// First add all non-nested types
 			foreach (var type in packages.SelectMany (p => p.Types).Where (t => !t.NestedName.Contains ('.')))
-				collection.Add (type);
+				collection.AddType (type);
 
 			// Add all nested types
 			// This needs to be done ordered from least nested to most nested, in order for nesting to work.
-			// That is, 'android.foo.blah' needs to be added before 'android.foo.blah.bar'.
+			// That is, 'android.foo.Blah' needs to be added before 'android.foo.Blah.Bar'.
 			foreach (var type in packages.SelectMany (p => p.Types).Where (t => t.NestedName.Contains ('.')).OrderBy (t => t.FullName.Count (c => c == '.')).ToArray ()) {
-				collection.Add (type);
+				collection.AddType (type);
 
 				// Remove nested types from Package
 				type.Package.Types.Remove (type);
 			}
 
-			// Remove any package-private classes
-			//foreach (var klass in collection.Types.Values.OfType<JavaClassModel> ())
-			//	RemovePackagePrivateClasses (collection, klass);
-
 			return collection;
 		}
 
-		static void RemovePackagePrivateClasses (JavaTypeCollection types, JavaClassModel klass)
+		public static JavaPackage ParsePackage (XElement package, JavaTypeCollection collection)
 		{
-			if (!klass.Visibility.HasValue ()) {
-				RemoveTypeAndChildren (types, klass);
-				return;
-			}
-
-			foreach (var child in klass.NestedTypes.OfType<JavaClassModel> ())
-				RemovePackagePrivateClasses (types, child);
-		}
-
-		static void RemoveTypeAndChildren (JavaTypeCollection types, JavaTypeModel type)
-		{
-			foreach (var child in type.NestedTypes)
-				RemoveTypeAndChildren (types, child);
-
-			if (types.Types.ContainsKey (type.FullName))
-				types.Types.Remove (type.FullName);
-
-			if (types.TypesFlattened.ContainsKey (type.FullName))
-				types.TypesFlattened.Remove (type.FullName);
-		}
-
-		public static JavaPackage ParsePackage (XElement package)
-		{
-			var pkg = new JavaPackage (
+			var pkg = collection.AddPackage (
 				name: package.XGetAttribute ("name"),
 				jniName: package.XGetAttribute ("jni-name"),
-				managedName: package.Attribute ("managedName")?.Value
+				managedName: package.XGetAttributeOrNull ("managedName")
 			);
 
 			if (package.XGetAttribute ("merge.SourceFile") is string source && source.HasValue ())
@@ -97,13 +62,13 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			foreach (var elem in package.Elements ()) {
 				switch (elem.Name.LocalName) {
 					case "class":
-						if (package.XGetAttribute ("obfuscated") == "true")
+						if (package.XGetAttributeAsBool ("obfuscated"))
 							continue;
 
 						pkg.Types.Add (ParseClass (pkg, elem));
 						break;
 					case "interface":
-						if (package.XGetAttribute ("obfuscated") == "true")
+						if (package.XGetAttributeAsBool ("obfuscated"))
 							continue;
 
 						pkg.Types.Add (ParseInterface (pkg, elem));
@@ -120,12 +85,12 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				javaPackage: package,
 				javaNestedName: element.XGetAttribute ("name"),
 				javaVisibility: element.XGetAttribute ("visibility"),
-				javaAbstract: element.XGetAttribute ("abstract") == "true",
-				javaFinal: element.XGetAttribute ("final") == "true",
+				javaAbstract: element.XGetAttributeAsBool ("abstract"),
+				javaFinal: element.XGetAttributeAsBool ("final"),
 				javaBaseType: element.XGetAttribute ("extends"),
 				javaBaseTypeGeneric: element.XGetAttribute ("extends-generic-aware"),
 				javaDeprecated: element.XGetAttribute ("deprecated"),
-				javaStatic: element.XGetAttribute ("static") == "true",
+				javaStatic: element.XGetAttributeAsBool ("static"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
 				baseTypeJni: element.XGetAttribute ("jni-extends")
 			);
@@ -136,13 +101,12 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				model.PropertyBag.Add ("deprecated-since", dep);
 
 			if (element.Element ("typeParameters") is XElement tp)
-				model.TypeParameters = ParseTypeParameters (tp);
+				ParseTypeParameters (model.TypeParameters, tp);
 
 			foreach (var child in element.Elements ()) {
 				switch (child.Name.LocalName) {
 					case "constructor":
-						//if (child.XGetAttribute ("synthetic") != "true")
-							model.Constructors.Add (ParseConstructor (model, child));
+						model.Constructors.Add (ParseConstructor (model, child));
 						break;
 					case "field":
 						model.Fields.Add (ParseField (model, child));
@@ -151,8 +115,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 						model.Implements.Add (ParseImplements (child));
 						break;
 					case "method":
-						//if (child.XGetAttribute ("synthetic") != "true")
-							model.Methods.Add (ParseMethod (model, child));
+						model.Methods.Add (ParseMethod (model, child));
 						break;
 				}
 			}
@@ -176,7 +139,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				model.PropertyBag.Add ("deprecated-since", dep);
 
 			if (element.Element ("typeParameters") is XElement tp)
-				model.TypeParameters = ParseTypeParameters (tp);
+				ParseTypeParameters (model.TypeParameters, tp);
 
 			foreach (var child in element.Elements ()) {
 				switch (child.Name.LocalName) {
@@ -201,23 +164,23 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			var method = new JavaMethodModel (
 				javaName: element.XGetAttribute ("name"),
 				javaVisibility: element.XGetAttribute ("visibility"),
-				javaAbstract: element.XGetAttribute ("abstract") == "true",
-				javaFinal: element.XGetAttribute ("final") == "true",
-				javaStatic: element.XGetAttribute ("static") == "true",
+				javaAbstract: element.XGetAttributeAsBool ("abstract"),
+				javaFinal: element.XGetAttributeAsBool ("final"),
+				javaStatic: element.XGetAttributeAsBool ("static"),
 				javaReturn: element.XGetAttribute ("return"),
 				javaParentType: type,
 				deprecated: element.XGetAttribute ("deprecated"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
-				isSynthetic: element.XGetAttribute ("synthetic") == "true",
-				isBridge: element.XGetAttribute ("bridge") == "true",
+				isSynthetic: element.XGetAttributeAsBool ("synthetic"),
+				isBridge: element.XGetAttributeAsBool ("bridge"),
 				returnJni: element.XGetAttribute ("jni-return"),
-				isNative: element.XGetAttribute ("native") == "true",
-				isSynchronized: element.XGetAttribute ("synchronized") == "true",
-				returnNotNull: element.XGetAttribute ("return-not-null") == "true"
+				isNative: element.XGetAttributeAsBool ("native"),
+				isSynchronized: element.XGetAttributeAsBool ("synchronized"),
+				returnNotNull: element.XGetAttributeAsBool ("return-not-null")
 			);
 
 			if (element.Element ("typeParameters") is XElement tp)
-				method.TypeParameters = ParseTypeParameters (tp);
+				ParseTypeParameters (method.TypeParameters, tp);
 
 			foreach (var child in element.Elements ("parameter"))
 				method.Parameters.Add (ParseParameter (method, child));
@@ -237,18 +200,18 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			var method = new JavaConstructorModel (
 				javaName: element.XGetAttribute ("name"),
 				javaVisibility: element.XGetAttribute ("visibility"),
-				javaAbstract: element.XGetAttribute ("abstract") == "true",
-				javaFinal: element.XGetAttribute ("final") == "true",
-				javaStatic: element.XGetAttribute ("static") == "true",
+				javaAbstract: element.XGetAttributeAsBool ("abstract"),
+				javaFinal: element.XGetAttributeAsBool ("final"),
+				javaStatic: element.XGetAttributeAsBool ("static"),
 				javaParentType: type,
 				deprecated: element.XGetAttribute ("deprecated"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
-				isSynthetic: element.XGetAttribute ("synthetic") == "true",
-				isBridge: element.XGetAttribute ("bridge") == "true"
+				isSynthetic: element.XGetAttributeAsBool ("synthetic"),
+				isBridge: element.XGetAttributeAsBool ("bridge")
 			);
 
 			if (element.Element ("typeParameters") is XElement tp)
-				method.TypeParameters = ParseTypeParameters (tp);
+				ParseTypeParameters (method.TypeParameters, tp);
 			foreach (var child in element.Elements ("exception"))
 				method.Exceptions.Add (ParseException (child));
 
@@ -270,15 +233,15 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				visibility: element.XGetAttribute ("visibility"),
 				type: element.XGetAttribute ("type"),
 				typeGeneric: element.XGetAttribute ("type-generic-aware"),
-				isStatic: element.XGetAttribute ("static") == "true",
+				isStatic: element.XGetAttributeAsBool ("static"),
 				value: element.Attribute ("value")?.Value,
 				parent: type,
-				isFinal: element.XGetAttribute ("final") == "true",
+				isFinal: element.XGetAttributeAsBool ("final"),
 				deprecated: element.XGetAttribute ("deprecated"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
-				isTransient: element.XGetAttribute ("transient") == "true",
-				isVolatile: element.XGetAttribute ("volatile") == "true",
-				isNotNull: element.XGetAttribute ("not-null") == "true"
+				isTransient: element.XGetAttributeAsBool ("transient"),
+				isVolatile: element.XGetAttributeAsBool ("volatile"),
+				isNotNull: element.XGetAttributeAsBool ("not-null")
 			);
 
 			if (element.XGetAttribute ("merge.SourceFile") is string source && source.HasValue ())
@@ -318,39 +281,37 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				javaName: element.XGetAttribute ("name"),
 				javaType: element.XGetAttribute ("type"),
 				jniType: element.XGetAttribute ("jni-type"),
-				isNotNull: element.XGetAttribute ("not-null") == "true"
+				isNotNull: element.XGetAttributeAsBool ("not-null")
 			);
 
 			return parameter;
 		}
 
-		public static JavaTypeParameters ParseTypeParameters (XElement element)
+		public static void ParseTypeParameters (JavaTypeParameters parameters, XElement element)
 		{
-			var parameters = new JavaTypeParameters ();
-
 			foreach (var elem in element.Elements ()) {
 				if (elem.Name.LocalName == "typeParameter")
-					parameters.Add (ParseTypeParameter (elem));
+					ParseTypeParameter (parameters, elem);
 			}
 
 			if (element.XGetAttribute ("merge.SourceFile") is string source && source.HasValue ())
 				parameters.PropertyBag.Add ("merge.SourceFile", source);
-
-			return parameters;
 		}
 
-		public static JavaTypeParameter ParseTypeParameter (XElement element)
+		public static void ParseTypeParameter (JavaTypeParameters parameters, XElement element)
 		{
-			var parameter = new JavaTypeParameter (element.XGetAttribute ("name")) {
+			var parameter = new JavaTypeParameter (element.XGetAttribute ("name"), parameters) {
 				ExtendedJniClassBound = element.XGetAttribute ("jni-classBound"),
 				ExtendedClassBound = element.XGetAttribute ("classBound"),
 				ExtendedInterfaceBounds = element.XGetAttribute ("interfaceBounds"),
 				ExtendedJniInterfaceBounds = element.XGetAttribute ("jni-interfaceBounds")
 			};
 
+			parameters.Add (parameter);
+
 			if (element.Element ("genericConstraints") is XElement gc) {
 				parameter.GenericConstraints.AddRange (ParseGenericConstraints (gc));
-				return parameter;
+				return;
 			}
 
 			// Now we have to deal with the format difference...
@@ -364,8 +325,6 @@ namespace Java.Interop.Tools.JavaTypeSystem
 					foreach (var ic in parameter.ExtendedInterfaceBounds.Split (':'))
 						parameter.GenericConstraints.Add (new JavaGenericConstraint (ic));
 			}
-
-			return parameter;
 		}
 
 		public static List<JavaGenericConstraint> ParseGenericConstraints (XElement element)

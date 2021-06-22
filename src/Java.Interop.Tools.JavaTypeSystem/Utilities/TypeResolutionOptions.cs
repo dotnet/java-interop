@@ -13,5 +13,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		public bool RemoveInterfacesWithUnresolvableMembers { get; set; } = false;
 
 		public static TypeResolutionOptions Default => new TypeResolutionOptions ();
+
+		public static bool ResolveGenerics = true;
 	}
 }

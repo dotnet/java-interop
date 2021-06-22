@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Java.Interop.Tools.Cecil;
 using Java.Interop.Tools.JavaTypeSystem.Models;
 using Mono.Cecil;
@@ -15,43 +12,22 @@ namespace Java.Interop.Tools.JavaTypeSystem
 	{
 		public static JavaTypeCollection Parse (AssemblyDefinition assembly, JavaTypeCollection collection)
 		{
+			var types_to_add = new List<JavaTypeModel> ();
+
 			foreach (var md in assembly.Modules)
 				foreach (var td in md.Types) {
 					if (!ShouldSkipType (td) && ParseType (td, collection) is JavaTypeModel type)
-						collection.AddReferenceTypeRecursive (type);
+						types_to_add.Add (type);
 				}
 
+			// This needs to be done ordered from least nested to most nested, in order for nesting to work.
+			// That is, 'android.foo.Blah' needs to be added before 'android.foo.Blah.Bar'.
+			// Plus, we may have unnested managed types that are actually nested in Java-land:
+			// ex: IContextMenu and IContextMenuContextMenuItem
+			foreach (var type in types_to_add.OrderBy (t => t.FullName.Count (c => c == '.')).ToArray ())
+				AddReferenceTypeRecursive (type, collection);
+
 			return collection;
-		}
-
-		static bool ShouldSkipType (TypeDefinition type)
-		{
-			if (type.FullName == "Android.Runtime.JavaList")
-				return true;
-
-			// Currently we do not support generic types because they conflict.
-			// ex: AdapterView`1 and AdapterView both have:
-			// [Register ("android/widget/AdapterView")]
-			// So we do not import the generic type if we also find a non-generic type.
-			var non_generic_type = type.HasGenericParameters
-				? type.Module.GetType (type.FullName.Substring (0, type.FullName.IndexOf ('`')))
-				: null;
-
-			if (ShouldSkipGeneric (type, non_generic_type, null))
-				return true;
-
-			return false;
-		}
-
-		static bool ShouldSkipGeneric (TypeDefinition? a, TypeDefinition? b, TypeDefinitionCache? cache)
-		{
-			if (a == null || b == null)
-				return false;
-			if (!a.ImplementsInterface ("Android.Runtime.IJavaObject", cache) || !b.ImplementsInterface ("Android.Runtime.IJavaObject", cache))
-				return false;
-
-			return GetRegisteredJavaTypeName (a) == GetRegisteredJavaTypeName (b);
-			//return JavaNativeTypeManager.ToJniName (a) == JavaNativeTypeManager.ToJniName (b);
 		}
 
 		public static JavaTypeModel? ParseType (TypeDefinition type, JavaTypeCollection collection)
@@ -76,23 +52,25 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static bool ShouldImport (TypeDefinition td)
 		{
-			// We want to exclude "IBlahInvoker" types from this type registration.
+			// We want to exclude "IBlahInvoker" and "IBlahImplementor" types
 			if (td.Name.EndsWith ("Invoker")) {
-				string n = td.FullName;
+				var n = td.FullName;
 				n = n.Substring (0, n.Length - 7);
+
 				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
+
 				if (types.Any (t => t.FullName == n))
 					return false;
-				//Console.Error.WriteLine ("WARNING: " + td.FullName + " survived");
 			}
 
 			if (td.Name.EndsWith ("Implementor")) {
-				string n = td.FullName;
+				var n = td.FullName;
 				n = n.Substring (0, n.Length - 11);
+
 				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
+
 				if (types.Any (t => t.FullName == n))
 					return false;
-				//Console.Error.WriteLine ("WARNING: " + td.FullName + " survived");
 			}
 
 			return true;
@@ -167,8 +145,6 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		public static JavaMethodModel? ParseMethod (MethodDefinition method, JavaTypeModel parent)
 		{
-			//if (parent.FullName.StartsWith ("android.hardware.biometrics.BiometricPrompt"))
-			//	Debugger.Break ();
 			if (method.IsPrivate || method.IsAssembly)
 				return null;
 
@@ -201,12 +177,6 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 			for (var i = 0; i < jni_signature.Parameters.Count; i++)
 				model.Parameters.Add (ParseParameterModel (model, jni_signature.Parameters [i], method.Parameters [i]));
-			//var index = 0;
-
-			//foreach (var p in jni_signature.Parameters) {
-			//	var name = method.Parameters [index++].Name;
-			//	model.Parameters.Add (new JavaParameterModel (model, name, p.Type, p.Jni, false));
-			//}
 
 			return model;
 		}
@@ -223,12 +193,51 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			// on the type components that make up the signature:
 			// java.util.List<mypackage.MyType>
 
-			// TODO: THis is more correct, but differs from ApiXmlAdjuster.
+			// TODO: This is more correct, but differs from ApiXmlAdjuster.
 			//if (managedParameter.ParameterType is GenericInstanceType)
 			//	if (TypeReferenceToJavaType (managedParameter.ParameterType) is string s)
 			//		raw_type = s;
 
 			return new JavaParameterModel (parent, managedParameter.Name, raw_type, jniParameter.Jni, false);
+		}
+
+		static void AddReferenceTypeRecursive (JavaTypeModel type, JavaTypeCollection collection)
+		{
+			collection.AddReferenceType (type);
+
+			foreach (var nested in type.NestedTypes)
+				AddReferenceTypeRecursive (nested, collection);
+		}
+
+		static bool ShouldSkipType (TypeDefinition type)
+		{
+			// We want to use 'Java.Util.ArrayList' over 'Android.Runtime.JavaList', so
+			// don't import JavaList.
+			if (type.FullName == "Android.Runtime.JavaList")
+				return true;
+
+			// Currently we do not support generic types because they conflict.
+			// ex: AdapterView`1 and AdapterView both have:
+			// [Register ("android/widget/AdapterView")]
+			// So we do not import the generic type if we also find a non-generic type.
+			var non_generic_type = type.HasGenericParameters
+				? type.Module.GetType (type.FullName.Substring (0, type.FullName.IndexOf ('`')))
+				: null;
+
+			if (ShouldSkipGeneric (type, non_generic_type, null))
+				return true;
+
+			return false;
+		}
+
+		static bool ShouldSkipGeneric (TypeDefinition? a, TypeDefinition? b, TypeDefinitionCache? cache)
+		{
+			if (a == null || b == null)
+				return false;
+			if (!a.ImplementsInterface ("Android.Runtime.IJavaObject", cache) || !b.ImplementsInterface ("Android.Runtime.IJavaObject", cache))
+				return false;
+
+			return GetRegisteredJavaTypeName (a) == GetRegisteredJavaTypeName (b);
 		}
 
 		static string? TypeReferenceToJavaType (TypeReference type)
@@ -314,18 +323,13 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static string? GetSpecialCase (TypeDefinition type)
 		{
-			switch (type.FullName) {
-				case "System.Collections.Generic.IList`1":
-					return "java.util.List";
-				case "System.Collections.Generic.IDictionary`2":
-					return "java.util.Map";
-				case "System.Collections.Generic.ICollection`1":
-					return "java.util.Collection";
-				case "System.String":
-					return "java.lang.String";
-				default:
-					return null;
-			}
+			return type.FullName switch {
+				"System.Collections.Generic.IList`1" => "java.util.List",
+				"System.Collections.Generic.IDictionary`2" => "java.util.Map",
+				"System.Collections.Generic.ICollection`1" => "java.util.Collection",
+				"System.String" => "java.lang.String",
+				_ => null,
+			};
 		}
 
 		static string FullNameCorrected (this TypeReference t) => t.FullName.Replace ('/', '.');
@@ -353,18 +357,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static JavaPackage GetOrCreatePackage (JavaTypeCollection collection, string package, string managedName)
 		{
-			if (collection.Packages.TryGetValue (package, out var pkg))
-				return pkg;
-
-			pkg = new JavaPackage (
-				name: package,
-				jniName: package.Replace ('.', '/'),
-				managedName: managedName
-			);
-
-			collection.Packages.Add (pkg.Name, pkg);
-
-			return pkg;
+			return collection.AddPackage (package, package.Replace ('.', '/'), managedName);
 		}
 	}
 }

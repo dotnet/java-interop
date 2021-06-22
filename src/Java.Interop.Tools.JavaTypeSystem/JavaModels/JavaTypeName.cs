@@ -26,6 +26,14 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 		static readonly string [] genericConstraintsLabels = { extendsLabel, superLabel };
 
+		public JavaTypeName? GenericParent { get; set; }
+		// NRT - This is always set via Parse
+		public string DottedName { get; set; } = null!;
+		public string? BoundsType { get; set; } // " extends " / " super "
+		public IList<JavaTypeName>? GenericConstraints { get; private set; }
+		public IList<JavaTypeName>? GenericArguments { get; private set; }
+		public string? ArrayPart { get; set; }
+
 		JavaTypeName ()
 		{
 		}
@@ -131,14 +139,6 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			}
 		}
 
-		public  JavaTypeName?           GenericParent       { get; set; }
-		// NRT - This is always set via Parse
-		public string DottedName { get; set; } = null!;
-		public  string?                 BoundsType          { get; set; } // " extends " / " super "
-		public  IList<JavaTypeName>?    GenericConstraints  { get; private set; }
-		public  IList<JavaTypeName>?    GenericArguments    { get; private set; }
-		public  string?                 ArrayPart           { get; set; }
-
 		public string FullNameNonGeneric {
 			get {
 				if (GenericParent != null)
@@ -147,6 +147,5 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 					return DottedName;
 			}
 		}
-
 	}
 }

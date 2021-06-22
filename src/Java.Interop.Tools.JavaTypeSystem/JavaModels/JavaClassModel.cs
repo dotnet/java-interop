@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Java.Interop.Tools.JavaTypeSystem.Models
 {
 	public class JavaClassModel : JavaTypeModel
 	{
-		private IDictionary<JavaTypeReference, JavaTypeReference>? generic_inheritance_mapping;
+		IDictionary<JavaTypeReference, JavaTypeReference>? generic_inheritance_mapping;
 
 		public string BaseType { get; }
 		public string BaseTypeGeneric { get; }
@@ -31,26 +29,23 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 			// Resolve base class
 			if (FullName != "java.lang.Object") {
-				//var symbol = types.Resolve (JavaTypeReferenceExtensions.ResolveGenerics ? BaseTypeGeneric : BaseType, this);
-
 				try {
-					BaseTypeReference = types.ResolveTypeReference (JavaTypeReferenceExtensions.ResolveGenerics ? BaseTypeGeneric : BaseType, type_parameters);
+					BaseTypeReference = types.ResolveTypeReference (TypeResolutionOptions.ResolveGenerics ? BaseTypeGeneric : BaseType, type_parameters);
 				} catch (JavaTypeResolutionException) {
 					unresolvables.Add (new JavaUnresolvableModel (this, BaseTypeGeneric));
 
 					throw;
 				}
 
-				// We don't resolve reference types by default, we only resolve the ones that are
-				// actually used as base classes, which we trigger here.
+				// We don't resolve reference-only types by default, so if our base class
+				// is a reference only type, we need to force it to resolve here. This will be
+				// needed later when we attempt to resolve base methods.
 				try {
 					if (BaseTypeReference.ReferencedType is JavaClassModel klass && klass.FullName != "java.lang.Object" && klass.BaseTypeReference is null && klass.IsReferenceOnly)
 						klass.Resolve (types, unresolvables);
 				} catch (JavaTypeResolutionException) {
 					// Ignore
 				}
-				//if (BaseTypeReference is null)
-				//	throw new Exception ();
 			}
 
 			// Resolve constructors
@@ -78,42 +73,44 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			}
 		}
 
-		public void PrepareGenericInheritanceMapping ()
+		void PrepareGenericInheritanceMapping ()
 		{
 			if (generic_inheritance_mapping != null)
 				return; // already done.
 
-			var empty = new Dictionary<JavaTypeReference, JavaTypeReference> ();
+			var bt = BaseTypeReference?.ReferencedType as JavaClassModel;
 
-			var bt = BaseTypeReference == null ? null : BaseTypeReference.ReferencedType as JavaClassModel;
-			if (bt == null)
-				generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> (); // empty
-			else {
-				// begin processing from the base class.
-				bt.PrepareGenericInheritanceMapping ();
-
-				if (BaseTypeReference?.TypeParameters == null)
-					generic_inheritance_mapping = empty;
-				else if (BaseTypeReference?.ReferencedType is null || BaseTypeReference?.ReferencedType?.TypeParameters.Count == 0) {
-					// FIXME: I guess this should not happen. But this still happens.
-					//Log.LogWarning ("Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.", cls.ExtendsGeneric, cls.FullName);
-					generic_inheritance_mapping = empty;
-				} else {
-					if (BaseTypeReference.ReferencedType.TypeParameters.Count != BaseTypeReference.TypeParameters.Count)
-						throw new Exception (string.Format ("On {0}.{1}, referenced generic arguments count do not match the base type parameters definition",
-							ParentType?.Name, Name));
-					var dic = empty;
-					foreach (var kvp in BaseTypeReference.ReferencedType.TypeParameters.Zip (
-						 BaseTypeReference.TypeParameters,
-						 (def, use) => new KeyValuePair<JavaTypeParameter, JavaTypeReference> (def, use))
-						 .Where (p => p.Value.ReferencedTypeParameter == null || p.Key.Name != p.Value.ReferencedTypeParameter.Name))
-						dic.Add (new JavaTypeReference (kvp.Key, null), kvp.Value);
-					if (dic.Any ()) {
-						generic_inheritance_mapping = dic;
-					} else
-						generic_inheritance_mapping = empty;
-				}
+			if (BaseTypeReference is null || bt is null) {
+				generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> ();
+				return;
 			}
+
+			// begin processing from the base class.
+			bt.PrepareGenericInheritanceMapping ();
+
+			if (BaseTypeReference.TypeParameters is null) {
+				generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> ();
+				return;
+			}
+
+			if (BaseTypeReference.ReferencedType is null || BaseTypeReference.ReferencedType?.TypeParameters.Count == 0) {
+				// FIXME: I guess this should not happen. But this still happens.
+				//Log.LogWarning ("Warning: '{0}' is referenced as base type of '{1}' and expected to have generic type parameters, but it does not.", cls.ExtendsGeneric, cls.FullName);
+				generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> ();
+				return;
+			}
+
+			// NRT - This is checked above but compiler can't figure it out
+			if (BaseTypeReference.ReferencedType!.TypeParameters.Count != BaseTypeReference.TypeParameters.Count)
+				throw new Exception (string.Format ("On {0}.{1}, referenced generic arguments count do not match the base type parameters definition",
+					ParentType?.Name, Name));
+
+			generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> ();
+			foreach (var kvp in BaseTypeReference.ReferencedType.TypeParameters.Zip (
+					BaseTypeReference.TypeParameters,
+					(def, use) => new KeyValuePair<JavaTypeParameter, JavaTypeReference> (def, use))
+					.Where (p => p.Value.ReferencedTypeParameter == null || p.Key.Name != p.Value.ReferencedTypeParameter.Name))
+				generic_inheritance_mapping.Add (new JavaTypeReference (kvp.Key, null), kvp.Value);
 		}
 
 		public override string ToString () => $"[Class] {FullName}";
