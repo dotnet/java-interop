@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Java.Interop.Tools.JavaTypeSystem.Models;
@@ -8,11 +9,31 @@ namespace Java.Interop.Tools.JavaTypeSystem
 {
 	public class JavaXmlApiImporter
 	{
+		public static JavaTypeCollection ParseString (string xml, JavaTypeCollection? collection = null)
+		{
+			var doc = XDocument.Parse (xml, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
+
+			return Parse (doc, collection);
+		}
+
+		public static JavaTypeCollection Parse (TextReader reader, JavaTypeCollection? collection = null)
+		{
+			var doc = XDocument.Load (reader, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
+
+			return Parse (doc, collection);
+		}
+
 		public static JavaTypeCollection Parse (string filename, JavaTypeCollection? collection = null)
+		{
+			var doc = XDocument.Load (filename, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
+
+			return Parse (doc, collection);
+		}
+
+		static JavaTypeCollection Parse (XDocument doc, JavaTypeCollection? collection = null)
 		{
 			collection ??= new JavaTypeCollection ();
 
-			var doc = XDocument.Load (filename, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
 			var root = doc.Root;
 
 			if (root is null)

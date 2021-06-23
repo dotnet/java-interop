@@ -102,13 +102,13 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		// will also need to be removed from TypesFlattened (recursively). Note this only
 		// removes the type from this collection, it does not remove a nested type from
 		// its parent type model. Returns true if type(s) were removed. 
-		public bool Remove (JavaTypeModel type)
+		public bool RemoveType (JavaTypeModel type)
 		{
 			var removed = false;
 
 			// Remove all nested types
 			foreach (var nested in type.NestedTypes)
-				removed |= Remove (nested);
+				removed |= RemoveType (nested);
 
 			// Remove ourselves
 			removed |= types_flattened.Remove (type.FullName);
@@ -139,7 +139,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 				foreach (var u in unresolvables) {
 					if (u.Unresolvable is JavaTypeModel type) {
-						types_removed |= RemoveType (type);
+						types_removed |= RemoveResolvedType (type);
 					} else if (u.Unresolvable is JavaConstructorModel ctor) {
 						// Remove from parent type (must pattern check for ctor before method)
 						((JavaClassModel) ctor.ParentType).Constructors.Remove (ctor);
@@ -207,7 +207,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			// We cannot remove a non-static, non-default method on an interface without breaking the contract.
 			// If we need to do that we have to remove the entire interface instead.
 			if (method.ParentType is JavaInterfaceModel && !method.IsStatic && method.IsAbstract && options.RemoveInterfacesWithUnresolvableMembers)
-				return RemoveType (method.ParentType);
+				return RemoveResolvedType (method.ParentType);
 
 			if (method is JavaConstructorModel ctor && method.ParentType is JavaClassModel klass)
 				klass.Constructors.Remove (ctor);
@@ -217,7 +217,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			return false;
 		}
 
-		bool RemoveType (JavaTypeModel type)
+		bool RemoveResolvedType (JavaTypeModel type)
 		{
 			var removed = false;
 
@@ -226,7 +226,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				removed |= type.ParentType.NestedTypes.Remove (type);
 
 			// Remove from collection
-			removed |= Remove (type);
+			removed |= RemoveType (type);
 
 			// Remove from parent package
 			type.Package.Types.Remove (type);
@@ -234,7 +234,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			return removed;
 		}
 
-		JavaTypeModel? FindType (string type)
+		public JavaTypeModel? FindType (string type)
 		{
 			// Prefer built-in types
 			if (built_in_types.TryGetValue (type, out var builtin))
@@ -247,6 +247,11 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			// Finally reference types
 			if (ReferenceTypesFlattened.TryGetValue (type, out var ref_type))
 				return ref_type;
+
+			// We moved this type to "mono.android.app.IntentService" which makes this
+			// type resolution fail if a user tries to reference it in Java.
+			if (type == "android.app.IntentService")
+				return FindType ("mono.android.app.IntentService");
 
 			return null;
 		}
