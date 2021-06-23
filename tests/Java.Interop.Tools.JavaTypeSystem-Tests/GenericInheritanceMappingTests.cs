@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaTypeSystem.Tests
 {
 	[TestFixture]
-	public class GenericInheritanceMappingTest
+	public class GenericInheritanceMappingTests
 	{
 		JavaTypeCollection api;
 
