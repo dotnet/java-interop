@@ -52,7 +52,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static bool ShouldImport (TypeDefinition td)
 		{
-			// We want to exclude "IBlahInvoker" and "IBlahImplementor" types
+			// We want to exclude "IBlahInvoker" and "IBlahImplementor" and "BlahConsts" types
 			if (td.Name.EndsWith ("Invoker")) {
 				var n = td.FullName;
 				n = n.Substring (0, n.Length - 7);
@@ -66,6 +66,16 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			if (td.Name.EndsWith ("Implementor")) {
 				var n = td.FullName;
 				n = n.Substring (0, n.Length - 11);
+
+				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
+
+				if (types.Any (t => t.FullName == n))
+					return false;
+			}
+
+			if (td.Name.EndsWith ("Consts")) {
+				var n = td.FullName;
+				n = n.Substring (0, n.Length - 6);
 
 				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
 
@@ -211,10 +221,16 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static bool ShouldSkipType (TypeDefinition type)
 		{
-			// We want to use 'Java.Util.ArrayList' over 'Android.Runtime.JavaList', so
-			// don't import JavaList.
-			if (type.FullName == "Android.Runtime.JavaList")
-				return true;
+			// We want to use Java's collection types instead of our managed adapter.
+			// eg: 'Java.Util.ArrayList' over 'Android.Runtime.JavaList'
+			// So don't import our adapters.
+			switch (type.FullName) {
+				case "Android.Runtime.JavaCollection":
+				case "Android.Runtime.JavaDictionary":
+				case "Android.Runtime.JavaList":
+				case "Android.Runtime.JavaSet":
+					return true;
+			}
 
 			// Currently we do not support generic types because they conflict.
 			// ex: AdapterView`1 and AdapterView both have:
