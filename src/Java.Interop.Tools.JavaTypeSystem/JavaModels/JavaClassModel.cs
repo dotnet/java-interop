@@ -28,7 +28,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			var type_parameters = GetApplicableTypeParameters ().ToArray ();
 
 			// Resolve base class
-			if (FullName != "java.lang.Object") {
+			if (FullName != "java.lang.Object" && FullName != "java.lang.Throwable") {
 				try {
 					BaseTypeReference = types.ResolveTypeReference (TypeResolutionOptions.ResolveGenerics ? BaseTypeGeneric : BaseType, type_parameters);
 				} catch (JavaTypeResolutionException) {

@@ -208,7 +208,6 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			    method.BaseMethod.Visibility == method.Visibility &&
 			    method.BaseMethod.IsAbstract == method.IsAbstract &&
 			    method.BaseMethod.IsFinal == method.IsFinal &&
-			    method.BaseMethod.TypeParameters.Count == method.TypeParameters.Count &&
 			    !method.IsSynthetic &&
 			    check (method))
 				return;
