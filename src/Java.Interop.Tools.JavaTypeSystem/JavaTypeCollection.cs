@@ -9,16 +9,18 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		readonly Dictionary<string, JavaPackage> packages = new Dictionary<string, JavaPackage> ();
 		readonly Dictionary<string, JavaTypeModel> types = new Dictionary<string, JavaTypeModel> ();
 		readonly Dictionary<string, JavaTypeModel> types_flattened = new Dictionary<string, JavaTypeModel> ();
-		readonly Dictionary<string, JavaTypeModel> reference_types = new Dictionary<string, JavaTypeModel> ();
 		readonly Dictionary<string, JavaTypeModel> reference_types_flattened = new Dictionary<string, JavaTypeModel> ();
 		readonly Dictionary<string, JavaTypeModel> built_in_types = new Dictionary<string, JavaTypeModel> ();
 
 		// Expose ReadOnly versions so internal type management cannot be bypassed
 		public IReadOnlyDictionary<string, JavaPackage> Packages => packages;
 		public IReadOnlyDictionary<string, JavaTypeModel> Types => types;
-		public IReadOnlyDictionary<string, JavaTypeModel> ReferenceTypes => reference_types;
 
 		public IReadOnlyDictionary<string, JavaTypeModel> TypesFlattened => types_flattened;
+
+		// We only keep a flattened version of reference types. The main issue is that the Managed nesting
+		// may not match the Java nesting (ie: types nested in Java interfaces that C# originally didn't support).
+		// Since we don't actually *need* this model to be nested it's simpler to keep them flattened.
 		public IReadOnlyDictionary<string, JavaTypeModel> ReferenceTypesFlattened => reference_types_flattened;
 
 		public string? ApiSource { get; set; }
@@ -56,27 +58,15 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		/// Adds a type to the collection.  Note parent classes must be added before nested classes.
 		/// </summary>
 		/// <returns>True if type was added to collection. False if type could not be added because its parent type was missing.</returns>
-		public bool AddType (JavaTypeModel type) => AddType (type, types, types_flattened);
-
-		/// <summary>
-		/// Adds a reference type to the collection.  Note parent classes must be added before nested classes.
-		/// </summary>
-		/// <returns>True if type was added to collection. False if type could not be added because its parent type was missing.</returns>
-		public bool AddReferenceType (JavaTypeModel type)
-		{
-			type.IsReferenceOnly = true;
-
-			return AddType (type, reference_types, reference_types_flattened);
-		}
-
-		bool AddType (JavaTypeModel type, Dictionary<string, JavaTypeModel> typeDictionary, Dictionary<string, JavaTypeModel> flattenedDictionary)
+		public bool AddType (JavaTypeModel type)
 		{
 			var nested_name = type.NestedName;
 
 			// Not a nested type
 			if (!nested_name.Contains ('.')) {
-				typeDictionary [type.FullName] = type;
-				flattenedDictionary [type.FullName] = type;
+				types [type.FullName] = type;
+
+				types_flattened [type.FullName] = type;
 
 				return true;
 			}
@@ -84,18 +74,28 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			var full_name = type.FullName.ChompLast ('.');
 
 			// Nested type, find parent model to put it in
-			if (flattenedDictionary.TryGetValue (full_name, out var parent)) {
+			if (types_flattened.TryGetValue (full_name, out var parent)) {
 				if (!parent.NestedTypes.Contains (type))
 					parent.NestedTypes.Add (type);
 
 				type.ParentType = parent;
-				flattenedDictionary [type.FullName] = type;
+				types_flattened [type.FullName] = type;
 
 				return true;
 			}
 
 			// Could not find parent type to nest child type in
 			return false;
+		}
+
+		/// <summary>
+		/// Adds a reference type to the collection.
+		/// </summary>
+		public void AddReferenceType (JavaTypeModel type)
+		{
+			type.IsReferenceOnly = true;
+
+			reference_types_flattened [type.FullName] = type;
 		}
 
 		// This is a little trickier than we may initially think, because nested classes

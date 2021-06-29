@@ -291,7 +291,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		{
 			return new JavaExceptionModel (
 				name: element.XGetAttribute ("name"),
-				type: element.XGetAttribute ("type")
+				type: element.XGetAttribute ("type-generic-aware")
 			);
 		}
 

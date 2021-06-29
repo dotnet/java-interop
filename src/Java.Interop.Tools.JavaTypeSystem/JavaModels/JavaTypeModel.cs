@@ -69,6 +69,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			}
 		}
 
+		public bool IsNested => NestedName.Contains ('.');
+
 		public virtual void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
 		{
 			var type_parameters = GetApplicableTypeParameters ().ToArray ();
