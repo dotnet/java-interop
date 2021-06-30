@@ -75,7 +75,7 @@ namespace generator
 			writer.WriteLine ();
 
 			foreach (var item in result.Unresolvables)
-				writer.WriteLine ($"'{item.Unresolvable}' was removed because the Java type '{item.MissingType}' could not be found.");
+				writer.WriteLine (item.GetDisplayMessage ());
 
 			writer.WriteLine ();
 		}
