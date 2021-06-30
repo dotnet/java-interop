@@ -95,9 +95,6 @@ namespace Xamarin.Android.Binder
 				resolver.SearchDirectories.Add (Path.GetDirectoryName (reference));
 			}
 
-			var compare_output = @"C:\code\androidx-output";
-			var rsp_output = @"C:\Users\jopobst\Desktop\androidx-output";
-
 			// Figure out if this is class-parse
 			string apiXmlFile = filename;
 			string apiSourceAttr = null;
@@ -108,15 +105,6 @@ namespace Xamarin.Android.Binder
 			}
 
 			var is_classparse = apiSourceAttr == "class-parse";
-			//var write_compare_files = true;
-
-
-			// Save generator.rsp
-			//var rsp = Path.Combine (Environment.CurrentDirectory, "obj", "Release", "monoandroid9.0", "generated", "src", "generator.rsp");
-			//var new_rsp = Path.Combine (rsp_output, Path.GetFileName (Environment.CurrentDirectory) + ".rsp");
-
-			//File.Copy (rsp, new_rsp, true);
-
 
 			// Resolve types using Java.Interop.Tools.JavaTypeSystem
 			if (is_classparse && !options.UseLegacyJavaResolver) {
@@ -130,42 +118,7 @@ namespace Xamarin.Android.Binder
 				filename = output_xml;
 				apiXmlFile = filename;
 				is_classparse = false;
-
-				//return;
-				// Save generator.rsp
-				//var rsp = Path.Combine (Environment.CurrentDirectory, "obj", "Release", "monoandroid9.0", "generated", "src", "generator.rsp");
-				//var new_rsp = Path.Combine (rsp_output, Path.GetFileName (Environment.CurrentDirectory) + ".rsp");
-
-				//File.Copy (rsp, new_rsp, true);
-
-				// Parse api.xml
-				//var type_collection = JavaXmlApiImporter.Parse (filename);
-
-				//// Add in reference types from assemblies
-				//foreach (var reference in references.Distinct ()) {
-				//	Report.Verbose (0, "resolving assembly {0}.", reference);
-				//	var assembly = resolver.Load (reference);
-
-				//	ManagedApiImporter.Parse (assembly, type_collection);
-				//}
-
-				// Run the type resolution pass
-				//type_collection.ResolveCollection ();
-
-				// Output the adjusted xml
-
-				//JavaXmlApiExporter.Save (type_collection, output_xml);
-				//JavaXmlApiExporter.Save (type_collection, Path.Combine (compare_output, Path.GetFileName (Environment.CurrentDirectory) + ".txt"));
-				//FormatXml (Path.Combine (compare_output, Path.GetFileName (Environment.CurrentDirectory) + ".txt"));
-
-				//var compare_file = Path.Combine (compare_output, Path.GetFileName (Environment.CurrentDirectory) + ".txt");
-
-				//JavaTypeResolutionFixups.Fixup (filename, compare_file, resolver, references.Distinct ().ToArray ());
-				//FormatXml (compare_file);
-
 			}
-
-
 
 			// We don't use shallow referenced types with class-parse because the Adjuster process
 			// enumerates every ctor/method/property/field to build its model, so we will need
@@ -195,12 +148,12 @@ namespace Xamarin.Android.Binder
 			}
 
 			// For class-parse API description, transform it to jar2xml style.
+			// Resolve types using ApiXmlAdjuster
 			if (is_classparse && options.UseLegacyJavaResolver) {
 				apiXmlFile = api_xml_adjuster_output ?? Path.Combine (Path.GetDirectoryName (filename), Path.GetFileName (filename) + ".adjusted");
 				new Adjuster ().Process (filename, opt, opt.SymbolTable.AllRegisteredSymbols (opt).OfType<GenBase> ().ToArray (), apiXmlFile, Report.Verbosity ?? 0);
-				//new Adjuster ().Process (filename, opt, opt.SymbolTable.AllRegisteredSymbols (opt).OfType<GenBase> ().ToArray (), apiXmlFile, Report.Verbosity ?? 0, Path.Combine (compare_output, Path.GetFileName (Environment.CurrentDirectory) + ".txt"));
-				//FormatXml (Path.Combine (compare_output, Path.GetFileName (Environment.CurrentDirectory) + ".txt"));
 			}
+
 			if (only_xml_adjuster)
 				return;
 
@@ -298,35 +251,6 @@ namespace Xamarin.Android.Binder
 			gen_info.GenerateLibraryProjectFile (options, enumFiles);
 		}
 
-		static void FormatXml (string filename)
-		{
-			var doc = XDocument.Load (filename);
-
-			using var writer = XmlWriter.Create (filename, new XmlWriterSettings {
-				Encoding = new UTF8Encoding (false, true),
-				Indent = true,
-				OmitXmlDeclaration = true,
-			});
-
-			OutputElement (doc.Root, writer);
-		}
-
-		static void OutputElement (XElement? element, XmlWriter writer)
-		{
-			if (element is null)
-				return;
-
-			writer.WriteStartElement (element.Name.LocalName);
-
-			foreach (var attr in element.Attributes ().OrderBy (a => a.Name.LocalName))
-				writer.WriteAttributeString (attr.Name.LocalName, attr.Value);
-
-			foreach (var elem in element.Elements ().OrderBy (a => a.XGetAttribute ("name")).ThenBy (a => a.XGetAttribute ("jni-signature")))
-				OutputElement (elem, writer);
-
-			writer.WriteEndElement ();
-		}
-
 		static void AddTypeToTable (CodeGenerationOptions opt, GenBase gb)
 		{
 			opt.SymbolTable.AddType (gb);
@@ -405,10 +329,6 @@ namespace Xamarin.Android.Binder
 		internal static void ProcessReferencedType (TypeDefinition td, CodeGenerationOptions opt)
 		{
 			if (!td.IsPublic && !td.IsNested)
-				return;
-
-			// We want to reference the real 'java.util.ArrayList' instead of 'JavaList'
-			if (td.FullName == "Android.Runtime.JavaList")
 				return;
 
 			// We want to exclude "IBlahInvoker" types from this type registration.
