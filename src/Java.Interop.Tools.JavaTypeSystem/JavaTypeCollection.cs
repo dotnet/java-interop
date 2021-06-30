@@ -129,7 +129,6 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 			while (true) {
 				var unresolvables = new List<JavaUnresolvableModel> ();
-				var types_removed = false;
 
 				foreach (var t in Types)
 					try {
@@ -139,19 +138,19 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 				foreach (var u in unresolvables) {
 					if (u.Unresolvable is JavaTypeModel type) {
-						types_removed |= RemoveResolvedType (type);
+						u.RemovedEntireType = RemoveResolvedType (type);
 					} else if (u.Unresolvable is JavaConstructorModel ctor) {
 						// Remove from parent type (must pattern check for ctor before method)
 						((JavaClassModel) ctor.ParentType).Constructors.Remove (ctor);
 					} else if (u.Unresolvable is JavaMethodModel method) {
 						// Remove from parent type
-						types_removed |= RemoveMethod (method, options);
+						u.RemovedEntireType = RemoveMethod (method, options);
 					} else if (u.Unresolvable is JavaFieldModel field) {
 						// Remove from parent type
 						field.ParentType.Fields.Remove (field);
 					} else if (u.Unresolvable is JavaParameterModel parameter) {
 						// Remove method from parent type
-						types_removed |= RemoveMethod (parameter.ParentMethod, options);
+						u.RemovedEntireType = RemoveMethod (parameter.ParentMethod, options);
 					} else {
 						// *Shouldn't* be possible
 						throw new Exception ($"Encountered unknown IJavaResolvable: '{u.Unresolvable.GetType ().Name}'");
@@ -163,7 +162,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 				// We may have removed a type that other types/members reference, so we have
 				// to keep doing this until we do not remove any types.
-				if (!types_removed)
+				if (!unresolvables.Any (u => u.RemovedEntireType))
 					break;
 			}
 

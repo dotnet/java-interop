@@ -32,7 +32,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				try {
 					BaseTypeReference = types.ResolveTypeReference (TypeResolutionOptions.ResolveGenerics ? BaseTypeGeneric : BaseType, type_parameters);
 				} catch (JavaTypeResolutionException) {
-					unresolvables.Add (new JavaUnresolvableModel (this, BaseTypeGeneric));
+					unresolvables.Add (new JavaUnresolvableModel (this, BaseTypeGeneric, UnresolvableType.BaseType));
 
 					throw;
 				}

@@ -42,7 +42,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			try {
 				TypeModel = types.ResolveTypeReference (GenericType, type_parameters);
 			} catch (JavaTypeResolutionException) {
-				unresolvables.Add (new JavaUnresolvableModel (this, Type));
+				unresolvables.Add (new JavaUnresolvableModel (this, Type, UnresolvableType.ParameterType));
 
 				return;
 			}

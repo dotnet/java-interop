@@ -85,7 +85,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 					ImplementsModels.Add (implements);
 				} catch (JavaTypeResolutionException) {
-					unresolvables.Add (new JavaUnresolvableModel (this, i.NameGeneric));
+					unresolvables.Add (new JavaUnresolvableModel (this, i.NameGeneric, UnresolvableType.ImplementsType));
 
 					throw;
 				}

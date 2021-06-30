@@ -29,7 +29,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		public override void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
 		{
 			if (Name.Contains ('$')) {
-				unresolvables.Add (new JavaUnresolvableModel (this, "$"));
+				unresolvables.Add (new JavaUnresolvableModel (this, "$", UnresolvableType.DollarSign));
 				return;
 			}
 
@@ -38,7 +38,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			try {
 				TypeReference = types.ResolveTypeReference (TypeGeneric, type_parameters);
 			} catch (JavaTypeResolutionException) {
-				unresolvables.Add (new JavaUnresolvableModel (this, TypeGeneric));
+				unresolvables.Add (new JavaUnresolvableModel (this, TypeGeneric, UnresolvableType.FieldType));
 
 				return;
 			}
