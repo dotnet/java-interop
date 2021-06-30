@@ -61,6 +61,10 @@ namespace generator
 					WriteCycle (tw, i + 1, results [i]);
 			}
 
+			// Output diagnostic messages to verbose log
+			foreach (var result in results.SelectMany (r => r.Unresolvables))
+				Report.Verbose (0, result.GetDisplayMessage ());
+
 			// Let users know about this report
 			Report.LogCodedWarning (0, Report.WarningTypesNotBoundDueToMissingJavaTypes, new SourceLineInfo (report_file));
 		}
