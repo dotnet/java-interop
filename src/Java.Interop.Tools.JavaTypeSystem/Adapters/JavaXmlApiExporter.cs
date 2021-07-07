@@ -26,9 +26,11 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			if (types.Platform.HasValue ())
 				writer.WriteAttributeString ("platform", types.Platform);
 
+			writer.WriteAttributeString ("api-source", "JavaTypeSystem");
+
 			foreach (var pkg in types.Packages.Values) {
 
-				if (!pkg.Types.Any (t => !t.IsReferenceOnly))
+				if (!pkg.Types.Any (t => !t.IsReferencedOnly))
 					continue;
 
 				writer.WriteStartElement ("package");
@@ -41,7 +43,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 					writer.WriteAttributeString ("jni-name", pkg.JniName);
 
 				foreach (var type in pkg.Types) {
-					if (type.IsReferenceOnly)
+					if (type.IsReferencedOnly)
 						continue; // skip reference only types
 
 					SaveType (type, writer);

@@ -41,7 +41,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				// is a reference only type, we need to force it to resolve here. This will be
 				// needed later when we attempt to resolve base methods.
 				try {
-					if (BaseTypeReference.ReferencedType is JavaClassModel klass && klass.FullName != "java.lang.Object" && klass.BaseTypeReference is null && klass.IsReferenceOnly)
+					if (BaseTypeReference.ReferencedType is JavaClassModel klass && klass.FullName != "java.lang.Object" && klass.BaseTypeReference is null && klass.IsReferencedOnly)
 						klass.Resolve (types, unresolvables);
 				} catch (JavaTypeResolutionException) {
 					// Ignore

@@ -9,7 +9,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		readonly Dictionary<string, JavaPackage> packages = new Dictionary<string, JavaPackage> ();
 		readonly Dictionary<string, JavaTypeModel> types = new Dictionary<string, JavaTypeModel> ();
 		readonly Dictionary<string, JavaTypeModel> types_flattened = new Dictionary<string, JavaTypeModel> ();
-		readonly Dictionary<string, JavaTypeModel> reference_types_flattened = new Dictionary<string, JavaTypeModel> ();
+		readonly Dictionary<string, JavaTypeModel> referenced_types_flattened = new Dictionary<string, JavaTypeModel> ();
 		readonly Dictionary<string, JavaTypeModel> built_in_types = new Dictionary<string, JavaTypeModel> ();
 
 		// Expose ReadOnly versions so internal type management cannot be bypassed
@@ -21,7 +21,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		// We only keep a flattened version of reference types. The main issue is that the Managed nesting
 		// may not match the Java nesting (ie: types nested in Java interfaces that C# originally didn't support).
 		// Since we don't actually *need* this model to be nested it's simpler to keep them flattened.
-		public IReadOnlyDictionary<string, JavaTypeModel> ReferenceTypesFlattened => reference_types_flattened;
+		public IReadOnlyDictionary<string, JavaTypeModel> ReferencedTypesFlattened => referenced_types_flattened;
 
 		public string? ApiSource { get; set; }
 		public string? Platform { get; set; }
@@ -91,11 +91,11 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		/// <summary>
 		/// Adds a reference type to the collection.
 		/// </summary>
-		public void AddReferenceType (JavaTypeModel type)
+		public void AddReferencedType (JavaTypeModel type)
 		{
-			type.IsReferenceOnly = true;
+			type.IsReferencedOnly = true;
 
-			reference_types_flattened [type.FullName] = type;
+			referenced_types_flattened [type.FullName] = type;
 		}
 
 		// This is a little trickier than we may initially think, because nested classes
@@ -245,7 +245,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				return value;
 
 			// Finally reference types
-			if (ReferenceTypesFlattened.TryGetValue (type, out var ref_type))
+			if (ReferencedTypesFlattened.TryGetValue (type, out var ref_type))
 				return ref_type;
 
 			// We moved this type to "mono.android.app.IntentService" which makes this

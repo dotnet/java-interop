@@ -22,7 +22,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		public string Deprecated { get; }
 		public bool IsStatic { get; }
 		public string ExtendedJniSignature { get; }
-		public bool IsReferenceOnly { get; internal set; }
+		public bool IsReferencedOnly { get; internal set; }
 
 		public JavaPackage Package { get; }
 		public JavaTypeModel? ParentType { get; internal set; }
@@ -56,9 +56,6 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		/// </summary>
 		public string FullName {
 			get {
-				if (Name == "boolean")
-					return "bool";
-
 				if (ParentType != null)
 					return $"{ParentType.FullName}.{Name}";
 

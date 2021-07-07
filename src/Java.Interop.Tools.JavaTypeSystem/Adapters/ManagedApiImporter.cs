@@ -213,7 +213,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static void AddReferenceTypeRecursive (JavaTypeModel type, JavaTypeCollection collection)
 		{
-			collection.AddReferenceType (type);
+			collection.AddReferencedType (type);
 
 			foreach (var nested in type.NestedTypes)
 				AddReferenceTypeRecursive (nested, collection);
