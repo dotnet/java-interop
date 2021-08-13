@@ -4,8 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <_OutputPath>$(MSBuildThisFileDirectory)bin\Build$(Configuration)\</_OutputPath>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <NoWarn>CS0436</NoWarn>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -87,15 +86,18 @@
   </ItemGroup>
 
   <!-- GitInfo Package for Assembly Versioning -->
-  <PropertyGroup>
-    <GitDefaultBranch>main</GitDefaultBranch>
-    <GitThisAssemblyMetadata>false</GitThisAssemblyMetadata>
-    <GitThisAssembly>true</GitThisAssembly>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="*" PrivateAssets="all" />
   </ItemGroup>
+  <PropertyGroup>
+    <GitDefaultBranch>main</GitDefaultBranch>
+    <GitThisAssembly>false</GitThisAssembly>
+  </PropertyGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)src/version/Version.props" />
-
+  <Target Name="SetVersion" BeforeTargets="GetAssemblyVersion;GetPackageVersion" DependsOnTargets="GitVersion">
+    <PropertyGroup>
+      <Version>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</Version>
+      <InformationalVersion>$(Version); git-head: $(GitCommit) git-branch: $(GitBranch)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
 </Project>
