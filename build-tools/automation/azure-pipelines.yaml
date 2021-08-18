@@ -19,7 +19,7 @@ variables:
   RunningOnCI: true
   Build.Configuration: Release
   MaxJdkVersion: 8
-  DotNetCoreVersion: 6.0.100-preview.6.21355.2
+  DotNetCoreVersion: 6.0.x
   HostedMacImage: macOS-10.15
   HostedWinVS2019: Hosted Windows 2019 with VS2019
   NetCoreTargetFrameworkPathSuffix: -net6.0
