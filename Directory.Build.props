@@ -98,6 +98,8 @@
     <PropertyGroup>
       <Version>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</Version>
       <InformationalVersion>$(Version); git-head: $(GitCommit) git-branch: $(GitBranch)</InformationalVersion>
+      <Company>Microsoft Corporation</Company>
+      <Copyright>Microsoft Corporation</Copyright>
     </PropertyGroup>
   </Target>
 </Project>
