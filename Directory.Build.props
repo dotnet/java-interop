@@ -97,7 +97,7 @@
   <Target Name="SetVersion" BeforeTargets="GetAssemblyVersion;GetPackageVersion" DependsOnTargets="GitVersion">
     <PropertyGroup>
       <Version>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</Version>
-      <InformationalVersion>$(Version); git-head: $(GitCommit) git-branch: $(GitBranch)</InformationalVersion>
+      <InformationalVersion>$(Version); git-rev-head:$(GitCommit); git-branch:$(GitBranch)</InformationalVersion>
       <Company>Microsoft Corporation</Company>
       <Copyright>Microsoft Corporation</Copyright>
     </PropertyGroup>
