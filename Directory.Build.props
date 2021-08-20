@@ -90,11 +90,12 @@
     <PackageReference Include="GitInfo" Version="2.1.2" PrivateAssets="all" />
   </ItemGroup>
   <PropertyGroup>
+    <GitNameRevOptions>--refs=&quot;refs/heads/*&quot; --no-undefined --always</GitNameRevOptions>
     <GitDefaultBranch>main</GitDefaultBranch>
     <GitThisAssembly>false</GitThisAssembly>
   </PropertyGroup>
 
-  <Target Name="SetVersion" BeforeTargets="GetAssemblyVersion;GetPackageVersion" DependsOnTargets="GitVersion">
+  <Target Name="SetVersion" BeforeTargets="GetAssemblyVersion;GetPackageVersion" DependsOnTargets="GitVersion" Condition=" '$(BuildingInsideVisualStudio)' != 'true' ">
     <PropertyGroup>
       <Version>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</Version>
       <InformationalVersion>$(Version); git-rev-head:$(GitCommit); git-branch:$(GitBranch)</InformationalVersion>
