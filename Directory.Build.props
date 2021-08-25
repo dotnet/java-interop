@@ -87,10 +87,9 @@
 
   <!-- GitInfo Package for Assembly Versioning -->
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.1.2" PrivateAssets="all" />
+    <PackageReference Include="GitInfo" Version="2.1.2" PrivateAssets="all" GeneratePathProperty="true" />
   </ItemGroup>
   <PropertyGroup>
-    <GitNameRevOptions>--refs=&quot;refs/heads/*&quot; --no-undefined --always</GitNameRevOptions>
     <GitDefaultBranch>main</GitDefaultBranch>
     <GitThisAssembly>false</GitThisAssembly>
   </PropertyGroup>

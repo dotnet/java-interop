@@ -17,6 +17,7 @@
     <LangVersion>8.0</LangVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
+  <Import Project="$(PkgGitInfo)\build\GitInfo.targets" Condition="Exists ('$(PkgGitInfo)\build\GitInfo.targets')" />
   <Import Project="..\..\Directory.Build.props" />
   <PropertyGroup>
     <XAConfigPath>..\..\bin\Build$(Configuration)\XAConfig.props</XAConfigPath>
@@ -85,6 +86,7 @@
   <Import Project="Directory.Build.targets" />
   <PropertyGroup>
     <BuildDependsOn>
+      SetVersion;
       BuildJniEnvironment_g_cs;
       BuildInteropJar;
       $(BuildDependsOn)
