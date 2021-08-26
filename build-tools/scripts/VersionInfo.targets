@@ -10,7 +10,7 @@
     <PackageReference Include="GitInfo" Version="2.1.2" PrivateAssets="all" />
   </ItemGroup>
 
-  <Target Name="GenerateVersionInfo" DependsOnTargets="GitVersion">
+  <Target Name="GenerateVersionInfo" AfterTargets="Build" DependsOnTargets="GitVersion" Condition="!Exists ('$(MSBuildThisFileDirectory)..\..\Version.props')">
     <ItemGroup>
       <Replacements Include="@VERSION@" Replacement="$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)"/>
       <Replacements Include="@COMMIT@" Replacement="$(GitCommit)"/>

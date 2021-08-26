@@ -62,7 +62,6 @@ bin/Build$(CONFIGURATION)/Java.Interop.BootstrapTasks.dll: build-tools/Java.Inte
 		external/xamarin-android-tools/src/Xamarin.Android.Tools.AndroidSdk/Xamarin.Android.Tools.AndroidSdk.csproj \
 		$(wildcard build-tools/Java.Interop.BootstrapTasks/Java.Interop.BootstrapTasks/*.cs)
 	$(MSBUILD) $(MSBUILD_FLAGS) /restore "$<"
-	$(MSBUILD) $(MSBUILD_FLAGS) /restore /t:GenerateVersionInfo "$<"
 
 prepare-external $(PREPARE_EXTERNAL_FILES):
 	git submodule update --init --recursive
