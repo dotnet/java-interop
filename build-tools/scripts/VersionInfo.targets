@@ -22,23 +22,4 @@
       Replacements="@(Replacements)"
     />
   </Target>
-
-  <Target Name="BuildVersionInfo_g_cs" Condition=" '$(GenerateAssemblyInfo)' == 'true' And '$(TargetFramework)' == 'monodroid10' ">
-    <ItemGroup>
-      <Replacements Include="@VERSION@" Replacement="$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)"/>
-      <Replacements Include="@COMMIT@" Replacement="$(GitCommit)"/>
-      <Replacements Include="@BRANCH@" Replacement="$(GitBranch)"/>
-      <Replacements Include="@TITLE@" Replacement="$(AssemblyName)"/>
-      <Replacements Include="@PRODUCT@" Replacement="$(AssemblyName)"/>
-      <Replacements Include="@CONFIGURATION@" Replacement="$(Configuration)"/>
-    </ItemGroup>
-    <GenerateVersionFile
-      InputFile="$(MSBuildThisFileDirectory)AssemblyInfo.g.cs.in"
-      OutputFile="$(IntermediateOutputPath)$(AssemblyName).AssemblyInfo.g.cs"
-      Replacements="@(Replacements)"
-    />
-    <ItemGroup>
-      <Compile Include="$(IntermediateOutputPath)$(AssemblyName).AssemblyInfo.g.cs"/>
-    </ItemGroup>
-  </Target>
 </Project>
