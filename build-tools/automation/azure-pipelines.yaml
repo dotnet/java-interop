@@ -103,11 +103,11 @@ jobs:
       replaceExistingArchive: true
     condition: succeededOrFailed()
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: debug'
-      inputs:
-        ArtifactName: debug
-      condition: succeededOrFailed()
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: debug'
+    inputs:
+      ArtifactName: debug
+    condition: succeededOrFailed()
 
 - job: mac_build
   displayName: Mac - Mono
