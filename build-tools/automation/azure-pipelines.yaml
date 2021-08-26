@@ -101,7 +101,7 @@ jobs:
       archiveType: 'zip'
       archiveFile: '$(Build.ArtifactStagingDirectory)/bin-dotnet.zip'
       replaceExistingArchive: true
-      condition: succeededOrFailed()
+    condition: succeededOrFailed()
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: debug'
