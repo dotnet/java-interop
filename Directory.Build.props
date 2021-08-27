@@ -21,8 +21,8 @@
       Condition=" Exists('$([System.IO.Path]::GetDirectoryName($(MSBuildThisFileDirectory))).override.props') "
   />
   <Import
-      Project="$(MSBuildThisFileDirectory)Version.props"
-      Condition=" Exists('$(MSBuildThisFileDirectory)Version.props') "
+      Project="$(MSBuildThisFileDirectory)bin\Build$(Configuration)\Version.props"
+      Condition=" Exists('$(MSBuildThisFileDirectory)bin\Build$(Configuration)\Version.props') "
   />
   <Import
       Project="$(_OutputPath)JdkInfo.props"

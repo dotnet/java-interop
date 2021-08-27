@@ -14,7 +14,7 @@
   <Target Name="GenerateVersionInfo"
       AfterTargets="Build"
       DependsOnTargets="GitVersion"
-      Condition="!Exists ('$(MSBuildThisFileDirectory)..\..\Version.props')">
+      Condition="!Exists ('$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Version.props')">
     <ItemGroup>
       <Replacements Include="@VERSION@" Replacement="$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)"/>
       <Replacements Include="@COMMIT@" Replacement="$(GitCommit)"/>
@@ -22,7 +22,7 @@
     </ItemGroup>
     <GenerateVersionFile
         InputFile="$(MSBuildThisFileDirectory)Version.props.in"
-        OutputFile="$(MSBuildThisFileDirectory)..\..\Version.props"
+        OutputFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Version.props"
         Replacements="@(Replacements)"
     />
   </Target>
