@@ -41,6 +41,7 @@
       <Replacements Include="@PRODUCT@" Replacement="$(AssemblyName)"/>
       <Replacements Include="@CONFIGURATION@" Replacement="$(Configuration)"/>
     </ItemGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)" />
     <GenerateVersionFile
         InputFile="$(MSBuildThisFileDirectory)..\..\build-tools\scripts\AssemblyInfo.g.cs.in"
         OutputFile="$(IntermediateOutputPath)$(AssemblyName).AssemblyInfo.g.cs"
