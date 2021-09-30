@@ -158,7 +158,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		}
 
 		static void SaveConstructor (JavaConstructorModel ctor, XmlWriter writer)
-			=> SaveMember (ctor, writer, "constructor", null, null, null, null, null, ctor.ParentType.FullName, null, null, null, ctor.Parameters, ctor.IsBridge, null, ctor.IsSynthetic, null);
+			=> SaveMember (ctor, writer, "constructor", null, null, null, null, null, ctor.DeclaringType.FullName, null, null, null, ctor.Parameters, ctor.IsBridge, null, ctor.IsSynthetic, null);
 
 		static void SaveField (JavaFieldModel field, XmlWriter writer)
 		{
@@ -182,9 +182,9 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		static void SaveMethod (JavaMethodModel method, XmlWriter writer)
 		{
-			bool check (JavaMethodModel _) => _.BaseMethod?.ParentType?.Visibility == "public" &&
-			     !method.IsStatic &&
-					      method.Parameters.All (p => p.InstantiatedGenericArgumentName == null);
+			bool check (JavaMethodModel _) => _.BaseMethod?.DeclaringType?.Visibility == "public" &&
+				!method.IsStatic &&
+				method.Parameters.All (p => p.InstantiatedGenericArgumentName == null);
 
 			//// skip synthetic methods, that's what jar2xml does.
 			//// However, jar2xml is based on Java reflection and it generates synthetic methods
@@ -206,29 +206,29 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			//// - none of the arguments are type parameters.
 			//// - finally, it is the synthetic method already checked above.
 			if (method.BaseMethod != null &&
-			    !method.BaseMethod.IsAbstract &&
-			    method.BaseMethod.Visibility == method.Visibility &&
-			    method.BaseMethod.IsAbstract == method.IsAbstract &&
-			    method.BaseMethod.IsFinal == method.IsFinal &&
-			    !method.IsSynthetic &&
-			    check (method))
+					!method.BaseMethod.IsAbstract &&
+					method.BaseMethod.Visibility == method.Visibility &&
+					method.BaseMethod.IsAbstract == method.IsAbstract &&
+					method.BaseMethod.IsFinal == method.IsFinal &&
+					!method.IsSynthetic &&
+					check (method))
 				return;
 
-			SaveMember (method, writer, "method",
-				XmlConvert.ToString (method.IsAbstract),
-				XmlConvert.ToString (method.IsNative),
-				GetVisibleReturnTypeString (method),
-				XmlConvert.ToString (method.IsSynchronized),
-				null,
-				null,
-				null,
-				null,
-				null,
-				method.Parameters,
-				method.IsBridge,
-				method.ReturnJni,
-				method.IsSynthetic,
-				method.ReturnNotNull);
+			SaveMember (m: method, writer: writer, elementName: "method",
+				abs: XmlConvert.ToString (method.IsAbstract),
+				native: XmlConvert.ToString (method.IsNative),
+				ret: GetVisibleReturnTypeString (method),
+				sync: XmlConvert.ToString (method.IsSynchronized),
+				transient: null,
+				type: null,
+				typeGeneric: null,
+				value: null,
+				volat: null,
+				parameters: method.Parameters,
+				extBridge: method.IsBridge,
+				jniReturn: method.ReturnJni,
+				extSynthetic: method.IsSynthetic,
+				notNull: method.ReturnNotNull);
 		}
 
 		static string GetVisibleReturnTypeString (JavaMethodModel method)
@@ -241,7 +241,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 
 		public static string? GetVisibleParamterTypeName (this JavaParameterModel parameter)
 		{
-			if (GetVisibleNonSpecialType (parameter.ParentMethod, parameter.TypeModel) is JavaTypeReference jtr)
+			if (GetVisibleNonSpecialType (parameter.DeclaringMethod, parameter.TypeModel) is JavaTypeReference jtr)
 				return jtr.ToString ();
 
 			return parameter.GenericType;
@@ -252,7 +252,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			if (r == null || r.SpecialName != null || r.ReferencedTypeParameter != null || r.ArrayPart != null)
 				return null;
 
-			var requiredVisibility = method?.Visibility == "public" && method.ParentType?.Visibility == "public" ? "public" : method?.Visibility;
+			var requiredVisibility = method?.Visibility == "public" && method.DeclaringType?.Visibility == "public" ? "public" : method?.Visibility;
 
 			for (var t = r; t != null; t = (t.ReferencedType as JavaClassModel)?.BaseTypeReference) {
 				if (t.ReferencedType == null)
@@ -273,11 +273,11 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		}
 
 		static void SaveMember (JavaMemberModel m, XmlWriter writer, string elementName,
-					string? abs, string? native, string? ret, string? sync,
-					string? transient, string? type, string? typeGeneric,
-					string? value, string? volat,
-					IEnumerable<JavaParameterModel>? parameters,
-					bool? extBridge, string? jniReturn, bool? extSynthetic, bool? notNull)
+				string? abs, string? native, string? ret, string? sync,
+				string? transient, string? type, string? typeGeneric,
+				string? value, string? volat,
+				IEnumerable<JavaParameterModel>? parameters,
+				bool? extBridge, string? jniReturn, bool? extSynthetic, bool? notNull)
 		{
 			// If any of the parameters contain reference to non-public type, it cannot be generated.
 			// TODO

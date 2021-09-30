@@ -20,8 +20,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			var jni = new JniSignature (JniTypeName.Parse (signature.Substring (idx)));
 
 			// Strip out return type
-			if (signature.StartsWith ("(")) {
-				var e = signature.IndexOf (")");
+			if (signature.StartsWith ("(", StringComparison.Ordinal)) {
+				var e = signature.IndexOf (')');
 				signature = signature.Substring (1, e >= 0 ? e - 1 : signature.Length - 1);
 			}
 
@@ -86,7 +86,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				case 'J':
 					return new JniTypeName ("J", "long", true);
 				case 'L': {
-						var e = signature.IndexOf (";", index);
+						var e = signature.IndexOf (';', index);
 
 						if (e <= 0)
 							throw new InvalidOperationException ("Missing reference type after 'L' at index " + index + "in: " + signature);

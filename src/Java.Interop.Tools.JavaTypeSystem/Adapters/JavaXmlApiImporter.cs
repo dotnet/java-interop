@@ -37,7 +37,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			var root = doc.Root;
 
 			if (root is null)
-				throw new Exception ("Invalid XML file");
+				throw new ArgumentException ("Invalid XML file doesn't contain a root node");
 
 			collection.ApiSource = root.XGetAttributeOrNull ("api-source");
 			collection.Platform = root.XGetAttributeOrNull ("platform");
@@ -62,7 +62,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			foreach (var type in packages.SelectMany (p => p.Types).Where (t => t.NestedName.Contains ('.')).OrderBy (t => t.FullName.Count (c => c == '.')).ToArray ()) {
 				collection.AddType (type);
 
-				// Remove nested types from Package
+				// Remove nested types from Package. In this model, Package only contains top-level types, which then contain nested types.
 				type.Package.Types.Remove (type);
 			}
 
@@ -83,13 +83,13 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			foreach (var elem in package.Elements ()) {
 				switch (elem.Name.LocalName) {
 					case "class":
-						if (package.XGetAttributeAsBool ("obfuscated"))
+						if (elem.XGetAttributeAsBool ("obfuscated"))
 							continue;
 
 						pkg.Types.Add (ParseClass (pkg, elem));
 						break;
 					case "interface":
-						if (package.XGetAttributeAsBool ("obfuscated"))
+						if (elem.XGetAttributeAsBool ("obfuscated"))
 							continue;
 
 						pkg.Types.Add (ParseInterface (pkg, elem));
@@ -189,7 +189,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				javaFinal: element.XGetAttributeAsBool ("final"),
 				javaStatic: element.XGetAttributeAsBool ("static"),
 				javaReturn: element.XGetAttribute ("return"),
-				javaParentType: type,
+				javaDeclaringType: type,
 				deprecated: element.XGetAttribute ("deprecated"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
 				isSynthetic: element.XGetAttributeAsBool ("synthetic"),
@@ -221,18 +221,14 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			var method = new JavaConstructorModel (
 				javaName: element.XGetAttribute ("name"),
 				javaVisibility: element.XGetAttribute ("visibility"),
-				javaAbstract: element.XGetAttributeAsBool ("abstract"),
-				javaFinal: element.XGetAttributeAsBool ("final"),
 				javaStatic: element.XGetAttributeAsBool ("static"),
-				javaParentType: type,
+				javaDeclaringType: type,
 				deprecated: element.XGetAttribute ("deprecated"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
 				isSynthetic: element.XGetAttributeAsBool ("synthetic"),
 				isBridge: element.XGetAttributeAsBool ("bridge")
 			);
 
-			if (element.Element ("typeParameters") is XElement tp)
-				ParseTypeParameters (method.TypeParameters, tp);
 			foreach (var child in element.Elements ("exception"))
 				method.Exceptions.Add (ParseException (child));
 
@@ -256,7 +252,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				typeGeneric: element.XGetAttribute ("type-generic-aware"),
 				isStatic: element.XGetAttributeAsBool ("static"),
 				value: element.Attribute ("value")?.Value,
-				parent: type,
+				declaringType: type,
 				isFinal: element.XGetAttributeAsBool ("final"),
 				deprecated: element.XGetAttribute ("deprecated"),
 				jniSignature: element.XGetAttribute ("jni-signature"),
@@ -298,7 +294,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		public static JavaParameterModel ParseParameter (JavaMethodModel method, XElement element)
 		{
 			var parameter = new JavaParameterModel (
-				parent: method,
+				declaringMethod: method,
 				javaName: element.XGetAttribute ("name"),
 				javaType: element.XGetAttribute ("type"),
 				jniType: element.XGetAttribute ("jni-type"),

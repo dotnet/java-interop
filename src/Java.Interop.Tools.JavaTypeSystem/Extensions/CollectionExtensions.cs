@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Java.Interop.Tools.JavaTypeSystem
 {
-	public static class CollectionExtensions
+	static class CollectionExtensions
 	{
 		public static bool ContainsAny<T> (this ICollection<T> collection, params T[] values)
 		{

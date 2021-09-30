@@ -12,14 +12,14 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		public bool IsNotNull { get; }
 		public string GenericType { get; }
 
-		public JavaMethodModel ParentMethod { get; }
+		public JavaMethodModel DeclaringMethod { get; }
 		public JavaTypeReference? TypeModel { get; private set; }
 		public bool IsParameterArray { get; private set; }
 		public string? InstantiatedGenericArgumentName { get; internal set; }
 
-		public JavaParameterModel (JavaMethodModel parent, string javaName, string javaType, string jniType, bool isNotNull)
+		public JavaParameterModel (JavaMethodModel declaringMethod, string javaName, string javaType, string jniType, bool isNotNull)
 		{
-			ParentMethod = parent;
+			DeclaringMethod = declaringMethod;
 			Name = javaName;
 			Type = javaType;
 			JniType = jniType;
@@ -30,14 +30,14 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				Type = Type.Substring (0, Type.IndexOf ('<'));
 		}
 
-		public void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
+		public void Resolve (JavaTypeCollection types, ICollection<JavaUnresolvableModel> unresolvables)
 		{
 			var jtn = JavaTypeName.Parse (GenericType);
 
 			if (jtn.ArrayPart == "...")
 				IsParameterArray = true;
 
-			var type_parameters = ParentMethod.GetApplicableTypeParameters ().ToArray ();
+			var type_parameters = DeclaringMethod.GetApplicableTypeParameters ().ToArray ();
 
 			try {
 				TypeModel = types.ResolveTypeReference (GenericType, type_parameters);

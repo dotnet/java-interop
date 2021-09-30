@@ -22,8 +22,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		public List<JavaParameterModel> Parameters { get; } = new List<JavaParameterModel> ();
 		public List<JavaExceptionModel> Exceptions { get; } = new List<JavaExceptionModel> ();
 
-		public JavaMethodModel (string javaName, string javaVisibility, bool javaAbstract, bool javaFinal, bool javaStatic, string javaReturn, JavaTypeModel javaParentType, string deprecated, string jniSignature, bool isSynthetic, bool isBridge, string returnJni, bool isNative, bool isSynchronized, bool returnNotNull)
-			: base (javaName, javaStatic, javaFinal, javaVisibility, javaParentType, deprecated, jniSignature)
+		public JavaMethodModel (string javaName, string javaVisibility, bool javaAbstract, bool javaFinal, bool javaStatic, string javaReturn, JavaTypeModel javaDeclaringType, string deprecated, string jniSignature, bool isSynthetic, bool isBridge, string returnJni, bool isNative, bool isSynchronized, bool returnNotNull)
+			: base (javaName, javaStatic, javaFinal, javaVisibility, javaDeclaringType, deprecated, jniSignature)
 		{
 			IsAbstract = javaAbstract;
 			Return = javaReturn;
@@ -38,7 +38,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			TypeParameters = new JavaTypeParameters (this);
 		}
 
-		public override void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
+		public override void Resolve (JavaTypeCollection types, ICollection<JavaUnresolvableModel> unresolvables)
 		{
 			if (Name.Contains ('$')) {
 				unresolvables.Add (new JavaUnresolvableModel (this, "$", UnresolvableType.DollarSign));
@@ -59,14 +59,14 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 				p.Resolve (types, unresolvables);
 		}
 
-		// Return method's type parameters, plus type parameters for any parent type(s).
+		// Return method's type parameters, plus type parameters for any declaring type(s).
 		public IEnumerable<JavaTypeParameter> GetApplicableTypeParameters ()
 		{
 			foreach (var jtp in TypeParameters)
 				yield return jtp;
 
-			if (ParentType != null)
-				foreach (var jtp in ParentType.GetApplicableTypeParameters ())
+			if (DeclaringType != null)
+				foreach (var jtp in DeclaringType.GetApplicableTypeParameters ())
 					yield return jtp;
 		}
 
@@ -75,7 +75,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			if (type is null)
 				return;
 
-			var pt = (JavaClassModel)ParentType;
+			var pt = (JavaClassModel)DeclaringType;
 
 			var candidate = type.Methods.FirstOrDefault (p => p.Name == Name && IsImplementing (this, p, pt.GenericInheritanceMapping ?? throw new InvalidOperationException ($"missing {nameof (pt.GenericInheritanceMapping)}!")));
 
@@ -142,7 +142,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			// generic instantiation check.
 			var baseGTP = bp.TypeModel?.ReferencedTypeParameter;
 			if (baseGTP != null) {
-				if (baseGTP.Parent?.ParentMethod != null && IsConformantType (baseGTP, dp.TypeModel))
+				if (baseGTP.Parent?.DeclaringMethod != null && IsConformantType (baseGTP, dp.TypeModel))
 					return true;
 				var k = genericInstantiation.Keys.FirstOrDefault (tr => bp.TypeModel?.Equals (tr) ?? false);
 				if (k == null)

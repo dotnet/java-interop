@@ -22,7 +22,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			Parent = parent;
 		}
 
-		public void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
+		public void Resolve (JavaTypeCollection types, ICollection<JavaUnresolvableModel> unresolvables)
 		{
 			// TODO: Resolve generic constraints
 			//var type_parameters = GetApplicableTypeParameters ().ToArray ();

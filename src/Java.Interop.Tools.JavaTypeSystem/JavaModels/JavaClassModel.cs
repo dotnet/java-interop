@@ -23,7 +23,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			BaseTypeJni = baseTypeJni;
 		}
 
-		public override void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
+		public override void Resolve (JavaTypeCollection types, ICollection<JavaUnresolvableModel> unresolvables)
 		{
 			var type_parameters = GetApplicableTypeParameters ().ToArray ();
 
@@ -103,7 +103,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			// NRT - This is checked above but compiler can't figure it out
 			if (BaseTypeReference.ReferencedType!.TypeParameters.Count != BaseTypeReference.TypeParameters.Count)
 				throw new Exception (string.Format ("On {0}.{1}, referenced generic arguments count do not match the base type parameters definition",
-					ParentType?.Name, Name));
+					DeclaringType?.Name, Name));
 
 			generic_inheritance_mapping = new Dictionary<JavaTypeReference, JavaTypeReference> ();
 			foreach (var kvp in BaseTypeReference.ReferencedType.TypeParameters.Zip (

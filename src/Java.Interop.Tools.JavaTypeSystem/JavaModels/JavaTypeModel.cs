@@ -7,12 +7,12 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 	public abstract class JavaTypeModel : IJavaResolvable
 	{
 		/// <summary>
-		/// Only the type's name, does not include parent type name for nested type.
+		/// Only the type's name, does not include declaring type name for nested type.
 		/// </summary>
 		public string Name { get; }
 
 		/// <summary>
-		/// Includes parent type name(s) if type is nested (period separator). ex: Manifest.permission
+		/// Includes declaring type name(s) if type is nested (period separator). ex: Manifest.permission
 		/// </summary>
 		public string NestedName { get; set; }
 
@@ -25,7 +25,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		public bool IsReferencedOnly { get; internal set; }
 
 		public JavaPackage Package { get; }
-		public JavaTypeModel? ParentType { get; internal set; }
+		public JavaTypeModel? DeclaringType { get; internal set; }
 		public List<JavaTypeModel> NestedTypes { get; } = new List<JavaTypeModel> ();
 
 		public JavaTypeParameters TypeParameters { get; }
@@ -52,12 +52,12 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		}
 
 		/// <summary>
-		/// Returns string containing package name, parent name, and type's name. (ex: 'java.util.ArrayList.Keys')
+		/// Returns string containing package name, declaring type name, and type's name. (ex: 'java.util.ArrayList.Keys')
 		/// </summary>
 		public string FullName {
 			get {
-				if (ParentType != null)
-					return $"{ParentType.FullName}.{Name}";
+				if (DeclaringType != null)
+					return $"{DeclaringType.FullName}.{Name}";
 
 				if (Package.Name.Length > 0)
 					return $"{Package.Name}.{NestedName}";
@@ -68,7 +68,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 		public bool IsNested => NestedName.Contains ('.');
 
-		public virtual void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
+		public virtual void Resolve (JavaTypeCollection types, ICollection<JavaUnresolvableModel> unresolvables)
 		{
 			var type_parameters = GetApplicableTypeParameters ().ToArray ();
 
@@ -110,8 +110,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 			// TODO, this is more correct, but disabled for ApiXmlAdjuster compatibility.
 			// https://github.com/xamarin/java.interop/issues/815
-			//if (ParentType != null)
-			//	foreach (var jtp in ParentType.GetApplicableTypeParameters ())
+			//if (DeclaringType != null)
+			//	foreach (var jtp in DeclaringType.GetApplicableTypeParameters ())
 			//		yield return jtp;
 		}
 	}

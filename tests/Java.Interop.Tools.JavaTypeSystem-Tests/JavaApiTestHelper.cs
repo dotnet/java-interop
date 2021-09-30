@@ -16,8 +16,8 @@ namespace Java.Interop.Tools.JavaTypeSystem.Tests
 
 		public static JavaClassModel CreateClass (JavaPackage javaPackage, string javaNestedName, string javaVisibility = "public", bool javaAbstract = false, bool javaFinal = false, string javaBaseType = "java.lang.Object", string javaBaseTypeGeneric = "java.lang.Object", string javaDeprecated = "not deprecated", bool javaStatic = false, string jniSignature = "", string baseTypeJni = "java/lang/Object")
 		{
-			if (!jniSignature.HasValue ())
-				jniSignature = $"{(javaPackage.Name.HasValue () ? javaPackage.Name + "." : "")}{javaNestedName}".Replace ('.', '/');
+			if (string.IsNullOrWhiteSpace (jniSignature))
+				jniSignature = $"{(!string.IsNullOrWhiteSpace (javaPackage.Name) ? javaPackage.Name + "." : "")}{javaNestedName}".Replace ('.', '/');
 
 			var klass = new JavaClassModel (
 				javaPackage: javaPackage,

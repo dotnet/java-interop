@@ -55,9 +55,9 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		}
 
 		/// <summary>
-		/// Adds a type to the collection.  Note parent classes must be added before nested classes.
+		/// Adds a type to the collection.  Note declaring classes must be added before nested classes.
 		/// </summary>
-		/// <returns>True if type was added to collection. False if type could not be added because its parent type was missing.</returns>
+		/// <returns>True if type was added to collection. False if type could not be added because its declaring type was missing.</returns>
 		public bool AddType (JavaTypeModel type)
 		{
 			var nested_name = type.NestedName;
@@ -73,18 +73,18 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 			var full_name = type.FullName.ChompLast ('.');
 
-			// Nested type, find parent model to put it in
-			if (types_flattened.TryGetValue (full_name, out var parent)) {
-				if (!parent.NestedTypes.Contains (type))
-					parent.NestedTypes.Add (type);
+			// Nested type, find declaring model to put it in
+			if (types_flattened.TryGetValue (full_name, out var declaring)) {
+				if (!declaring.NestedTypes.Contains (type))
+					declaring.NestedTypes.Add (type);
 
-				type.ParentType = parent;
+				type.DeclaringType = declaring;
 				types_flattened [type.FullName] = type;
 
 				return true;
 			}
 
-			// Could not find parent type to nest child type in
+			// Could not find declaring type to nest child type in
 			return false;
 		}
 
@@ -101,7 +101,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		// This is a little trickier than we may initially think, because nested classes
 		// will also need to be removed from TypesFlattened (recursively). Note this only
 		// removes the type from this collection, it does not remove a nested type from
-		// its parent type model. Returns true if type(s) were removed. 
+		// its declaring type model. Returns true if type(s) were removed. 
 		public bool RemoveType (JavaTypeModel type)
 		{
 			var removed = false;
@@ -140,17 +140,17 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 					if (u.Unresolvable is JavaTypeModel type) {
 						u.RemovedEntireType = RemoveResolvedType (type);
 					} else if (u.Unresolvable is JavaConstructorModel ctor) {
-						// Remove from parent type (must pattern check for ctor before method)
-						((JavaClassModel) ctor.ParentType).Constructors.Remove (ctor);
+						// Remove from declaring type (must pattern check for ctor before method)
+						((JavaClassModel) ctor.DeclaringType).Constructors.Remove (ctor);
 					} else if (u.Unresolvable is JavaMethodModel method) {
-						// Remove from parent type
+						// Remove from declaring type
 						u.RemovedEntireType = RemoveMethod (method, options);
 					} else if (u.Unresolvable is JavaFieldModel field) {
-						// Remove from parent type
-						field.ParentType.Fields.Remove (field);
+						// Remove from declaring type
+						field.DeclaringType.Fields.Remove (field);
 					} else if (u.Unresolvable is JavaParameterModel parameter) {
-						// Remove method from parent type
-						u.RemovedEntireType = RemoveMethod (parameter.ParentMethod, options);
+						// Remove method from declaring type
+						u.RemovedEntireType = RemoveMethod (parameter.DeclaringMethod, options);
 					} else {
 						// *Shouldn't* be possible
 						throw new Exception ($"Encountered unknown IJavaResolvable: '{u.Unresolvable.GetType ().Name}'");
@@ -206,13 +206,13 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		{
 			// We cannot remove a non-static, non-default method on an interface without breaking the contract.
 			// If we need to do that we have to remove the entire interface instead.
-			if (method.ParentType is JavaInterfaceModel && !method.IsStatic && method.IsAbstract && options.RemoveInterfacesWithUnresolvableMembers)
-				return RemoveResolvedType (method.ParentType);
+			if (method.DeclaringType is JavaInterfaceModel && !method.IsStatic && method.IsAbstract && options.RemoveInterfacesWithUnresolvableMembers)
+				return RemoveResolvedType (method.DeclaringType);
 
-			if (method is JavaConstructorModel ctor && method.ParentType is JavaClassModel klass)
+			if (method is JavaConstructorModel ctor && method.DeclaringType is JavaClassModel klass)
 				klass.Constructors.Remove (ctor);
 			else
-				method.ParentType.Methods.Remove (method);
+				method.DeclaringType.Methods.Remove (method);
 
 			return false;
 		}
@@ -221,14 +221,14 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		{
 			var removed = false;
 
-			// Remove from parent type
-			if (type.ParentType != null)
-				removed |= type.ParentType.NestedTypes.Remove (type);
+			// Remove from declaring type
+			if (type.DeclaringType != null)
+				removed |= type.DeclaringType.NestedTypes.Remove (type);
 
 			// Remove from collection
 			removed |= RemoveType (type);
 
-			// Remove from parent package
+			// Remove from declaring package
 			type.Package.Types.Remove (type);
 
 			return removed;

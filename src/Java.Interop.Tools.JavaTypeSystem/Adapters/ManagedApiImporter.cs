@@ -53,9 +53,9 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		static bool ShouldImport (TypeDefinition td)
 		{
 			// We want to exclude "IBlahInvoker" and "IBlahImplementor" and "BlahConsts" types
-			if (td.Name.EndsWith ("Invoker")) {
+			if (td.Name.EndsWith ("Invoker", StringComparison.Ordinal)) {
 				var n = td.FullName;
-				n = n.Substring (0, n.Length - 7);
+				n = n.Substring (0, n.Length - "Invoker".Length);
 
 				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
 
@@ -63,9 +63,9 @@ namespace Java.Interop.Tools.JavaTypeSystem
 					return false;
 			}
 
-			if (td.Name.EndsWith ("Implementor")) {
+			if (td.Name.EndsWith ("Implementor", StringComparison.Ordinal)) {
 				var n = td.FullName;
-				n = n.Substring (0, n.Length - 11);
+				n = n.Substring (0, n.Length - "Implementor".Length);
 
 				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
 
@@ -73,9 +73,9 @@ namespace Java.Interop.Tools.JavaTypeSystem
 					return false;
 			}
 
-			if (td.Name.EndsWith ("Consts")) {
+			if (td.Name.EndsWith ("Consts", StringComparison.Ordinal)) {
 				var n = td.FullName;
-				n = n.Substring (0, n.Length - 6);
+				n = n.Substring (0, n.Length - "Consts".Length);
 
 				var types = td.DeclaringType != null ? td.DeclaringType.Resolve ().NestedTypes : td.Module.Types;
 
@@ -132,7 +132,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			if (reg_attr is null)
 				return null;
 
-			var encoded_fullname = ((string) reg_attr.ConstructorArguments [0].Value).Replace ('/', '.');
+			var encoded_fullname = ((string) reg_attr.ConstructorArguments [0].Value);
 			var (package, nested_name) = DecodeRegisterJavaFullName (encoded_fullname);
 
 			var model = new JavaInterfaceModel (
@@ -153,7 +153,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			return model;
 		}
 
-		public static JavaMethodModel? ParseMethod (MethodDefinition method, JavaTypeModel parent)
+		public static JavaMethodModel? ParseMethod (MethodDefinition method, JavaTypeModel declaringType)
 		{
 			if (method.IsPrivate || method.IsAssembly)
 				return null;
@@ -174,7 +174,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				javaFinal: method.IsFinal,
 				javaStatic: method.IsStatic,
 				javaReturn: jni_signature.Return.Type,
-				javaParentType: parent,
+				javaDeclaringType: declaringType,
 				deprecated: deprecated,
 				jniSignature: jni_signature.ToString (),
 				isSynthetic: false,
@@ -191,7 +191,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			return model;
 		}
 
-		static JavaParameterModel ParseParameterModel (JavaMethodModel parent, JniTypeName jniParameter, ParameterDefinition managedParameter)
+		static JavaParameterModel ParseParameterModel (JavaMethodModel declaringMethod, JniTypeName jniParameter, ParameterDefinition managedParameter)
 		{
 			var raw_type = jniParameter.Type;
 
@@ -208,7 +208,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			//	if (TypeReferenceToJavaType (managedParameter.ParameterType) is string s)
 			//		raw_type = s;
 
-			return new JavaParameterModel (parent, managedParameter.Name, raw_type, jniParameter.Jni, false);
+			return new JavaParameterModel (declaringMethod, managedParameter.Name, raw_type, jniParameter.Jni, false);
 		}
 
 		static void AddReferenceTypeRecursive (JavaTypeModel type, JavaTypeCollection collection)
@@ -351,10 +351,11 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		static string FullNameCorrected (this TypeReference t) => t.FullName.Replace ('/', '.');
 
 		public static string Visibility (this MethodDefinition m) =>
-	m.IsPublic ? "public" : m.IsFamilyOrAssembly ? "protected internal" : m.IsFamily ? "protected" : m.IsAssembly ? "internal" : "private";
+			m.IsPublic ? "public" : m.IsFamilyOrAssembly ? "protected internal" : m.IsFamily ? "protected" : m.IsAssembly ? "internal" : "private";
 
 		static (string package, string nestedName) DecodeRegisterJavaFullName (string value)
 		{
+			value = value.Replace ('/', '.');
 			var idx = value.LastIndexOf ('.');
 
 			var package = idx >= 0 ? value.Substring (0, idx) : string.Empty;
@@ -366,9 +367,9 @@ namespace Java.Interop.Tools.JavaTypeSystem
 		static string FormatJniSignature (string package, string nestedName)
 		{
 			if (package.HasValue ())
-				return $"L{package.Replace ('.', '/')}/{nestedName.Replace ('$', '/')};";
+				return $"L{package.Replace ('.', '/')}/{nestedName};";
 
-			return "L" + nestedName.Replace ('$', '/') + ";";
+			return "L" + nestedName + ";";
 		}
 
 		static JavaPackage GetOrCreatePackage (JavaTypeCollection collection, string package, string managedName)

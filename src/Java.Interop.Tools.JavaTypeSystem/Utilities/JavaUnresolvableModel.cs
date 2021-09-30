@@ -22,14 +22,14 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 			if (Type == UnresolvableType.DollarSign)
 				return RemovedEntireType ?
-					$"The type '{member?.ParentType.FullName}' was removed because the required {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because its name contains a dollar sign." :
+					$"The type '{member?.DeclaringType.FullName}' was removed because the required {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because its name contains a dollar sign." :
 					$"The {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because its name contains a dollar sign.";
 
 			if (Unresolvable is JavaTypeModel)
 				return $"The {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because the Java {GetReason ()} '{MissingType}' could not be found.";
 
 			return RemovedEntireType ?
-				$"The type '{member?.ParentType.FullName}' was removed because the required {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because the Java {GetReason ()} '{MissingType}' could not be found." :
+				$"The type '{member?.DeclaringType.FullName}' was removed because the required {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because the Java {GetReason ()} '{MissingType}' could not be found." :
 				$"The {GetUnresolvableType ()} '{GetUnresolvable ()}' was removed because the Java {GetReason ()} '{MissingType}' could not be found.";
 		}
 
@@ -37,9 +37,9 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		{
 			if (Unresolvable is JavaFieldModel)
 				return "field";
-			if (Unresolvable is JavaConstructorModel || (Unresolvable is JavaParameterModel p && p.ParentMethod is JavaConstructorModel))
+			if (Unresolvable is JavaConstructorModel || (Unresolvable is JavaParameterModel p && p.DeclaringMethod is JavaConstructorModel))
 				return "constructor";
-			if (Unresolvable is JavaMethodModel || (Unresolvable is JavaParameterModel p2 && p2.ParentMethod is JavaMethodModel))
+			if (Unresolvable is JavaMethodModel || (Unresolvable is JavaParameterModel p2 && p2.DeclaringMethod is JavaMethodModel))
 				return "method";
 			if (Unresolvable is JavaClassModel)
 				return "class";
@@ -52,7 +52,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		string GetUnresolvable ()
 		{
 			if (Unresolvable is JavaParameterModel p)
-				return p.ParentMethod.ToString ();
+				return p.DeclaringMethod.ToString ();
 
 			return Unresolvable.ToString ();
 		}

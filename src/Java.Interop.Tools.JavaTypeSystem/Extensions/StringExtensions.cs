@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Java.Interop.Tools.JavaTypeSystem
 {
-	public static class StringExtensions
+	static class StringExtensions
 	{
 		/// <summary>
 		/// Shortcut for !string.IsNullOrWhiteSpace (s)

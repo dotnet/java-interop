@@ -8,7 +8,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 	{
 		public JavaBuiltInType (string name) : base (new JavaPackage ("", "", null), name, "public", false, true, "not deprecated", false, "") { }
 
-		public override void Resolve (JavaTypeCollection types, List<JavaUnresolvableModel> unresolvables)
+		public override void Resolve (JavaTypeCollection types, ICollection<JavaUnresolvableModel> unresolvables)
 		{
 			throw new NotImplementedException ();
 		}

@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Java.Interop.Tools.JavaTypeSystem
 {
-	public static class XmlExtensions
+	static class XmlExtensions
 	{
 		public static string XGetAttribute (this XElement element, string name)
 		{

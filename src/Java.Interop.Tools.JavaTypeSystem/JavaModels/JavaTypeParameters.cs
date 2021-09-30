@@ -5,12 +5,12 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 {
 	public class JavaTypeParameters : List<JavaTypeParameter>
 	{
-		public JavaTypeModel? ParentType { get; }
-		public JavaMethodModel? ParentMethod { get; }
+		public JavaTypeModel? DeclaringType { get; }
+		public JavaMethodModel? DeclaringMethod { get; }
 
 		public Dictionary<string, string> PropertyBag { get; } = new Dictionary<string, string> ();
 
-		public JavaTypeParameters (JavaTypeModel parent) => ParentType = parent;
-		public JavaTypeParameters (JavaMethodModel parent) => ParentMethod = parent;
+		public JavaTypeParameters (JavaTypeModel declaringType) => DeclaringType = declaringType;
+		public JavaTypeParameters (JavaMethodModel declaringMethod) => DeclaringMethod = declaringMethod;
 	}
 }
