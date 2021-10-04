@@ -11,6 +11,7 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 			"android.support.annotation.",
 			"androidx.annotation.",
 		};
+
 		public AnnotationData (XElement e)
 		{
 			var a = e.Attribute ("name");
