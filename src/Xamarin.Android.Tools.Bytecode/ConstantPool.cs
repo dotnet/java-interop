@@ -260,7 +260,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public override string ToString ()
 		{
-			return string.Format (CultureInfo.InvariantCulture, "Float({0})", Value);
+			return string.Format (CultureInfo.InvariantCulture, "Float({0:G9})", Value);
 		}
 	}
 
@@ -329,7 +329,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public override string ToString ()
 		{
-			return string.Format (CultureInfo.InvariantCulture, "Double({0})", Value);
+			return string.Format (CultureInfo.InvariantCulture, "Double({0:G17})", Value);
 		}
 	}
 
