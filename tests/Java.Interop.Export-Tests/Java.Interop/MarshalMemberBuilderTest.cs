@@ -556,5 +556,5 @@ namespace Java.InteropTests
 }}");
 		}
 	}
-#endif
+#endif  // !NET
 }
