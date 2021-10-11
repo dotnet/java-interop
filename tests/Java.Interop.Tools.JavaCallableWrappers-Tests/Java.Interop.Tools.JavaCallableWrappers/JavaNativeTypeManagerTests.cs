@@ -32,9 +32,9 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 #if NET
 			// System.String moved assemblies in .NET
 			Assert.AreEqual ("crc64d04135c992393d83", JavaNativeTypeManager.GetPackageName (typeof (string)));
-#else
+#else   // !NET
 			Assert.AreEqual ("crc64b74743e9328eed0a", JavaNativeTypeManager.GetPackageName (typeof (string)));
-#endif
+#endif  // !NET
 		}
 
 		[Test]
@@ -51,9 +51,9 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 #if NET
 			// System.String moved assemblies in .NET
 			Assert.AreEqual ("assembly_system_private_corelib.system", JavaNativeTypeManager.GetPackageName (typeof (string)));
-#else
+#else   // !NET
 			Assert.AreEqual ("assembly_mscorlib.system", JavaNativeTypeManager.GetPackageName (typeof (string)));
-#endif
+#endif  // !NET
 		}
 	}
 }
