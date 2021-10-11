@@ -50,7 +50,7 @@ namespace generatortests
 				MetadataReference.CreateFromFile (Path.Combine (facDir, "netstandard.dll")),
 #if NET
 				MetadataReference.CreateFromFile (Path.Combine (facDir, "System.Runtime.dll")),
-#endif
+#endif  // NET
 			};
 
 
