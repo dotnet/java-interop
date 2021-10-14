@@ -22,5 +22,16 @@
         PropertyFile="$(_TopDir)\bin\Build$(Configuration)\JdkInfo.props">
       <Output TaskParameter="JavaHomePath" PropertyName="_JavaSdkDirectory" />
     </JdkInfo>
+    <PropertyGroup>
+      <JdksRoot Condition=" '$(JdksRoot)' == '' ">$(JAVA_HOME_11_X64)</JdksRoot>
+    </PropertyGroup>
+    <JdkInfo
+        JdksRoot="$(JdksRoot)"
+        PropertyNameModifier="11"
+        MinimumJdkVersion="11.0"
+        MaximumJdkVersion="11.99.0"
+        PropertyFile="$(_TopDir)\bin\Build$(Configuration)\JdkInfo-11.props">
+      <Output TaskParameter="JavaHomePath" PropertyName="Java11SdkDirectory"/>
+    </JdkInfo>
   </Target>
 </Project>

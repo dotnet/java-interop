@@ -10,9 +10,9 @@ using Xamarin.SourceWriter;
 namespace generatortests
 {
 	[TestFixture]
-	class JavaInteropCodeGeneratorTests : CodeGeneratorTests
+	class XAJavaInteropCodeGeneratorTests : CodeGeneratorTests
 	{
-		protected override CodeGenerationTarget Target => CodeGenerationTarget.JavaInterop1;
+		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 
 		[Test]
 		public void WriteKotlinUnsignedTypeMethodsClass ()
@@ -215,7 +215,7 @@ namespace generatortests
 			generator.WriteType (iface, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
 			generator.Context.ContextTypes.Pop ();
 
-			Assert.AreEqual (GetExpected (nameof (WriteDuplicateInterfaceEventArgs)), writer.ToString ().NormalizeLineEndings ());
+			Assert.AreEqual (GetTargetedExpected (nameof (WriteDuplicateInterfaceEventArgs)), writer.ToString ().NormalizeLineEndings ());
 		}
 
 		[Test]
@@ -229,7 +229,7 @@ namespace generatortests
 			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
 			generator.Context.ContextTypes.Pop ();
 
-			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.SupportedOSPlatformAttribute (\"android30.0\")]", builder.ToString (), "Should contain SupportedOSPlatform!");
+			StringAssert.Contains ("[global::System.Runtime.Versioning.SupportedOSPlatformAttribute (\"android30.0\")]", builder.ToString (), "Should contain SupportedOSPlatform!");
 		}
 
 		[Test]
@@ -268,25 +268,6 @@ namespace generatortests
 			generator.Context.ContextTypes.Pop ();
 
 			Assert.Pass ("WriteType did not NRE");
-		}
-	}
-
-	[TestFixture]
-	class XAJavaInteropCodeGeneratorTests : CodeGeneratorTests
-	{
-		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
-
-		[Test]
-		public void SupportedOSPlatform ()
-		{
-			var klass = SupportTypeBuilder.CreateClass ("java.code.MyClass", options);
-			klass.ApiAvailableSince = 30;
-
-			generator.Context.ContextTypes.Push (klass);
-			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
-			generator.Context.ContextTypes.Pop ();
-
-			StringAssert.Contains ("[global::System.Runtime.Versioning.SupportedOSPlatformAttribute (\"android30.0\")]", builder.ToString (), "Should contain SupportedOSPlatform!");
 		}
 	}
 
