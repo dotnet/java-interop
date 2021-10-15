@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 
 using Java.Interop;
 
@@ -18,13 +17,11 @@ namespace Java.InteropTests
 			using (var t = new JniType ("java/lang/Object")) {
 				var oldHandle = IntPtr.Zero;
 				var array     = new JavaObjectArray<JavaObject> (1);
-				var w = new Thread (() => {
+				FinalizerHelpers.PerformNoPinAction (() => {
 						var v       = new JavaObject ();
 						oldHandle   = v.PeerReference.Handle;
 						array [0] = v;
 				});
-				w.Start ();
-				w.Join ();
 				JniEnvironment.Runtime.ValueManager.CollectPeers ();
 				GC.WaitForPendingFinalizers ();
 				GC.WaitForPendingFinalizers ();
@@ -80,13 +77,11 @@ namespace Java.InteropTests
 		{
 			JniObjectReference  oldHandle = new JniObjectReference ();
 			WeakReference r = null;
-			var t = new Thread (() => {
+			FinalizerHelpers.PerformNoPinAction (() => {
 					var v     = new JavaObject ();
 					oldHandle = v.PeerReference.NewWeakGlobalRef ();
 					r         = new WeakReference (v);
 			});
-			t.Start ();
-			t.Join ();
 			JniEnvironment.Runtime.ValueManager.CollectPeers ();
 			GC.WaitForPendingFinalizers ();
 			GC.WaitForPendingFinalizers ();
@@ -114,12 +109,10 @@ namespace Java.InteropTests
 		{
 			var d = false;
 			var f = false;
-			var t = new Thread (() => {
+			FinalizerHelpers.PerformNoPinAction (() => {
 				var v     = new JavaDisposedObject (() => d = true, () => f = true);
 				GC.KeepAlive (v);
 			});
-			t.Start ();
-			t.Join ();
 			JniEnvironment.Runtime.ValueManager.CollectPeers ();
 			GC.WaitForPendingFinalizers ();
 			JniEnvironment.Runtime.ValueManager.CollectPeers ();
@@ -183,11 +176,9 @@ namespace Java.InteropTests
 		public void CrossThreadSharingRequresRegistration ()
 		{
 			JavaObject o = null;
-			var t = new Thread (() => {
+			FinalizerHelpers.PerformNoPinAction (() => {
 					o = new JavaObject ();
 			});
-			t.Start ();
-			t.Join ();
 			o.ToString ();
 			o.Dispose ();
 		}
