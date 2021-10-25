@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Java.Interop.Tools.JavaTypeSystem.Models
@@ -128,7 +129,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			var results = new CollectionResolutionResults ();
 
 			while (true) {
-				var unresolvables = new List<JavaUnresolvableModel> ();
+				var unresolvables = new Collection<JavaUnresolvableModel> ();
 
 				foreach (var t in Types)
 					try {

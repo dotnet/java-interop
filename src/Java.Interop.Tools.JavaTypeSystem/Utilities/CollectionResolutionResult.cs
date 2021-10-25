@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Java.Interop.Tools.JavaTypeSystem.Models;
 
@@ -11,15 +12,15 @@ namespace Java.Interop.Tools.JavaTypeSystem
 	// - Cycle 2 removed 'com.example.MyDerivedType' because 'com.example.MyType' is now missing
 	// This distinction can be interesting, because Cycle 1 removals are often due to missing
 	// dependencies, whereas the remaining cycles are just the internal fallout from Cycle 1.
-	public class CollectionResolutionResults : List<CollectionResolutionResult>
+	public class CollectionResolutionResults : Collection<CollectionResolutionResult>
 	{
 	}
 
 	public class CollectionResolutionResult
 	{
-		public List<JavaUnresolvableModel> Unresolvables { get; }
+		public Collection<JavaUnresolvableModel> Unresolvables { get; }
 
-		public CollectionResolutionResult (List<JavaUnresolvableModel> unresolvables) =>
+		public CollectionResolutionResult (Collection<JavaUnresolvableModel> unresolvables) =>
 			Unresolvables = unresolvables;
 	}
 }

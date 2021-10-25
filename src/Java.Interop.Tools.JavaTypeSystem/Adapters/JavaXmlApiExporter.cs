@@ -186,25 +186,25 @@ namespace Java.Interop.Tools.JavaTypeSystem
 				!method.IsStatic &&
 				method.Parameters.All (p => p.InstantiatedGenericArgumentName == null);
 
-			//// skip synthetic methods, that's what jar2xml does.
-			//// However, jar2xml is based on Java reflection and it generates synthetic methods
-			//// that actually needs to be generated in the output XML (they are not marked as
-			//// "synthetic" either by asm or java reflection), when:
-			//// - the synthetic method is actually from non-public ancestor class
-			////   (e.g. FileBackupHelperBase.writeNewStateDescription())
-			//// For such case, it does not skip generation.
+			// skip synthetic methods, that's what jar2xml does.
+			// However, jar2xml is based on Java reflection and it generates synthetic methods
+			// that actually needs to be generated in the output XML (they are not marked as
+			// "synthetic" either by asm or java reflection), when:
+			// - the synthetic method is actually from non-public ancestor class
+			//   (e.g. FileBackupHelperBase.writeNewStateDescription())
+			// For such case, it does not skip generation.
 			if (method.IsSynthetic && (method.BaseMethod == null || check (method)))
 				return;
 
-			//// Here we skip most of the overriding methods of a virtual method, unless
-			//// - the method visibility or final-ity has changed: protected Object#clone() is often
-			////   overriden as public. In that case, we need a "new" method.
-			//// - the method is covariant. In that case we need another overload.
-			//// - they differ in "abstract" or "final" method attribute.
-			//// - the derived method is static.
-			//// - the base method is in the NON-public class.
-			//// - none of the arguments are type parameters.
-			//// - finally, it is the synthetic method already checked above.
+			// Here we skip most of the overriding methods of a virtual method, unless
+			// - the method visibility or final-ity has changed: protected Object#clone() is often
+			//   overriden as public. In that case, we need a "new" method.
+			// - the method is covariant. In that case we need another overload.
+			// - they differ in "abstract" or "final" method attribute.
+			// - the derived method is static.
+			// - the base method is in the NON-public class.
+			// - none of the arguments are type parameters.
+			// - finally, it is the synthetic method already checked above.
 			if (method.BaseMethod != null &&
 					!method.BaseMethod.IsAbstract &&
 					method.BaseMethod.Visibility == method.Visibility &&
