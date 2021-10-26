@@ -1,7 +1,6 @@
 package com.xamarin;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -200,21 +199,6 @@ public class JavaType<E>
 			List<? extends Number> extendsList,
 			List<? super Throwable> superList)
 		throws IllegalArgumentException, NumberFormatException, TThrowable {
-
-		class MyStringList extends ArrayList<String> {
-			public MyStringList(String a, int b) {
-			}
-			public MyStringList(T value1, String a, int b) {
-			}
-			public MyStringList(String a, TExtendsNumber value2, int b) {
-			}
-			public MyStringList(String a, int b, List<?> unboundedList) {
-			}
-			public String get(int index) {
-				unboundedList.add (null);
-				return value1.toString();
-			}
-		}
 	}
 
 	/** JNI sig: instanceActionWithGenerics.(Ljava/lang/Object;java/lang/Object;)V */
