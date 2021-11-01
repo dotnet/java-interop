@@ -208,13 +208,6 @@ namespace MonoDroid.Generation
 				sw.WriteLine ("#endif // def MONODROID_TIMING");
 				sw.WriteLine ("\t\t}");
 				sw.WriteLine ();
-				sw.WriteLine ("\t\tstatic Type{0} Lookup (string[] mappings, string javaType)", opt.NullableOperator);
-				sw.WriteLine ("\t\t{");
-				sw.WriteLine ("\t\t\tvar managedType = Java.Interop.TypeManager.LookupTypeMapping (mappings, javaType);");
-				sw.WriteLine ("\t\t\tif (managedType == null)");
-				sw.WriteLine ("\t\t\t\treturn null;");
-				sw.WriteLine ("\t\t\treturn Type.GetType (managedType);");
-				sw.WriteLine ("\t\t}");
 				foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> map in mapping) {
 					sw.WriteLine ();
 					string package = map.Key.Replace ('/', '_');

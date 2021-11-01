@@ -23,12 +23,5 @@ namespace Java.Interop {
 #endif // def MONODROID_TIMING
 		}
 
-		static Type Lookup (string[] mappings, string javaType)
-		{
-			var managedType = Java.Interop.TypeManager.LookupTypeMapping (mappings, javaType);
-			if (managedType == null)
-				return null;
-			return Type.GetType (managedType);
-		}
 	}
 }
