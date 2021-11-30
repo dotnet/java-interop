@@ -1,0 +1,14 @@
+steps:
+- task: PublishTestResults@2
+  displayName: Publish NUnit Test Results
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: TestResult-*.xml
+  condition: succeededOrFailed()
+
+- task: PublishTestResults@2
+  displayName: Publish JUnit Test Results
+  inputs:
+    testResultsFormat: JUnit
+    testResultsFiles: '**/TEST-*.xml'
+  condition: succeededOrFailed()
