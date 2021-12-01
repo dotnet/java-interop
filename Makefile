@@ -147,7 +147,7 @@ run-ptests: $(PTESTS) bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
 	exit $$r;
 
 run-java-source-utils-tests:
-	$(MSBUILD) $(MSBUILD_FLAGS) tools/java-source-utils/java-source-utils.csproj /t:RunTests -v:diag
+	$(MSBUILD) $(MSBUILD_FLAGS) tools/java-source-utils/java-source-utils.csproj /t:RunTests
 
 bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB): bin/$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
 	cp $< $@
