@@ -67,7 +67,7 @@ jobs:
     inputs:
       solution: build-tools/scripts/RunNUnitTests.targets
       configuration: $(Build.Configuration)
-      msbuildArguments: /p:TestAssembly="bin\Test$(Build.Configuration)\generator-Tests.dll;bin\Test$(Build.Configuration)\Java.Interop.Tools.JavaCallableWrappers-Tests.dll;bin\Test$(Build.Configuration)\logcat-parse-Tests.dll;bin\Test$(Build.Configuration)\Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll;bin\Test$(Build.Configuration)\Xamarin.Android.Tools.Bytecode-Tests.dll;bin\Test$(Build.Configuration)\Java.Interop.Tools.Generator-Tests.dll;bin\Test$(Build.Configuration)\Xamarin.SourceWriter-Tests.dll"
+      msbuildArguments: /p:TestAssembly="bin\Test$(Build.Configuration)\generator-Tests.dll;bin\Test$(Build.Configuration)\Java.Interop.Tools.JavaCallableWrappers-Tests.dll;bin\Test$(Build.Configuration)\logcat-parse-Tests.dll;bin\Test$(Build.Configuration)\Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll;bin\Test$(Build.Configuration)\Java.Interop.Tools.JavaTypeSystem-Tests.dll;bin\Test$(Build.Configuration)\Xamarin.Android.Tools.Bytecode-Tests.dll;bin\Test$(Build.Configuration)\Java.Interop.Tools.Generator-Tests.dll;bin\Test$(Build.Configuration)\Xamarin.SourceWriter-Tests.dll"
     condition: succeededOrFailed()
 
   - template: templates\publish-test-results.yaml
@@ -90,6 +90,7 @@ jobs:
   - template: templates\core-tests.yaml
     parameters:
       runNativeDotnetTests: true
+      platformName: .NET - Windows
 
   - template: templates\fail-on-issue.yaml
 
@@ -180,5 +181,6 @@ jobs:
     parameters:
       runNativeTests: true
       runJavaTests: true
+      platformName: .NET - MacOS
 
   - template: templates\fail-on-issue.yaml

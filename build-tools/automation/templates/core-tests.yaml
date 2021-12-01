@@ -2,12 +2,14 @@ parameters:
   condition: succeeded()
   runNativeTests: false
   runJavaTests: false
+  platformName:
 
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Tests: generator'
   inputs:
     command: test
+    testRunTitle: generator (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/generator-Tests.dll
   continueOnError: true
   
@@ -15,6 +17,7 @@ steps:
   displayName: 'Tests: JavaCallableWrappers'
   inputs:
     command: test
+    testRunTitle: Java.Interop.Tools.JavaCallableWrappers (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll
   continueOnError: true
    
@@ -22,6 +25,7 @@ steps:
   displayName: 'Tests: logcat-parse'
   inputs:
     command: test
+    testRunTitle: logcat-parse (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/logcat-parse-Tests.dll
   continueOnError: true
   
@@ -29,13 +33,23 @@ steps:
   displayName: 'Tests: ApiXmlAdjuster'
   inputs:
     command: test
+    testRunTitle: Xamarin.Android.Tools.ApiXmlAdjuster (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll
+  continueOnError: true
+  
+- task: DotNetCoreCLI@2
+  displayName: 'Tests: JavaTypeSystem'
+  inputs:
+    command: test
+    testRunTitle: Xamarin.Android.Tools.JavaTypeSystem (${{ parameters.platformName }})
+    arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaTypeSystem-Tests.dll
   continueOnError: true
   
 - task: DotNetCoreCLI@2
   displayName: 'Tests: Bytecode'
   inputs:
     command: test
+    testRunTitle: Xamarin.Android.Tools.Bytecode (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.Bytecode-Tests.dll
   continueOnError: true
 
@@ -43,6 +57,7 @@ steps:
   displayName: 'Tests: Java.Interop.Tools.Generator'
   inputs:
     command: test
+    testRunTitle: Java.Interop.Tools.Generator (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Generator-Tests.dll
   continueOnError: true
 
@@ -50,6 +65,7 @@ steps:
   displayName: 'Tests: Java.Interop.Tools.JavaSource'
   inputs:
     command: test
+    testRunTitle: Java.Interop.Tools.JavaSource (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaSource-Tests.dll
   continueOnError: true
 
@@ -57,6 +73,7 @@ steps:
   displayName: 'Tests: Xamarin.SourceWriter'
   inputs:
     command: test
+    testRunTitle: Xamarin.SourceWriter (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.SourceWriter-Tests.dll
   continueOnError: true
 
@@ -65,6 +82,7 @@ steps:
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:
     command: test
+    testRunTitle: Java.Interop (netstandard2.0 - ${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)/Java.Interop-Tests.dll
   continueOnError: true
 
@@ -73,6 +91,7 @@ steps:
   condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
   inputs:
     command: test
+    testRunTitle: Java.Interop (net6.0 - ${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-Tests.dll
   continueOnError: true
 
@@ -81,6 +100,7 @@ steps:
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:
     command: test
+    testRunTitle: Java.Interop.Dynamic (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Dynamic-Tests.dll
   continueOnError: true
 
@@ -89,22 +109,25 @@ steps:
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:
     command: test
+    testRunTitle: Java.Interop.Export (${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop'
+  displayName: 'Tests: Java.Interop-Performance-net472'
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:
     command: test
+    testRunTitle: Java.Interop-Performance (net472 - ${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)/Java.Interop-PerformanceTests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop'
+  displayName: 'Tests: Java.Interop-Performance-net6.0'
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:
     command: test
+    testRunTitle: Java.Interop-Performance (net6.0 - ${{ parameters.platformName }})
     arguments: bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-PerformanceTests.dll
   continueOnError: true
 
