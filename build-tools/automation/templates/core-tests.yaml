@@ -113,7 +113,7 @@ steps:
   condition: eq('${{ parameters.runJavaTests }}', 'true')
   inputs:
     command: build
-    arguments: tools/java-source-utils/java-source-utils.csproj /t:RunTests
+    arguments: tools/java-source-utils/java-source-utils.csproj -t:RunTests -v:diag
   continueOnError: true
 
 - task: PublishTestResults@2
