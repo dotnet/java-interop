@@ -122,4 +122,4 @@ steps:
   inputs:
     testResultsFormat: JUnit
     testResultsFiles: 'tools/java-source-utils/build/test-results/**/TEST-*.xml'
-  condition: succeededOrFailed()
+  continueOnError: true
