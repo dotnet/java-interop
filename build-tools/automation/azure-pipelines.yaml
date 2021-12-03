@@ -180,7 +180,6 @@ jobs:
   - template: templates\core-tests.yaml
     parameters:
       runNativeTests: true
-      runJavaTests: true
       platformName: .NET - MacOS
 
   - template: templates\fail-on-issue.yaml
