@@ -71,6 +71,8 @@ jobs:
     condition: succeededOrFailed()
 
   - template: templates\publish-test-results.yaml
+    parameters:
+      platformName: .NET Framework - Windows
 
 - job: windows_dotnet_build
   displayName: Windows - .NET Core
@@ -142,6 +144,8 @@ jobs:
     displayName: Run Tests
 
   - template: templates\publish-test-results.yaml
+    parameters:
+      platformName: Mono - Mac
 
   - task: CopyFiles@2
     displayName: 'Copy Files to: Artifact Staging Directory'
