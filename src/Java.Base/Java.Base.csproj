@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Java.Interop\Java.Interop.csproj" />
-    <ProjectReference Include="..\..\tools\class-parse.csproj"  ReferenceOutputAssembly="False" />
-    <ProjectReference Include="..\..\tools\generator.csproj"    ReferenceOutputAssembly="False" />
+    <ProjectReference Include="..\..\tools\class-parse\class-parse.csproj"  ReferenceOutputAssembly="False" />
+    <ProjectReference Include="..\..\tools\generator\generator.csproj"      ReferenceOutputAssembly="False" />
   </ItemGroup>
 
   <Import Project="Java.Base.targets" />
