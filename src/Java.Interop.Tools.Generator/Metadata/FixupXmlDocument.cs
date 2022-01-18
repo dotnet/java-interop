@@ -169,7 +169,7 @@ namespace Java.Interop.Tools.Generator
 			}
 		}
 
-		public List<NamespaceTransform> GetNamespaceTransforms ()
+		public IList<NamespaceTransform> GetNamespaceTransforms ()
 		{
 			var list = new List<NamespaceTransform> ();
 

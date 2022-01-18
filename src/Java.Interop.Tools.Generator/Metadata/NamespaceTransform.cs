@@ -45,6 +45,15 @@ namespace Java.Interop.Tools.Generator
 
 		public string Apply (string value)
 		{
+			// Handle a "starts with" and "ends with" transform
+			if (IsStartsWith && IsEndsWith) {
+				if (value.Equals (OldValue, StringComparison.OrdinalIgnoreCase))
+					return NewValue;
+
+				// Don't let this fall through
+				return value;
+			}
+
 			// Handle a "starts with" transform
 			if (IsStartsWith) {
 				if (value.StartsWith (OldValue, StringComparison.OrdinalIgnoreCase))
@@ -78,7 +87,7 @@ namespace Java.Interop.Tools.Generator
 				}
 			}
 
-			return string.Join (".", results.ToArray ());
+			return string.Join (".", results);
 		}
 
 		public static bool TryParse (XElement element, [NotNullWhen (true)] out NamespaceTransform? transform)

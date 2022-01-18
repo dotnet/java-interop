@@ -78,6 +78,12 @@ namespace Java.Interop.Tools.Generator_Tests
 			AssertTransformedNamespace ("Androidx.Androidx.Core", "AndroidX.AndroidX.Core", new NamespaceTransform ("androidx", "AndroidX"));
 			AssertTransformedNamespace ("google.androidx.Core", "Xamarin.AndroidX.Core", new NamespaceTransform ("androidx", "AndroidX"), new NamespaceTransform ("google", "Xamarin"));
 
+			// Starts with and ends with
+			AssertTransformedNamespace ("example", "Transformed", new NamespaceTransform (".example.", "Transformed"));
+			AssertTransformedNamespace ("Androidx.Core", "Transformed", new NamespaceTransform (".Androidx.Core.", "Transformed"));
+			AssertTransformedNamespace ("Androidx.Core", "Androidx.Core", new NamespaceTransform (".Core.", "Transformed"));
+			AssertTransformedNamespace ("Androidx.Core", "Androidx.Core", new NamespaceTransform (".AndroidX.", "Transformed"));
+
 			// Starts with
 			AssertTransformedNamespace ("Androidx.Androidx.Core", "AndroidX2.Androidx.Core", new NamespaceTransform ("AndroidX.", "AndroidX2"));
 			AssertTransformedNamespace ("Androidx.Androidx.Core", "Androidx.Core", new NamespaceTransform ("AndroidX.", ""));
