@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+
+  <Target Name="GenerateVersionInfo"
+      AfterTargets="Build"
+      DependsOnTargets="GitVersion"
+      Inputs="$(MSBuildThisFileDirectory)..\scripts\Version.props.in;$(MSBuildThisFileFullPath)"
+      Outputs="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Version.props">
+    <ItemGroup>
+      <Replacements Include="@VERSION@" Replacement="$(GitSemVerMajor).$(GitSemVerMinor).0.$(GitSemVerPatch)"/>
+      <Replacements Include="@COMMIT@" Replacement="$(GitCommit)"/>
+      <Replacements Include="@BRANCH@" Replacement="$(GitBranch)"/>
+    </ItemGroup>
+    <ReplaceFileContents
+        TemplateFile="$(MSBuildThisFileDirectory)..\scripts\Version.props.in;"
+        OutputFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Version.props"
+        Replacements="@(Replacements)"
+    />
+  </Target>
+
+</Project>
