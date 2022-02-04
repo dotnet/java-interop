@@ -17,7 +17,7 @@ namespace Java.Interop.BootstrapTasks
 {
 	public class JdkInfo : Task
 	{
-		public  string  JdksRoot              { get; set; }
+		public  string  JdkRoot               { get; set; }
 
 		public  string  PropertyNameModifier  { get; set; } = "";
 		public  string  MinimumJdkVersion     { get; set; }
@@ -49,7 +49,7 @@ namespace Java.Interop.BootstrapTasks
 				.FirstOrDefault ();
 
 			if (jdk == null) {
-				Log.LogError ("Could not determine JAVA_HOME location. Please set JdksRoot or export the JAVA_HOME environment variable.");
+				Log.LogError ($"Could not determine JAVA_HOME location. Please set {nameof(JdkRoot)} or export the JAVA_HOME environment variable.");
 				return false;
 			}
 
@@ -75,10 +75,10 @@ namespace Java.Interop.BootstrapTasks
 		{
 			XATInfo jdk = null;
 			try {
-				if (!string.IsNullOrEmpty (JdksRoot))
-					jdk = new XATInfo (JdksRoot);
+				if (!string.IsNullOrEmpty (JdkRoot))
+					jdk = new XATInfo (JdkRoot);
 			} catch (Exception e) {
-				Log.LogWarning ($"Could not get information about JdksRoot path `{JdksRoot}`: {e.Message}");
+				Log.LogWarning ($"Could not get information about {nameof (JdkRoot)} path `{JdkRoot}`: {e.Message}");
 				Log.LogMessage (MessageImportance.Low, e.ToString ());
 			}
 			return jdk == null

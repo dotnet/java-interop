@@ -1,4 +1,7 @@
-<Project Sdk="Microsoft.Build.NoTargets">
+<Project>
+
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll"
+      TaskName="Java.Interop.BootstrapTasks.ReplaceFileContents" />
 
   <Target Name="GenerateVersionInfo"
       AfterTargets="Build"
@@ -6,12 +9,12 @@
       Inputs="$(MSBuildThisFileDirectory)..\scripts\Version.props.in;$(MSBuildThisFileFullPath)"
       Outputs="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Version.props">
     <ItemGroup>
-      <Replacements Include="@VERSION@" Replacement="$(GitSemVerMajor).$(GitSemVerMinor).0.$(GitSemVerPatch)"/>
+      <Replacements Include="@VERSION@" Replacement="$(GitBaseVersionMajor).$(GitBaseVersionMinor).$(GitBaseVersionPatch).$(GitCommits)"/>
       <Replacements Include="@COMMIT@" Replacement="$(GitCommit)"/>
       <Replacements Include="@BRANCH@" Replacement="$(GitBranch)"/>
     </ItemGroup>
     <ReplaceFileContents
-        TemplateFile="$(MSBuildThisFileDirectory)..\scripts\Version.props.in;"
+        TemplateFile="$(MSBuildThisFileDirectory)..\scripts\Version.props.in"
         OutputFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Version.props"
         Replacements="@(Replacements)"
     />

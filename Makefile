@@ -35,7 +35,7 @@ ATESTS = \
 BUILD_PROPS = bin/Build$(CONFIGURATION)/MonoInfo.props
 
 all:
-	msbuild Java.Interop.sln /p:Configuration=$(CONFIGURATION)
+	$(MSBUILD) $(MSBUILD_FLAGS) Java.Interop.sln
 
 run-all-tests:
 	r=0; \
@@ -48,7 +48,7 @@ run-all-tests:
 include build-tools/scripts/msbuild.mk
 
 prepare:: $(BUILD_PROPS)
-	dotnet build Java.Interop.sln -c $(CONFIGURATION) -target:Prepare -p:MaxJdkVersion=$(JI_MAX_JDK)
+	$(MSBUILD) $(MSBUILD_FLAGS) Java.Interop.sln -target:Prepare $(if $(JI_MAX_JDK),-p:MaxJdkVersion=$(JI_MAX_JDK),)
 
 prepare-core: bin/Build$(CONFIGURATION)/MonoInfo.props
 

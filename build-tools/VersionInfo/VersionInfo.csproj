@@ -7,9 +7,6 @@
     <GitThisAssembly>false</GitThisAssembly>
   </PropertyGroup>
 
-  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll"
-      TaskName="Java.Interop.BootstrapTasks.ReplaceFileContents" />
-
   <ItemGroup>
     <ProjectReference Include="..\Java.Interop.BootstrapTasks\Java.Interop.BootstrapTasks.csproj" ReferenceOutputAssembly="False" />
   </ItemGroup>

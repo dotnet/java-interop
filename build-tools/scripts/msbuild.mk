@@ -21,9 +21,9 @@
 #   $(MSBUILD): The MSBuild program to use. Defaults to `xbuild` unless overridden.
 #   $(MSBUILD_FLAGS): Additional MSBuild flags; contains $(CONFIGURATION), $(V), $(MSBUILD_ARGS).
 
-MSBUILD       = msbuild
-MSBUILD_FLAGS = /p:Configuration=$(CONFIGURATION) $(MSBUILD_ARGS)
+MSBUILD       = dotnet build
+MSBUILD_FLAGS = -c $(CONFIGURATION) $(MSBUILD_ARGS)
 
 ifneq ($(V),0)
-MSBUILD_FLAGS += /v:d
+MSBUILD_FLAGS += -v:diag
 endif   # $(V) != 0

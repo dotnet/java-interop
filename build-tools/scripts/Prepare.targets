@@ -6,24 +6,19 @@
   <UsingTask AssemblyFile="$(_TopDir)\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll" TaskName="Java.Interop.BootstrapTasks.JdkInfo" />
   <Target Name="Prepare">
     <Exec Command="git submodule update --init --recursive" WorkingDirectory="$(_TopDir)" />
-    <MSBuild Projects="$(MSBuildThisFileDirectory)..\..\build-tools\Java.Interop.BootstrapTasks.sln"
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\..\Java.Interop.BootstrapTasks.sln"
         Targets="Restore"
     />
-    <MSBuild Projects="$(MSBuildThisFileDirectory)..\..\build-tools\Java.Interop.BootstrapTasks.sln"
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\..\Java.Interop.BootstrapTasks.sln"
         Targets="Build"
     />
     <PropertyGroup>
       <_MaxJdk>$(MaxJdkVersion)</_MaxJdk>
       <_MaxJdk Condition=" '$(_MaxJdk)' == '' ">$(JI_MAX_JDK)</_MaxJdk>
-      <Jdks8Root Condition=" '$(Jdks8Root)' == '' And '$(JAVA_HOME_8_X64)' != '' And Exists($(JAVA_HOME_8_X64)) ">$(JAVA_HOME_8_X64)</Jdks8Root>
-      <Jdks8Root Condition=" '$(Jdks8Root)' == '' And Exists('/Library/Java/JavaVirtualMachines') ">/Library/Java/JavaVirtualMachines</Jdks8Root>
-      <Jdks8Root Condition=" '$(Jdks8Root)' == '' And Exists('/usr/lib/jvm') ">/usr/lib/jvm</Jdks8Root>
-      <Jdks11Root Condition=" '$(Jdks11Root)' == '' And '$(JAVA_HOME_11_X64)' != '' And Exists($(JAVA_HOME_11_X64)) ">$(JAVA_HOME_11_X64)</Jdks11Root>
-      <Jdks11Root Condition=" '$(Jdks11Root)' == '' And Exists('/Library/Java/JavaVirtualMachines') ">/Library/Java/JavaVirtualMachines</Jdks11Root>
-      <Jdks11Root Condition=" '$(Jdks11Root)' == '' And Exists('/usr/lib/jvm') ">/usr/lib/jvm</Jdks11Root>
+      <Jdk8Root Condition=" '$(Jdks8Root)' == '' And '$(JAVA_HOME_8_X64)' != '' And Exists($(JAVA_HOME_8_X64)) ">$(JAVA_HOME_8_X64)</Jdk8Root>
     </PropertyGroup>
     <JdkInfo
-        JdksRoot="$(Jdks8Root)"
+        JdkRoot="$(Jdk8Root)"
         MakeFragmentFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\JdkInfo.mk"
         MaximumJdkVersion="$(_MaxJdk)"
         DotnetToolPath="$(DotnetToolPath)"
@@ -31,10 +26,10 @@
       <Output TaskParameter="JavaHomePath" PropertyName="_JavaSdkDirectory" />
     </JdkInfo>
     <PropertyGroup>
-      <Jdks11Root Condition=" '$(Jdks11Root)' == '' And '$(JAVA_HOME_11_X64)' != '' And Exists($(JAVA_HOME_11_X64)) ">$(JAVA_HOME_11_X64)</Jdks11Root>
+      <Jdk11Root Condition=" '$(Jdks11Root)' == '' And '$(JAVA_HOME_11_X64)' != '' And Exists($(JAVA_HOME_11_X64)) ">$(JAVA_HOME_11_X64)</Jdk11Root>
     </PropertyGroup>
     <JdkInfo
-        JdksRoot="$(Jdks11Root)"
+        JdkRoot="$(Jdk11Root)"
         PropertyNameModifier="11"
         MinimumJdkVersion="11.0"
         MaximumJdkVersion="11.99.0"
