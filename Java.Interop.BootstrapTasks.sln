@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xamarin.Android.Tools.Andro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionInfo", "build-tools\VersionInfo\VersionInfo.csproj", "{D5E50EDC-6CE3-4E8D-85A6-6920DF74E44C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackagePaths", "build-tools\PackagePaths\PackagePaths.csproj", "{0510FC04-44A2-41DE-A208-561DDE9F2AC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D5E50EDC-6CE3-4E8D-85A6-6920DF74E44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5E50EDC-6CE3-4E8D-85A6-6920DF74E44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5E50EDC-6CE3-4E8D-85A6-6920DF74E44C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0510FC04-44A2-41DE-A208-561DDE9F2AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0510FC04-44A2-41DE-A208-561DDE9F2AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0510FC04-44A2-41DE-A208-561DDE9F2AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0510FC04-44A2-41DE-A208-561DDE9F2AC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

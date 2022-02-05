@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Java.Interop.BootstrapTasks\Java.Interop.BootstrapTasks.csproj" ReferenceOutputAssembly="False" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit.ConsoleRunner" GeneratePathProperty="True" />
+  </ItemGroup>
+
+  <Import Project="PackagePaths.targets" />
+
+</Project>

@@ -1,0 +1,20 @@
+<Project>
+
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll"
+      TaskName="Java.Interop.BootstrapTasks.ReplaceFileContents" />
+
+  <Target Name="_GeneratePackagePaths"
+      AfterTargets="Build"
+      Inputs="PackagePaths.props.in;$(MSBuildThisFileFullPath)"
+      Outputs="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\PackagePaths.props">
+    <ItemGroup>
+      <Replacements Include="@CONSOLE_RUNNER_PATH@" Replacement="$(PkgNUnit_ConsoleRunner)"/>
+    </ItemGroup>
+    <ReplaceFileContents
+        TemplateFile="PackagePaths.props.in"
+        OutputFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\PackagePaths.props"
+        Replacements="@(Replacements)"
+    />
+  </Target>
+
+</Project>

@@ -1,0 +1,7 @@
+<Project>
+
+  <PropertyGroup>
+    <PkgNUnit_ConsoleRunner Condition=" '$(PkgNUnit_ConsoleRunner)' == '' ">@CONSOLE_RUNNER_PATH@</PkgNUnit_ConsoleRunner>
+  </PropertyGroup>
+
+</Project>
