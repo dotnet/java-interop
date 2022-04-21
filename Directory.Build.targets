@@ -11,23 +11,23 @@
 
   <!-- NuGet Dependencies -->
   <ItemGroup>
-    <PackageReference Update="Microsoft.Xml.SgmlReader"                     Version="1.8.16" />
+    <PackageReference Update="Microsoft.Xml.SgmlReader"                     Version="1.8.20" />
     <PackageReference Update="GitInfo"                                      Version="2.1.2" />
     <PackageReference Update="HtmlAgilityPack"                              Version="1.11.30" />
     <PackageReference Update="Irony"                                        Version="1.1.0" />
     <PackageReference Update="Microsoft.Build.Framework"                    Version="16.11.0" />
     <PackageReference Update="Microsoft.Build.Utilities.Core"               Version="16.11.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp"                Version="3.11.0" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp"                Version="4.1.0" />
     <PackageReference Update="Microsoft.DotNet.GenAPI"                      Version="7.0.0-beta.22103.1" />
-    <PackageReference Update="Microsoft.NET.Test.Sdk"                       Version="16.11.0" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk"                       Version="17.1.0" />
     <PackageReference Update="Microsoft.NETFramework.ReferenceAssemblies"   Version="1.0.2" />
     <PackageReference Update="Mono.CSharp"                                  Version="4.0.0.143" />
     <PackageReference Update="Mono.Linq.Expressions"                        Version="2.0.0" />
     <PackageReference Update="Mono.Options"                                 Version="6.12.0.148" />
     <PackageReference Update="Mono.Terminal"                                Version="5.4.2" />
-    <PackageReference Update="nunit"                                        Version="3.13.2" />
+    <PackageReference Update="nunit"                                        Version="3.13.3" />
     <PackageReference Update="NUnit.ConsoleRunner"                          Version="3.12.0" />
-    <PackageReference Update="NUnit3TestAdapter"                            Version="4.0.0">
+    <PackageReference Update="NUnit3TestAdapter"                            Version="4.2.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
