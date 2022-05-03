@@ -85,7 +85,7 @@ namespace generatortests
 		[SetCulture ("cs-CZ")]
 		public void GetSafeIdentifierCultureInvariant (string keyword)
 		{
-			var opt = new CodeGenerationOptions { SupportNullableReferenceTypes = true };
+			var opt = new CodeGenerationOptions ();
 
 			Assert.AreEqual ($"{keyword}_", opt.GetSafeIdentifier (keyword));
 		}
