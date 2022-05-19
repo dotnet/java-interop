@@ -189,6 +189,6 @@ namespace Java.Interop.Tools.Cecil {
 			return null;
 		}
 
-		public static string? CecilTypeNameToReflectionTypeName (string typeName) => typeName?.Replace ('/', '+');
+		public static string? CecilTypeNameToReflectionTypeName (string? typeName) => typeName?.Replace ('/', '+');
 	}
 }
