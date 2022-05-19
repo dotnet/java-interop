@@ -51,7 +51,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			if (parts.Length > 2) {
 				Connector = parts[2];
 				if (parts.Length > 3) {
-					ManagedTypeName = parts[3].Replace ('/', '+');
+					ManagedTypeName = TypeDefinitionRocks.CecilTypeNameToReflectionTypeName (parts[3]);
 				}
 			}
 
