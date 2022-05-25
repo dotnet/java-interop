@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;$(DotNetTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>net472;$(DotNetStableTargetFramework)</TargetFrameworks>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <PropertyGroup>

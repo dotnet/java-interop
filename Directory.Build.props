@@ -10,7 +10,8 @@
     <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
     <DotNetTargetFrameworkVersion>7.0</DotNetTargetFrameworkVersion>
     <DotNetTargetFramework>net$(DotNetTargetFrameworkVersion)</DotNetTargetFramework>
-    
+    <!-- Used for build tools, command-line tooling, and desktop NUnit projects -->
+    <DotNetStableTargetFramework>net6.0</DotNetStableTargetFramework>
     <!-- 
       Workaround for https://github.com/NuGet/Home/issues/6461 (VSWin Only)
       Even though we don't build NuGet packages, it still attempts to build the NuGet package name, which includes 
