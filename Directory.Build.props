@@ -10,7 +10,7 @@
     <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
     <DotNetTargetFrameworkVersion>7.0</DotNetTargetFrameworkVersion>
     <DotNetTargetFramework>net$(DotNetTargetFrameworkVersion)</DotNetTargetFramework>
-    <!-- Used for build tools, command-line tooling, and desktop NUnit projects -->
+    <!-- Used for command-line utilities -->
     <DotNetStableTargetFramework>net6.0</DotNetStableTargetFramework>
     <!-- 
       Workaround for https://github.com/NuGet/Home/issues/6461 (VSWin Only)
@@ -72,7 +72,7 @@
     <ToolOutputFullPath>$(MSBuildThisFileDirectory)bin\$(Configuration)-$(TargetFramework.ToLowerInvariant())\</ToolOutputFullPath>
     <TestOutputFullPath>$(MSBuildThisFileDirectory)bin\Test$(Configuration)-$(TargetFramework.ToLowerInvariant())\</TestOutputFullPath>
     <UtilityOutputFullPath Condition=" '$(UtilityOutputFullPathCoreApps)' != '' ">$(UtilityOutputFullPathCoreApps)</UtilityOutputFullPath>
-    <UtilityOutputFullPath Condition=" '$(UtilityOutputFullPathCoreApps)' == '' ">$(ToolOutputFullPath)</UtilityOutputFullPath>
+    <UtilityOutputFullPath Condition=" '$(UtilityOutputFullPathCoreApps)' == '' ">$(MSBuildThisFileDirectory)bin\$(Configuration)-$(DotNetStableTargetFramework)\</UtilityOutputFullPath>
     <RollForward>Major</RollForward>
     <JIUtilityVersion>$(JINetToolVersion)</JIUtilityVersion>
     <JICoreLibVersion>$(JINetCoreLibVersion)</JICoreLibVersion>
