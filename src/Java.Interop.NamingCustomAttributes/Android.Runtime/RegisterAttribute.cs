@@ -14,17 +14,28 @@ namespace Android.Runtime {
 		string name;
 		string signature;
 
-		public RegisterAttribute (string name, CustomAttribute originAttribute)
+		public RegisterAttribute (string name)
 		{
 			this.name = name;
+		}
+
+		public RegisterAttribute (string name, CustomAttribute originAttribute)
+			: this (name)
+		{
 			OriginAttribute = originAttribute;
 		}
 
-		public RegisterAttribute (string name, string signature, string connector, CustomAttribute originAttribute)
+		public RegisterAttribute (string name, string signature, string connector)
 			: this (name, originAttribute)
 		{
 			this.connector = connector;
 			this.signature = signature;
+		}
+
+		public RegisterAttribute (string name, string signature, string connector, CustomAttribute originAttribute)
+			: this (name, signature, connector)
+		{
+			OriginAttribute = originAttribute;
 		}
 
 		public CustomAttribute OriginAttribute { get; }
