@@ -26,7 +26,7 @@ namespace Android.Runtime {
 		}
 
 		public RegisterAttribute (string name, string signature, string connector)
-			: this (name, originAttribute)
+			: this (name)
 		{
 			this.connector = connector;
 			this.signature = signature;
