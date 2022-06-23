@@ -94,7 +94,8 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		public bool HasExport { get; private set; }
 
-		public bool HasDynamicallyRegisteredMethods => methods.Any ((Signature sig) => sig.IsDynamicallyRegistered);
+		// If there are no methods, we need to generate "empty" registration because of backward compatibility
+		public bool HasDynamicallyRegisteredMethods => methods.Count == 0 || methods.Any ((Signature sig) => sig.IsDynamicallyRegistered);
 
 		/// <summary>
 		/// The Java source code to be included in Instrumentation.onCreate
