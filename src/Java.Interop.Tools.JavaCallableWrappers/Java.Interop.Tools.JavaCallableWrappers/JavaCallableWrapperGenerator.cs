@@ -531,7 +531,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 						continue;
 					}
 					needCtor = true;
-					writer.WriteLine ("\tstatic final String __md_{0}_methods;", i);
+					writer.WriteLine ("\tstatic final String __md_{0}_methods;", i + 1);
 				}
 			}
 
