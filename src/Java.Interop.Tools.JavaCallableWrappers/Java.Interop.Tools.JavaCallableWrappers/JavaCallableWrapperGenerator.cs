@@ -25,9 +25,9 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		JavaInterop1,
 	}
 
-	public interface IJCWMethodClassifier
+	public abstract class JavaCallableMethodClassifier
 	{
-		bool ShouldBeDynamicallyRegistered (MethodDefinition registeredMethod, MethodDefinition implementedMethod, CustomAttribute registerAttribute);
+		public abstract bool ShouldBeDynamicallyRegistered (MethodDefinition registeredMethod, MethodDefinition implementedMethod, CustomAttribute registerAttribute);
 	}
 
 	 public class JavaCallableWrapperGenerator {
@@ -66,19 +66,19 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		List<JavaCallableWrapperGenerator> children;
 
 		readonly IMetadataResolver cache;
-		readonly IJCWMethodClassifier methodClassifier;
+		readonly JavaCallableMethodClassifier methodClassifier;
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
 		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object []> log)
 			: this (type, null, log, resolver: null)
 		{ }
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache, IJCWMethodClassifier methodClassifier = null)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache, JavaCallableMethodClassifier methodClassifier = null)
 			: this (type, log, (IMetadataResolver) cache, methodClassifier)
 		{
 		}
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver, IJCWMethodClassifier methodClassifier = null)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver, JavaCallableMethodClassifier methodClassifier = null)
 			: this (type, null, log, resolver, methodClassifier)
 		{
 			if (type.HasNestedTypes) {
@@ -124,7 +124,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			HasExport |= children.Any (t => t.HasExport);
 		}
 
-		JavaCallableWrapperGenerator (TypeDefinition type, string outerType, Action<string, object[]> log, IMetadataResolver resolver, IJCWMethodClassifier methodClassifier = null)
+		JavaCallableWrapperGenerator (TypeDefinition type, string outerType, Action<string, object[]> log, IMetadataResolver resolver, JavaCallableMethodClassifier methodClassifier = null)
 		{
 			this.methodClassifier = methodClassifier;
 			this.type = type;

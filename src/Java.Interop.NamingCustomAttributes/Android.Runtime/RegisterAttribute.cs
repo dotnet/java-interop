@@ -19,17 +19,17 @@ namespace Android.Runtime {
 			this.name = name;
 		}
 
-		public RegisterAttribute (string name, CustomAttribute originAttribute)
-			: this (name)
-		{
-			OriginAttribute = originAttribute;
-		}
-
 		public RegisterAttribute (string name, string signature, string connector)
 			: this (name)
 		{
 			this.connector = connector;
 			this.signature = signature;
+		}
+#if HAVE_CECIL
+		public RegisterAttribute (string name, CustomAttribute originAttribute)
+			: this (name)
+		{
+			OriginAttribute = originAttribute;
 		}
 
 		public RegisterAttribute (string name, string signature, string connector, CustomAttribute originAttribute)
@@ -39,7 +39,7 @@ namespace Android.Runtime {
 		}
 
 		public CustomAttribute OriginAttribute { get; }
-
+#endif
 		public string Connector {
 			get { return connector; }
 			set { connector = value; }
