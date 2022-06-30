@@ -116,7 +116,7 @@ namespace Java.Interop {
 			internal static void AssertSimpleReference (string jniSimpleReference, string argumentName = "jniSimpleReference")
 			{
 				if (string.IsNullOrEmpty (jniSimpleReference))
-					throw new ArgumentNullException (nameof (jniSimpleReference));
+					throw new ArgumentNullException (argumentName);
 				if (jniSimpleReference.IndexOf ('.') >= 0)
 					throw new ArgumentException ("JNI type names do not contain '.', they use '/'. Are you sure you're using a JNI type name?", argumentName);
 				switch (jniSimpleReference [0]) {
