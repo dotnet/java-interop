@@ -80,7 +80,7 @@ namespace Java.Interop.Tools.JavaSource {
 					parseNode.AstNode   = p;
 				};
 
-				var nonSpaceTerm = new RegexBasedTerminal ("[^ \n\r]", "[^ \n\r]+") {
+				var nonSpaceTerm = new RegexBasedTerminal ("[^ \n\r\t]", "[^ \n\r\t]+") {
 					AstConfig = new AstNodeConfig {
 						NodeCreator = (context, parseNode) => parseNode.AstNode = parseNode.Token.Value,
 					},
