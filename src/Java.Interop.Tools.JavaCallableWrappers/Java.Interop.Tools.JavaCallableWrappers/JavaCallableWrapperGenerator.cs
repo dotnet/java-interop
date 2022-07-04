@@ -27,7 +27,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 	public abstract class JavaCallableMethodClassifier
 	{
-		public abstract bool ShouldBeDynamicallyRegistered (MethodDefinition registeredMethod, MethodDefinition implementedMethod, CustomAttribute registerAttribute);
+		public abstract bool ShouldBeDynamicallyRegistered (TypeDefinition topType, MethodDefinition registeredMethod, MethodDefinition implementedMethod, CustomAttribute registerAttribute);
 	}
 
 	 public class JavaCallableWrapperGenerator {
@@ -442,7 +442,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					if (attr.Name.Contains ("-impl") || (attr.Name.Length > 7 && attr.Name[attr.Name.Length - 8] == '-'))
 						Diagnostic.Error (4217, LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4217, attr.Name);
 
-					bool shouldBeDynamicallyRegistered = methodClassifier?.ShouldBeDynamicallyRegistered (registeredMethod, implementedMethod, attr.OriginAttribute) ?? true;
+					bool shouldBeDynamicallyRegistered = methodClassifier?.ShouldBeDynamicallyRegistered (type, registeredMethod, implementedMethod, attr.OriginAttribute) ?? true;
 					var msig = new Signature (implementedMethod, attr, shouldBeDynamicallyRegistered);
 					if (!registeredMethod.IsConstructor && !methods.Any (m => m.Name == msig.Name && m.Params == msig.Params))
 						methods.Add (msig);
