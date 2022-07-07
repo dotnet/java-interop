@@ -80,6 +80,6 @@ namespace Xamarin.Android.Tools.Bytecode {
 		Enum        = 0x4000,
 
 		// This is not a real Java FieldAccessFlags, it is used to denote Kotlin "internal" access.
-		Internal.   = 0x10000000,
+		Internal    = 0x10000000,
 	}
 }
