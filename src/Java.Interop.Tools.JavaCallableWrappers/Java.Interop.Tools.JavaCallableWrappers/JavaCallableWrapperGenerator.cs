@@ -70,15 +70,23 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
 		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object []> log)
-			: this (type, null, log, resolver: null)
+			: this (type, log, resolver: null, methodClassifier: null)
 		{ }
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache, JavaCallableMethodClassifier methodClassifier = null)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache)
+			: this (type, log, (IMetadataResolver) cache, methodClassifier: null)
+		{ }
+
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache, JavaCallableMethodClassifier methodClassifier)
 			: this (type, log, (IMetadataResolver) cache, methodClassifier)
 		{
 		}
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver, JavaCallableMethodClassifier methodClassifier = null)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver)
+			: this (type, log, resolver, methodClassifier: null)
+		{ }
+
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver, JavaCallableMethodClassifier methodClassifier)
 			: this (type, null, log, resolver, methodClassifier)
 		{
 			if (type.HasNestedTypes) {
