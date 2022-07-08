@@ -62,6 +62,25 @@
     <BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)' == '' ">obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <XamarinAndroidToolsDirectory   Condition=" '$(XamarinAndroidToolsDirectory)' == '' ">$(MSBuildThisFileDirectory)external\xamarin-android-tools</XamarinAndroidToolsDirectory>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DotnetToolPath Condition=" '$(DotnetToolPath)' == '' ">dotnet</DotnetToolPath>
+    <CmakePath Condition=" '$(CmakePath)' == '' ">cmake</CmakePath>
+    <GradleHome Condition=" '$(GradleHome)' == '' ">$(MSBuildThisFileDirectory)build-tools\gradle</GradleHome>
+    <GradleWPath Condition=" '$(GradleWPath)' == '' ">$(GradleHome)\gradlew</GradleWPath>
+    <GradleArgs Condition=" '$(GradleArgs)' == '' ">--stacktrace --no-daemon</GradleArgs>
+    <JavacSourceVersion Condition=" '$(JavacSourceVersion)' == '' ">1.8</JavacSourceVersion>
+    <JavacTargetVersion Condition=" '$(JavacTargetVersion)' == '' ">1.8</JavacTargetVersion>
+    <_BootClassPath Condition=" '$(JreRtJarPath)' != '' ">-bootclasspath "$(JreRtJarPath)"</_BootClassPath>
+    <_JavacSourceOptions>-source $(JavacSourceVersion) -target $(JavacTargetVersion) $(_BootClassPath)</_JavacSourceOptions>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_XamarinAndroidCecilPath Condition=" '$(CecilSourceDirectory)' != '' And Exists('$(UtilityOutputFullPath)Xamarin.Android.Cecil.dll') ">$(UtilityOutputFullPath)Xamarin.Android.Cecil.dll</_XamarinAndroidCecilPath>
+    <XamarinAndroidToolsFullPath>$([System.IO.Path]::GetFullPath ('$(XamarinAndroidToolsDirectory)'))</XamarinAndroidToolsFullPath>
+  </PropertyGroup>
+
   <!--
     When building on a bot w/ VS2019:
 
@@ -76,10 +95,6 @@
     -->
   <PropertyGroup>
     <NoWarn>$(NoWarn);CS8032;CS8981</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <XamarinAndroidToolsDirectory   Condition=" '$(XamarinAndroidToolsDirectory)' == '' ">$(MSBuildThisFileDirectory)external\xamarin-android-tools</XamarinAndroidToolsDirectory>
   </PropertyGroup>
 
 </Project>
