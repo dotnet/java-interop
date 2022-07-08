@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(JIBuildingForNetCoreApp)' == 'True' ">
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)-$(TargetFramework.ToLowerInvariant())</IntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)-$(TargetFramework.ToLowerInvariant())\</IntermediateOutputPath>
     <BuildToolOutputFullPath>$(MSBuildThisFileDirectory)bin\Build$(Configuration)-$(TargetFramework.ToLowerInvariant())\</BuildToolOutputFullPath>
     <ToolOutputFullPath>$(MSBuildThisFileDirectory)bin\$(Configuration)-$(TargetFramework.ToLowerInvariant())\</ToolOutputFullPath>
     <TestOutputFullPath>$(MSBuildThisFileDirectory)bin\Test$(Configuration)-$(TargetFramework.ToLowerInvariant())\</TestOutputFullPath>
