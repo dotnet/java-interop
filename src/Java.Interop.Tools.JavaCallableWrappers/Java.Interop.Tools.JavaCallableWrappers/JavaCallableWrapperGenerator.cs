@@ -711,14 +711,13 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		void GenerateRegisterType (TextWriter sw, JavaCallableWrapperGenerator self, string field)
 		{
-			string managedTypeName = self.type.GetPartialAssemblyQualifiedName (cache);
-			string javaTypeName = $"{package}.{name}";
-
 			if (!self.HasDynamicallyRegisteredMethods) {
 				return;
 			}
 
 			sw.WriteLine ("\t\t{0} = ", field);
+			string managedTypeName = self.type.GetPartialAssemblyQualifiedName (cache);
+			string javaTypeName = $"{package}.{name}";
 
 			foreach (Signature method in self.methods) {
 				if (method.IsDynamicallyRegistered) {
