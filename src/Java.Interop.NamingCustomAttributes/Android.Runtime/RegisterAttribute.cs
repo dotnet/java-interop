@@ -39,7 +39,8 @@ namespace Android.Runtime {
 		}
 
 		public CustomAttribute OriginAttribute { get; }
-#endif
+#endif  // HAVE_CECIL
+
 		public string Connector {
 			get { return connector; }
 			set { connector = value; }
