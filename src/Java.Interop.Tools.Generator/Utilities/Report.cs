@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -7,7 +8,7 @@ namespace Java.Interop.Tools.Generator
 	public class Report
 	{
 		public static int? Verbosity { get; set; }
-		public static Action<string>? OutputDelegate { get; set; }
+		public static Action<TraceLevel, string>? OutputDelegate { get; set; }
 
 		public class LocalizedMessage
 		{
@@ -97,7 +98,7 @@ namespace Java.Interop.Tools.Generator
 
 		public static void LogCodedError (LocalizedMessage message, string? sourceFile, int line, int column, params string? [] args)
 		{
-			WriteOutput (Format (true, message.Code, sourceFile, line, column, message.Value, args));
+			WriteOutput (TraceLevel.Error, Format (true, message.Code, sourceFile, line, column, message.Value, args));
 		}
 
 		public static void LogCodedWarning (int verbosity, LocalizedMessage message, params string? [] args)
@@ -122,17 +123,17 @@ namespace Java.Interop.Tools.Generator
 				return;
 
 			var supp = innerException != null ? "  For details, see verbose output." : null;
-			WriteOutput (Format (false, message.Code, sourceFile, line, column, message.Value, args) + supp);
+			WriteOutput (TraceLevel.Warning, Format (false, message.Code, sourceFile, line, column, message.Value, args) + supp);
 
 			if (innerException != null)
-				WriteOutput (innerException.ToString ());
+				WriteOutput (TraceLevel.Warning, innerException.ToString ());
 		}
 		
 		public static void Verbose (int verbosity, string format, params object?[] args)
 		{
 			if (verbosity > (Verbosity ?? 0))
 				return;
-			WriteOutput (format, args);
+			WriteOutput (TraceLevel.Verbose, format, args);
 		}
 
 		public static string FormatCodedMessage (bool error, LocalizedMessage message, params object? [] args)
@@ -172,11 +173,11 @@ namespace Java.Interop.Tools.Generator
 			return (file, pos?.LineNumber ?? -1, pos?.LinePosition ?? -1);
 		}
 
-		static void WriteOutput (string format, params object?[] args)
+		static void WriteOutput (TraceLevel traceLevel, string format, params object?[] args)
 		{
 			// Write to overridden output if requested
 			if (OutputDelegate != null) {
-				OutputDelegate (string.Format (format, args));
+				OutputDelegate (traceLevel, string.Format (format, args));
 				return;
 			}
 

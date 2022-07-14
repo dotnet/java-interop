@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using generator.SourceWriters;
@@ -528,6 +529,7 @@ namespace generatortests
 
 			// Ensure [Obsolete] was written
 			Assert.True (writer.ToString ().Contains ("[Obsolete (@\"This is so old!\")]"), writer.ToString ());
+		}
 
 		[Test]
 		[NonParallelizable]	// We are setting a static property on Report
@@ -536,7 +538,7 @@ namespace generatortests
 			var @class = new TestClass ("Object", "java.myclass.MyClass");
 			var sb = new StringBuilder ();
 
-			var write_output = new Action<string> ((s) => { sb.AppendLine (s); });
+			var write_output = new Action<TraceLevel, string> ((t, s) => { sb.AppendLine (s); });
 			Report.OutputDelegate = write_output;
 
 			generator.Context.ContextTypes.Push (@class);
@@ -557,7 +559,7 @@ namespace generatortests
 			@class.NestedTypes.Add (new TestClass ("Object", "java.myclass.MyParentClass.MyClass"));
 			var sb = new StringBuilder ();
 
-			var write_output = new Action<string> ((s) => { sb.AppendLine (s); });
+			var write_output = new Action<TraceLevel, string> ((t, s) => { sb.AppendLine (s); });
 			Report.OutputDelegate = write_output;
 
 			generator.Context.ContextTypes.Push (@class);
