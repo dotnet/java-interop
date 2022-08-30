@@ -81,6 +81,6 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		ParameterType,
 		BaseType,
 		ImplementsType,
-		InvalidBaseType
+		InvalidBaseType,
 	}
 }
