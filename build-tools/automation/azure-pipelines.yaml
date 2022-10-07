@@ -28,7 +28,6 @@ variables:
   1ESWindowsImage: AzurePipelinesWindows2022compliant
   1ESMacPool: Azure Pipelines
   1ESMacImage: internal-macos-11
-  VSInstallDir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise
 
 jobs:
 - job: windows_build
@@ -65,7 +64,8 @@ jobs:
     inputs:
       solution: Java.Interop.sln
       configuration: $(Build.Configuration)
-      msbuildArguments: /restore
+      msbuildArguments: /restore -v:diag
+      logFileVerbosity: 'diagnostic'
 
   - task: MSBuild@1
     displayName: MSBuild RunNUnitTests.targets
