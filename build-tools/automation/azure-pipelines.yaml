@@ -64,8 +64,7 @@ jobs:
     inputs:
       solution: Java.Interop.sln
       configuration: $(Build.Configuration)
-      msbuildArguments: /restore -v:diag
-      logFileVerbosity: 'diagnostic'
+      msbuildArguments: /restore
 
   - task: MSBuild@1
     displayName: MSBuild RunNUnitTests.targets

@@ -25,7 +25,7 @@
   <Target Name="_RunCmake">
     <PropertyGroup>
       <_Prepare>$(PrepareNativeToolchain)</_Prepare>
-      <_Prepare Condition=" '$(_Prepare)' != '' And !$(_Prepare.Trim().EndsWith('&amp;&amp;')) ">$(_Prepare) &amp;&amp;</_Prepare>
+      <_Prepare Condition=" '$(_Prepare)' != '' And !$(_Prepare.Trim().EndsWith('&amp;&amp;')) ">set VSCMD_DEBUG=3 &amp;&amp; $(_Prepare) &amp;&amp;</_Prepare>
       <_SourceDir>$(CmakeSourceDir.Replace('%5c', '/'))</_SourceDir>
       <_BuildDir>$(CmakeBuildDir.Replace('%5c', '/'))</_BuildDir>
       <_ExtraArgs>$(CmakeExtraArgs.Replace('%5c', '/'))</_ExtraArgs>
