@@ -85,7 +85,7 @@ jobs:
     demands: 
     - ImageOverride -equals $(1ESWindowsImage)
   variables:
-    VSINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022\Enterprise
+    VSINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\
   timeoutInMinutes: 20
   workspace:
     clean: all
