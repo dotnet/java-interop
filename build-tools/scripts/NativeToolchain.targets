@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) And '$(VSINSTALLROOT)' != '' ">
-    <_VcvarsallPath>$(VSINSTALLROOT)\VC\Auxiliary\Build\vcvarsall.bat</_VcvarsallPath>
+  <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) And '$(VSINSTALLDIR)' != '' ">
+    <_VcvarsallPath>$(VSINSTALLDIR)\VC\Auxiliary\Build\vcvarsall.bat</_VcvarsallPath>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) And Exists ('$(_VcvarsallPath)') ">
