@@ -119,7 +119,7 @@ namespace Java.Interop.Tools.JavaSource {
 
 					var hrefValue = seeElement?.Attribute ("href")?.Value ?? string.Empty;
 					if (!string.IsNullOrEmpty (hrefValue) &&
-						(hrefValue.StartsWith ("http", StringComparison.OrdinalIgnoreCase) || hrefValue.StartsWith ("www", StringComparison.OrdinalIgnoreCase))) {
+							(hrefValue.StartsWith ("http", StringComparison.OrdinalIgnoreCase) || hrefValue.StartsWith ("www", StringComparison.OrdinalIgnoreCase))) {
 						parseNode.AstNode = seeElement;
 					} else {
 						// TODO: Need to convert relative paths or code references to appropriate CREF value.
