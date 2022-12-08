@@ -131,8 +131,8 @@ namespace Java.Interop.Tools.Cecil {
 
 			try {
 				assembly  = ReadAssembly (fileName);
-			} catch (FileNotFoundException) {
-				// This one is ok, we can return null
+			} catch (Exception e) when (e is FileNotFoundException || e is DirectoryNotFoundException) {
+				// These are ok, we can return null
 				return null;
 			} catch (Exception e) {
 				Diagnostic.Error (9, e, Localization.Resources.CecilResolver_XA0009, fileName);
