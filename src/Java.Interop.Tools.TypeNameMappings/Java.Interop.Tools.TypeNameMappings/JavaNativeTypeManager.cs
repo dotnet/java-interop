@@ -473,7 +473,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		internal static string? GetJniTypeName (TypeReference typeRef, ExportParameterKind exportKind, IMetadataResolver? cache)
 		{
-			return GetJniTypeName<TypeReference, TypeDefinition> (typeRef, exportKind, t => t.Resolve (), t => {
+			return GetJniTypeName<TypeReference, TypeDefinition> (typeRef, exportKind, t => t.ResolveCached (cache), t => {
 				TypeReference etype;
 				int rank = GetArrayInfo (typeRef, out etype);
 				return new KeyValuePair<int,TypeReference> (rank,etype);
@@ -525,7 +525,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 				throw new ArgumentNullException ("type");
 
 			if (type.IsValueType)
-				return GetPrimitiveClass (type);
+				return GetPrimitiveClass (type, cache);
 
 			if (type.FullName == "System.String")
 				return "java/lang/String";
@@ -554,7 +554,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		static string? ToJniNameFromAttributesForInterop (TypeDefinition type, IMetadataResolver? resolver)
 		{
 			var attr = type.CustomAttributes.FirstOrDefault (a =>
-				Resolve (resolver, a.AttributeType)
+				a.AttributeType.ResolveCached (resolver)
 				.FullName == "Java.Interop.JniTypeSignatureAttribute");
 			if (attr == null) {
 				return null;
@@ -604,16 +604,11 @@ namespace Java.Interop.Tools.TypeNameMappings
 				return true;
 
 			// Slow path resolves the type, looking for IJniNameProviderAttribute
-			var attributeType = Resolve (resolver, attr.AttributeType);
+			var attributeType = attr.AttributeType.ResolveCached (resolver);
 			if (!attributeType.HasInterfaces)
 				return false;
 			return attributeType.Interfaces.Any (it => it.InterfaceType.FullName == typeof (IJniNameProviderAttribute).FullName);
 		}
-
-		static TypeDefinition Resolve (IMetadataResolver? resolver, TypeReference typeReference) =>
-			resolver?.Resolve (typeReference) ??
-			typeReference.Resolve () ??
-			throw new InvalidOperationException ();
 
 		public static int GetArrayInfo (Mono.Cecil.TypeReference type, out Mono.Cecil.TypeReference elementType)
 		{
@@ -626,10 +621,10 @@ namespace Java.Interop.Tools.TypeNameMappings
 			return rank;
 		}
 
-		static string? GetPrimitiveClass (Mono.Cecil.TypeDefinition type)
+		static string? GetPrimitiveClass (Mono.Cecil.TypeDefinition type, IMetadataResolver? cache)
 		{
 			if (type.IsEnum)
-				return GetPrimitiveClass (type.Fields.First (f => f.IsSpecialName).FieldType.Resolve ());
+				return GetPrimitiveClass (type.Fields.First (f => f.IsSpecialName).FieldType.ResolveCached (cache), cache);
 			if (type.FullName == "System.Byte")
 				return "B";
 			if (type.FullName == "System.Char")

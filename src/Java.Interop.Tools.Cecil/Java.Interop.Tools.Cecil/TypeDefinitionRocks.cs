@@ -7,6 +7,9 @@ namespace Java.Interop.Tools.Cecil {
 
 	public static class TypeDefinitionRocks {
 
+		public static TypeDefinition ResolveCached (this TypeReference type, IMetadataResolver? resolver) =>
+			resolver != null ? resolver.Resolve (type) : type.Resolve ();
+
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
 		public static TypeDefinition? GetBaseType (this TypeDefinition type) =>
 			GetBaseType (type, resolver: null);
@@ -19,9 +22,7 @@ namespace Java.Interop.Tools.Cecil {
 			var bt = type.BaseType;
 			if (bt == null)
 				return null;
-			if (resolver != null)
-				return resolver.Resolve (bt);
-			return bt.Resolve ();
+			return bt.ResolveCached (resolver);
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
@@ -68,7 +69,7 @@ namespace Java.Interop.Tools.Cecil {
 		{
 			if (type.FullName == c.FullName)
 				return true;
-			var d = (resolver?.Resolve (c)) ?? c.Resolve ();
+			var d = c.ResolveCached (resolver);
 			if (d == null)
 				return false;
 			foreach (var t in d.GetTypeAndBaseTypes (resolver)) {
@@ -127,7 +128,7 @@ namespace Java.Interop.Tools.Cecil {
 
 		public static string GetPartialAssemblyName (this TypeReference type, IMetadataResolver? resolver)
 		{
-			TypeDefinition? def = (resolver?.Resolve (type)) ?? type.Resolve ();
+			TypeDefinition? def = type.ResolveCached (resolver);
 			return (def ?? type).Module.Assembly.Name.Name;
 		}
 
@@ -156,7 +157,7 @@ namespace Java.Interop.Tools.Cecil {
 
 		public static string GetAssemblyQualifiedName (this TypeReference type, IMetadataResolver? resolver)
 		{
-			TypeDefinition? def = (resolver?.Resolve (type)) ?? type.Resolve ();
+			TypeDefinition? def = type.ResolveCached(resolver);
 			return string.Format ("{0}, {1}",
 					// Cecil likes to use '/' as the nested type separator, while
 					// Reflection uses '+' as the nested type separator. Use Reflection.
