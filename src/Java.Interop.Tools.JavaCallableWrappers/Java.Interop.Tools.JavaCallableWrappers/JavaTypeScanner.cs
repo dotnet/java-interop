@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -77,8 +77,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type) =>
-			ShouldSkipJavaCallableWrapperGeneration (type, resolver: null!);
+		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type) => throw new NotSupportedException ();
 
 		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type, TypeDefinitionCache cache) =>
 			ShouldSkipJavaCallableWrapperGeneration (type, (IMetadataResolver) cache);

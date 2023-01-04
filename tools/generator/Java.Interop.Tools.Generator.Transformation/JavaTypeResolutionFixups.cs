@@ -10,8 +10,7 @@ namespace generator
 	public static class JavaTypeResolutionFixups
 	{
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static void Fixup (string xmlFile, string outputXmlFile, DirectoryAssemblyResolver resolver, string [] references) =>
-			Fixup(xmlFile, outputXmlFile, resolver, references, cache: null!);
+		public static void Fixup (string xmlFile, string outputXmlFile, DirectoryAssemblyResolver resolver, string [] references) => throw new NotSupportedException ();
 
 		// This fixup ensures all referenced Java types can be resolved, and
 		// removes types and members that rely on unresolvable Java types.

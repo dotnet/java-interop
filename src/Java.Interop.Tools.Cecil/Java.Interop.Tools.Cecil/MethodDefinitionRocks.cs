@@ -10,8 +10,7 @@ namespace Java.Interop.Tools.Cecil {
 	public static class MethodDefinitionRocks
 	{
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static MethodDefinition GetBaseDefinition (this MethodDefinition method) =>
-			GetBaseDefinition (method, resolver: null!);
+		public static MethodDefinition GetBaseDefinition (this MethodDefinition method) => throw new NotSupportedException ();
 
 		public static MethodDefinition GetBaseDefinition (this MethodDefinition method, TypeDefinitionCache cache) =>
 			GetBaseDefinition (method, (IMetadataResolver) cache);
@@ -35,8 +34,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit) =>
-			GetOverriddenMethods (method, inherit, resolver: null!);
+		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit) => throw new NotSupportedException ();
 
 		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit, TypeDefinitionCache cache) =>
 			GetOverriddenMethods (method, inherit, (IMetadataResolver) cache);
@@ -54,8 +52,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b) =>
-			AreParametersCompatibleWith (a, b, resolver: null!);
+		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b) => throw new NotSupportedException ();
 
 		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b, TypeDefinitionCache cache) =>
 			AreParametersCompatibleWith (a, b, (IMetadataResolver) cache);

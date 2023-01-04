@@ -11,8 +11,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 	public static class ManagedApiImporter
 	{
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static JavaTypeCollection Parse (AssemblyDefinition assembly, JavaTypeCollection collection) =>
-			Parse (assembly, collection, resolver: null!);
+		public static JavaTypeCollection Parse (AssemblyDefinition assembly, JavaTypeCollection collection) => throw new NotSupportedException ();
 
 		public static JavaTypeCollection Parse (AssemblyDefinition assembly, JavaTypeCollection collection, TypeDefinitionCache resolver)
 		{

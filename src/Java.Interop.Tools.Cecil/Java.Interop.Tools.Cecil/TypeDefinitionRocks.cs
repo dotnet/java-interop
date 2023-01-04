@@ -10,8 +10,7 @@ namespace Java.Interop.Tools.Cecil {
 			resolver != null ? resolver.Resolve (type) : type.Resolve ();
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static TypeDefinition? GetBaseType (this TypeDefinition type) =>
-			GetBaseType (type, resolver: null!);
+		public static TypeDefinition? GetBaseType (this TypeDefinition type) => throw new NotSupportedException ();
 
 		public static TypeDefinition? GetBaseType (this TypeDefinition type, TypeDefinitionCache cache) =>
 			GetBaseType (type, (IMetadataResolver) cache);
@@ -25,8 +24,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type) =>
-			GetTypeAndBaseTypes (type, resolver: null!);
+		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type) => throw new NotSupportedException ();
 
 		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type, TypeDefinitionCache cache) =>
 			GetTypeAndBaseTypes (type, (IMetadataResolver) cache);
@@ -42,8 +40,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type) =>
-			GetBaseTypes (type, resolver: null!);
+		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type) => throw new NotSupportedException();
 
 		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type, TypeDefinitionCache cache) =>
 			GetBaseTypes (type, (IMetadataResolver) cache);
@@ -58,8 +55,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool IsAssignableFrom (this TypeReference type, TypeReference c) =>
-			IsAssignableFrom (type, c, resolver: null!);
+		public static bool IsAssignableFrom (this TypeReference type, TypeReference c) => throw new NotSupportedException ();
 
 		public static bool IsAssignableFrom (this TypeReference type, TypeReference c, TypeDefinitionCache cache) =>
 			IsAssignableFrom (type, c, (IMetadataResolver) cache);
@@ -84,8 +80,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool IsSubclassOf (this TypeDefinition type, string typeName) =>
-			IsSubclassOf (type, typeName, resolver: null!);
+		public static bool IsSubclassOf (this TypeDefinition type, string typeName) => throw new NotSupportedException ();
 
 		public static bool IsSubclassOf (this TypeDefinition type, string typeName, TypeDefinitionCache cache) =>
 			IsSubclassOf (type, typeName, (IMetadataResolver) cache);
@@ -100,8 +95,7 @@ namespace Java.Interop.Tools.Cecil {
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName) =>
-			ImplementsInterface (type, interfaceName, resolver: null!);
+		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName) => throw new NotSupportedException ();
 
 		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName, TypeDefinitionCache cache) =>
 			ImplementsInterface (type, interfaceName, (IMetadataResolver) cache);

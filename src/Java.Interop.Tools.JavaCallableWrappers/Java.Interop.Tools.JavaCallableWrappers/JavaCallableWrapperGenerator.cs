@@ -70,9 +70,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		readonly JavaCallableMethodClassifier? methodClassifier;
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object []> log)
-			: this (type, log, resolver: null!, methodClassifier: null)
-		{ }
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object []> log) => throw new NotSupportedException ();
 
 		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache)
 			: this (type, log, (IMetadataResolver) cache, methodClassifier: null)

@@ -415,8 +415,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool IsApplication (TypeDefinition type) =>
-			IsApplication (type, resolver: null!);
+		public static bool IsApplication (TypeDefinition type) => throw new NotSupportedException ();
 
 		public static bool IsApplication (TypeDefinition type, TypeDefinitionCache cache) =>
 			IsApplication (type, (IMetadataResolver) cache);
@@ -427,8 +426,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static bool IsInstrumentation (TypeDefinition type) =>
-			IsInstrumentation (type, resolver: null!);
+		public static bool IsInstrumentation (TypeDefinition type) => throw new NotSupportedException ();
 
 		public static bool IsInstrumentation (TypeDefinition type, TypeDefinitionCache cache) =>
 			IsInstrumentation (type, (IMetadataResolver) cache);
@@ -440,8 +438,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		// moved from JavaTypeInfo
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static string? GetJniSignature (MethodDefinition method) =>
-			GetJniSignature (method, resolver: null!);
+		public static string? GetJniSignature (MethodDefinition method) => throw new NotSupportedException ();
 
 		public static string? GetJniSignature (MethodDefinition method, TypeDefinitionCache cache) =>
 			GetJniSignature (method, (IMetadataResolver) cache);
@@ -460,8 +457,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		// moved from JavaTypeInfo
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static string? GetJniTypeName (TypeReference typeRef) =>
-			GetJniTypeName (typeRef, resolver: null!);
+		public static string? GetJniTypeName (TypeReference typeRef) => throw new NotSupportedException ();
 
 		public static string? GetJniTypeName (TypeReference typeRef, TypeDefinitionCache cache) =>
 			GetJniTypeName (typeRef, (IMetadataResolver) cache);
@@ -481,8 +477,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static string ToCompatJniName (TypeDefinition type) =>
-			ToCompatJniName (type, resolver: null!);
+		public static string ToCompatJniName (TypeDefinition type) => throw new NotSupportedException ();
 
 		public static string ToCompatJniName (TypeDefinition type, TypeDefinitionCache cache) =>
 			ToCompatJniName (type, (IMetadataResolver) cache);
@@ -506,8 +501,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		// Keep in sync with ToJniNameFromAttributes(Type) and ToJniName(Type)
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
-		public static string ToJniName (TypeDefinition type) =>
-			ToJniName (type, resolver: null!);
+		public static string ToJniName (TypeDefinition type) => throw new NotSupportedException ();
 
 		public static string ToJniName (TypeDefinition type, TypeDefinitionCache cache) =>
 			ToJniName (type, (IMetadataResolver) cache);
