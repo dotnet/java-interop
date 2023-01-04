@@ -6,18 +6,17 @@ using Mono.Cecil;
 namespace Java.Interop.Tools.Cecil {
 
 	public static class TypeDefinitionRocks {
-
-		public static TypeDefinition ResolveCached (this TypeReference type, IMetadataResolver? resolver) =>
+		static TypeDefinition ResolveCached (this TypeReference type, IMetadataResolver? resolver) =>
 			resolver != null ? resolver.Resolve (type) : type.Resolve ();
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static TypeDefinition? GetBaseType (this TypeDefinition type) =>
-			GetBaseType (type, resolver: null);
+			GetBaseType (type, resolver: null!);
 
-		public static TypeDefinition? GetBaseType (this TypeDefinition type, TypeDefinitionCache? cache) =>
-			GetBaseType (type, (IMetadataResolver?) cache);
+		public static TypeDefinition? GetBaseType (this TypeDefinition type, TypeDefinitionCache cache) =>
+			GetBaseType (type, (IMetadataResolver) cache);
 
-		public static TypeDefinition? GetBaseType (this TypeDefinition type, IMetadataResolver? resolver)
+		public static TypeDefinition? GetBaseType (this TypeDefinition type, IMetadataResolver resolver)
 		{
 			var bt = type.BaseType;
 			if (bt == null)
@@ -25,14 +24,14 @@ namespace Java.Interop.Tools.Cecil {
 			return bt.ResolveCached (resolver);
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type) =>
-			GetTypeAndBaseTypes (type, resolver: null);
+			GetTypeAndBaseTypes (type, resolver: null!);
 
-		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type, TypeDefinitionCache? cache) =>
-			GetTypeAndBaseTypes (type, (IMetadataResolver?) cache);
+		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type, TypeDefinitionCache cache) =>
+			GetTypeAndBaseTypes (type, (IMetadataResolver) cache);
 
-		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type, IMetadataResolver? resolver)
+		public static IEnumerable<TypeDefinition> GetTypeAndBaseTypes (this TypeDefinition type, IMetadataResolver resolver)
 		{
 			TypeDefinition? t = type;
 
@@ -42,14 +41,14 @@ namespace Java.Interop.Tools.Cecil {
 			}
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type) =>
-			GetBaseTypes (type, resolver: null);
+			GetBaseTypes (type, resolver: null!);
 
-		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type, TypeDefinitionCache? cache) =>
-			GetBaseTypes (type, (IMetadataResolver?) cache);
+		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type, TypeDefinitionCache cache) =>
+			GetBaseTypes (type, (IMetadataResolver) cache);
 
-		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type, IMetadataResolver? resolver)
+		public static IEnumerable<TypeDefinition> GetBaseTypes (this TypeDefinition type, IMetadataResolver resolver)
 		{
 			TypeDefinition? t = type;
 
@@ -58,14 +57,14 @@ namespace Java.Interop.Tools.Cecil {
 			}
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static bool IsAssignableFrom (this TypeReference type, TypeReference c) =>
-			IsAssignableFrom (type, c, resolver: null);
+			IsAssignableFrom (type, c, resolver: null!);
 
-		public static bool IsAssignableFrom (this TypeReference type, TypeReference c, TypeDefinitionCache? cache) =>
-			IsAssignableFrom (type, c, (IMetadataResolver?) cache);
+		public static bool IsAssignableFrom (this TypeReference type, TypeReference c, TypeDefinitionCache cache) =>
+			IsAssignableFrom (type, c, (IMetadataResolver) cache);
 
-		public static bool IsAssignableFrom (this TypeReference type, TypeReference c, IMetadataResolver? resolver)
+		public static bool IsAssignableFrom (this TypeReference type, TypeReference c, IMetadataResolver resolver)
 		{
 			if (type.FullName == c.FullName)
 				return true;
@@ -84,13 +83,13 @@ namespace Java.Interop.Tools.Cecil {
 			return false;
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static bool IsSubclassOf (this TypeDefinition type, string typeName) =>
-			IsSubclassOf (type, typeName, resolver: null);
+			IsSubclassOf (type, typeName, resolver: null!);
 
-		public static bool IsSubclassOf (this TypeDefinition type, string typeName, TypeDefinitionCache? cache) =>
-			IsSubclassOf (type, typeName, (IMetadataResolver?) cache);
-		public static bool IsSubclassOf (this TypeDefinition type, string typeName, IMetadataResolver? resolver)
+		public static bool IsSubclassOf (this TypeDefinition type, string typeName, TypeDefinitionCache cache) =>
+			IsSubclassOf (type, typeName, (IMetadataResolver) cache);
+		public static bool IsSubclassOf (this TypeDefinition type, string typeName, IMetadataResolver resolver)
 		{
 			foreach (var t in type.GetTypeAndBaseTypes (resolver)) {
 				if (t.FullName == typeName) {
@@ -100,14 +99,14 @@ namespace Java.Interop.Tools.Cecil {
 			return false;
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName) =>
-			ImplementsInterface (type, interfaceName, resolver: null);
+			ImplementsInterface (type, interfaceName, resolver: null!);
 
-		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName, TypeDefinitionCache? cache) =>
-			ImplementsInterface (type, interfaceName, (IMetadataResolver?) cache);
+		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName, TypeDefinitionCache cache) =>
+			ImplementsInterface (type, interfaceName, (IMetadataResolver) cache);
 
-		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName, IMetadataResolver? resolver)
+		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName, IMetadataResolver resolver)
 		{
 			foreach (var t in type.GetTypeAndBaseTypes (resolver)) {
 				foreach (var i in t.Interfaces) {

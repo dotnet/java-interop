@@ -33,7 +33,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 	 public class JavaCallableWrapperGenerator {
 
 		class JavaFieldInfo {
-			public JavaFieldInfo (MethodDefinition method, string fieldName, IMetadataResolver? resolver)
+			public JavaFieldInfo (MethodDefinition method, string fieldName, IMetadataResolver resolver)
 			{
 				this.FieldName = fieldName;
 				InitializerName = method.Name;
@@ -69,25 +69,25 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		readonly IMetadataResolver cache;
 		readonly JavaCallableMethodClassifier? methodClassifier;
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object []> log)
-			: this (type, log, resolver: null, methodClassifier: null)
+			: this (type, log, resolver: null!, methodClassifier: null)
 		{ }
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache? cache)
-			: this (type, log, (IMetadataResolver?) cache, methodClassifier: null)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache)
+			: this (type, log, (IMetadataResolver) cache, methodClassifier: null)
 		{ }
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache? cache, JavaCallableMethodClassifier? methodClassifier)
-			: this (type, log, (IMetadataResolver?) cache, methodClassifier)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, TypeDefinitionCache cache, JavaCallableMethodClassifier? methodClassifier)
+			: this (type, log, (IMetadataResolver) cache, methodClassifier)
 		{
 		}
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver? resolver)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver)
 			: this (type, log, resolver, methodClassifier: null)
 		{ }
 
-		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver? resolver, JavaCallableMethodClassifier? methodClassifier)
+		public JavaCallableWrapperGenerator (TypeDefinition type, Action<string, object[]> log, IMetadataResolver resolver, JavaCallableMethodClassifier? methodClassifier)
 			: this (type, null, log, resolver, methodClassifier)
 		{
 			AddNestedTypes (type);
@@ -133,7 +133,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			HasExport |= children.Any (t => t.HasExport);
 		}
 
-		JavaCallableWrapperGenerator (TypeDefinition type, string? outerType, Action<string, object[]> log, IMetadataResolver? resolver, JavaCallableMethodClassifier? methodClassifier = null)
+		JavaCallableWrapperGenerator (TypeDefinition type, string? outerType, Action<string, object[]> log, IMetadataResolver resolver, JavaCallableMethodClassifier? methodClassifier = null)
 		{
 			this.methodClassifier = methodClassifier;
 			this.type = type;
@@ -177,7 +177,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 			foreach (InterfaceImplementation ifaceInfo in type.Interfaces) {
 				var typeReference = ifaceInfo.InterfaceType;
-				var typeDefinition = typeReference.ResolveCached (resolver);
+				var typeDefinition = cache.Resolve (typeReference);
 				if (typeDefinition == null) {
 					Diagnostic.Error (4204,
 						LookupSource (type),
@@ -604,17 +604,17 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			}
 		}
 
-		static string GetAnnotationsString (string indent, IEnumerable<CustomAttribute> atts, IMetadataResolver? resolver)
+		static string GetAnnotationsString (string indent, IEnumerable<CustomAttribute> atts, IMetadataResolver resolver)
 		{
 			var sw = new StringWriter ();
 			WriteAnnotations (indent, sw, atts, resolver);
 			return sw.ToString ();
 		}
 
-		static void WriteAnnotations (string indent, TextWriter sw, IEnumerable<CustomAttribute> atts, IMetadataResolver? resolver)
+		static void WriteAnnotations (string indent, TextWriter sw, IEnumerable<CustomAttribute> atts, IMetadataResolver resolver)
 		{
 			foreach (var ca in atts) {
-				var catype = ca.AttributeType.ResolveCached (resolver);
+				var catype = resolver.Resolve (ca.AttributeType);
 				var tca = catype.CustomAttributes.FirstOrDefault (a => a.AttributeType.FullName == "Android.Runtime.AnnotationAttribute");
 				if (tca != null) {
 					sw.Write (indent);
@@ -677,7 +677,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					break;
 			}
 			foreach (var ifaceInfo in type.Interfaces) {
-				var iface = ifaceInfo.InterfaceType.ResolveCached (cache);
+				var iface = cache.Resolve(ifaceInfo.InterfaceType);
 				if (!GetTypeRegistrationAttributes (iface).Any ())
 					continue;
 				sw.WriteLine (",");

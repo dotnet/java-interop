@@ -76,14 +76,14 @@ namespace Java.Interop.Tools.JavaCallableWrappers
 				AddJavaTypes (javaTypes, nested);
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type) =>
-			ShouldSkipJavaCallableWrapperGeneration (type, resolver: null);
+			ShouldSkipJavaCallableWrapperGeneration (type, resolver: null!);
 
-		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type, TypeDefinitionCache? cache) =>
-			ShouldSkipJavaCallableWrapperGeneration (type, (IMetadataResolver?) cache);
+		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type, TypeDefinitionCache cache) =>
+			ShouldSkipJavaCallableWrapperGeneration (type, (IMetadataResolver) cache);
 
-		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type, IMetadataResolver? resolver)
+		public static bool ShouldSkipJavaCallableWrapperGeneration (TypeDefinition type, IMetadataResolver resolver)
 		{
 			if (JavaNativeTypeManager.IsNonStaticInnerClass (type, resolver))
 				return true;

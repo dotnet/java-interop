@@ -9,14 +9,14 @@ namespace Java.Interop.Tools.Cecil {
 
 	public static class MethodDefinitionRocks
 	{
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static MethodDefinition GetBaseDefinition (this MethodDefinition method) =>
-			GetBaseDefinition (method, resolver: null);
+			GetBaseDefinition (method, resolver: null!);
 
-		public static MethodDefinition GetBaseDefinition (this MethodDefinition method, TypeDefinitionCache? cache) =>
-			GetBaseDefinition (method, (IMetadataResolver?) cache);
+		public static MethodDefinition GetBaseDefinition (this MethodDefinition method, TypeDefinitionCache cache) =>
+			GetBaseDefinition (method, (IMetadataResolver) cache);
 
-		public static MethodDefinition GetBaseDefinition (this MethodDefinition method, IMetadataResolver? resolver)
+		public static MethodDefinition GetBaseDefinition (this MethodDefinition method, IMetadataResolver resolver)
 		{
 			if (method.IsStatic || method.IsNewSlot || !method.IsVirtual)
 				return method;
@@ -34,14 +34,14 @@ namespace Java.Interop.Tools.Cecil {
 			return method;
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit) =>
-			GetOverriddenMethods (method, inherit, resolver: null);
+			GetOverriddenMethods (method, inherit, resolver: null!);
 
-		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit, TypeDefinitionCache? cache) =>
-			GetOverriddenMethods (method, inherit, (IMetadataResolver?) cache);
+		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit, TypeDefinitionCache cache) =>
+			GetOverriddenMethods (method, inherit, (IMetadataResolver) cache);
 
-		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit, IMetadataResolver? resolver)
+		public static IEnumerable<MethodDefinition> GetOverriddenMethods (MethodDefinition method, bool inherit, IMetadataResolver resolver)
 		{
 			yield return method;
 			if (inherit) {
@@ -53,14 +53,14 @@ namespace Java.Interop.Tools.Cecil {
 			}
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b) =>
-			AreParametersCompatibleWith (a, b, resolver: null);
+			AreParametersCompatibleWith (a, b, resolver: null!);
 
-		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b, TypeDefinitionCache? cache) =>
-			AreParametersCompatibleWith (a, b, (IMetadataResolver?) cache);
+		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b, TypeDefinitionCache cache) =>
+			AreParametersCompatibleWith (a, b, (IMetadataResolver) cache);
 
-		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b, IMetadataResolver? resolver)
+		public static bool AreParametersCompatibleWith (this Collection<ParameterDefinition> a, Collection<ParameterDefinition> b, IMetadataResolver resolver)
 		{
 			if (a.Count != b.Count)
 				return false;
@@ -75,7 +75,7 @@ namespace Java.Interop.Tools.Cecil {
 			return true;
 		}
 
-		static bool IsParameterCompatibleWith (IModifierType a, IModifierType b, IMetadataResolver? cache)
+		static bool IsParameterCompatibleWith (IModifierType a, IModifierType b, IMetadataResolver cache)
 		{
 			if (!IsParameterCompatibleWith (a.ModifierType, b.ModifierType, cache))
 				return false;
@@ -83,7 +83,7 @@ namespace Java.Interop.Tools.Cecil {
 			return IsParameterCompatibleWith (a.ElementType, b.ElementType, cache);
 		}
 
-		static bool IsParameterCompatibleWith (TypeSpecification a, TypeSpecification b, IMetadataResolver? cache)
+		static bool IsParameterCompatibleWith (TypeSpecification a, TypeSpecification b, IMetadataResolver cache)
 		{
 			if (a is GenericInstanceType)
 				return IsParameterCompatibleWith ((GenericInstanceType) a, (GenericInstanceType) b, cache);
@@ -94,7 +94,7 @@ namespace Java.Interop.Tools.Cecil {
 			return IsParameterCompatibleWith (a.ElementType, b.ElementType, cache);
 		}
 
-		static bool IsParameterCompatibleWith (GenericInstanceType a, GenericInstanceType b, IMetadataResolver? cache)
+		static bool IsParameterCompatibleWith (GenericInstanceType a, GenericInstanceType b, IMetadataResolver cache)
 		{
 			if (!IsParameterCompatibleWith (a.ElementType, b.ElementType, cache))
 				return false;
@@ -112,7 +112,7 @@ namespace Java.Interop.Tools.Cecil {
 			return true;
 		}
 
-		static bool IsParameterCompatibleWith (TypeReference a, TypeReference b, IMetadataResolver? cache)
+		static bool IsParameterCompatibleWith (TypeReference a, TypeReference b, IMetadataResolver cache)
 		{
 			if (a is TypeSpecification || b is TypeSpecification) {
 				if (a.GetType () != b.GetType ())
