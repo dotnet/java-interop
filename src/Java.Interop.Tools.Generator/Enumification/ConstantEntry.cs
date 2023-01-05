@@ -135,7 +135,7 @@ namespace Java.Interop.Tools.Generator.Enumification
 				EnumMember = parser.GetField (5),
 				FieldAction = FromFieldActionString (parser.GetField (6)),
 				IsFlags = parser.GetField (7).ToLowerInvariant () == "flags",
-				DeprecatedSince = parser.GetFieldAsIntNullable (8)
+				DeprecatedSince = parser.GetFieldAsNullableInt32 (8)
 			};
 
 			entry.NormalizeJavaSignature ();
