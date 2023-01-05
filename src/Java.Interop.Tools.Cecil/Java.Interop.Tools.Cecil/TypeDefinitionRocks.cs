@@ -6,8 +6,6 @@ using Mono.Cecil;
 namespace Java.Interop.Tools.Cecil {
 
 	public static class TypeDefinitionRocks {
-		static TypeDefinition ResolveCached (this TypeReference type, IMetadataResolver? resolver) =>
-			resolver != null ? resolver.Resolve (type) : type.Resolve ();
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static TypeDefinition? GetBaseType (this TypeDefinition type) => throw new NotSupportedException ();
@@ -20,7 +18,7 @@ namespace Java.Interop.Tools.Cecil {
 			var bt = type.BaseType;
 			if (bt == null)
 				return null;
-			return bt.ResolveCached (resolver);
+			return resolver.Resolve (bt);
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
@@ -64,7 +62,7 @@ namespace Java.Interop.Tools.Cecil {
 		{
 			if (type.FullName == c.FullName)
 				return true;
-			var d = c.ResolveCached (resolver);
+			var d = resolver.Resolve (c);
 			if (d == null)
 				return false;
 			foreach (var t in d.GetTypeAndBaseTypes (resolver)) {
@@ -112,27 +110,25 @@ namespace Java.Interop.Tools.Cecil {
 			return false;
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
-		public static string GetPartialAssemblyName (this TypeReference type) =>
-			GetPartialAssemblyName (type, resolver: null);
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
+		public static string GetPartialAssemblyName (this TypeReference type) => throw new NotSupportedException ();
 
-		public static string GetPartialAssemblyName (this TypeReference type, TypeDefinitionCache? cache) =>
-			GetPartialAssemblyName (type, (IMetadataResolver?) cache);
+		public static string GetPartialAssemblyName (this TypeReference type, TypeDefinitionCache cache) =>
+			GetPartialAssemblyName (type, (IMetadataResolver) cache);
 
-		public static string GetPartialAssemblyName (this TypeReference type, IMetadataResolver? resolver)
+		public static string GetPartialAssemblyName (this TypeReference type, IMetadataResolver resolver)
 		{
-			TypeDefinition? def = type.ResolveCached (resolver);
+			TypeDefinition? def = resolver.Resolve (type);
 			return (def ?? type).Module.Assembly.Name.Name;
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
-		public static string GetPartialAssemblyQualifiedName (this TypeReference type) =>
-			GetPartialAssemblyQualifiedName (type, resolver: null);
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
+		public static string GetPartialAssemblyQualifiedName (this TypeReference type) => throw new NotSupportedException ();
 
-		public static string GetPartialAssemblyQualifiedName (this TypeReference type, TypeDefinitionCache? cache) =>
-			GetPartialAssemblyQualifiedName (type, (IMetadataResolver?) cache);
+		public static string GetPartialAssemblyQualifiedName (this TypeReference type, TypeDefinitionCache cache) =>
+			GetPartialAssemblyQualifiedName (type, (IMetadataResolver) cache);
 
-		public static string GetPartialAssemblyQualifiedName (this TypeReference type, IMetadataResolver? resolver)
+		public static string GetPartialAssemblyQualifiedName (this TypeReference type, IMetadataResolver resolver)
 		{
 			return string.Format ("{0}, {1}",
 					// Cecil likes to use '/' as the nested type separator, while
@@ -141,16 +137,15 @@ namespace Java.Interop.Tools.Cecil {
 					type.GetPartialAssemblyName (resolver));
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
-		public static string GetAssemblyQualifiedName (this TypeReference type) =>
-			GetAssemblyQualifiedName (type, resolver: null);
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
+		public static string GetAssemblyQualifiedName (this TypeReference type) => throw new NotSupportedException ();
 
-		public static string GetAssemblyQualifiedName (this TypeReference type, TypeDefinitionCache? cache) =>
-			GetAssemblyQualifiedName (type, (IMetadataResolver?) cache);
+		public static string GetAssemblyQualifiedName (this TypeReference type, TypeDefinitionCache cache) =>
+			GetAssemblyQualifiedName (type, (IMetadataResolver) cache);
 
-		public static string GetAssemblyQualifiedName (this TypeReference type, IMetadataResolver? resolver)
+		public static string GetAssemblyQualifiedName (this TypeReference type, IMetadataResolver resolver)
 		{
-			TypeDefinition? def = type.ResolveCached(resolver);
+			TypeDefinition? def = resolver.Resolve (type);
 			return string.Format ("{0}, {1}",
 					// Cecil likes to use '/' as the nested type separator, while
 					// Reflection uses '+' as the nested type separator. Use Reflection.

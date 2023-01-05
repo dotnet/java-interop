@@ -638,14 +638,13 @@ namespace Java.Interop.Tools.TypeNameMappings
 			return null;
 		}
 
-		[Obsolete ("Use the TypeDefinitionCache overload for better performance.")]
-		public static string GetPackageName (TypeDefinition type) =>
-			GetPackageName (type, resolver: null);
+		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
+		public static string GetPackageName (TypeDefinition type) => throw new NotSupportedException ();
 
-		public static string GetPackageName (TypeDefinition type, TypeDefinitionCache? cache) =>
-			GetPackageName (type, (IMetadataResolver?) cache);
+		public static string GetPackageName (TypeDefinition type, TypeDefinitionCache cache) =>
+			GetPackageName (type, (IMetadataResolver) cache);
 
-		public static string GetPackageName (TypeDefinition type, IMetadataResolver? resolver)
+		public static string GetPackageName (TypeDefinition type, IMetadataResolver resolver)
 		{
 			if (IsPackageNamePreservedForAssembly (type.GetPartialAssemblyName (resolver)))
 				return type.Namespace.ToLowerInvariant ();
