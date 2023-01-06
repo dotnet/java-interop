@@ -60,7 +60,7 @@ namespace Java.Interop.Tools.Generator.Enumification
 				"Deprecated Since",
 			};
 
-			writer.WriteLine (string.Join (",", column_names));
+			writer.WriteLine ("// " + string.Join (",", column_names));
 
 			foreach (var c in Sort (constants))
 				writer.WriteLine (c.ToVersion2String ());
