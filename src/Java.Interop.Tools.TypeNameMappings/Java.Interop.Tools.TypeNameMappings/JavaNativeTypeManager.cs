@@ -719,7 +719,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 				foreach (var method in baseType.Methods) {
 					if (!method.IsConstructor || method.IsStatic)
 						continue;
-					if (method.Parameters.Any (p => p.Name == "_self"))
+					if (method.Parameters.Any (p => p.Name == "__self"))
 						return true;
 				}
 
