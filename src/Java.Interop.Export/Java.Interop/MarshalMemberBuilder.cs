@@ -278,7 +278,7 @@ namespace Java.Interop {
 						typeof (object),
 						typeof (IntPtr)
 					};
-					marshalDelegateTypes = new ();
+					marshalDelegateTypes = new (StringComparer.Ordinal);
 				}
 				if (marshalDelegateTypes!.TryGetValue (name, out var type)) {
 					return type;

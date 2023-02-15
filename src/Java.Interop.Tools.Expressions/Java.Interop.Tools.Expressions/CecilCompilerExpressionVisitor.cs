@@ -295,8 +295,7 @@ class CecilCompilerExpressionVisitor : ExpressionVisitor
 
 	List<Instruction> GetFixupsForLabelTarget (LabelTarget target)
 	{
-		List<Instruction>? fixups;
-		if (!returnFixups.TryGetValue (target, out fixups)) {
+		if (!returnFixups.TryGetValue (target, out List<Instruction>? fixups)) {
 			returnFixups.Add (target, fixups = new ());
 		}
 		return fixups;
@@ -313,7 +312,7 @@ class CecilCompilerExpressionVisitor : ExpressionVisitor
 	{
 		Logger (TraceLevel.Verbose, $"# jonp: CecilCompilerExpressionVisitor.VisitLabel: {node}");
 		var target = il.Body.Instructions.Last ();
-		if (returnFixups.TryGetValue (node.Target, out var fixups)) {
+		if (returnFixups.TryGetValue (node.Target, out List<Instruction>? fixups)) {
 			foreach (var replace in fixups) {
 				Logger (TraceLevel.Verbose, $"# jonp: VisitLabel: replacing instruction `{replace}` w/ `leave {target}");
 				Debug.Assert (replace.OpCode == OpCodes.Ret || replace.OpCode == OpCodes.Nop);

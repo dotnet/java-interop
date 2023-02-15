@@ -367,7 +367,7 @@ sealed class VariableDefinitions {
 		var variableVisitor = new VariableExpressionVisitor (variables.Keys, Logger);
 		variableVisitor.Visit (e);
 
-		Console.WriteLine ($"# jonp: filling {variableVisitor.Variables.Count} variables");
+		Logger (TraceLevel.Verbose, $"# jonp: filling {variableVisitor.Variables.Count} variables");
 		for (int i = 0; i < variableVisitor.Variables.Count; ++i) {
 			var c = variableVisitor.Variables [i];
 			var d = new VariableDefinition (declaringAssembly.MainModule.ImportReference (c.Type));
@@ -397,7 +397,7 @@ sealed class VariableDefinitions {
 			if (c == variableVisitor.ReturnValue) {
 				ReturnValue = v;
 			}
-			Console.WriteLine ($"# jonp: FillVariables: local var {c.Name} is index {i}");
+			Logger (TraceLevel.Verbose, $"# jonp: FillVariables: local var {c.Name} is index {i}");
 		}
 	}
 }
