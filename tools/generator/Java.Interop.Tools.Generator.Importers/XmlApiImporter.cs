@@ -116,6 +116,10 @@ namespace MonoDroid.Generation
 					 !options.SupportNestedInterfaceTypes
 			};
 
+			if (elem.Attribute ("skipInvokerMethods")?.Value is string skip)
+				foreach (var m in skip.Split (new char [] { ',' }))
+					klass.SkippedInvokerMethods.Add (m);
+
 			FillApiSince (klass, pkg, elem);
 			SetLineInfo (klass, elem, options);
 
