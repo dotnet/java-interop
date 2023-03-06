@@ -117,7 +117,7 @@ namespace MonoDroid.Generation
 			};
 
 			if (elem.Attribute ("skipInvokerMethods")?.Value is string skip)
-				foreach (var m in skip.Split (new char [] { ',', ' ' }))
+				foreach (var m in skip.Split (new char [] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
 					klass.SkippedInvokerMethods.Add (m);
 
 			FillApiSince (klass, pkg, elem);
