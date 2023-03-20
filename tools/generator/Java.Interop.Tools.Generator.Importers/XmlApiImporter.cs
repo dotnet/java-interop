@@ -371,6 +371,7 @@ namespace MonoDroid.Generation
 				GenericArguments = elem.GenericArguments (),
 				IsAbstract = elem.XGetAttribute ("abstract") == "true",
 				IsAcw = true,
+				IsCompatVirtualMethod = elem.XGetAttribute ("compatVirtualMethod") == "true",
 				IsFinal = elem.XGetAttribute ("final") == "true",
 				IsReturnEnumified = elem.Attribute ("enumReturn") != null,
 				IsStatic = elem.XGetAttribute ("static") == "true",
