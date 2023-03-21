@@ -361,7 +361,7 @@ namespace generatortests
 			  </package>
 			  <package name='com.xamarin.android' jni-name='com/xamarin/android'>
 			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' jni-extends='Ljava/lang/Object;' final='false' name='MyClass' static='false' visibility='public' jni-signature='Lcom/xamarin/android/MyClass;'>
-			      <method abstract='false' deprecated='not deprecated' final='true' name='DoStuff' jni-signature='()I' bridge='false' native='false' return='int' jni-return='I' static='false' synchronized='false' synthetic='false' visibility='public' compatVirtualMethod='true'></method>
+			      <method abstract='true' deprecated='not deprecated' final='true' name='DoStuff' jni-signature='()I' bridge='false' native='false' return='int' jni-return='I' static='false' synchronized='false' synthetic='false' visibility='public' compatVirtualMethod='true'></method>
 			    </class>
 			  </package>
 			</api>";

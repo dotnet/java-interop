@@ -385,6 +385,10 @@ namespace MonoDroid.Generation
 				Visibility = elem.Visibility ()
 			};
 
+			// CompatVirtualMethods aren't abstract
+			if (method.IsCompatVirtualMethod)
+				method.IsAbstract = false;
+
 			method.IsVirtual = !method.IsStatic && elem.XGetAttribute ("final") == "false";
 
 			if (elem.Attribute ("managedName") != null)
