@@ -40,6 +40,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 					GetSourceFile (),
 					new XAttribute ("static",                   classFile.IsStatic),
 					new XAttribute ("visibility",               GetVisibility (classFile.Visibility)),
+					GetAnnotatedVisibility (classFile.Attributes),
 					GetTypeParmeters (signature == null ? null : signature.TypeParameters),
 					GetImplementedInterfaces (),
 					GetConstructors (),
@@ -346,6 +347,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				new XAttribute ("static",       (method.AccessFlags & MethodAccessFlags.Static) != 0),
 				GetSynchronized (method),
 				new XAttribute ("visibility",   GetVisibility (method.AccessFlags)),
+				GetAnnotatedVisibility (method.Attributes),
 				new XAttribute ("bridge",       (method.AccessFlags & MethodAccessFlags.Bridge) != 0),
 				new XAttribute ("synthetic",    (method.AccessFlags & MethodAccessFlags.Synthetic) != 0),
 				new XAttribute ("jni-signature",    method.Descriptor),
@@ -427,6 +429,16 @@ namespace Xamarin.Android.Tools.Bytecode {
 			}
 		}
 
+		static XAttribute? GetAnnotatedVisibility (AttributeCollection attributes)
+		{
+			var annotations = attributes?.OfType<RuntimeInvisibleAnnotationsAttribute> ().FirstOrDefault ()?.Annotations;
+
+			if (annotations?.FirstOrDefault (a => a.Type == "Landroidx/annotation/RestrictTo;") is Annotation annotation)
+				return new XAttribute ("annotated-visibility", ((annotation.Values.FirstOrDefault ().Value as AnnotationElementArray)?.Values?.FirstOrDefault () as AnnotationElementEnum)?.ConstantName ?? string.Empty);
+
+			return null;
+		}
+
 		static XAttribute? GetNotNull (MethodInfo method)
 		{
 			var annotations = method.Attributes?.OfType<RuntimeInvisibleAnnotationsAttribute> ().FirstOrDefault ()?.Annotations;
@@ -500,6 +512,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 						GetNotNull (field),
 						GetValue (field),
 						new XAttribute ("visibility",           visibility),
+						GetAnnotatedVisibility (field.Attributes),
 						new XAttribute ("volatile",             (field.AccessFlags & FieldAccessFlags.Volatile) != 0));
 			}
 		}
