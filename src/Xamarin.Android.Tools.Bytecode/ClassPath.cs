@@ -69,7 +69,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 					if (!ShouldLoadEntry (entry))
 						continue;
 
-					using (var s = entry.Open ()) {
+					using (var entry_stream = entry.Open ())
+					using (var s = new BufferedStream (entry_stream)) {
 						try {
 							var c   = new ClassFile (s);
 							Add (c);
