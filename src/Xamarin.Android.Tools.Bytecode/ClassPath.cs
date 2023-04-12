@@ -88,9 +88,6 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if (entry.Length == 0)
 				return false;
 
-			if (entry.Name == "module-info.class")
-				return false;
-
 			if (entry.Name.EndsWith (".jnilib", StringComparison.OrdinalIgnoreCase))
 				return false;
 
@@ -360,6 +357,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				FixUpParametersFromClasses ();
 
 			KotlinFixups.Fixup (classFiles);
+			FixupModuleVisibility ();
 
 			var packagesDictionary = GetPackages ();
 			var api = new XElement ("api",
@@ -373,6 +371,40 @@ namespace Xamarin.Android.Tools.Bytecode {
 						.Select (c => new XmlClassDeclarationBuilder (c).ToXElement ()))));
 			FixupParametersFromDocs (api);
 			return api;
+		}
+
+		void FixupModuleVisibility ()
+		{
+			var publicPackages  = new HashSet<string> ();
+
+			var moduleFiles     = classFiles.Where (c => c.AccessFlags == ClassAccessFlags.Module)
+				.ToList ();
+			if (moduleFiles.Count == 0) {
+				return;
+			}
+			foreach (var moduleFile in moduleFiles) {
+				classFiles.Remove (moduleFile);
+				foreach (var moduleAttr in moduleFile.Attributes.OfType<ModuleAttribute> ()) {
+					foreach (var export in moduleAttr.Exports) {
+						publicPackages.Add (export.Exports);
+					}
+				}
+			}
+
+			foreach (var c in classFiles) {
+				if (!c.AccessFlags.HasFlag (ClassAccessFlags.Public)) {
+					continue;
+				}
+				var jniName     = c.ThisClass.Name.Value;
+				var packageEnd  = jniName.LastIndexOf ('/');
+				if (packageEnd < 0) {
+					continue;
+				}
+				var package     = jniName.Substring (0, packageEnd);
+				if (!publicPackages.Contains (package)) {
+					c.AccessFlags = KotlinFixups.SetVisibility (c.AccessFlags, ClassAccessFlags.Internal);
+				}
+			}
 		}
 
 		public void SaveXmlDescription (string fileName)

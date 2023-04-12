@@ -110,6 +110,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 				return "protected";
 			if ((accessFlags & ClassAccessFlags.Private) != 0)
 				return "private";
+			if (accessFlags.HasFlag (ClassAccessFlags.Internal))
+				return "kotlin-internal";
 			return "";
 		}
 
