@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;$(DotNetTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>$(DotNetTargetFramework)</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -34,8 +34,8 @@
 
   <Target Name="BuildExportTestJar" BeforeTargets="Build" Inputs="@(JavaExportTestJar)" Outputs="$(OutputPath)export-test.jar">
     <MakeDir Directories="$(IntermediateOutputPath)et-classes" />
-    <Exec Command="&quot;$(JavaCPath)&quot; -classpath &quot;$(OutputPath)../$(Configuration)/java-interop.jar&quot; $(_JavacSourceOptions) -d &quot;$(IntermediateOutputPath)et-classes&quot; @(JavaExportTestJar->'%(Identity)', ' ')" />
-    <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(OutputPath)export-test.jar&quot; -C &quot;$(IntermediateOutputPath)et-classes&quot; ." />
+    <Exec Command="&quot;$(JavaCPath)&quot; -classpath &quot;$(OutputPath)../$(Configuration)-$(DotNetTargetFramework)/java-interop.jar&quot; $(_JavacSourceOptions) -d &quot;$(IntermediateOutputPath)et-classes&quot; @(JavaExportTestJar->'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(OutputPath)../$(Configuration)-$(DotNetTargetFramework)/export-test.jar&quot; -C &quot;$(IntermediateOutputPath)et-classes&quot; ." />
   </Target>
 
 </Project>

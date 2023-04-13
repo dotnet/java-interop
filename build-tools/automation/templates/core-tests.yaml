@@ -137,16 +137,6 @@ steps:
   retryCountOnTaskFailure: 1
 
 - task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop-Performance-net472'
-  condition: eq('${{ parameters.runNativeTests }}', 'true')
-  inputs:
-    command: test
-    testRunTitle: Java.Interop-Performance (net472 - ${{ parameters.platformName }})
-    arguments: bin/Test$(Build.Configuration)/Java.Interop-PerformanceTests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: DotNetCoreCLI@2
   displayName: 'Tests: Java.Interop-Performance-$(DotNetTargetFramework)'
   condition: eq('${{ parameters.runNativeTests }}', 'true')
   inputs:

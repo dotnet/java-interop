@@ -124,7 +124,6 @@
     <ProjectReference Include="..\..\build-tools\jnienv-gen\jnienv-gen.csproj"
         ReferenceOutputAssembly="false"
         SkipGetTargetFrameworkProperties="True"
-        AdditionalProperties="TargetFramework=net472"
     />
   </ItemGroup>
   <ItemGroup>

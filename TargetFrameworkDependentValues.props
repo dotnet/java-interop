@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' != '' And (!$(TargetFramework.StartsWith('nets')) And !$(TargetFramework.StartsWith('net4')) And !$(TargetFramework.StartsWith('monoandroid'))) ">
+  <PropertyGroup Condition=" '$(TargetFramework)' != '' And !$(TargetFramework.StartsWith('nets')) ">
     <JIBuildingForNetCoreApp>True</JIBuildingForNetCoreApp>
   </PropertyGroup>
 
