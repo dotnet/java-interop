@@ -40,7 +40,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 					GetSourceFile (),
 					new XAttribute ("static",                   classFile.IsStatic),
 					new XAttribute ("visibility",               GetVisibility (classFile.Visibility)),
-					GetAnnotatedVisibility (classFile.Attributes),
+					GetAnnotatedVisibility (classFile.Visibility, classFile.Attributes),
 					GetTypeParmeters (signature == null ? null : signature.TypeParameters),
 					GetImplementedInterfaces (),
 					GetConstructors (),
@@ -111,7 +111,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if ((accessFlags & ClassAccessFlags.Private) != 0)
 				return "private";
 			if (accessFlags.HasFlag (ClassAccessFlags.Internal))
-				return "kotlin-internal";
+				return "public";    // TODO: `kotlin-internal` at some point?  See also GetAnnotatedVisibility()
 			return "";
 		}
 
@@ -429,6 +429,19 @@ namespace Xamarin.Android.Tools.Bytecode {
 							? SignatureToGenericJavaTypeName (t.TypeSignature)
 							: BinaryNameToJavaClassName (t.BinaryName)));
 			}
+		}
+
+		static XAttribute? GetAnnotatedVisibility (ClassAccessFlags flags, AttributeCollection attributes)
+		{
+			var attr = GetAnnotatedVisibility (attributes);
+			if (flags.HasFlag (ClassAccessFlags.Internal)) {
+				if (attr == null) {
+					attr = new XAttribute ("annotated-visibility", "module-info");
+				} else {
+					attr.Value += " module-info";
+				}
+			}
+			return attr;
 		}
 
 		static XAttribute? GetAnnotatedVisibility (AttributeCollection attributes)

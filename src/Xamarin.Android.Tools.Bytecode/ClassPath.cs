@@ -108,6 +108,14 @@ namespace Xamarin.Android.Tools.Bytecode {
 			classFiles.Add (classFile);
 		}
 
+		public void Add (ClassPath classPath, bool removeModules = true)
+		{
+			classPath.FixupModuleVisibility (removeModules);
+			foreach (var c in classPath.classFiles) {
+				Add (c);
+			}
+		}
+
 		public ReadOnlyDictionary<string, List<ClassFile>> GetPackages ()
 		{
 			return new ReadOnlyDictionary<string, List<ClassFile>> (classFiles
@@ -357,7 +365,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				FixUpParametersFromClasses ();
 
 			KotlinFixups.Fixup (classFiles);
-			FixupModuleVisibility ();
+			FixupModuleVisibility (removeModules: true);
 
 			var packagesDictionary = GetPackages ();
 			var api = new XElement ("api",
@@ -373,7 +381,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			return api;
 		}
 
-		void FixupModuleVisibility ()
+		public void FixupModuleVisibility (bool removeModules)
 		{
 			var publicPackages  = new HashSet<string> ();
 
@@ -383,7 +391,9 @@ namespace Xamarin.Android.Tools.Bytecode {
 				return;
 			}
 			foreach (var moduleFile in moduleFiles) {
-				classFiles.Remove (moduleFile);
+				if (removeModules) {
+					classFiles.Remove (moduleFile);
+				}
 				foreach (var moduleAttr in moduleFile.Attributes.OfType<ModuleAttribute> ()) {
 					foreach (var export in moduleAttr.Exports) {
 						publicPackages.Add (export.Exports);
@@ -427,5 +437,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				contents.Save (writer);
 			textWriter.WriteLine ();
 		}
+
+		public IEnumerable<ClassFile> GetClassFiles () => classFiles;
 	}
 }
