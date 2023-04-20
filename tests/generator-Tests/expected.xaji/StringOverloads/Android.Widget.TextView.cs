@@ -106,12 +106,18 @@ namespace Android.Widget {
 			}
 		}
 
-		public virtual string Text {
+		public virtual unsafe string Text {
 			get { return TextFormatted == null ? null : TextFormatted.ToString (); }
 			set {
-				var jls = value == null ? null : new global::Java.Lang.String (value);
-				TextFormatted = jls;
-				if (jls != null) jls.Dispose ();
+				const string __id = "setText.(Ljava/lang/CharSequence;)V";
+				global::Java.Interop.JniObjectReference native_text = global::Java.Interop.JniEnvironment.Strings.NewString (value);
+				try {
+					JniArgumentValue* __args = stackalloc JniArgumentValue [1];
+					__args [0] = new JniArgumentValue (native_text);
+					_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
+				} finally {
+					global::Java.Interop.JniObjectReference.Dispose (ref native_text);
+				}
 			}
 		}
 
