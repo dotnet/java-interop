@@ -1152,6 +1152,49 @@ namespace generatortests
 			};
 			return options;
 		}
+
+		[Test]
+		public void StringPropertyOverride ()
+		{
+			var xml = @$"<api>
+			  <package name='java.lang' jni-name='java/lang'>
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
+			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object'
+			      final='true' name='String' static='false' visibility='public'>
+			    </class>
+			  </package>
+			  <package name='android.widget' jni-name='android/widget'>
+			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' final='false' name='TextView' static='false' visibility='public'>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='getText' bridge='false' native='false' return='java.lang.CharSequence' static='false' synchronized='false' synthetic='false' visibility='public'>
+			       </method>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='setText' bridge='false' native='false' return='void' static='false' synchronized='false' synthetic='false' visibility='public'>
+			         <parameter name='text' type='java.lang.CharSequence'>
+			         </parameter>
+			       </method>
+			     </class>
+			  </package>
+			</api>";
+
+			var gens = ParseApiDefinition (xml);
+			var klass = gens.Single (g => g.Name == "TextView");
+
+			generator.Context.ContextTypes.Push (klass);
+			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			Assert.True (writer.ToString ().Contains (
+		@"set {
+			const string __id = ""setText.(Ljava/lang/CharSequence;)V"";
+			global::Java.Interop.JniObjectReference text = global::Java.Interop.JniEnvironment.Strings.NewString (value);
+			try {
+				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
+				__args [0] = new JniArgumentValue (text);
+				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
+			} finally {
+				global::Java.Interop.JniObjectReference.Dispose (ref text);
+			}
+		}"), $"was: `{writer}`");
+		}
 	}
 
 	[TestFixture]
@@ -1235,6 +1278,49 @@ namespace generatortests
 			generator.Context.ContextTypes.Pop ();
 
 			StringAssert.Contains ("[global::System.Runtime.Versioning.SupportedOSPlatformAttribute (\"android30.0\")]", builder.ToString (), "Should contain SupportedOSPlatform!");
+		}
+
+		[Test]
+		public void StringPropertyOverride ()
+		{
+			var xml = @$"<api>
+			  <package name='java.lang' jni-name='java/lang'>
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
+			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object'
+			      final='true' name='String' static='false' visibility='public'>
+			    </class>
+			  </package>
+			  <package name='android.widget' jni-name='android/widget'>
+			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' final='false' name='TextView' static='false' visibility='public'>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='getText' bridge='false' native='false' return='java.lang.CharSequence' static='false' synchronized='false' synthetic='false' visibility='public'>
+			       </method>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='setText' bridge='false' native='false' return='void' static='false' synchronized='false' synthetic='false' visibility='public'>
+			         <parameter name='text' type='java.lang.CharSequence'>
+			         </parameter>
+			       </method>
+			     </class>
+			  </package>
+			</api>";
+
+			var gens = ParseApiDefinition (xml);
+			var klass = gens.Single (g => g.Name == "TextView");
+
+			generator.Context.ContextTypes.Push (klass);
+			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			Assert.True (writer.ToString ().Contains (
+		@"set {
+			const string __id = ""setText.(Ljava/lang/CharSequence;)V"";
+			global::Java.Interop.JniObjectReference native_text = global::Java.Interop.JniEnvironment.Strings.NewString (value);
+			try {
+				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
+				__args [0] = new JniArgumentValue (native_text);
+				_members.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
+			} finally {
+				global::Java.Interop.JniObjectReference.Dispose (ref native_text);
+			}
+		}"), $"was: `{writer}`");
 		}
 	}
 
