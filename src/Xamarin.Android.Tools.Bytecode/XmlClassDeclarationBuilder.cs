@@ -433,8 +433,19 @@ namespace Xamarin.Android.Tools.Bytecode {
 		{
 			var annotations = attributes?.OfType<RuntimeInvisibleAnnotationsAttribute> ().FirstOrDefault ()?.Annotations;
 
-			if (annotations?.FirstOrDefault (a => a.Type == "Landroidx/annotation/RestrictTo;") is Annotation annotation)
-				return new XAttribute ("annotated-visibility", ((annotation.Values.FirstOrDefault ().Value as AnnotationElementArray)?.Values?.FirstOrDefault () as AnnotationElementEnum)?.ConstantName ?? string.Empty);
+			if (annotations?.FirstOrDefault (a => a.Type == "Landroidx/annotation/RestrictTo;") is Annotation annotation) {
+				var annotation_element_values = (annotation.Values.FirstOrDefault ().Value as AnnotationElementArray)?.Values?.OfType<AnnotationElementEnum> ();
+
+				if (annotation_element_values is null || !annotation_element_values.Any ())
+					return null;
+
+				var value_string = string.Join (" ", annotation_element_values.Select (v => v.ConstantName).Where (p => p != null));
+
+				if (string.IsNullOrWhiteSpace (value_string))
+					return null;
+
+				return new XAttribute ("annotated-visibility", value_string);
+			}
 
 			return null;
 		}
