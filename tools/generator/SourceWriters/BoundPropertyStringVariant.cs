@@ -13,7 +13,15 @@ namespace generator.SourceWriters
 	// an overload with type 'string' as a convenience for the user.
 	public class BoundPropertyStringVariant : PropertyWriter
 	{
-		public BoundPropertyStringVariant (Property property, CodeGenerationOptions opt)
+		public BoundPropertyStringVariant (Property property, CodeGenerationOptions opt, BoundAbstractProperty original)
+			: this (property, opt, original.IsVirtual)
+		{ }
+
+		public BoundPropertyStringVariant (Property property, CodeGenerationOptions opt, BoundProperty original)
+			: this(property, opt, original.IsVirtual)
+		{ }
+
+		private BoundPropertyStringVariant (Property property, CodeGenerationOptions opt, bool isOriginalVirtual)
 		{
 			var is_array = property.Getter.RetVal.IsArray;
 
@@ -24,8 +32,6 @@ namespace generator.SourceWriters
 			};
 
 			SetVisibility ((property.Setter ?? property.Getter).Visibility);
-
-			IsVirtual = property.Getter.IsVirtual && (property.Setter == null || property.Setter.IsVirtual);
 
 			SourceWriterExtensions.AddSupportedOSPlatform (Attributes, property.Getter, opt);
 
@@ -48,20 +54,27 @@ namespace generator.SourceWriters
 				SetBody.Add ($"{property.AdjustedName} = jlsa;");
 				SetBody.Add ($"foreach (var jls in jlsa) if (jls != null) jls.Dispose ();");
 			} else {
-				IsUnsafe = true;
-				var method = property.Setter;
-				var parameter = method.Parameters [0];
+				if (isOriginalVirtual) {
+					SetBody.Add ($"var jls = value == null ? null : new global::Java.Lang.String (value, JniHandleOwnership.TransferLocalRef | JniHandleOwnership.DoNotRegister);");
+					SetBody.Add ($"{property.AdjustedName} = jls;");
+					SetBody.Add ($"if (jls != null) jls.Dispose ();");
+				} else {
+					// Emit a "fast" path if the property is non-virtual
+					IsUnsafe = true;
+					var method = property.Setter;
+					var parameter = method.Parameters [0];
 
-				SetBody.Add ($"const string __id = \"{method.JavaName}.{method.JniSignature}\";");
-				SetBody.Add ($"global::Java.Interop.JniObjectReference {parameter.ToNative (opt)} = global::Java.Interop.JniEnvironment.Strings.NewString (value);");
+					SetBody.Add ($"const string __id = \"{method.JavaName}.{method.JniSignature}\";");
+					SetBody.Add ($"global::Java.Interop.JniObjectReference {parameter.ToNative (opt)} = global::Java.Interop.JniEnvironment.Strings.NewString (value);");
 
-				SetBody.Add ("try {");
+					SetBody.Add ("try {");
 
-				SourceWriterExtensions.AddMethodBodyTryBlock (SetBody, method, opt);
+					SourceWriterExtensions.AddMethodBodyTryBlock (SetBody, method, opt);
 
-				SetBody.Add ("} finally {");
-				SetBody.Add ($"\tglobal::Java.Interop.JniObjectReference.Dispose (ref {parameter.ToNative (opt)});");
-				SetBody.Add ("}");
+					SetBody.Add ("} finally {");
+					SetBody.Add ($"\tglobal::Java.Interop.JniObjectReference.Dispose (ref {parameter.ToNative (opt)});");
+					SetBody.Add ("}");
+				}
 			}
 		}
 	}
