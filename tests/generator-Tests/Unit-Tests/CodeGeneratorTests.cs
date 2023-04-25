@@ -1199,7 +1199,7 @@ namespace generatortests
 			} else {
 				Assert.True (writer.ToString ().Contains (
 		@"set {
-			var jls = value == null ? null : new global::Java.Lang.String (JNIEnv.NewString (value), JniHandleOwnership.TransferLocalRef | JniHandleOwnership.DoNotRegister);
+			var jls = value == null ? null : new global::Java.Lang.String (value);
 			TextFormatted = jls;
 			if (jls != null) jls.Dispose ();
 		}"), $"was: `{writer}`");
@@ -1335,7 +1335,7 @@ namespace generatortests
 			} else {
 				Assert.True (writer.ToString ().Contains (
 		@"set {
-			var jls = value == null ? null : new global::Java.Lang.String (JNIEnv.NewString (value), JniHandleOwnership.TransferLocalRef | JniHandleOwnership.DoNotRegister);
+			var jls = value == null ? null : new global::Java.Lang.String (value);
 			TextFormatted = jls;
 			if (jls != null) jls.Dispose ();
 		}"), $"was: `{writer}`");

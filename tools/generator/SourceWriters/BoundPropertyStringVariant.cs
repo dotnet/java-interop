@@ -55,7 +55,7 @@ namespace generator.SourceWriters
 				SetBody.Add ($"foreach (var jls in jlsa) if (jls != null) jls.Dispose ();");
 			} else {
 				if (isOriginalVirtual) {
-					SetBody.Add ($"var jls = value == null ? null : new global::Java.Lang.String (JNIEnv.NewString (value), JniHandleOwnership.TransferLocalRef | JniHandleOwnership.DoNotRegister);");
+					SetBody.Add ($"var jls = value == null ? null : new global::Java.Lang.String (value);");
 					SetBody.Add ($"{property.AdjustedName} = jls;");
 					SetBody.Add ($"if (jls != null) jls.Dispose ();");
 				} else {
