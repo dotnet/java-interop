@@ -179,6 +179,10 @@ namespace Java.Interop.Tools.Cecil {
 
 		AssemblyDefinition LoadFromMemoryMappedFile(string file, ReaderParameters options)
 		{
+			// We can't use MemoryMappedFile when ReadWrite is true
+			if (options.ReadWrite)
+				return AssemblyDefinition.ReadAssembly (file, options);
+
 			MemoryMappedViewStream? viewStream = null;
 			try {
 				// Create stream because CreateFromFile(string, ...) uses FileShare.None which is too strict
