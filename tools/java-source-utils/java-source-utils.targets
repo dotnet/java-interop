@@ -49,7 +49,7 @@
       Inputs="@(CompileTestJavaResources)"
       Outputs="@(CompileTestJavaResources->'%(RelativeDir)%(Filename).class')">
     <Exec
-        Command="&quot;$(JavaCPath)&quot; @(CompileTestJavaResources->'%(Identity)', ' ')"
+        Command="&quot;$(JavaC8Path)&quot; @(CompileTestJavaResources->'%(Identity)', ' ')"
         WorkingDirectory="$(MSBuildThisFileDirectory)"
     />
   </Target>

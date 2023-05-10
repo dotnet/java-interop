@@ -42,8 +42,8 @@
     <ItemGroup>
       <_JcwSourceReal Include="$(IntermediateOutputPath)java\**\*.java;java\**\*.java" />
     </ItemGroup>
-    <Exec Command="&quot;$(JavaCPath)&quot; $(_JavacSourceOptions) -d &quot;$(IntermediateOutputPath)classes&quot; -classpath &quot;$(OutputPath)/java-interop.jar&quot; @(_JcwSourceReal->'%(Identity)', ' ')" />
-    <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(OutputPath)java.base-tests.jar&quot; -C &quot;$(IntermediateOutputPath)classes&quot; ." />
+    <Exec Command="&quot;$(JavaC11Path)&quot; $(_Javac8SourceOptions) -d &quot;$(IntermediateOutputPath)classes&quot; -classpath &quot;$(OutputPath)/java-interop.jar&quot; @(_JcwSourceReal->'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(Jar11Path)&quot; cf &quot;$(OutputPath)java.base-tests.jar&quot; -C &quot;$(IntermediateOutputPath)classes&quot; ." />
   </Target>
 
 </Project>

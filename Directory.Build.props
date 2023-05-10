@@ -33,8 +33,8 @@
       Condition=" Exists('$(MSBuildThisFileDirectory)bin\Build$(Configuration)\Version.props') "
   />
   <Import
-      Project="$(_OutputPath)JdkInfo.props"
-      Condition="Exists('$(_OutputPath)JdkInfo.props')"
+      Project="$(_OutputPath)JdkInfo-8.props"
+      Condition="Exists('$(_OutputPath)JdkInfo-8.props')"
   />
   <Import
       Project="$(_OutputPath)JdkInfo-11.props"
@@ -69,7 +69,7 @@
     <JavacSourceVersion Condition=" '$(JavacSourceVersion)' == '' ">1.8</JavacSourceVersion>
     <JavacTargetVersion Condition=" '$(JavacTargetVersion)' == '' ">1.8</JavacTargetVersion>
     <_BootClassPath Condition=" '$(JreRtJarPath)' != '' ">-bootclasspath "$(JreRtJarPath)"</_BootClassPath>
-    <_JavacSourceOptions>-source $(JavacSourceVersion) -target $(JavacTargetVersion) $(_BootClassPath)</_JavacSourceOptions>
+    <_Javac8SourceOptions>-source $(JavacSourceVersion) -target $(JavacTargetVersion) $(_BootClassPath)</_Javac8SourceOptions>
   </PropertyGroup>
   <PropertyGroup>
     <XamarinAndroidToolsFullPath>$([System.IO.Path]::GetFullPath ('$(XamarinAndroidToolsDirectory)'))</XamarinAndroidToolsFullPath>

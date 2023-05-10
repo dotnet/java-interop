@@ -19,8 +19,8 @@
         Inputs="@(TestJar);@(TestJarNoParameters);@(TestJarJdk11)"
         Outputs="@(_BuildClassOutputs)">
     <MakeDir Directories="$(IntermediateOutputPath)classes" />
-    <Exec Command="&quot;$(JavaCPath)&quot; -parameters $(_JavacSourceOptions) -g -d &quot;$(IntermediateOutputPath)classes&quot; java/android/annotation/NonNull.java @(TestJar->'%(Identity)', ' ')" />
-    <Exec Command="&quot;$(JavaCPath)&quot; $(_JavacSourceOptions) -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJarNoParameters->'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(JavaC8Path)&quot; -parameters $(_Javac8SourceOptions) -g -d &quot;$(IntermediateOutputPath)classes&quot; java/android/annotation/NonNull.java @(TestJar->'%(Identity)', ' ')" />
+    <Exec Command="&quot;$(JavaC8Path)&quot; $(_Javac8SourceOptions) -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJarNoParameters->'%(Identity)', ' ')" />
     <Exec Command="&quot;$(JavaC11Path)&quot; -source 11 -target 11 -g -d &quot;$(IntermediateOutputPath)classes&quot; @(TestJarJdk11->'%(Identity)', ' ')" />
   </Target>
 

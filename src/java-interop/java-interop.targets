@@ -53,7 +53,7 @@
       <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
     </PropertyGroup>
     <PropertyGroup>
-      <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
+      <_JdkDirs>"-DJDK_INCLUDE_LIST=@(Jdk11IncludePath, ';')"</_JdkDirs>
       <_Jni_c>"-DJNI_C_PATH=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)jni.c"</_Jni_c>
       <_ExtraArgs>$([MSBuild]::Escape('$(_JdkDirs) $(_Jni_c) $(_EnableMono) $(_MonoDirs) $(_MonoLib)'))</_ExtraArgs>
     </PropertyGroup>

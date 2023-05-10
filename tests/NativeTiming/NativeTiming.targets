@@ -47,7 +47,7 @@
       Outputs="$(OutputPath)%(_NativeTimingLib.Dir)$(_NativeTimingLibName)">
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <PropertyGroup>
-      <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
+      <_JdkDirs>"-DJDK_INCLUDE_LIST=@(Jdk11IncludePath, ';')"</_JdkDirs>
     </PropertyGroup>
     <ItemGroup>
       <_Cmake

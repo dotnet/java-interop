@@ -19,20 +19,22 @@
     </PropertyGroup>
     <JdkInfo
         JdksRoot="$(Jdks8Root)"
+        PropertyNameModifier="8"
         MakeFragmentFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\JdkInfo.mk"
         MaximumJdkVersion="$(_MaxJdk)"
         DotnetToolPath="$(DotnetToolPath)"
-        PropertyFile="$(_TopDir)\bin\Build$(Configuration)\JdkInfo.props">
+        PropertyFile="$(_TopDir)\bin\Build$(Configuration)\JdkInfo-8.props">
       <Output TaskParameter="JavaHomePath" PropertyName="_JavaSdkDirectory" />
     </JdkInfo>
     <PropertyGroup>
       <Jdks11Root Condition=" '$(Jdks11Root)' == '' And '$(JAVA_HOME_11_X64)' != '' And Exists($(JAVA_HOME_11_X64)) ">$(JAVA_HOME_11_X64)</Jdks11Root>
+      <Jdks11MaxVersion Condition=" '$(Jdks11MaxVersion)' == '' ">11.99.0</Jdks11MaxVersion>
     </PropertyGroup>
     <JdkInfo
         JdksRoot="$(Jdks11Root)"
         PropertyNameModifier="11"
         MinimumJdkVersion="11.0"
-        MaximumJdkVersion="11.99.0"
+        MaximumJdkVersion="$(Jdks11MaxVersion)"
         PropertyFile="$(_TopDir)\bin\Build$(Configuration)\JdkInfo-11.props">
       <Output TaskParameter="JavaHomePath" PropertyName="Java11SdkDirectory"/>
     </JdkInfo>

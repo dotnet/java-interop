@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <GeneratorPath>$(UtilityOutputFullPath)generator.dll</GeneratorPath>
+    <DefineConstants>$(DefineConstants);JAVA_$(Java11MajorVersion)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -28,8 +28,8 @@
       Inputs="@(CompileJavaInteropJar)"
       Outputs="$(OutputPath)java-interop.jar">
     <MakeDir Directories="$(OutputPath);$(IntermediateOutputPath)ji-classes" />
-    <Exec Command="&quot;$(JavaCPath)&quot; $(_JavacSourceOptions) -d &quot;$(IntermediateOutputPath)ji-classes&quot; @(CompileJavaInteropJar -&gt; '%(Identity)', ' ')" />
-    <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(OutputPath)java-interop.jar&quot; -C &quot;$(IntermediateOutputPath)ji-classes&quot; ." />
+    <Exec Command="&quot;$(JavaC8Path)&quot; $(_Javac8SourceOptions) -d &quot;$(IntermediateOutputPath)ji-classes&quot; @(CompileJavaInteropJar -&gt; '%(Identity)', ' ')" />
+    <Exec Command="&quot;$(Jar8Path)&quot; cf &quot;$(OutputPath)java-interop.jar&quot; -C &quot;$(IntermediateOutputPath)ji-classes&quot; ." />
   </Target>
   <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll" TaskName="Java.Interop.BootstrapTasks.ReplaceFileContents" />
   <Target Name="BuildVersionInfo_g_cs"
