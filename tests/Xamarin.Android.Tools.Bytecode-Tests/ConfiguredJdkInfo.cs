@@ -33,7 +33,7 @@ namespace Xamarin.Android.Tools.BytecodeTests {
 			if (buildName.IndexOf ("-", StringComparison.Ordinal) >= 0) {
 				buildName   = buildName.Substring (0, buildName.IndexOf ('-'));
 			}
-			var jdkPropFile = Path.Combine (binDir, buildName, "JdkInfo.props");
+			var jdkPropFile = Path.Combine (binDir, buildName, "JdkInfo-8.props");
 			if (!File.Exists (jdkPropFile)) {
 				return null;
 			}
@@ -43,7 +43,7 @@ namespace Xamarin.Android.Tools.BytecodeTests {
 			var jdkProps    = XDocument.Load (jdkPropFile);
 			var jdkPath     = jdkProps.Elements ()
 				.Elements (msbuild + "PropertyGroup")
-				.Elements (msbuild + "JavaSdkDirectory")
+				.Elements (msbuild + "Java8SdkDirectory")
 				.FirstOrDefault ();
 			if (jdkPath == null) {
 				return null;
