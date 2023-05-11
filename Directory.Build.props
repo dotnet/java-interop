@@ -3,21 +3,14 @@
   <!-- Note: MUST be imported *after* $(Configuration) is set! -->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <!-- Mono's MSBuild does not support some implicit .NET6 source generator stuff
-    <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' And '$(MSBuildRuntimeType)' != 'Mono' ">true</TreatWarningsAsErrors> -->
     <_OutputPath>$(MSBuildThisFileDirectory)bin\Build$(Configuration)\</_OutputPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
     <DotNetTargetFrameworkVersion>7.0</DotNetTargetFrameworkVersion>
     <DotNetTargetFramework>net$(DotNetTargetFrameworkVersion)</DotNetTargetFramework>
-    <!-- 
-      Workaround for https://github.com/NuGet/Home/issues/6461 (VSWin Only)
-      Even though we don't build NuGet packages, it still attempts to build the NuGet package name, which includes 
-      the assembly version if PackageVersion isn't specified. Because our assemblies have different versions
-      per-TFM, that causes a problem because the package can't have multiple versions in it.  
-      Set a dummy PackageVersion because we don't actually need it.
-    -->
-    <PackageVersion>1.0.0.0</PackageVersion>
+    <!-- These assemblies are used by Xamarin.Android.Build.Tasks which must be netstandard2.0
+         in order to be loaded into Visual Studio -->
+    <MSBuildRequiredTargetFramework>netstandard2.0</MSBuildRequiredTargetFramework>
   </PropertyGroup>
 
   <Import
@@ -54,7 +47,7 @@
     <!-- Workaround: https://github.com/dotnet/runtime/issues/55992 -->
     <UseAppHost>False</UseAppHost>
     <AppendTargetFrameworkToOutputPath Condition=" '$(AppendTargetFrameworkToOutputPath)' == '' ">False</AppendTargetFrameworkToOutputPath>
-    <!--<BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)' == '' ">obj\</BaseIntermediateOutputPath>-->
+    <BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)' == '' ">obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>

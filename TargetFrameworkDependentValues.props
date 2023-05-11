@@ -19,30 +19,18 @@
     <JICoreLibVersion>$(JINetCoreLibVersion)</JICoreLibVersion>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition=" '$(JIBuildingForNetCoreApp)' != 'True' ">
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)</IntermediateOutputPath>
-    <BuildToolOutputFullPath>$(MSBuildThisFileDirectory)bin\Build$(Configuration)\</BuildToolOutputFullPath>
-    <ToolOutputFullPath>$(MSBuildThisFileDirectory)bin\$(Configuration)\</ToolOutputFullPath>
-    <TestOutputFullPath>$(MSBuildThisFileDirectory)bin\Test$(Configuration)\</TestOutputFullPath>
-    <UtilityOutputFullPath Condition=" '$(UtilityOutputFullPath)' == '' ">$(ToolOutputFullPath)</UtilityOutputFullPath>
-    <_XamarinAndroidCecilPath Condition=" '$(CecilSourceDirectory)' != '' And Exists('$(UtilityOutputFullPath)Xamarin.Android.Cecil.dll') ">$(UtilityOutputFullPath)Xamarin.Android.Cecil.dll</_XamarinAndroidCecilPath>
-    <JIUtilityVersion>$(JIOldToolVersion)</JIUtilityVersion>
-    <JICoreLibVersion>$(JIOldCoreLibVersion)</JICoreLibVersion>
-  </PropertyGroup>-->
-
   <PropertyGroup>
     <Runtime Condition="'$(OS)' != 'Windows_NT'">mono</Runtime>
     <_JNIEnvGenPath>$(BuildToolOutputFullPath)jnienv-gen.dll</_JNIEnvGenPath>
     <_RunJNIEnvGen>$(DotnetToolPath) "$(_JNIEnvGenPath)"</_RunJNIEnvGen>
   </PropertyGroup>
 
-  <!-- The net6.0 versions of these are stricter and require overloads not available in .NET Framework, so start with just .NET Framework -->
-  <PropertyGroup Condition=" '$(JIBuildingForNetCoreApp)' != 'True' ">
+  <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <WarningsAsErrors>$(WarningsAsErrors);CA1307;CA1309;CA1310</WarningsAsErrors>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(JIBuildingForNetCoreApp)' == 'True' ">
+  <PropertyGroup>
     <NoWarn>$(NoWarn);CA1307;CA1309;CA1310</NoWarn>
   </PropertyGroup>
 

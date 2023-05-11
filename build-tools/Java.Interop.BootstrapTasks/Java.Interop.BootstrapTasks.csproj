@@ -9,10 +9,6 @@
 
   <PropertyGroup>
     <OutputPath>$(BuildToolOutputFullPathNoTF)</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <OutputPath>$(BuildToolOutputFullPathNoTF)</OutputPath>
     <GitDefaultBranch>main</GitDefaultBranch>
     <GitThisAssembly>false</GitThisAssembly>
   </PropertyGroup>
