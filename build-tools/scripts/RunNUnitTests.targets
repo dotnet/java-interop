@@ -13,8 +13,8 @@
     <_Run Condition=" '$(RUN)' != '' ">--run=&quot;$(RUN)&quot;</_Run>
   </PropertyGroup>
   <Import
-      Condition=" Exists('..\..\bin\Build$(Configuration)\JdkInfo.props') "
-      Project="..\..\bin\Build$(Configuration)\JdkInfo.props"
+      Condition=" Exists('..\..\bin\Build$(Configuration)\JdkInfo-11.props') "
+      Project="..\..\bin\Build$(Configuration)\JdkInfo-11.props"
   />
   <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)..\..\bin\Build$(Configuration)\Java.Interop.BootstrapTasks.dll" TaskName="Java.Interop.BootstrapTasks.SetEnvironmentVariable" />
   <ItemGroup>
@@ -27,7 +27,7 @@
     <SetEnvironmentVariable Name="MONO_TRACE_LISTENER"   Value="Console.Out" />
     <SetEnvironmentVariable Name="JAVA_INTEROP_GREF_LOG" Value="bin\Test$(Configuration)\g-%(_TestAssembly.Filename).txt" />
     <SetEnvironmentVariable Name="JAVA_INTEROP_LREF_LOG" Value="bin\Test$(Configuration)\l-%(_TestAssembly.Filename).txt" />
-    <SetEnvironmentVariable Name="JI_JVM_PATH"           Value="$(JdkJvmPath)" />
+    <SetEnvironmentVariable Name="JI_JVM_PATH"           Value="$(JdkJvm11Path)" />
     <Exec
         Command="$(_NUnit) $(NUNIT_EXTRA) %(_TestAssembly.Identity) $(_Run) --result=&quot;TestResult-%(Filename).xml&quot; --output=&quot;bin\Test$(Configuration)\TestOutput-%(Filename).txt&quot;"
         WorkingDirectory="$(_TopDir)"
