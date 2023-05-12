@@ -7,7 +7,7 @@
       Outputs="$(OutputPath)\java-source-utils.jar">
     <Exec
         Command="&quot;$(GradleWPath)&quot; -d $(GradleArgs) -PjavaSourceVer=$(JavacSourceVersion) -PjavaTargetVer=$(JavacTargetVersion) jar"
-        EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory);APP_HOME=$(GradleHome)"
+        EnvironmentVariables="JAVA_HOME=$(Java8SdkDirectory);APP_HOME=$(GradleHome)"
         WorkingDirectory="$(MSBuildThisFileDirectory)"
         IgnoreStandardErrorWarningFormat="true"
     />
@@ -40,7 +40,7 @@
       DependsOnTargets="_BuildJava;_CopyJavaType_java">
     <Exec
         Command="&quot;$(GradleWPath)&quot; $(GradleArgs) test"
-        EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory);APP_HOME=$(GradleHome)"
+        EnvironmentVariables="JAVA_HOME=$(Java8SdkDirectory);APP_HOME=$(GradleHome)"
         WorkingDirectory="$(MSBuildThisFileDirectory)"
     />
   </Target>
@@ -58,7 +58,7 @@
       DependsOnTargets="_BuildJava">
     <Exec
         Command="&quot;$(GradleWPath)&quot; $(GradleArgs) test"
-        EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory);APP_HOME=$(GradleHome)"
+        EnvironmentVariables="JAVA_HOME=$(Java8SdkDirectory);APP_HOME=$(GradleHome)"
         WorkingDirectory="$(MSBuildThisFileDirectory)"
     />
   </Target>
@@ -67,7 +67,7 @@
       DependsOnTargets="_BuildJava">
     <Exec
         Command="&quot;$(JavaPath)&quot; -jar &quot;$(ToolOutputFullPath)$(TargetFileName)&quot; $(Args)"
-        EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory)"
+        EnvironmentVariables="JAVA_HOME=$(Java8SdkDirectory)"
     />
   </Target>
 
@@ -75,7 +75,7 @@
     <Delete Files="$(OutputPath)java-source-utils.jar" />
     <Exec
         Command="&quot;$(GradleWPath)&quot; clean $(GradleArgs)"
-        EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory);APP_HOME=$(GradleHome)"
+        EnvironmentVariables="JAVA_HOME=$(Java8SdkDirectory);APP_HOME=$(GradleHome)"
         WorkingDirectory="$(MSBuildThisFileDirectory)"
     />
   </Target>
@@ -88,7 +88,7 @@
     </ItemGroup>
     <Exec
         Command="&quot;$(JavaPath)&quot; -jar &quot;$(ToolOutputFullPath)$(TargetFileName)&quot; @(_JavaSource) --output-params src/test/resources/com/microsoft/android/%(Filename).params.txt --output-javadoc src/test/resources/com/microsoft/android/%(Filename).xml"
-        EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory)"
+        EnvironmentVariables="JAVA_HOME=$(Java8SdkDirectory)"
     />
   </Target>
 
