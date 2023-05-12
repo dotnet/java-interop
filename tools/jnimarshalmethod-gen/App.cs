@@ -320,7 +320,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			if (buildName.Contains ('-')) {
 				buildName = buildName.Substring (0, buildName.IndexOf ('-'));
 			}
-			var jdkPropFile = Path.Combine (binDir, buildName, "JdkInfo.props");
+			var jdkPropFile = Path.Combine (binDir, buildName, "JdkInfo-11.props");
 			if (!File.Exists (jdkPropFile)) {
 				return null;
 			}
@@ -332,7 +332,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 				.Elements (msbuild + "Choose")
 				.Elements (msbuild + "When")
 				.Elements (msbuild + "PropertyGroup")
-				.Elements (msbuild + "JdkJvmPath")
+				.Elements (msbuild + "JdkJvm11Path")
 				.FirstOrDefault ();
 			if (jdkJvmPath == null) {
 				return null;
