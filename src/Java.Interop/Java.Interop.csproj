@@ -5,7 +5,7 @@
   </PropertyGroup>
   <Import Condition="Exists ('$(XAConfigPath)')" Project="$(XAConfigPath)" />
   <PropertyGroup Condition=" '$(XABuild)' != 'true' ">
-    <TargetFrameworks>$(DotNetTargetFramework)</TargetFrameworks>
+    <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>$(NoWarn);1591</NoWarn>
