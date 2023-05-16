@@ -3,14 +3,12 @@
   <!-- Note: MUST be imported *after* $(Configuration) is set! -->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <TreatWarningsAsErrors Condition=" '$(Configuration)' == 'Release' ">true</TreatWarningsAsErrors>
     <_OutputPath>$(MSBuildThisFileDirectory)bin\Build$(Configuration)\</_OutputPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
     <DotNetTargetFrameworkVersion>7.0</DotNetTargetFrameworkVersion>
     <DotNetTargetFramework>net$(DotNetTargetFrameworkVersion)</DotNetTargetFramework>
-    <!-- These assemblies are used by Xamarin.Android.Build.Tasks which must be netstandard2.0
-         in order to be loaded into Visual Studio -->
-    <MSBuildRequiredTargetFramework>netstandard2.0</MSBuildRequiredTargetFramework>
   </PropertyGroup>
 
   <Import
@@ -69,19 +67,10 @@
   </PropertyGroup>
 
   <!--
-    When building on a bot w/ VS2019:
-
-      warning CS8032: An instance of analyzer System.Text.Json.SourceGeneration.JsonSourceGenerator cannot be created from
-
-    however, with `$(TreatWarningsAsErrors)`=True, this becomes an error,
-    meaning we can't build on VS2019.
-
-    Ignore CS8032 so that we can build on VS2019.
-    
     JniEnvironment.g.cs(34,8): error CS8981: The type name 'jobject' only contains lower-cased ascii characters. Such names may become reserved for the language.
     -->
   <PropertyGroup>
-    <NoWarn>$(NoWarn);CS8032;CS8981</NoWarn>
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
   </PropertyGroup>
 
 </Project>
