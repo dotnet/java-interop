@@ -25,6 +25,7 @@ namespace MonoDroid.Generation
 		public  XElement[]      Copyright           { get; set; }
 
 		public  XmldocStyle     XmldocStyle         { get; set; }
+
 		public  string          DocRootReplacement  { get; set; }
 
 		string  MemberDescription;
@@ -202,12 +203,50 @@ namespace MonoDroid.Generation
 			if (node == null)
 				return;
 			var contents = node.ToString ();
+			contents = FixUpHtml (contents);
 
 			var lines = new StringReader (contents);
 			string line;
 			while ((line = lines.ReadLine ()) != null) {
 				comments.Add ($"/// {line}");
 			}
+		}
+
+		// Remove, replace, or decode common HTML tags to improve what is displayed in the IDE and online.
+		static string FixUpHtml (string javadocContent)
+		{
+			var replacements = new Dictionary<string, string> {
+				{ "&lt;blockquote&gt;", "" },    { "&lt;/blockquote&gt;", "" },
+				{ "&lt;cite&gt;", "<i>" },       { "&lt;/cite&gt;", "</i>" },
+				{ "&lt;code&gt;", "<c>" },       { "&lt;/code&gt;", "</c>" },
+				{ "&lt;dd&gt;", "" },            { "&lt;/dd&gt;", "" },
+				{ "&lt;dl&gt;", "" },            { "&lt;/dl&gt;", "" },
+				{ "&lt;dt&gt;", "" },            { "&lt;/dt&gt;", "" },
+				{ "&lt;em&gt;", "<i>" },         { "&lt;/em&gt;", "</i>" },
+				{ "&lt;h1&gt;", "" },            { "&lt;/h1&gt;", "" },
+				{ "&lt;h2&gt;", "" },            { "&lt;/h2&gt;", "" },
+				{ "&lt;h3&gt;", "" },            { "&lt;/h3&gt;", "" },
+				{ "&lt;h4&gt;", "" },            { "&lt;/h4&gt;", "" },
+				{ "&lt;h5&gt;", "" },            { "&lt;/h5&gt;", "" },
+				{ "&lt;h6&gt;", "" },            { "&lt;/h6&gt;", "" },
+				{ "&lt;li&gt;", "" },            { "&lt;/li&gt;", "" },
+				{ "&lt;ol&gt;", "" },            { "&lt;/ol&gt;", "" },
+				{ "&lt;strong&gt;", "<b>" },     { "&lt;/strong&gt;", "</b>" },
+				{ "&lt;sub&gt;", "" },           { "&lt;/sub&gt;", "" },
+				{ "&lt;sup&gt;", "" },           { "&lt;/sup&gt;", "" },
+				{ "&lt;table", "<table" },       { "&lt;/table&gt;", "</table>" },
+				{ "&lt;tbody&gt;", "<tbody>" },  { "&lt;/tbody&gt;", "</tbody>" },
+				{ "&lt;td&gt;", "<td>" },        { "&lt;/td&gt;", "</td>" },
+				{ "&lt;th&gt;", "<th>" },        { "&lt;/th&gt;", "</th>" },
+				{ "&lt;thead&gt;", "<thead>" },  { "&lt;/thead&gt;", "</thead>" },
+				{ "&lt;tr&gt;", "<tr>" },        { "&lt;/tr&gt;", "</tr>" },
+				{ "&lt;ul&gt;", "" },            { "&lt;/ul&gt;", "" },
+			};
+
+			foreach (var r in replacements) {
+				javadocContent = javadocContent.Replace (r.Key, r.Value);
+			}
+			return javadocContent;
 		}
 
 		static void PrintMessages (ParseTree tree, TextWriter writer)

@@ -69,19 +69,12 @@ namespace Java.Interop.Tools.JavaSource.Tests
 
 			r = p.Parse ("<a href=\"AutofillService.html#FieldClassification\">field classification</a>");
 			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
-			Assert.AreEqual ("\"AutofillService.html#FieldClassification\"&gt;field classification",
+			Assert.AreEqual ("field classification", r.Root.AstNode.ToString ());
+
+			r = p.Parse ("<a href='https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators'>\nProgress & activity</a>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ("<see href=\"https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators\">\nProgress &amp; activity</see>",
 					r.Root.AstNode.ToString ());
 		}
-
-		[Test]
-		public void CodeElementDeclaration ()
-		{
-			var p = CreateParser (g => g.HtmlTerms.CodeElementDeclaration);
-
-			var r = p.Parse ("<code>input.position()</code>");
-			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
-			Assert.AreEqual ("<c>input.position()</c>", r.Root.AstNode.ToString ());
-		}
-
 	}
 }
