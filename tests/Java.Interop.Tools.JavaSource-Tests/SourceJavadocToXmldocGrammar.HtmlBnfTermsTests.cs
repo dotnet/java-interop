@@ -73,7 +73,7 @@ namespace Java.Interop.Tools.JavaSource.Tests
 
 			r = p.Parse ("<a href='https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators'>\nProgress & activity</a>");
 			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
-			Assert.AreEqual ("<see href=\"https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators\">\nProgress &amp; activity</see>",
+			Assert.AreEqual ($"<see href=\"https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators\">{Environment.NewLine}Progress &amp; activity</see>",
 					r.Root.AstNode.ToString ());
 		}
 	}
