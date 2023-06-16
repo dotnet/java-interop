@@ -69,7 +69,11 @@ namespace Java.Interop.Tools.JavaSource.Tests
 
 			r = p.Parse ("<a href=\"AutofillService.html#FieldClassification\">field classification</a>");
 			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
-			Assert.AreEqual ("\"AutofillService.html#FieldClassification\"&gt;field classification",
+			Assert.AreEqual ("field classification", r.Root.AstNode.ToString ());
+
+			r = p.Parse ("<a href='https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators'>\nProgress & activity</a>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ($"<see href=\"https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators\">{Environment.NewLine}Progress &amp; activity</see>",
 					r.Root.AstNode.ToString ());
 		}
 
