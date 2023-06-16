@@ -99,7 +99,7 @@ namespace Java.Interop.Tools.JavaSource {
 					parseNode.AstNode   = p;
 				};
 
-				InlineHyperLinkDeclaration.Rule = HtmlAElementStart + InlineDeclarations + CreateEndElement ("a", grammar, optional: true);
+				InlineHyperLinkDeclaration.Rule = InlineHyperLinkOpenTerm + InlineDeclarations + CreateEndElement ("a", grammar, optional: true);
 				InlineHyperLinkDeclaration.AstConfig.NodeCreator = (context, parseNode) => {
 					var nodesAsString = GetChildNodesAsString (parseNode);
 					var tokenValue = parseNode.ChildNodes [0].Token.Text;
@@ -233,7 +233,7 @@ namespace Java.Interop.Tools.JavaSource {
 			public  readonly    NonTerminal InlineHyperLinkDeclaration  = new NonTerminal (nameof (InlineHyperLinkDeclaration), ConcatChildNodes);
 			public  readonly    NonTerminal CodeElementDeclaration      = new NonTerminal (nameof (CodeElementDeclaration), ConcatChildNodes);
 
-			public  readonly    Terminal    HtmlAElementStart           = new RegexBasedTerminal ("<a attr=", @"(?i)<a\s*.*=") {
+			public  readonly    Terminal    InlineHyperLinkOpenTerm     = new RegexBasedTerminal ("<a attr=", @"(?i)<a\s*.*=") {
 				AstConfig = new AstNodeConfig {
 					NodeCreator = (context, parseNode) => parseNode.AstNode = "",
 				},
