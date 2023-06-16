@@ -113,8 +113,7 @@ namespace Java.Interop.Tools.JavaSource {
 					var attributeName = parseNode.ChildNodes [0].Term.Name;
 					var attributeValue = nodesAsString.Substring (0, stopIndex).Trim ().Trim ('\'', '"');
 					var elementValue = nodesAsString.Substring (stopIndex + 1);
-					if (!string.IsNullOrEmpty (attributeValue) &&
-						(attributeValue.StartsWith ("http", StringComparison.OrdinalIgnoreCase) || attributeValue.StartsWith ("www", StringComparison.OrdinalIgnoreCase))) {
+					if (!string.IsNullOrEmpty (attributeValue) && attributeValue.StartsWith ("http", StringComparison.OrdinalIgnoreCase)) {
 						var unparsed = $"<see href=\"{attributeValue}\">{elementValue}</see>";
 						XNode? seeElement = TryParseElement (unparsed);
 						if (seeElement == null) {
