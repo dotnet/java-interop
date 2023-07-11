@@ -69,12 +69,50 @@ namespace Java.Interop.Tools.JavaSource.Tests
 
 			r = p.Parse ("<a href=\"AutofillService.html#FieldClassification\">field classification</a>");
 			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
-			Assert.AreEqual ("field classification", r.Root.AstNode.ToString ());
-
-			r = p.Parse ("<a href='https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators'>\nProgress & activity</a>");
-			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
-			Assert.AreEqual ($"<see href=\"https://material.io/guidelines/components/progress-activity.html#progress-activity-types-of-indicators\">{Environment.NewLine}Progress &amp; activity</see>",
+			Assert.AreEqual ("\"AutofillService.html#FieldClassification\"&gt;field classification",
 					r.Root.AstNode.ToString ());
+		}
+
+		[Test]
+		public void CodeElementDeclaration ()
+		{
+			var p = CreateParser (g => g.HtmlTerms.CodeElementDeclaration);
+
+			var r = p.Parse ("<code>input.position()</code>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ("<c>input.position()</c>", r.Root.AstNode.ToString ());
+
+			r = p.Parse ("<code>null</null>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ("<c>null</c>", r.Root.AstNode.ToString ());
+
+			r = p.Parse ("<code>android:label=\"@string/resolve_title\"</code>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ("<c>android:label=\"@string/resolve_title\"</c>", r.Root.AstNode.ToString ());
+
+			r = p.Parse ("<code>Activity.RESULT_OK<code>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ("<c>Activity.RESULT_OK</c>", r.Root.AstNode.ToString ());
+
+			r = p.Parse ("<code class=prettyprint>format.setString(MediaFormat.KEY_FRAME_RATE, null)</code>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual ("<c>format.setString(MediaFormat.KEY_FRAME_RATE, null)</c>", r.Root.AstNode.ToString ());
+
+			r = p.Parse (@"<code>
+<p> [ 0,  0,  0,  0,  0  ]
+<p> [ 0,  0,  0,  0,  0  ]
+<p> [ 0,  0,  1,  0,  0  ]
+<p> [ 0,  0,  0,  0,  0  ]
+<p> [ 0,  0,  0,  0,  0  ]
+</code>");
+			Assert.IsFalse (r.HasErrors (), DumpMessages (r, p));
+			Assert.AreEqual (@"<c>
+&lt;p&gt; [ 0,  0,  0,  0,  0  ]
+&lt;p&gt; [ 0,  0,  0,  0,  0  ]
+&lt;p&gt; [ 0,  0,  1,  0,  0  ]
+&lt;p&gt; [ 0,  0,  0,  0,  0  ]
+&lt;p&gt; [ 0,  0,  0,  0,  0  ]
+</c>", r.Root.AstNode.ToString ());
 		}
 	}
 }

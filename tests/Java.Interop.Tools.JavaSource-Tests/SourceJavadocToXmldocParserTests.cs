@@ -144,16 +144,16 @@ more description here.</para>
 </member>",
 			},
 			new ParseResult {
-				Javadoc = "Something {@link #method}: description.\n\n@apiSince 1\n",
+				Javadoc = "Something {@link #method}: description, \"<code>declaration</code>\" or <code><pre><p>some content</code></pre></p>.\n\n@apiSince 1\n",
 				FullXml = @"<member>
-  <summary>Something <c>#method</c>: description.</summary>
+  <summary>Something <c>#method</c>: description, ""<c>declaration</c>"" or <c>&lt;pre&gt;&lt;p&gt;some content</c>&lt;/pre&gt;&lt;/p&gt;.</summary>
   <remarks>
-    <para>Something <c>#method</c>: description.</para>
+    <para>Something <c>#method</c>: description, ""<c>declaration</c>"" or <c>&lt;pre&gt;&lt;p&gt;some content</c>&lt;/pre&gt;&lt;/p&gt;.</para>
     <para>Added in API level 1.</para>
   </remarks>
 </member>",
 				IntelliSenseXml = @"<member>
-  <summary>Something <c>#method</c>: description.</summary>
+  <summary>Something <c>#method</c>: description, ""<c>declaration</c>"" or <c>&lt;pre&gt;&lt;p&gt;some content</c>&lt;/pre&gt;&lt;/p&gt;.</summary>
 </member>",
 			},
 			new ParseResult {
