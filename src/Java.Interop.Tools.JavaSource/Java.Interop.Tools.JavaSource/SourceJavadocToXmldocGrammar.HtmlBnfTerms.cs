@@ -132,7 +132,6 @@ namespace Java.Interop.Tools.JavaSource {
 				};
 
 				CodeElementDeclaration.Rule = CodeElementContentTerm;
-				CodeElementDeclaration.Rule = CreateStartElement ("code", grammar) + InlineDeclarations + CreateEndElement ("code", grammar);
 				CodeElementDeclaration.AstConfig.NodeCreator = (context, parseNode) => {
 					// Parse the entire <code> element captured in the token
 					var codeElementText = parseNode.ChildNodes [0].Token.Text;
