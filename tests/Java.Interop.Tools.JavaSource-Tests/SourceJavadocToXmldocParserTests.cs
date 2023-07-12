@@ -157,6 +157,26 @@ more description here.</para>
 </member>",
 			},
 			new ParseResult {
+				Javadoc = @"The result code will be <code>Activity.RESULT_OK<code> for success,
+  or one of these errors:
+  <code>RESULT_ERROR_GENERIC_FAILURE</code>",
+				FullXml = @"<member>
+  <summary>The result code will be <c>Activity.RESULT_OK</c> for success,
+  or one of these errors:
+  <c>RESULT_ERROR_GENERIC_FAILURE</c></summary>
+  <remarks>
+    <para>The result code will be <c>Activity.RESULT_OK</c> for success,
+  or one of these errors:
+  <c>RESULT_ERROR_GENERIC_FAILURE</c></para>
+  </remarks>
+</member>",
+				IntelliSenseXml = @"<member>
+  <summary>The result code will be <c>Activity.RESULT_OK</c> for success,
+  or one of these errors:
+  <c>RESULT_ERROR_GENERIC_FAILURE</c></summary>
+</member>",
+			},
+			new ParseResult {
 				// @jls is currently not supported; should be handled by @unknown-tag & ignored.
 				Javadoc = "Summary.\n\n@jls 1.2\n",
 				FullXml = @"<member>
