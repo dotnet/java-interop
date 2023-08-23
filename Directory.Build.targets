@@ -20,7 +20,6 @@
     <PackageReference Update="Microsoft.CSharp"                             Version="4.7.0" />
     <PackageReference Update="Microsoft.DotNet.GenAPI"                      Version="7.0.0-beta.22103.1" />
     <PackageReference Update="Microsoft.NET.Test.Sdk"                       Version="17.5.0-preview-20221003-04" />
-    <PackageReference Update="Microsoft.NETFramework.ReferenceAssemblies"   Version="1.0.3" />
     <PackageReference Update="Microsoft.SourceLink.GitHub"                  Version="1.1.1" />
     <PackageReference Update="Microsoft.Xml.SgmlReader"                     Version="1.8.16" />
     <PackageReference Update="Mono.CSharp"                                  Version="4.0.0.143" />
