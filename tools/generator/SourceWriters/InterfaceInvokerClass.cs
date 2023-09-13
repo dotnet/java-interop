@@ -34,24 +34,34 @@ namespace generator.SourceWriters
 
 			SourceWriterExtensions.AddObsolete (Attributes, iface.DeprecatedComment, opt, iface.IsDeprecated, deprecatedSince: iface.DeprecatedSince);
 
-			Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", false));
+			if (opt.EmitLegacyInterfaceInvokers) {
+				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", false));
+			}
 
 			if (!ji) {
 				Properties.Add (new InterfaceHandleGetter ());
 			}
 
-			Properties.Add (new JniPeerMembersGetter ());
+			Properties.Add (new JniPeerMembersGetter (opt.EmitLegacyInterfaceInvokers ? "_members" : $"_members_{iface.Name}"));
 
 			if (!ji) {
 				Properties.Add (new InterfaceThresholdClassGetter ());
 				Properties.Add (new ThresholdTypeGetter ());
 			}
 
-			Fields.Add (new FieldWriter { Name = "class_ref", Type = TypeReferenceWriter.IntPtr, IsShadow = opt.BuildingCoreAssembly });
+			if (opt.EmitLegacyInterfaceInvokers) {
+				Fields.Add (new FieldWriter { Name = "class_ref", Type = TypeReferenceWriter.IntPtr, IsShadow = opt.BuildingCoreAssembly });
 
-			Methods.Add (new GetObjectMethod (iface, opt));
-			Methods.Add (new ValidateMethod (iface));
-			Methods.Add (new DisposeMethod ());
+				Methods.Add (new GetObjectMethod (iface, opt));
+				Methods.Add (new ValidateMethod (iface));
+				Methods.Add (new DisposeMethod ());
+			} else {
+				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{iface.Name}"));
+				foreach (var i in iface.GetAllImplementedInterfaces ()) {
+					var mi = new PeerMembersField (opt, i.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{i.Name}");
+					Fields.Add (mi);
+				}
+			}
 
 			Constructors.Add (new InterfaceInvokerConstructor (opt, iface, context));
 
@@ -193,14 +203,25 @@ namespace generator.SourceWriters
 
 			IsPublic = true;
 
-			Parameters.Add (new MethodParameterWriter ("handle", TypeReferenceWriter.IntPtr));
-			Parameters.Add (new MethodParameterWriter ("transfer", new TypeReferenceWriter ("JniHandleOwnership")));
+			if (opt.CodeGenerationTarget == CodeGenerationTarget.JavaInterop1) {
+				Parameters.Add (new MethodParameterWriter ("reference", new TypeReferenceWriter ("ref JniObjectReference")));
+				Parameters.Add (new MethodParameterWriter ("options", new TypeReferenceWriter ("JniObjectReferenceOptions")));
+				BaseCall = "base (ref reference, options)";
 
-			BaseCall = "base (Validate (handle), transfer)";
+			} else {
+				Parameters.Add (new MethodParameterWriter ("handle", TypeReferenceWriter.IntPtr));
+				Parameters.Add (new MethodParameterWriter ("transfer", new TypeReferenceWriter ("JniHandleOwnership")));
+				BaseCall = opt.EmitLegacyInterfaceInvokers
+					? "base (Validate (handle), transfer)"
+					: "base (handle, transfer)";
+			}
 
-			Body.Add ($"IntPtr local_ref = JNIEnv.GetObjectClass ({context.ContextType.GetObjectHandleProperty (opt, "this")});");
-			Body.Add ("this.class_ref = JNIEnv.NewGlobalRef (local_ref);");
-			Body.Add ("JNIEnv.DeleteLocalRef (local_ref);");
+
+			if (opt.EmitLegacyInterfaceInvokers) {
+				Body.Add ($"IntPtr local_ref = JNIEnv.GetObjectClass ({context.ContextType.GetObjectHandleProperty (opt, "this")});");
+				Body.Add ("this.class_ref = JNIEnv.NewGlobalRef (local_ref);");
+				Body.Add ("JNIEnv.DeleteLocalRef (local_ref);");
+			}
 		}
 	}
 }

@@ -1,7 +1,10 @@
 <metadata>
-  <!-- For now, just bind java.lang.* -->
-  <remove-node path="//api/package[not(starts-with(@name, 'java.lang')
-      or starts-with(@name, 'java.io')
+  <!-- For now, just bind a few packages  -->
+  <remove-node path="//api/package[
+      not(
+        starts-with(@name, 'java.lang')
+        or starts-with(@name, 'java.io')
+        or starts-with(@name, 'java.util.function')
       )]" />
 
   <!-- Type / Namespace conflicts -->

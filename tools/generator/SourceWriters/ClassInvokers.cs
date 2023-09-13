@@ -50,7 +50,7 @@ namespace generator.SourceWriters
 		// public override global::Java.Interop.JniPeerMembers JniPeerMembers {
 		//   get { return _members; }
 		// }
-		public JniPeerMembersGetter ()
+		public JniPeerMembersGetter (string name = "_members")
 		{
 			Name = "JniPeerMembers";
 			PropertyType = new TypeReferenceWriter ("global::Java.Interop.JniPeerMembers");
@@ -62,7 +62,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new EditorBrowsableAttr ());
 
 			HasGet = true;
-			GetBody.Add ("return _members;");
+			GetBody.Add ($"return {name};");
 		}		
 	}
 

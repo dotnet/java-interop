@@ -1193,6 +1193,7 @@ namespace generatortests
 				SupportInterfaceConstants       = true,
 				SupportNestedInterfaceTypes     = true,
 				SupportNullableReferenceTypes   = true,
+				EmitLegacyInterfaceInvokers     = Target == CodeGenerationTarget.XAJavaInterop1,
 			};
 			return options;
 		}
