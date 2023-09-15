@@ -25,9 +25,9 @@ namespace Java.BaseTests {
 			int value   = 0;
 			using var c = new MyIntConsumer (v => value = v);
 			using var r = JavaInvoker.CreateRunnable (c);
-			r.Run ();
+			r?.Run ();
 			Assert.AreEqual (0, value);
-			r.Run ();
+			r?.Run ();
 			Assert.AreEqual (1, value);
 		}
 	}
