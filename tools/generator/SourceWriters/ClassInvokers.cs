@@ -31,7 +31,7 @@ namespace generator.SourceWriters
 		// static IntPtr java_class_ref {
 		//   get { return _members.JniPeerType.PeerReference.Handle; }
 		// }
-		public InterfaceHandleGetter ()
+		public InterfaceHandleGetter (string members)
 		{
 			Name = "java_class_ref";
 			PropertyType = TypeReferenceWriter.IntPtr;
@@ -39,7 +39,7 @@ namespace generator.SourceWriters
 			IsStatic = true;
 
 			HasGet = true;
-			GetBody.Add ("return _members.JniPeerType.PeerReference.Handle;");
+			GetBody.Add ($"return {members}.JniPeerType.PeerReference.Handle;");
 		}
 	}
 
@@ -96,7 +96,7 @@ namespace generator.SourceWriters
 		// protected override IntPtr ThresholdClass {
 		// 	get { return class_ref; }
 		// }
-		public InterfaceThresholdClassGetter ()
+		public InterfaceThresholdClassGetter (string getExpression)
 		{
 			Name = "ThresholdClass";
 			PropertyType = TypeReferenceWriter.IntPtr;
@@ -108,7 +108,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new EditorBrowsableAttr ());
 
 			HasGet = true;
-			GetBody.Add ("return class_ref;");
+			GetBody.Add ($"return {getExpression};");
 		}
 	}
 
@@ -119,7 +119,7 @@ namespace generator.SourceWriters
 		// protected override global::System.Type ThresholdType {
 		// 	get { return _members.ManagedPeerType; }
 		// }
-		public ThresholdTypeGetter ()
+		public ThresholdTypeGetter (string members = "_members")
 		{
 			Name = "ThresholdType";
 			PropertyType = new TypeReferenceWriter ("global::System.Type");
@@ -131,7 +131,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new EditorBrowsableAttr ());
 
 			HasGet = true;
-			GetBody.Add ("return _members.ManagedPeerType;");
+			GetBody.Add ($"return {members}.ManagedPeerType;");
 		}
 	}
 }

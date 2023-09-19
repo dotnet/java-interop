@@ -38,15 +38,20 @@ namespace generator.SourceWriters
 				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", false));
 			}
 
+			string members = opt.EmitLegacyInterfaceInvokers ? "_members" : $"_members_{iface.Name}";
+
 			if (!ji) {
-				Properties.Add (new InterfaceHandleGetter ());
+				Properties.Add (new InterfaceHandleGetter (members));
 			}
 
-			Properties.Add (new JniPeerMembersGetter (opt.EmitLegacyInterfaceInvokers ? "_members" : $"_members_{iface.Name}"));
+			Properties.Add (new JniPeerMembersGetter (members));
 
 			if (!ji) {
-				Properties.Add (new InterfaceThresholdClassGetter ());
-				Properties.Add (new ThresholdTypeGetter ());
+				string thresholdClassGet = opt.EmitLegacyInterfaceInvokers
+					? "class_ref"
+					: $"{members}.JniPeerType.PeerReference.Handle";
+				Properties.Add (new InterfaceThresholdClassGetter (thresholdClassGet));
+				Properties.Add (new ThresholdTypeGetter (members));
 			}
 
 			if (opt.EmitLegacyInterfaceInvokers) {
@@ -56,7 +61,7 @@ namespace generator.SourceWriters
 				Methods.Add (new ValidateMethod (iface));
 				Methods.Add (new DisposeMethod ());
 			} else {
-				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{iface.Name}"));
+				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: members));
 				foreach (var i in iface.GetAllImplementedInterfaces ()) {
 					var mi = new PeerMembersField (opt, i.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{i.Name}");
 					Fields.Add (mi);
