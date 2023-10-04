@@ -50,7 +50,10 @@ namespace generator.SourceWriters
 					SourceWriterExtensions.AddMethodBody (GetBody, property.Getter, opt, $"_members_{property.Getter.DeclaringType.Name}");
 				}
 				if (HasSet) {
+					var pname = property.Setter.Parameters [0].Name;
+					property.Setter.Parameters [0].Name = "value";
 					SourceWriterExtensions.AddMethodBody (SetBody, property.Setter, opt, $"_members_{property.Setter.DeclaringType.Name}");
+					property.Setter.Parameters [0].Name = pname;
 				}
 			}
 		}

@@ -100,7 +100,7 @@
 			<method abstract="true" deprecated="not deprecated" final="false" name="getObject" native="false" return="T" static="false" synchronized="false" visibility="public">
 			</method>
 			<method abstract="true" deprecated="not deprecated" final="false" name="setObject" native="false" return="void" static="false" synchronized="false" visibility="public">
-				<parameter name="value" type="T" />
+				<parameter name="object" type="T" />
 			</method>
 		</interface>
 		<!--
@@ -117,7 +117,7 @@
 			<method abstract="false" deprecated="not deprecated" final="false" name="getObject" native="false" return="java.lang.Object" static="false" synchronized="false" visibility="public">
 			</method>
 			<method abstract="false" deprecated="not deprecated" final="false" name="setObject" native="false" return="void" static="false" synchronized="false" visibility="public">
-				<parameter name="value" type="java.lang.Object" />
+				<parameter name="object" type="java.lang.Object" />
 			</method>
 		</class>
 		<!--
@@ -134,7 +134,7 @@
 			<method abstract="false" deprecated="not deprecated" final="false" name="getObject" native="false" return="java.lang.String" static="false" synchronized="false" visibility="public">
 			</method>
 			<method abstract="false" deprecated="not deprecated" final="false" name="SetObject" native="false" return="void" static="false" synchronized="false" visibility="public">
-				<parameter name="value" type="java.lang.String" />
+				<parameter name="object" type="java.lang.String" />
 			</method>
 		</class>
 	</package>
