@@ -19,10 +19,10 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_IGenericInterface; }
+			get { return _members_test_me_GenericInterface; }
 		}
 
-		static readonly JniPeerMembers _members_IGenericInterface = new JniPeerMembers ("test/me/GenericInterface", typeof (IGenericInterfaceInvoker));
+		static readonly JniPeerMembers _members_test_me_GenericInterface = new JniPeerMembers ("test/me/GenericInterface", typeof (IGenericInterfaceInvoker));
 
 		public IGenericInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 		{
@@ -35,7 +35,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (native_value);
-				_members_IGenericInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+				_members_test_me_GenericInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 			} finally {
 				global::System.GC.KeepAlive (value);
 			}

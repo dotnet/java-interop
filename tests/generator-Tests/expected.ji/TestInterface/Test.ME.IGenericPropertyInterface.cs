@@ -25,10 +25,10 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_IGenericPropertyInterface; }
+			get { return _members_test_me_GenericPropertyInterface; }
 		}
 
-		static readonly JniPeerMembers _members_IGenericPropertyInterface = new JniPeerMembers ("test/me/GenericPropertyInterface", typeof (IGenericPropertyInterfaceInvoker));
+		static readonly JniPeerMembers _members_test_me_GenericPropertyInterface = new JniPeerMembers ("test/me/GenericPropertyInterface", typeof (IGenericPropertyInterfaceInvoker));
 
 		public IGenericPropertyInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 		{
@@ -38,7 +38,7 @@ namespace Test.ME {
 			get {
 				const string __id = "getObject.()Ljava/lang/Object;";
 				try {
-					var __rm = _members_IGenericPropertyInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, null);
+					var __rm = _members_test_me_GenericPropertyInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, null);
 					return global::Java.Interop.JniEnvironment.Runtime.ValueManager.GetValue<global::Java.Lang.Object>(ref __rm, JniObjectReferenceOptions.CopyAndDispose);
 				} finally {
 				}
@@ -49,7 +49,7 @@ namespace Test.ME {
 				try {
 					JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 					__args [0] = new JniArgumentValue (native_value);
-					_members_IGenericPropertyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+					_members_test_me_GenericPropertyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 				} finally {
 					global::System.GC.KeepAlive (value);
 				}

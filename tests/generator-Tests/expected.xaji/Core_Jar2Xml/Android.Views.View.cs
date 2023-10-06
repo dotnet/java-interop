@@ -30,28 +30,28 @@ namespace Android.Views {
 		[global::Android.Runtime.Register ("android/view/View$OnClickListener", DoNotGenerateAcw=true)]
 		internal partial class IOnClickListenerInvoker : global::Java.Lang.Object, IOnClickListener {
 			static IntPtr java_class_ref {
-				get { return _members_IOnClickListener.JniPeerType.PeerReference.Handle; }
+				get { return _members_android_view_View_OnClickListener.JniPeerType.PeerReference.Handle; }
 			}
 
 			[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 			[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 			public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-				get { return _members_IOnClickListener; }
+				get { return _members_android_view_View_OnClickListener; }
 			}
 
 			[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 			[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 			protected override IntPtr ThresholdClass {
-				get { return _members_IOnClickListener.JniPeerType.PeerReference.Handle; }
+				get { return _members_android_view_View_OnClickListener.JniPeerType.PeerReference.Handle; }
 			}
 
 			[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 			[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 			protected override global::System.Type ThresholdType {
-				get { return _members_IOnClickListener.ManagedPeerType; }
+				get { return _members_android_view_View_OnClickListener.ManagedPeerType; }
 			}
 
-			static readonly JniPeerMembers _members_IOnClickListener = new XAPeerMembers ("android/view/View$OnClickListener", typeof (IOnClickListenerInvoker));
+			static readonly JniPeerMembers _members_android_view_View_OnClickListener = new XAPeerMembers ("android/view/View$OnClickListener", typeof (IOnClickListenerInvoker));
 
 			public IOnClickListenerInvoker (IntPtr handle, JniHandleOwnership transfer) : base (handle, transfer)
 			{
@@ -80,7 +80,7 @@ namespace Android.Views {
 				try {
 					JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 					__args [0] = new JniArgumentValue ((v == null) ? IntPtr.Zero : ((global::Java.Lang.Object) v).Handle);
-					_members_IOnClickListener.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+					_members_android_view_View_OnClickListener.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 				} finally {
 					global::System.GC.KeepAlive (v);
 				}

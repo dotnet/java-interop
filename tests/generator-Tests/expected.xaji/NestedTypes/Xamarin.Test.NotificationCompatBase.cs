@@ -33,28 +33,28 @@ namespace Xamarin.Test {
 			[global::Android.Runtime.Register ("xamarin/test/NotificationCompatBase$Action$Factory", DoNotGenerateAcw=true)]
 			internal partial class IFactoryInvoker : global::Java.Lang.Object, IFactory {
 				static IntPtr java_class_ref {
-					get { return _members_IFactory.JniPeerType.PeerReference.Handle; }
+					get { return _members_xamarin_test_NotificationCompatBase_Action_Factory.JniPeerType.PeerReference.Handle; }
 				}
 
 				[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 				[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 				public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-					get { return _members_IFactory; }
+					get { return _members_xamarin_test_NotificationCompatBase_Action_Factory; }
 				}
 
 				[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 				[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 				protected override IntPtr ThresholdClass {
-					get { return _members_IFactory.JniPeerType.PeerReference.Handle; }
+					get { return _members_xamarin_test_NotificationCompatBase_Action_Factory.JniPeerType.PeerReference.Handle; }
 				}
 
 				[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 				[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 				protected override global::System.Type ThresholdType {
-					get { return _members_IFactory.ManagedPeerType; }
+					get { return _members_xamarin_test_NotificationCompatBase_Action_Factory.ManagedPeerType; }
 				}
 
-				static readonly JniPeerMembers _members_IFactory = new XAPeerMembers ("xamarin/test/NotificationCompatBase$Action$Factory", typeof (IFactoryInvoker));
+				static readonly JniPeerMembers _members_xamarin_test_NotificationCompatBase_Action_Factory = new XAPeerMembers ("xamarin/test/NotificationCompatBase$Action$Factory", typeof (IFactoryInvoker));
 
 				public IFactoryInvoker (IntPtr handle, JniHandleOwnership transfer) : base (handle, transfer)
 				{
@@ -82,7 +82,7 @@ namespace Xamarin.Test {
 					try {
 						JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 						__args [0] = new JniArgumentValue (p0);
-						var __rm = _members_IFactory.InstanceMethods.InvokeAbstractObjectMethod (__id, this, __args);
+						var __rm = _members_xamarin_test_NotificationCompatBase_Action_Factory.InstanceMethods.InvokeAbstractObjectMethod (__id, this, __args);
 						return global::Java.Lang.Object.GetObject<global::Xamarin.Test.NotificationCompatBase.Action> (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 					} finally {
 					}

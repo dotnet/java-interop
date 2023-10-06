@@ -22,12 +22,12 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_IExtendedInterface; }
+			get { return _members_xamarin_test_ExtendedInterface; }
 		}
 
-		static readonly JniPeerMembers _members_IExtendedInterface = new JniPeerMembers ("xamarin/test/ExtendedInterface", typeof (IExtendedInterfaceInvoker));
+		static readonly JniPeerMembers _members_xamarin_test_ExtendedInterface = new JniPeerMembers ("xamarin/test/ExtendedInterface", typeof (IExtendedInterfaceInvoker));
 
-		static readonly JniPeerMembers _members_IBaseInterface = new JniPeerMembers ("xamarin/test/BaseInterface", typeof (IExtendedInterfaceInvoker));
+		static readonly JniPeerMembers _members_xamarin_test_BaseInterface = new JniPeerMembers ("xamarin/test/BaseInterface", typeof (IExtendedInterfaceInvoker));
 
 		public IExtendedInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 		{
@@ -37,7 +37,7 @@ namespace Xamarin.Test {
 		{
 			const string __id = "extendedMethod.()V";
 			try {
-				_members_IExtendedInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
+				_members_xamarin_test_ExtendedInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
 			} finally {
 			}
 		}
@@ -46,7 +46,7 @@ namespace Xamarin.Test {
 		{
 			const string __id = "baseMethod.()V";
 			try {
-				_members_IBaseInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
+				_members_xamarin_test_BaseInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
 			} finally {
 			}
 		}

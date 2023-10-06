@@ -24,28 +24,28 @@ namespace Test.ME {
 	[global::Android.Runtime.Register ("test/me/GenericPropertyInterface", DoNotGenerateAcw=true)]
 	internal partial class IGenericPropertyInterfaceInvoker : global::Java.Lang.Object, IGenericPropertyInterface {
 		static IntPtr java_class_ref {
-			get { return _members_IGenericPropertyInterface.JniPeerType.PeerReference.Handle; }
+			get { return _members_test_me_GenericPropertyInterface.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_IGenericPropertyInterface; }
+			get { return _members_test_me_GenericPropertyInterface; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override IntPtr ThresholdClass {
-			get { return _members_IGenericPropertyInterface.JniPeerType.PeerReference.Handle; }
+			get { return _members_test_me_GenericPropertyInterface.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override global::System.Type ThresholdType {
-			get { return _members_IGenericPropertyInterface.ManagedPeerType; }
+			get { return _members_test_me_GenericPropertyInterface.ManagedPeerType; }
 		}
 
-		static readonly JniPeerMembers _members_IGenericPropertyInterface = new XAPeerMembers ("test/me/GenericPropertyInterface", typeof (IGenericPropertyInterfaceInvoker));
+		static readonly JniPeerMembers _members_test_me_GenericPropertyInterface = new XAPeerMembers ("test/me/GenericPropertyInterface", typeof (IGenericPropertyInterfaceInvoker));
 
 		public IGenericPropertyInterfaceInvoker (IntPtr handle, JniHandleOwnership transfer) : base (handle, transfer)
 		{
@@ -88,7 +88,7 @@ namespace Test.ME {
 			get {
 				const string __id = "getObject.()Ljava/lang/Object;";
 				try {
-					var __rm = _members_IGenericPropertyInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, null);
+					var __rm = _members_test_me_GenericPropertyInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, null);
 					return (global::Java.Lang.Object) global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 				} finally {
 				}
@@ -99,7 +99,7 @@ namespace Test.ME {
 				try {
 					JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 					__args [0] = new JniArgumentValue (native_value);
-					_members_IGenericPropertyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+					_members_test_me_GenericPropertyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 				} finally {
 					JNIEnv.DeleteLocalRef (native_value);
 					global::System.GC.KeepAlive (value);

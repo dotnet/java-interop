@@ -79,28 +79,28 @@ namespace Test.ME {
 	[global::Android.Runtime.Register ("test/me/TestInterface", DoNotGenerateAcw=true)]
 	internal partial class ITestInterfaceInvoker : global::Java.Lang.Object, ITestInterface {
 		static IntPtr java_class_ref {
-			get { return _members_ITestInterface.JniPeerType.PeerReference.Handle; }
+			get { return _members_test_me_TestInterface.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_ITestInterface; }
+			get { return _members_test_me_TestInterface; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override IntPtr ThresholdClass {
-			get { return _members_ITestInterface.JniPeerType.PeerReference.Handle; }
+			get { return _members_test_me_TestInterface.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override global::System.Type ThresholdType {
-			get { return _members_ITestInterface.ManagedPeerType; }
+			get { return _members_test_me_TestInterface.ManagedPeerType; }
 		}
 
-		static readonly JniPeerMembers _members_ITestInterface = new XAPeerMembers ("test/me/TestInterface", typeof (ITestInterfaceInvoker));
+		static readonly JniPeerMembers _members_test_me_TestInterface = new XAPeerMembers ("test/me/TestInterface", typeof (ITestInterfaceInvoker));
 
 		public ITestInterfaceInvoker (IntPtr handle, JniHandleOwnership transfer) : base (handle, transfer)
 		{
@@ -130,7 +130,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue ((tag == null) ? IntPtr.Zero : ((global::Java.Lang.Object) tag).Handle);
-				var __rm = _members_ITestInterface.InstanceMethods.InvokeAbstractInt32Method (__id, this, __args);
+				var __rm = _members_test_me_TestInterface.InstanceMethods.InvokeAbstractInt32Method (__id, this, __args);
 				return __rm;
 			} finally {
 				global::System.GC.KeepAlive (tag);
@@ -161,7 +161,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (native_value);
-				_members_ITestInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+				_members_test_me_TestInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_value);
 				global::System.GC.KeepAlive (value);
@@ -193,7 +193,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (native_value);
-				var __rm = _members_ITestInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, __args);
+				var __rm = _members_test_me_TestInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, __args);
 				return global::Java.Lang.Object.GetObject<Java.Lang.ICharSequence> (__rm.Handle, JniHandleOwnership.TransferLocalRef);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_value);

@@ -39,7 +39,7 @@ namespace generator.SourceWriters
 			this.AddMethodParameters (method.Parameters, opt);
 
 			if (!opt.EmitLegacyInterfaceInvokers) {
-				SourceWriterExtensions.AddMethodBody (Body, method, opt, $"_members_{method.DeclaringType.Name}");
+				SourceWriterExtensions.AddMethodBody (Body, method, opt, $"_members_{method.DeclaringType.JavaFullNameId}");
 			}
 		}
 

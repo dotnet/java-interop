@@ -16,10 +16,10 @@ internal partial class AnimatorListenerInvoker : global::Java.Lang.Object, Anima
 	[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 	[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 	public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-		get { return _members_AnimatorListener; }
+		get { return _members_java_code_AnimatorListener; }
 	}
 
-	static readonly JniPeerMembers _members_AnimatorListener = new JniPeerMembers ("java/code/AnimatorListener", typeof (AnimatorListenerInvoker));
+	static readonly JniPeerMembers _members_java_code_AnimatorListener = new JniPeerMembers ("java/code/AnimatorListener", typeof (AnimatorListenerInvoker));
 
 	public AnimatorListenerInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 	{
@@ -31,7 +31,7 @@ internal partial class AnimatorListenerInvoker : global::Java.Lang.Object, Anima
 		try {
 			JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 			__args [0] = new JniArgumentValue (param1);
-			var __rm = _members_AnimatorListener.InstanceMethods.InvokeAbstractBooleanMethod (__id, this, __args);
+			var __rm = _members_java_code_AnimatorListener.InstanceMethods.InvokeAbstractBooleanMethod (__id, this, __args);
 			return __rm;
 		} finally {
 		}
@@ -44,7 +44,7 @@ internal partial class AnimatorListenerInvoker : global::Java.Lang.Object, Anima
 			JniArgumentValue* __args = stackalloc JniArgumentValue [2];
 			__args [0] = new JniArgumentValue (param1);
 			__args [1] = new JniArgumentValue (param2);
-			var __rm = _members_AnimatorListener.InstanceMethods.InvokeAbstractBooleanMethod (__id, this, __args);
+			var __rm = _members_java_code_AnimatorListener.InstanceMethods.InvokeAbstractBooleanMethod (__id, this, __args);
 			return __rm;
 		} finally {
 		}

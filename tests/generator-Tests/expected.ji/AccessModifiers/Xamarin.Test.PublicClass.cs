@@ -31,10 +31,10 @@ namespace Xamarin.Test {
 			[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 			[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 			public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-				get { return _members_IProtectedInterface; }
+				get { return _members_xamarin_test_PublicClass_ProtectedInterface; }
 			}
 
-			static readonly JniPeerMembers _members_IProtectedInterface = new JniPeerMembers ("xamarin/test/PublicClass$ProtectedInterface", typeof (IProtectedInterfaceInvoker));
+			static readonly JniPeerMembers _members_xamarin_test_PublicClass_ProtectedInterface = new JniPeerMembers ("xamarin/test/PublicClass$ProtectedInterface", typeof (IProtectedInterfaceInvoker));
 
 			public IProtectedInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 			{
@@ -44,7 +44,7 @@ namespace Xamarin.Test {
 			{
 				const string __id = "foo.()V";
 				try {
-					_members_IProtectedInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
+					_members_xamarin_test_PublicClass_ProtectedInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
 				} finally {
 				}
 			}

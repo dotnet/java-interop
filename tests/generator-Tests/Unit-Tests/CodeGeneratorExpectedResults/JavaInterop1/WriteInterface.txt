@@ -85,10 +85,10 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 	[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 	public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-		get { return _members_IMyInterface; }
+		get { return _members_java_code_IMyInterface; }
 	}
 
-	static readonly JniPeerMembers _members_IMyInterface = new JniPeerMembers ("java/code/IMyInterface", typeof (IMyInterfaceInvoker));
+	static readonly JniPeerMembers _members_java_code_IMyInterface = new JniPeerMembers ("java/code/IMyInterface", typeof (IMyInterfaceInvoker));
 
 	public IMyInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 	{
@@ -98,7 +98,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 		get {
 			const string __id = "get_Count.()I";
 			try {
-				var __rm = _members_IMyInterface.InstanceMethods.InvokeVirtualInt32Method (__id, this, null);
+				var __rm = _members_java_code_IMyInterface.InstanceMethods.InvokeVirtualInt32Method (__id, this, null);
 				return __rm;
 			} finally {
 			}
@@ -108,7 +108,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (value);
-				_members_IMyInterface.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
+				_members_java_code_IMyInterface.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 			}
 		}
@@ -118,7 +118,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 		get {
 			const string __id = "get_Key.()Ljava/lang/String;";
 			try {
-				var __rm = _members_IMyInterface.InstanceMethods.InvokeVirtualObjectMethod (__id, this, null);
+				var __rm = _members_java_code_IMyInterface.InstanceMethods.InvokeVirtualObjectMethod (__id, this, null);
 				return global::Java.Interop.JniEnvironment.Strings.ToString (ref __rm, JniObjectReferenceOptions.CopyAndDispose);
 			} finally {
 			}
@@ -129,7 +129,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (native_value);
-				_members_IMyInterface.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
+				_members_java_code_IMyInterface.InstanceMethods.InvokeVirtualVoidMethod (__id, this, __args);
 			} finally {
 				global::Java.Interop.JniObjectReference.Dispose (ref native_value);
 			}
@@ -140,7 +140,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 		get {
 			const string __id = "get_AbstractCount.()I";
 			try {
-				var __rm = _members_IMyInterface.InstanceMethods.InvokeAbstractInt32Method (__id, this, null);
+				var __rm = _members_java_code_IMyInterface.InstanceMethods.InvokeAbstractInt32Method (__id, this, null);
 				return __rm;
 			} finally {
 			}
@@ -150,7 +150,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (value);
-				_members_IMyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+				_members_java_code_IMyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 			} finally {
 			}
 		}
@@ -163,7 +163,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 		try {
 			JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 			__args [0] = new JniArgumentValue (native_key);
-			var __rm = _members_IMyInterface.InstanceMethods.InvokeVirtualInt32Method (__id, this, __args);
+			var __rm = _members_java_code_IMyInterface.InstanceMethods.InvokeVirtualInt32Method (__id, this, __args);
 			return __rm;
 		} finally {
 			global::Java.Interop.JniObjectReference.Dispose (ref native_key);
@@ -174,7 +174,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	{
 		const string __id = "Key.()Ljava/lang/String;";
 		try {
-			var __rm = _members_IMyInterface.InstanceMethods.InvokeVirtualObjectMethod (__id, this, null);
+			var __rm = _members_java_code_IMyInterface.InstanceMethods.InvokeVirtualObjectMethod (__id, this, null);
 			return global::Java.Interop.JniEnvironment.Strings.ToString (ref __rm, JniObjectReferenceOptions.CopyAndDispose);
 		} finally {
 		}
@@ -184,7 +184,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	{
 		const string __id = "AbstractMethod.()V";
 		try {
-			_members_IMyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
+			_members_java_code_IMyInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
 		} finally {
 		}
 	}

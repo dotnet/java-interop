@@ -18,28 +18,28 @@ namespace Java.Lang {
 	[global::Android.Runtime.Register ("java/lang/Comparable", DoNotGenerateAcw=true)]
 	internal partial class IComparableInvoker : global::Java.Lang.Object, IComparable {
 		static IntPtr java_class_ref {
-			get { return _members_IComparable.JniPeerType.PeerReference.Handle; }
+			get { return _members_java_lang_Comparable.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_IComparable; }
+			get { return _members_java_lang_Comparable; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override IntPtr ThresholdClass {
-			get { return _members_IComparable.JniPeerType.PeerReference.Handle; }
+			get { return _members_java_lang_Comparable.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override global::System.Type ThresholdType {
-			get { return _members_IComparable.ManagedPeerType; }
+			get { return _members_java_lang_Comparable.ManagedPeerType; }
 		}
 
-		static readonly JniPeerMembers _members_IComparable = new XAPeerMembers ("java/lang/Comparable", typeof (IComparableInvoker));
+		static readonly JniPeerMembers _members_java_lang_Comparable = new XAPeerMembers ("java/lang/Comparable", typeof (IComparableInvoker));
 
 		public IComparableInvoker (IntPtr handle, JniHandleOwnership transfer) : base (handle, transfer)
 		{
@@ -70,7 +70,7 @@ namespace Java.Lang {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (native_another);
-				var __rm = _members_IComparable.InstanceMethods.InvokeAbstractInt32Method (__id, this, __args);
+				var __rm = _members_java_lang_Comparable.InstanceMethods.InvokeAbstractInt32Method (__id, this, __args);
 				return __rm;
 			} finally {
 				JNIEnv.DeleteLocalRef (native_another);

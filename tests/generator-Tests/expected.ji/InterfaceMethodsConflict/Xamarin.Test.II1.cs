@@ -18,10 +18,10 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_II1; }
+			get { return _members_xamarin_test_I1; }
 		}
 
-		static readonly JniPeerMembers _members_II1 = new JniPeerMembers ("xamarin/test/I1", typeof (II1Invoker));
+		static readonly JniPeerMembers _members_xamarin_test_I1 = new JniPeerMembers ("xamarin/test/I1", typeof (II1Invoker));
 
 		public II1Invoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 		{
@@ -31,7 +31,7 @@ namespace Xamarin.Test {
 		{
 			const string __id = "close.()V";
 			try {
-				_members_II1.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
+				_members_xamarin_test_I1.InstanceMethods.InvokeAbstractVoidMethod (__id, this, null);
 			} finally {
 			}
 		}

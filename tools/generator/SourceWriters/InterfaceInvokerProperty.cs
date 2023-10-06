@@ -47,12 +47,12 @@ namespace generator.SourceWriters
 
 			if (!opt.EmitLegacyInterfaceInvokers) {
 				if (HasGet) {
-					SourceWriterExtensions.AddMethodBody (GetBody, property.Getter, opt, $"_members_{property.Getter.DeclaringType.Name}");
+					SourceWriterExtensions.AddMethodBody (GetBody, property.Getter, opt, $"_members_{property.Getter.DeclaringType.JavaFullNameId}");
 				}
 				if (HasSet) {
 					var pname = property.Setter.Parameters [0].Name;
 					property.Setter.Parameters [0].Name = "value";
-					SourceWriterExtensions.AddMethodBody (SetBody, property.Setter, opt, $"_members_{property.Setter.DeclaringType.Name}");
+					SourceWriterExtensions.AddMethodBody (SetBody, property.Setter, opt, $"_members_{property.Setter.DeclaringType.JavaFullNameId}");
 					property.Setter.Parameters [0].Name = pname;
 				}
 			}

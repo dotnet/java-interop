@@ -45,10 +45,10 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_ITestInterface; }
+			get { return _members_test_me_TestInterface; }
 		}
 
-		static readonly JniPeerMembers _members_ITestInterface = new JniPeerMembers ("test/me/TestInterface", typeof (ITestInterfaceInvoker));
+		static readonly JniPeerMembers _members_test_me_TestInterface = new JniPeerMembers ("test/me/TestInterface", typeof (ITestInterfaceInvoker));
 
 		public ITestInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 		{
@@ -60,7 +60,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (tag);
-				var __rm = _members_ITestInterface.InstanceMethods.InvokeAbstractInt32Method (__id, this, __args);
+				var __rm = _members_test_me_TestInterface.InstanceMethods.InvokeAbstractInt32Method (__id, this, __args);
 				return __rm;
 			} finally {
 				global::System.GC.KeepAlive (tag);
@@ -73,7 +73,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (value);
-				_members_ITestInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+				_members_test_me_TestInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 			} finally {
 				global::System.GC.KeepAlive (value);
 			}
@@ -85,7 +85,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (value);
-				var __rm = _members_ITestInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, __args);
+				var __rm = _members_test_me_TestInterface.InstanceMethods.InvokeAbstractObjectMethod (__id, this, __args);
 				return global::Java.Interop.JniEnvironment.Runtime.ValueManager.GetValue<Java.Lang.ICharSequence>(ref __rm, JniObjectReferenceOptions.CopyAndDispose);
 			} finally {
 				global::System.GC.KeepAlive (value);

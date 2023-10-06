@@ -38,7 +38,7 @@ namespace generator.SourceWriters
 				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", false));
 			}
 
-			string members = opt.EmitLegacyInterfaceInvokers ? "_members" : $"_members_{iface.Name}";
+			string members = opt.EmitLegacyInterfaceInvokers ? "_members" : $"_members_{iface.JavaFullNameId}";
 
 			if (!ji) {
 				Properties.Add (new InterfaceHandleGetter (members));
@@ -63,7 +63,7 @@ namespace generator.SourceWriters
 			} else {
 				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: members));
 				foreach (var i in iface.GetAllImplementedInterfaces ()) {
-					var mi = new PeerMembersField (opt, i.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{i.Name}");
+					var mi = new PeerMembersField (opt, i.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{i.JavaFullNameId}");
 					Fields.Add (mi);
 				}
 			}

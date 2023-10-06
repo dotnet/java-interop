@@ -18,28 +18,28 @@ namespace Test.ME {
 	[global::Android.Runtime.Register ("test/me/GenericInterface", DoNotGenerateAcw=true)]
 	internal partial class IGenericInterfaceInvoker : global::Java.Lang.Object, IGenericInterface {
 		static IntPtr java_class_ref {
-			get { return _members_IGenericInterface.JniPeerType.PeerReference.Handle; }
+			get { return _members_test_me_GenericInterface.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		public override global::Java.Interop.JniPeerMembers JniPeerMembers {
-			get { return _members_IGenericInterface; }
+			get { return _members_test_me_GenericInterface; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override IntPtr ThresholdClass {
-			get { return _members_IGenericInterface.JniPeerType.PeerReference.Handle; }
+			get { return _members_test_me_GenericInterface.JniPeerType.PeerReference.Handle; }
 		}
 
 		[global::System.Diagnostics.DebuggerBrowsable (global::System.Diagnostics.DebuggerBrowsableState.Never)]
 		[global::System.ComponentModel.EditorBrowsable (global::System.ComponentModel.EditorBrowsableState.Never)]
 		protected override global::System.Type ThresholdType {
-			get { return _members_IGenericInterface.ManagedPeerType; }
+			get { return _members_test_me_GenericInterface.ManagedPeerType; }
 		}
 
-		static readonly JniPeerMembers _members_IGenericInterface = new XAPeerMembers ("test/me/GenericInterface", typeof (IGenericInterfaceInvoker));
+		static readonly JniPeerMembers _members_test_me_GenericInterface = new XAPeerMembers ("test/me/GenericInterface", typeof (IGenericInterfaceInvoker));
 
 		public IGenericInterfaceInvoker (IntPtr handle, JniHandleOwnership transfer) : base (handle, transfer)
 		{
@@ -69,7 +69,7 @@ namespace Test.ME {
 			try {
 				JniArgumentValue* __args = stackalloc JniArgumentValue [1];
 				__args [0] = new JniArgumentValue (native_value);
-				_members_IGenericInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
+				_members_test_me_GenericInterface.InstanceMethods.InvokeAbstractVoidMethod (__id, this, __args);
 			} finally {
 				JNIEnv.DeleteLocalRef (native_value);
 				global::System.GC.KeepAlive (value);
