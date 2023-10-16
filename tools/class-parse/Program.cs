@@ -8,6 +8,8 @@ using System.Text;
 using Mono.Options;
 
 using Xamarin.Android.Tools.Bytecode;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Xamarin.Android.Tools {
 
@@ -158,6 +160,29 @@ namespace Xamarin.Android.Tools {
 				foreach (var attr in c.Methods [i].Attributes) {
 					output.WriteLine ("\t\t{0}", attr);
 				}
+			}
+
+			// Output Kotlin metadata if it exists
+			var kotlin_metadata = c.Attributes.OfType<RuntimeVisibleAnnotationsAttribute> ().FirstOrDefault ()?.Annotations.FirstOrDefault (a => a.Type == "Lkotlin/Metadata;");
+
+			if (kotlin_metadata is not null) {
+				var meta = KotlinMetadata.FromAnnotation (kotlin_metadata);
+
+				if (meta.AsClassMetadata () is KotlinClass kc) {
+					Console.WriteLine ();
+					Console.WriteLine ($"Kotlin Class Metadata [{meta.MetadataVersion}]:");
+					var json = JsonSerializer.Serialize (kc, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true });
+					output.WriteLine (json);
+				} else if (meta.AsFileMetadata () is KotlinFile kf) {
+					Console.WriteLine ();
+					Console.WriteLine ($"Kotlin File Metadata [{meta.MetadataVersion}]:");
+					var json = JsonSerializer.Serialize (kf, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true });
+					output.WriteLine (json);
+				}
+
+				Console.WriteLine ();
+				Console.WriteLine ("Kotlin Metadata String Table:");
+				output.WriteLine (JsonSerializer.Serialize (meta.Data2, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true }));
 			}
 		}
 	}
