@@ -199,6 +199,13 @@ namespace MonoDroid.Generation
 				sw.WriteLine ();
 				sw.WriteLine ("\tpartial class __TypeRegistrations {");
 				sw.WriteLine ();
+    				if (mapping.Count > 0) {
+					sw.WriteLine ("\t\tprivate static readonly string[] s_packages = new[] {");
+					foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> e in mapping) {
+						sw.WriteLine ("\t\t\t\"{0}\",", e.Key);
+					}
+					sw.WriteLine ("\t\t};");
+				}
 				sw.WriteLine ("\t\tpublic static void RegisterPackages ()");
 				sw.WriteLine ("\t\t{");
 				sw.WriteLine ("#if MONODROID_TIMING");
@@ -206,11 +213,12 @@ namespace MonoDroid.Generation
 				sw.WriteLine ("\t\t\tAndroid.Util.Log.Info (\"MonoDroid-Timing\", \"RegisterPackages start: \" + (start - new DateTime (1970, 1, 1)).TotalMilliseconds);");
 				sw.WriteLine ("#endif // def MONODROID_TIMING");
 				sw.WriteLine ("\t\t\tJava.Interop.TypeManager.RegisterPackages (");
-				sw.WriteLine ("\t\t\t\t\tnew string[]{");
-				foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> e in mapping) {
-					sw.WriteLine ("\t\t\t\t\t\t\"{0}\",", e.Key);
+				if (mapping.Count == 0) {
+					sw.WriteLine ("\t\t\t\t\Array.Empty<string>(),");
+				} else {
+					sw.WriteLine ("\t\t\t\t\s_packages,");
 				}
-				sw.WriteLine ("\t\t\t\t\t},");
+				
 				sw.WriteLine ("\t\t\t\t\tnew Converter<string, Type{0}>[]{{", opt.NullableOperator);
 				foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> e in mapping) {
 					sw.WriteLine ("\t\t\t\t\t\tlookup_{0}_package,", e.Key.Replace ('/', '_'));
