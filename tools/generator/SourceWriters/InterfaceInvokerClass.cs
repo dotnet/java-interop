@@ -61,8 +61,7 @@ namespace generator.SourceWriters
 				Methods.Add (new ValidateMethod (iface));
 				Methods.Add (new DisposeMethod ());
 			} else {
-				Fields.Add (new PeerMembersField (opt, iface.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: members));
-				foreach (var i in iface.GetAllImplementedInterfaces ()) {
+				foreach (var i in GetCompleteImplementedInterfaces (new (), iface)) {
 					var mi = new PeerMembersField (opt, i.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{i.JavaFullNameId}");
 					Fields.Add (mi);
 				}
@@ -71,6 +70,15 @@ namespace generator.SourceWriters
 			Constructors.Add (new InterfaceInvokerConstructor (opt, iface, context));
 
 			AddMemberInvokers (iface, new HashSet<string> (), opt, context);
+		}
+
+		static HashSet<InterfaceGen> GetCompleteImplementedInterfaces (HashSet<InterfaceGen> ifaces, InterfaceGen toplevel)
+		{
+			ifaces.Add (toplevel);
+			foreach (var i in toplevel.GetAllImplementedInterfaces ()) {
+				GetCompleteImplementedInterfaces (ifaces, i);
+			}
+			return ifaces;
 		}
 
 		void AddMemberInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)

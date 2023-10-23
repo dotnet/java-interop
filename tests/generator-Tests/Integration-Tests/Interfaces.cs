@@ -6,6 +6,11 @@ namespace generatortests
 	[TestFixture]
 	public class Interfaces : BaseGeneratorTest
 	{
+		public Interfaces ()
+		{
+			AllowWarnings   = true;
+		}
+
 		protected override bool TryJavaInterop1 => true;
 
 		[Test]
