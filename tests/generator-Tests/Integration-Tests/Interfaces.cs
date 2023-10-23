@@ -8,6 +8,8 @@ namespace generatortests
 	{
 		public Interfaces ()
 		{
+			// warning CS0108: 'IDeque.Add(Object)' hides inherited member 'IQueue.Add(Object)'. Use the new keyword if hiding was intended.
+			// warning CS0108: 'IQueue.Add(Object)' hides inherited member 'ICollection.Add(Object)'. Use the new keyword if hiding was intended.
 			AllowWarnings   = true;
 		}
 
