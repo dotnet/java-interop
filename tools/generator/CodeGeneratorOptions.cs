@@ -106,7 +106,6 @@ namespace Xamarin.Android.Binder
 					"SDK Platform {VERSION}/API level.",
 					v => opts.ApiLevel = v },
 				{ "lang-features=",
-					"For internal use. (Flags: interface-constants,default-interface-methods,nested-interface-types,nullable-reference-types,obsoleted-platform-attributes,restrict-to-attributes,emit-legacy-interface-invokers)",
 					"For internal use. (Flags: interface-constants,default-interface-methods,nested-interface-types,nullable-reference-types,obsoleted-platform-attributes,restrict-to-attributes,do-not-fix-obsolete-overrides,emit-legacy-interface-invokers)",
 					v => {
 						opts.EmitLegacyInterfaceInvokers = v?.Contains ("emit-legacy-interface-invokers") == true;
