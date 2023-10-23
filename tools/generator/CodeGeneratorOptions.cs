@@ -54,6 +54,7 @@ namespace Xamarin.Android.Binder
 		public bool		    SupportNestedInterfaceTypes { get; set; }
 		public bool		    SupportNullableReferenceTypes { get; set; }
 		public bool		    UseRestrictToAttributes { get; set; }
+		public bool		    FixObsoleteOverrides { get; set;} = true;
 		public bool		    UseLegacyJavaResolver { get; set; }
 		public bool			UseObsoletedOSPlatformAttributes { get; set; }
 
@@ -106,6 +107,7 @@ namespace Xamarin.Android.Binder
 					v => opts.ApiLevel = v },
 				{ "lang-features=",
 					"For internal use. (Flags: interface-constants,default-interface-methods,nested-interface-types,nullable-reference-types,obsoleted-platform-attributes,restrict-to-attributes,emit-legacy-interface-invokers)",
+					"For internal use. (Flags: interface-constants,default-interface-methods,nested-interface-types,nullable-reference-types,obsoleted-platform-attributes,restrict-to-attributes,do-not-fix-obsolete-overrides,emit-legacy-interface-invokers)",
 					v => {
 						opts.EmitLegacyInterfaceInvokers = v?.Contains ("emit-legacy-interface-invokers") == true;
 						opts.SupportInterfaceConstants = v?.Contains ("interface-constants") == true;
@@ -114,6 +116,7 @@ namespace Xamarin.Android.Binder
 						opts.SupportNullableReferenceTypes = v?.Contains ("nullable-reference-types") == true;
 						opts.UseObsoletedOSPlatformAttributes = v?.Contains ("obsoleted-platform-attributes") == true;
 						opts.UseRestrictToAttributes = v?.Contains ("restrict-to-attributes") == true;
+						opts.FixObsoleteOverrides = v?.Contains ("do-not-fix-obsolete-overrides") == false;
 						}},
 				{ "preserve-enums",
 					"For internal use.",
