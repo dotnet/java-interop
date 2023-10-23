@@ -61,7 +61,7 @@ namespace generator.SourceWriters
 				Methods.Add (new ValidateMethod (iface));
 				Methods.Add (new DisposeMethod ());
 			} else {
-				foreach (var i in GetCompleteImplementedInterfaces (new (), iface)) {
+				foreach (var i in GetCompleteImplementedInterfaces (new (), iface).OrderBy (x => x.JavaFullNameId)) {
 					var mi = new PeerMembersField (opt, i.RawJniName, $"{iface.Name}Invoker", isInterface:false, name: $"_members_{i.JavaFullNameId}");
 					Fields.Add (mi);
 				}
