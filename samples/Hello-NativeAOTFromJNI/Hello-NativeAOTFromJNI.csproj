@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Hello_NativeAOTFromJNI</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishAot>true</PublishAot>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NativeLib>Shared</NativeLib>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Java.Interop\Java.Interop.csproj"
+        AdditionalProperties="Standalone=True"
+    />
+    <ProjectReference Include="..\..\src\Java.Runtime.Environment\Java.Runtime.Environment.csproj"
+        AdditionalProperties="Standalone=True"
+    />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(OutputPath)hello-from-java.jar" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <HelloNativeAOTFromJNIJar Include="$(MSBuildThisFileDirectory)java\**\*.java" />
+  </ItemGroup>
+
+  <Import Project="Hello-NativeAOTFromJNI.targets" />
+</Project>
