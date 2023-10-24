@@ -22,9 +22,9 @@ namespace Java.Util {
 			get { return _members_java_util_Queue; }
 		}
 
-		static readonly JniPeerMembers _members_java_util_Queue = new JniPeerMembers ("java/util/Queue", typeof (IQueueInvoker));
-
 		static readonly JniPeerMembers _members_java_util_Collection = new JniPeerMembers ("java/util/Collection", typeof (IQueueInvoker));
+
+		static readonly JniPeerMembers _members_java_util_Queue = new JniPeerMembers ("java/util/Queue", typeof (IQueueInvoker));
 
 		public IQueueInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options) : base (ref reference, options)
 		{
