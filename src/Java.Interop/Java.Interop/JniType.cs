@@ -168,13 +168,6 @@ namespace Java.Interop {
 			RegisterWithRuntime ();
 		}
 
-		public void RegisterNativeMethods (ReadOnlySpan<JniBlittableNativeMethodRegistration> methods)
-		{
-			AssertValid ();
-			JniEnvironment.Types.RegisterNatives (PeerReference, methods);
-			RegisterWithRuntime ();
-		}
-
 		public void UnregisterNativeMethods ()
 		{
 			AssertValid ();

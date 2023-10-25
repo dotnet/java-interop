@@ -56,6 +56,7 @@ Time Elapsed 00:00:00.83
 % (cd bin/Release/osx-x64/publish ; java -cp hello-from-java.jar:java-interop.jar com/microsoft/hello_from_jni/App)
 Hello from Java!
 Hello from .NET NativeAOT!
+String returned to Java: Hello from .NET NativeAOT!
 ```
 
 Note the use of `(cd …; java …)` so that `libHello-NativeAOTFromJNI.dylib` is
