@@ -56,7 +56,8 @@ namespace Java.InteropTests
 			Assert.Throws<ObjectDisposedException> (() => t.IsAssignableFrom (null));
 			Assert.Throws<ObjectDisposedException> (() => t.IsInstanceOfType (new JniObjectReference ()));
 			Assert.Throws<ObjectDisposedException> (() => t.RegisterWithRuntime ());
-			Assert.Throws<ObjectDisposedException> (() => t.RegisterNativeMethods (null));
+			Assert.Throws<ObjectDisposedException> (() => t.RegisterNativeMethods ((JniNativeMethodRegistration[])null));
+			Assert.Throws<ObjectDisposedException> (() => t.RegisterNativeMethods (new ReadOnlySpan<JniBlittableNativeMethodRegistration> ()));
 			Assert.Throws<ObjectDisposedException> (() => t.UnregisterNativeMethods ());
 
 			JniFieldInfo    jif = null;
