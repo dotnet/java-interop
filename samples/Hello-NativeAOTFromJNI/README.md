@@ -52,7 +52,14 @@ Build succeeded.
     0 Error(s)
 
 Time Elapsed 00:00:00.83
+
+% (cd bin/Release/osx-x64/publish ; java -cp hello-from-java.jar:java-interop.jar com/microsoft/hello_from_jni/App)
+Hello from Java!
+Hello from .NET NativeAOT!
 ```
+
+Note the use of `(cd …; java …)` so that `libHello-NativeAOTFromJNI.dylib` is
+in the current working directory, so that it can be found.
 
 [0]: https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/jniTOC.html
 [1]: https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html#creating_the_vm

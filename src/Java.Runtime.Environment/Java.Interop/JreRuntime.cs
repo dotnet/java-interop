@@ -39,11 +39,7 @@ namespace Java.Interop {
 		public JreRuntimeOptions ()
 		{
 			JniVersion  = JniVersion.v1_2;
-			ClassPath   = new Collection<string> () {
-				Path.Combine (
-					Path.GetDirectoryName (typeof (JreRuntimeOptions).Assembly.Location) ?? throw new NotSupportedException (),
-					"java-interop.jar"),
-			};
+			ClassPath   = new Collection<string> ();
 		}
 
 		public JreRuntimeOptions AddOption (string option)
@@ -80,7 +76,7 @@ namespace Java.Interop {
 		{
 			if (builder == null)
 				throw new ArgumentNullException ("builder");
-			if (string.IsNullOrEmpty (builder.JvmLibraryPath))
+			if (builder.InvocationPointer == IntPtr.Zero && string.IsNullOrEmpty (builder.JvmLibraryPath))
 				throw new InvalidOperationException ($"Member `{nameof (JreRuntimeOptions)}.{nameof (JreRuntimeOptions.JvmLibraryPath)}` must be set.");
 
 			builder.LibraryHandler  = JvmLibraryHandler.Create ();
@@ -99,10 +95,22 @@ namespace Java.Interop {
 				builder.ObjectReferenceManager  = builder.ObjectReferenceManager    ?? new ManagedObjectReferenceManager (builder.JniGlobalReferenceLogWriter, builder.JniLocalReferenceLogWriter);
 			}
 
+			Console.WriteLine($"# jonp: builder.InvocationPointer={builder.InvocationPointer.ToString("x2")}");
 			if (builder.InvocationPointer != IntPtr.Zero)
 				return builder;
+			Console.WriteLine($"# jonp: loading {builder.JvmLibraryPath}...");
 
 			builder.LibraryHandler.LoadJvmLibrary (builder.JvmLibraryPath!);
+
+			if (!builder.ClassPath.Any (p => p.EndsWith ("java-interop.jar", StringComparison.OrdinalIgnoreCase))) {
+				var loc = typeof (JreRuntimeOptions).Assembly.Location;
+				var dir = string.IsNullOrEmpty (loc) ? null : Path.GetDirectoryName (loc);
+				var jij = string.IsNullOrEmpty (dir) ? null : Path.Combine (dir, "java-interop.jar");
+				if (!File.Exists (jij)) {
+					throw new InvalidOperationException ($"`java-interop.jar` is required.  Please add to `JreRuntimeOptions.ClassPath`.  Tried to find it in `{jij}`.");
+				}
+				builder.ClassPath.Add (jij);
+			}
 
 			var args = new JavaVMInitArgs () {
 				version             = builder.JniVersion,

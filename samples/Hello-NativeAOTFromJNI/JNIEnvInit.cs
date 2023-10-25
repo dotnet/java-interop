@@ -6,18 +6,23 @@ namespace Hello_NativeAOTFromJNI;
 
 static class JNIEnvInit
 {
-	// static JniRuntime? runtime;
+	static JniRuntime? runtime;
 
 	[UnmanagedCallersOnly (EntryPoint="JNI_OnLoad")]
 	static int JNI_OnLoad (IntPtr vm, IntPtr reserved)
 	{
+		Console.WriteLine ($"# jonp: JNI_OnLoad: vm={vm.ToString("x2")}");
 		try {
-			// runtime = new JniRuntime (null);
-			// return runtime.JniVersion;
-			return (int) JniVersion.v1_2;
+			var options = new JreRuntimeOptions {
+				InvocationPointer = vm,
+			};
+			Console.WriteLine ($"# jonp: JNI_OnLoad: created options…");
+			runtime = options.CreateJreVM ();
+			Console.WriteLine ($"# jonp: JNI_OnLoad: created runtime…");
+			return (int) runtime.JniVersion;
 		}
 		catch (Exception e) {
-			Console.Error.WriteLine ($"JNI_OnLoad: {e}");
+			Console.Error.WriteLine ($"JNI_OnLoad: error: {e}");
 			return 0;
 		}
 	}
@@ -30,8 +35,13 @@ static class JNIEnvInit
 
 	// symbol name from `$(IntermediateOutputPath)/h-classes/com_microsoft_hello_from_jni_NativeAOTInit.h`
 	[UnmanagedCallersOnly (EntryPoint="Java_com_microsoft_hello_1from_1jni_NativeAOTInit_sayHello")]
-	static void sayHello (IntPtr jnienv, IntPtr klass)
+	static IntPtr sayHello (IntPtr jnienv, IntPtr klass)
 	{
-		Console.WriteLine ($"Hello from .NET NativeAOT!");
+		var s = $"Hello from .NET NativeAOT!";
+		Console.WriteLine (s);
+		var h = JniEnvironment.Strings.NewString (s);
+		var r = JniEnvironment.References.NewReturnToJniRef (h);
+		JniObjectReference.Dispose (ref h);
+		return r;
 	}
 }

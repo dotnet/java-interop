@@ -5,5 +5,5 @@ class NativeAOTInit {
         System.loadLibrary("Hello-NativeAOTFromJNI");
     }
 
-    public static native void sayHello();
+    public static native String sayHello();
 }

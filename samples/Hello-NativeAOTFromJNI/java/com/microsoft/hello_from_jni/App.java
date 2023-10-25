@@ -4,6 +4,7 @@ class App {
 
     public static void main(String[] args) {
         System.out.println("Hello from Java!");
-        NativeAOTInit.sayHello();
+        String s = NativeAOTInit.sayHello();
+        System.out.println("String returned to Java: " + s);
     }
 }
