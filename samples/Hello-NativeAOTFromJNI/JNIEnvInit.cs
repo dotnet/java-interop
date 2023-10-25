@@ -11,14 +11,11 @@ static class JNIEnvInit
 	[UnmanagedCallersOnly (EntryPoint="JNI_OnLoad")]
 	static int JNI_OnLoad (IntPtr vm, IntPtr reserved)
 	{
-		Console.WriteLine ($"# jonp: JNI_OnLoad: vm={vm.ToString("x2")}");
 		try {
 			var options = new JreRuntimeOptions {
 				InvocationPointer = vm,
 			};
-			Console.WriteLine ($"# jonp: JNI_OnLoad: created options…");
 			runtime = options.CreateJreVM ();
-			Console.WriteLine ($"# jonp: JNI_OnLoad: created runtime…");
 			return (int) runtime.JniVersion;
 		}
 		catch (Exception e) {
@@ -30,7 +27,7 @@ static class JNIEnvInit
 	[UnmanagedCallersOnly (EntryPoint="JNI_OnUnload")]
 	static void JNI_Onload (IntPtr vm, IntPtr reserved)
 	{
-		// runtime?.Dispose ();
+		runtime?.Dispose ();
 	}
 
 	// symbol name from `$(IntermediateOutputPath)/h-classes/com_microsoft_hello_from_jni_NativeAOTInit.h`

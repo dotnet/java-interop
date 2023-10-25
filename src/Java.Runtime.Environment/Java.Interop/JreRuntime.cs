@@ -95,10 +95,8 @@ namespace Java.Interop {
 				builder.ObjectReferenceManager  = builder.ObjectReferenceManager    ?? new ManagedObjectReferenceManager (builder.JniGlobalReferenceLogWriter, builder.JniLocalReferenceLogWriter);
 			}
 
-			Console.WriteLine($"# jonp: builder.InvocationPointer={builder.InvocationPointer.ToString("x2")}");
 			if (builder.InvocationPointer != IntPtr.Zero)
 				return builder;
-			Console.WriteLine($"# jonp: loading {builder.JvmLibraryPath}...");
 
 			builder.LibraryHandler.LoadJvmLibrary (builder.JvmLibraryPath!);
 

@@ -758,7 +758,7 @@ namespace Xamarin.Java.Interop
 			{ "void*",                      new BuiltinTypeInfo ("void*",                   "IntPtr") },
 			{ "const jchar*",               new StringTypeInfo ("const jchar*") },
 			{ "const char*",                new StringTypeInfo ("const char*") },
-			{ "const JNINativeMethod*",     new BuiltinTypeInfo ("const JNINativeMethod*",  "JniNativeMethodRegistration []") },
+			{ "const JNINativeMethod*",     new BuiltinTypeInfo ("const JNINativeMethod*",  "IntPtr") },
 			{ "jobjectRefType",             new BuiltinTypeInfo ("jobjectRefType",          "JniObjectReferenceType") },
 			{ "jfieldID",                   new InstanceFieldTypeInfo ("jfieldID") },
 			{ "jstaticfieldID",             new StaticFieldTypeInfo ("jstaticfieldID") },

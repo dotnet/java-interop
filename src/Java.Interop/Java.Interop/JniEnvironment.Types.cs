@@ -250,6 +250,9 @@ namespace Java.Interop
 					throw new ArgumentOutOfRangeException (nameof (numMethods), numMethods,
 							$"`numMethods` must be between 0 and `methods.Length` ({methods?.Length ?? 0})!");
 				}
+				if (methods == null || numMethods == 0) {
+					return;
+				}
 #if DEBUG && NETCOREAPP
 				for (int i = 0; methods != null && i < numMethods; ++i) {
 					var m   = methods [i];
@@ -262,8 +265,42 @@ namespace Java.Interop
 				}
 #endif  // DEBUG && NETCOREAPP
 
-				int r   = _RegisterNatives (type, methods, numMethods);
+				Span<JniBlittableNativeMethodRegistration> blittableMethods
+					= stackalloc JniBlittableNativeMethodRegistration [numMethods];
+				Span<IntPtr> freeStrings
+					= stackalloc IntPtr [numMethods * 2];
+				try {
+					for (int i = 0; i < numMethods; ++i) {
+						var name    = methods [i].Name == null ? IntPtr.Zero : Marshal.StringToCoTaskMemUTF8 (methods [i].Name);
+						var sig     = methods [i].Signature == null ? IntPtr.Zero : Marshal.StringToCoTaskMemUTF8 (methods [i].Signature);
 
+						freeStrings [(i*2)+0] = name;
+						freeStrings [(i*2)+1] = sig;
+
+						blittableMethods [i] = new JniBlittableNativeMethodRegistration (
+								name,
+								sig,
+								Marshal.GetFunctionPointerForDelegate (methods [i].Marshaler)
+						);
+					}
+					RegisterNatives (type, blittableMethods);
+				}
+				finally {
+					for (int i = 0; i < freeStrings.Length; ++i) {
+						Marshal.ZeroFreeCoTaskMemUTF8 (freeStrings [i]);
+					}
+				}
+			}
+
+			public static unsafe void RegisterNatives (JniObjectReference type, ReadOnlySpan<JniBlittableNativeMethodRegistration> methods)
+			{
+				if (methods.Length == 0) {
+					return;
+				}
+				int r;
+				fixed (JniBlittableNativeMethodRegistration* pMethods = methods) {
+					r = _RegisterNatives (type, (IntPtr) pMethods, methods.Length);
+				}
 				if (r != 0) {
 					throw new InvalidOperationException (
 							string.Format ("Could not register native methods for class '{0}'; JNIEnv::RegisterNatives() returned {1}.", GetJniTypeNameFromClass (type), r));
