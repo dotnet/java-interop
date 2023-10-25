@@ -368,6 +368,10 @@ namespace MonoDroid.Generation
 
 		(object Package, object Name, string Id) javaFullNameIdCache;
 
+		/// <summary>
+		/// Fully-qualifed Java name, usable as a C# identifier, by replacing
+		/// `.` and `$` with `_`.  Example: java_lang_Object.
+		/// </summary>
 		public string JavaFullNameId {
 			get {
 				if (object.ReferenceEquals (javaFullNameIdCache.Package, support.PackageName) &&
