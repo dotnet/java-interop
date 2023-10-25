@@ -27,5 +27,9 @@
     <HelloNativeAOTFromJNIJar Include="$(MSBuildThisFileDirectory)java\**\*.java" />
   </ItemGroup>
 
+  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform('linux')) Or $([MSBuild]::IsOSPlatform('FreeBSD')) Or $([MSBuild]::IsOSPlatform('Android')) ">
+    <CustomLinkerArg Include="-Wl,-soname,lib$(NativeBinary)$(NativeBinaryExt)" />
+  </ItemGroup>
+
   <Import Project="Hello-NativeAOTFromJNI.targets" />
 </Project>
