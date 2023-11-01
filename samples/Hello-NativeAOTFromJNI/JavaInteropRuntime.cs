@@ -4,7 +4,7 @@ using Java.Interop;
 
 namespace Hello_NativeAOTFromJNI;
 
-static class JNIEnvInit
+static class JavaInteropRuntime
 {
 	static JniRuntime? runtime;
 
@@ -30,15 +30,9 @@ static class JNIEnvInit
 		runtime?.Dispose ();
 	}
 
-	// symbol name from `$(IntermediateOutputPath)/h-classes/com_microsoft_hello_from_jni_NativeAOTInit.h`
-	[UnmanagedCallersOnly (EntryPoint="Java_com_microsoft_hello_1from_1jni_NativeAOTInit_sayHello")]
-	static IntPtr sayHello (IntPtr jnienv, IntPtr klass)
+	[UnmanagedCallersOnly (EntryPoint="Java_com_microsoft_java_1interop_JavaInteropRuntime_init")]
+	static void init ()
 	{
-		var s = $"Hello from .NET NativeAOT!";
-		Console.WriteLine (s);
-		var h = JniEnvironment.Strings.NewString (s);
-		var r = JniEnvironment.References.NewReturnToJniRef (h);
-		JniObjectReference.Dispose (ref h);
-		return r;
+		Console.Error.WriteLine ($"C# init()");
 	}
 }

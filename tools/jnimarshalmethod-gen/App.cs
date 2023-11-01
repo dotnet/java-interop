@@ -228,9 +228,11 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			// loadContext = CreateLoadContext ();
 			AppDomain.CurrentDomain.AssemblyResolve += (o, e) => {
 				Log (TraceLevel.Verbose, $"# jonp: resolving assembly: {e.Name}");
+				var name = new AssemblyName  (e.Name);
 				foreach (var d in resolver.SearchDirectories) {
-					var a = Path.Combine (d, e.Name);
+					var a = Path.Combine (d, name.Name);
 					var f = a + ".dll";
+					Log (TraceLevel.Verbose, $"# jonp: checking for: {f} ({File.Exists (f)})");
 					if (File.Exists (f)) {
 						return Assembly.LoadFile (Path.GetFullPath (f));
 					}
@@ -239,6 +241,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 						return Assembly.LoadFile (Path.GetFullPath (f));
 					}
 				}
+				Log (TraceLevel.Verbose, $"# jonp: could not resolve assembly: {e.Name}");
 				return null;
 			};
 

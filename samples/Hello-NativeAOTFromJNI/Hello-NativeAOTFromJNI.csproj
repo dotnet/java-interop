@@ -17,6 +17,8 @@
     <ProjectReference Include="..\..\src\Java.Runtime.Environment\Java.Runtime.Environment.csproj"
         AdditionalProperties="Standalone=True"
     />
+    <ProjectReference Include="..\..\src\Java.Base\Java.Base.csproj" />
+    <ProjectReference Include="..\..\src\Java.Interop.Export\Java.Interop.Export.csproj" />
   </ItemGroup>
 
   <ItemGroup>

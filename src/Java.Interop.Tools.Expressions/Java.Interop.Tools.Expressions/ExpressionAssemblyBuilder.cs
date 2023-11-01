@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using Java.Interop;
@@ -187,6 +188,15 @@ public class ExpressionAssemblyBuilder {
 		);
 		delegateDef.BaseType = DeclaringAssemblyDefinition.MainModule.ImportReference (typeof (MulticastDelegate));
 
+		var ufpCtor     = typeof (UnmanagedFunctionPointerAttribute).GetConstructor (new[]{typeof (CallingConvention)});
+		var ufpCtorRef  = DeclaringAssemblyDefinition.MainModule.ImportReference (ufpCtor);
+		var ufpAttr     = new CustomAttribute (ufpCtorRef);
+		ufpAttr.ConstructorArguments.Add (
+				new CustomAttributeArgument (
+					DeclaringAssemblyDefinition.MainModule.ImportReference (typeof (CallingConvention)),
+					CallingConvention.Winapi));
+		delegateDef.CustomAttributes.Add (ufpAttr);
+
 		var delegateCtor = new MethodDefinition (
 				name:       ".ctor",
 				attributes: MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName,
@@ -218,7 +228,7 @@ public class ExpressionAssemblyBuilder {
 		var module = DeclaringAssemblyDefinition.MainModule;
 
 		var c       = new MemoryStream ();
-		DeclaringAssemblyDefinition.Write (c);
+		DeclaringAssemblyDefinition.Write (path);
 		c.Position  = 0;
 
 		if (KeepTemporaryFiles) {
@@ -227,6 +237,10 @@ public class ExpressionAssemblyBuilder {
 			c.Position  = 0;
 		}
 
+
+#if false
+		// `Failed to resolve System.Runtime.InteropServices.CallingConvention`
+		// because `System.Runtime.InteropServices` is not referenced.
 		Logger (TraceLevel.Verbose, $"# jonp: ---");
 
 		var rp = new ReaderParameters {
@@ -277,6 +291,7 @@ public class ExpressionAssemblyBuilder {
 			module.AssemblyReferences.Remove (selfRef);
 		}
 		newAsm.Write (path);
+#endif  // false
 	}
 
 	static AssemblyNameReference GetSystemRuntimeReference ()
