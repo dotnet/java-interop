@@ -11,17 +11,7 @@ static class JavaInteropRuntime
 	[UnmanagedCallersOnly (EntryPoint="JNI_OnLoad")]
 	static int JNI_OnLoad (IntPtr vm, IntPtr reserved)
 	{
-		try {
-			var options = new JreRuntimeOptions {
-				InvocationPointer = vm,
-			};
-			runtime = options.CreateJreVM ();
-			return (int) runtime.JniVersion;
-		}
-		catch (Exception e) {
-			Console.Error.WriteLine ($"JNI_OnLoad: error: {e}");
-			return 0;
-		}
+		return (int) JniVersion.v1_6;
 	}
 
 	[UnmanagedCallersOnly (EntryPoint="JNI_OnUnload")]
@@ -31,8 +21,17 @@ static class JavaInteropRuntime
 	}
 
 	[UnmanagedCallersOnly (EntryPoint="Java_com_microsoft_java_1interop_JavaInteropRuntime_init")]
-	static void init ()
+	static void init (IntPtr jnienv, IntPtr klass)
 	{
-		Console.Error.WriteLine ($"C# init()");
+		Console.WriteLine ($"C# init()");
+		try {
+			var options = new JreRuntimeOptions {
+				EnvironmentPointer  = jnienv,
+			};
+			runtime = options.CreateJreVM ();
+		}
+		catch (Exception e) {
+			Console.Error.WriteLine ($"JavaInteropRuntime.init: error: {e}");
+		}
 	}
 }

@@ -76,7 +76,9 @@ namespace Java.Interop {
 		{
 			if (builder == null)
 				throw new ArgumentNullException ("builder");
-			if (builder.InvocationPointer == IntPtr.Zero && string.IsNullOrEmpty (builder.JvmLibraryPath))
+			if (builder.InvocationPointer == IntPtr.Zero &&
+					builder.EnvironmentPointer == IntPtr.Zero &&
+					string.IsNullOrEmpty (builder.JvmLibraryPath))
 				throw new InvalidOperationException ($"Member `{nameof (JreRuntimeOptions)}.{nameof (JreRuntimeOptions.JvmLibraryPath)}` must be set.");
 
 			builder.LibraryHandler  = JvmLibraryHandler.Create ();
@@ -95,7 +97,7 @@ namespace Java.Interop {
 				builder.ObjectReferenceManager  = builder.ObjectReferenceManager    ?? new ManagedObjectReferenceManager (builder.JniGlobalReferenceLogWriter, builder.JniLocalReferenceLogWriter);
 			}
 
-			if (builder.InvocationPointer != IntPtr.Zero)
+			if (builder.InvocationPointer != IntPtr.Zero || builder.EnvironmentPointer != IntPtr.Zero)
 				return builder;
 
 			builder.LibraryHandler.LoadJvmLibrary (builder.JvmLibraryPath!);
