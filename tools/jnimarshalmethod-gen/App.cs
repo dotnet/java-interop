@@ -552,27 +552,22 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 					Log (TraceLevel.Verbose, $"## Dumping contents of marshal method for `{td.FullName}::{method.Name}({string.Join (", ", method.GetParameters ().Select (p => p.ParameterType))})`:");
 					Console.WriteLine (lambda.ToCSharpCode ());
 #endif  // _DUMP_REGISTER_NATIVE_MEMBERS
+					name = export?.Name ?? method.Name;
+
 					var mmDef = assemblyBuilder.Compile (lambda);
-					mmDef.Name = export?.Name ?? ("n_TODO" + lambda.GetHashCode ());
+					mmDef.Name = name;
 					mmTypeDef.Methods.Add (mmDef);
 
-					if (export != null) {
-						name = export.Name;
-						signature = export.Signature;
-					}
+					signature = export?.Signature ?? builder.GetJniMethodSignature (method);
 
-					if (signature == null) {
-						signature = builder.GetJniMethodSignature (method);
-					}
-
-					registrations.Add (new ExpressionMethodRegistration (name, signature, mmDef));
+					// Assume that `JavaCallableAttribute.Name` is "public" JCW name, and JCW's declare `n_`-prefixed `native` methods…
+					registrations.Add (new ExpressionMethodRegistration ("n_" + method.Name, signature, mmDef));
 
 					addedMethods.Add (methodName);
 				}
 				if (registrations.Count > 0) {
-					var m = assemblyBuilder.CreateRegistrationMethod (registrations);
-					mmTypeDef.Methods.Add (m);
 					td.NestedTypes.Add (mmTypeDef);
+					assemblyBuilder.AddRegistrationMethod (mmTypeDef, registrations);
 				}
 			}
 

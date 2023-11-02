@@ -59,7 +59,7 @@ public class ExpressionAssemblyBuilder {
 		return mmDef;
 	}
 
-	public MethodDefinition CreateRegistrationMethod (IList<ExpressionMethodRegistration> methods)
+	public void AddRegistrationMethod (TypeDefinition declaringType, IList<ExpressionMethodRegistration> methods)
 	{
 		var registrations = new MethodDefinition (
 			name:       "__RegisterNativeMembers",
@@ -70,6 +70,8 @@ public class ExpressionAssemblyBuilder {
 				InitLocals      = true,
 			},
 		};
+
+		declaringType.Methods.Add (registrations);
 
 		var ctor    = typeof (JniAddNativeMethodRegistrationAttribute).GetConstructor (Type.EmptyTypes);
 		var attr    = new CustomAttribute (DeclaringAssemblyDefinition.MainModule.ImportReference (ctor));
@@ -84,7 +86,7 @@ public class ExpressionAssemblyBuilder {
 		registrations.Body.Variables.Add (array);
 
 		var il = registrations.Body.GetILProcessor ();
-		EmitConsoleWriteLine (il, $"# jonp: called __RegisterNativeMembers w/ {methods.Count} methods to register.");
+		EmitConsoleWriteLine (il, $"# jonp: called `{declaringType.FullName}.__RegisterNativeMembers()` w/ {methods.Count} methods to register.");
 		il.Emit (OpCodes.Ldc_I4, methods.Count);
 		il.Emit (OpCodes.Newarr, DeclaringAssemblyDefinition.MainModule.ImportReference (arrayType.GetElementType ()));
 		// il.Emit (OpCodes.Stloc_0);
@@ -117,9 +119,6 @@ public class ExpressionAssemblyBuilder {
 		il.Emit (OpCodes.Ldloc_0);
 		il.Emit (OpCodes.Call, DeclaringAssemblyDefinition.MainModule.ImportReference (addRegistrations.Method));
 		il.Emit (OpCodes.Ret);
-
-
-		return registrations;
 	}
 
 	void EmitConsoleWriteLine (ILProcessor il, string message)

@@ -372,6 +372,9 @@ namespace Java.Interop {
 
 			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
+			public virtual void RegisterNativeMembers (JniType nativeClass, ReadOnlySpan<char> assmblyQualifiedTypeName, ReadOnlySpan<char> methods) =>
+				RegisterNativeMembers (nativeClass, Type.GetType (new string (assmblyQualifiedTypeName), throwOnError: true)!, methods);
+
 			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, ReadOnlySpan<char> methods)
 			{
 				TryRegisterNativeMembers (nativeClass, type, methods);
@@ -412,10 +415,21 @@ namespace Java.Interop {
 			bool TryLoadJniMarshalMethods (JniType nativeClass, Type type, string? methods)
 			{
 				var marshalType = type?.GetNestedType ("__<$>_jni_marshal_methods", BindingFlags.NonPublic);
-				if (marshalType == null)
+				if (marshalType == null) {
+					Console.WriteLine ($"# jonp: could not find type `{(type?.FullName ?? "<no-type>")}.__<$>_jni_marshal_methods`");
 					return false;
+				}
 
-				var registerMethod = marshalType.GetRuntimeMethod ("__RegisterNativeMembers", registerMethodParameters);
+				var registerMethod = marshalType.GetMethod (
+						"__RegisterNativeMembers",
+						BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
+						binder: null,
+						callConvention: default,
+						types: registerMethodParameters,
+						modifiers: null);
+				if (registerMethod == null) {
+					Console.WriteLine ($"# jonp: could not find method `{marshalType.FullName}.__<$>_jni_marshal_methods.__RegisterNativeMembers`; will look for methods with `[JniAddNativeMethodRegistration]`…]");
+				}
 
 				return TryRegisterNativeMembers (nativeClass, marshalType, methods, registerMethod);
 			}
@@ -466,11 +480,14 @@ namespace Java.Interop {
 						continue;
 					}
 
+					var declaringTypeName = methodInfo.DeclaringType?.FullName ?? "<no-decl-type>";
+
 					if ((methodInfo.Attributes & MethodAttributes.Static) != MethodAttributes.Static) {
-						throw new InvalidOperationException ($"The method {methodInfo} marked with {nameof (JniAddNativeMethodRegistrationAttribute)} must be static");
+						throw new InvalidOperationException ($"The method `{declaringTypeName}.{methodInfo}` marked with [{nameof (JniAddNativeMethodRegistrationAttribute)}] must be static!");
 					}
 
 					var register = (Action<JniNativeMethodRegistrationArguments>)methodInfo.CreateDelegate (typeof (Action<JniNativeMethodRegistrationArguments>));
+					Console.WriteLine ($"# jonp: FindAndCallRegisterMethod: calling `{declaringTypeName}.{methodInfo}`…");
 					register (arguments);
 
 					found = true;

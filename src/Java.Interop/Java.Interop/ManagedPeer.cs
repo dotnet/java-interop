@@ -197,22 +197,27 @@ namespace Java.Interop {
 				var r_nativeClass   = new JniObjectReference (n_nativeClass);
 				var nativeClass     = new JniType (ref r_nativeClass, JniObjectReferenceOptions.Copy);
 
-				var assemblyQualifiedName   = JniEnvironment.Strings.ToString (new JniObjectReference (n_assemblyQualifiedName));
-				var type                    = Type.GetType (assemblyQualifiedName!, throwOnError: true)!;
 				var methodsRef              = new JniObjectReference (n_methods);
-
 #if NET
+
+				var aqnRef                  = new JniObjectReference (n_assemblyQualifiedName);
+				int aqnLength               = JniEnvironment.Strings.GetStringLength (aqnRef);
+				var aqnChars                = JniEnvironment.Strings.GetStringChars (aqnRef, null);
+				var aqn                     = new ReadOnlySpan<char>(aqnChars, aqnLength);
 
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
 				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
 				try {
-					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
+					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, aqn, methods);
 				}
 				finally {
+					JniEnvironment.Strings.ReleaseStringChars (aqnRef, aqnChars);
 					JniEnvironment.Strings.ReleaseStringChars (methodsRef, methodsChars);
 				}
 #else   // NET
+				var assemblyQualifiedName   = JniEnvironment.Strings.ToString (new JniObjectReference (n_assemblyQualifiedName));
+				var type                    = Type.GetType (assemblyQualifiedName!, throwOnError: true)!;
 				var methods                 = JniEnvironment.Strings.ToString (methodsRef);
 				JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 #endif  // NET

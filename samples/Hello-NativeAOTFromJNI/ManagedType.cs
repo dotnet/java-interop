@@ -9,6 +9,12 @@ class ManagedType : Java.Lang.Object {
 	{
 	}
 
+	// TODO: remove this
+	public ManagedType (ref JniObjectReference reference, JniObjectReferenceOptions options)
+		: base (ref reference, options)
+	{
+	}
+
 	[JavaCallable ("getString")]
 	public Java.Lang.String GetString ()
 	{

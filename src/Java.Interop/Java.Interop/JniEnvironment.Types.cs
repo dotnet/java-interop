@@ -265,6 +265,8 @@ namespace Java.Interop
 				int r   = _RegisterNatives (type, methods, numMethods);
 
 				if (r != 0) {
+					Console.WriteLine ($"# jonp: _RegisterNatives returned {r}");
+					JniNativeMethods.ExceptionDescribe (JniEnvironment.CurrentInfo.EnvironmentPointer);
 					throw new InvalidOperationException (
 							string.Format ("Could not register native methods for class '{0}'; JNIEnv::RegisterNatives() returned {1}.", GetJniTypeNameFromClass (type), r));
 				}

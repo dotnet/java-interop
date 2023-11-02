@@ -22,6 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TrimmerRootAssembly Include="Hello-NativeAOTFromJNI" />
+    <TrimmerRootDescriptor Include="Hello-NativeAOTFromJNI.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="$(OutputPath)hello-from-java.jar" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
