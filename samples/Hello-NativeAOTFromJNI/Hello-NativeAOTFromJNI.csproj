@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="../../src/Java.Runtime.Environment/Java.Interop/ManagedValueManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="$(OutputPath)hello-from-java.jar" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 

@@ -5,13 +5,8 @@ using Java.Interop;
 [JniTypeSignature ("example/ManagedType")]
 class ManagedType : Java.Lang.Object {
 
+	[JavaCallable]
 	public ManagedType ()
-	{
-	}
-
-	// TODO: remove this
-	public ManagedType (ref JniObjectReference reference, JniObjectReferenceOptions options)
-		: base (ref reference, options)
 	{
 	}
 

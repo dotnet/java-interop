@@ -22,7 +22,7 @@ namespace Java.Interop {
 		public override void CollectPeers ()
 		{
 			if (RegisteredInstances == null)
-				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
+				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
 			var peers = new List<IJavaPeerable> ();
 
@@ -51,7 +51,7 @@ namespace Java.Interop {
 		public override void AddPeer (IJavaPeerable value)
 		{
 			if (RegisteredInstances == null)
-				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
+				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
 			var r = value.PeerReference;
 			if (!r.IsValid)
@@ -116,7 +116,7 @@ namespace Java.Interop {
 		public override IJavaPeerable? PeekPeer (JniObjectReference reference)
 		{
 			if (RegisteredInstances == null)
-				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
+				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
 			if (!reference.IsValid)
 				return null;
@@ -142,7 +142,7 @@ namespace Java.Interop {
 		public override void RemovePeer (IJavaPeerable value)
 		{
 			if (RegisteredInstances == null)
-				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
+				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
 			if (value == null)
 				throw new ArgumentNullException (nameof (value));
@@ -221,7 +221,7 @@ namespace Java.Interop {
 		public override List<JniSurfacedPeerInfo> GetSurfacedPeers ()
 		{
 			if (RegisteredInstances == null)
-				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
+				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
 			lock (RegisteredInstances) {
 				var peers = new List<JniSurfacedPeerInfo> (RegisteredInstances.Count);

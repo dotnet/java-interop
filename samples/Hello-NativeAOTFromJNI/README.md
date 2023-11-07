@@ -25,17 +25,17 @@ Release configuration:
 Once Java.Interop itself is built, you can build the sample:
 
 ```sh
-% dotnet build -c Release
-% dotnet publish -r osx-x64
+% dotnet publish -c Release -r osx-x64
 ```
 
 The resulting native library contains the desired symbols:
 
 ```sh
 % nm bin/Release/osx-x64/publish/Hello-NativeAOTFromJNI.dylib | grep ' S ' 
-00000000000cb710 S _JNI_OnLoad
-00000000000cb820 S _JNI_OnUnload
-00000000000cb840 S _Java_com_microsoft_hello_1from_1jni_NativeAOTInit_sayHello
+000000000016f5a0 S _JNI_OnLoad
+000000000016f5d0 S _JNI_OnUnload
+000000000016f2f0 S _Java_com_microsoft_hello_1from_1jni_App_sayHello
+000000000016f620 S _Java_com_microsoft_java_1interop_JavaInteropRuntime_init
 ```
 
 Use the `RunJavaSample` target to run Java, which will run
@@ -45,18 +45,29 @@ NativeAOT-generated `libHello-NativeAOTFromJNI.dylib` to be run:
 ```sh
 % dotnet build -c Release -r osx-x64 -t:RunJavaSample  -v m --nologo --no-restore
   Hello from Java!
+  C# init()
   Hello from .NET NativeAOT!
+  String returned to Java: Hello from .NET NativeAOT!
+  C# RegisterNativeMembers(JniType(Name='example/ManagedType' PeerReference=0x7fd0a00072d8/G), "Example.ManagedType, Hello-NativeAOTFromJNI", "getString:()Ljava/lang/String;:__export__
+  ")
+  # jonp: called `Example.ManagedType/__<$>_jni_marshal_methods.__RegisterNativeMembers()` w/ 1 methods to register.
+  mt.getString()=Hello from C#, via Java.Interop!
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.83
+Time Elapsed 00:00:00.73
 
 % (cd bin/Release/osx-x64/publish ; java -cp hello-from-java.jar:java-interop.jar com/microsoft/hello_from_jni/App)
 Hello from Java!
+C# init()
 Hello from .NET NativeAOT!
 String returned to Java: Hello from .NET NativeAOT!
+C# RegisterNativeMembers(JniType(Name='example/ManagedType' PeerReference=0x7fa822114598/G), "Example.ManagedType, Hello-NativeAOTFromJNI", "getString:()Ljava/lang/String;:__export__
+")
+# jonp: called `Example.ManagedType/__<$>_jni_marshal_methods.__RegisterNativeMembers()` w/ 1 methods to register.
+mt.getString()=Hello from C#, via Java.Interop!
 ```
 
 Note the use of `(cd …; java …)` so that `libHello-NativeAOTFromJNI.dylib` is
