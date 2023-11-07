@@ -37,7 +37,8 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 
 			// Contains invalid [Register] name of "foo-impl"
 			var td = SupportDeclarations.GetTypeDefinition (typeof (KotlinInvalidImplRegisterName));
-			var e = Assert.Throws<XamarinAndroidException> (() => new JavaCallableWrapperGenerator (td, logger, cache: null));
+			var g = new JavaCallableWrapperGenerator (td, logger, cache: null);
+			var e = Assert.Throws<XamarinAndroidException> (() => g.Generate (TextWriter.Null));
 			Assert.AreEqual (4217, e.Code);
 		}
 
@@ -48,7 +49,8 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 
 			// Contains invalid [Register] name of "foo-f8k2a13"
 			var td = SupportDeclarations.GetTypeDefinition (typeof (KotlinInvalidHashRegisterName));
-			var e = Assert.Throws<XamarinAndroidException> (() => new JavaCallableWrapperGenerator (td, logger, cache: null));
+			var g = new JavaCallableWrapperGenerator (td, logger, cache: null);
+			var e = Assert.Throws<XamarinAndroidException> (() => g.Generate (TextWriter.Null));
 			Assert.AreEqual (4217, e.Code);
 		}
 
@@ -102,13 +104,14 @@ public class Name
 			Assert.AreEqual (expected, actual);
 		}
 
-		static string Generate (Type type, string applicationJavaClass = null, string monoRuntimeInit = null)
+		static string Generate (Type type, string applicationJavaClass = null, string monoRuntimeInit = null, JavaPeerStyle style = JavaPeerStyle.XAJavaInterop1)
 		{
 			var td  = SupportDeclarations.GetTypeDefinition (type);
 			var g   = new JavaCallableWrapperGenerator (td, log: null, cache: null) {
 				ApplicationJavaClass        = applicationJavaClass,
 				GenerateOnCreateOverrides   = true,
 				MonoRuntimeInitialization   = monoRuntimeInit,
+				CodeGenerationTarget        = style,
 			};
 			var o   = new StringWriter ();
 			var dir = Path.GetDirectoryName (typeof (JavaCallableWrapperGeneratorTests).Assembly.Location);
@@ -618,6 +621,57 @@ public class ExampleInstrumentation
 			refList.clear ();
 	}}
 }}
+";
+			Assert.AreEqual (expected, actual);
+		}
+
+		[Test]
+		public void GenerateJavaInteropExample ()
+		{
+			var actual = Generate (typeof (JavaInteropExample), style: JavaPeerStyle.JavaInterop1);
+			var expected = @"package register;
+
+
+public class JavaInteropExample
+	extends java.lang.Object
+	implements
+		com.xamarin.java_interop.GCUserPeerable
+{
+/** @hide */
+	public static final String __md_methods;
+	static {
+		__md_methods = 
+			""example:()V:__export__\n"" +
+			"""";
+		com.xamarin.java_interop.ManagedPeer.registerNativeMembers (JavaInteropExample.class, ""Xamarin.Android.ToolsTests.JavaInteropExample, Java.Interop.Tools.JavaCallableWrappers-Tests"", __md_methods);
+	}
+
+
+	public JavaInteropExample ()
+	{
+		super ();
+		if (getClass () == JavaInteropExample.class) {
+			com.xamarin.java_interop.ManagedPeer.construct (this, ""Xamarin.Android.ToolsTests.JavaInteropExample, Java.Interop.Tools.JavaCallableWrappers-Tests"", """", new java.lang.Object[] {  });
+		}
+	}
+
+
+	public native void example ();
+
+	private java.util.ArrayList refList;
+	public void jiAddManagedReference (java.lang.Object obj)
+	{
+		if (refList == null)
+			refList = new java.util.ArrayList ();
+		refList.add (obj);
+	}
+
+	public void jiClearManagedReferences ()
+	{
+		if (refList != null)
+			refList.clear ();
+	}
+}
 ";
 			Assert.AreEqual (expected, actual);
 		}

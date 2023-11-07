@@ -560,8 +560,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 					signature = export?.Signature ?? builder.GetJniMethodSignature (method);
 
-					// Assume that `JavaCallableAttribute.Name` is "public" JCW name, and JCW's declare `n_`-prefixed `native` methods…
-					registrations.Add (new ExpressionMethodRegistration ("n_" + method.Name, signature, mmDef));
+					registrations.Add (new ExpressionMethodRegistration (name, signature, mmDef));
 
 					addedMethods.Add (methodName);
 				}

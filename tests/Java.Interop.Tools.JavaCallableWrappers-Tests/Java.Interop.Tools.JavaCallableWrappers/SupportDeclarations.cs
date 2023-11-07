@@ -323,4 +323,15 @@ namespace Xamarin.Android.ToolsTests {
 		[Export (Throws = new Type [0])]
 		public ExportsThrowsConstructors (string value) { }
 	}
+
+	[JniTypeSignature ("register/JavaInteropExample")]
+	class JavaInteropExample : Java.Lang.Object {
+
+
+		[JavaCallable]
+		public JavaInteropExample () {}
+
+		[JavaCallable ("example")]
+		public void Example () {}
+	}
 }
