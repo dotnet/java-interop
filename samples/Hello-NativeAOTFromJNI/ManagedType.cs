@@ -5,7 +5,7 @@ using Java.Interop;
 [JniTypeSignature ("example/ManagedType")]
 class ManagedType : Java.Lang.Object {
 
-	[JavaCallable]
+	[JavaCallableConstructor]
 	public ManagedType ()
 	{
 	}

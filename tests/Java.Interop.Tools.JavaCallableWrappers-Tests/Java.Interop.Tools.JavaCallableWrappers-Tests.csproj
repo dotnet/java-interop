@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="..\..\src\Java.Interop\Java.Interop\JniTypeSignatureAttribute.cs" />
     <Compile Include="..\..\src\Java.Interop.Export\Java.Interop\JavaCallableAttribute.cs" />
+    <Compile Include="..\..\src\Java.Interop.Export\Java.Interop\JavaCallableConstructorAttribute.cs" />
   </ItemGroup>
 
 </Project>

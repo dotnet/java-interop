@@ -6,7 +6,7 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 
 #pragma warning disable IL2026
 	Dictionary<string, Type> typeMappings = new () {
-		["com/xamarin/java_interop/internal/JavaProxyThrowable"] = typeof (JniEnvironment).Assembly.GetType ("Java.Interop.JavaProxyThrowable", throwOnError: true)!,
+		["com/xamarin/java_interop/internal/JavaProxyThrowable"] = Type.GetType ("Java.Interop.JavaProxyThrowable, Java.Interop", throwOnError: true)!,
 		["example/ManagedType"] = typeof (Example.ManagedType),
 	};
 #pragma warning restore IL2026

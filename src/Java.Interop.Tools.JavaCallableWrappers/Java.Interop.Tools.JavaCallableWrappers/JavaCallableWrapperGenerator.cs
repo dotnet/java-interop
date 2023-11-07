@@ -179,6 +179,9 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableAttribute")) {
 					AddMethod (null, minfo);
 					HasExport = true;
+				} else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableConstructorAttribute")) {
+					AddMethod (null, minfo);
+					HasExport = true;
 				} else if (minfo.AnyCustomAttributes (typeof(ExportFieldAttribute))) {
 					AddMethod (null, minfo);
 					HasExport = true;
@@ -310,7 +313,9 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					if (!string.IsNullOrEmpty (eattr.Name)) {
 						// Diagnostic.Warning (log, "Use of ExportAttribute.Name property is invalid on constructors");
 					}
-					ctors.Add (new Signature (new (cache, CodeGenerationTarget, ctor, eattr)));
+					ctors.Add (new Signature (new (cache, CodeGenerationTarget, ctor, eattr) {
+						ManagedParameters   = managedParameters,
+					}));
 					curCtors.Add (ctor);
 					return;
 				}
@@ -450,6 +455,15 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			return new ExportAttribute (name);
 		}
 
+		ExportAttribute ToExportAttributeFromJavaCallableConstructorAttribute (CustomAttribute attr, IMemberDefinition declaringMember)
+		{
+			var name = attr.ConstructorArguments.Count > 0 ? (string) attr.ConstructorArguments [0].Value : declaringMember.Name;
+			var superArgs = (string) attr.Properties.FirstOrDefault (p => p.Name == "SuperConstructorExpression").Argument.Value;
+			return new ExportAttribute (".ctor") {
+				SuperArgumentsString = superArgs,
+			};
+		}
+
 		internal static ExportFieldAttribute ToExportFieldAttribute (CustomAttribute attr)
 		{
 			return new ExportFieldAttribute ((string) attr.ConstructorArguments [0].Value);
@@ -486,7 +500,8 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		IEnumerable<ExportAttribute> GetExportAttributes (IMemberDefinition p)
 		{
 			return GetAttributes<ExportAttribute> (p, a => ToExportAttribute (a, p))
-				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableAttribute", a => ToExportAttributeFromJavaCallableAttribute (a, p)));
+				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableAttribute", a => ToExportAttributeFromJavaCallableAttribute (a, p)))
+				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableConstructorAttribute", a => ToExportAttributeFromJavaCallableConstructorAttribute (a, p)));
 		}
 
 		static IEnumerable<ExportFieldAttribute> GetExportFieldAttributes (Mono.Cecil.ICustomAttributeProvider p)

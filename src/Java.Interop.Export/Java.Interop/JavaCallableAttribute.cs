@@ -3,7 +3,7 @@ using System;
 
 namespace Java.Interop {
 
-	[AttributeUsage (AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple=false)]
+	[AttributeUsage (AttributeTargets.Method, AllowMultiple=false)]
 	public sealed class JavaCallableAttribute : Attribute {
 
 		public JavaCallableAttribute ()

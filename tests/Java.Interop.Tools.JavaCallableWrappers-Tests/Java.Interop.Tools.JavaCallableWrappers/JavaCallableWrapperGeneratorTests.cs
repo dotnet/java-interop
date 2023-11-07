@@ -452,7 +452,7 @@ public class ExportsConstructors
 	{
 		super (p0);
 		if (getClass () == ExportsConstructors.class) {
-			mono.android.TypeManager.Activate (""Xamarin.Android.ToolsTests.ExportsConstructors, Java.Interop.Tools.JavaCallableWrappers-Tests"", """", this, new java.lang.Object[] { p0 });
+			mono.android.TypeManager.Activate (""Xamarin.Android.ToolsTests.ExportsConstructors, Java.Interop.Tools.JavaCallableWrappers-Tests"", ""System.Int32, System.Private.CoreLib"", this, new java.lang.Object[] { p0 });
 		}
 	}
 
@@ -508,7 +508,7 @@ public class ExportsThrowsConstructors
 	{
 		super (p0);
 		if (getClass () == ExportsThrowsConstructors.class) {
-			mono.android.TypeManager.Activate (""Xamarin.Android.ToolsTests.ExportsThrowsConstructors, Java.Interop.Tools.JavaCallableWrappers-Tests"", """", this, new java.lang.Object[] { p0 });
+			mono.android.TypeManager.Activate (""Xamarin.Android.ToolsTests.ExportsThrowsConstructors, Java.Interop.Tools.JavaCallableWrappers-Tests"", ""System.Int32, System.Private.CoreLib"", this, new java.lang.Object[] { p0 });
 		}
 	}
 
@@ -517,7 +517,7 @@ public class ExportsThrowsConstructors
 	{
 		super (p0);
 		if (getClass () == ExportsThrowsConstructors.class) {
-			mono.android.TypeManager.Activate (""Xamarin.Android.ToolsTests.ExportsThrowsConstructors, Java.Interop.Tools.JavaCallableWrappers-Tests"", """", this, new java.lang.Object[] { p0 });
+			mono.android.TypeManager.Activate (""Xamarin.Android.ToolsTests.ExportsThrowsConstructors, Java.Interop.Tools.JavaCallableWrappers-Tests"", ""System.String, System.Private.CoreLib"", this, new java.lang.Object[] { p0 });
 		}
 	}
 
@@ -647,11 +647,11 @@ public class JavaInteropExample
 	}
 
 
-	public JavaInteropExample ()
+	public JavaInteropExample (int p0, int p1)
 	{
 		super ();
 		if (getClass () == JavaInteropExample.class) {
-			com.xamarin.java_interop.ManagedPeer.construct (this, ""Xamarin.Android.ToolsTests.JavaInteropExample, Java.Interop.Tools.JavaCallableWrappers-Tests"", """", new java.lang.Object[] {  });
+			com.xamarin.java_interop.ManagedPeer.construct (this, ""Xamarin.Android.ToolsTests.JavaInteropExample, Java.Interop.Tools.JavaCallableWrappers-Tests"", ""System.Int32, System.Private.CoreLib:System.Int32, System.Private.CoreLib"", new java.lang.Object[] { p0, p1 });
 		}
 	}
 

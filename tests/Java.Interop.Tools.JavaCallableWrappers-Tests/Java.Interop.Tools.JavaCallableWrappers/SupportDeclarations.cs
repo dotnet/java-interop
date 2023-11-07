@@ -328,8 +328,8 @@ namespace Xamarin.Android.ToolsTests {
 	class JavaInteropExample : Java.Lang.Object {
 
 
-		[JavaCallable]
-		public JavaInteropExample () {}
+		[JavaCallableConstructor(SuperConstructorExpression="")]
+		public JavaInteropExample (int a, int b) {}
 
 		[JavaCallable ("example")]
 		public void Example () {}
