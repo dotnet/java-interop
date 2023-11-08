@@ -160,18 +160,6 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					 type.IsSubclassOf ("Android.Content.ContentProvider", cache)))
 				Diagnostic.Error (4203, LookupSource (type), Localization.Resources.JavaCallableWrappers_XA4203, jniName);
 
-			this.outerType = outerType;
-		}
-
-		bool initialized;
-		string? outerType;
-
-		void Initialize ()
-		{
-			if (initialized)
-				return;
-			initialized = true;
-
 			foreach (MethodDefinition minfo in type.Methods.Where (m => !m.IsConstructor)) {
 				var baseRegisteredMethod = GetBaseRegisteredMethod (minfo);
 				if (baseRegisteredMethod != null)
@@ -313,9 +301,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					if (!string.IsNullOrEmpty (eattr.Name)) {
 						// Diagnostic.Warning (log, "Use of ExportAttribute.Name property is invalid on constructors");
 					}
-					ctors.Add (new Signature (new (cache, CodeGenerationTarget, ctor, eattr) {
-						ManagedParameters   = managedParameters,
-					}));
+					ctors.Add (new Signature (ctor, eattr, managedParameters, cache));
 					curCtors.Add (ctor);
 					return;
 				}
@@ -324,10 +310,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				if (rattr != null) {
 					if (ctors.Any (c => c.JniSignature == rattr.Signature))
 						return;
-					ctors.Add (new Signature (new (cache, CodeGenerationTarget, ctor, rattr) {
-						ManagedParameters   = managedParameters,
-						OuterType           = outerType,
-					}));
+					ctors.Add (new Signature (ctor, rattr, managedParameters, outerType, cache));
 					curCtors.Add (ctor);
 					return;
 				}
@@ -348,26 +331,12 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				}
 
 				if (baseCtors.Any (m => m.Parameters.AreParametersCompatibleWith (ctor.Parameters, cache))) {
-					ctors.Add (new Signature (new (cache, CodeGenerationTarget) {
-						RegisterName            = ".ctor",
-						RegisterSignature       = jniSignature,
-						RegisterConnector       = "",
-						ManagedParameters       = managedParameters,
-						OuterType               = outerType,
-						IsDynamicallyRegistered = true,
-					}));
+					ctors.Add (new Signature (".ctor", jniSignature, "", managedParameters, outerType, null));
 					curCtors.Add (ctor);
 					return;
 				}
 				if (baseCtors.Any (m => !m.HasParameters)) {
-					ctors.Add (new Signature (new (cache, CodeGenerationTarget) {
-						RegisterName            = ".ctor",
-						RegisterSignature       = jniSignature,
-						RegisterConnector       = "",
-						ManagedParameters       = managedParameters,
-						OuterType               = outerType,
-						IsDynamicallyRegistered = true,
-					}));
+					ctors.Add (new Signature (".ctor", jniSignature, "", managedParameters, outerType, ""));
 					curCtors.Add (ctor);
 					return;
 				}
@@ -533,9 +502,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 						Diagnostic.Error (4217, LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4217, attr.Name);
 
 					bool shouldBeDynamicallyRegistered = methodClassifier?.ShouldBeDynamicallyRegistered (type, registeredMethod, implementedMethod, attr.OriginAttribute) ?? true;
-					var msig = new Signature (new (cache, CodeGenerationTarget, implementedMethod, attr) {
-						IsDynamicallyRegistered = shouldBeDynamicallyRegistered,
-					});
+					var msig = new Signature (implementedMethod, attr, cache, shouldBeDynamicallyRegistered);
 					if (!registeredMethod.IsConstructor && !methods.Any (m => m.Name == msig.Name && m.Params == msig.Params))
 						methods.Add (msig);
 				}
@@ -543,7 +510,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				if (type.HasGenericParameters)
 					Diagnostic.Error (4206, LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4206);
 
-				var msig = new Signature (new (cache, CodeGenerationTarget, implementedMethod, attr));
+				var msig = new Signature (implementedMethod, attr, null, cache);
 				if (!string.IsNullOrEmpty (attr.SuperArgumentsString)) {
 					// Diagnostic.Warning (log, "Use of ExportAttribute.SuperArgumentsString property is invalid on methods");
 				}
@@ -554,7 +521,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				if (type.HasGenericParameters)
 					Diagnostic.Error (4207, LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4207);
 
-				var msig = new Signature (new (cache, CodeGenerationTarget, implementedMethod, attr));
+				var msig = new Signature (implementedMethod, attr, cache);
 				if (!implementedMethod.IsConstructor && !methods.Any (m => m.Name == msig.Name && m.Params == msig.Params)) {
 					methods.Add (msig);
 					exported_fields.Add (new JavaFieldInfo (implementedMethod, attr.Name, cache));
@@ -603,8 +570,6 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		public void Generate (TextWriter writer)
 		{
-			Initialize ();
-
 			if (!string.IsNullOrEmpty (package)) {
 				writer.WriteLine ("package " + package + ";");
 				writer.WriteLine ();
@@ -821,7 +786,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 			foreach (Signature method in self.methods) {
 				if (method.IsDynamicallyRegistered) {
-					sw.Write ("\t\t\t\"");
+					sw.Write ("\t\t\t\"", method.Method);
 					sw.Write (method.Method);
 					sw.WriteLine ("\\n\" +");
 				}
@@ -887,111 +852,56 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			return JavaNativeTypeManager.IsApplication (type, cache) || JavaNativeTypeManager.IsInstrumentation (type, cache);
 		}
 
-		record struct SignatureOptions (IMetadataResolver Cache, JavaPeerStyle Style) {
+		class Signature {
 
-			public SignatureOptions (IMetadataResolver cache, JavaPeerStyle style, MethodDefinition method)
-				: this (cache, style)
+			public Signature (MethodDefinition method, RegisterAttribute register, IMetadataResolver cache, bool shouldBeDynamicallyRegistered = true) : this (method, register, null, null, cache, shouldBeDynamicallyRegistered) {}
+
+			public Signature (MethodDefinition method, RegisterAttribute register, string? managedParameters, string? outerType, IMetadataResolver cache, bool shouldBeDynamicallyRegistered = true)
+				: this (register.Name, register.Signature, register.Connector, managedParameters, outerType, null)
 			{
-				Method                  = method;
-				IsStatic                = method.IsStatic;
-				JavaAccess              = JavaCallableWrapperGenerator.GetJavaAccess (method.Attributes & MethodAttributes.MemberAccessMask);
-				Annotations             = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", method.CustomAttributes, cache);
-				IsDynamicallyRegistered = true;
+				Annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", method.CustomAttributes, cache);
+				IsDynamicallyRegistered = shouldBeDynamicallyRegistered;
 			}
 
-			public SignatureOptions (IMetadataResolver cache, JavaPeerStyle style, MethodDefinition method, RegisterAttribute register)
-				: this (cache, style, method)
+			public Signature (MethodDefinition method, ExportAttribute export, string? managedParameters, IMetadataResolver cache)
+				: this (method.Name, GetJniSignature (method, cache), "__export__", null, null, export.SuperArgumentsString)
 			{
-				Register                = register;
+				IsExport = true;
+				IsStatic = method.IsStatic;
+				JavaAccess = JavaCallableWrapperGenerator.GetJavaAccess (method.Attributes & MethodAttributes.MemberAccessMask);
+				ThrownTypeNames = export.ThrownNames;
+				JavaNameOverride = export.Name;
+				ManagedParameters = managedParameters;
+				Annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", method.CustomAttributes, cache);
 			}
 
-			public SignatureOptions (IMetadataResolver cache, JavaPeerStyle style, MethodDefinition method, ExportAttribute export)
-				: this (cache, style, method)
+			public Signature (MethodDefinition method, ExportFieldAttribute exportField, IMetadataResolver cache)
+				: this (method.Name, GetJniSignature (method, cache), "__export__", null, null, null)
 			{
-				IsExport            = true;
-				SuperCall           = export.SuperArgumentsString;
-				ThrownTypeNames     = export.ThrownNames;
-				JavaNameOverride    = export.Name;
-				if (style == JavaPeerStyle.JavaInterop1) {
-					RegisterName    = export.Name;
-				}
-			}
-
-			public SignatureOptions (IMetadataResolver cache, JavaPeerStyle style, MethodDefinition method, ExportFieldAttribute exportField)
-				: this (cache, style, method)
-			{
-				IsExport    = true;
-				Annotations = null;
-
 				if (method.HasParameters)
 					Diagnostic.Error (4205, JavaCallableWrapperGenerator.LookupSource (method), Localization.Resources.JavaCallableWrappers_XA4205);
 				if (method.ReturnType.MetadataType == MetadataType.Void)
 					Diagnostic.Error (4208, JavaCallableWrapperGenerator.LookupSource (method), Localization.Resources.JavaCallableWrappers_XA4208);
+				IsExport = true;
+				IsStatic = method.IsStatic;
+				JavaAccess = JavaCallableWrapperGenerator.GetJavaAccess (method.Attributes & MethodAttributes.MemberAccessMask);
+
+				// annotations are processed within JavaFieldInfo, not the initializer method. So we don't generate them here.
 			}
 
-
-			public  string?             RegisterName;
-			public  string?             RegisterSignature;
-			public  string?             RegisterConnector;
-			public  RegisterAttribute   Register {
-				set {
-					RegisterName        = value.Name;
-					RegisterSignature   = value.Signature;
-					RegisterConnector   = value.Connector;
-				}
-			}
-			public  MethodDefinition    Method {
-				set {
-					RegisterName        = value.Name;
-					RegisterSignature   = GetJniSignature (value, Cache);
-					RegisterConnector   = "__export__";
-					Annotations         = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", value.CustomAttributes, Cache);
-				}
-			}
-			public  bool                IsDynamicallyRegistered;
-			public  string?             ManagedParameters;
-			public  string?             OuterType;
-			public  string?             SuperCall;
-			public  string?             Annotations;
-			public  string?             JavaAccess;
-			public  string?             JavaNameOverride;
-			public  bool                IsExport;
-			public  bool                IsStatic;
-			public  string[]?           ThrownTypeNames;
-		}
-
-		class Signature {
-
-			public Signature (SignatureOptions options)
+			public Signature (string name, string? signature, string? connector, string? managedParameters, string? outerType, string? superCall)
 			{
-				if (options.RegisterName == null) {
-					throw new ArgumentNullException ("`RegisterName` cannot be null.", nameof (options.RegisterName));
-				}
-				if (options.RegisterSignature == null) {
-					throw new ArgumentNullException ("`RegisterSignature` cannot be null.", nameof (options.RegisterSignature));
-				}
-				Annotations                 = options.Annotations;
-				IsDynamicallyRegistered     = options.IsDynamicallyRegistered;
-				IsExport                    = options.IsExport;
-				IsStatic                    = options.IsStatic;
-				JavaAccess                  = options.JavaAccess;
-				JavaNameOverride            = options.JavaNameOverride;
-				JniSignature                = options.RegisterSignature;
-				ManagedParameters           = options.ManagedParameters;
-				Method                      = options.RegisterName + ":" + JniSignature + ":" + options.RegisterConnector;
-				Name                        = options.RegisterName;
-				ThrownTypeNames             = options.ThrownTypeNames;
-
-				if (options.Style == JavaPeerStyle.XAJavaInterop1) {
-					Method        = "n_" + Method;
-				}
+				ManagedParameters = managedParameters;
+				JniSignature      = signature ?? throw new ArgumentNullException ("`connector` cannot be null.", nameof (connector));
+				Method    = "n_" + name + ":" + JniSignature + ":" + connector;
+				Name      = name;
 
 				var jnisig = JniSignature;
 				int closer = jnisig.IndexOf (')');
 				string ret = jnisig.Substring (closer + 1);
 				retval = JavaNativeTypeManager.Parse (ret)?.Type;
 				string jniparms = jnisig.Substring (1, closer - 1);
-				if (string.IsNullOrEmpty (jniparms) && string.IsNullOrEmpty (options.SuperCall))
+				if (string.IsNullOrEmpty (jniparms) && string.IsNullOrEmpty (superCall))
 					return;
 				var parms = new StringBuilder ();
 				var scall = new StringBuilder ();
@@ -999,9 +909,9 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				bool first = true;
 				int i = 0;
 				foreach (JniTypeName jti in JavaNativeTypeManager.FromSignature (jniparms)) {
-					if (options.OuterType != null) {
-						acall.Append (options.OuterType).Append (".this");
-						options.OuterType = null;
+					if (outerType != null) {
+						acall.Append (outerType).Append (".this");
+						outerType = null;
 						continue;
 					}
 					string? parmType = jti.Type;
@@ -1017,7 +927,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					++i;
 				}
 				this.parms = parms.ToString ();
-				this.call  = options.SuperCall != null ? options.SuperCall : scall.ToString ();
+				this.call  = superCall != null ? superCall : scall.ToString ();
 				this.ActivateCall = acall.ToString ();
 			}
 
@@ -1154,21 +1064,13 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			sw.Write (' ');
 			if (method.IsStatic)
 				sw.Write ("static ");
-			if (CodeGenerationTarget == JavaPeerStyle.JavaInterop1) {
-				sw.Write ("native ");
-			}
 			sw.Write (method.Retval);
 			sw.Write (' ');
 			sw.Write (method.JavaName);
 			sw.Write (" (");
 			sw.Write (method.Params);
 			sw.Write (')');
-			sw.Write (method.ThrowsDeclaration);
-			if (CodeGenerationTarget == JavaPeerStyle.JavaInterop1) {
-				sw.WriteLine (";");
-				return;
-			}
-			sw.WriteLine ();
+			sw.WriteLine (method.ThrowsDeclaration);
 			sw.WriteLine ("\t{");
 #if MONODROID_TIMING
 			sw.WriteLine ("\t\tandroid.util.Log.i(\"MonoDroid-Timing\", \"{0}.{1}: time: \"+java.lang.System.currentTimeMillis());", name, method.Name);
@@ -1239,8 +1141,6 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		/// </summary>
 		public string GetDestinationPath (string outputPath)
 		{
-			Initialize ();
-
 			var dir = package.Replace ('.', Path.DirectorySeparatorChar);
 			return Path.Combine (outputPath, dir, name + ".java");
 		}

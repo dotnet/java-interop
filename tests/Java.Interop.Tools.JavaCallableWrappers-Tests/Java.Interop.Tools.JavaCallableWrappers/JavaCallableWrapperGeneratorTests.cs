@@ -37,8 +37,7 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 
 			// Contains invalid [Register] name of "foo-impl"
 			var td = SupportDeclarations.GetTypeDefinition (typeof (KotlinInvalidImplRegisterName));
-			var g = new JavaCallableWrapperGenerator (td, logger, cache: null);
-			var e = Assert.Throws<XamarinAndroidException> (() => g.Generate (TextWriter.Null));
+			var e = Assert.Throws<XamarinAndroidException> (() => new JavaCallableWrapperGenerator (td, logger, cache: null));
 			Assert.AreEqual (4217, e.Code);
 		}
 
@@ -49,8 +48,7 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 
 			// Contains invalid [Register] name of "foo-f8k2a13"
 			var td = SupportDeclarations.GetTypeDefinition (typeof (KotlinInvalidHashRegisterName));
-			var g = new JavaCallableWrapperGenerator (td, logger, cache: null);
-			var e = Assert.Throws<XamarinAndroidException> (() => g.Generate (TextWriter.Null));
+			var e = Assert.Throws<XamarinAndroidException> (() => new JavaCallableWrapperGenerator (td, logger, cache: null));
 			Assert.AreEqual (4217, e.Code);
 		}
 
@@ -641,7 +639,7 @@ public class JavaInteropExample
 	public static final String __md_methods;
 	static {
 		__md_methods = 
-			""example:()V:__export__\n"" +
+			""n_Example:()V:__export__\n"" +
 			"""";
 		com.xamarin.java_interop.ManagedPeer.registerNativeMembers (JavaInteropExample.class, ""Xamarin.Android.ToolsTests.JavaInteropExample, Java.Interop.Tools.JavaCallableWrappers-Tests"", __md_methods);
 	}
@@ -656,7 +654,12 @@ public class JavaInteropExample
 	}
 
 
-	public native void example ();
+	public void example ()
+	{
+		n_Example ();
+	}
+
+	private native void n_Example ();
 
 	private java.util.ArrayList refList;
 	public void jiAddManagedReference (java.lang.Object obj)

@@ -75,7 +75,7 @@ namespace Java.Interop {
 			if (signature == null || string.IsNullOrEmpty (signature.MemberName)) {
 				return;
 			}
-			toRegister [(signature.MemberName, signature.MemberSignature)]   = targetMethod ?? declaringMethod;
+			toRegister [("n_" + signature.MemberName, signature.MemberSignature)]   = targetMethod ?? declaringMethod;
 		}
 
 		static void AddClassMethods (JniMethodMap toRegister, Type type)

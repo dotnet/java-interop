@@ -560,7 +560,7 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 					signature = export?.Signature ?? builder.GetJniMethodSignature (method);
 
-					registrations.Add (new ExpressionMethodRegistration (name, signature, mmDef));
+					registrations.Add (new ExpressionMethodRegistration ("n_" + method.Name, signature, mmDef));
 
 					addedMethods.Add (methodName);
 				}
