@@ -26,6 +26,7 @@ namespace Java.Interop {
 				return marshalMemberBuilder;
 			}
 		}
+		public  bool                           UseMarshalMemberBuilder  => marshalMemberBuilder != null;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage ("Design", "CA1031:Do not catch general exception types", Justification = "the *.Export assemblies are optional, so we don't care when they cannot be loaded (they are presumably missing)")]
 #if NET
