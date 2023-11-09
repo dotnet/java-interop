@@ -107,7 +107,7 @@ namespace Java.Interop {
 				var dir = string.IsNullOrEmpty (loc) ? null : Path.GetDirectoryName (loc);
 				var jij = string.IsNullOrEmpty (dir) ? null : Path.Combine (dir, "java-interop.jar");
 				if (!File.Exists (jij)) {
-					throw new InvalidOperationException ($"`java-interop.jar` is required.  Please add to `JreRuntimeOptions.ClassPath`.  Tried to find it in `{jij}`.");
+					throw new FileNotFoundException ($"`java-interop.jar` is required.  Please add to `JreRuntimeOptions.ClassPath`.  Tried to find it in `{jij}`.");
 				}
 				builder.ClassPath.Add (jij);
 			}
