@@ -69,6 +69,7 @@ namespace Java.Interop {
 			var envp = new JniTransition (jnienv);
 			try {
 				var runtime = JniEnvironment.Runtime;
+				var typeMgr = runtime.TypeManager;
 				var r_self  = new JniObjectReference (n_self);
 				var self    = runtime.ValueManager.PeekPeer (r_self);
 				if (self != null) {
@@ -92,14 +93,14 @@ namespace Java.Interop {
 					return;
 				}
 
-				var type    = Type.GetType (JniEnvironment.Strings.ToString (n_assemblyQualifiedName)!, throwOnError: true)!;
+				var type    = typeMgr.GetTypeFromAssemblyQualifiedName (JniEnvironment.Strings.ToString (n_assemblyQualifiedName)!);
 				if (type.IsGenericTypeDefinition) {
 					throw new NotSupportedException (
 							"Constructing instances of generic types from Java is not supported, as the type parameters cannot be determined.",
 							CreateJniLocationException ());
 				}
 
-				var ptypes  = GetParameterTypes (JniEnvironment.Strings.ToString (n_constructorSignature));
+				var ptypes  = GetParameterTypes (typeMgr, JniEnvironment.Strings.ToString (n_constructorSignature));
 				var pvalues = GetValues (runtime, new JniObjectReference (n_constructorArguments), ptypes);
 				var cinfo = type.GetConstructor (ptypes);
 				if (cinfo == null) {
@@ -148,14 +149,14 @@ namespace Java.Interop {
 			}
 		}
 
-		static Type[] GetParameterTypes (string? signature)
+		static Type[] GetParameterTypes (JniRuntime.JniTypeManager typeMgr, string? signature)
 		{
 			if (string.IsNullOrEmpty (signature))
 				return Array.Empty<Type> ();
 			var typeNames   = signature!.Split (':');
 			var ptypes      = new Type [typeNames.Length];
 			for (int i = 0; i < typeNames.Length; i++)
-				ptypes [i] = Type.GetType (typeNames [i], throwOnError:true)!;
+				ptypes [i] = typeMgr.GetTypeFromAssemblyQualifiedName (typeNames [i]);
 			return ptypes;
 		}
 
@@ -197,26 +198,23 @@ namespace Java.Interop {
 				var r_nativeClass   = new JniObjectReference (n_nativeClass);
 				var nativeClass     = new JniType (ref r_nativeClass, JniObjectReferenceOptions.Copy);
 
+				var assemblyQualifiedName   = JniEnvironment.Strings.ToString (new JniObjectReference (n_assemblyQualifiedName));
 				var methodsRef              = new JniObjectReference (n_methods);
+
 #if NET
 
-				var aqnRef                  = new JniObjectReference (n_assemblyQualifiedName);
-				int aqnLength               = JniEnvironment.Strings.GetStringLength (aqnRef);
-				var aqnChars                = JniEnvironment.Strings.GetStringChars (aqnRef, null);
-				var aqn                     = new ReadOnlySpan<char>(aqnChars, aqnLength);
+				var type                    = JniEnvironment.Runtime.TypeManager.GetTypeFromAssemblyQualifiedName (assemblyQualifiedName!);
 
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
 				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
 				try {
-					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, aqn, methods);
+					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 				}
 				finally {
-					JniEnvironment.Strings.ReleaseStringChars (aqnRef, aqnChars);
 					JniEnvironment.Strings.ReleaseStringChars (methodsRef, methodsChars);
 				}
 #else   // NET
-				var assemblyQualifiedName   = JniEnvironment.Strings.ToString (new JniObjectReference (n_assemblyQualifiedName));
 				var type                    = Type.GetType (assemblyQualifiedName!, throwOnError: true)!;
 				var methods                 = JniEnvironment.Strings.ToString (methodsRef);
 				JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);

@@ -10,7 +10,7 @@ class App {
         JavaInteropRuntime.init();
         String s = sayHello();
         System.out.println("String returned to Java: " + s);
-        ManagedType mt = new ManagedType();
+        ManagedType mt = new ManagedType(42);
         System.out.println("mt.getString()=" + mt.getString());
     }
 

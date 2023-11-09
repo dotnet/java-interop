@@ -48,26 +48,22 @@ NativeAOT-generated `libHello-NativeAOTFromJNI.dylib` to be run:
   C# init()
   Hello from .NET NativeAOT!
   String returned to Java: Hello from .NET NativeAOT!
-  C# RegisterNativeMembers(JniType(Name='example/ManagedType' PeerReference=0x7fd0a00072d8/G), "Example.ManagedType, Hello-NativeAOTFromJNI", "getString:()Ljava/lang/String;:__export__
-  ")
   # jonp: called `Example.ManagedType/__<$>_jni_marshal_methods.__RegisterNativeMembers()` w/ 1 methods to register.
-  mt.getString()=Hello from C#, via Java.Interop!
+  mt.getString()=Hello from C#, via Java.Interop! Value=42
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.73
+Time Elapsed 00:00:01.04
 
 % (cd bin/Release/osx-x64/publish ; java -cp hello-from-java.jar:java-interop.jar com/microsoft/hello_from_jni/App)
 Hello from Java!
 C# init()
 Hello from .NET NativeAOT!
 String returned to Java: Hello from .NET NativeAOT!
-C# RegisterNativeMembers(JniType(Name='example/ManagedType' PeerReference=0x7fa822114598/G), "Example.ManagedType, Hello-NativeAOTFromJNI", "getString:()Ljava/lang/String;:__export__
-")
 # jonp: called `Example.ManagedType/__<$>_jni_marshal_methods.__RegisterNativeMembers()` w/ 1 methods to register.
-mt.getString()=Hello from C#, via Java.Interop!
+mt.getString()=Hello from C#, via Java.Interop! Value=42
 ```
 
 Note the use of `(cd …; java …)` so that `libHello-NativeAOTFromJNI.dylib` is
@@ -99,8 +95,8 @@ var type = Type.GetType ("System.Int32, System.Runtime");
 
 It fails if the string comes from "elsewhere", even if it's a type that exists.
 
-Unfortunately, we do this *everywhere* in Java.Interop.  Consider this more
-complete Java Callable Wrapper fragment:
+Unfortunately, we do this in key places within Java.Interop.  Consider this
+more complete Java Callable Wrapper fragment:
 
 ```java
 public class ManagedType
@@ -139,105 +135,22 @@ public class ManagedType
 ```
 
 There are *two* places that assembly-qualified names are used, both of which
-currently wind up at `Type.GetType()`:
+normally wind up at `Type.GetType()`:
 
   * `ManagedPeer.RegisterNativeMembers()` is given an assembly-qualified name
     to register the `native` methods.
   * `ManagedPeer.Construct()` is given a `:`-separated list of assembly-qualified
     names for each parameter type.  This is done to lookup a `ConstructorInfo`.
 
-This sample "fixes" `ManagedPeer.RegisterNativeMembers()` by adding a new
-`JniRuntime.JniTypeManager.RegisterNativeMembers()` overload which *avoids* the
-`Type.GetType()` call, which allows `NativeAotTypeManager` to "do something else".
+This sample "fixes" things by adding
+`JniRuntime.JniTypeManager.GetTypeFromAssemblyQualifiedName()`, which allows
+`NativeAotTypeManager` to override it and support the various assembly-qualified
+name values which the sample requires.
 
-This sample "avoids" `ManagedPeer.Construct()` by not using any parameter types
-in the constructor!  If we add any, e.g. via this patch:
+An alternate idea to avoid some of the new `GetTypeFromAssemblyQualifiedName()`
+invocations would be to declare `native` methods for each constructor overload,
+but fixing this gets increasingly difficult.
 
-```diff
-diff --git a/samples/Hello-NativeAOTFromJNI/JavaInteropRuntime.cs b/samples/Hello-NativeAOTFromJNI/JavaInteropRuntime.cs
-index 607bd73f..7ed83c59 100644
---- a/samples/Hello-NativeAOTFromJNI/JavaInteropRuntime.cs
-+++ b/samples/Hello-NativeAOTFromJNI/JavaInteropRuntime.cs
-@@ -31,9 +31,18 @@ static class JavaInteropRuntime
- 				ValueManager        = new NativeAotValueManager (),
- 			};
- 			runtime = options.CreateJreVM ();
-+#pragma warning disable IL2057
-+			var t = Type.GetType (CreateTypeName (), throwOnError: true);
-+#pragma warning restore IL2057
-+			Console.WriteLine ($"# jonp: found System.Int32: {t}");
- 		}
- 		catch (Exception e) {
- 			Console.Error.WriteLine ($"JavaInteropRuntime.init: error: {e}");
- 		}
- 	}
-+
-+	static string CreateTypeName () =>
-+		new System.Text.StringBuilder ().Append ("System").Append (".").Append ("Int32")
-+			.Append (", ").Append ("System").Append (".").Append ("Runtime")
-+			.ToString ();
- }
-diff --git a/samples/Hello-NativeAOTFromJNI/ManagedType.cs b/samples/Hello-NativeAOTFromJNI/ManagedType.cs
-index c5224a40..5db7af84 100644
---- a/samples/Hello-NativeAOTFromJNI/ManagedType.cs
-+++ b/samples/Hello-NativeAOTFromJNI/ManagedType.cs
-@@ -5,14 +5,17 @@ using Java.Interop;
- [JniTypeSignature ("example/ManagedType")]
- class ManagedType : Java.Lang.Object {
- 
--	[JavaCallableConstructor]
--	public ManagedType ()
-+	[JavaCallableConstructor(SuperConstructorExpression="")]
-+	public ManagedType (int value)
- 	{
-+		this.value = value;
- 	}
- 
-+	int value;
-+
- 	[JavaCallable ("getString")]
- 	public Java.Lang.String GetString ()
- 	{
--		return new Java.Lang.String ("Hello from C#, via Java.Interop!");
-+		return new Java.Lang.String ($"Hello from C#, via Java.Interop!  Value={value}.");
- 	}
- }
-diff --git a/samples/Hello-NativeAOTFromJNI/java/com/microsoft/hello_from_jni/App.java b/samples/Hello-NativeAOTFromJNI/java/com/microsoft/hello_from_jni/App.java
-index f6d6fff2..f4764cf1 100644
---- a/samples/Hello-NativeAOTFromJNI/java/com/microsoft/hello_from_jni/App.java
-+++ b/samples/Hello-NativeAOTFromJNI/java/com/microsoft/hello_from_jni/App.java
-@@ -10,7 +10,7 @@ class App {
-         JavaInteropRuntime.init();
-         String s = sayHello();
-         System.out.println("String returned to Java: " + s);
--        ManagedType mt = new ManagedType();
-+        ManagedType mt = new ManagedType(42);
-         System.out.println("mt.getString()=" + mt.getString());
-     }
- 
-```
-
-this will fail at runtime:
-
-```
-Exception in thread "main" com.xamarin.java_interop.internal.JavaProxyThrowable: System.IO.FileNotFoundException: Could not resolve assembly 'System.Runtime'.
-   at System.Reflection.TypeNameParser.ResolveAssembly(String) + 0x97
-   at System.Reflection.TypeNameParser.GetType(String, ReadOnlySpan`1, String) + 0x32
-   at System.Reflection.TypeNameParser.NamespaceTypeName.ResolveType(TypeNameParser&, String) + 0x17
-   at System.Reflection.TypeNameParser.GetType(String, Func`2, Func`4, Boolean, Boolean, Boolean, String) + 0x99
-   at Java.Interop.ManagedPeer.GetParameterTypes(String) + 0xc1
-   at Java.Interop.ManagedPeer.Construct(IntPtr jnienv, IntPtr klass, IntPtr n_self, IntPtr n_assemblyQualifiedName, IntPtr n_constructorSignature, IntPtr n_constructorArguments) + 0x293
-	at com.xamarin.java_interop.ManagedPeer.construct(Native Method)
-	at example.ManagedType.<init>(ManagedType.java:23)
-	at com.microsoft.hello_from_jni.App.main(App.java:13)
-```
-
-This isn't impossible -- a straightforward fix would be to declare `native`
-methods for each constructor overload -- but fixing this gets increasingly difficult.
-
-(Possible "quick hack": replace `Type.GetType()` use with calls to something
-on `JniRuntime.JniTypeManager`, allowing a subclass to provide its own
-mapping?  This feels "duplicative" of dotnet/runtime, though.)
 
 ## Type Maps
 

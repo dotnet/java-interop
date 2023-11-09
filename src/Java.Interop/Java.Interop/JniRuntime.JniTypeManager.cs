@@ -372,8 +372,12 @@ namespace Java.Interop {
 
 			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
-			public virtual void RegisterNativeMembers (JniType nativeClass, ReadOnlySpan<char> assmblyQualifiedTypeName, ReadOnlySpan<char> methods) =>
-				RegisterNativeMembers (nativeClass, Type.GetType (new string (assmblyQualifiedTypeName), throwOnError: true)!, methods);
+			public virtual Type GetTypeFromAssemblyQualifiedName (string assemblyQualifiedTypeName)
+			{
+				AssertValid ();
+
+				return Type.GetType (assemblyQualifiedTypeName, throwOnError: true)!;
+			}
 
 			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, ReadOnlySpan<char> methods)
 			{
