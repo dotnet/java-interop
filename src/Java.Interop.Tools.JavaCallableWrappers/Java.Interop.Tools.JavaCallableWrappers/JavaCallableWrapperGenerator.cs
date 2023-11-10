@@ -164,7 +164,13 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				var baseRegisteredMethod = GetBaseRegisteredMethod (minfo);
 				if (baseRegisteredMethod != null)
 					AddMethod (baseRegisteredMethod, minfo);
-				else if (minfo.AnyCustomAttributes (typeof(ExportFieldAttribute))) {
+				else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableAttribute")) {
+					AddMethod (null, minfo);
+					HasExport = true;
+				} else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableConstructorAttribute")) {
+					AddMethod (null, minfo);
+					HasExport = true;
+				} else if (minfo.AnyCustomAttributes (typeof(ExportFieldAttribute))) {
 					AddMethod (null, minfo);
 					HasExport = true;
 				} else if (minfo.AnyCustomAttributes (typeof (ExportAttribute))) {
@@ -295,7 +301,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 					if (!string.IsNullOrEmpty (eattr.Name)) {
 						// Diagnostic.Warning (log, "Use of ExportAttribute.Name property is invalid on constructors");
 					}
-					ctors.Add (new Signature (ctor, eattr, cache));
+					ctors.Add (new Signature (ctor, eattr, managedParameters, cache));
 					curCtors.Add (ctor);
 					return;
 				}
@@ -412,6 +418,25 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			return new ExportAttribute (name) {ThrownNames = thrown, SuperArgumentsString = superArgs};
 		}
 
+		ExportAttribute ToExportAttributeFromJavaCallableAttribute (CustomAttribute attr, IMemberDefinition declaringMember)
+		{
+			var name = attr.ConstructorArguments.Count > 0
+				? (string) attr.ConstructorArguments [0].Value
+				: declaringMember.Name;
+			return new ExportAttribute (name);
+		}
+
+		ExportAttribute ToExportAttributeFromJavaCallableConstructorAttribute (CustomAttribute attr, IMemberDefinition declaringMember)
+		{
+			var superArgs = (string) attr.Properties
+				.FirstOrDefault (p => p.Name == "SuperConstructorExpression")
+				.Argument
+				.Value;
+			return new ExportAttribute (".ctor") {
+				SuperArgumentsString = superArgs,
+			};
+		}
+
 		internal static ExportFieldAttribute ToExportFieldAttribute (CustomAttribute attr)
 		{
 			return new ExportFieldAttribute ((string) attr.ConstructorArguments [0].Value);
@@ -447,7 +472,11 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		IEnumerable<ExportAttribute> GetExportAttributes (IMemberDefinition p)
 		{
-			return GetAttributes<ExportAttribute> (p, a => ToExportAttribute (a, p));
+			return GetAttributes<ExportAttribute> (p, a => ToExportAttribute (a, p))
+				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableAttribute",
+					a => ToExportAttributeFromJavaCallableAttribute (a, p)))
+				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableConstructorAttribute",
+					a => ToExportAttributeFromJavaCallableConstructorAttribute (a, p)));
 		}
 
 		static IEnumerable<ExportFieldAttribute> GetExportFieldAttributes (Mono.Cecil.ICustomAttributeProvider p)
@@ -458,7 +487,13 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		static IEnumerable<TAttribute> GetAttributes<TAttribute> (Mono.Cecil.ICustomAttributeProvider p, Func<CustomAttribute, TAttribute?> selector)
 			where TAttribute : class
 		{
-			return p.GetCustomAttributes (typeof (TAttribute))
+			return GetAttributes (p, typeof (TAttribute).FullName, selector);
+		}
+
+		static IEnumerable<TAttribute> GetAttributes<TAttribute> (Mono.Cecil.ICustomAttributeProvider p, string attributeName, Func<CustomAttribute, TAttribute?> selector)
+			where TAttribute : class
+		{
+			return p.GetCustomAttributes (attributeName)
 				.Select (selector)
 				.Where (v => v != null)
 				.Select (v => v!);
@@ -481,7 +516,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				if (type.HasGenericParameters)
 					Diagnostic.Error (4206, LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4206);
 
-				var msig = new Signature (implementedMethod, attr, cache);
+				var msig = new Signature (implementedMethod, attr, managedParameters: null, cache: cache);
 				if (!string.IsNullOrEmpty (attr.SuperArgumentsString)) {
 					// Diagnostic.Warning (log, "Use of ExportAttribute.SuperArgumentsString property is invalid on methods");
 				}
@@ -834,7 +869,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				IsDynamicallyRegistered = shouldBeDynamicallyRegistered;
 			}
 
-			public Signature (MethodDefinition method, ExportAttribute export, IMetadataResolver cache)
+			public Signature (MethodDefinition method, ExportAttribute export, string? managedParameters, IMetadataResolver cache)
 				: this (method.Name, GetJniSignature (method, cache), "__export__", null, null, export.SuperArgumentsString)
 			{
 				IsExport = true;
@@ -842,6 +877,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				JavaAccess = JavaCallableWrapperGenerator.GetJavaAccess (method.Attributes & MethodAttributes.MemberAccessMask);
 				ThrownTypeNames = export.ThrownNames;
 				JavaNameOverride = export.Name;
+				ManagedParameters = managedParameters;
 				Annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", method.CustomAttributes, cache);
 			}
 
