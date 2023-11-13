@@ -420,21 +420,16 @@ namespace Java.Interop {
 			{
 				var marshalType = type?.GetNestedType ("__<$>_jni_marshal_methods", BindingFlags.NonPublic);
 				if (marshalType == null) {
-					Console.WriteLine ($"# jonp: could not find type `{(type?.FullName ?? "<no-type>")}.__<$>_jni_marshal_methods`");
 					return false;
 				}
 
 				var registerMethod = marshalType.GetMethod (
-						"__RegisterNativeMembers",
-						BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
-						binder: null,
+						name:           "__RegisterNativeMembers",
+						bindingAttr:    BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
+						binder:         null,
 						callConvention: default,
-						types: registerMethodParameters,
-						modifiers: null);
-				if (registerMethod == null) {
-					Console.WriteLine ($"# jonp: could not find method `{marshalType.FullName}.__<$>_jni_marshal_methods.__RegisterNativeMembers`; will look for methods with `[JniAddNativeMethodRegistration]`…]");
-				}
-
+						types:          registerMethodParameters,
+						modifiers:      null);
 				return TryRegisterNativeMembers (nativeClass, marshalType, methods, registerMethod);
 			}
 

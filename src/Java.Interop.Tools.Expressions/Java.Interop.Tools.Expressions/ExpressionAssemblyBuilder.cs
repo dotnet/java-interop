@@ -250,22 +250,10 @@ public class ExpressionAssemblyBuilder {
 		};
 		var newAsm              = AssemblyDefinition.ReadAssembly (c, rp);
 		module                  = newAsm.MainModule;
-		var systemRuntimeRef    = module.AssemblyReferences.FirstOrDefault (r => r.Name == "System.Runtime");
-		var privateCorelibRef   = module.AssemblyReferences.FirstOrDefault (r => r.Name == "System.Private.CoreLib");
-
-		if (systemRuntimeRef == null && privateCorelibRef != null) {
-			systemRuntimeRef    = GetSystemRuntimeReference ();
-			module.AssemblyReferences.Add (systemRuntimeRef);
-		}
 
 		var selfRef             = module.AssemblyReferences.FirstOrDefault (r => r.Name == newAsm.Name.Name);
 		foreach (var member in module.GetMemberReferences ()) {
 			Logger (TraceLevel.Verbose, $"# jonp: looking at ref for member: [{member.DeclaringType.Scope?.Name}]{member}");
-			if (member.DeclaringType.Scope == privateCorelibRef) {
-				Logger (TraceLevel.Verbose, $"# jonp: Fixing scope ref for member: {member}");
-				member.DeclaringType.Scope = systemRuntimeRef;
-				continue;
-			}
 			if (member.DeclaringType.Scope == selfRef) {
 				Logger (TraceLevel.Verbose, $"# jonp: Fixing scope self ref for member: {member}");
 				member.DeclaringType.Scope = null;
@@ -274,18 +262,12 @@ public class ExpressionAssemblyBuilder {
 		}
 		foreach (var type in module.GetTypeReferences ()) {
 			Logger (TraceLevel.Verbose, $"# jonp: looking at ref for type: [{type.Scope}]{type}");
-			if (type.Scope == privateCorelibRef) {
-				Logger (TraceLevel.Verbose, $"# jonp: Fixing scope ref for type: {type}");
-				type.Scope = systemRuntimeRef;
-				continue;
-			}
 			if (type.Scope == selfRef) {
 				Logger (TraceLevel.Verbose, $"# jonp: Fixing scope self ref for type: {type}");
 				type.Scope = null;
 				continue;
 			}
 		}
-		module.AssemblyReferences.Remove (privateCorelibRef);
 		if (selfRef != null) {
 			module.AssemblyReferences.Remove (selfRef);
 		}

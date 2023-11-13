@@ -420,14 +420,18 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		ExportAttribute ToExportAttributeFromJavaCallableAttribute (CustomAttribute attr, IMemberDefinition declaringMember)
 		{
-			var name = attr.ConstructorArguments.Count > 0 ? (string) attr.ConstructorArguments [0].Value : declaringMember.Name;
+			var name = attr.ConstructorArguments.Count > 0
+				? (string) attr.ConstructorArguments [0].Value
+				: declaringMember.Name;
 			return new ExportAttribute (name);
 		}
 
 		ExportAttribute ToExportAttributeFromJavaCallableConstructorAttribute (CustomAttribute attr, IMemberDefinition declaringMember)
 		{
-			var name = attr.ConstructorArguments.Count > 0 ? (string) attr.ConstructorArguments [0].Value : declaringMember.Name;
-			var superArgs = (string) attr.Properties.FirstOrDefault (p => p.Name == "SuperConstructorExpression").Argument.Value;
+			var superArgs = (string) attr.Properties
+				.FirstOrDefault (p => p.Name == "SuperConstructorExpression")
+				.Argument
+				.Value;
 			return new ExportAttribute (".ctor") {
 				SuperArgumentsString = superArgs,
 			};
@@ -469,8 +473,10 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		IEnumerable<ExportAttribute> GetExportAttributes (IMemberDefinition p)
 		{
 			return GetAttributes<ExportAttribute> (p, a => ToExportAttribute (a, p))
-				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableAttribute", a => ToExportAttributeFromJavaCallableAttribute (a, p)))
-				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableConstructorAttribute", a => ToExportAttributeFromJavaCallableConstructorAttribute (a, p)));
+				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableAttribute",
+					a => ToExportAttributeFromJavaCallableAttribute (a, p)))
+				.Concat (GetAttributes<ExportAttribute> (p, "Java.Interop.JavaCallableConstructorAttribute",
+					a => ToExportAttributeFromJavaCallableConstructorAttribute (a, p)));
 		}
 
 		static IEnumerable<ExportFieldAttribute> GetExportFieldAttributes (Mono.Cecil.ICustomAttributeProvider p)
@@ -510,7 +516,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				if (type.HasGenericParameters)
 					Diagnostic.Error (4206, LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4206);
 
-				var msig = new Signature (implementedMethod, attr, null, cache);
+				var msig = new Signature (implementedMethod, attr, managedParameters: null, cache: cache);
 				if (!string.IsNullOrEmpty (attr.SuperArgumentsString)) {
 					// Diagnostic.Warning (log, "Use of ExportAttribute.SuperArgumentsString property is invalid on methods");
 				}
