@@ -486,7 +486,6 @@ namespace Java.Interop {
 					}
 
 					var register = (Action<JniNativeMethodRegistrationArguments>)methodInfo.CreateDelegate (typeof (Action<JniNativeMethodRegistrationArguments>));
-					Console.WriteLine ($"# jonp: FindAndCallRegisterMethod: calling `{declaringTypeName}.{methodInfo}`…");
 					register (arguments);
 
 					found = true;

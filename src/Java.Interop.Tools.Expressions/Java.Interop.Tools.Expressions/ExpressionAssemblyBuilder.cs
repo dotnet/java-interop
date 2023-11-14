@@ -227,7 +227,7 @@ public class ExpressionAssemblyBuilder {
 		var module = DeclaringAssemblyDefinition.MainModule;
 
 		var c       = new MemoryStream ();
-		DeclaringAssemblyDefinition.Write (path);
+		DeclaringAssemblyDefinition.Write (c);
 		c.Position  = 0;
 
 		if (KeepTemporaryFiles) {
@@ -236,10 +236,6 @@ public class ExpressionAssemblyBuilder {
 			c.Position  = 0;
 		}
 
-
-#if false
-		// `Failed to resolve System.Runtime.InteropServices.CallingConvention`
-		// because `System.Runtime.InteropServices` is not referenced.
 		Logger (TraceLevel.Verbose, $"# jonp: ---");
 
 		var rp = new ReaderParameters {
@@ -272,7 +268,6 @@ public class ExpressionAssemblyBuilder {
 			module.AssemblyReferences.Remove (selfRef);
 		}
 		newAsm.Write (path);
-#endif  // false
 	}
 
 	static AssemblyNameReference GetSystemRuntimeReference ()
