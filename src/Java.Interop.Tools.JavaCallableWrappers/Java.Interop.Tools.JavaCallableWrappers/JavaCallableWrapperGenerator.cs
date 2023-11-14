@@ -702,7 +702,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			sw.Write ("\t\t");
 			switch (CodeGenerationTarget) {
 				case JavaPeerStyle.JavaInterop1:
-					sw.Write ("com.xamarin.java_interop.GCUserPeerable");
+					sw.Write ("net.dot.jni.GCUserPeerable");
 					break;
 				default:
 					sw.Write ("mono.android.IGCUserPeer");
@@ -803,7 +803,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			sw.Write ("\t\t");
 			switch (CodeGenerationTarget) {
 				case JavaPeerStyle.JavaInterop1:
-					sw.Write ("com.xamarin.java_interop.ManagedPeer.registerNativeMembers (");
+					sw.Write ("net.dot.jni.ManagedPeer.registerNativeMembers (");
 					sw.Write (self.name);
 					sw.Write (".class, \"");
 					sw.Write (managedTypeName);
@@ -1004,7 +1004,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				sw.Write ("\t\t\t");
 				switch (CodeGenerationTarget) {
 					case JavaPeerStyle.JavaInterop1:
-						sw.Write ("com.xamarin.java_interop.ManagedPeer.construct (this, \"");
+						sw.Write ("net.dot.jni.ManagedPeer.construct (this, \"");
 						sw.Write (type.GetPartialAssemblyQualifiedName (cache));
 						sw.Write ("\", \"");
 						sw.Write (ctor.ManagedParameters);
