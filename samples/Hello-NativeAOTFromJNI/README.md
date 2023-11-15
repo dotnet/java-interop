@@ -69,6 +69,11 @@ mt.getString()=Hello from C#, via Java.Interop! Value=42
 Note the use of `(cd …; java …)` so that `libHello-NativeAOTFromJNI.dylib` is
 in the current working directory, so that it can be found.
 
+# Notes
+
+To support cross-compilation, the project should set
+`$(PlatformTarget)`=AnyCPU.
+
 # Known Unknowns
 
 With this sample "done" (-ish), there are several "future research directions" to

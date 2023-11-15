@@ -14,13 +14,13 @@
     <MakeDir Directories="$(IntermediateOutputPath)java" />
     <ItemGroup>
       <!-- I can't find a good way to trim the trailing `\`, so append with `.` so we can sanely quote for $(_Libpath) -->
-      <_RefAsmDirs Include="@(ReferencePathWithRefAssemblies->'%(RootDir)%(Directory).'->Distinct())" />
+      <_JcwGenRefAsmDirs Include="@(ReferencePathWithRefAssemblies->'%(RootDir)%(Directory).'->Distinct())" />
     </ItemGroup>
     <PropertyGroup>
       <_JcwGen>"$(UtilityOutputFullPath)/jcw-gen.dll"</_JcwGen>
       <_Target>--codegen-target JavaInterop1</_Target>
       <_Output>-o "$(IntermediateOutputPath)/java"</_Output>
-      <_Libpath>@(_RefAsmDirs->'-L "%(Identity)"', ' ')</_Libpath>
+      <_Libpath>@(_JcwGenRefAsmDirs->'-L "%(Identity)"', ' ')</_Libpath>
     </PropertyGroup>
     <Exec Command="$(DotnetToolPath) $(_JcwGen) &quot;$(TargetPath)&quot; $(_Target) $(_Output) $(_Libpath)" />
     <Touch Files="$(IntermediateOutputPath)java\.stamp" AlwaysCreate="True" />
@@ -33,12 +33,12 @@
       AfterTargets="_CreateJavaCallableWrappers">
     <ItemGroup>
       <!-- I can't find a good way to trim the trailing `\`, so append with `.` so we can sanely quote for $(_Libpath) -->
-      <_RefAsmDirs Include="@(ReferencePathWithRefAssemblies->'%(RootDir)%(Directory).'->Distinct())" />
+      <_JnimmRefAsmDirs Include="@(RuntimePackAsset->'%(RootDir)%(Directory).'->Distinct())" />
     </ItemGroup>
     <PropertyGroup>
       <_JnimarshalmethodGen>"$(UtilityOutputFullPath)/jnimarshalmethod-gen.dll"</_JnimarshalmethodGen>
       <_Verbosity>-v -v --keeptemp</_Verbosity>
-      <_Libpath>-L "$(TargetDir)" @(_RefAsmDirs->'-L "%(Identity)"', ' ')</_Libpath>
+      <_Libpath>-L "$(TargetDir)" @(_JnimmRefAsmDirs->'-L "%(Identity)"', ' ')</_Libpath>
       <!-- <_Output>-o "$(IntermediateOutputPath)/jonp"</_Output> -->
     </PropertyGroup>
 
