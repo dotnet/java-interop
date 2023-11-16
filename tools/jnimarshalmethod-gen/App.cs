@@ -227,7 +227,20 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 
 			// loadContext = CreateLoadContext ();
 			AppDomain.CurrentDomain.AssemblyResolve += (o, e) => {
-				return TryResolveAssembly (e.Name, e.RequestingAssembly);
+				Log (TraceLevel.Verbose, $"# jonp: resolving assembly: {e.Name}");
+				var name = new AssemblyName  (e.Name);
+				foreach (var d in resolver.SearchDirectories) {
+					var a = Path.Combine (d, name.Name);
+					var f = a + ".dll";
+					if (File.Exists (f)) {
+						return Assembly.LoadFile (Path.GetFullPath (f));
+					}
+					f = a + ".exe";
+					if (File.Exists (f)) {
+						return Assembly.LoadFile (Path.GetFullPath (f));
+					}
+				}
+				return null;
 			};
 
 			foreach (var r in references) {
@@ -329,27 +342,6 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 		}
 
 		readonly string RefPathPart = $"{Path.DirectorySeparatorChar}ref{Path.DirectorySeparatorChar}";
-
-		Assembly TryResolveAssembly (string assemblyFullName, Assembly requestingAssembly)
-		{
-			Log (TraceLevel.Verbose, $"# jonp: resolving assembly: {assemblyFullName}");
-			var name = new AssemblyName  (assemblyFullName);
-			foreach (var d in resolver.SearchDirectories) {
-				if (d.Contains (RefPathPart, StringComparison.OrdinalIgnoreCase)) {
-					continue;
-				}
-				var a = Path.Combine (d, name.Name);
-				var f = a + ".dll";
-				if (File.Exists (f)) {
-					return Assembly.LoadFile (Path.GetFullPath (f));
-				}
-				f = a + ".exe";
-				if (File.Exists (f)) {
-					return Assembly.LoadFile (Path.GetFullPath (f));
-				}
-			}
-			return null;
-		}
 
 		AssemblyLoadContext CreateLoadContext ()
 		{
