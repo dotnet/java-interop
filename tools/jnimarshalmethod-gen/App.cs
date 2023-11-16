@@ -341,8 +341,6 @@ namespace Xamarin.Android.Tools.JniMarshalMethodGenerator {
 			return jdkJvmPath.Value;
 		}
 
-		readonly string RefPathPart = $"{Path.DirectorySeparatorChar}ref{Path.DirectorySeparatorChar}";
-
 		AssemblyLoadContext CreateLoadContext ()
 		{
 			var c = new AssemblyLoadContext ("jnimarshalmethod-gen", isCollectible: true);
