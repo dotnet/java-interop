@@ -20,6 +20,7 @@ static class JavaInteropRuntime
 		runtime?.Dispose ();
 	}
 
+	// symbol name from `$(IntermediateOutputPath)obj/Release/osx-arm64/h-classes/net_dot_jni_hello_JavaInteropRuntime.h`
 	[UnmanagedCallersOnly (EntryPoint="Java_net_dot_jni_hello_JavaInteropRuntime_init")]
 	static void init (IntPtr jnienv, IntPtr klass)
 	{

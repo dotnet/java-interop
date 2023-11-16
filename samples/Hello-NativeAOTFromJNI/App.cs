@@ -6,7 +6,7 @@ namespace Hello_NativeAOTFromJNI;
 
 static class App {
 
-	// symbol name from `$(IntermediateOutputPath)h-classes/com_microsoft_hello_from_jni_App.h`
+	// symbol name from `$(IntermediateOutputPath)obj/Release/osx-arm64/h-classes/net_dot_jni_hello_App.h`
 	[UnmanagedCallersOnly (EntryPoint="Java_net_dot_jni_hello_App_sayHello")]
 	static IntPtr sayHello (IntPtr jnienv, IntPtr klass)
 	{
