@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Java.Interop\Java.Interop.csproj"
-        AdditionalProperties="Standalone=True"
+        AdditionalProperties="Standalone=True;UseNativeAot=True"
     />
     <ProjectReference Include="..\..\src\Java.Runtime.Environment\Java.Runtime.Environment.csproj"
         AdditionalProperties="Standalone=True"
@@ -26,10 +26,6 @@
   <ItemGroup>
     <TrimmerRootAssembly Include="Hello-NativeAOTFromJNI" />
     <TrimmerRootDescriptor Include="Hello-NativeAOTFromJNI.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="../../src/Java.Runtime.Environment/Java.Interop/ManagedValueManager.cs" />
   </ItemGroup>
 
   <ItemGroup>

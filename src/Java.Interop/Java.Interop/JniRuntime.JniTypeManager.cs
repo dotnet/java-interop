@@ -372,7 +372,12 @@ namespace Java.Interop {
 
 			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
-			public virtual Type GetTypeFromAssemblyQualifiedName (string assemblyQualifiedTypeName)
+#if FEATURE_NATIVE_AOT
+			public virtual
+#else   // FEATURE_NATIVE_AOT
+			internal
+#endif  // FEATURE_NATIVE_AOT
+			Type GetTypeFromAssemblyQualifiedName (string assemblyQualifiedTypeName)
 			{
 				AssertValid ();
 
