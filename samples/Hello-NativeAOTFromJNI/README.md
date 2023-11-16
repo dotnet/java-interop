@@ -34,8 +34,8 @@ The resulting native library contains the desired symbols:
 % nm bin/Release/osx-x64/publish/Hello-NativeAOTFromJNI.dylib | grep ' S ' 
 000000000016f5a0 S _JNI_OnLoad
 000000000016f5d0 S _JNI_OnUnload
-000000000016f2f0 S _Java_com_microsoft_hello_1from_1jni_App_sayHello
-000000000016f620 S _Java_com_microsoft_java_1interop_JavaInteropRuntime_init
+000000000016f2f0 S _Java_net_dot_jni_hello_App_sayHello
+000000000016f620 S _Java_net_dot_jni_hello_JavaInteropRuntime_init
 ```
 
 Use the `RunJavaSample` target to run Java, which will run
@@ -57,7 +57,7 @@ Build succeeded.
 
 Time Elapsed 00:00:01.04
 
-% (cd bin/Release/osx-x64/publish ; java -cp hello-from-java.jar:java-interop.jar com/microsoft/hello_from_jni/App)
+% (cd bin/Release/osx-x64/publish ; java -cp hello-from-java.jar:java-interop.jar net/dot/jni/hello/App)
 Hello from Java!
 C# init()
 Hello from .NET NativeAOT!

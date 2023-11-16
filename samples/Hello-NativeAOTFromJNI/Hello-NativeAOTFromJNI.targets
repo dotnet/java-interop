@@ -100,7 +100,7 @@
       <_CP>@(_Classpath, '$(_CPSep)')</_CP>
     </PropertyGroup>
     <Exec
-        Command="&quot;$(JavaPath)&quot; -classpath &quot;$(_CP)&quot; com/microsoft/hello_from_jni/App"
+        Command="&quot;$(JavaPath)&quot; -classpath &quot;$(_CP)&quot; net/dot/jni/hello/App"
         WorkingDirectory="$(PublishDir)"
     />
   </Target>

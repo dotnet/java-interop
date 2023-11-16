@@ -20,7 +20,7 @@ static class JavaInteropRuntime
 		runtime?.Dispose ();
 	}
 
-	[UnmanagedCallersOnly (EntryPoint="Java_com_microsoft_java_1interop_JavaInteropRuntime_init")]
+	[UnmanagedCallersOnly (EntryPoint="Java_net_dot_jni_hello_JavaInteropRuntime_init")]
 	static void init (IntPtr jnienv, IntPtr klass)
 	{
 		Console.WriteLine ($"C# init()");

@@ -1,6 +1,6 @@
-package com.microsoft.hello_from_jni;
+package net.dot.jni.hello;
 
-import com.microsoft.java_interop.JavaInteropRuntime;
+import net.dot.jni.hello.JavaInteropRuntime;
 import example.ManagedType;
 
 class App {

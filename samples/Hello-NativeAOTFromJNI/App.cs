@@ -7,7 +7,7 @@ namespace Hello_NativeAOTFromJNI;
 static class App {
 
 	// symbol name from `$(IntermediateOutputPath)h-classes/com_microsoft_hello_from_jni_App.h`
-	[UnmanagedCallersOnly (EntryPoint="Java_com_microsoft_hello_1from_1jni_App_sayHello")]
+	[UnmanagedCallersOnly (EntryPoint="Java_net_dot_jni_hello_App_sayHello")]
 	static IntPtr sayHello (IntPtr jnienv, IntPtr klass)
 	{
 		var envp = new JniTransition (jnienv);

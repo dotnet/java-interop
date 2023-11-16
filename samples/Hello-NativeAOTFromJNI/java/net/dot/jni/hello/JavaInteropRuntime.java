@@ -1,4 +1,4 @@
-package com.microsoft.java_interop;
+package net.dot.jni.hello;
 
 public class JavaInteropRuntime {
     static {
