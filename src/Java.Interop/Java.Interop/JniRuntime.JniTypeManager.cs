@@ -267,6 +267,7 @@ namespace Java.Interop {
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
 
+			[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
@@ -371,18 +372,6 @@ namespace Java.Interop {
 			}
 
 			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
-
-#if FEATURE_NATIVE_AOT
-			public virtual
-#else   // FEATURE_NATIVE_AOT
-			internal
-#endif  // FEATURE_NATIVE_AOT
-			Type GetTypeFromAssemblyQualifiedName (string assemblyQualifiedTypeName)
-			{
-				AssertValid ();
-
-				return Type.GetType (assemblyQualifiedTypeName, throwOnError: true)!;
-			}
 
 			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, ReadOnlySpan<char> methods)
 			{

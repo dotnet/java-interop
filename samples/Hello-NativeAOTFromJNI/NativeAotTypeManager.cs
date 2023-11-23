@@ -6,22 +6,10 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 
 #pragma warning disable IL2026
 	Dictionary<string, Type> typeMappings = new () {
-		["com/xamarin/java_interop/internal/JavaProxyThrowable"] = Type.GetType ("Java.Interop.JavaProxyThrowable, Java.Interop", throwOnError: true)!,
 		["example/ManagedType"] = typeof (Example.ManagedType),
-		["System.Int32, System.Runtime"] = typeof (int),
-		["System.Int32, System.Private.CoreLib"] = typeof (int),
-		["Java.Interop.JavaProxyThrowable, Java.Interop"] = Type.GetType ("Java.Interop.JavaProxyThrowable, Java.Interop", throwOnError: true)!,
-		["Example.ManagedType, Hello-NativeAOTFromJNI"] = typeof (Example.ManagedType),
 	};
 #pragma warning restore IL2026
 
-
-	public override Type GetTypeFromAssemblyQualifiedName (string assemblyQualifiedTypeName)
-	{
-		if (typeMappings.TryGetValue (assemblyQualifiedTypeName, out var type))
-			return type;
-		throw new NotSupportedException ($"Unsupported type: \"{assemblyQualifiedTypeName}\"!");
-	}
 
 	protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
 	{

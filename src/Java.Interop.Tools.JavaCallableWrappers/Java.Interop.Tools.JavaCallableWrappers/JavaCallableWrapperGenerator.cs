@@ -825,9 +825,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				case JavaPeerStyle.JavaInterop1:
 					sw.Write ("net.dot.jni.ManagedPeer.registerNativeMembers (");
 					sw.Write (self.name);
-					sw.Write (".class, \"");
-					sw.Write (managedTypeName);
-					sw.Write ("\", ");
+					sw.Write (".class, ");
 					sw.Write (field);
 					sw.WriteLine (");");
 					break;
@@ -1025,9 +1023,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				switch (CodeGenerationTarget) {
 					case JavaPeerStyle.JavaInterop1:
 						sw.Write ("net.dot.jni.ManagedPeer.construct (this, \"");
-						sw.Write (type.GetPartialAssemblyQualifiedName (cache));
-						sw.Write ("\", \"");
-						sw.Write (ctor.ManagedParameters);
+						sw.Write (ctor.JniSignature);
 						sw.Write ("\", new java.lang.Object[] { ");
 						sw.Write (ctor.ActivateCall);
 						sw.WriteLine (" });");
