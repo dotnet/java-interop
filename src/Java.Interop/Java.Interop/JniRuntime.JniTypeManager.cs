@@ -267,6 +267,7 @@ namespace Java.Interop {
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
 
+			[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
