@@ -387,6 +387,12 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 				} else if (v.Name == "GenerateJavaPeer") {
 					r.DoNotGenerateAcw = ! (bool) v.Argument.Value;
 				}
+				var isKeyProp   = attr.Properties.FirstOrDefault (p => p.Name == "IsKeyword");
+				var isKeyword	= isKeyProp.Name != null && ((bool) isKeyProp.Argument.Value) == true;
+				var arrRankProp = attr.Properties.FirstOrDefault (p => p.Name == "ArrayRank");
+				if (arrRankProp.Name != null && arrRankProp.Argument.Value is int rank) {
+					r.Name = new string ('[', rank) + (isKeyword ? r.Name : "L" + r.Name + ";");
+				}
 			}
 			return r;
 		}
