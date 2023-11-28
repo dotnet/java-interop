@@ -100,7 +100,7 @@ namespace Java.Interop {
 				}
 
 				var ctorSig = JniEnvironment.Strings.ToString (n_constructorSignature) ?? "()V";
-				var cinfo   = GetConstructor (type, typeSig.SimpleReference, ctorSig) ??
+				var cinfo   = GetConstructor (type, typeSig.SimpleReference!, ctorSig) ??
 					throw CreateMissingConstructorException (type, ctorSig);
 				var pvalues = GetValues (runtime, new JniObjectReference (n_constructorArguments), cinfo);
 
