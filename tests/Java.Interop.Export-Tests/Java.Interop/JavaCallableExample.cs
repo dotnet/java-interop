@@ -28,9 +28,9 @@ class JavaCallableExample : Java.Lang.Object {
 	int[] a;
 	JavaInt32Array b;
 
-	[JavaCallable ("getA")]
-	public int[] GetA ()
+	[JavaCallable ("getFirstA")]
+	public int GetFirstA ()
 	{
-		return a;
+		return a [0];
 	}
 }
