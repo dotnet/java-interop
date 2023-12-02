@@ -79,7 +79,7 @@ namespace Java.Interop {
 		}
 #endif  // NET
 
-		public class JniTypeManager : IDisposable, ISetRuntime {
+		public partial class JniTypeManager : IDisposable, ISetRuntime {
 
 			JniRuntime?             runtime;
 			bool                    disposed;
@@ -294,13 +294,16 @@ namespace Java.Interop {
 						continue;
 					}
 
+					if (typeSignature.IsKeyword) {
+						foreach (var t in GetPrimitiveArrayTypesForSimpleReference (typeSignature, type)) {
+							yield return t;
+						}
+						continue;
+					}
+
 					if (typeSignature.ArrayRank > 0) {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
-						if (typeSignature.IsKeyword) {
-							arrayType   = typeof (JavaPrimitiveArray<>).MakeGenericType (arrayType);
-							rank--;
-						}
 						while (rank-- > 0) {
 							arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
 						}
@@ -315,6 +318,35 @@ namespace Java.Interop {
 						}
 						yield return arrayType;
 					}
+				}
+			}
+
+			IEnumerable<Type> GetPrimitiveArrayTypesForSimpleReference (JniTypeSignature typeSignature, Type type)
+			{
+				int index   = -1;
+				for (int i = 0; i < JniPrimitiveArrayTypes.Length; ++i) {
+					if (JniPrimitiveArrayTypes [i].PrimitiveType == type) {
+						index   = i;
+						break;
+					}
+				}
+				if (index == -1) {
+					throw new InvalidOperationException ($"Should not be reached; Could not find JniPrimitiveArrayInfo for {type}");
+				}
+				foreach (var t in JniPrimitiveArrayTypes [index].ArrayTypes) {
+					var rank        = typeSignature.ArrayRank-1;
+					var arrayType   = t;
+					while (rank-- > 0) {
+						arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
+					}
+					yield return arrayType;
+
+					rank            = typeSignature.ArrayRank-1;
+					arrayType       = t;
+					while (rank-- > 0) {
+						arrayType   = arrayType.MakeArrayType ();
+					}
+					yield return arrayType;
 				}
 			}
 

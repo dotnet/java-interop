@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -93,7 +94,7 @@ namespace Java.Interop {
 				}
 
 				var typeSig = new JniTypeSignature (JniEnvironment.Types.GetJniTypeNameFromInstance (r_self));
-				var type    = GetTypeFromSignature (typeMgr, typeSig);
+				var type    = GetTypeFromSignature (runtime.TypeManager, typeSig);
 
 				if (type.IsGenericTypeDefinition) {
 					throw new NotSupportedException (
@@ -101,12 +102,10 @@ namespace Java.Interop {
 							CreateJniLocationException ());
 				}
 
-				var ptypes  = GetParameterTypes (typeMgr, JniEnvironment.Strings.ToString (n_constructorSignature));
-				var pvalues = GetValues (runtime, new JniObjectReference (n_constructorArguments), ptypes);
-				var cinfo = type.GetConstructor (ptypes);
-				if (cinfo == null) {
-					throw CreateMissingConstructorException (type, ptypes);
-				}
+				var ctorSig = JniEnvironment.Strings.ToString (n_constructorSignature) ?? "()V";
+				var cinfo   = GetConstructor (type, typeSig.SimpleReference!, ctorSig) ??
+					throw CreateMissingConstructorException (type, ctorSig);
+				var pvalues = GetValues (runtime, new JniObjectReference (n_constructorArguments), cinfo);
 
 				if (self != null) {
 					cinfo.Invoke (self, pvalues);
@@ -123,25 +122,17 @@ namespace Java.Interop {
 			}
 		}
 
-		static Exception CreateMissingConstructorException (Type type, Type [] ptypes)
+		static Exception CreateMissingConstructorException (Type type, string signature)
 		{
 			var message = new StringBuilder ();
-			message.Append ("Unable to find constructor ");
+			message.Append ("Unable to find constructor for type `");
 			message.Append (type.FullName);
-			message.Append ("(");
-
-			if (ptypes.Length > 0) {
-				message.Append (ptypes [0].FullName);
-				for (int i = 1; i < ptypes.Length; ++i)
-					message.Append (", ").Append (ptypes [i].FullName);
-			}
-
-			message.Append (")");
-			message.Append (". Please provide the missing constructor.");
+			message.Append ("` with JNI signature `");
+			message.Append (signature);
+			message.Append ("`. Please provide the missing constructor.");
 
 			return new NotSupportedException (message.ToString (), CreateJniLocationException ());
 		}
-
 
 		static Exception CreateJniLocationException ()
 		{
@@ -150,30 +141,103 @@ namespace Java.Interop {
 			}
 		}
 
-		static Type[] GetParameterTypes (JniRuntime.JniTypeManager typeMgr, string? signature)
+		static Dictionary<string, ConstructorInfo?> ConstructorCache    = new Dictionary<string, ConstructorInfo?> ();
+
+		static ConstructorInfo? GetConstructor (Type type, string jniTypeName, string signature)
 		{
-			if (string.IsNullOrEmpty (signature))
-				return Array.Empty<Type> ();
-			var ptypes      = new Type [JniMemberSignature.GetParameterCountFromMethodSignature (signature)];
-			int i           = 0;
-			foreach (var jniType in JniMemberSignature.GetParameterTypesFromMethodSignature (signature)) {
-				ptypes [i++]    = GetTypeFromSignature (typeMgr, jniType, signature);
+			var ctorCacheKey    = jniTypeName + "." + signature;
+			lock (ConstructorCache) {
+				if (ConstructorCache.TryGetValue (ctorCacheKey, out var ctor)) {
+					return ctor;
+				}
 			}
-			return ptypes;
+
+			var candidateParameterTypes = GetConstructorCandidateParameterTypes (signature);
+			if (candidateParameterTypes.Length == 0) {
+				return CacheConstructor (ctorCacheKey, type.GetConstructor (Array.Empty<Type> ()));
+			}
+
+			var constructors    = new List<ConstructorInfo>(type.GetConstructors (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
+
+			// Filter out wrong parameter count
+			for (int c = constructors.Count; c > 0; --c) {
+				if (constructors [c-1].GetParameters ().Length != candidateParameterTypes.Length) {
+					constructors.RemoveAt (c-1);
+				}
+			}
+
+			// Filter out mismatched types
+			for (int c = constructors.Count; c > 0; --c) {
+				var parameters  = constructors [c-1].GetParameters ();
+				for (int i = 0; i < parameters.Length; ++i) {
+					if (!candidateParameterTypes [i].Contains (parameters [i].ParameterType)) {
+						constructors.RemoveAt (c-1);
+						break;
+					}
+				}
+			}
+
+			if (constructors.Count == 0)
+				return CacheConstructor (ctorCacheKey, null);
+
+			if (constructors.Count != 1) {
+				var message = new StringBuilder ($"Found {constructors.Count} constructors matching JNI signature {signature}:")
+					.Append (Environment.NewLine);
+				foreach (var c in constructors) {
+					message.Append ("  ").Append (c).Append (Environment.NewLine);
+				}
+				throw new NotSupportedException (message.ToString (), CreateJniLocationException ());
+			}
+
+			return CacheConstructor (ctorCacheKey, constructors [0]);
 		}
 
-		static object?[]? GetValues (JniRuntime runtime, JniObjectReference values, Type[] types)
+		static ConstructorInfo? CacheConstructor (string cacheKey, ConstructorInfo? ctor)
+		{
+			lock (ConstructorCache) {
+				if (ConstructorCache.TryGetValue (cacheKey, out var existing)) {
+					return existing;
+				}
+				ConstructorCache.Add (cacheKey, ctor);
+			}
+			return ctor;
+		}
+
+		static List<Type>[] GetConstructorCandidateParameterTypes (string signature)
+		{
+			var parameterCount  = JniMemberSignature.GetParameterCountFromMethodSignature (signature);
+			if (parameterCount == 0) {
+				return Array.Empty<List<Type>> ();
+			}
+			var typeManager             = JniEnvironment.Runtime.TypeManager;
+			var candidateParameterTypes = new List<Type>[parameterCount];
+			int i                       = 0;
+			foreach (var jniType in JniMemberSignature.GetParameterTypesFromMethodSignature (signature)) {
+				var possibleTypes       = new List<Type> (typeManager.GetTypes (jniType));
+				if (possibleTypes.Count == 0) {
+					throw new NotSupportedException (
+							$"Could not find System.Type corresponding to Java type `{jniType}` within constructor signature `{signature}`.",
+							CreateJniLocationException ());
+				}
+				candidateParameterTypes [i++]   = possibleTypes;
+			}
+			return candidateParameterTypes;
+		}
+
+		static object?[]? GetValues (JniRuntime runtime, JniObjectReference values, ConstructorInfo cinfo)
 		{
 			if (!values.IsValid)
 				return null;
 
+			var parameters  = cinfo.GetParameters ();
+
 			int len = JniEnvironment.Arrays.GetArrayLength (values);
-			Debug.Assert (len == types.Length,
-					string.Format ("Unexpected number of parameter types! Expected {0}, got {1}", types.Length, len));
-			var pvalues = new object? [types.Length];
-			for (int i = 0; i < pvalues.Length; ++i) {
+			Debug.Assert (len == parameters.Length,
+					$"Unexpected number of parameter types! Expected {parameters.Length}, got {len}");
+			var pvalues = new object? [len];
+			for (int i = 0; i < len; ++i) {
 				var n_value = JniEnvironment.Arrays.GetObjectArrayElement (values, i);
-				var value   = runtime.ValueManager.GetValue (ref n_value, JniObjectReferenceOptions.CopyAndDispose, types [i]);
+				var value   = runtime.ValueManager.GetValue (ref n_value, JniObjectReferenceOptions.CopyAndDispose, parameters [i].ParameterType);
 				pvalues [i] = value;
 			}
 
@@ -206,8 +270,6 @@ namespace Java.Interop {
 				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 
 #if NET
-
-
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
 				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
