@@ -74,6 +74,52 @@ in the current working directory, so that it can be found.
 To support cross-compilation, the project should set
 `$(PlatformTarget)`=AnyCPU.
 
+# Known Knowns?
+
+With this sample "done" (-ish), there are some
+"potentially solved, if not ideally" used to make NativeAOT + Java *viable*.
+
+## `Type.GetType()`
+
+Commit 
+[xamarin/java.interop@005c9141](https://github.com/xamarin/java.interop/commit/005c914170a0af9069ff18fd4dd9d45463dd5dc6)
+uses JNI Type Signatures to avoid `Type.GetType()` invocations, which continue
+to be used in .NET Android.
+
+```Java
+/* partial */ class JavaCallableWrapper
+{
+  public static final String __md_methods;
+  static {
+    __md_methods =
+      "n_GetString:()Ljava/lang/String;:__export__\n" +
+      "";
+    net.dot.jni.ManagedPeer.registerNativeMembers (
+        /* nativeClass */             ManagedType.class,
+        /* methods */                 __md_methods);
+  }
+
+  public ManagedType (int p0)
+  {
+    super ();
+    if (getClass () == ManagedType.class) {
+      net.dot.jni.ManagedPeer.construct (
+          /* self */                  this,
+          /* constructorSignature */  "(I)V",
+          /* arguments */             new java.lang.Object[] { p0 });
+    }
+  }
+}
+```
+
+This requires the use of JNI method signatures within the constructor
+to lookup the corresponding managed constructor to invoke.  While this
+works, it requires additional work to lookup the constructor, as there
+may not be a 1:1 relation between types within the JNI method signature
+and managed code.  In particular, Java *arrays* may have multiple types
+which can be used from managed code.
+
+
 # Known Unknowns
 
 With this sample "done" (-ish), there are several "future research directions" to
@@ -87,74 +133,6 @@ like MonoVM does, so how do we support cross-VM object references?
   * [Collecting Cyclic Garbage across Foreign Function Interfaces: Who Takes the Last Piece of Cake?](https://pldi23.sigplan.org/details/pldi-2023-pldi/25/Collecting-Cyclic-Garbage-across-Foreign-Function-Interfaces-Who-Takes-the-Last-Piec)
   * [`JavaScope`?](https://github.com/jonpryor/java.interop/commits/jonp-registration-scope)
     (Less a "solution" and more a "Glorious Workaround".)
-
-## `Type.GetType()`
-
-Next, Java.Interop and .NET Android make *extensive* use of `Type.GetType()`,
-which doesn't quite work "the same" in NativeAOT.  It works when using a string
-constant:
-
-```csharp
-var type = Type.GetType ("System.Int32, System.Runtime");
-```
-
-It fails if the string comes from "elsewhere", even if it's a type that exists.
-
-Unfortunately, we do this in key places within Java.Interop.  Consider this
-more complete Java Callable Wrapper fragment:
-
-```java
-public class ManagedType
-	extends java.lang.Object
-	implements
-		com.xamarin.java_interop.GCUserPeerable
-{
-/** @hide */
-	public static final String __md_methods;
-	static {
-		__md_methods = 
-			"getString:()Ljava/lang/String;:__export__\n" +
-			"";
-		com.xamarin.java_interop.ManagedPeer.registerNativeMembers (
-				ManagedType.class,
-				"Example.ManagedType, Hello-NativeAOTFromJNI",
-				__md_methods);
-	}
-
-
-	public ManagedType (int p0)
-	{
-		super ();
-		if (getClass () == ManagedType.class) {
-			com.xamarin.java_interop.ManagedPeer.construct (
-					this,
-					"Example.ManagedType, Hello-NativeAOTFromJNI",
-					"System.Int32, System.Runtime",
-					new java.lang.Object[] { p0 });
-		}
-	}
-
-
-	public native java.lang.String getString ();
-}
-```
-
-There are *two* places that assembly-qualified names are used, both of which
-normally wind up at `Type.GetType()`:
-
-  * `ManagedPeer.RegisterNativeMembers()` is given an assembly-qualified name
-    to register the `native` methods.
-  * `ManagedPeer.Construct()` is given a `:`-separated list of assembly-qualified
-    names for each parameter type.  This is done to lookup a `ConstructorInfo`.
-
-This sample "fixes" things by adding
-`JniRuntime.JniTypeManager.GetTypeFromAssemblyQualifiedName()`, which allows
-`NativeAotTypeManager` to override it and support the various assembly-qualified
-name values which the sample requires.
-
-An alternate idea to avoid some of the new `GetTypeFromAssemblyQualifiedName()`
-invocations would be to declare `native` methods for each constructor overload,
-but fixing this gets increasingly difficult.
 
 
 ## Type Maps
