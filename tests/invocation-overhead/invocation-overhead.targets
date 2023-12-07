@@ -6,6 +6,10 @@
     <Exec
         Command="$(_RunJNIEnvGen) jni.cs jni.c"
     />
+    
+    <ItemGroup>
+      <Compile Include="jni.cs" KeepDuplicates="false" />
+    </ItemGroup>
   </Target>
 
   <ItemGroup>
