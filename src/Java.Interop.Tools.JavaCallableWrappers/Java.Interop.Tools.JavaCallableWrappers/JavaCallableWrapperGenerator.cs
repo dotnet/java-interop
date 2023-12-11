@@ -17,6 +17,8 @@ using Java.Interop.Tools.TypeNameMappings;
 
 using MethodAttributes = Mono.Cecil.MethodAttributes;
 using static Java.Interop.Tools.TypeNameMappings.JavaNativeTypeManager;
+using Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
+using Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
 namespace Java.Interop.Tools.JavaCallableWrappers {
 
@@ -26,12 +28,12 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 		internal string name;
 		internal string package;
 		internal TypeDefinition type;
-		List<JavaFieldInfo> exported_fields = new List<JavaFieldInfo> ();
+		internal List<JavaFieldInfo> exported_fields = new List<JavaFieldInfo> ();
 		internal List<Signature> methods = new List<Signature> ();
-		List<Signature> ctors   = new List<Signature> ();
-		List<JavaCallableWrapperGenerator>? children;
+		internal List<Signature> ctors   = new List<Signature> ();
+		internal List<JavaCallableWrapperGenerator>? children;
 
-		readonly IMetadataResolver cache;
+		internal readonly IMetadataResolver cache;
 		readonly JavaCallableMethodClassifier? methodClassifier;
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
@@ -210,7 +212,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			}
 		}
 
-		static SequencePoint? LookupSource (MethodDefinition method)
+		internal static SequencePoint? LookupSource (MethodDefinition method)
 		{
 			if (!method.HasBody)
 				return null;
@@ -542,36 +544,24 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 
 		public void Generate (string outputPath)
 		{
+			var options = new CallableWrapperWriterOptions { CodeGenerationTarget = CodeGenerationTarget };
 			var jcw_writer = CreateWriter ();
-			jcw_writer.Generate (outputPath);
+			jcw_writer.Generate (outputPath, options);
 		}
 
 		public void Generate (TextWriter writer)
 		{
+			var options = new CallableWrapperWriterOptions { CodeGenerationTarget = CodeGenerationTarget };
 			var jcw_writer = CreateWriter ();
-			jcw_writer.Generate (writer);
+			jcw_writer.Generate (writer, options, false);
 		}
 
-		internal JavaCallableWrapperWriter CreateWriter ()
+		internal CallableWrapperType CreateWriter ()
 		{
-			return new JavaCallableWrapperWriter (
-				name: name,
-				package: package,
-				type: type,
-				hasDynamicallyRegisteredMethods: HasDynamicallyRegisteredMethods,
-				children: children,
-				cache: cache,
-				applicationJavaClass: ApplicationJavaClass,
-				codeGenerationTarget: CodeGenerationTarget,
-				generateOnCreateOverrides: GenerateOnCreateOverrides,
-				monoRuntimeInitialization: MonoRuntimeInitialization,
-				exported_fields: exported_fields,
-				methods: methods,
-				ctors: ctors,
-				generator: this);
+			return CecilImporter.CreateType (this);
 		}
 
-		static string GetAnnotationsString (string indent, IEnumerable<CustomAttribute> atts, IMetadataResolver resolver)
+		internal static string GetAnnotationsString (string indent, IEnumerable<CustomAttribute> atts, IMetadataResolver resolver)
 		{
 			var sw = new StringWriter ();
 			WriteAnnotations (indent, sw, atts, resolver);
@@ -607,7 +597,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers {
 			}
 		}
 
-		static string GetJavaAccess (MethodAttributes access)
+		internal static string GetJavaAccess (MethodAttributes access)
 		{
 			switch (access) {
 				case MethodAttributes.Public:
