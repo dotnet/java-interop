@@ -4,24 +4,22 @@ namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
 class CallableWrapperField
 {
-	public string FieldName { get; }
-	public string TypeName { get; }
-	public string Visibility { get; }
-	public bool IsStatic { get; }
-	public string InitializerName { get; }
-	public string? Annotations { get; }
+	public string FieldName { get; set; }
+	public string TypeName { get; set; }
+	public string Visibility { get; set; }
+	public bool IsStatic { get; set; }
+	public string InitializerName { get; set; }
+	public string? Annotations { get; set; }
 
-	public CallableWrapperField (string fieldName, string typeName, string visibility, bool isStatic, string initializerName, string? annotations)
+	public CallableWrapperField (string fieldName, string typeName, string visibility, string initializerName)
 	{
 		FieldName = fieldName;
 		TypeName = typeName;
 		Visibility = visibility;
-		IsStatic = isStatic;
 		InitializerName = initializerName;
-		Annotations = annotations;
 	}
 
-	public void Generate (TextWriter sw)
+	public void Generate (TextWriter sw, CallableWrapperWriterOptions options)
 	{
 		sw.WriteLine ();
 

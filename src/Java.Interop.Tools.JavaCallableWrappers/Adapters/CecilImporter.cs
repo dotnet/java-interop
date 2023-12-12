@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using Android.Runtime;
+using Java.Interop.Tools.Cecil;
 using Java.Interop.Tools.Diagnostics;
 using Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 using Java.Interop.Tools.TypeNameMappings;
@@ -18,25 +20,19 @@ class CecilImporter
 			?? throw new ArgumentException ($"Could not get JNI signature for method `{method.Name}`", nameof (method));
 		var annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", method.CustomAttributes, resolver);
 
-		return new CallableWrapperField (
-			fieldName: fieldName,
-			typeName: type_name,
-			visibility: visibility,
-			isStatic: method.IsStatic,
-			initializerName: method.Name,
-			annotations: annotations);
+		return new CallableWrapperField (fieldName, type_name, visibility, method.Name) {
+			IsStatic = method.IsStatic,
+			Annotations = annotations
+		};
 	}
 
 	// Temporary conversion function
 	public static CallableWrapperField CreateField (JavaCallableWrapperGenerator.JavaFieldInfo field)
 	{
-		return new CallableWrapperField (
-			fieldName: field.FieldName,
-			typeName: field.TypeName,
-			visibility: field.GetJavaAccess (),
-			isStatic: field.IsStatic,
-			initializerName: field.InitializerName,
-			annotations: field.Annotations);
+		return new CallableWrapperField (field.FieldName, field.TypeName, field.GetJavaAccess (), field.InitializerName) {
+			IsStatic = field.IsStatic,
+			Annotations = field.Annotations
+		};
 	}
 
 	public static CallableWrapperMethod CreateMethod (MethodDefinition method, RegisterAttribute register, IMetadataResolver cache, bool shouldBeDynamicallyRegistered = true)
@@ -190,21 +186,132 @@ class CecilImporter
 	// Temporary conversion function
 	public static CallableWrapperType CreateType (JavaCallableWrapperGenerator generator)
 	{
-		var type = new CallableWrapperType (generator.name, generator.package) {
-			Type = generator.type,
-			Cache = generator.cache,
+		var partial_assembly_qualified_name = generator.type.GetPartialAssemblyQualifiedName (generator.cache);
+
+		var type = new CallableWrapperType (generator.name, generator.package, partial_assembly_qualified_name) {
 			IsAbstract = generator.type.IsAbstract,
 			ApplicationJavaClass = generator.ApplicationJavaClass,
-			Generator = generator,
 			HasDynamicallyRegisteredMethods = generator.HasDynamicallyRegisteredMethods,
 			GenerateOnCreateOverrides = generator.GenerateOnCreateOverrides,
 			MonoRuntimeInitialization = generator.MonoRuntimeInitialization,
+			IsApplication = JavaNativeTypeManager.IsApplication (generator.type, generator.cache),
+			IsInstrumentation = JavaNativeTypeManager.IsInstrumentation (generator.type, generator.cache),
 		};
 
+		type.Annotations.AddRange (CreateTypeAnnotations (generator.type, generator.cache));
+
+		// Extends
+		var extendsType = GetJavaTypeName (generator.type.BaseType, generator.cache);
+
+		if (extendsType == "android.app.Application" && generator.ApplicationJavaClass != null && !string.IsNullOrEmpty (generator.ApplicationJavaClass))
+			extendsType = generator.ApplicationJavaClass;
+
+		type.ExtendsType = extendsType;
+
+		// Implemented interfaces
+		foreach (var ifaceInfo in generator.type.Interfaces) {
+			var iface = generator.cache.Resolve (ifaceInfo.InterfaceType);
+
+			if (!JavaCallableWrapperGenerator.GetTypeRegistrationAttributes (iface).Any ())
+				continue;
+
+			type.ImplementedInterfaces.Add (GetJavaTypeName (iface, generator.cache));
+		}
+
+		// Type constructors
+		foreach (var ctor in generator.ctors) {
+			if (string.IsNullOrEmpty (ctor.Params) && type.IsApplication)
+				continue;
+
+			var ct = CreateConstructor (ctor);
+
+			ct.Name = type.Name;
+			ct.CannotRegisterInStaticConstructor = type.CannotRegisterInStaticConstructor;
+			ct.PartialAssemblyQualifiedName = type.PartialAssemblyQualifiedName ;
+
+			type.Constructors.Add (ct);
+		}
+
+		// Application constructor
+		if (CreateApplicationConstructor (type.Name, generator.type, generator.cache) is CallableWrapperApplicationConstructor app_ctor)
+			type.ApplicationConstructor = app_ctor;
+
+		// Exported fields
+		foreach (var field in generator.exported_fields)
+			type.Fields.Add (CreateField (field));
+
+		// Methods
+		foreach (var method in generator.methods)
+			type.Methods.Add (CreateMethod (method));
+
+		// Nested types
 		if (generator.children is not null)
 			foreach (var nested in generator.children)
 				type.NestedTypes.Add (CreateType (nested));
 
 		return type;
+	}
+
+	static string GetJavaTypeName (TypeReference r, IMetadataResolver cache)
+	{
+		TypeDefinition d = cache.Resolve (r);
+		string? jniName = JavaNativeTypeManager.ToJniName (d, cache);
+		if (jniName == null) {
+			Diagnostic.Error (4201, Localization.Resources.JavaCallableWrappers_XA4201, r.FullName);
+			throw new InvalidOperationException ("--nrt:jniName-- Should not be reached");
+		}
+		return jniName.Replace ('/', '.').Replace ('$', '.');
+	}
+
+	public static IEnumerable<CallableWrapperTypeAnnotation> CreateTypeAnnotations (TypeDefinition type, IMetadataResolver resolver)
+	{
+		foreach (var ca in type.CustomAttributes) {
+			var annotation = CreateTypeAnnotation (ca, resolver);
+
+			if (annotation is not null)
+				yield return annotation;
+		}
+	}
+
+	public static CallableWrapperTypeAnnotation? CreateTypeAnnotation (CustomAttribute ca, IMetadataResolver resolver)
+	{
+		var catype = resolver.Resolve (ca.AttributeType);
+		var tca = catype.CustomAttributes.FirstOrDefault (a => a.AttributeType.FullName == "Android.Runtime.AnnotationAttribute");
+
+		if (tca is null)
+			return null;
+
+		var name_object = tca.ConstructorArguments [0].Value;
+
+		// Should never be hit
+		if (name_object is not string name)
+			throw new ArgumentException ($"Expected a string for the first argument of the {nameof (RegisterAttribute)} constructor.", nameof (ca));
+
+		var annotation = new CallableWrapperTypeAnnotation (name);
+
+		foreach (var p in ca.Properties) {
+			var pd = catype.Properties.FirstOrDefault (pp => pp.Name == p.Name);
+			var reg = pd != null ? pd.CustomAttributes.FirstOrDefault (pdca => pdca.AttributeType.FullName == "Android.Runtime.RegisterAttribute") : null;
+
+			var key = reg != null ? (string) reg.ConstructorArguments [0].Value : p.Name;
+			var value = ManagedValueToJavaSource (p.Argument.Value);
+
+			annotation.Properties.Add (new System.Collections.Generic.KeyValuePair<string, string> (key, value));
+		}
+
+		return annotation;
+	}
+
+	// FIXME: this is hacky. Is there any existing code for value to source conversion?
+	static string ManagedValueToJavaSource (object value)
+	{
+		if (value is string)
+			return "\"" + value.ToString ().Replace ("\"", "\"\"") + '"';
+		else if (value.GetType ().FullName == "Java.Lang.Class")
+			return value.ToString () + ".class";
+		else if (value is bool)
+			return ((bool) value) ? "true" : "false";
+		else
+			return value.ToString ();
 	}
 }

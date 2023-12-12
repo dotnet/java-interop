@@ -1,14 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Java.Interop.Tools.Cecil;
-using System.Xml.Linq;
-using Java.Interop.Tools.Diagnostics;
-using Java.Interop.Tools.TypeNameMappings;
-using Mono.Cecil;
-using static Java.Interop.Tools.JavaCallableWrappers.JavaCallableWrapperGenerator;
-using Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
@@ -21,21 +13,26 @@ class CallableWrapperType
 	public bool HasDynamicallyRegisteredMethods { get; set; }
 	public bool GenerateOnCreateOverrides { get; set; }
 	public string? MonoRuntimeInitialization { get; set; }
+	public string? ExtendsType { get; set; }
+	public CallableWrapperApplicationConstructor? ApplicationConstructor { get; set; }
+	public bool IsApplication { get; set; }
+	public bool IsInstrumentation { get; set; }
+	public string PartialAssemblyQualifiedName { get; set; }
 
+	public List<CallableWrapperTypeAnnotation> Annotations { get; } = new List<CallableWrapperTypeAnnotation> ();
+	public List<string> ImplementedInterfaces { get; } = new List<string> ();
 	public List<CallableWrapperConstructor> Constructors { get; } = new List<CallableWrapperConstructor> ();
 	public List<CallableWrapperField> Fields { get; } = new List<CallableWrapperField> ();
 	public List<CallableWrapperMethod> Methods { get; } = new List<CallableWrapperMethod> ();
 	public List<CallableWrapperType> NestedTypes { get; } = new List<CallableWrapperType> ();
 
-	// TODO: Remove Cecil
-	public TypeDefinition Type { get; set; } = null!;
-	public IMetadataResolver Cache { get; set; } = null!;
-	public JavaCallableWrapperGenerator Generator { get; set; } = null!;
+	public bool CannotRegisterInStaticConstructor => IsApplication || IsInstrumentation;
 
-	public CallableWrapperType (string name, string package)
+	public CallableWrapperType (string name, string package, string partialAssemblyQualifiedName)
 	{
 		Name = name;
 		Package = package;
+		PartialAssemblyQualifiedName = partialAssemblyQualifiedName;
 	}
 
 	// example of java target to generate for a type
@@ -87,19 +84,17 @@ class CallableWrapperType
 	{
 		sw.WriteLine ();
 
-		// class annotations.
-		JavaCallableWrapperGenerator.WriteAnnotations ("", sw, Type.CustomAttributes, Cache);
+		// Type annotations
+		foreach (var annotation in Annotations)
+			annotation.Generate (sw, "", options);
 
 		sw.WriteLine ("public " + (IsAbstract ? "abstract " : "") + "class " + Name);
 
-		var extendsType = GetJavaTypeName (Type.BaseType, Cache);
+		sw.WriteLine ("\textends " + ExtendsType);
 
-		if (extendsType == "android.app.Application" && ApplicationJavaClass != null && !string.IsNullOrEmpty (ApplicationJavaClass))
-			extendsType = ApplicationJavaClass;
-
-		sw.WriteLine ("\textends " + extendsType);
 		sw.WriteLine ("\timplements");
 		sw.Write ("\t\t");
+
 		switch (options.CodeGenerationTarget) {
 			case JavaPeerStyle.JavaInterop1:
 				sw.Write ("net.dot.jni.GCUserPeerable");
@@ -108,14 +103,13 @@ class CallableWrapperType
 				sw.Write ("mono.android.IGCUserPeer");
 				break;
 		}
-		foreach (var ifaceInfo in Type.Interfaces) {
-			var iface = Cache.Resolve (ifaceInfo.InterfaceType);
-			if (!JavaCallableWrapperGenerator.GetTypeRegistrationAttributes (iface).Any ())
-				continue;
+
+		foreach (var iface in ImplementedInterfaces) {
 			sw.WriteLine (",");
 			sw.Write ("\t\t");
-			sw.Write (GetJavaTypeName (iface, Cache));
+			sw.Write (iface);
 		}
+
 		sw.WriteLine ();
 		sw.WriteLine ("{");
 	}
@@ -130,10 +124,10 @@ class CallableWrapperType
 			writer.WriteLine ("\tpublic static final String __md_methods;");
 		}
 
-		for (int i = 0; i < NestedTypes.Count; i++) {
-			if (!NestedTypes [i].HasDynamicallyRegisteredMethods) {
+		for (var i = 0; i < NestedTypes.Count; i++) {
+			if (!NestedTypes [i].HasDynamicallyRegisteredMethods)
 				continue;
-			}
+
 			needCtor = true;
 			writer.Write ("\tstatic final String __md_");
 			writer.Write (i + 1);
@@ -143,13 +137,11 @@ class CallableWrapperType
 		if (needCtor) {
 			writer.WriteLine ("\tstatic {");
 
-			if (HasDynamicallyRegisteredMethods) {
-				GenerateRegisterType (writer, Generator, "__md_methods", options);
-			}
+			if (HasDynamicallyRegisteredMethods)
+				GenerateRegisterType (writer, this, "__md_methods", options);
 
-			for (int i = 0; i < NestedTypes.Count; ++i) {
-				GenerateRegisterType (writer, NestedTypes [i].Generator, $"__md_{i + 1}_methods", options);
-			}
+			for (var i = 0; i < NestedTypes.Count; ++i)
+				GenerateRegisterType (writer, NestedTypes [i], $"__md_{i + 1}_methods", options);
 
 			writer.WriteLine ("\t}");
 		}
@@ -157,56 +149,29 @@ class CallableWrapperType
 
 	public void GenerateBody (TextWriter sw, CallableWrapperWriterOptions options)
 	{
-		foreach (Signature ctor in Generator.ctors) {
-			if (string.IsNullOrEmpty (ctor.Params) && JavaNativeTypeManager.IsApplication (Type, Cache))
-				continue;
+		foreach (var ctor in Constructors)
+			ctor.Generate (sw, options);
 
-			var ct = CecilImporter.CreateConstructor (ctor);
+		ApplicationConstructor?.Generate (sw, options);
 
-			ct.Name = Name;
-			ct.CannotRegisterInStaticConstructor = CannotRegisterInStaticConstructor (Type);
-			ct.PartialAssemblyQualifiedName = Type.GetPartialAssemblyQualifiedName (Cache);
+		foreach (var field in Fields)
+			field.Generate (sw, options);
 
-			ct.Generate (sw, options);
-		}
+		foreach (var method in Methods)
+			method.Generate (sw, options);
 
-		if (CecilImporter.CreateApplicationConstructor (Name, Type, Cache) is CallableWrapperApplicationConstructor app_ctor)
-			app_ctor.Generate (sw, options);
+		if (GenerateOnCreateOverrides && IsApplication && !Methods.Any (m => m.Name == "onCreate"))
+			WriteApplicationOnCreate (sw, options);
 
-		foreach (JavaFieldInfo field in Generator.exported_fields)
-			CecilImporter.CreateField (field).Generate (sw);
+		if (GenerateOnCreateOverrides && IsInstrumentation && !Methods.Any (m => m.Name == "onCreate"))
+			WriteInstrumentationOnCreate (sw, options);
 
-		foreach (Signature method in Generator.methods)
-			CecilImporter.CreateMethod (method).Generate (sw, options);
-
-		if (GenerateOnCreateOverrides && JavaNativeTypeManager.IsApplication (Type, Cache) && !Generator.methods.Any (m => m.Name == "onCreate"))
-			WriteApplicationOnCreate (sw, w => {
-				w.Write ("\t\tmono.android.Runtime.register (\"");
-				w.Write (Type.GetPartialAssemblyQualifiedName (Cache));
-				w.Write ("\", ");
-				w.Write (Name);
-				w.WriteLine (".class, __md_methods);");
-				w.WriteLine ("\t\tsuper.onCreate ();");
-			});
-		if (GenerateOnCreateOverrides && JavaNativeTypeManager.IsInstrumentation (Type, Cache) && !Generator.methods.Any (m => m.Name == "onCreate"))
-			WriteInstrumentationOnCreate (sw, w => {
-				w.Write ("\t\tmono.android.Runtime.register (\"");
-				w.Write (Type.GetPartialAssemblyQualifiedName (Cache));
-				w.Write ("\", ");
-				w.Write (Name);
-				w.WriteLine (".class, __md_methods);");
-				w.WriteLine ("\t\tsuper.onCreate (arguments);");
-			});
-
-		string addRef = "monodroidAddReference";
-		string clearRefs = "monodroidClearReferences";
-		if (options.CodeGenerationTarget == JavaPeerStyle.JavaInterop1) {
-			addRef = "jiAddManagedReference";
-			clearRefs = "jiClearManagedReferences";
-		}
+		var addRef = options.CodeGenerationTarget == JavaPeerStyle.JavaInterop1 ? "jiAddManagedReference" : "monodroidAddReference";
+		var clearRefs = options.CodeGenerationTarget == JavaPeerStyle.JavaInterop1 ? "jiClearManagedReferences" : "monodroidClearReferences";
 
 		sw.WriteLine ();
 		sw.WriteLine ("\tprivate java.util.ArrayList refList;");
+
 		sw.WriteLine ($"\tpublic void {addRef} (java.lang.Object obj)");
 		sw.WriteLine ("\t{");
 		sw.WriteLine ("\t\tif (refList == null)");
@@ -214,6 +179,7 @@ class CallableWrapperType
 		sw.WriteLine ("\t\trefList.add (obj);");
 		sw.WriteLine ("\t}");
 		sw.WriteLine ();
+
 		sw.WriteLine ($"\tpublic void {clearRefs} ()");
 		sw.WriteLine ("\t{");
 		sw.WriteLine ("\t\tif (refList != null)");
@@ -226,16 +192,24 @@ class CallableWrapperType
 		sw.WriteLine ("}");
 	}
 
-	void WriteApplicationOnCreate (TextWriter sw, Action<TextWriter> extra)
+	void WriteApplicationOnCreate (TextWriter sw, CallableWrapperWriterOptions options)
 	{
 		sw.WriteLine ();
+
 		sw.WriteLine ("\tpublic void onCreate ()");
 		sw.WriteLine ("\t{");
-		extra (sw);
+
+		sw.Write ("\t\tmono.android.Runtime.register (\"");
+		sw.Write (PartialAssemblyQualifiedName);
+		sw.Write ("\", ");
+		sw.Write (Name);
+		sw.WriteLine (".class, __md_methods);");
+
+		sw.WriteLine ("\t\tsuper.onCreate ();");
 		sw.WriteLine ("\t}");
 	}
 
-	void WriteInstrumentationOnCreate (TextWriter sw, Action<TextWriter> extra)
+	void WriteInstrumentationOnCreate (TextWriter sw, CallableWrapperWriterOptions options)
 	{
 		sw.WriteLine ();
 		sw.WriteLine ("\tpublic void onCreate (android.os.Bundle arguments)");
@@ -254,67 +228,58 @@ class CallableWrapperType
 			sw.WriteLine ();
 		}
 
-		extra (sw);
+		sw.Write ("\t\tmono.android.Runtime.register (\"");
+		sw.Write (PartialAssemblyQualifiedName);
+		sw.Write ("\", ");
+		sw.Write (Name);
+		sw.WriteLine (".class, __md_methods);");
+
+		sw.WriteLine ("\t\tsuper.onCreate (arguments);");
 		sw.WriteLine ("\t}");
 	}
 
-	void GenerateRegisterType (TextWriter sw, JavaCallableWrapperGenerator self, string field, CallableWrapperWriterOptions options)
+	void GenerateRegisterType (TextWriter sw, CallableWrapperType self, string field, CallableWrapperWriterOptions options)
 	{
-		if (!self.HasDynamicallyRegisteredMethods) {
+		if (!self.HasDynamicallyRegisteredMethods)
 			return;
-		}
 
 		sw.Write ("\t\t");
 		sw.Write (field);
 		sw.WriteLine (" = ");
-		string managedTypeName = self.type.GetPartialAssemblyQualifiedName (Cache);
-		string javaTypeName = $"{Package}.{Name}";
 
-		foreach (Signature method in self.methods) {
+		foreach (var method in self.Methods) {
 			if (method.IsDynamicallyRegistered) {
 				sw.Write ("\t\t\t\"", method.Method);
 				sw.Write (method.Method);
 				sw.WriteLine ("\\n\" +");
 			}
 		}
+
 		sw.WriteLine ("\t\t\t\"\";");
-		if (CannotRegisterInStaticConstructor (self.type))
+
+		if (CannotRegisterInStaticConstructor)
 			return;
+
 		sw.Write ("\t\t");
+
 		switch (options.CodeGenerationTarget) {
 			case JavaPeerStyle.JavaInterop1:
 				sw.Write ("net.dot.jni.ManagedPeer.registerNativeMembers (");
-				sw.Write (self.name);
+				sw.Write (self.Name);
 				sw.Write (".class, ");
 				sw.Write (field);
 				sw.WriteLine (");");
 				break;
 			default:
 				sw.Write ("mono.android.Runtime.register (\"");
-				sw.Write (managedTypeName);
+				sw.Write (self.PartialAssemblyQualifiedName);
 				sw.Write ("\", ");
-				sw.Write (self.name);
+				sw.Write (self.Name);
 				sw.Write (".class, ");
 				sw.Write (field);
 				sw.WriteLine (");");
 				break;
 		}
-	}
-
-	bool CannotRegisterInStaticConstructor (TypeDefinition type)
-	{
-		return JavaNativeTypeManager.IsApplication (type, Cache) || JavaNativeTypeManager.IsInstrumentation (type, Cache);
-	}
-
-	static string GetJavaTypeName (TypeReference r, IMetadataResolver cache)
-	{
-		TypeDefinition d = cache.Resolve (r);
-		string? jniName = JavaNativeTypeManager.ToJniName (d, cache);
-		if (jniName == null) {
-			Diagnostic.Error (4201, Localization.Resources.JavaCallableWrappers_XA4201, r.FullName);
-			throw new InvalidOperationException ("--nrt:jniName-- Should not be reached");
-		}
-		return jniName.Replace ('/', '.').Replace ('$', '.');
 	}
 
 	/// <summary>
@@ -328,15 +293,15 @@ class CallableWrapperType
 
 	public void Generate (string outputPath, CallableWrapperWriterOptions options)
 	{
-		using (StreamWriter sw = OpenStream (outputPath)) {
+		using (StreamWriter sw = OpenStream (outputPath))
 			Generate (sw, options, false);
-		}
 	}
 
 	StreamWriter OpenStream (string outputPath)
 	{
-		string destination = GetDestinationPath (outputPath);
+		var destination = GetDestinationPath (outputPath);
 		Directory.CreateDirectory (Path.GetDirectoryName (destination));
+
 		return new StreamWriter (new FileStream (destination, FileMode.Create, FileAccess.Write));
 	}
 }
