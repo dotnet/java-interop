@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
-class CallableWrapperApplicationConstructor
+public class CallableWrapperApplicationConstructor
 {
 	public string Name { get; set; }
 

@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
-class CallableWrapperMethod
+public class CallableWrapperMethod
 {
 	public string Name { get; set; }
 	public string Method { get; set; }
@@ -12,16 +13,17 @@ class CallableWrapperMethod
 	public string? JavaNameOverride { get; set; }
 	public string? Params { get; set; }
 	public string? Retval { get; set; }
-	public string? ThrowsDeclaration { get; set; }
 	public string? JavaAccess { get; set; }
 	public bool IsExport { get; set; }
 	public bool IsStatic { get; set; }
-	public bool IsDynamicallyRegistered { get; set; }
+	public bool IsDynamicallyRegistered { get; set; } = true;
 	public string []? ThrownTypeNames { get; set; }
-	public string? Annotations { get; set; }
 	public string? SuperCall { get; set; }
 	public string? ActivateCall { get; set; }
 	public string JavaName => JavaNameOverride ?? Name;
+	public List<CallableWrapperTypeAnnotation> Annotations { get; } = new List<CallableWrapperTypeAnnotation> ();
+
+	public string? ThrowsDeclaration => ThrownTypeNames?.Length > 0 ? $" throws {string.Join (", ", ThrownTypeNames)}" : null;
 
 	public CallableWrapperMethod (string name, string method, string jniSignature)
 	{
@@ -34,8 +36,8 @@ class CallableWrapperMethod
 	{
 		sw.WriteLine ();
 
-		if (Annotations is not null)
-			sw.WriteLine (Annotations);
+		foreach (var annotation in Annotations)
+			annotation.Generate (sw, "", options);
 
 		sw.Write ("\t");
 
@@ -58,7 +60,7 @@ class CallableWrapperMethod
 		sw.WriteLine ("\t{");
 
 #if MONODROID_TIMING
-		sw.WriteLine ("\t\tandroid.util.Log.i(\"MonoDroid-Timing\", \"{0}.{1}: time: \"+java.lang.System.currentTimeMillis());", name, method.Name);
+		sw.WriteLine ("\t\tandroid.util.Log.i(\"MonoDroid-Timing\", \"{0}.{1}: time: \"+java.lang.System.currentTimeMillis());", Name, Method);
 #endif
 
 		sw.Write ("\t\t");

@@ -6,99 +6,286 @@ using Android.Runtime;
 using Java.Interop.Tools.Cecil;
 using Java.Interop.Tools.Diagnostics;
 using Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
+using Java.Interop.Tools.JavaCallableWrappers.Utilities;
 using Java.Interop.Tools.TypeNameMappings;
 using Mono.Cecil;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
-class CecilImporter
+public class CecilImporter
 {
-	public static CallableWrapperField CreateField (MethodDefinition method, string fieldName, IMetadataResolver resolver)
+	public static CallableWrapperType CreateType (TypeDefinition type, IMetadataResolver resolver, string? outerType = null, JavaCallableMethodClassifier? methodClassifier = null)
 	{
-		var visibility = JavaCallableWrapperGenerator.GetJavaAccess (method.Attributes & MethodAttributes.MemberAccessMask);
+		if (type.IsEnum || type.IsInterface || type.IsValueType)
+			Diagnostic.Error (4200, CecilExtensions.LookupSource (type), Localization.Resources.JavaCallableWrappers_XA4200, type.FullName);
+
+		var jniName = JavaNativeTypeManager.ToJniName (type, resolver);
+
+		if (jniName is null)
+			Diagnostic.Error (4201, CecilExtensions.LookupSource (type), Localization.Resources.JavaCallableWrappers_XA4201, type.FullName);
+
+		if (outerType != null && !string.IsNullOrEmpty (outerType)) {
+			jniName = jniName.Substring (outerType.Length + 1);
+			ExtractJavaNames (outerType, out var p, out outerType);
+		}
+
+		ExtractJavaNames (jniName, out var package, out var name);
+
+		if (string.IsNullOrEmpty (package) &&
+				(type.IsSubclassOf ("Android.App.Activity", resolver) ||
+				 type.IsSubclassOf ("Android.App.Application", resolver) ||
+				 type.IsSubclassOf ("Android.App.Service", resolver) ||
+				 type.IsSubclassOf ("Android.Content.BroadcastReceiver", resolver) ||
+				 type.IsSubclassOf ("Android.Content.ContentProvider", resolver)))
+			Diagnostic.Error (4203, CecilExtensions.LookupSource (type), Localization.Resources.JavaCallableWrappers_XA4203, jniName);
+
+		var cwt = new CallableWrapperType (name, package, type.GetPartialAssemblyQualifiedName (resolver)) {
+			IsApplication = JavaNativeTypeManager.IsApplication (type, resolver),
+			IsInstrumentation = JavaNativeTypeManager.IsInstrumentation (type, resolver),
+			IsAbstract = type.IsAbstract,
+		};
+
+		// Type annotations
+		cwt.Annotations.AddRange (CreateAnnotations (type, resolver));
+
+		// Extends
+		cwt.ExtendsType = GetJavaTypeName (type.BaseType, resolver);
+
+		// Implemented interfaces
+		foreach (var ifaceInfo in type.Interfaces) {
+			var iface = resolver.Resolve (ifaceInfo.InterfaceType);
+
+			if (!CecilExtensions.GetTypeRegistrationAttributes (iface).Any ())
+				continue;
+
+			cwt.ImplementedInterfaces.Add (GetJavaTypeName (iface, resolver));
+		}
+
+		// Application constructor
+		if (CreateApplicationConstructor (cwt.Name, type, resolver) is CallableWrapperApplicationConstructor app_ctor)
+			cwt.ApplicationConstructor = app_ctor;
+
+		// Methods
+		foreach (var minfo in type.Methods.Where (m => !m.IsConstructor)) {
+			var baseRegisteredMethod = CecilExtensions.GetBaseRegisteredMethod (minfo, resolver);
+
+			if (baseRegisteredMethod is not null)
+				AddMethod (cwt, type, baseRegisteredMethod, minfo, methodClassifier, resolver);
+			else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableAttribute")) {
+				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				cwt.HasExport = true;
+			} else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableConstructorAttribute")) {
+				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				cwt.HasExport = true;
+			} else if (minfo.AnyCustomAttributes (typeof (ExportFieldAttribute))) {
+				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				cwt.HasExport = true;
+			} else if (minfo.AnyCustomAttributes (typeof (ExportAttribute))) {
+				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				cwt.HasExport = true;
+			}
+		}
+
+		// Methods from interfaces
+		foreach (InterfaceImplementation ifaceInfo in type.Interfaces) {
+			var typeReference = ifaceInfo.InterfaceType;
+			var typeDefinition = resolver.Resolve (typeReference);
+
+			if (typeDefinition is null) {
+				Diagnostic.Error (4204,
+					CecilExtensions.LookupSource (type),
+					Localization.Resources.JavaCallableWrappers_XA4204,
+					typeReference.FullName);
+				continue;
+			}
+
+			if (!CecilExtensions.GetTypeRegistrationAttributes (typeDefinition).Any ())
+				continue;
+
+			foreach (MethodDefinition imethod in typeDefinition.Methods) {
+				if (imethod.IsStatic)
+					continue;
+
+				AddMethod (cwt, type, imethod, imethod, methodClassifier, resolver);
+			}
+		}
+
+		// Constructors
+		var ctorTypes = new List<TypeDefinition> () {
+			type,
+		};
+
+		foreach (var bt in type.GetBaseTypes (resolver)) {
+			ctorTypes.Add (bt);
+			var rattr = CecilExtensions.GetMethodRegistrationAttributes (bt).FirstOrDefault ();
+
+			if (rattr != null && rattr.DoNotGenerateAcw)
+				break;
+		}
+
+		ctorTypes.Reverse ();
+
+		var curCtors = new List<MethodDefinition> ();
+
+		foreach (var minfo in type.Methods) {
+			if (minfo.IsConstructor && minfo.AnyCustomAttributes (typeof (ExportAttribute))) {
+				if (minfo.IsStatic) {
+					// Diagnostic.Warning (log, "ExportAttribute does not work on static constructor");
+				} else {
+					if (CreateConstructor (cwt, minfo, ctorTypes [0], type, outerType, null, curCtors, false, true, resolver) is CallableWrapperConstructor c)
+						cwt.Constructors.Add (c);
+
+					cwt.HasExport = true;
+				}
+			}
+		}
+
+		AddConstructors (cwt, ctorTypes [0], type, outerType, null, curCtors, true, resolver);
+
+		for (var i = 1; i < ctorTypes.Count; ++i) {
+			var baseCtors = curCtors;
+			curCtors = new List<MethodDefinition> ();
+			AddConstructors (cwt, ctorTypes [i], type, outerType, baseCtors, curCtors, false, resolver);
+		}
+
+		AddNestedTypes (cwt, type, resolver, methodClassifier);
+
+		return cwt;
+	}
+
+	static CallableWrapperField CreateField (MethodDefinition method, string fieldName, IMetadataResolver resolver)
+	{
+		var visibility = GetJavaAccess (method.Attributes & MethodAttributes.MemberAccessMask);
 		var type_name = JavaNativeTypeManager.ReturnTypeFromSignature (JavaNativeTypeManager.GetJniSignature (method, resolver))?.Type
 			?? throw new ArgumentException ($"Could not get JNI signature for method `{method.Name}`", nameof (method));
-		var annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", method.CustomAttributes, resolver);
 
-		return new CallableWrapperField (fieldName, type_name, visibility, method.Name) {
+		var field = new CallableWrapperField (fieldName, type_name, visibility, method.Name) {
 			IsStatic = method.IsStatic,
-			Annotations = annotations
 		};
+
+		field.Annotations.AddRange (CreateAnnotations (method, resolver));
+
+		return field;
 	}
 
-	// Temporary conversion function
-	public static CallableWrapperField CreateField (JavaCallableWrapperGenerator.JavaFieldInfo field)
+	// Constructor with [Register] attribute
+	static CallableWrapperConstructor CreateConstructor (MethodDefinition methodDefinition, CallableWrapperType type, RegisterAttribute register, string? managedParameters, string? outerType, IMetadataResolver cache, bool shouldBeDynamicallyRegistered = true)
 	{
-		return new CallableWrapperField (field.FieldName, field.TypeName, field.GetJavaAccess (), field.InitializerName) {
-			IsStatic = field.IsStatic,
-			Annotations = field.Annotations
-		};
-	}
+		var method = CreateConstructor (methodDefinition.Name, type, register.Signature, register.Connector, managedParameters, outerType, null);
 
-	public static CallableWrapperMethod CreateMethod (MethodDefinition method, RegisterAttribute register, IMetadataResolver cache, bool shouldBeDynamicallyRegistered = true)
-		=> CreateMethod (method, register, null, null, cache, shouldBeDynamicallyRegistered);
-
-	public static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, RegisterAttribute register, string? managedParameters, string? outerType, IMetadataResolver cache, bool shouldBeDynamicallyRegistered = true)
-	{
-		var method = CreateMethod (register.Name, register.Signature, register.Connector, managedParameters, outerType, null);
-
-		method.Annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", methodDefinition.CustomAttributes, cache);
+		method.Annotations.AddRange (CreateAnnotations (methodDefinition, cache));
 		method.IsDynamicallyRegistered = shouldBeDynamicallyRegistered;
 
 		return method;
 	}
 
-	public static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, ExportAttribute export, string? managedParameters, IMetadataResolver resolver)
+	// Constructor with [Export] attribute
+	static CallableWrapperConstructor CreateConstructor (MethodDefinition methodDefinition, CallableWrapperType type, ExportAttribute export, string? managedParameters, IMetadataResolver resolver)
+	{
+		var method = CreateConstructor (methodDefinition.Name, type, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, export.SuperArgumentsString);
+
+		method.IsExport = true;
+		method.IsStatic = methodDefinition.IsStatic;
+		method.JavaAccess = GetJavaAccess (methodDefinition.Attributes & MethodAttributes.MemberAccessMask);
+		method.ThrownTypeNames = export.ThrownNames;
+		method.JavaNameOverride = export.Name;
+		method.ManagedParameters = managedParameters;
+		method.Annotations.AddRange (CreateAnnotations (methodDefinition, resolver));
+
+		return method;
+	}
+
+	// Common constructor creation code
+	static CallableWrapperConstructor CreateConstructor (string name, CallableWrapperType type, string? signature, string? connector, string? managedParameters, string? outerType, string? superCall)
+	{
+		signature = signature ?? throw new ArgumentNullException ("`connector` cannot be null.", nameof (connector));
+		var method_name = "n_" + name + ":" + signature + ":" + connector;
+
+		var method = new CallableWrapperConstructor (name, method_name, signature);
+
+		PopulateMethod (method, signature, managedParameters, outerType, superCall);
+
+		method.Name = type.Name;
+		method.CannotRegisterInStaticConstructor = type.CannotRegisterInStaticConstructor;
+		method.PartialAssemblyQualifiedName = type.PartialAssemblyQualifiedName;
+
+		return method;
+	}
+
+	// Method with a [Register] attribute
+	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, RegisterAttribute register, string? managedParameters, string? outerType, IMetadataResolver resolver, bool shouldBeDynamicallyRegistered = true)
+	{
+		var method = CreateMethod (register.Name, register.Signature, register.Connector, managedParameters, outerType, null);
+
+		method.Annotations.AddRange (CreateAnnotations (methodDefinition, resolver));
+		method.IsDynamicallyRegistered = shouldBeDynamicallyRegistered;
+
+		return method;
+	}
+
+	// Method with an [Export] attribute
+	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, ExportAttribute export, string? managedParameters, IMetadataResolver resolver)
 	{
 		var method = CreateMethod (methodDefinition.Name, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, export.SuperArgumentsString);
 
 		method.IsExport = true;
 		method.IsStatic = methodDefinition.IsStatic;
-		method.JavaAccess = JavaCallableWrapperGenerator.GetJavaAccess (methodDefinition.Attributes & MethodAttributes.MemberAccessMask);
+		method.JavaAccess = GetJavaAccess (methodDefinition.Attributes & MethodAttributes.MemberAccessMask);
 		method.ThrownTypeNames = export.ThrownNames;
 		method.JavaNameOverride = export.Name;
 		method.ManagedParameters = managedParameters;
-		method.Annotations = JavaCallableWrapperGenerator.GetAnnotationsString ("\t", methodDefinition.CustomAttributes, resolver);
+		method.Annotations.AddRange (CreateAnnotations (methodDefinition, resolver));
 
 		return method;
 	}
 
-	public static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, IMetadataResolver resolver)
+	// Method with an [ExportField] attribute
+	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, IMetadataResolver resolver)
 	{
 		var method = CreateMethod (methodDefinition.Name, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, null);
 
 		if (methodDefinition.HasParameters)
-			Diagnostic.Error (4205, JavaCallableWrapperGenerator.LookupSource (methodDefinition), Localization.Resources.JavaCallableWrappers_XA4205);
+			Diagnostic.Error (4205, CecilExtensions.LookupSource (methodDefinition), Localization.Resources.JavaCallableWrappers_XA4205);
 		if (methodDefinition.ReturnType.MetadataType == MetadataType.Void)
-			Diagnostic.Error (4208, JavaCallableWrapperGenerator.LookupSource (methodDefinition), Localization.Resources.JavaCallableWrappers_XA4208);
+			Diagnostic.Error (4208, CecilExtensions.LookupSource (methodDefinition), Localization.Resources.JavaCallableWrappers_XA4208);
 
 		method.IsExport = true;
-		method.IsStatic = method.IsStatic;
-		method.JavaAccess = JavaCallableWrapperGenerator.GetJavaAccess (methodDefinition.Attributes & MethodAttributes.MemberAccessMask);
+		method.IsStatic = methodDefinition.IsStatic;
+		method.JavaAccess = GetJavaAccess (methodDefinition.Attributes & MethodAttributes.MemberAccessMask);
 
 		// Annotations are processed within CallableWrapperField, not the initializer method. So we don't generate them here.
 
 		return method;
 	}
 
-	public static CallableWrapperMethod CreateMethod (string name, string? signature, string? connector, string? managedParameters, string? outerType, string? superCall)
+	// Common method creation code
+	static CallableWrapperMethod CreateMethod (string name, string? signature, string? connector, string? managedParameters, string? outerType, string? superCall)
 	{
 		signature = signature ?? throw new ArgumentNullException ("`connector` cannot be null.", nameof (connector));
 		var method_name = "n_" + name + ":" + signature + ":" + connector;
 
-		var method = new CallableWrapperMethod (name, method_name, signature) {
-			ManagedParameters = managedParameters
-		};
+		var method = new CallableWrapperMethod (name, method_name, signature);
+
+		PopulateMethod (method, signature, managedParameters, outerType, superCall);
+
+		return method;
+	}
+
+	// This is done this way to allow sharing between CallableWrapperMethod and CallableWrapperConstructor
+	static void PopulateMethod (CallableWrapperMethod method, string signature, string? managedParameters, string? outerType, string? superCall)
+	{
+		method.ManagedParameters = managedParameters;
 
 		var jnisig = signature;
 		var closer = jnisig.IndexOf (')');
 		var ret = jnisig.Substring (closer + 1);
+
 		method.Retval = JavaNativeTypeManager.Parse (ret)?.Type;
 
 		var jniparms = jnisig.Substring (1, closer - 1);
 
 		if (string.IsNullOrEmpty (jniparms) && string.IsNullOrEmpty (superCall))
-			return method;
+			return;
 
 		var parms = new StringBuilder ();
 		var scall = new StringBuilder ();
@@ -131,51 +318,95 @@ class CecilImporter
 		method.Params = parms.ToString ();
 		method.SuperCall = superCall ?? scall.ToString ();
 		method.ActivateCall = acall.ToString ();
-
-		return method;
 	}
 
-	// Temporary conversion function
-	public static CallableWrapperMethod CreateMethod (JavaCallableWrapperGenerator.Signature signature)
+	static void AddConstructors (CallableWrapperType cwt, TypeDefinition type, TypeDefinition rootType, string? outerType, List<MethodDefinition>? baseCtors, List<MethodDefinition> curCtors, bool onlyRegisteredOrExportedCtors, IMetadataResolver cache)
 	{
-		return new CallableWrapperMethod (signature.Name, signature.Method, signature.JniSignature) {
-			ManagedParameters = signature.ManagedParameters,
-			JavaNameOverride = signature.JavaNameOverride,
-			Params = signature.Params,
-			Retval = signature.Retval,
-			ThrowsDeclaration = signature.ThrowsDeclaration,
-			JavaAccess = signature.JavaAccess,
-			IsExport = signature.IsExport,
-			IsStatic = signature.IsStatic,
-			IsDynamicallyRegistered = signature.IsDynamicallyRegistered,
-			ThrownTypeNames = signature.ThrownTypeNames,
-			Annotations = signature.Annotations,
-			SuperCall = signature.SuperCall,
-			ActivateCall = signature.ActivateCall,
-		};
+		foreach (var ctor in type.Methods)
+			if (ctor.IsConstructor && !ctor.IsStatic && !ctor.AnyCustomAttributes (typeof (ExportAttribute)))
+				if (CreateConstructor (cwt, ctor, type, rootType, outerType, baseCtors, curCtors, onlyRegisteredOrExportedCtors, false, cache) is CallableWrapperConstructor c)
+					cwt.Constructors.Add (c);
 	}
 
-	// Temporary conversion function
-	public static CallableWrapperConstructor CreateConstructor (JavaCallableWrapperGenerator.Signature signature)
+	static CallableWrapperConstructor? CreateConstructor (CallableWrapperType cwt, MethodDefinition ctor, TypeDefinition type, TypeDefinition rootType, string? outerType, List<MethodDefinition>? baseCtors, List<MethodDefinition> curCtors, bool onlyRegisteredOrExportedCtors, bool skipParameterCheck, IMetadataResolver cache)
 	{
-		return new CallableWrapperConstructor (signature.Name, signature.Method, signature.JniSignature) {
-			ManagedParameters = signature.ManagedParameters,
-			JavaNameOverride = signature.JavaNameOverride,
-			Params = signature.Params,
-			Retval = signature.Retval,
-			ThrowsDeclaration = signature.ThrowsDeclaration,
-			JavaAccess = signature.JavaAccess,
-			IsExport = signature.IsExport,
-			IsStatic = signature.IsStatic,
-			IsDynamicallyRegistered = signature.IsDynamicallyRegistered,
-			ThrownTypeNames = signature.ThrownTypeNames,
-			Annotations = signature.Annotations,
-			SuperCall = signature.SuperCall,
-			ActivateCall = signature.ActivateCall
-		};
+		// We create a parameter-less constructor for the application class, so don't use the imported one
+		if (!ctor.HasParameters && JavaNativeTypeManager.IsApplication (rootType, cache))
+			return null;
+
+		var managedParameters = GetManagedParameters (ctor, outerType, type, cache);
+
+		if (!skipParameterCheck && (managedParameters == null || cwt.Constructors.Any (c => c.ManagedParameters == managedParameters)))
+			return null;
+
+		// Constructor with [Export] attribute
+		var eattr = CecilExtensions.GetExportAttributes (ctor, cache).FirstOrDefault ();
+
+		if (eattr != null) {
+			if (!string.IsNullOrEmpty (eattr.Name)) {
+				// Diagnostic.Warning (log, "Use of ExportAttribute.Name property is invalid on constructors");
+			}
+
+			curCtors.Add (ctor);
+			return CreateConstructor (ctor, cwt, eattr, managedParameters, cache);
+		}
+
+		// Constructor with [Register] attribute
+		var rattr = CecilExtensions.GetMethodRegistrationAttributes (ctor).FirstOrDefault ();
+
+		if (rattr != null) {
+			if (cwt.Constructors.Any (c => c.JniSignature == rattr.Signature))
+				return null;
+
+			curCtors.Add (ctor);
+			return CreateConstructor (ctor, cwt, rattr, managedParameters, outerType, cache);
+		}
+
+		if (onlyRegisteredOrExportedCtors)
+			return null;
+
+		// Constructors without [Export] or [Register] attributes
+		var jniSignature = JavaNativeTypeManager.GetJniSignature (ctor, cache);
+
+		if (jniSignature is null)
+			return null;
+
+		if (cwt.Constructors.Any (c => c.JniSignature == jniSignature))
+			return null;
+
+		if (baseCtors is null)
+			throw new InvalidOperationException ("`baseCtors` should not be null!");
+
+		if (baseCtors.Any (m => m.Parameters.AreParametersCompatibleWith (ctor.Parameters, cache))) {
+			curCtors.Add (ctor);
+			return CreateConstructor (".ctor", cwt, jniSignature, "", managedParameters, outerType, null);
+		}
+
+		if (baseCtors.Any (m => !m.HasParameters)) {
+			curCtors.Add (ctor);
+			return CreateConstructor (".ctor", cwt, jniSignature, "", managedParameters, outerType, "");
+		}
+
+		return null;
 	}
 
-	public static CallableWrapperApplicationConstructor? CreateApplicationConstructor (string name, TypeDefinition type, IMetadataResolver resolver)
+	static string GetManagedParameters (MethodDefinition ctor, string? outerType, TypeDefinition type, IMetadataResolver cache)
+	{
+		var sb = new StringBuilder ();
+
+		foreach (var pdef in ctor.Parameters) {
+			if (sb.Length > 0)
+				sb.Append (':');
+			if (outerType != null && sb.Length == 0)
+				sb.Append (type.DeclaringType.GetPartialAssemblyQualifiedName (cache));
+			else
+				sb.Append (pdef.ParameterType.GetPartialAssemblyQualifiedName (cache));
+		}
+
+		return sb.ToString ();
+	}
+
+	static CallableWrapperApplicationConstructor? CreateApplicationConstructor (string name, TypeDefinition type, IMetadataResolver resolver)
 	{
 		if (!JavaNativeTypeManager.IsApplication (type, resolver))
 			return null;
@@ -183,97 +414,101 @@ class CecilImporter
 		return new CallableWrapperApplicationConstructor (name);
 	}
 
-	// Temporary conversion function
-	public static CallableWrapperType CreateType (JavaCallableWrapperGenerator generator)
+	static void AddNestedTypes (CallableWrapperType cwt, TypeDefinition type, IMetadataResolver cache,JavaCallableMethodClassifier? methodClassifier)
 	{
-		var partial_assembly_qualified_name = generator.type.GetPartialAssemblyQualifiedName (generator.cache);
+		if (!type.HasNestedTypes)
+			return;
 
-		var type = new CallableWrapperType (generator.name, generator.package, partial_assembly_qualified_name) {
-			IsAbstract = generator.type.IsAbstract,
-			ApplicationJavaClass = generator.ApplicationJavaClass,
-			HasDynamicallyRegisteredMethods = generator.HasDynamicallyRegisteredMethods,
-			GenerateOnCreateOverrides = generator.GenerateOnCreateOverrides,
-			MonoRuntimeInitialization = generator.MonoRuntimeInitialization,
-			IsApplication = JavaNativeTypeManager.IsApplication (generator.type, generator.cache),
-			IsInstrumentation = JavaNativeTypeManager.IsInstrumentation (generator.type, generator.cache),
-		};
-
-		type.Annotations.AddRange (CreateTypeAnnotations (generator.type, generator.cache));
-
-		// Extends
-		var extendsType = GetJavaTypeName (generator.type.BaseType, generator.cache);
-
-		if (extendsType == "android.app.Application" && generator.ApplicationJavaClass != null && !string.IsNullOrEmpty (generator.ApplicationJavaClass))
-			extendsType = generator.ApplicationJavaClass;
-
-		type.ExtendsType = extendsType;
-
-		// Implemented interfaces
-		foreach (var ifaceInfo in generator.type.Interfaces) {
-			var iface = generator.cache.Resolve (ifaceInfo.InterfaceType);
-
-			if (!JavaCallableWrapperGenerator.GetTypeRegistrationAttributes (iface).Any ())
+		foreach (var nt in type.NestedTypes) {
+			if (!nt.HasJavaPeer (cache))
+				continue;
+			if (!JavaNativeTypeManager.IsNonStaticInnerClass (nt, cache))
 				continue;
 
-			type.ImplementedInterfaces.Add (GetJavaTypeName (iface, generator.cache));
+			cwt.NestedTypes.Add (CreateType (nt, cache, JavaNativeTypeManager.ToJniName (type, cache), methodClassifier));
+			AddNestedTypes (cwt, nt, cache, methodClassifier);
 		}
 
-		// Type constructors
-		foreach (var ctor in generator.ctors) {
-			if (string.IsNullOrEmpty (ctor.Params) && type.IsApplication)
-				continue;
+		cwt.HasExport |= cwt.NestedTypes.Any (t => t.HasExport);
+	}
 
-			var ct = CreateConstructor (ctor);
+	static void AddMethod (CallableWrapperType cwt, TypeDefinition type, MethodDefinition? registeredMethod, MethodDefinition implementedMethod, JavaCallableMethodClassifier? methodClassifier, IMetadataResolver cache)
+	{
+		if (registeredMethod != null)
+			foreach (RegisterAttribute attr in CecilExtensions.GetMethodRegistrationAttributes (registeredMethod)) {
+				// Check for Kotlin-mangled methods that cannot be overridden
+				if (attr.Name.Contains ("-impl") || (attr.Name.Length > 7 && attr.Name [attr.Name.Length - 8] == '-'))
+					Diagnostic.Error (4217, CecilExtensions.LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4217, attr.Name);
 
-			ct.Name = type.Name;
-			ct.CannotRegisterInStaticConstructor = type.CannotRegisterInStaticConstructor;
-			ct.PartialAssemblyQualifiedName = type.PartialAssemblyQualifiedName ;
+				var shouldBeDynamicallyRegistered = methodClassifier?.ShouldBeDynamicallyRegistered (type, registeredMethod, implementedMethod, attr.OriginAttribute) ?? true;
+				var method = CreateMethod (implementedMethod, attr, null, null, cache, shouldBeDynamicallyRegistered);
 
-			type.Constructors.Add (ct);
+				if (!registeredMethod.IsConstructor && !cwt.Methods.Any (m => m.Name == method.Name && m.Params == method.Params))
+					cwt.Methods.Add (method);
+			}
+		foreach (ExportAttribute attr in CecilExtensions.GetExportAttributes (implementedMethod, cache)) {
+			if (type.HasGenericParameters)
+				Diagnostic.Error (4206, CecilExtensions.LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4206);
+
+			var method = CreateMethod (implementedMethod, attr, null, cache);
+
+			if (!string.IsNullOrEmpty (attr.SuperArgumentsString)) {
+				// Diagnostic.Warning (log, "Use of ExportAttribute.SuperArgumentsString property is invalid on methods");
+			}
+
+			if (!implementedMethod.IsConstructor && !cwt.Methods.Any (m => m.Name == method.Name && m.Params == method.Params))
+				cwt.Methods.Add (method);
 		}
+		foreach (ExportFieldAttribute attr in CecilExtensions.GetExportFieldAttributes (implementedMethod)) {
+			if (type.HasGenericParameters)
+				Diagnostic.Error (4207, CecilExtensions.LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4207);
 
-		// Application constructor
-		if (CreateApplicationConstructor (type.Name, generator.type, generator.cache) is CallableWrapperApplicationConstructor app_ctor)
-			type.ApplicationConstructor = app_ctor;
+			var method = CreateMethod (implementedMethod, cache);
 
-		// Exported fields
-		foreach (var field in generator.exported_fields)
-			type.Fields.Add (CreateField (field));
+			if (!implementedMethod.IsConstructor && !cwt.Methods.Any (m => m.Name == method.Name && m.Params == method.Params)) {
+				cwt.Methods.Add (method);
+				cwt.Fields.Add (CreateField (implementedMethod, attr.Name, cache));
+			}
+		}
+	}
 
-		// Methods
-		foreach (var method in generator.methods)
-			type.Methods.Add (CreateMethod (method));
+	static void ExtractJavaNames (string jniName, out string package, out string type)
+	{
+		var i = jniName.LastIndexOf ('/');
 
-		// Nested types
-		if (generator.children is not null)
-			foreach (var nested in generator.children)
-				type.NestedTypes.Add (CreateType (nested));
-
-		return type;
+		if (i < 0) {
+			type = jniName;
+			package = string.Empty;
+		} else {
+			type = jniName.Substring (i + 1);
+			package = jniName.Substring (0, i).Replace ('/', '.');
+		}
 	}
 
 	static string GetJavaTypeName (TypeReference r, IMetadataResolver cache)
 	{
-		TypeDefinition d = cache.Resolve (r);
-		string? jniName = JavaNativeTypeManager.ToJniName (d, cache);
-		if (jniName == null) {
+		var d = cache.Resolve (r);
+		var jniName = JavaNativeTypeManager.ToJniName (d, cache);
+
+		if (jniName is null) {
 			Diagnostic.Error (4201, Localization.Resources.JavaCallableWrappers_XA4201, r.FullName);
 			throw new InvalidOperationException ("--nrt:jniName-- Should not be reached");
 		}
+
 		return jniName.Replace ('/', '.').Replace ('$', '.');
 	}
 
-	public static IEnumerable<CallableWrapperTypeAnnotation> CreateTypeAnnotations (TypeDefinition type, IMetadataResolver resolver)
+	static IEnumerable<CallableWrapperTypeAnnotation> CreateAnnotations (ICustomAttributeProvider type, IMetadataResolver resolver)
 	{
 		foreach (var ca in type.CustomAttributes) {
-			var annotation = CreateTypeAnnotation (ca, resolver);
+			var annotation = CreateAnnotation (ca, resolver);
 
 			if (annotation is not null)
 				yield return annotation;
 		}
 	}
 
-	public static CallableWrapperTypeAnnotation? CreateTypeAnnotation (CustomAttribute ca, IMetadataResolver resolver)
+	static CallableWrapperTypeAnnotation? CreateAnnotation (CustomAttribute ca, IMetadataResolver resolver)
 	{
 		var catype = resolver.Resolve (ca.AttributeType);
 		var tca = catype.CustomAttributes.FirstOrDefault (a => a.AttributeType.FullName == "Android.Runtime.AnnotationAttribute");
@@ -291,12 +526,11 @@ class CecilImporter
 
 		foreach (var p in ca.Properties) {
 			var pd = catype.Properties.FirstOrDefault (pp => pp.Name == p.Name);
-			var reg = pd != null ? pd.CustomAttributes.FirstOrDefault (pdca => pdca.AttributeType.FullName == "Android.Runtime.RegisterAttribute") : null;
-
+			var reg = pd?.CustomAttributes.FirstOrDefault (pdca => pdca.AttributeType.FullName == "Android.Runtime.RegisterAttribute");
 			var key = reg != null ? (string) reg.ConstructorArguments [0].Value : p.Name;
 			var value = ManagedValueToJavaSource (p.Argument.Value);
 
-			annotation.Properties.Add (new System.Collections.Generic.KeyValuePair<string, string> (key, value));
+			annotation.Properties.Add (new KeyValuePair<string, string> (key, value));
 		}
 
 		return annotation;
@@ -309,9 +543,19 @@ class CecilImporter
 			return "\"" + value.ToString ().Replace ("\"", "\"\"") + '"';
 		else if (value.GetType ().FullName == "Java.Lang.Class")
 			return value.ToString () + ".class";
-		else if (value is bool)
-			return ((bool) value) ? "true" : "false";
+		else if (value is bool v)
+			return v ? "true" : "false";
 		else
 			return value.ToString ();
+	}
+
+	static string GetJavaAccess (MethodAttributes access)
+	{
+		return access switch {
+			MethodAttributes.Public => "public",
+			MethodAttributes.FamORAssem => "protected",
+			MethodAttributes.Family => "protected",
+			_ => "private",
+		};
 	}
 }

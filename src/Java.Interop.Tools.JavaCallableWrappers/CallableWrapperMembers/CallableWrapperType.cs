@@ -4,20 +4,27 @@ using System.Linq;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
-class CallableWrapperType
+public class CallableWrapperType
 {
 	public string Name { get; set; }
 	public string Package { get; set; }
 	public bool IsAbstract { get; set; }
 	public string? ApplicationJavaClass { get; set; }
-	public bool HasDynamicallyRegisteredMethods { get; set; }
 	public bool GenerateOnCreateOverrides { get; set; }
+	/// <summary>
+	/// The Java source code to be included in Instrumentation.onCreate
+	///
+	/// Originally came from MonoRuntimeProvider.java delimited by:
+	/// // Mono Runtime Initialization {{{
+	/// // }}}
+	/// </summary>
 	public string? MonoRuntimeInitialization { get; set; }
 	public string? ExtendsType { get; set; }
 	public CallableWrapperApplicationConstructor? ApplicationConstructor { get; set; }
 	public bool IsApplication { get; set; }
 	public bool IsInstrumentation { get; set; }
 	public string PartialAssemblyQualifiedName { get; set; }
+	public bool HasExport { get; set; }
 
 	public List<CallableWrapperTypeAnnotation> Annotations { get; } = new List<CallableWrapperTypeAnnotation> ();
 	public List<string> ImplementedInterfaces { get; } = new List<string> ();
@@ -59,8 +66,7 @@ class CallableWrapperType
 	//
 	//    private native void n_onCreate (android.os.Bundle bundle);
 	// }
-
-	public void Generate (TextWriter writer, CallableWrapperWriterOptions options, bool isNested)
+	public void Generate (TextWriter writer, CallableWrapperWriterOptions options, bool isNested = false)
 	{
 		if (!isNested && !string.IsNullOrEmpty (Package)) {
 			writer.WriteLine ("package " + Package + ";");
@@ -80,7 +86,7 @@ class CallableWrapperType
 		GenerateFooter (writer, options);
 	}	
 
-	public void GenerateHeader (TextWriter sw, CallableWrapperWriterOptions options)
+	void GenerateHeader (TextWriter sw, CallableWrapperWriterOptions options)
 	{
 		sw.WriteLine ();
 
@@ -90,7 +96,13 @@ class CallableWrapperType
 
 		sw.WriteLine ("public " + (IsAbstract ? "abstract " : "") + "class " + Name);
 
-		sw.WriteLine ("\textends " + ExtendsType);
+		var extends = ExtendsType;
+
+		// Do this check here rather than the constructor because it can be set after the constructor is called
+		if (extends == "android.app.Application" && ApplicationJavaClass != null && !string.IsNullOrEmpty (ApplicationJavaClass))
+			extends = ApplicationJavaClass;
+
+		sw.WriteLine ("\textends " + extends);
 
 		sw.WriteLine ("\timplements");
 		sw.Write ("\t\t");
@@ -114,7 +126,7 @@ class CallableWrapperType
 		sw.WriteLine ("{");
 	}
 
-	public void GenerateInfrastructure (TextWriter writer, CallableWrapperWriterOptions options)
+	void GenerateInfrastructure (TextWriter writer, CallableWrapperWriterOptions options)
 	{
 		var needCtor = false;
 
@@ -147,7 +159,7 @@ class CallableWrapperType
 		}
 	}
 
-	public void GenerateBody (TextWriter sw, CallableWrapperWriterOptions options)
+	void GenerateBody (TextWriter sw, CallableWrapperWriterOptions options)
 	{
 		foreach (var ctor in Constructors)
 			ctor.Generate (sw, options);
@@ -187,7 +199,7 @@ class CallableWrapperType
 		sw.WriteLine ("\t}");
 	}
 
-	public void GenerateFooter (TextWriter sw, CallableWrapperWriterOptions options)
+	void GenerateFooter (TextWriter sw, CallableWrapperWriterOptions options)
 	{
 		sw.WriteLine ("}");
 	}
@@ -216,7 +228,7 @@ class CallableWrapperType
 		sw.WriteLine ("\t{");
 
 #if MONODROID_TIMING
-		sw.WriteLine ("\t\tandroid.util.Log.i(\"MonoDroid-Timing\", \"{0}.onCreate(Bundle): time: \"+java.lang.System.currentTimeMillis());", name);
+		sw.WriteLine ("\t\tandroid.util.Log.i(\"MonoDroid-Timing\", \"{0}.onCreate(Bundle): time: \"+java.lang.System.currentTimeMillis());", Name);
 		sw.WriteLine ();
 #endif
 
@@ -281,6 +293,9 @@ class CallableWrapperType
 				break;
 		}
 	}
+
+	// If there are no methods, we need to generate "empty" registration because of backward compatibility
+	public bool HasDynamicallyRegisteredMethods => Methods.Count == 0 || Methods.Any (sig => sig.IsDynamicallyRegistered);
 
 	/// <summary>
 	/// Returns a destination file path based on the package name of this Java type

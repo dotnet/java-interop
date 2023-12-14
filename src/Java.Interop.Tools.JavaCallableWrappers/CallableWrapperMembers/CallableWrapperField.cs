@@ -1,15 +1,16 @@
+using System.Collections.Generic;
 using System.IO;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
-class CallableWrapperField
+public class CallableWrapperField
 {
 	public string FieldName { get; set; }
 	public string TypeName { get; set; }
 	public string Visibility { get; set; }
 	public bool IsStatic { get; set; }
 	public string InitializerName { get; set; }
-	public string? Annotations { get; set; }
+	public List<CallableWrapperTypeAnnotation> Annotations { get; } = new List<CallableWrapperTypeAnnotation> ();
 
 	public CallableWrapperField (string fieldName, string typeName, string visibility, string initializerName)
 	{
@@ -23,8 +24,8 @@ class CallableWrapperField
 	{
 		sw.WriteLine ();
 
-		if (Annotations is not null)
-			sw.WriteLine (Annotations);
+		foreach (var annotation in Annotations)
+			annotation.Generate (sw, "", options);
 
 		sw.Write ("\t");
 		sw.Write (Visibility);

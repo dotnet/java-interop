@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
-class CallableWrapperTypeAnnotation
+public class CallableWrapperTypeAnnotation
 {
 	public string Name { get; set; }
 	public List<KeyValuePair<string, string>> Properties { get; } = new ();

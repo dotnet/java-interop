@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
-class CallableWrapperConstructor : CallableWrapperMethod
+public class CallableWrapperConstructor : CallableWrapperMethod
 {
 	public bool CannotRegisterInStaticConstructor { get; set; }
 	public string? PartialAssemblyQualifiedName { get; set; }
@@ -19,8 +19,8 @@ class CallableWrapperConstructor : CallableWrapperMethod
 		//        This does NOT currently allow creating managed types from Java.
 		sw.WriteLine ();
 
-		if (Annotations is not null)
-			sw.WriteLine (Annotations);
+		foreach (var annotation in Annotations)
+			annotation.Generate (sw, "", options);
 
 		sw.Write ("\tpublic ");
 		sw.Write (Name);

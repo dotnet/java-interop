@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Java.Interop.Tools.JavaCallableWrappers;
 
-class CallableWrapperWriterOptions
+public class CallableWrapperWriterOptions
 {
 	public JavaPeerStyle CodeGenerationTarget { get; set; }
 }
