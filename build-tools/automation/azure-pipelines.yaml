@@ -61,7 +61,7 @@ jobs:
 
   - template: templates\fail-on-issue.yaml
 
-  - task: PublishBuildArtifacts@1
+  - task: PublishPipelineArtifact@1
     displayName: Publish build artifacts
     inputs:
       artifactName: artifacts
@@ -95,15 +95,13 @@ jobs:
 - job: api_scan
   displayName: API Scan
   dependsOn: windows_dotnet_build
+  condition: and(eq(dependencies.windows_dotnet_build.result, 'Succeeded'), eq(variables['Build.SourceBranch'], '${{ parameters.ApiScanSourceBranch }}'))
   pool:
     name: Azure Pipelines
     vmImage: windows-2022
   timeoutInMinutes: 480
   workspace:
     clean: all
-  variables:
-  - name: ApiScan.Enabled
-    value: true
   steps:
   - task: DownloadPipelineArtifact@2
     displayName: Download build artifacts
@@ -120,7 +118,6 @@ jobs:
       softwareVersionNum: $(Build.SourceBranchName)-$(Build.SourceVersion)$(System.JobAttempt)
       isLargeApp: true
       toolVersion: Latest
-    condition: and(succeeded(), eq(variables['ApiScan.Enabled'], 'true'), eq(variables['Build.SourceBranch'], '${{ parameters.ApiScanSourceBranch }}'))
     env:
       AzureServicesAuthConnectionString: runAs=App;AppId=$(ApiScanClientId);TenantId=$(ApiScanTenant);AppKey=$(ApiScanSecret)
 
@@ -130,7 +127,6 @@ jobs:
       GdnExportAllTools: false
       GdnExportGdnToolApiScan: true
       GdnExportOutputSuppressionFile: source.gdnsuppress
-    condition: and(succeededOrFailed(), eq(variables['ApiScan.Enabled'], 'true'), eq(variables['Build.SourceBranch'], '${{ parameters.ApiScanSourceBranch }}'))
 
   - task: PublishSecurityAnalysisLogs@3
     displayName: Publish Guardian Artifacts
@@ -140,14 +136,12 @@ jobs:
       AllTools: false
       APIScan: true
       ToolLogsNotFoundAction: Warning
-    condition: and(succeededOrFailed(), eq(variables['ApiScan.Enabled'], 'true'), eq(variables['Build.SourceBranch'], '${{ parameters.ApiScanSourceBranch }}'))
 
   - task: PostAnalysis@2
     displayName: Fail Build on Guardian Issues
     inputs:
       GdnBreakAllTools: false
       GdnBreakGdnToolApiScan: true
-    condition: and(succeededOrFailed(), eq(variables['ApiScan.Enabled'], 'true'), eq(variables['Build.SourceBranch'], '${{ parameters.ApiScanSourceBranch }}'))
 
 
 - job: OneLocBuild
