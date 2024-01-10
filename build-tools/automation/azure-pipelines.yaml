@@ -107,13 +107,27 @@ jobs:
     displayName: Download build artifacts
     inputs:
       artifactName: artifacts
-      downloadPath: $(Build.StagingDirectory)
+      downloadPath: $(Build.SourcesDirectory)
+
+    ### Copy .dll, .exe, .pdb files for APIScan
+  - task: CopyFiles@2
+    displayName: Collect Files for APIScan
+    inputs:
+      Contents: |
+        $(Build.SourcesDirectory)\$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)\**\?(*.dll|*.exe|*.pdb)
+        !$(Build.SourcesDirectory)\**\jnimarshalmethod-gen.*
+        !$(Build.SourcesDirectory)\**\Mono.CSharp.dll
+        !$(Build.SourcesDirectory)\**\SgmlReader.exe
+        !$(Build.SourcesDirectory)\**\win-*\java-interop.dll
+      TargetFolder: $(Build.StagingDirectory)\apiscan
+      OverWrite: true
+      flattenFolders: true
 
   - task: APIScan@2
     displayName: Run APIScan
     inputs:
-      softwareFolder: $(Build.StagingDirectory)
-      symbolsFolder: 'SRV*http://symweb;$(Build.StagingDirectory)'
+      softwareFolder: $(Build.StagingDirectory)\apiscan
+      symbolsFolder: 'SRV*http://symweb;$(Build.StagingDirectory)\apiscan'
       softwareName: $(ApiScanName)
       softwareVersionNum: $(Build.SourceBranchName)-$(Build.SourceVersion)$(System.JobAttempt)
       isLargeApp: true
