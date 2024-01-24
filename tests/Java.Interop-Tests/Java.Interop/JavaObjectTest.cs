@@ -204,12 +204,12 @@ namespace Java.InteropTests
 	class JavaObjectWithNoJavaPeer : JavaObject {
 	}
 
-	[JniTypeSignature (JniTypeName)]
+	[JniTypeSignature (JniTypeName, GenerateJavaPeer=false)]
 	class JavaObjectWithMissingJavaPeer : JavaObject {
 		internal    const   string  JniTypeName = "__this__/__type__/__had__/__better__/__not__/__Exist__";
 	}
 
-	[JniTypeSignature ("java/lang/Object")]
+	[JniTypeSignature ("java/lang/Object", GenerateJavaPeer=false)]
 	class JavaDisposedObject : JavaObject {
 
 		public Action   OnDisposed;
@@ -230,7 +230,7 @@ namespace Java.InteropTests
 		}
 	}
 
-	[JniTypeSignature ("java/lang/Object")]
+	[JniTypeSignature ("java/lang/Object", GenerateJavaPeer=false)]
 	class MyDisposableObject : JavaObject {
 		bool _isDisposed;
 
