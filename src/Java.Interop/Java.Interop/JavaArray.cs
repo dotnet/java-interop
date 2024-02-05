@@ -12,6 +12,8 @@ namespace Java.Interop
 {
 	public abstract class JavaArray<T> : JavaObject, IList, IList<T>
 	{
+		internal const DynamicallyAccessedMemberTypes ConstructorsAndInterfaces = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.Interfaces;
+
 		internal delegate TArray ArrayCreator<TArray> (ref JniObjectReference reference, JniObjectReferenceOptions transfer)
 			where TArray : JavaArray<T>;
 
@@ -362,7 +364,7 @@ namespace Java.Interop
 		}
 	}
 	
-	public abstract class JavaPrimitiveArray<T> : JavaArray<T> {
+	public abstract class JavaPrimitiveArray<[DynamicallyAccessedMembers (ConstructorsAndInterfaces)] T> : JavaArray<T> {
 
 		internal JavaPrimitiveArray (ref JniObjectReference reference, JniObjectReferenceOptions transfer)
 			: base (ref reference, transfer)

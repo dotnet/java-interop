@@ -248,7 +248,7 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<<#= info.TypeModifier #>>> {
 
-			public override IList<<#= info.TypeModifier #>> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
+			public override IList<<#= info.TypeModifier #>> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
 			{
 				return JavaArray<<#= info.TypeModifier #>>.CreateValue (
 						ref reference,
