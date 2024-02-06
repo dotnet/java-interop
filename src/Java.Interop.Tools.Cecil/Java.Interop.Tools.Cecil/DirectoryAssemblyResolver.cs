@@ -185,8 +185,9 @@ namespace Java.Interop.Tools.Cecil {
 				return AssemblyDefinition.ReadAssembly (file, options);
 			}
 
-			// Likely 6 entries when symbols exist
-			var disposables = new List<IDisposable> (capacity: 6);
+			// We know the capacity for disposables
+			var disposables = new List<IDisposable> (
+				(1 + (loadDebugSymbols ? 1 : 0)) * OpenMemoryMappedViewStream_disposables_Add_calls);
 			try {
 				if (loadDebugSymbols) {
 					LoadSymbols (file, options, f => OpenMemoryMappedViewStream (f, disposables));
@@ -223,6 +224,11 @@ namespace Java.Interop.Tools.Cecil {
 			options.ReadSymbols = symbolStream != null;
 			options.SymbolStream = symbolStream;
 		}
+
+		/// <summary>
+		/// Number of times OpenMemoryMappedViewStream() calls disposables.Add()
+		/// </summary>
+		const int OpenMemoryMappedViewStream_disposables_Add_calls = 3;
 
 		static MemoryMappedViewStream OpenMemoryMappedViewStream (string file, List<IDisposable> disposables)
 		{
