@@ -550,8 +550,8 @@ namespace Java.Interop
 
 			public JniValueMarshaler<T> GetValueMarshaler<
 					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-					T>
-			()
+					T
+			> ()
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
