@@ -267,7 +267,11 @@ namespace Java.Interop
 				return type;
 			}
 
-			public virtual IJavaPeerable? CreatePeer (ref JniObjectReference reference, JniObjectReferenceOptions transfer, [DynamicallyAccessedMembers (Constructors)] Type? targetType)
+			public virtual IJavaPeerable? CreatePeer (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions transfer,
+				[DynamicallyAccessedMembers (Constructors)]
+				Type? targetType)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -298,7 +302,10 @@ namespace Java.Interop
 
 			static  readonly    Type    ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
 
-			ConstructorInfo? GetPeerConstructor (JniObjectReference instance, [DynamicallyAccessedMembers (Constructors)] Type fallbackType)
+			ConstructorInfo? GetPeerConstructor (
+				JniObjectReference instance,
+				[DynamicallyAccessedMembers (Constructors)]
+				Type fallbackType)
 			{
 				var klass       = JniEnvironment.Types.GetObjectClass (instance);
 				var jniTypeName = JniEnvironment.Types.GetJniTypeNameFromClass (klass);
@@ -333,7 +340,9 @@ namespace Java.Interop
 				return GetActivationConstructor (fallbackType);
 			}
 
-			static ConstructorInfo? GetActivationConstructor ([DynamicallyAccessedMembers (Constructors)] Type type)
+			static ConstructorInfo? GetActivationConstructor (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type)
 			{
 				if (type.IsAbstract || type.IsInterface) {
 					type = GetInvokerType (type) ?? type;
@@ -364,7 +373,11 @@ namespace Java.Interop
 				return suffixDefinition.MakeGenericType (arguments);
 			}
 
-			public object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType = null)
+			public object? CreateValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -449,7 +462,11 @@ namespace Java.Interop
 				return Runtime.TypeManager.GetType (signature);
 			}
 
-			public object? GetValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType = null)
+			public object? GetValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -550,7 +567,9 @@ namespace Java.Interop
 				}
 			}
 
-			public JniValueMarshaler GetValueMarshaler ([DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)] Type type)
+			public JniValueMarshaler GetValueMarshaler (
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+				Type type)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
