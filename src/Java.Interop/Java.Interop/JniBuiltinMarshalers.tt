@@ -1,4 +1,4 @@
-﻿<#@ template  language="C#" #>
+<#@ template  language="C#" #>
 <#@ assembly  name="System.Core" #>
 <#@ import    namespace="System.Collections.Generic" #>
 <#@ import    namespace="System.Linq" #>
@@ -181,14 +181,22 @@ namespace Java.Interop {
 		    get {return typeof (<#= type.Type #>);}
 		}
 
-		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
+		public override object? CreateValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
 			return CreateGenericValue (ref reference, options, targetType);
 		}
 
-		public override <#= type.Type #> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
+		public override <#= type.Type #> CreateGenericValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (<#= type.Type #>);
@@ -241,7 +249,11 @@ namespace Java.Interop {
 
 		internal    static  readonly    JniNullable<#= type.Type #>ValueMarshaler   Instance    = new JniNullable<#= type.Type #>ValueMarshaler ();
 
-		public override <#= type.Type #>? CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
+		public override <#= type.Type #>? CreateGenericValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;

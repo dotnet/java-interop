@@ -477,7 +477,11 @@ namespace Java.Interop
 			}
 
 			[return: MaybeNull]
-			public T GetValue<[DynamicallyAccessedMembers (ConstructorsAndInterfaces)] T> (IntPtr handle)
+			public T GetValue<
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					T
+			> (
+					IntPtr handle)
 			{
 				var r   = new JniObjectReference (handle);
 				return GetValue<T> (ref r, JniObjectReferenceOptions.Copy);
@@ -527,7 +531,10 @@ namespace Java.Interop
 
 			Dictionary<Type, JniValueMarshaler> Marshalers = new Dictionary<Type, JniValueMarshaler> ();
 
-			public JniValueMarshaler<T> GetValueMarshaler<[DynamicallyAccessedMembers (ConstructorsAndInterfaces)] T>()
+			public JniValueMarshaler<T> GetValueMarshaler<
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					T>
+			()
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -615,7 +622,10 @@ namespace Java.Interop
 				return direct ();
 			}
 
-			static JniValueMarshaler GetObjectArrayMarshalerHelper<[DynamicallyAccessedMembers (ConstructorsAndInterfaces)] T> ()
+			static JniValueMarshaler GetObjectArrayMarshalerHelper<
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					T
+			> ()
 			{
 				return JavaObjectArray<T>.Instance;
 			}
@@ -635,7 +645,11 @@ namespace Java.Interop
 			get {return typeof (void);}
 		}
 
-		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		public override object? CreateValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
@@ -656,7 +670,11 @@ namespace Java.Interop
 		internal    static  JavaPeerableValueMarshaler      Instance    = new JavaPeerableValueMarshaler ();
 
 		[return: MaybeNull]
-		public override IJavaPeerable? CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		public override IJavaPeerable? CreateGenericValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			var jvm         = JniEnvironment.Runtime;
 			var marshaler   = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof(IJavaPeerable));
@@ -729,7 +747,12 @@ namespace Java.Interop
 		}
 	}
 
-	sealed class DelegatingValueMarshaler<[DynamicallyAccessedMembers (ConstructorsAndInterfaces)] T> : JniValueMarshaler<T> {
+	sealed class DelegatingValueMarshaler<
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			T
+	>
+		: JniValueMarshaler<T>
+	{
 
 		JniValueMarshaler   ValueMarshaler;
 
@@ -739,7 +762,11 @@ namespace Java.Interop
 		}
 
 		[return: MaybeNull]
-		public override T CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		public override T CreateGenericValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
 		}
@@ -778,7 +805,11 @@ namespace Java.Interop
 		internal    static  ProxyValueMarshaler     Instance    = new ProxyValueMarshaler ();
 
 		[return: MaybeNull]
-		public override object? CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		public override object? CreateGenericValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			var jvm     = JniEnvironment.Runtime;
 

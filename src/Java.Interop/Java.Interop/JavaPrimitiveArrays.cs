@@ -251,7 +251,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Boolean>> {
 
-			public override IList<Boolean> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Boolean> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Boolean>.CreateValue (
 						ref reference,
@@ -447,7 +451,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<SByte>> {
 
-			public override IList<SByte> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<SByte> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<SByte>.CreateValue (
 						ref reference,
@@ -643,7 +651,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Char>> {
 
-			public override IList<Char> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Char> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Char>.CreateValue (
 						ref reference,
@@ -839,7 +851,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Int16>> {
 
-			public override IList<Int16> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Int16> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Int16>.CreateValue (
 						ref reference,
@@ -1035,7 +1051,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Int32>> {
 
-			public override IList<Int32> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Int32> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Int32>.CreateValue (
 						ref reference,
@@ -1231,7 +1251,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Int64>> {
 
-			public override IList<Int64> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Int64> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Int64>.CreateValue (
 						ref reference,
@@ -1427,7 +1451,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Single>> {
 
-			public override IList<Single> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Single> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Single>.CreateValue (
 						ref reference,
@@ -1623,7 +1651,11 @@ namespace Java.Interop {
 
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Double>> {
 
-			public override IList<Double> CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+			public override IList<Double> CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 			{
 				return JavaArray<Double>.CreateValue (
 						ref reference,

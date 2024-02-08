@@ -199,12 +199,20 @@ namespace Java.Interop {
 		}
 
 
-		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		public override object? CreateValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override IntPtr CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		public override IntPtr CreateGenericValue (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
