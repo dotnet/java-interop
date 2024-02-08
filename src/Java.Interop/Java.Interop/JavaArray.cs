@@ -12,8 +12,6 @@ namespace Java.Interop
 {
 	public abstract class JavaArray<T> : JavaObject, IList, IList<T>
 	{
-		internal const DynamicallyAccessedMemberTypes ConstructorsAndInterfaces = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.Interfaces;
-
 		internal delegate TArray ArrayCreator<TArray> (ref JniObjectReference reference, JniObjectReferenceOptions transfer)
 			where TArray : JavaArray<T>;
 

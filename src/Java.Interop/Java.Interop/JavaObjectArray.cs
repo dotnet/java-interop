@@ -203,7 +203,7 @@ namespace Java.Interop
 		partial class Arrays {
 
 			public static JavaObjectArray<T>? CreateMarshalObjectArray<
-					[DynamicallyAccessedMembers (JavaArray<T>.ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (JavaObject.ConstructorsAndInterfaces)]
 					T
 			> (
 					IEnumerable<T>? value)
