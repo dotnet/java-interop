@@ -244,7 +244,10 @@ namespace Java.Interop {
 				typeof (JavaBooleanArray) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers(JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers(JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -444,7 +447,10 @@ namespace Java.Interop {
 				typeof (JavaSByteArray) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -644,7 +650,10 @@ namespace Java.Interop {
 				typeof (JavaCharArray) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -844,7 +853,10 @@ namespace Java.Interop {
 				typeof (JavaInt16Array) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1044,7 +1056,10 @@ namespace Java.Interop {
 				typeof (JavaInt32Array) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1244,7 +1259,10 @@ namespace Java.Interop {
 				typeof (JavaInt64Array) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1444,7 +1462,10 @@ namespace Java.Interop {
 				typeof (JavaSingleArray) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1644,7 +1665,10 @@ namespace Java.Interop {
 				typeof (JavaDoubleArray) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, [DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)] Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}

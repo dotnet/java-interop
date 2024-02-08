@@ -241,7 +241,10 @@ namespace Java.Interop {
 				typeof (Java<#= info.TypeModifier #>Array) == targetType;
 		}
 
-		public static object? CreateMarshaledValue (IntPtr handle, Type? targetType)
+		public static object? CreateMarshaledValue (
+			IntPtr handle,
+			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
+			Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
