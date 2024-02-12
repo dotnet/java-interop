@@ -280,6 +280,7 @@ namespace Java.Interop {
 				JavaArray<<#= info.ManagedType #>>.DestroyArgumentState<Java<#= info.TypeModifier #>Array> (value, ref state, synchronize);
 			}
 
+			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = Java<#= info.TypeModifier #>Array.CreateMarshaledValue;

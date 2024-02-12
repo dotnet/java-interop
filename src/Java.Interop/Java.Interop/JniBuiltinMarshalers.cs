@@ -271,19 +271,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -413,19 +413,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -555,19 +555,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -697,19 +697,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -839,19 +839,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -981,19 +981,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -1123,19 +1123,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -1265,19 +1265,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
