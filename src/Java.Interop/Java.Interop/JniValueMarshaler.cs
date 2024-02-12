@@ -132,7 +132,11 @@ namespace Java.Interop {
 			get {return IntPtr_type;}
 		}
 
-		public  abstract    object?                 CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType = null);
+		public  abstract    object?                 CreateValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType = null);
 
 		public  virtual     JniValueMarshalerState  CreateArgumentState (object? value, ParameterAttributes synchronize = 0)
 		{
@@ -142,7 +146,10 @@ namespace Java.Interop {
 		public  abstract    JniValueMarshalerState  CreateObjectReferenceArgumentState (object? value, ParameterAttributes synchronize = 0);
 		public  abstract    void                    DestroyArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0);
 
-		internal object? CreateValue (IntPtr handle, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType)
+		internal object? CreateValue (
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			var r = new JniObjectReference (handle);
 			return CreateValue (ref r, JniObjectReferenceOptions.Copy, targetType);
@@ -231,7 +238,11 @@ namespace Java.Interop {
 	{
 
 		[return: MaybeNull]
-		public  abstract    T                       CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, [DynamicallyAccessedMembers (ConstructorsAndInterfaces)] Type? targetType = null);
+		public  abstract    T                       CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType = null);
 
 		public  virtual     JniValueMarshalerState  CreateGenericArgumentState ([MaybeNull] T value, ParameterAttributes synchronize = 0)
 		{
@@ -242,10 +253,10 @@ namespace Java.Interop {
 		public  abstract    void                    DestroyGenericArgumentState ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0);
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType = null)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType = null)
 		{
 			return CreateGenericValue (ref reference, options, targetType ?? typeof (T));
 		}

@@ -242,9 +242,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -252,10 +252,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<<#= info.TypeModifier #>>> {
 
 			public override IList<<#= info.TypeModifier #>> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<<#= info.TypeModifier #>>.CreateValue (
 						ref reference,

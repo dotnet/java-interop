@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
 using Java.Interop.Expressions;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Java.Interop {
 
@@ -224,10 +224,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -235,10 +235,10 @@ namespace Java.Interop {
 		}
 
 		public override Boolean CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Boolean);
@@ -271,19 +271,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -295,10 +295,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableBooleanValueMarshaler   Instance    = new JniNullableBooleanValueMarshaler ();
 
 		public override Boolean? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -366,10 +366,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -377,10 +377,10 @@ namespace Java.Interop {
 		}
 
 		public override SByte CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (SByte);
@@ -413,19 +413,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -437,10 +437,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableSByteValueMarshaler   Instance    = new JniNullableSByteValueMarshaler ();
 
 		public override SByte? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -508,10 +508,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -519,10 +519,10 @@ namespace Java.Interop {
 		}
 
 		public override Char CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Char);
@@ -555,19 +555,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -579,10 +579,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableCharValueMarshaler   Instance    = new JniNullableCharValueMarshaler ();
 
 		public override Char? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -650,10 +650,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -661,10 +661,10 @@ namespace Java.Interop {
 		}
 
 		public override Int16 CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Int16);
@@ -697,19 +697,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -721,10 +721,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableInt16ValueMarshaler   Instance    = new JniNullableInt16ValueMarshaler ();
 
 		public override Int16? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -792,10 +792,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -803,10 +803,10 @@ namespace Java.Interop {
 		}
 
 		public override Int32 CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Int32);
@@ -839,19 +839,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -863,10 +863,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableInt32ValueMarshaler   Instance    = new JniNullableInt32ValueMarshaler ();
 
 		public override Int32? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -934,10 +934,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -945,10 +945,10 @@ namespace Java.Interop {
 		}
 
 		public override Int64 CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Int64);
@@ -981,19 +981,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -1005,10 +1005,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableInt64ValueMarshaler   Instance    = new JniNullableInt64ValueMarshaler ();
 
 		public override Int64? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -1076,10 +1076,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -1087,10 +1087,10 @@ namespace Java.Interop {
 		}
 
 		public override Single CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Single);
@@ -1123,19 +1123,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -1147,10 +1147,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableSingleValueMarshaler   Instance    = new JniNullableSingleValueMarshaler ();
 
 		public override Single? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -1218,10 +1218,10 @@ namespace Java.Interop {
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;
@@ -1229,10 +1229,10 @@ namespace Java.Interop {
 		}
 
 		public override Double CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return default (Double);
@@ -1265,19 +1265,19 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 		    return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
+		[RequiresUnreferencedCode (JniValueMarshaler.ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
@@ -1289,10 +1289,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniNullableDoubleValueMarshaler   Instance    = new JniNullableDoubleValueMarshaler ();
 
 		public override Double? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			if (!reference.IsValid)
 				return null;

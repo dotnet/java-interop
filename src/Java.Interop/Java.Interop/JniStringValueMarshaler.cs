@@ -15,10 +15,10 @@ namespace Java.Interop {
 		internal    static  readonly    JniStringValueMarshaler     Instance    = new JniStringValueMarshaler ();
 
 		public override string? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return JniEnvironment.Strings.ToString (ref reference, options, targetType ?? typeof (string));
 		}

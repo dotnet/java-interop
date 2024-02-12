@@ -169,10 +169,10 @@ namespace Java.Interop
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<T>> {
 
 			public override IList<T> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<T>.CreateValue (ref reference, options, targetType, (ref JniObjectReference h, JniObjectReferenceOptions t) => new JavaObjectArray<T> (ref h, t) {
 					forMarshalCollection    = true,

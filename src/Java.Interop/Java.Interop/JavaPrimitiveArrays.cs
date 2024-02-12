@@ -245,9 +245,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers(JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -255,10 +255,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Boolean>> {
 
 			public override IList<Boolean> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Boolean>.CreateValue (
 						ref reference,
@@ -283,7 +283,6 @@ namespace Java.Interop {
 				JavaArray<Boolean>.DestroyArgumentState<JavaBooleanArray> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaBooleanArray.CreateMarshaledValue;
@@ -448,9 +447,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -458,10 +457,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<SByte>> {
 
 			public override IList<SByte> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<SByte>.CreateValue (
 						ref reference,
@@ -486,7 +485,6 @@ namespace Java.Interop {
 				JavaArray<SByte>.DestroyArgumentState<JavaSByteArray> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaSByteArray.CreateMarshaledValue;
@@ -651,9 +649,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -661,10 +659,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Char>> {
 
 			public override IList<Char> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Char>.CreateValue (
 						ref reference,
@@ -689,7 +687,6 @@ namespace Java.Interop {
 				JavaArray<Char>.DestroyArgumentState<JavaCharArray> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaCharArray.CreateMarshaledValue;
@@ -854,9 +851,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -864,10 +861,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Int16>> {
 
 			public override IList<Int16> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Int16>.CreateValue (
 						ref reference,
@@ -892,7 +889,6 @@ namespace Java.Interop {
 				JavaArray<Int16>.DestroyArgumentState<JavaInt16Array> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaInt16Array.CreateMarshaledValue;
@@ -1057,9 +1053,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1067,10 +1063,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Int32>> {
 
 			public override IList<Int32> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Int32>.CreateValue (
 						ref reference,
@@ -1095,7 +1091,6 @@ namespace Java.Interop {
 				JavaArray<Int32>.DestroyArgumentState<JavaInt32Array> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaInt32Array.CreateMarshaledValue;
@@ -1260,9 +1255,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1270,10 +1265,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Int64>> {
 
 			public override IList<Int64> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Int64>.CreateValue (
 						ref reference,
@@ -1298,7 +1293,6 @@ namespace Java.Interop {
 				JavaArray<Int64>.DestroyArgumentState<JavaInt64Array> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaInt64Array.CreateMarshaledValue;
@@ -1463,9 +1457,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1473,10 +1467,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Single>> {
 
 			public override IList<Single> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Single>.CreateValue (
 						ref reference,
@@ -1501,7 +1495,6 @@ namespace Java.Interop {
 				JavaArray<Single>.DestroyArgumentState<JavaSingleArray> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaSingleArray.CreateMarshaledValue;
@@ -1666,9 +1659,9 @@ namespace Java.Interop {
 		}
 
 		public static object? CreateMarshaledValue (
-			IntPtr handle,
-			[DynamicallyAccessedMembers (JniValueMarshaler.ConstructorsAndInterfaces)]
-			Type? targetType)
+				IntPtr handle,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return ArrayMarshaler.CreateValue (handle, targetType);
 		}
@@ -1676,10 +1669,10 @@ namespace Java.Interop {
 		internal sealed class ValueMarshaler : JniValueMarshaler<IList<Double>> {
 
 			public override IList<Double> CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType)
 			{
 				return JavaArray<Double>.CreateValue (
 						ref reference,
@@ -1704,7 +1697,6 @@ namespace Java.Interop {
 				JavaArray<Double>.DestroyArgumentState<JavaDoubleArray> (value, ref state, synchronize);
 			}
 
-			[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 			public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize = 0, Type? targetType = null)
 			{
 				Func<IntPtr, Type?, object?>  m = JavaDoubleArray.CreateMarshaledValue;

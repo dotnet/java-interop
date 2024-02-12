@@ -268,10 +268,10 @@ namespace Java.Interop
 			}
 
 			public virtual IJavaPeerable? CreatePeer (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions transfer,
-				[DynamicallyAccessedMembers (Constructors)]
-				Type? targetType)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions transfer,
+					[DynamicallyAccessedMembers (Constructors)]
+					Type? targetType)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -303,9 +303,9 @@ namespace Java.Interop
 			static  readonly    Type    ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
 
 			ConstructorInfo? GetPeerConstructor (
-				JniObjectReference instance,
-				[DynamicallyAccessedMembers (Constructors)]
-				Type fallbackType)
+					JniObjectReference instance,
+					[DynamicallyAccessedMembers (Constructors)]
+					Type fallbackType)
 			{
 				var klass       = JniEnvironment.Types.GetObjectClass (instance);
 				var jniTypeName = JniEnvironment.Types.GetJniTypeNameFromClass (klass);
@@ -341,8 +341,8 @@ namespace Java.Interop
 			}
 
 			static ConstructorInfo? GetActivationConstructor (
-				[DynamicallyAccessedMembers (Constructors)]
-				Type type)
+					[DynamicallyAccessedMembers (Constructors)]
+					Type type)
 			{
 				if (type.IsAbstract || type.IsInterface) {
 					type = GetInvokerType (type) ?? type;
@@ -374,10 +374,10 @@ namespace Java.Interop
 			}
 
 			public object? CreateValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType = null)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -408,13 +408,13 @@ namespace Java.Interop
 
 			[return: MaybeNull]
 			public T CreateValue<
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				T
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					T
 			> (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType = null)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -463,10 +463,10 @@ namespace Java.Interop
 			}
 
 			public object? GetValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType = null)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -506,13 +506,13 @@ namespace Java.Interop
 
 			[return: MaybeNull]
 			public T GetValue<
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				T
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					T
 			> (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-				Type? targetType = null)
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					Type? targetType = null)
 			{
 				if (!reference.IsValid) {
 #pragma warning disable 8653
@@ -568,8 +568,8 @@ namespace Java.Interop
 			}
 
 			public JniValueMarshaler GetValueMarshaler (
-				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
-				Type type)
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+					Type type)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -665,10 +665,10 @@ namespace Java.Interop
 		}
 
 		public override object? CreateValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
@@ -690,10 +690,10 @@ namespace Java.Interop
 
 		[return: MaybeNull]
 		public override IJavaPeerable? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			var jvm         = JniEnvironment.Runtime;
 			var marshaler   = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof(IJavaPeerable));
@@ -782,10 +782,10 @@ namespace Java.Interop
 
 		[return: MaybeNull]
 		public override T CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
 		}
@@ -825,10 +825,10 @@ namespace Java.Interop
 
 		[return: MaybeNull]
 		public override object? CreateGenericValue (
-			ref JniObjectReference reference,
-			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
-			Type? targetType)
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			var jvm     = JniEnvironment.Runtime;
 

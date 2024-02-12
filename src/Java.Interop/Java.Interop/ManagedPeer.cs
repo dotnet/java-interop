@@ -142,7 +142,11 @@ namespace Java.Interop {
 
 		static Dictionary<string, ConstructorInfo?> ConstructorCache    = new Dictionary<string, ConstructorInfo?> ();
 
-		static ConstructorInfo? GetConstructor ([DynamicallyAccessedMembers (Constructors)] Type type, string jniTypeName, string signature)
+		static ConstructorInfo? GetConstructor (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type,
+				string jniTypeName,
+				string signature)
 		{
 			var ctorCacheKey    = jniTypeName + "." + signature;
 			lock (ConstructorCache) {

@@ -409,12 +409,20 @@ namespace Java.Interop {
 
 			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
-			public virtual void RegisterNativeMembers (JniType nativeClass, [DynamicallyAccessedMembers (MethodsAndPrivateNested)] Type type, ReadOnlySpan<char> methods)
+			public virtual void RegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					ReadOnlySpan<char> methods)
 			{
 				TryRegisterNativeMembers (nativeClass, type, methods);
 			}
 
-			protected bool TryRegisterNativeMembers (JniType nativeClass, [DynamicallyAccessedMembers (MethodsAndPrivateNested)] Type type, ReadOnlySpan<char> methods)
+			protected bool TryRegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					ReadOnlySpan<char> methods)
 			{
 				AssertValid ();
 
@@ -429,7 +437,11 @@ namespace Java.Interop {
 #if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
 #endif  // NET
-			public virtual void RegisterNativeMembers (JniType nativeClass, [DynamicallyAccessedMembers (MethodsAndPrivateNested)] Type type, string? methods)
+			public virtual void RegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					string? methods)
 			{
 				TryRegisterNativeMembers (nativeClass, type, methods);
 			}
@@ -437,7 +449,11 @@ namespace Java.Interop {
 #if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
 #endif  // NET
-			protected bool TryRegisterNativeMembers (JniType nativeClass, [DynamicallyAccessedMembers (MethodsAndPrivateNested)] Type type, string? methods)
+			protected bool TryRegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					string? methods)
 			{
 				AssertValid ();
 
@@ -446,7 +462,11 @@ namespace Java.Interop {
 
 			static Type [] registerMethodParameters = new Type [] { typeof (JniNativeMethodRegistrationArguments) };
 
-			bool TryLoadJniMarshalMethods (JniType nativeClass, [DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.NonPublicNestedTypes)] Type type, string? methods)
+			bool TryLoadJniMarshalMethods (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
+					Type type,
+					string? methods)
 			{
 				var marshalType = type?.GetNestedType ("__<$>_jni_marshal_methods", BindingFlags.NonPublic);
 				if (marshalType == null) {
@@ -465,7 +485,12 @@ namespace Java.Interop {
 
 			static List<JniNativeMethodRegistration> sharedRegistrations = new List<JniNativeMethodRegistration> ();
 
-			bool TryRegisterNativeMembers (JniType nativeClass, [DynamicallyAccessedMembers (Methods)] Type marshalType, string? methods, MethodInfo? registerMethod)
+			bool TryRegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (Methods)]
+					Type marshalType,
+					string? methods,
+					MethodInfo? registerMethod)
 			{
 				bool lockTaken = false;
 				bool rv = false;
@@ -497,7 +522,10 @@ namespace Java.Interop {
 				return rv;
 			}
 
-			bool FindAndCallRegisterMethod ([DynamicallyAccessedMembers (Methods)] Type marshalType, JniNativeMethodRegistrationArguments arguments)
+			bool FindAndCallRegisterMethod (
+					[DynamicallyAccessedMembers (Methods)]
+					Type marshalType,
+					JniNativeMethodRegistrationArguments arguments)
 			{
 				if (!Runtime.JniAddNativeMethodRegistrationAttributePresent)
 					return false;
