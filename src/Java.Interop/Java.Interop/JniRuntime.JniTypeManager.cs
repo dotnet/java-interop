@@ -269,14 +269,15 @@ namespace Java.Interop {
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
+			const string NotUsedInAndroid = "This code path is not used in Android projects.";
 
 			// FIXME: https://github.com/xamarin/java.interop/issues/1192
-			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "This code path is not used in Android projects")]
+			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = NotUsedInAndroid)]
 			static Type MakeArrayType (Type type) => type.MakeArrayType ();
 
 			// FIXME: https://github.com/xamarin/java.interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = "This code path is not used in Android projects")]
-			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = "This code path is not used in Android projects")]
+			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = NotUsedInAndroid)]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = NotUsedInAndroid)]
 			static Type MakeGenericType (Type type, Type arrayType) => type.MakeGenericType (arrayType);
 
 
