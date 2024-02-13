@@ -319,7 +319,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeGenericType(typeof(JavaObjectArray<>), arrayType);
+							arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
 						}
 						yield return arrayType;
 					}
