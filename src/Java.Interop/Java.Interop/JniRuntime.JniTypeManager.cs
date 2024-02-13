@@ -270,6 +270,15 @@ namespace Java.Interop {
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
+			// FIXME: https://github.com/xamarin/java.interop/issues/1192
+			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "This code path is not used in Android projects")]
+			static Type MakeArrayType (Type type) => type.MakeArrayType ();
+
+			// FIXME: https://github.com/xamarin/java.interop/issues/1192
+			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = "This code path is not used in Android projects")]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = "This code path is not used in Android projects")]
+			static Type MakeGenericType (Type type, Type arrayType) => type.MakeGenericType (arrayType);
+
 
 			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 			[return: DynamicallyAccessedMembers (MethodsConstructorsInterfaces)]
@@ -289,8 +298,6 @@ namespace Java.Interop {
 				return CreateGetTypesEnumerator (typeSignature);
 			}
 
-			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = "JavaObjectArray<T> types should be preserved via other means.")]
-			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = "Array types should be preserved via other means.")]
 			IEnumerable<Type> CreateGetTypesEnumerator (JniTypeSignature typeSignature)
 			{
 				if (!typeSignature.IsValid)
@@ -312,7 +319,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
+							arrayType   = MakeGenericType(typeof(JavaObjectArray<>), arrayType);
 						}
 						yield return arrayType;
 					}
@@ -321,15 +328,13 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = arrayType.MakeArrayType ();
+							arrayType   = MakeArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
 				}
 			}
 
-			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = "JavaObjectArray<T> types should be preserved via other means.")]
-			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = "Array types should be preserved via other means.")]
 			IEnumerable<Type> GetPrimitiveArrayTypesForSimpleReference (JniTypeSignature typeSignature, Type type)
 			{
 				int index   = -1;
@@ -346,14 +351,14 @@ namespace Java.Interop {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
 					while (rank-- > 0) {
-						arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
+						arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
 					}
 					yield return arrayType;
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;
 					while (rank-- > 0) {
-						arrayType   = arrayType.MakeArrayType ();
+						arrayType   = MakeArrayType (arrayType);
 					}
 					yield return arrayType;
 				}
