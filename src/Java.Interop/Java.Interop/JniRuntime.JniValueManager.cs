@@ -370,8 +370,8 @@ namespace Java.Interop
 				static Type? AssemblyGetType(Assembly assembly, string typeName) =>
 					assembly.GetType (typeName);
 
-				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
 				// FIXME: https://github.com/xamarin/java.interop/issues/1192
+				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
 				[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = makeGenericTypeMessage)]
 				[return: DynamicallyAccessedMembers (Constructors)]
 				static Type MakeGenericType (Type type, Type [] arguments) =>
@@ -650,15 +650,19 @@ namespace Java.Interop
 				return GetValueMarshalerCore (type);
 			}
 
-			const string MakeGenericMethod = "Generic methods used here, should be preserved via other means.";
-
-			[UnconditionalSuppressMessage ("Trimming", "IL2060", Justification = MakeGenericMethod)]
-			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = MakeGenericMethod)]
 			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
 			{
+				const string makeGenericMethodMessage = "This code path is not used in Android projects.";
+
+				// FIXME: https://github.com/xamarin/java.interop/issues/1192
+				[UnconditionalSuppressMessage ("Trimming", "IL2060", Justification = makeGenericMethodMessage)]
+				[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = makeGenericMethodMessage)]
+				static MethodInfo MakeGenericMethod (MethodInfo method, Type type) =>
+					method.MakeGenericMethod (type);
+
 				Func<JniValueMarshaler> indirect = GetObjectArrayMarshalerHelper<object>;
-				var reifiedMethodInfo = indirect.Method.GetGenericMethodDefinition ()
-					.MakeGenericMethod (elementType);
+				var reifiedMethodInfo = MakeGenericMethod (
+						indirect.Method.GetGenericMethodDefinition (), elementType);
 				Func<JniValueMarshaler> direct = (Func<JniValueMarshaler>) Delegate.CreateDelegate (typeof (Func<JniValueMarshaler>), reifiedMethodInfo);
 				return direct ();
 			}
