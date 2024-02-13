@@ -4,9 +4,22 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Prepare Java.Interop",
+            "type": "shell",
+            "command": "dotnet build Java.Interop.sln -t:Prepare",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
             "label": "Build Java.Interop",
             "type": "shell",
-            "command": "msbuild Java.Interop.sln /restore /t:Build",
+            "command": "dotnet build Java.Interop.sln",
+            "dependsOn": [ "Prepare Java.Interop" ],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -18,10 +31,10 @@
         {
             "label": "Clean Java.Interop",
             "type": "shell",
-            "command": "msbuild Java.Interop.sln /restore /t:Clean",
+            "command": "dotnet build Java.Interop.sln -t:Clean",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": [
                 "$msCompile"
@@ -30,10 +43,10 @@
         {
             "label": "Build Generator",
             "type": "shell",
-            "command": "msbuild tools/generator/generator.sln /restore /t:Build",
+            "command": "dotnet build tools/generator/generator.csproj",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": [
                 "$msCompile"
@@ -42,26 +55,14 @@
         {
             "label": "Clean Generator",
             "type": "shell",
-            "command": "msbuild tools/generator/generator.sln /restore /t:Clean",
+            "command": "dotnet build tools/generator/generator.csproj -t:Clean",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": [
                 "$msCompile"
             ]
         },
-        {
-            "label": "Run Generator Unit Tests",
-            "type": "shell",
-            "command": "msbuild tools/generator/generator.sln /restore /t:RunNunitTests",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ]
-        }
     ]
 }

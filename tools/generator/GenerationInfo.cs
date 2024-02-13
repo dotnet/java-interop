@@ -37,6 +37,22 @@ namespace MonoDroid.Generation {
 			return sw;
 		}
 
+		internal void GenerateFileList (CodeGeneratorOptions options, string path = null)
+		{
+			if (path == null) {
+				var     name    = Assembly ?? "GeneratedFiles";
+				int     idx     = name.IndexOf (',');
+				name            = idx < 0 ? name : name.Substring (0, idx);
+				path            = Path.Combine (CSharpDir, name + ".FileList.txt");
+			}
+			var sb = new StringBuilder ();
+			foreach (var file in GeneratedFiles
+						.OrderBy (f => f, StringComparer.OrdinalIgnoreCase)) {
+				sb.AppendLine (file);
+			}
+			File.WriteAllText (path, sb.ToString ());
+		}
+
 		internal void GenerateLibraryProjectFile (CodeGeneratorOptions options, IEnumerable<string> enumFiles, string path = null)
 		{
 			if (path == null) {

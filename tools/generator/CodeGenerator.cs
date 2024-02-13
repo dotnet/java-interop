@@ -71,6 +71,7 @@ namespace Xamarin.Android.Binder
 			string mapping_file     = options.MappingReportFile;
 			bool only_xml_adjuster  = options.OnlyRunApiXmlAdjuster;
 			string api_xml_adjuster_output = options.ApiXmlAdjusterOutput;
+			string generatedFilesOutputFile = options.GeneratedFilesOutputFile;
 			var apiSource           = "";
 			var opt                 = new CodeGenerationOptions () {
 				ApiXmlFile            = options.ApiDescriptionFile,
@@ -255,6 +256,7 @@ namespace Xamarin.Android.Binder
 				: enummap.WriteEnumerations (enumdir, enums, FlattenNestedTypes (gens).ToArray (), opt);
 
 			gen_info.GenerateLibraryProjectFile (options, enumFiles);
+			gen_info.GenerateFileList (options, generatedFilesOutputFile);
 		}
 
 		static void AddTypeToTable (CodeGenerationOptions opt, GenBase gb)

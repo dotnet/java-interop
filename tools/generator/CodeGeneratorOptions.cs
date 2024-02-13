@@ -55,6 +55,7 @@ namespace Xamarin.Android.Binder
 		public bool		    UseRestrictToAttributes { get; set; }
 		public bool		    UseLegacyJavaResolver { get; set; }
 		public bool			UseObsoletedOSPlatformAttributes { get; set; }
+		public string		GeneratedFilesOutputFile { get; set; }
 
 		public XmldocStyle		    XmldocStyle { get; set; } = XmldocStyle.IntelliSense;
 
@@ -134,6 +135,9 @@ namespace Xamarin.Android.Binder
 				{ "xml-adjuster-output=",
 					"specify API XML adjuster output XML for class-parse input.",
 					v => opts.ApiXmlAdjusterOutput = v },
+				{ "generated-files-output-file=",
+					"specify the path to write the list of generated files",
+					v => opts.GeneratedFilesOutputFile = v },
 				{ "h|?|help",
 					"Show this message and exit.",
 					v => show_help = v != null },

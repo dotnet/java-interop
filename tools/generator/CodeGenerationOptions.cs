@@ -66,6 +66,7 @@ namespace MonoDroid.Generation
 		public bool UseObsoletedOSPlatformAttributes { get; set; }
 		public bool UseRestrictToAttributes { get; set; }
 		public bool RemoveConstSugar => BuildingCoreAssembly;
+		public string GeneratedFilesOutputFile { get; set; }
 
 		bool? buildingCoreAssembly;
 		// Basically this means "Are we building Mono.Android.dll?"
