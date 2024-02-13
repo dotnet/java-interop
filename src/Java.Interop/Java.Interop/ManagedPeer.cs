@@ -227,6 +227,7 @@ namespace Java.Interop {
 			return candidateParameterTypes;
 		}
 
+		[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "Constructor parameter types should be preserved via other means.")]
 		static object?[]? GetValues (JniRuntime runtime, JniObjectReference values, ConstructorInfo cinfo)
 		{
 			if (!values.IsValid)

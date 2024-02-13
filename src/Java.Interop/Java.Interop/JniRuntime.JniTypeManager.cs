@@ -271,6 +271,7 @@ namespace Java.Interop {
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
 
+			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 			[return: DynamicallyAccessedMembers (MethodsConstructorsInterfaces)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
 			{
@@ -288,6 +289,8 @@ namespace Java.Interop {
 				return CreateGetTypesEnumerator (typeSignature);
 			}
 
+			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = "JavaObjectArray<T> types should be preserved via other means.")]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = "Array types should be preserved via other means.")]
 			IEnumerable<Type> CreateGetTypesEnumerator (JniTypeSignature typeSignature)
 			{
 				if (!typeSignature.IsValid)
@@ -325,6 +328,8 @@ namespace Java.Interop {
 				}
 			}
 
+			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = "JavaObjectArray<T> types should be preserved via other means.")]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = "Array types should be preserved via other means.")]
 			IEnumerable<Type> GetPrimitiveArrayTypesForSimpleReference (JniTypeSignature typeSignature, Type type)
 			{
 				int index   = -1;
@@ -462,6 +467,10 @@ namespace Java.Interop {
 
 			static Type [] registerMethodParameters = new Type [] { typeof (JniNativeMethodRegistrationArguments) };
 
+			const string MarshalMethods = "'jni_marshal_methods' should be preserved via other means.";
+
+			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = MarshalMethods)]
+			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = MarshalMethods)]
 			bool TryLoadJniMarshalMethods (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]

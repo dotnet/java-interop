@@ -355,7 +355,14 @@ namespace Java.Interop
 				return null;
 			}
 
+			const string AssemblyGetType = "'Invoker' types are preserved via other means.";
+			const string MakeGenericType = "Generic 'Invoker' types are preserved via other means.";
+
 			[return: DynamicallyAccessedMembers (Constructors)]
+			[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = AssemblyGetType)]
+			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = AssemblyGetType)]
+			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = MakeGenericType)]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = MakeGenericType)]
 			static Type? GetInvokerType (Type type)
 			{
 				const string suffix = "Invoker";
@@ -632,6 +639,10 @@ namespace Java.Interop
 				return GetValueMarshalerCore (type);
 			}
 
+			const string MakeGenericMethod = "Generic methods used here, should be preserved via other means.";
+
+			[UnconditionalSuppressMessage ("Trimming", "IL2060", Justification = MakeGenericMethod)]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = MakeGenericMethod)]
 			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
 			{
 				Func<JniValueMarshaler> indirect = GetObjectArrayMarshalerHelper<object>;
