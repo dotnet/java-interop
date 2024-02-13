@@ -472,7 +472,8 @@ namespace Java.Interop {
 
 			static Type [] registerMethodParameters = new Type [] { typeof (JniNativeMethodRegistrationArguments) };
 
-			const string MarshalMethods = "'jni_marshal_methods' should be preserved via other means.";
+			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/PreserveRegistrations.cs#L85
+			const string MarshalMethods = "'jni_marshal_methods' is preserved by the PreserveRegistrations trimmer step.";
 
 			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = MarshalMethods)]
 			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = MarshalMethods)]
