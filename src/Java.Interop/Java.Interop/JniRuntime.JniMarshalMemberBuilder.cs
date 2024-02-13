@@ -150,9 +150,14 @@ namespace Java.Interop {
 				throw new NotSupportedException ("Don't know how to determine JNI signature for parameter type: " + p.ParameterType.FullName + ".");
 			}
 
-			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "Method parameter types should be preserved via other means.")]
 			public JniValueMarshaler GetParameterMarshaler (ParameterInfo parameter)
 			{
+				// Activator.CreateInstance requires DynamicallyAccessedMemberTypes.PublicParameterlessConstructor
+				// GetValueMarshaler requires DynamicallyAccessedMemberTypes.Interfaces
+				[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "JniValueMarshalerAttribute is decorated with [DynamicallyAccessedMembers]")]
+				static JniValueMarshaler GetValueMarshaler (JniValueManager manager, ParameterInfo parameter) =>
+					manager.GetValueMarshaler (parameter.ParameterType);
+
 				if (parameter.ParameterType == typeof (IntPtr))
 					return IntPtrValueMarshaler.Instance;
 
@@ -165,7 +170,7 @@ namespace Java.Interop {
 				if (attr != null) {
 					return (JniValueMarshaler) Activator.CreateInstance (attr.MarshalerType)!;
 				}
-				return Runtime.ValueManager.GetValueMarshaler (parameter.ParameterType);
+				return GetValueMarshaler (Runtime.ValueManager, parameter);
 			}
 
 			// Heuristic: if first two parameters are IntPtr, this is a "direct" wrapper.
