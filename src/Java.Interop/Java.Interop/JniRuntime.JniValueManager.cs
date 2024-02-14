@@ -367,7 +367,7 @@ namespace Java.Interop
 				[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = assemblyGetTypeMessage)]
 				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = assemblyGetTypeMessage)]
 				[return: DynamicallyAccessedMembers (Constructors)]
-				static Type? AssemblyGetType(Assembly assembly, string typeName) =>
+				static Type? AssemblyGetType (Assembly assembly, string typeName) =>
 					assembly.GetType (typeName);
 
 				// FIXME: https://github.com/xamarin/java.interop/issues/1192

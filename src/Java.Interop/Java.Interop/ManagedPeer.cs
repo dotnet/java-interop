@@ -231,7 +231,7 @@ namespace Java.Interop {
 		{
 			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L51-L132
 			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "Constructors are preserved by the MarkJavaObjects trimmer step.")]
-			static object? ValueManagerGetValue(JniRuntime runtime, ref JniObjectReference value, ParameterInfo parameter) =>
+			static object? ValueManagerGetValue (JniRuntime runtime, ref JniObjectReference value, ParameterInfo parameter) =>
 				runtime.ValueManager.GetValue (ref value, JniObjectReferenceOptions.CopyAndDispose, parameter.ParameterType);
 
 			if (!values.IsValid)
