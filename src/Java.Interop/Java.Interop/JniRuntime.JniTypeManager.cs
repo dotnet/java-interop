@@ -280,7 +280,6 @@ namespace Java.Interop {
 			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = NotUsedInAndroid)]
 			static Type MakeGenericType (Type type, Type arrayType) => type.MakeGenericType (arrayType);
 
-
 			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 			[return: DynamicallyAccessedMembers (MethodsConstructorsInterfaces)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
