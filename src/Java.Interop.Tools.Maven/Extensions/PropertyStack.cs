@@ -32,6 +32,9 @@ class PropertyStack
 
 	public string Apply (string value)
 	{
+		if (stack.Count == 0 || !value.Contains ("${"))
+			return value;
+
 		foreach (var property_set in stack) {
 			foreach (var prop in property_set)
 				value = value.Replace ($"${{{prop.Key}}}", prop.Value);

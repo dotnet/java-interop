@@ -47,13 +47,12 @@ public class CachedMavenRepository : IMavenRepository
 			return true;
 		}
 
-		Directory.CreateDirectory (directory);
-
 		if (repository.TryGetFile (artifact, filename, out var repo_stream)) {
-			using (var sw = File.Create (file))
-				repo_stream!.CopyTo (sw);
+			Directory.CreateDirectory (directory);
 
-			using (repo_stream) { }
+			using (var sw = File.Create (file))
+			using (repo_stream)
+				repo_stream.CopyTo (sw);
 
 			path = file;
 			return true;
@@ -70,13 +69,13 @@ public class CachedMavenRepository : IMavenRepository
 		if (File.Exists (file))
 			return file;
 
-		Directory.CreateDirectory (directory);
-
 		if (repository.TryGetFile (artifact, filename, out var repo_stream)) {
-			using (var sw = File.Create (file))
-				await repo_stream!.CopyToAsync (sw, 81920, cancellationToken);
+			Directory.CreateDirectory (directory);
 
-			using (repo_stream) { }
+			using (var sw = File.Create (file))
+			using (repo_stream)
+				await repo_stream.CopyToAsync (sw, 81920, cancellationToken);
+
 
 			return file;
 		}
