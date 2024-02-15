@@ -115,7 +115,9 @@ public class Name
 
 			var o   = new StringWriter ();
 			var dir = Path.GetDirectoryName (typeof (JavaCallableWrapperGeneratorTests).Assembly.Location);
-			var options = new CallableWrapperWriterOptions { CodeGenerationTarget = style };
+			var options = new CallableWrapperWriterOptions {
+				CodeGenerationTarget        = style,
+			};
 
 			g.Generate (Path.Combine (dir, "__o"), options);
 			g.Generate (o, options);
