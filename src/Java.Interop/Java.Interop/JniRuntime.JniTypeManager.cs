@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -250,13 +250,17 @@ namespace Java.Interop {
 			}
 
 			// `type` will NOT be an array type.
-			protected virtual string? GetSimpleReference (Type type)
+			protected virtual string? GetSimpleReference (
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+					Type type)
 			{
 				return GetSimpleReferences (type).FirstOrDefault ();
 			}
 
 			// `type` will NOT be an array type.
-			protected virtual IEnumerable<string> GetSimpleReferences (Type type)
+			protected virtual IEnumerable<string> GetSimpleReferences (
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+					Type type)
 			{
 				AssertValid ();
 

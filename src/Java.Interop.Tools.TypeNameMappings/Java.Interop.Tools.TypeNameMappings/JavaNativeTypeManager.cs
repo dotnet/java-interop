@@ -161,13 +161,22 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 
 		// Keep in sync with ToJniName(TypeDefinition)
-		public static string ToJniName (Type type)
+		public static string ToJniName (
+#if NET
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+				Type type)
 		{
 			return ToJniName (type, ExportParameterKind.Unspecified) ??
 				"java/lang/Object";
 		}
 
-		static string? ToJniName (Type type, ExportParameterKind exportKind)
+		static string? ToJniName (
+#if NET
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+				Type type,
+				ExportParameterKind exportKind)
 		{
 			if (type == null)
 				throw new ArgumentNullException ("type");
@@ -377,25 +386,48 @@ namespace Java.Interop.Tools.TypeNameMappings
 				p => GetExportKind (p),
 				method.ReturnType,
 				GetExportKind (method.ReturnParameter),
-				(t, k) => GetJniTypeName (t, k),
+				GetJniTypeName,
 				method.IsConstructor);
 		}
 
-		public static string? GetJniTypeName (Type typeRef)
+#if NET
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+		public static string? GetJniTypeName (
+#if NET
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+				Type typeRef)
 		{
 			return GetJniTypeName (typeRef, ExportParameterKind.Unspecified);
 		}
 
-		internal static string? GetJniTypeName (Type typeRef, ExportParameterKind exportKind)
+#if NET
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+		internal static string? GetJniTypeName (
+#if NET
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+				Type typeRef,
+				ExportParameterKind exportKind)
 		{
 			return GetJniTypeName<Type,Type> (typeRef, exportKind, t => t, t => {
 				Type etype;
 				int rank = GetArrayInfo (t, out etype);
 				return new KeyValuePair<int,Type> (rank, etype);
-			}, t => t.FullName!, (t, k) => ToJniNameWhichShouldReplaceExistingToJniName (t, k));
+			}, t => t.FullName!, ToJniNameWhichShouldReplaceExistingToJniName);
 		}
 
-		static string? ToJniNameWhichShouldReplaceExistingToJniName (Type type, ExportParameterKind exportKind)
+#if NET
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+		static string? ToJniNameWhichShouldReplaceExistingToJniName (
+#if NET
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
+#endif
+				Type type,
+				ExportParameterKind exportKind)
 		{
 			// we need some method that exactly does the same as ToJniName(TypeDefinition)
 			var ret = ToJniNameFromAttributes (type);
