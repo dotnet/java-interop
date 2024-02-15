@@ -7,10 +7,6 @@ namespace Java.Interop.Tools.Maven.Extensions;
 
 static class MavenNetExtensions
 {
-	public static bool HasValue ([NotNullWhen (true)] this string? str) => !string.IsNullOrEmpty (str);
-
-	public static string OrEmpty (this string? str) => str ?? string.Empty;
-
 	public static string GetInheritedProperty (this ResolvedDependency dependency, ResolvedProject project, Func<ResolvedDependency, string?> property)
 	{
 		// Check our <dependencyManagement> section
