@@ -107,7 +107,7 @@ public class Name
 		static string Generate (Type type, string applicationJavaClass = null, string monoRuntimeInit = null, JavaPeerStyle style = JavaPeerStyle.XAJavaInterop1)
 		{
 			var td  = SupportDeclarations.GetTypeDefinition (type);
-			var g = CecilImporter.CreateType (td, new TypeDefinitionCache (), null);
+			var g = CecilImporter.CreateType (td, new TypeDefinitionCache ());
 
 			g.ApplicationJavaClass = applicationJavaClass;
 			g.GenerateOnCreateOverrides = true;
