@@ -89,10 +89,15 @@
   </Target>
 
   <Target Name="RunJavaSample">
+    <Message Text="# jonp: PublishDir='$(PublishDir)'" Importance="high" />
     <ItemGroup>
       <_Classpath Include="hello-from-java.jar" />
       <_Classpath Include="java-interop.jar" />
+      <_PD Include="$(PublishDir)**\*" />
     </ItemGroup>
+    <Message Text="# jonp: PublishDir Contents:" />
+    <Message Text="  @(_PD, '
+  ')" Importance="high" />
     <PropertyGroup>
       <_CPSep Condition=" '$(OS)' == 'Windows_NT' ">;</_CPSep>
       <_CPSep Condition=" '$(_CPSep)' == '' ">:</_CPSep>
