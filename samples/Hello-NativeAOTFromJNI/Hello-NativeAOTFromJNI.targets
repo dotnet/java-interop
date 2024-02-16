@@ -105,7 +105,7 @@
     </PropertyGroup>
     <Exec
         Command="&quot;$(JavaPath)&quot; -classpath &quot;$(_CP)&quot; net/dot/jni/hello/App"
-        WorkingDirectory="$(PublishDir)"
+        WorkingDirectory="$(MSBuildThisFileDirectory)$(PublishDir)"
     />
   </Target>
 </Project>
