@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -29,12 +29,7 @@ namespace Java.Interop {
 
 		internal    bool                       UseMarshalMemberBuilder  => marshalMemberBuilder != null;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage ("Design", "CA1031:Do not catch general exception types", Justification = "the *.Export assemblies are optional, so we don't care when they cannot be loaded (they are presumably missing)")]
-#if NET
 		[DynamicDependency (DynamicallyAccessedMemberTypes.PublicParameterlessConstructor, "Java.Interop.MarshalMemberBuilder", "Java.Interop.Export")]
-		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "DynamicDependency should preserve the constructor.")]
-		[UnconditionalSuppressMessage ("Trimming", "IL2035", Justification = "Java.Interop.Export.dll is not always present.")]
-#endif
 		partial void SetMarshalMemberBuilder (CreationOptions options)
 		{
 			if (!options.UseMarshalMemberBuilder) {
@@ -46,14 +41,7 @@ namespace Java.Interop {
 				return;
 			}
 
-			Assembly jie;
-			try {
-				jie = Assembly.Load (new AssemblyName ("Java.Interop.Export"));
-			} catch (Exception e) {
-				System.Diagnostics.Debug.WriteLine ($"Java.Interop.Export assembly was not loaded: {e}");
-				return;
-			}
-			var t   = jie.GetType ("Java.Interop.MarshalMemberBuilder");
+			var t   = Type.GetType ("Java.Interop.MarshalMemberBuilder, Java.Interop.Export", throwOnError: false);
 			if (t == null)
 				throw new InvalidOperationException ("Could not find Java.Interop.MarshalMemberBuilder from Java.Interop.Export.dll!");
 			var b   = (JniMarshalMemberBuilder) Activator.CreateInstance (t)!;
@@ -153,6 +141,12 @@ namespace Java.Interop {
 
 			public JniValueMarshaler GetParameterMarshaler (ParameterInfo parameter)
 			{
+				// Activator.CreateInstance requires DynamicallyAccessedMemberTypes.PublicParameterlessConstructor
+				// GetValueMarshaler requires DynamicallyAccessedMemberTypes.Interfaces
+				[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "JniValueMarshalerAttribute is decorated with [DynamicallyAccessedMembers]")]
+				static JniValueMarshaler GetValueMarshaler (JniValueManager manager, ParameterInfo parameter) =>
+					manager.GetValueMarshaler (parameter.ParameterType);
+
 				if (parameter.ParameterType == typeof (IntPtr))
 					return IntPtrValueMarshaler.Instance;
 
@@ -165,7 +159,7 @@ namespace Java.Interop {
 				if (attr != null) {
 					return (JniValueMarshaler) Activator.CreateInstance (attr.MarshalerType)!;
 				}
-				return Runtime.ValueManager.GetValueMarshaler (parameter.ParameterType);
+				return GetValueMarshaler (Runtime.ValueManager, parameter);
 			}
 
 			// Heuristic: if first two parameters are IntPtr, this is a "direct" wrapper.
@@ -181,28 +175,39 @@ namespace Java.Interop {
 	sealed class IntPtrValueMarshaler : JniValueMarshaler<IntPtr> {
 		internal    static  IntPtrValueMarshaler Instance = new IntPtrValueMarshaler ();
 
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterFromManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
 		{
 			return sourceValue;
 		}
 
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
 			return sourceValue;
 		}
 
+		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (Java.Interop.Expressions.JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
 			return sourceValue;
 		}
 
 
-		public override object? CreateValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
+		public override object? CreateValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override IntPtr CreateGenericValue (ref JniObjectReference reference, JniObjectReferenceOptions options, Type? targetType)
+		public override IntPtr CreateGenericValue (
+				ref JniObjectReference reference,
+				JniObjectReferenceOptions options,
+				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				Type? targetType)
 		{
 			throw new NotSupportedException ();
 		}

@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -80,6 +80,10 @@ namespace Java.Interop {
 #endif  // NET
 
 		public partial class JniTypeManager : IDisposable, ISetRuntime {
+
+			internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
+			internal const DynamicallyAccessedMemberTypes MethodsAndPrivateNested = Methods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
+			internal const DynamicallyAccessedMemberTypes MethodsConstructorsInterfaces = MethodsAndPrivateNested | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.Interfaces;
 
 			JniRuntime?             runtime;
 			bool                    disposed;
@@ -265,9 +269,19 @@ namespace Java.Interop {
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
+			const string NotUsedInAndroid = "This code path is not used in Android projects.";
 
+			// FIXME: https://github.com/xamarin/java.interop/issues/1192
+			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = NotUsedInAndroid)]
+			static Type MakeArrayType (Type type) => type.MakeArrayType ();
 
-			[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+			// FIXME: https://github.com/xamarin/java.interop/issues/1192
+			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = NotUsedInAndroid)]
+			[UnconditionalSuppressMessage ("AOT",      "IL3050", Justification = NotUsedInAndroid)]
+			static Type MakeGenericType (Type type, Type arrayType) => type.MakeGenericType (arrayType);
+
+			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
+			[return: DynamicallyAccessedMembers (MethodsConstructorsInterfaces)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
@@ -305,7 +319,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
+							arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
 						}
 						yield return arrayType;
 					}
@@ -314,7 +328,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = arrayType.MakeArrayType ();
+							arrayType   = MakeArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -337,14 +351,14 @@ namespace Java.Interop {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
 					while (rank-- > 0) {
-						arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
+						arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
 					}
 					yield return arrayType;
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;
 					while (rank-- > 0) {
-						arrayType   = arrayType.MakeArrayType ();
+						arrayType   = MakeArrayType (arrayType);
 					}
 					yield return arrayType;
 				}
@@ -405,12 +419,20 @@ namespace Java.Interop {
 
 			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
-			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, ReadOnlySpan<char> methods)
+			public virtual void RegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					ReadOnlySpan<char> methods)
 			{
 				TryRegisterNativeMembers (nativeClass, type, methods);
 			}
 
-			protected bool TryRegisterNativeMembers (JniType nativeClass, Type type, ReadOnlySpan<char> methods)
+			protected bool TryRegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					ReadOnlySpan<char> methods)
 			{
 				AssertValid ();
 
@@ -425,7 +447,11 @@ namespace Java.Interop {
 #if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
 #endif  // NET
-			public virtual void RegisterNativeMembers (JniType nativeClass, Type type, string? methods)
+			public virtual void RegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					string? methods)
 			{
 				TryRegisterNativeMembers (nativeClass, type, methods);
 			}
@@ -433,7 +459,11 @@ namespace Java.Interop {
 #if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
 #endif  // NET
-			protected bool TryRegisterNativeMembers (JniType nativeClass, Type type, string? methods)
+			protected bool TryRegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					string? methods)
 			{
 				AssertValid ();
 
@@ -442,7 +472,16 @@ namespace Java.Interop {
 
 			static Type [] registerMethodParameters = new Type [] { typeof (JniNativeMethodRegistrationArguments) };
 
-			bool TryLoadJniMarshalMethods (JniType nativeClass, Type type, string? methods)
+			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/PreserveRegistrations.cs#L85
+			const string MarshalMethods = "'jni_marshal_methods' is preserved by the PreserveRegistrations trimmer step.";
+
+			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = MarshalMethods)]
+			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = MarshalMethods)]
+			bool TryLoadJniMarshalMethods (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
+					Type type,
+					string? methods)
 			{
 				var marshalType = type?.GetNestedType ("__<$>_jni_marshal_methods", BindingFlags.NonPublic);
 				if (marshalType == null) {
@@ -461,7 +500,12 @@ namespace Java.Interop {
 
 			static List<JniNativeMethodRegistration> sharedRegistrations = new List<JniNativeMethodRegistration> ();
 
-			bool TryRegisterNativeMembers (JniType nativeClass, Type marshalType, string? methods, MethodInfo? registerMethod)
+			bool TryRegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (Methods)]
+					Type marshalType,
+					string? methods,
+					MethodInfo? registerMethod)
 			{
 				bool lockTaken = false;
 				bool rv = false;
@@ -493,7 +537,10 @@ namespace Java.Interop {
 				return rv;
 			}
 
-			bool FindAndCallRegisterMethod (Type marshalType, JniNativeMethodRegistrationArguments arguments)
+			bool FindAndCallRegisterMethod (
+					[DynamicallyAccessedMembers (Methods)]
+					Type marshalType,
+					JniNativeMethodRegistrationArguments arguments)
 			{
 				if (!Runtime.JniAddNativeMethodRegistrationAttributePresent)
 					return false;

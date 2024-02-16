@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +18,8 @@ namespace Java.Interop {
 	/* static */ sealed class ManagedPeer : JavaObject {
 
 		internal const string JniTypeName = "net/dot/jni/ManagedPeer";
+		internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
+		internal const DynamicallyAccessedMemberTypes ConstructorsMethodsNestedTypes = Constructors | DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 
 
 		static  readonly    JniPeerMembers  _members        = new JniPeerMembers (JniTypeName, typeof (ManagedPeer));
@@ -143,7 +145,11 @@ namespace Java.Interop {
 
 		static Dictionary<string, ConstructorInfo?> ConstructorCache    = new Dictionary<string, ConstructorInfo?> ();
 
-		static ConstructorInfo? GetConstructor (Type type, string jniTypeName, string signature)
+		static ConstructorInfo? GetConstructor (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type,
+				string jniTypeName,
+				string signature)
 		{
 			var ctorCacheKey    = jniTypeName + "." + signature;
 			lock (ConstructorCache) {
@@ -226,6 +232,11 @@ namespace Java.Interop {
 
 		static object?[]? GetValues (JniRuntime runtime, JniObjectReference values, ConstructorInfo cinfo)
 		{
+			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L51-L132
+			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "Constructors are preserved by the MarkJavaObjects trimmer step.")]
+			static object? ValueManagerGetValue (JniRuntime runtime, ref JniObjectReference value, ParameterInfo parameter) =>
+				runtime.ValueManager.GetValue (ref value, JniObjectReferenceOptions.CopyAndDispose, parameter.ParameterType);
+
 			if (!values.IsValid)
 				return null;
 
@@ -237,7 +248,7 @@ namespace Java.Interop {
 			var pvalues = new object? [len];
 			for (int i = 0; i < len; ++i) {
 				var n_value = JniEnvironment.Arrays.GetObjectArrayElement (values, i);
-				var value   = runtime.ValueManager.GetValue (ref n_value, JniObjectReferenceOptions.CopyAndDispose, parameters [i].ParameterType);
+				var value   = ValueManagerGetValue (runtime, ref n_value, parameters [i]);
 				pvalues [i] = value;
 			}
 
@@ -294,7 +305,7 @@ namespace Java.Interop {
 			}
 		}
 
-		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+		[return: DynamicallyAccessedMembers (ConstructorsMethodsNestedTypes)]
 		static Type GetTypeFromSignature (JniRuntime.JniTypeManager typeManager, JniTypeSignature typeSignature, string? context = null)
 		{
 			return typeManager.GetType (typeSignature) ??

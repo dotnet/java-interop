@@ -1,19 +1,23 @@
-﻿#nullable enable
+#nullable enable
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Java.Interop {
 
 	[AttributeUsage (Targets, AllowMultiple=false)]
 	public class JniValueMarshalerAttribute : Attribute {
+		const DynamicallyAccessedMemberTypes ParameterlessConstructorsInterfaces = DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces;
 
 		const   AttributeTargets    Targets =
 			AttributeTargets.Class | AttributeTargets.Enum |
 			AttributeTargets.Interface | AttributeTargets.Struct |
 			AttributeTargets.Parameter | AttributeTargets.ReturnValue;
 
-		public JniValueMarshalerAttribute (Type marshalerType)
+		public JniValueMarshalerAttribute (
+				[DynamicallyAccessedMembers (ParameterlessConstructorsInterfaces)]
+				Type marshalerType)
 		{
 			if (marshalerType == null)
 				throw new ArgumentNullException (nameof (marshalerType));
@@ -25,7 +29,10 @@ namespace Java.Interop {
 			MarshalerType   = marshalerType;
 		}
 
-		public  Type    MarshalerType   {get;}
+		public  Type    MarshalerType   {
+			[return: DynamicallyAccessedMembers (ParameterlessConstructorsInterfaces)]
+			get;
+		}
 	}
 }
 
