@@ -199,11 +199,15 @@ namespace Java.Interop {
 		{
 			var handler = Environment.GetEnvironmentVariable ("JI_LOADER_TYPE");
 			switch (handler?.ToLowerInvariant ()) {
+#if !NET
 			case "":
 			case null:
+#endif  // NET
 			case "java-interop":
 				return new JavaInteropLibJvmLibraryHandler ();
 #if NET
+			case "":
+			case null:
 			case "native-library":
 				return new NativeLibraryJvmLibraryHandler ();
 #endif  // NET
