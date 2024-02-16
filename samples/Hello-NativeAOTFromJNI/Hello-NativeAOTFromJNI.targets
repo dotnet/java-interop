@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <DotnetToolPath>$(DOTNET_HOST_PATH)</DotnetToolPath>
+    <DotnetToolPath>"$(DOTNET_HOST_PATH)"</DotnetToolPath>
   </PropertyGroup>
 
   <Target Name="_CreateJavaCallableWrappers"
