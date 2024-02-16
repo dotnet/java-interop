@@ -15,7 +15,7 @@ static class JavaInteropRuntime
 	}
 
 	[UnmanagedCallersOnly (EntryPoint="JNI_OnUnload")]
-	static void JNI_Onload (IntPtr vm, IntPtr reserved)
+	static void JNI_OnUnload (IntPtr vm, IntPtr reserved)
 	{
 		runtime?.Dispose ();
 	}
