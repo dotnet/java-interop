@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -103,7 +104,7 @@ namespace Java.Interop {
 			builder.LibraryHandler.LoadJvmLibrary (builder.JvmLibraryPath!);
 
 			if (!builder.ClassPath.Any (p => p.EndsWith ("java-interop.jar", StringComparison.OrdinalIgnoreCase))) {
-				var loc = typeof (JreRuntimeOptions).Assembly.Location;
+				var loc = GetAssemblyLocation (typeof (JreRuntimeOptions).Assembly);
 				var dir = string.IsNullOrEmpty (loc) ? null : Path.GetDirectoryName (loc);
 				var jij = string.IsNullOrEmpty (dir) ? null : Path.Combine (dir, "java-interop.jar");
 				if (!File.Exists (jij)) {
@@ -144,6 +145,15 @@ namespace Java.Interop {
 				for (int i = 0; i < options.Length; ++i)
 					Marshal.FreeHGlobal (options [i].optionString);
 			}
+		}
+
+		[UnconditionalSuppressMessage ("Trimming", "IL3000", Justification = "We check for a null Assembly.Location value!")]
+		internal static string? GetAssemblyLocation (Assembly assembly)
+		{
+			var location = assembly.Location;
+			if (!string.IsNullOrEmpty (location))
+				return location;
+			return null;
 		}
 
 		JvmLibraryHandler LibraryHandler;
@@ -320,7 +330,8 @@ namespace Java.Interop {
 		static JreNativeMethods ()
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				var baseDir = Path.GetDirectoryName (typeof (JreRuntime).Assembly.Location) ?? throw new NotSupportedException ();
+				var loc     = JreRuntime.GetAssemblyLocation (typeof (JreRuntime).Assembly) ?? throw new NotSupportedException ();
+				var baseDir = Path.GetDirectoryName (loc) ?? throw new NotSupportedException ();
 				var newDir  = Path.Combine (baseDir, Environment.Is64BitProcess ? "win-x64" : "win-x86");
 				JreNativeMethods.AddDllDirectory (newDir);
 			}
