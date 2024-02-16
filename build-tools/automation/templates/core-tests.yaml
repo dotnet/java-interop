@@ -2,6 +2,7 @@ parameters:
   condition: succeeded()
   runNativeTests: false
   platformName:
+  nativeAotRid:
 
 steps:
 - task: DotNetCoreCLI@2
@@ -174,18 +175,16 @@ steps:
   continueOnError: true
 
 - powershell: >
-    dotnet publish -c $(Build.Configuration) -r osx-x64
+    dotnet publish -c $(Build.Configuration) -r ${{ parameters.nativeAotRid }}
     samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj
   displayName: 'Tests: publish Hello-NativeAOTFromJNI'
-  condition: eq('${{ parameters.platformName }}', '.NET - MacOS')
   continueOnError: true
 
 - powershell: >
-    dotnet build -c $(Build.Configuration) -r osx-x64
+    dotnet build -c $(Build.Configuration) -r ${{ parameters.nativeAotRid }}
     -t:RunJavaSample
     samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj
   displayName: 'Tests: run Hello-NativeAOTFromJNI'
-  condition: eq('${{ parameters.platformName }}', '.NET - MacOS')
   continueOnError: true
 
 - task: PublishTestResults@2
