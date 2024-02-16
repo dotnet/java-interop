@@ -88,33 +88,11 @@
     <Copy SourceFiles="$(OutputPath)hello-from-java.jar" DestinationFolder="$(PublishDir)" />
   </Target>
 
-  <Target Name="_DumpDirContents"
-      AfterTargets="Publish">
-    <ItemGroup>
-      <_TD Include="$(MSBuildThisFileDirectory)**\*" />
-    </ItemGroup>
-    <Message Text="# jonp: $(MSBuildThisFileDirectory) Contents:" Importance="high" />
-    <Message Text="  @(_TD, '
-  ')" Importance="high" />
-  </Target>
-
   <Target Name="RunJavaSample">
-    <PropertyGroup>
-      <_HavePD Condition=" Exists('$(MSBuildThisFileDirectory)$(PublishDir)') ">true</_HavePD>
-    </PropertyGroup>
-    <Message Text="# jonp: PublishDir='$(PublishDir)'; exists? $(_HavePD)" Importance="high" />
     <ItemGroup>
       <_Classpath Include="hello-from-java.jar" />
       <_Classpath Include="java-interop.jar" />
-      <_TD Include="$(MSBuildThisFileDirectory)**\*" />
-      <_PD Include="$(MSBuildThisFileDirectory)$(PublishDir)**\*" />
     </ItemGroup>
-    <Message Text="# jonp: $(MSBuildThisFileDirectory)$(PublishDir) Contents:" />
-    <Message Text="  @(_PD, '
-  ')" Importance="high" />
-    <Message Text="# jonp: $(MSBuildThisFileDirectory) Contents:" />
-    <Message Text="  @(_TD, '
-  ')" Importance="high" />
     <PropertyGroup>
       <_CPSep Condition=" '$(OS)' == 'Windows_NT' ">;</_CPSep>
       <_CPSep Condition=" '$(_CPSep)' == '' ">:</_CPSep>
