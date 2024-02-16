@@ -188,7 +188,8 @@ steps:
   condition: eq('${{ parameters.platformName }}', '.NET - MacOS')
   inputs:
     command: build
-    arguments: -c $(Build.Configuration) samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj -r osx-x64 -t:RunJavaSample
+    arguments: -c $(Build.Configuration) Hello-NativeAOTFromJNI.csproj -r osx-x64 -t:RunJavaSample
+    workingDirectory: samples/Hello-NativeAOTFromJNI
   continueOnError: true
 
 - task: PublishTestResults@2
