@@ -178,7 +178,9 @@ steps:
   condition: eq('${{ parameters.platformName }}', '.NET - MacOS')
   inputs:
     command: publish
-    arguments: -c $(Build.Configuration) samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj -r osx-x64
+    publishWebProjects: false
+    projects: 'samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj'
+    arguments: -c $(Build.Configuration) -r osx-x64
   continueOnError: true
 
 - task: DotNetCoreCLI@2
