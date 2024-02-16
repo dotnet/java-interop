@@ -71,7 +71,6 @@ namespace Java.Interop {
 			var envp = new JniTransition (jnienv);
 			try {
 				var runtime = JniEnvironment.Runtime;
-				var typeMgr = runtime.TypeManager;
 				var r_self  = new JniObjectReference (n_self);
 				var self    = runtime.ValueManager.PeekPeer (r_self);
 				if (self != null) {
