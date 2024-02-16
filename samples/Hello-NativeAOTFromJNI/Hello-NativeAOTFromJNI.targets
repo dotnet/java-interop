@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <DotnetToolPath>$(DOTNET_HOST_PATH)</DotnetToolPath>
-    <UtilityOutputFullPath>$(MSBuildThisFileDirectory)..\..\bin\$(Configuration)-net7.0</UtilityOutputFullPath>
   </PropertyGroup>
 
   <Target Name="_CreateJavaCallableWrappers"
