@@ -173,23 +173,19 @@ steps:
     arguments: -c $(Build.Configuration) tools/java-source-utils/java-source-utils.csproj -t:RunTests
   continueOnError: true
 
-- task: DotNetCoreCLI@2
+- powershell: >
+    dotnet publish -c $(Build.Configuration) -r osx-x64
+    samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj
   displayName: 'Tests: publish Hello-NativeAOTFromJNI'
   condition: eq('${{ parameters.platformName }}', '.NET - MacOS')
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: 'samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj'
-    arguments: -c $(Build.Configuration) -r osx-x64
   continueOnError: true
 
-- task: DotNetCoreCLI@2
+- powershell: >
+    dotnet build -c $(Build.Configuration) -r osx-x64
+    -t:RunJavaSample
+    samples/Hello-NativeAOTFromJNI/Hello-NativeAOTFromJNI.csproj
   displayName: 'Tests: run Hello-NativeAOTFromJNI'
   condition: eq('${{ parameters.platformName }}', '.NET - MacOS')
-  inputs:
-    command: build
-    arguments: -c $(Build.Configuration) Hello-NativeAOTFromJNI.csproj -r osx-x64 -t:RunJavaSample
-    workingDirectory: samples/Hello-NativeAOTFromJNI
   continueOnError: true
 
 - task: PublishTestResults@2
