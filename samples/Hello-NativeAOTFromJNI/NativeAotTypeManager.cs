@@ -6,7 +6,7 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 
 #pragma warning disable IL2026
 	Dictionary<string, Type> typeMappings = new () {
-		["example/ManagedType"] = typeof (Example.ManagedType),
+		[Example.ManagedType.JniTypeName]   = typeof (Example.ManagedType),
 	};
 #pragma warning restore IL2026
 

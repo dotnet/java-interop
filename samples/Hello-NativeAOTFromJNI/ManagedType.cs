@@ -2,8 +2,9 @@ namespace Example;
 
 using Java.Interop;
 
-[JniTypeSignature ("example/ManagedType")]
+[JniTypeSignature (JniTypeName)]
 class ManagedType : Java.Lang.Object {
+	internal const string JniTypeName = "example/ManagedType";
 
 	[JavaCallableConstructor(SuperConstructorExpression="")]
 	public ManagedType (int value)
