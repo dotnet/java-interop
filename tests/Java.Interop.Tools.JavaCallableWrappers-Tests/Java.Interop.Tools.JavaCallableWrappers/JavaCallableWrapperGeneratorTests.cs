@@ -106,12 +106,14 @@ public class Name
 
 		static string Generate (Type type, string applicationJavaClass = null, string monoRuntimeInit = null, JavaPeerStyle style = JavaPeerStyle.XAJavaInterop1)
 		{
-			var td  = SupportDeclarations.GetTypeDefinition (type);
-			var g = CecilImporter.CreateType (td, new TypeDefinitionCache ());
+			var reader_options = new CallableWrapperReaderOptions {
+				DefaultApplicationJavaClass = applicationJavaClass,
+				DefaultGenerateOnCreateOverrides = true,
+				DefaultMonoRuntimeInitialization = monoRuntimeInit,
+			};
 
-			g.ApplicationJavaClass = applicationJavaClass;
-			g.GenerateOnCreateOverrides = true;
-			g.MonoRuntimeInitialization = monoRuntimeInit;
+			var td  = SupportDeclarations.GetTypeDefinition (type);
+			var g = CecilImporter.CreateType (td, new TypeDefinitionCache (), reader_options);
 
 			var o   = new StringWriter ();
 			var dir = Path.GetDirectoryName (typeof (JavaCallableWrapperGeneratorTests).Assembly.Location);

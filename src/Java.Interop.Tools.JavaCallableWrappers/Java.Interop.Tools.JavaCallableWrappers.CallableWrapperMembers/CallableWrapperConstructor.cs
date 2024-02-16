@@ -4,10 +4,7 @@ namespace Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 
 public class CallableWrapperConstructor : CallableWrapperMethod
 {
-	public bool CannotRegisterInStaticConstructor { get; set; }
-	public string? PartialAssemblyQualifiedName { get; set; }
-
-	public CallableWrapperConstructor (string name, string method, string jniSignature) : base (name, method, jniSignature)
+	public CallableWrapperConstructor (CallableWrapperType declaringType, string name, string method, string jniSignature) : base (declaringType, name, method, jniSignature)
 	{
 	}
 
@@ -40,7 +37,7 @@ public class CallableWrapperConstructor : CallableWrapperMethod
 		sw.WriteLine ("\t\tandroid.util.Log.i(\"MonoDroid-Timing\", \"{0}..ctor({1}): time: \"+java.lang.System.currentTimeMillis());", Name, Params);
 #endif
 
-		if (!CannotRegisterInStaticConstructor) {
+		if (!DeclaringType.CannotRegisterInStaticConstructor) {
 
 			sw.Write ("\t\tif (getClass () == ");
 			sw.Write (Name);
@@ -58,7 +55,7 @@ public class CallableWrapperConstructor : CallableWrapperMethod
 					break;
 				default:
 					sw.Write ("mono.android.TypeManager.Activate (\"");
-					sw.Write (PartialAssemblyQualifiedName);
+					sw.Write (DeclaringType.PartialAssemblyQualifiedName);
 					sw.Write ("\", \"");
 					sw.Write (ManagedParameters);
 					sw.Write ("\", this, new java.lang.Object[] { ");

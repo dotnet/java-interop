@@ -14,7 +14,11 @@ namespace Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
 public class CecilImporter
 {
-	public static CallableWrapperType CreateType (TypeDefinition type, IMetadataResolver resolver, string? outerType = null, JavaCallableMethodClassifier? methodClassifier = null)
+	// Don't expose internal "outerType" parameter to the public API
+	public static CallableWrapperType CreateType (TypeDefinition type, IMetadataResolver resolver, CallableWrapperReaderOptions? options = null)
+		=> CreateType (type, resolver, options, null);
+
+	static CallableWrapperType CreateType (TypeDefinition type, IMetadataResolver resolver, CallableWrapperReaderOptions? options = null, string? outerType = null)
 	{
 		if (type.IsEnum || type.IsInterface || type.IsValueType)
 			Diagnostic.Error (4200, CecilExtensions.LookupSource (type), Localization.Resources.JavaCallableWrappers_XA4200, type.FullName);
@@ -31,6 +35,8 @@ public class CecilImporter
 
 		ExtractJavaNames (jniName, out var package, out var name);
 
+		options ??= new CallableWrapperReaderOptions ();
+
 		if (string.IsNullOrEmpty (package) &&
 				(type.IsSubclassOf ("Android.App.Activity", resolver) ||
 				 type.IsSubclassOf ("Android.App.Application", resolver) ||
@@ -43,6 +49,9 @@ public class CecilImporter
 			IsApplication = JavaNativeTypeManager.IsApplication (type, resolver),
 			IsInstrumentation = JavaNativeTypeManager.IsInstrumentation (type, resolver),
 			IsAbstract = type.IsAbstract,
+			ApplicationJavaClass = options.DefaultApplicationJavaClass,
+			GenerateOnCreateOverrides = options.DefaultGenerateOnCreateOverrides,
+			MonoRuntimeInitialization = options.DefaultMonoRuntimeInitialization,
 		};
 
 		// Type annotations
@@ -70,18 +79,18 @@ public class CecilImporter
 			var baseRegisteredMethod = CecilExtensions.GetBaseRegisteredMethod (minfo, resolver);
 
 			if (baseRegisteredMethod is not null)
-				AddMethod (cwt, type, baseRegisteredMethod, minfo, methodClassifier, resolver);
+				AddMethod (cwt, type, baseRegisteredMethod, minfo, options.MethodClassifier, resolver);
 			else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableAttribute")) {
-				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				AddMethod (cwt, type, null, minfo, options.MethodClassifier, resolver);
 				cwt.HasExport = true;
 			} else if (minfo.AnyCustomAttributes ("Java.Interop.JavaCallableConstructorAttribute")) {
-				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				AddMethod (cwt, type, null, minfo, options.MethodClassifier, resolver);
 				cwt.HasExport = true;
 			} else if (minfo.AnyCustomAttributes (typeof (ExportFieldAttribute))) {
-				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				AddMethod (cwt, type, null, minfo, options.MethodClassifier, resolver);
 				cwt.HasExport = true;
 			} else if (minfo.AnyCustomAttributes (typeof (ExportAttribute))) {
-				AddMethod (cwt, type, null, minfo, methodClassifier, resolver);
+				AddMethod (cwt, type, null, minfo, options.MethodClassifier, resolver);
 				cwt.HasExport = true;
 			}
 		}
@@ -106,7 +115,7 @@ public class CecilImporter
 				if (imethod.IsStatic)
 					continue;
 
-				AddMethod (cwt, type, imethod, imethod, methodClassifier, resolver);
+				AddMethod (cwt, type, imethod, imethod, options.MethodClassifier, resolver);
 			}
 		}
 
@@ -148,7 +157,7 @@ public class CecilImporter
 			AddConstructors (cwt, ctorTypes [i], type, outerType, baseCtors, curCtors, false, resolver);
 		}
 
-		AddNestedTypes (cwt, type, resolver, methodClassifier);
+		AddNestedTypes (cwt, type, resolver, options);
 
 		return cwt;
 	}
@@ -201,21 +210,19 @@ public class CecilImporter
 		signature = signature ?? throw new ArgumentNullException ("`connector` cannot be null.", nameof (connector));
 		var method_name = "n_" + name + ":" + signature + ":" + connector;
 
-		var method = new CallableWrapperConstructor (name, method_name, signature);
+		var method = new CallableWrapperConstructor (type, name, method_name, signature);
 
 		PopulateMethod (method, signature, managedParameters, outerType, superCall);
 
 		method.Name = type.Name;
-		method.CannotRegisterInStaticConstructor = type.CannotRegisterInStaticConstructor;
-		method.PartialAssemblyQualifiedName = type.PartialAssemblyQualifiedName;
 
 		return method;
 	}
 
 	// Method with a [Register] attribute
-	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, RegisterAttribute register, string? managedParameters, string? outerType, IMetadataResolver resolver, bool shouldBeDynamicallyRegistered = true)
+	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, CallableWrapperType declaringType, RegisterAttribute register, string? managedParameters, string? outerType, IMetadataResolver resolver, bool shouldBeDynamicallyRegistered = true)
 	{
-		var method = CreateMethod (register.Name, register.Signature, register.Connector, managedParameters, outerType, null);
+		var method = CreateMethod (register.Name, declaringType, register.Signature, register.Connector, managedParameters, outerType, null);
 
 		method.Annotations.AddRange (CreateAnnotations (methodDefinition, resolver));
 		method.IsDynamicallyRegistered = shouldBeDynamicallyRegistered;
@@ -224,9 +231,9 @@ public class CecilImporter
 	}
 
 	// Method with an [Export] attribute
-	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, ExportAttribute export, string? managedParameters, IMetadataResolver resolver)
+	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, CallableWrapperType declaringType, ExportAttribute export, string? managedParameters, IMetadataResolver resolver)
 	{
-		var method = CreateMethod (methodDefinition.Name, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, export.SuperArgumentsString);
+		var method = CreateMethod (methodDefinition.Name, declaringType, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, export.SuperArgumentsString);
 
 		method.IsExport = true;
 		method.IsStatic = methodDefinition.IsStatic;
@@ -240,9 +247,9 @@ public class CecilImporter
 	}
 
 	// Method with an [ExportField] attribute
-	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, IMetadataResolver resolver)
+	static CallableWrapperMethod CreateMethod (MethodDefinition methodDefinition, CallableWrapperType declaringType, IMetadataResolver resolver)
 	{
-		var method = CreateMethod (methodDefinition.Name, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, null);
+		var method = CreateMethod (methodDefinition.Name, declaringType, JavaNativeTypeManager.GetJniSignature (methodDefinition, resolver), "__export__", null, null, null);
 
 		if (methodDefinition.HasParameters)
 			Diagnostic.Error (4205, CecilExtensions.LookupSource (methodDefinition), Localization.Resources.JavaCallableWrappers_XA4205);
@@ -259,12 +266,12 @@ public class CecilImporter
 	}
 
 	// Common method creation code
-	static CallableWrapperMethod CreateMethod (string name, string? signature, string? connector, string? managedParameters, string? outerType, string? superCall)
+	static CallableWrapperMethod CreateMethod (string name, CallableWrapperType declaringType, string? signature, string? connector, string? managedParameters, string? outerType, string? superCall)
 	{
 		signature = signature ?? throw new ArgumentNullException ("`connector` cannot be null.", nameof (connector));
 		var method_name = "n_" + name + ":" + signature + ":" + connector;
 
-		var method = new CallableWrapperMethod (name, method_name, signature);
+		var method = new CallableWrapperMethod (declaringType, name, method_name, signature);
 
 		PopulateMethod (method, signature, managedParameters, outerType, superCall);
 
@@ -320,15 +327,15 @@ public class CecilImporter
 		method.ActivateCall = acall.ToString ();
 	}
 
-	static void AddConstructors (CallableWrapperType cwt, TypeDefinition type, TypeDefinition rootType, string? outerType, List<MethodDefinition>? baseCtors, List<MethodDefinition> curCtors, bool onlyRegisteredOrExportedCtors, IMetadataResolver cache)
+	static void AddConstructors (CallableWrapperType declaringType, TypeDefinition type, TypeDefinition rootType, string? outerType, List<MethodDefinition>? baseCtors, List<MethodDefinition> curCtors, bool onlyRegisteredOrExportedCtors, IMetadataResolver cache)
 	{
 		foreach (var ctor in type.Methods)
 			if (ctor.IsConstructor && !ctor.IsStatic && !ctor.AnyCustomAttributes (typeof (ExportAttribute)))
-				if (CreateConstructor (cwt, ctor, type, rootType, outerType, baseCtors, curCtors, onlyRegisteredOrExportedCtors, false, cache) is CallableWrapperConstructor c)
-					cwt.Constructors.Add (c);
+				if (CreateConstructor (declaringType, ctor, type, rootType, outerType, baseCtors, curCtors, onlyRegisteredOrExportedCtors, false, cache) is CallableWrapperConstructor c)
+					declaringType.Constructors.Add (c);
 	}
 
-	static CallableWrapperConstructor? CreateConstructor (CallableWrapperType cwt, MethodDefinition ctor, TypeDefinition type, TypeDefinition rootType, string? outerType, List<MethodDefinition>? baseCtors, List<MethodDefinition> curCtors, bool onlyRegisteredOrExportedCtors, bool skipParameterCheck, IMetadataResolver cache)
+	static CallableWrapperConstructor? CreateConstructor (CallableWrapperType declaringType, MethodDefinition ctor, TypeDefinition type, TypeDefinition rootType, string? outerType, List<MethodDefinition>? baseCtors, List<MethodDefinition> curCtors, bool onlyRegisteredOrExportedCtors, bool skipParameterCheck, IMetadataResolver cache)
 	{
 		// We create a parameter-less constructor for the application class, so don't use the imported one
 		if (!ctor.HasParameters && JavaNativeTypeManager.IsApplication (rootType, cache))
@@ -336,7 +343,7 @@ public class CecilImporter
 
 		var managedParameters = GetManagedParameters (ctor, outerType, type, cache);
 
-		if (!skipParameterCheck && (managedParameters == null || cwt.Constructors.Any (c => c.ManagedParameters == managedParameters)))
+		if (!skipParameterCheck && (managedParameters == null || declaringType.Constructors.Any (c => c.ManagedParameters == managedParameters)))
 			return null;
 
 		// Constructor with [Export] attribute
@@ -348,18 +355,18 @@ public class CecilImporter
 			}
 
 			curCtors.Add (ctor);
-			return CreateConstructor (ctor, cwt, eattr, managedParameters, cache);
+			return CreateConstructor (ctor, declaringType, eattr, managedParameters, cache);
 		}
 
 		// Constructor with [Register] attribute
 		var rattr = CecilExtensions.GetMethodRegistrationAttributes (ctor).FirstOrDefault ();
 
 		if (rattr != null) {
-			if (cwt.Constructors.Any (c => c.JniSignature == rattr.Signature))
+			if (declaringType.Constructors.Any (c => c.JniSignature == rattr.Signature))
 				return null;
 
 			curCtors.Add (ctor);
-			return CreateConstructor (ctor, cwt, rattr, managedParameters, outerType, cache);
+			return CreateConstructor (ctor, declaringType, rattr, managedParameters, outerType, cache);
 		}
 
 		if (onlyRegisteredOrExportedCtors)
@@ -371,7 +378,7 @@ public class CecilImporter
 		if (jniSignature is null)
 			return null;
 
-		if (cwt.Constructors.Any (c => c.JniSignature == jniSignature))
+		if (declaringType.Constructors.Any (c => c.JniSignature == jniSignature))
 			return null;
 
 		if (baseCtors is null)
@@ -379,12 +386,12 @@ public class CecilImporter
 
 		if (baseCtors.Any (m => m.Parameters.AreParametersCompatibleWith (ctor.Parameters, cache))) {
 			curCtors.Add (ctor);
-			return CreateConstructor (".ctor", cwt, jniSignature, "", managedParameters, outerType, null);
+			return CreateConstructor (".ctor", declaringType, jniSignature, "", managedParameters, outerType, null);
 		}
 
 		if (baseCtors.Any (m => !m.HasParameters)) {
 			curCtors.Add (ctor);
-			return CreateConstructor (".ctor", cwt, jniSignature, "", managedParameters, outerType, "");
+			return CreateConstructor (".ctor", declaringType, jniSignature, "", managedParameters, outerType, "");
 		}
 
 		return null;
@@ -414,7 +421,7 @@ public class CecilImporter
 		return new CallableWrapperApplicationConstructor (name);
 	}
 
-	static void AddNestedTypes (CallableWrapperType cwt, TypeDefinition type, IMetadataResolver cache,JavaCallableMethodClassifier? methodClassifier)
+	static void AddNestedTypes (CallableWrapperType declaringType, TypeDefinition type, IMetadataResolver cache, CallableWrapperReaderOptions? options)
 	{
 		if (!type.HasNestedTypes)
 			return;
@@ -425,14 +432,14 @@ public class CecilImporter
 			if (!JavaNativeTypeManager.IsNonStaticInnerClass (nt, cache))
 				continue;
 
-			cwt.NestedTypes.Add (CreateType (nt, cache, JavaNativeTypeManager.ToJniName (type, cache), methodClassifier));
-			AddNestedTypes (cwt, nt, cache, methodClassifier);
+			declaringType.NestedTypes.Add (CreateType (nt, cache, options, JavaNativeTypeManager.ToJniName (type, cache)));
+			AddNestedTypes (declaringType, nt, cache, options);
 		}
 
-		cwt.HasExport |= cwt.NestedTypes.Any (t => t.HasExport);
+		declaringType.HasExport |= declaringType.NestedTypes.Any (t => t.HasExport);
 	}
 
-	static void AddMethod (CallableWrapperType cwt, TypeDefinition type, MethodDefinition? registeredMethod, MethodDefinition implementedMethod, JavaCallableMethodClassifier? methodClassifier, IMetadataResolver cache)
+	static void AddMethod (CallableWrapperType declaringType, TypeDefinition type, MethodDefinition? registeredMethod, MethodDefinition implementedMethod, JavaCallableMethodClassifier? methodClassifier, IMetadataResolver cache)
 	{
 		if (registeredMethod != null)
 			foreach (RegisterAttribute attr in CecilExtensions.GetMethodRegistrationAttributes (registeredMethod)) {
@@ -441,33 +448,33 @@ public class CecilImporter
 					Diagnostic.Error (4217, CecilExtensions.LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4217, attr.Name);
 
 				var shouldBeDynamicallyRegistered = methodClassifier?.ShouldBeDynamicallyRegistered (type, registeredMethod, implementedMethod, attr.OriginAttribute) ?? true;
-				var method = CreateMethod (implementedMethod, attr, null, null, cache, shouldBeDynamicallyRegistered);
+				var method = CreateMethod (implementedMethod, declaringType, attr, null, null, cache, shouldBeDynamicallyRegistered);
 
-				if (!registeredMethod.IsConstructor && !cwt.Methods.Any (m => m.Name == method.Name && m.Params == method.Params))
-					cwt.Methods.Add (method);
+				if (!registeredMethod.IsConstructor && !declaringType.Methods.Any (m => m.Name == method.Name && m.Params == method.Params))
+					declaringType.Methods.Add (method);
 			}
 		foreach (ExportAttribute attr in CecilExtensions.GetExportAttributes (implementedMethod, cache)) {
 			if (type.HasGenericParameters)
 				Diagnostic.Error (4206, CecilExtensions.LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4206);
 
-			var method = CreateMethod (implementedMethod, attr, null, cache);
+			var method = CreateMethod (implementedMethod, declaringType, attr, null, cache);
 
 			if (!string.IsNullOrEmpty (attr.SuperArgumentsString)) {
 				// Diagnostic.Warning (log, "Use of ExportAttribute.SuperArgumentsString property is invalid on methods");
 			}
 
-			if (!implementedMethod.IsConstructor && !cwt.Methods.Any (m => m.Name == method.Name && m.Params == method.Params))
-				cwt.Methods.Add (method);
+			if (!implementedMethod.IsConstructor && !declaringType.Methods.Any (m => m.Name == method.Name && m.Params == method.Params))
+				declaringType.Methods.Add (method);
 		}
 		foreach (ExportFieldAttribute attr in CecilExtensions.GetExportFieldAttributes (implementedMethod)) {
 			if (type.HasGenericParameters)
 				Diagnostic.Error (4207, CecilExtensions.LookupSource (implementedMethod), Localization.Resources.JavaCallableWrappers_XA4207);
 
-			var method = CreateMethod (implementedMethod, cache);
+			var method = CreateMethod (implementedMethod, declaringType, cache);
 
-			if (!implementedMethod.IsConstructor && !cwt.Methods.Any (m => m.Name == method.Name && m.Params == method.Params)) {
-				cwt.Methods.Add (method);
-				cwt.Fields.Add (CreateField (implementedMethod, attr.Name, cache));
+			if (!implementedMethod.IsConstructor && !declaringType.Methods.Any (m => m.Name == method.Name && m.Params == method.Params)) {
+				declaringType.Methods.Add (method);
+				declaringType.Fields.Add (CreateField (implementedMethod, attr.Name, cache));
 			}
 		}
 	}

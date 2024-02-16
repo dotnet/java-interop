@@ -22,11 +22,13 @@ public class CallableWrapperMethod
 	public string? ActivateCall { get; set; }
 	public string JavaName => JavaNameOverride ?? Name;
 	public List<CallableWrapperTypeAnnotation> Annotations { get; } = new List<CallableWrapperTypeAnnotation> ();
+	public CallableWrapperType DeclaringType { get; }
 
 	public string? ThrowsDeclaration => ThrownTypeNames?.Length > 0 ? $" throws {string.Join (", ", ThrownTypeNames)}" : null;
 
-	public CallableWrapperMethod (string name, string method, string jniSignature)
+	public CallableWrapperMethod (CallableWrapperType declaringType, string name, string method, string jniSignature)
 	{
+		DeclaringType = declaringType;
 		Name = name;
 		Method = method;
 		JniSignature = jniSignature;
