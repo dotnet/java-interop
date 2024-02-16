@@ -1,7 +1,0 @@
-<linker>
-  <assembly fullname="Java.Interop">
-    <type fullname="Java.Interop.JavaException">
-      <method name=".ctor" />
-    </type>
-  </assembly>
-</linker>

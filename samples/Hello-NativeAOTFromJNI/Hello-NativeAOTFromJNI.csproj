@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <TrimmerRootAssembly Include="Hello-NativeAOTFromJNI" />
-    <TrimmerRootDescriptor Include="Hello-NativeAOTFromJNI.xml" />
   </ItemGroup>
 
   <ItemGroup>

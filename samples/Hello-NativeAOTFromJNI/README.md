@@ -22,9 +22,10 @@ Release configuration:
 % dotnet build -c Release
 ```
 
-Once Java.Interop itself is built, you can build the sample:
+Once Java.Interop itself is built, you can *publish* the sample:
 
 ```sh
+% cd samples/Hello-NativeAOTFromJNI
 % dotnet publish -c Release -r osx-x64
 ```
 
@@ -32,10 +33,10 @@ The resulting native library contains the desired symbols:
 
 ```sh
 % nm bin/Release/osx-x64/publish/Hello-NativeAOTFromJNI.dylib | grep ' S ' 
-000000000016f5a0 S _JNI_OnLoad
-000000000016f5d0 S _JNI_OnUnload
-000000000016f2f0 S _Java_net_dot_jni_hello_App_sayHello
-000000000016f620 S _Java_net_dot_jni_hello_JavaInteropRuntime_init
+00000000000ef880 S _JNI_OnLoad
+00000000000ef8b0 S _JNI_OnUnload
+00000000000ef5d0 S _Java_net_dot_jni_hello_App_sayHello
+00000000000ef900 S _Java_net_dot_jni_hello_JavaInteropRuntime_init
 ```
 
 Use the `RunJavaSample` target to run Java, which will run
