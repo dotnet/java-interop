@@ -1,20 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <XAConfigPath>..\..\bin\Build$(Configuration)\XAConfig.props</XAConfigPath>
-  </PropertyGroup>
-  <Import Condition="Exists ('$(XAConfigPath)')" Project="$(XAConfigPath)" />
-
-  <PropertyGroup Condition=" '$(XABuild)' == 'true' ">
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(XABuild)' != 'true' ">
     <TargetFrameworks>netstandard2.0;$(DotNetTargetFramework)</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <LangVersion>11.0</LangVersion>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
