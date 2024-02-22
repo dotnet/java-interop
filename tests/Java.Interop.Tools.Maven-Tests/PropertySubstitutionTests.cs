@@ -19,7 +19,7 @@ public class PropertySubstitutionTests
 		var project = TestDataExtensions.CreateProject (artifact);
 		project.AddProperty ("mavenVersion", "2.0.6");
 
-		var resolver = new DefaultPomResolver ();
+		var resolver = new DefaultProjectResolver ();
 		resolver.Register (project);
 
 		var result = ResolvedProject.FromArtifact (artifact, resolver);
@@ -44,7 +44,7 @@ public class PropertySubstitutionTests
 
 		parent_project.AddProperty ("mavenVersion", "2.0.6");
 
-		var resolver = new DefaultPomResolver ();
+		var resolver = new DefaultProjectResolver ();
 		resolver.Register (parent_project);
 		resolver.Register (project);
 
@@ -66,7 +66,7 @@ public class PropertySubstitutionTests
 		var project = TestDataExtensions.CreateProject (artifact);
 		project.Name = "${project.groupId}:${project.artifactId}:${project.version}";
 
-		var resolver = new DefaultPomResolver ();
+		var resolver = new DefaultProjectResolver ();
 		resolver.Register (project);
 
 		var result = ResolvedProject.FromArtifact (artifact, resolver);
@@ -91,7 +91,7 @@ public class PropertySubstitutionTests
 
 		project.Name = "${project.groupId}:${project.artifactId}:${project.version}";
 
-		var resolver = new DefaultPomResolver ();
+		var resolver = new DefaultProjectResolver ();
 		resolver.Register (parent_project);
 		resolver.Register (project);
 
@@ -120,7 +120,7 @@ public class PropertySubstitutionTests
 
 		parent_project.AddProperty ("mavenVersion", "${project.version}");
 
-		var resolver = new DefaultPomResolver ();
+		var resolver = new DefaultProjectResolver ();
 		resolver.Register (parent_project);
 		resolver.Register (project);
 
@@ -150,7 +150,7 @@ public class PropertySubstitutionTests
 		project.AddProperty ("mavenVersion", "2.0");
 		parent_project.AddProperty ("mavenVersion", "1.0");
 
-		var resolver = new DefaultPomResolver ();
+		var resolver = new DefaultProjectResolver ();
 		resolver.Register (parent_project);
 		resolver.Register (project);
 

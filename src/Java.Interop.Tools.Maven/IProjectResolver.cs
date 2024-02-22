@@ -2,7 +2,7 @@ using Java.Interop.Tools.Maven.Models;
 
 namespace Java.Interop.Tools.Maven;
 
-public interface IPomResolver
+public interface IProjectResolver
 {
-	Project ResolveRawProject (Artifact artifact);
+	Project Resolve (Artifact artifact);
 }

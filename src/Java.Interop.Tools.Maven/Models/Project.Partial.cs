@@ -8,32 +8,22 @@ namespace Java.Interop.Tools.Maven.Models;
 
 public partial class Project
 {
-	public static Project Parse (Stream stream)
+	static readonly XmlSerializer xml_serializer = new (typeof (Project));
+
+	public static Project Load (Stream stream)
 	{
-		Project? result = null;
-
-		var serializer = new XmlSerializer (typeof (Project));
-
-		using (var sr = new StreamReader (stream))
-			result = (Project) serializer.Deserialize (new XmlTextReader (sr) {
-				Namespaces = false,
-			});
-
-		return result;
+		using (var xr = new XmlTextReader (stream) { Namespaces = false })
+			return Load (xr);
 	}
 
-	public static Project ParseXml (string xml)
+	public static Project Load (XmlReader reader)
+		=> (Project) xml_serializer.Deserialize (reader);
+
+	public static Project Parse (string xml)
 	{
-		Project? result = null;
-
-		var serializer = new XmlSerializer (typeof (Project));
-
 		using (var sr = new StringReader (xml))
-			result = (Project) serializer.Deserialize (new XmlTextReader (sr) {
-				Namespaces = false,
-			});
-
-		return result;
+		using (var xr = new XmlTextReader (sr) { Namespaces = false })
+			return Load (xr);
 	}
 
 	public bool TryGetParentPomArtifact ([NotNullWhen (true)] out Artifact? parent)
@@ -48,7 +38,7 @@ public partial class Project
 		return false;
 	}
 
-	public override string ToString () => $"{GroupId}:{ArtifactId}:{Version}";
+	public override string ToString () => VersionedArtifactString;
 
 	public string ToXml ()
 	{
@@ -59,4 +49,7 @@ public partial class Project
 			return sw.ToString ();
 		}
 	}
+
+	// Format should match Artifact.VersionedArtifactString for comparisons.
+	public string VersionedArtifactString => $"{GroupId}:{ArtifactId}:{Version}";
 }

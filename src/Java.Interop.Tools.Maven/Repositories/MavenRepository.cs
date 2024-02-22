@@ -8,7 +8,7 @@ namespace Java.Interop.Tools.Maven.Repositories;
 public class MavenRepository : IMavenRepository
 {
 	readonly string base_url;
-	static readonly HttpClient client;
+	static readonly HttpClient client = new HttpClient ();
 
 	public string Name { get; }
 
@@ -16,11 +16,6 @@ public class MavenRepository : IMavenRepository
 	{
 		Name = name;
 		base_url = baseUrl.TrimEnd ('/');
-	}
-
-	static MavenRepository ()
-	{
-		client = new HttpClient ();
 	}
 
 	public bool TryGetFile (Artifact artifact, string filename, [NotNullWhen (true)] out Stream? stream)

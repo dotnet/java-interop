@@ -11,6 +11,11 @@ public class Artifact
 
 	public string Version { get; }
 
+	public string ArtifactString => $"{GroupId}:{Id}";
+
+	// Format should match Project.ArtifactString for comparisons.
+	public string VersionedArtifactString => $"{GroupId}:{Id}:{Version}";
+
 	public Artifact (string groupId, string artifactId, string version)
 	{
 		Id = artifactId;
@@ -40,6 +45,5 @@ public class Artifact
 		return true;
 	}
 
-	// This is a "well-known" format we use, it should not be changed.
-	public override string ToString () => $"{GroupId}:{Id}:{Version}";
+	public override string ToString () => VersionedArtifactString;
 }

@@ -26,7 +26,7 @@ static class TestDataExtensions
 			xml.Root!.Add (parent_xml);
 		}
 
-		return Project.ParseXml (xml.ToString ());
+		return Project.Parse (xml.ToString ());
 	}
 
 	public static void AddProperty (this Project project, string key, string value)

@@ -9,7 +9,7 @@ namespace Java.Interop.Tools.Maven.Models;
 public class ResolvedProject
 {
 	readonly ResolvedProject? parent;
-	readonly IPomResolver? resolver;
+	readonly IProjectResolver? resolver;
 
 	Project? resolved_project;
 
@@ -34,7 +34,7 @@ public class ResolvedProject
 		}
 	}
 
-	public ResolvedProject (Project project, ResolvedProject parent, IPomResolver resolver)
+	public ResolvedProject (Project project, ResolvedProject parent, IProjectResolver resolver)
 	{
 		Raw = project;
 		this.parent = parent;
@@ -43,7 +43,7 @@ public class ResolvedProject
 
 	public void Resolve () => ResolveCore (new PropertyStack ());
 
-	public static ResolvedProject FromArtifact (Artifact artifact, IPomResolver resolver)
+	public static ResolvedProject FromArtifact (Artifact artifact, IProjectResolver resolver)
 	{
 		var project = FromArtifactCore (artifact, resolver);
 		project.Resolve ();
@@ -51,9 +51,9 @@ public class ResolvedProject
 		return project;
 	}
 
-	static ResolvedProject FromArtifactCore (Artifact artifact, IPomResolver resolver)
+	static ResolvedProject FromArtifactCore (Artifact artifact, IProjectResolver resolver)
 	{
-		var raw = resolver.ResolveRawProject (artifact);
+		var raw = resolver.Resolve (artifact);
 
 		// POM has a parent, resolve it
 		if (raw.TryGetParentPomArtifact (out var parentArtifact)) {
@@ -79,7 +79,7 @@ public class ResolvedProject
 		var xml = Raw.ToXml ();
 		xml = ReplaceProperties (xml, this, properties);
 
-		resolved_project = Project.ParseXml (xml);
+		resolved_project = Project.Parse (xml);
 
 		properties.Push (Raw.Properties);
 		parent?.ResolveCore (properties);

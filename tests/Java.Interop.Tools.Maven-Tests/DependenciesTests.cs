@@ -37,9 +37,9 @@ public class DependenciesTests
 	[TestCase ("com.facebook.android:facebook-android-sdk:14.1.1", "com.facebook.android:facebook-applinks:14.1.1 - compile;com.facebook.android:facebook-common:14.1.1 - compile;com.facebook.android:facebook-core:14.1.1 - compile;com.facebook.android:facebook-gamingservices:14.1.1 - compile;com.facebook.android:facebook-login:14.1.1 - compile;com.facebook.android:facebook-messenger:14.1.1 - compile;com.facebook.android:facebook-share:14.1.1 - compile;org.jetbrains.kotlin:kotlin-stdlib:1.5.10 - compile")]
 	[TestCase ("com.airbnb.android:lottie:5.2.0", "androidx.appcompat:appcompat:1.3.1 - runtime;com.squareup.okio:okio:1.17.4 - runtime")]
 	public void TestMavenCentralResolvedDependencies (string artifact, string expected)
-		=> TestResolvedDependencies (MavenPomResolver.Central, artifact, expected);
+		=> TestResolvedDependencies (MavenProjectResolver.Central, artifact, expected);
 
-	void TestResolvedDependencies (MavenPomResolver resolver, string artifact, string expected)
+	void TestResolvedDependencies (MavenProjectResolver resolver, string artifact, string expected)
 	{
 		var art = Artifact.Parse (artifact);
 		var project = ResolvedProject.FromArtifact (art, resolver);
