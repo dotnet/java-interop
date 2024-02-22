@@ -13,7 +13,8 @@
 
   <Import Project="..\..\TargetFrameworkDependentValues.props" />
 
-  <PropertyGroup>
+  <!-- Only use $(ToolOutputFullPath) for netstandard2.0 -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <OutputPath>$(ToolOutputFullPath)</OutputPath>
   </PropertyGroup>
 
