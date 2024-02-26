@@ -24,4 +24,5 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
+  <Import Project="Java.Interop.Tools.Maven.targets" />
 </Project>
