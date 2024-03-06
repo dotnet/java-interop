@@ -58,7 +58,7 @@ namespace generator.SourceWriters
 			AddMemberInvokers (iface, new HashSet<string> (), iface.SkippedInvokerMethods, opt, context);
 		}
 
-		void AddMemberInvokers (InterfaceGen iface, HashSet<string> members, CodeGenerationOptions opt, CodeGeneratorContext context)
+		void AddMemberInvokers (InterfaceGen iface, HashSet<string> members, HashSet<string> skipInvokers, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
 			AddPropertyInvokers (iface, iface.Properties.Where (p => !p.Getter.IsStatic && !p.Getter.IsInterfaceDefaultMethod), members, opt, context);
 			AddMethodInvokers (iface, iface.Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod), members, skipInvokers, opt, context);
