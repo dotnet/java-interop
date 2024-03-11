@@ -32,9 +32,10 @@
     </ItemGroup>
     
     <ReplaceFileContents
-      TemplateFile="Models/Java.Interop.Tools.Maven.Models.cs"
-      OutputFile="Models/Project.cs"
-      Replacements="@(Replacements)" />
+        TemplateFile="Models/Java.Interop.Tools.Maven.Models.cs"
+        OutputFile="Models/Project.cs"
+        Replacements="@(Replacements)"
+    />
 
     <Delete Files="Models/Java.Interop.Tools.Maven.Models.cs" />
   </Target>
