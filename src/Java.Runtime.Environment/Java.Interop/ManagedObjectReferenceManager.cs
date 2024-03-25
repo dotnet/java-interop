@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ObjectiveC;
 using System.Text;
 using System.Threading;
 
@@ -19,6 +20,54 @@ namespace Java.Interop {
 		int         grefCount;
 		int         wgrefCount;
 
+		static unsafe ManagedObjectReferenceManager ()
+		{
+			Console.Error.WriteLine ("# jonp: trying to use ObjectiveCMarshal.Initialize");
+			delegate *unmanaged<void> beginEndCallback = &BeginEndGCTracking;
+			delegate *unmanaged<IntPtr, int> isReferencedCallback = &IsJavaObjectReferenced;
+			delegate *unmanaged<IntPtr, void> trackedObjectEnteredFinalization = &TrackedObjectEnteredFinalization;
+			ObjectiveCMarshal.Initialize (
+				beginEndCallback: beginEndCallback,
+				isReferencedCallback: isReferencedCallback,
+				trackedObjectEnteredFinalization: trackedObjectEnteredFinalization,
+				unhandledExceptionPropagationHandler: UnhandledExceptionPropagationHandler
+			);
+			Console.Error.WriteLine ("# jonp: finished calling ObjectiveCMarshal.Initialize");
+		}
+
+		[UnmanagedCallersOnly]
+		static void BeginEndGCTracking ()
+		{
+			Console.Error.WriteLine ("# jonp: ManagedObjectReferenceManager.BeginEndGCTracking");
+		}
+
+		[UnmanagedCallersOnly]
+		static int IsJavaObjectReferenced (IntPtr handle)
+		{
+			Console.Error.WriteLine ($"# jonp: ManagedObjectReferenceManager.IsJavaObjectReferenced: handle={handle.ToString ("x2")}");
+			return 0;
+		}
+
+		[UnmanagedCallersOnly]
+		static void TrackedObjectEnteredFinalization (IntPtr handle)
+		{
+			Console.Error.WriteLine ($"# jonp: ManagedObjectReferenceManager.TrackedObjectEnteredFinalization: handle={handle.ToString ("x2")}");
+		}
+
+		unsafe static delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler(
+				Exception exception,
+				RuntimeMethodHandle lastMethod,
+				out IntPtr context)
+		{
+			Console.Error.WriteLine ($"# jonp: ManagedObjectReferenceManager.UnhandledExceptionPropagationHandler exception:");
+			Console.Error.WriteLine ("```");
+			Console.Error.WriteLine (exception.ToString ());
+			Console.Error.WriteLine ("```");
+			Console.Error.WriteLine ($"# jonp: ManagedObjectReferenceManager.UnhandledExceptionPropagationHandler lastMethod={lastMethod}");
+
+			context = IntPtr.Zero;
+			return null;
+		}
 
 		public  override    int     GlobalReferenceCount        => grefCount;
 		public  override    int     WeakGlobalReferenceCount    => wgrefCount;
