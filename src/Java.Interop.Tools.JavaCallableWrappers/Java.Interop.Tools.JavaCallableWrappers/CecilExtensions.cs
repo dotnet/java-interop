@@ -45,7 +45,7 @@ static class CecilExtensions
 		while ((bmethod = method.GetBaseDefinition (cache)) != method) {
 			method = bmethod;
 
-			if (method.AnyCustomAttributes (typeof (RegisterAttribute))) {
+			if (GetMethodRegistrationAttributes (method).Any ()) {
 				return method;
 			}
 		}
