@@ -9,17 +9,15 @@ partial class NativeAotTypeManager : JniRuntime.JniTypeManager {
 	internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
 	internal const DynamicallyAccessedMemberTypes MethodsAndPrivateNested = Methods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 
-#pragma warning disable IL2026
 	Dictionary<string, Type> typeMappings = new () {
-		["android/app/Activity"] = typeof (Android.App.Activity),
-		["android/content/Context"] = typeof (Android.Content.Context),
-		["android/content/ContextWrapper"] = typeof (Android.Content.ContextWrapper),
-		["android/os/BaseBundle"] = typeof (Android.OS.BaseBundle),
-		["android/os/Bundle"] = typeof (Android.OS.Bundle),
-		["android/view/ContextThemeWrapper"] = typeof (Android.View.ContextThemeWrapper),
-		["my/MainActivity"] = typeof (MainActivity),
+		["android/app/Activity"]                = typeof (Android.App.Activity),
+		["android/content/Context"]             = typeof (Android.Content.Context),
+		["android/content/ContextWrapper"]      = typeof (Android.Content.ContextWrapper),
+		["android/os/BaseBundle"]               = typeof (Android.OS.BaseBundle),
+		["android/os/Bundle"]                   = typeof (Android.OS.Bundle),
+		["android/view/ContextThemeWrapper"]    = typeof (Android.View.ContextThemeWrapper),
+		["my/MainActivity"]                     = typeof (MainActivity),
 	};
-#pragma warning restore IL2026
 
 	public override void RegisterNativeMembers (
 			JniType nativeClass,
