@@ -54,7 +54,7 @@ public class JavaPeerableExtensionsTests {
 
 // Note: Java side implements JavaInterface, while managed binding DOES NOT.
 [JniTypeSignature (JniTypeName, GenerateJavaPeer=false)]
-class MyJavaInterfaceImpl : JavaObject {
+public class MyJavaInterfaceImpl : JavaObject {
 	internal            const       string          JniTypeName    = "net/dot/jni/test/MyJavaInterfaceImpl";
 
 	internal    static  readonly    JniPeerMembers  _members    = new JniPeerMembers (JniTypeName, typeof (MyJavaInterfaceImpl));
