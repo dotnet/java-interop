@@ -35,6 +35,13 @@ public class JavaPeerableExtensionsTests {
 		Assert.AreEqual (null, JavaPeerableExtensions.JavaAs<IAndroidInterface> (null));
 	}
 
+	public void JavaAs_InvalidPeerRefReturnsNull ()
+	{
+		var v   = new MyJavaInterfaceImpl ();
+		v.Dispose ();
+		Assert.AreEqual (null, JavaPeerableExtensions.JavaAs<IJavaInterface> (v));
+	}
+
 	[Test]
 	public void JavaAs_InstanceThatDoesNotImplementInterfaceReturnsNull ()
 	{
@@ -83,6 +90,7 @@ interface IJavaInterface : IJavaPeerable {
 	}
 }
 
+[JniTypeSignature (IJavaInterface.JniTypeName, GenerateJavaPeer=false)]
 internal class IJavaInterfaceInvoker : JavaObject, IJavaInterface {
 
 	internal    static  readonly    JniPeerMembers  _members    = new JniPeerMembers (IJavaInterface.JniTypeName, typeof (IJavaInterfaceInvoker));

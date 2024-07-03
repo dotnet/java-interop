@@ -273,6 +273,7 @@ namespace Java.InteropTests
 		}
 	}
 
+	[JniTypeSignature (IAndroidInterface.JniTypeName, GenerateJavaPeer=false)]
 	internal class IAndroidInterfaceInvoker : JavaObject, IAndroidInterface {
 
 		public override JniPeerMembers JniPeerMembers => IAndroidInterface._members;

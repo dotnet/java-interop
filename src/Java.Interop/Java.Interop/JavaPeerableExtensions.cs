@@ -24,21 +24,17 @@ namespace Java.Interop {
 		}
 
 		public static TResult? JavaAs<
-				[DynamicallyAccessedMembers (JavaObject.ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (JavaObject.Constructors)]
 				TResult
 		> (this IJavaPeerable? self)
 			where TResult : class, IJavaPeerable
 		{
-			if (self == null) {
+			if (self == null || !self.PeerReference.IsValid) {
 				return null;
 			}
 
 			if (self is TResult result) {
 				return result;
-			}
-
-			if (!self.PeerReference.IsValid) {
-				throw new ObjectDisposedException (self.GetType ().FullName);
 			}
 
 			var r = self.PeerReference;
