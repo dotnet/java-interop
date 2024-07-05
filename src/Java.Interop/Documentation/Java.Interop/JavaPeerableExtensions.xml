@@ -56,6 +56,20 @@
         used to associated a managed type to a Java type.
       </block>
     </remarks>
+    <exception cref="T:System.ArgumentException">
+      <para>
+        The Java peer type for <typeparamref name="TResult" /> could not be found.
+      </para>
+    </exception>
+    <exception cref="T:System.NotSupportedException">
+      <para>
+        The type <typeparamref name="TResult" /> or a <i>Invoker type</i> for
+        <typeparamref name="TResult" /> does not provide an
+        <i>activation constructor</i>, a constructor with a singature of
+        <c>(ref JniObjectReference, JniObjectReferenceOptions)</c> or
+        <c>(IntPtr, JniHandleOwnership)</c>.
+      </para>
+    </exception>
     <seealso cref="M:Java.Interop.JavaPeerableExtensions.JavaAs``1(Java.Interop.IJavaPeerable)" />
   </member>
   <member name="M:JavaAs">
@@ -88,6 +102,20 @@
         used to associated a managed type to a Java type.
       </block>
     </remarks>
+    <exception cref="T:System.ArgumentException">
+      <para>
+        The Java peer type for <typeparamref name="TResult" /> could not be found.
+      </para>
+    </exception>
+    <exception cref="T:System.NotSupportedException">
+      <para>
+        The type <typeparamref name="TResult" /> or a <i>Invoker type</i> for
+        <typeparamref name="TResult" /> does not provide an
+        <i>activation constructor</i>, a constructor with a singature of
+        <c>(ref JniObjectReference, JniObjectReferenceOptions)</c> or
+        <c>(IntPtr, JniHandleOwnership)</c>.
+      </para>
+    </exception>
     <seealso cref="P:Java.Interop.JavaPeerableExtensions.TryJavaCast``1(Java.Interop.IJavaPeerable)" />
   </member>
 </docs>
