@@ -5,14 +5,17 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Java.Interop {
 
+	/// <include file="../Documentation/Java.Interop/JavaPeerableExtensions.xml" path="/docs/member[@name='T:JavaPeerableExtensions']/*" />
 	public static class JavaPeerableExtensions {
 
+		/// <include file="../Documentation/Java.Interop/JavaPeerableExtensions.xml" path="/docs/member[@name='M:GetJniTypeName']/*" />
 		public static string? GetJniTypeName (this IJavaPeerable self)
 		{
 			JniPeerMembers.AssertSelf (self);
 			return JniEnvironment.Types.GetJniTypeNameFromInstance (self.PeerReference);
 		}
 
+		/// <include file="../Documentation/Java.Interop/JavaPeerableExtensions.xml" path="/docs/member[@name='M:TryJavaCast']/*" />
 		public static bool TryJavaCast<
 				[DynamicallyAccessedMembers (JavaObject.ConstructorsAndInterfaces)]
 				TResult
@@ -23,6 +26,7 @@ namespace Java.Interop {
 			return result != null;
 		}
 
+		/// <include file="../Documentation/Java.Interop/JavaPeerableExtensions.xml" path="/docs/member[@name='M:JavaAs']/*" />
 		public static TResult? JavaAs<
 				[DynamicallyAccessedMembers (JavaObject.Constructors)]
 				TResult
