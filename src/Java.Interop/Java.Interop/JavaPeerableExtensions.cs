@@ -17,7 +17,7 @@ namespace Java.Interop {
 
 		/// <include file="../Documentation/Java.Interop/JavaPeerableExtensions.xml" path="/docs/member[@name='M:TryJavaCast']/*" />
 		public static bool TryJavaCast<
-				[DynamicallyAccessedMembers (JavaObject.ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (JavaObject.Constructors)]
 				TResult
 		> (this IJavaPeerable? self, [NotNullWhen (true)] out TResult? result)
 			where TResult : class, IJavaPeerable
