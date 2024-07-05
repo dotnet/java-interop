@@ -38,13 +38,13 @@ partial class JniEnvironment {
 		}
 
 		internal static unsafe bool TryGetStaticMethod (
-                JniObjectReference type,
-                ReadOnlySpan<byte> name,
-                ReadOnlySpan<byte> signature,
-                [NotNullWhen(true)]
-                out JniMethodInfo? method)
+				JniObjectReference type,
+				ReadOnlySpan<byte> name,
+				ReadOnlySpan<byte> signature,
+				[NotNullWhen(true)]
+				out JniMethodInfo? method)
 		{
-            method = null;
+			method = null;
 
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
@@ -58,17 +58,17 @@ partial class JniEnvironment {
 				thrown  = JniNativeMethods.ExceptionOccurred (env);
 			}
 
-            if (thrown != IntPtr.Zero) {
-                JniNativeMethods.ExceptionClear (env);
+			if (thrown != IntPtr.Zero) {
+				JniNativeMethods.ExceptionClear (env);
 				JniEnvironment.References.RawDeleteLocalRef (env, thrown);
-                thrown = IntPtr.Zero;
-                return false;
-            }
+				thrown = IntPtr.Zero;
+				return false;
+			}
 
 			Debug.Assert (id != IntPtr.Zero);
-            if (id == IntPtr.Zero) {
-                return false;
-            }
+			if (id == IntPtr.Zero) {
+				return false;
+			}
 
 #if DEBUG
 			method = new JniMethodInfo (name.ToString (), signature.ToString (), id, isStatic: true);
@@ -76,7 +76,7 @@ partial class JniEnvironment {
 			method = new JniMethodInfo (null!, null!, id, isStatic: true);
 #endif  // DEBUG
 
-            return true;
+			return true;
 		}
 	}
 }
