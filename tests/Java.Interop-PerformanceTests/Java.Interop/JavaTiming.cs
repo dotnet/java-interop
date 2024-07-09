@@ -128,6 +128,19 @@ namespace Java.Interop.PerformanceTests
 			return _members.InstanceMethods.InvokeVirtualInt32Method ("VirtualIntMethod1Args.(I)I", this, args);
 		}
 
+		public virtual unsafe int Timing_Lookup_VirtualIntMethod_Marshal1Args (int value)
+		{
+			var member = new JniMemberInfoLookup (
+					"VirtualIntMethod1Args.(I)I",
+					"VirtualIntMethod1Args"u8,
+					"(I)I"u8
+			);
+			var args = stackalloc JniArgumentValue [1];
+			args [0] = new JniArgumentValue (value);
+
+			return _members.InstanceMethods.InvokeVirtualInt32Method (member, this, new ReadOnlySpan<JniArgumentValue> (args, 1));
+		}
+
 		public virtual int Timing_VirtualIntMethod_GenericMarshal1Args (int value)
 		{
 			return _members.InstanceMethods.InvokeGenericVirtualInt32Method ("VirtualIntMethod1Args.(I)I", this, value);
@@ -275,6 +288,17 @@ namespace Java.Interop.PerformanceTests
 		{
 			const string id = toString_name + "." + toString_sig;
 			return _members.InstanceMethods.InvokeVirtualObjectMethod (id, this, null);
+		}
+
+		public JniObjectReference Timing_ToString_JniPeerMembers_Lookup ()
+		{
+			var member = new JniMemberInfoLookup (
+					toString_name + "." + toString_sig,
+					"toString"u8,
+					"()Ljava/lang/String;"u8
+			);
+			ReadOnlySpan<JniArgumentValue> args = null;
+			return _members.InstanceMethods.InvokeVirtualObjectMethod (member, this, args);
 		}
 
 		public static unsafe JniObjectReference CreateRunnable ()
