@@ -99,3 +99,5 @@ Java.Interop.JniPeerMembers.JniStaticMethods.InvokeSByteMethod(Java.Interop.JniM
 Java.Interop.JniPeerMembers.JniStaticMethods.InvokeSingleMethod(Java.Interop.JniMemberInfoLookup member, System.ReadOnlySpan<Java.Interop.JniArgumentValue> parameters) -> float
 Java.Interop.JniPeerMembers.JniStaticMethods.InvokeVoidMethod(Java.Interop.JniMemberInfoLookup member, System.ReadOnlySpan<Java.Interop.JniArgumentValue> parameters) -> void
 virtual Java.Interop.JniRuntime.JniTypeManager.GetReplacementMethodInfoCore(string! jniSimpleReference, System.ReadOnlySpan<byte> jniMethodName, System.ReadOnlySpan<byte> jniMethodSignature) -> Java.Interop.JniRuntime.ReplacementMethodInfo?
+static Java.Interop.JavaPeerableExtensions.TryJavaCast<TResult>(this Java.Interop.IJavaPeerable? self, out TResult? result) -> bool
+static Java.Interop.JavaPeerableExtensions.JavaAs<TResult>(this Java.Interop.IJavaPeerable? self) -> TResult?
