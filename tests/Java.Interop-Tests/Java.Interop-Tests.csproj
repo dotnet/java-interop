@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
     <IsPackable>false</IsPackable>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);NO_MARSHAL_MEMBER_BUILDER_SUPPORT;NO_GC_BRIDGE_SUPPORT</DefineConstants>
   </PropertyGroup>
@@ -50,6 +52,7 @@
     <JavaInteropTestJar Include="$(MSBuildThisFileDirectory)java\net\dot\jni\test\AndroidInterface.java" />
     <JavaInteropTestJar Include="$(MSBuildThisFileDirectory)java\net\dot\jni\test\DesugarAndroidInterface$_CC.java" />
     <JavaInteropTestJar Include="$(MSBuildThisFileDirectory)java\net\dot\jni\test\SelfRegistration.java" />
+    <JavaInteropTestJar Include="$(MSBuildThisFileDirectory)java\net\dot\jni\test\Singleton.java" />
     <JavaInteropTestJar Include="$(MSBuildThisFileDirectory)java\net\dot\jni\test\TestType.java" />
   </ItemGroup>
 

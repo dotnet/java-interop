@@ -14,15 +14,40 @@ using Java.Interop.Expressions;
 
 namespace Java.Interop
 {
+	[Experimental ("JI9999")]
+	[Flags]
+	public enum JniSurfacedPeerLocations {
+		ValueManager    = 1 << 0,
+		CurrentThread   = 1 << 1,
+		AllThreads      = 1 << 2,
+		// Everywhere      = ValueManager | CurrentThread | AllThreads,
+		// Can't add, because PublicAPI analyzers report RS0016 + RS0017
+	}
+
 	public class JniSurfacedPeerInfo {
 
 		public  int                             JniIdentityHashCode     {get; private set;}
 		public  WeakReference<IJavaPeerable>    SurfacedPeer            {get; private set;}
 
+		[Experimental ("JI9999")]
+		public  JniSurfacedPeerLocations        Location                {get; internal set;}
+
 		public JniSurfacedPeerInfo (int jniIdentityHashCode, WeakReference<IJavaPeerable> surfacedPeer)
 		{
 			JniIdentityHashCode     = jniIdentityHashCode;
 			SurfacedPeer            = surfacedPeer;
+		}
+
+		public override string ToString ()
+		{
+#pragma warning disable JI9999
+			if (SurfacedPeer.TryGetTarget (out var target) && target != null) {
+				return $"(JniSurfacedPeerInfo JniIdentityHashCode={JniIdentityHashCode} Location={Location} " +
+					$"SurfacedPeer=({target.GetType ().FullName} {target.PeerReference} {target.ToString ()})" +
+					")";
+			}
+			return $"(JniSurfacedPeerInfo JniIdentityHashCode={JniIdentityHashCode} Location={Location})";
+#pragma warning restore JI9999
 		}
 	}
 
@@ -32,7 +57,7 @@ namespace Java.Interop
 			public  JniValueManager?        ValueManager                {get; set;}
 		}
 
-		JniValueManager?                    valueManager;
+		internal    JniValueManager?        valueManager;
 		public  JniValueManager             ValueManager                {
 			get => valueManager ?? throw new NotSupportedException ();
 		}
@@ -51,6 +76,8 @@ namespace Java.Interop
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 			internal const DynamicallyAccessedMemberTypes ConstructorsAndInterfaces = Constructors | DynamicallyAccessedMemberTypes.Interfaces;
+
+			readonly       ConditionalWeakTable<object, JavaProxyObject>   ProxyValues     = new ();
 
 			JniRuntime?             runtime;
 			bool                    disposed;
@@ -77,9 +104,18 @@ namespace Java.Interop
 				disposed = true;
 			}
 
+			public virtual  bool CanCollectPeers                    => false;
+			public virtual  bool CanReleasePeers                    => false;
+			public virtual  bool SupportsPeerableRegistrationScopes => false;
+
 			public abstract void WaitForGCBridgeProcessing ();
 
 			public abstract void CollectPeers ();
+
+			public virtual void ReleasePeers ()
+			{
+				throw new NotImplementedException ();
+			}
 
 			public abstract void AddPeer (IJavaPeerable value);
 
@@ -88,6 +124,102 @@ namespace Java.Interop
 			public abstract void FinalizePeer (IJavaPeerable value);
 
 			public abstract List<JniSurfacedPeerInfo>   GetSurfacedPeers ();
+
+			[Experimental ("JI9999")]
+			public List<JniSurfacedPeerInfo> GetRegistrationScopePeers ()
+				=> GetRegistrationScopePeers (JniSurfacedPeerLocations.ValueManager | JniSurfacedPeerLocations.CurrentThread | JniSurfacedPeerLocations.AllThreads);
+
+			[Experimental ("JI9999")]
+			public List<JniSurfacedPeerInfo> GetRegistrationScopePeers (JniSurfacedPeerLocations locations)
+			{
+				List<JniSurfacedPeerInfo>? peers = null;
+				if (locations.HasFlag (JniSurfacedPeerLocations.ValueManager)) {
+					peers = GetSurfacedPeers ();
+					for (int i = 0; i < peers.Count; ++i) {
+						peers [i].Location  = JniSurfacedPeerLocations.ValueManager;
+					}
+				}
+				peers ??= new ();
+				return AddRegistrationScopePeers (peers, locations);
+			}
+
+			[Experimental ("JI9999")]
+			protected List<JniSurfacedPeerInfo> AddRegistrationScopePeers (List<JniSurfacedPeerInfo> peers, JniSurfacedPeerLocations locations)
+			{
+				if (locations.HasFlag (JniSurfacedPeerLocations.CurrentThread)) {
+					AddPeers (JniEnvironment.CurrentInfo.Scopes, JniSurfacedPeerLocations.CurrentThread);
+				}
+				if (locations.HasFlag (JniSurfacedPeerLocations.AllThreads)) {
+					var skipCurrentThread = locations.HasFlag (JniSurfacedPeerLocations.CurrentThread);
+					foreach (var info in JniEnvironment.Info.Values) {
+						if (skipCurrentThread && info == JniEnvironment.CurrentInfo) {
+							continue;
+						}
+						AddPeers (info.Scopes, JniSurfacedPeerLocations.AllThreads);
+					}
+				}
+
+				return peers;
+
+				void AddPeers (List<PeerableCollection?>? scopes, JniSurfacedPeerLocations location)
+				{
+					if (scopes == null)
+						return;
+
+					foreach (var scope in scopes) {
+						if (scope == null) {
+							continue;
+						}
+						foreach (var p in scope) {
+							var info = new JniSurfacedPeerInfo (p.JniIdentityHashCode, CreateWeakReference (p)) {
+								Location    = location,
+							};
+							peers.Add (info);
+						}
+					}
+				}
+			}
+
+			protected static WeakReference<IJavaPeerable> CreateWeakReference (IJavaPeerable peer) =>
+				new WeakReference<IJavaPeerable> (peer, trackResurrection: true);
+
+
+#pragma warning disable JI9999
+			[Experimental ("JI9999")]
+			protected bool TryAddPeerToRegistrationScope (IJavaPeerable value)
+			{
+				var scope   = JniEnvironment.CurrentInfo.CurrentScope;
+				if (scope == null) {
+					return false;
+				}
+				scope.Add (value);
+				return true;
+			}
+
+			[Experimental ("JI9999")]
+			protected bool TryRemovePeerFromRegistrationScopes (IJavaPeerable value)
+			{
+				var scopes  = JniEnvironment.CurrentInfo.Scopes;
+				if (scopes == null) {
+					return false;
+				}
+				for (int i = scopes.Count - 1; i >= 0; --i) {
+					var scope = scopes [i];
+					if (scope == null) {
+						continue;
+					}
+					if (!scope.Contains (value.JniIdentityHashCode)) {
+						continue;
+					}
+					if (scope.TryGetValue (value.JniIdentityHashCode, out var peer) &&
+							object.ReferenceEquals (peer, value)) {
+						scope.Remove (value);
+						return true;
+					}
+				}
+				return false;
+			}
+#pragma warning restore JI9999
 
 			public abstract void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, ConstructorInfo cinfo, object? []? argumentValues);
 
@@ -209,6 +341,28 @@ namespace Java.Interop
 			}
 
 			public abstract IJavaPeerable? PeekPeer (JniObjectReference reference);
+
+#pragma warning disable JI9999
+			[Experimental ("JI9999")]
+			protected IJavaPeerable? TryPeekPeerFromRegistrationScopes (JniObjectReference reference, int identityHashCode)
+			{
+				var scopes  = JniEnvironment.CurrentInfo.Scopes;
+				if (scopes == null) {
+					return null;
+				}
+				for (int i = scopes.Count - 1; i >= 0; --i) {
+					var scope = scopes [i];
+					if (scope == null) {
+						continue;
+					}
+					var peer    = scope.GetPeerable (reference, identityHashCode);
+					if (peer != null) {
+						return peer;
+					}
+				}
+				return null;
+			}
+#pragma warning restore JI9999
 
 			public object? PeekValue (JniObjectReference reference)
 			{
@@ -712,6 +866,29 @@ namespace Java.Interop
 			{
 				return ProxyValueMarshaler.Instance;
 			}
+
+
+			[return: NotNullIfNotNull ("value")]
+			internal JavaProxyObject? GetProxy (object? value)
+			{
+				if (value == null)
+					return null;
+
+				lock (ProxyValues) {
+					if (ProxyValues.TryGetValue (value, out var proxy))
+						return proxy;
+					proxy = new JavaProxyObject (value);
+					ProxyValues.Add (value, proxy);
+					return proxy;
+				}
+			}
+
+			internal void RemoveProxy (object value)
+			{
+				lock (ProxyValues) {
+					ProxyValues.Remove (value);
+				}
+			}
 		}
 	}
 
@@ -927,8 +1104,8 @@ namespace Java.Interop
 				return new JniValueMarshalerState (s, vm);
 			}
 
-			var p   = JavaProxyObject.GetProxy (value);
-			return new JniValueMarshalerState (p!.PeerReference.NewLocalRef ());
+			var p   = JniRuntime.CurrentRuntime.ValueManager.GetProxy (value);
+			return new JniValueMarshalerState (p.PeerReference.NewLocalRef ());
 		}
 
 		public override void DestroyGenericArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)

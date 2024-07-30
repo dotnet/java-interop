@@ -2,10 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 
 namespace Java.Interop {
@@ -209,6 +212,8 @@ namespace Java.Interop {
 		bool                    disposed;
 		JniRuntime?             runtime;
 
+		List<PeerableCollection?>?          scopes;
+
 		public      int                     LocalReferenceCount     {get; internal set;}
 		public      bool                    WithinNewObjectScope    {get; set;}
 		public      JniRuntime              Runtime {
@@ -242,6 +247,11 @@ namespace Java.Interop {
 		public      bool                    IsValid {
 			get {return Runtime != null && environmentPointer != IntPtr.Zero;}
 		}
+
+		public      List<PeerableCollection?>?
+		                                    Scopes => scopes;
+		public      PeerableCollection?     CurrentScope =>
+			scopes == null ? null : scopes [scopes.Count-1];
 
 		public JniEnvironmentInfo ()
 		{
@@ -293,6 +303,44 @@ namespace Java.Interop {
 			disposed                = true;
 		}
 
+#pragma warning disable JI9999
+		public PeerableCollection? BeginRegistrationScope (JavaPeerableRegistrationScopeCleanup cleanup)
+		{
+			if (cleanup != JavaPeerableRegistrationScopeCleanup.RegisterWithManager &&
+					!Runtime.ValueManager.SupportsPeerableRegistrationScopes) {
+				throw new NotSupportedException ("Peerable registration scopes are not supported by this runtime.");
+			}
+			scopes ??= new List<PeerableCollection?> ();
+			if (cleanup == JavaPeerableRegistrationScopeCleanup.RegisterWithManager) {
+				scopes.Add (null);
+				return null;
+			}
+			var scope = new PeerableCollection (cleanup);
+			scopes.Add (scope);
+			return scope;
+		}
+
+		public void EndRegistrationScope (PeerableCollection? scope)
+		{
+			Debug.Assert (scopes != null);
+			if (scopes == null) {
+				return;
+			}
+
+			for (int i = scopes.Count; i > 0; --i) {
+				var s = scopes [i - 1];
+				if (s == scope) {
+					scopes.RemoveAt (i - 1);
+					break;
+				}
+			}
+			if (scopes.Count == 0) {
+				scopes = null;
+			}
+			scope?.DisposeScope ();
+		}
+#pragma warning restore JI9999
+
 #if FEATURE_JNIENVIRONMENT_SAFEHANDLES
 		internal    List<List<JniLocalReference>>   LocalReferences = new List<List<JniLocalReference>> () {
 			new List<JniLocalReference> (),
@@ -309,5 +357,82 @@ namespace Java.Interop {
 		}
 #endif  // !FEATURE_JNIENVIRONMENT_JI_PINVOKES
 	}
+
+#pragma warning disable JI9999
+	sealed class PeerableCollection : KeyedCollection<int, IJavaPeerable> {
+		public JavaPeerableRegistrationScopeCleanup Cleanup { get; }
+
+		public PeerableCollection (JavaPeerableRegistrationScopeCleanup cleanup)
+		{
+			Cleanup = cleanup;
+		}
+
+		protected override int GetKeyForItem (IJavaPeerable item) => item.JniIdentityHashCode;
+
+		public IJavaPeerable? GetPeerable (JniObjectReference reference, int identityHashCode)
+		{
+			if (!reference.IsValid) {
+				return null;
+			}
+			if (TryGetValue (identityHashCode, out var p) &&
+					JniEnvironment.Types.IsSameObject (reference, p.PeerReference)) {
+				return p;
+			}
+			return null;
+		}
+
+		public void DisposeScope ()
+		{
+			Console.Error.WriteLine ($"# jonp: DisposeScope: {Cleanup}");
+			Debug.Assert (Cleanup != JavaPeerableRegistrationScopeCleanup.RegisterWithManager);
+			switch (Cleanup) {
+				case JavaPeerableRegistrationScopeCleanup.Dispose:
+					List<Exception>?    exceptions = null;
+					foreach (var p in this) {
+						DisposePeer (p, ref exceptions);
+					}
+					Clear ();
+					if (exceptions != null) {
+						throw new AggregateException ("Exceptions while disposing peers.", exceptions);
+					}
+					break;
+				case JavaPeerableRegistrationScopeCleanup.Release:
+					Clear ();
+					break;
+				case JavaPeerableRegistrationScopeCleanup.RegisterWithManager:
+				default:
+					throw new NotSupportedException ($"Unsupported scope cleanup value: {Cleanup}");
+			}
+
+			[SuppressMessage ("Design", "CA1031:Do not catch general exception types",
+					Justification = "Exceptions are bundled into an AggregateException and rethrown")]
+			static void DisposePeer (IJavaPeerable peer, ref List<Exception>? exceptions)
+			{
+				try {
+					Console.Error.WriteLine ($"# jonp: DisposeScope: disposing of: {peer} {peer.PeerReference}");
+					peer.Dispose ();
+				} catch (Exception e) {
+					exceptions ??= new ();
+					exceptions.Add (e);
+					Trace.WriteLine (e);
+				}
+			}
+		}
+
+		public override string ToString ()
+		{
+			var c   = (Collection<IJavaPeerable>) this;
+			var s   = new StringBuilder ();
+			s.Append ("PeerableCollection[").Append (Count).Append ("](");
+			for (int i  = 0; i < Count; ++i ) {
+				s.AppendLine ();
+				var e   = c [i];
+				s.Append ($"  [{i}] hash={e.JniIdentityHashCode} ref={e.PeerReference} type={e.GetType ().ToString ()} value=`{e.ToString ()}`");
+			}
+			s.Append (")");
+			return s.ToString ();
+		}
+	}
+#pragma warning restore JI9999
 }
 

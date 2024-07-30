@@ -240,7 +240,7 @@ namespace Java.InteropTests
 	class MyDisposableObject : JavaObject {
 		internal    const   string  JniTypeName = "net/dot/jni/test/MyDisposableObject";
 
-		bool _isDisposed;
+		internal bool _isDisposed;
 
 		public MyDisposableObject ()
 		{

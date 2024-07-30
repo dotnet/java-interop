@@ -15,6 +15,9 @@ namespace Java.InteropTests {
 		[Test]
 		public void CrossReferences ()
 		{
+			if (!JniEnvironment.Runtime.ValueManager.CanCollectPeers) {
+				Assert.Ignore ();
+			}
 			using (var array = new JavaObjectArray<CrossReferenceBridge> (2)) {
 				WeakReference<CrossReferenceBridge> root = null, child = null;
 				var t = new Thread (() => SetupLinks (array, out root, out child));
