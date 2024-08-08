@@ -28,7 +28,8 @@ and [Architecture][architecture] pages.
 
 `Java.Interop.sln` must first run some "preparatory" tasks before it can be built:
 
-```
+```console
+git submodule update --init --recursive
 dotnet build -t:Prepare
 ```
 
