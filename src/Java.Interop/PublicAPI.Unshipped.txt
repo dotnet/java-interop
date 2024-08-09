@@ -1,3 +1,29 @@
 #nullable enable
 static Java.Interop.JavaPeerableExtensions.TryJavaCast<TResult>(this Java.Interop.IJavaPeerable? self, out TResult? result) -> bool
 static Java.Interop.JavaPeerableExtensions.JavaAs<TResult>(this Java.Interop.IJavaPeerable? self) -> TResult?
+Java.Interop.JavaPeerableRegistrationScope
+Java.Interop.JavaPeerableRegistrationScope.JavaPeerableRegistrationScope() -> void
+Java.Interop.JavaPeerableRegistrationScope.JavaPeerableRegistrationScope(Java.Interop.JavaPeerableRegistrationScopeCleanup cleanup) -> void
+Java.Interop.JavaPeerableRegistrationScope.Dispose() -> void
+Java.Interop.JavaPeerableRegistrationScopeCleanup
+Java.Interop.JavaPeerableRegistrationScopeCleanup.Dispose = 1 -> Java.Interop.JavaPeerableRegistrationScopeCleanup
+Java.Interop.JavaPeerableRegistrationScopeCleanup.RegisterWithManager = 0 -> Java.Interop.JavaPeerableRegistrationScopeCleanup
+Java.Interop.JavaPeerableRegistrationScopeCleanup.Release = 2 -> Java.Interop.JavaPeerableRegistrationScopeCleanup
+Java.Interop.JniSurfacedPeerLocations
+Java.Interop.JniSurfacedPeerLocations.AllThreads = 4 -> Java.Interop.JniSurfacedPeerLocations
+Java.Interop.JniSurfacedPeerLocations.CurrentThread = 2 -> Java.Interop.JniSurfacedPeerLocations
+Java.Interop.JniSurfacedPeerLocations.ValueManager = 1 -> Java.Interop.JniSurfacedPeerLocations
+*REMOVED* Java.Interop.JniSurfacedPeerLocations.Everywhere = Java.Interop.JniSurfacedPeerLocations.AllThreads | Java.Interop.JniSurfacedPeerLocations.CurrentThread | Java.Interop.JniSurfacedPeerLocations.ValueManager -> Java.Interop.JniSurfacedPeerLocations
+Java.Interop.JniRuntime.JniValueManager.AddRegistrationScopePeers(System.Collections.Generic.List<Java.Interop.JniSurfacedPeerInfo!>! peers, Java.Interop.JniSurfacedPeerLocations locations) -> System.Collections.Generic.List<Java.Interop.JniSurfacedPeerInfo!>!
+Java.Interop.JniRuntime.JniValueManager.GetRegistrationScopePeers() -> System.Collections.Generic.List<Java.Interop.JniSurfacedPeerInfo!>!
+Java.Interop.JniRuntime.JniValueManager.GetRegistrationScopePeers(Java.Interop.JniSurfacedPeerLocations locations) -> System.Collections.Generic.List<Java.Interop.JniSurfacedPeerInfo!>!
+Java.Interop.JniRuntime.JniValueManager.TryAddPeerToRegistrationScope(Java.Interop.IJavaPeerable! value) -> bool
+Java.Interop.JniRuntime.JniValueManager.TryPeekPeerFromRegistrationScopes(Java.Interop.JniObjectReference reference, int identityHashCode) -> Java.Interop.IJavaPeerable?
+Java.Interop.JniRuntime.JniValueManager.TryRemovePeerFromRegistrationScopes(Java.Interop.IJavaPeerable! value) -> bool
+static Java.Interop.JniRuntime.JniValueManager.CreateWeakReference(Java.Interop.IJavaPeerable! peer) -> System.WeakReference<Java.Interop.IJavaPeerable!>!
+virtual Java.Interop.JniRuntime.JniValueManager.CanCollectPeers.get -> bool
+virtual Java.Interop.JniRuntime.JniValueManager.CanReleasePeers.get -> bool
+virtual Java.Interop.JniRuntime.JniValueManager.ReleasePeers() -> void
+virtual Java.Interop.JniRuntime.JniValueManager.SupportsPeerableRegistrationScopes.get -> bool
+Java.Interop.JniSurfacedPeerInfo.Location.get -> Java.Interop.JniSurfacedPeerLocations
+override Java.Interop.JniSurfacedPeerInfo.ToString() -> string!

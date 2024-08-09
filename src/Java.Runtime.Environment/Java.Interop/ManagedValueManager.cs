@@ -19,7 +19,18 @@ namespace Java.Interop {
 		{
 		}
 
+		public override bool CanCollectPeers => false;
+		public override bool CanReleasePeers => true;
+
 		public override void CollectPeers ()
+		{
+			if (RegisteredInstances == null)
+				throw new ObjectDisposedException (nameof (ManagedValueManager));
+
+			throw new NotSupportedException ();
+		}
+
+		public override void ReleasePeers ()
 		{
 			if (RegisteredInstances == null)
 				throw new ObjectDisposedException (nameof (ManagedValueManager));
@@ -27,26 +38,11 @@ namespace Java.Interop {
 			var peers = new List<IJavaPeerable> ();
 
 			lock (RegisteredInstances) {
-				foreach (var ps in RegisteredInstances.Values) {
-					foreach (var p in ps) {
-						peers.Add (p);
-					}
-				}
 				RegisteredInstances.Clear ();
 			}
-			List<Exception>? exceptions = null;
-			foreach (var peer in peers) {
-				try {
-					peer.Dispose ();
-				}
-				catch (Exception e) {
-					exceptions = exceptions ?? new List<Exception> ();
-					exceptions.Add (e);
-				}
-			}
-			if (exceptions != null)
-				throw new AggregateException ("Exceptions while collecting peers.", exceptions);
 		}
+
+		public override bool SupportsPeerableRegistrationScopes => true;
 
 		public override void AddPeer (IJavaPeerable value)
 		{
@@ -64,6 +60,13 @@ namespace Java.Interop {
 				value.SetPeerReference (r.NewGlobalRef ());
 				JniObjectReference.Dispose (ref r, JniObjectReferenceOptions.CopyAndDispose);
 			}
+
+#pragma warning disable JI9999
+			if (TryAddPeerToRegistrationScope (value)) {
+				return;
+			}
+#pragma warning restore JI9999
+
 			int key = value.JniIdentityHashCode;
 			lock (RegisteredInstances) {
 				List<IJavaPeerable>? peers;
@@ -120,8 +123,15 @@ namespace Java.Interop {
 
 			if (!reference.IsValid)
 				return null;
-
+			
 			int key = GetJniIdentityHashCode (reference);
+
+#pragma warning disable JI9999
+			var peer = TryPeekPeerFromRegistrationScopes (reference, key);
+			if (peer != null) {
+				return peer;
+			}
+#pragma warning restore JI9999
 
 			lock (RegisteredInstances) {
 				List<IJavaPeerable>? peers;
@@ -146,6 +156,12 @@ namespace Java.Interop {
 
 			if (value == null)
 				throw new ArgumentNullException (nameof (value));
+
+#pragma warning disable JI9999
+			if (TryRemovePeerFromRegistrationScopes (value)) {
+				return;
+			}
+#pragma warning restore JI9999
 
 			int key = value.JniIdentityHashCode;
 			lock (RegisteredInstances) {
@@ -248,7 +264,7 @@ namespace Java.Interop {
 				var peers = new List<JniSurfacedPeerInfo> (RegisteredInstances.Count);
 				foreach (var e in RegisteredInstances) {
 					foreach (var p in e.Value) {
-						peers.Add (new JniSurfacedPeerInfo (e.Key, new WeakReference<IJavaPeerable> (p)));
+						peers.Add (new JniSurfacedPeerInfo (e.Key, CreateWeakReference (p)));
 					}
 				}
 				return peers;
