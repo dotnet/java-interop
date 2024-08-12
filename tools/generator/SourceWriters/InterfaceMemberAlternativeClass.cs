@@ -39,7 +39,9 @@ namespace generator.SourceWriters
 
 			SourceWriterExtensions.AddSupportedOSPlatform (Attributes, iface, opt);
 
-			Attributes.Add (new RegisterAttr (iface.RawJniName, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()) { AcwLast = true });
+			// Place this class in a dummy package that won't conflict the actual interface
+			var register_jni = (opt.RegisterInterfaceAlternativesInOriginalNamespace ? string.Empty : "mono/internal/") + iface.RawJniName;
+			Attributes.Add (new RegisterAttr (register_jni, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()) { AcwLast = true });
 
 			if (should_obsolete)
 				SourceWriterExtensions.AddObsolete (Attributes, $"Use the '{iface.FullName}' type. This class will be removed in a future release.", opt);
@@ -179,7 +181,10 @@ namespace generator.SourceWriters
 			IsPublic = true;
 			IsAbstract = true;
 
-			Attributes.Add (new RegisterAttr (iface.RawJniName, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()));
+			// Place this class in a dummy package that won't conflict the actual interface
+			var register_jni = (opt.RegisterInterfaceAlternativesInOriginalNamespace ? string.Empty : "mono/internal/") + iface.RawJniName;
+			Attributes.Add (new RegisterAttr (register_jni, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()));
+
 			SourceWriterExtensions.AddObsolete (Attributes, $"Use the '{iface.Name.Substring (1)}' type. This type will be removed in a future release.", opt, isError: true);
 
 			Constructors.Add (new ConstructorWriter {

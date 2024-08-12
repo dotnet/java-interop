@@ -209,6 +209,22 @@ namespace generatortests
 		}
 
 		[Test]
+		public void WriteStaticInterfaceMethodWithRegisteredAlternatives ()
+		{
+			options.RegisterInterfaceAlternativesInOriginalNamespace = true;
+
+			// Create an interface with a static method
+			var iface = SupportTypeBuilder.CreateEmptyInterface ("java.code.IMyInterface");
+			iface.Methods.Add (new TestMethod (iface, "DoSomething").SetStatic ());
+
+			iface.Validate (options, new GenericParameterDefinitionList (), new CodeGeneratorContext ());
+
+			generator.WriteType (iface, string.Empty, new GenerationInfo (string.Empty, string.Empty, "MyAssembly"));
+
+			AssertTargetedExpected (nameof (WriteStaticInterfaceMethodWithRegisteredAlternatives), writer.ToString ());
+		}
+
+		[Test]
 		public void WriteStaticInterfaceProperty ()
 		{
 			// Create an interface with a static property

@@ -87,6 +87,7 @@ namespace Xamarin.Android.Binder
 				UseRestrictToAttributes = options.UseRestrictToAttributes,
 				EmitLegacyInterfaceInvokers      = options.EmitLegacyInterfaceInvokers,
 				FixObsoleteOverrides = options.FixObsoleteOverrides,
+				RegisterInterfaceAlternativesInOriginalNamespace = options.RegisterInterfaceAlternativesInOriginalNamespace,
 			};
 			var resolverCache       = new TypeDefinitionCache ();
 
