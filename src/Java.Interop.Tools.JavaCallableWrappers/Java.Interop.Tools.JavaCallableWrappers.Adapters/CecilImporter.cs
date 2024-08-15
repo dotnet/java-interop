@@ -14,6 +14,8 @@ namespace Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
 public class CecilImporter
 {
+	static IList<string> android_manifest_types = ["Android.App.Activity", "Android.App.Application", "Android.App.Service", "Android.Content.BroadcastReceiver", "Android.Content.ContentProvider"];
+
 	// Don't expose internal "outerType" parameter to the public API
 	public static CallableWrapperType CreateType (TypeDefinition type, IMetadataResolver resolver, CallableWrapperReaderOptions? options = null)
 		=> CreateType (type, resolver, options, null);
@@ -38,11 +40,7 @@ public class CecilImporter
 		options ??= new CallableWrapperReaderOptions ();
 
 		if (string.IsNullOrEmpty (package) &&
-				(type.IsSubclassOf ("Android.App.Activity", resolver) ||
-				 type.IsSubclassOf ("Android.App.Application", resolver) ||
-				 type.IsSubclassOf ("Android.App.Service", resolver) ||
-				 type.IsSubclassOf ("Android.Content.BroadcastReceiver", resolver) ||
-				 type.IsSubclassOf ("Android.Content.ContentProvider", resolver)))
+				(type.IsSubclassOfAny (android_manifest_types, resolver, out var _)))
 			Diagnostic.Error (4203, CecilExtensions.LookupSource (type), Localization.Resources.JavaCallableWrappers_XA4203, jniName);
 
 		var cwt = new CallableWrapperType (name, package, type.GetPartialAssemblyQualifiedName (resolver)) {
@@ -124,7 +122,9 @@ public class CecilImporter
 			type,
 		};
 
-		foreach (var bt in type.GetBaseTypes (resolver)) {
+		TypeDefinition? bt = type;
+
+		while ((bt = bt.GetBaseType (resolver)) != null) {
 			ctorTypes.Add (bt);
 			var rattr = CecilExtensions.GetTypeRegistrationAttributes (bt).FirstOrDefault ();
 

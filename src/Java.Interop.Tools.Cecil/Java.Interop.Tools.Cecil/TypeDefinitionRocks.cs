@@ -65,7 +65,10 @@ namespace Java.Interop.Tools.Cecil {
 			var d = resolver.Resolve (c);
 			if (d == null)
 				return false;
-			foreach (var t in d.GetTypeAndBaseTypes (resolver)) {
+
+			TypeDefinition? t = d;
+
+			while (t is not null) {
 				if (type.FullName == t.FullName)
 					return true;
 				foreach (var ifaceImpl in t.Interfaces) {
@@ -73,6 +76,8 @@ namespace Java.Interop.Tools.Cecil {
 					if (IsAssignableFrom (type, i, resolver))
 						return true;
 				}
+
+				t = t.GetBaseType (resolver);
 			}
 			return false;
 		}
@@ -84,20 +89,44 @@ namespace Java.Interop.Tools.Cecil {
 			IsSubclassOf (type, typeName, (IMetadataResolver) cache);
 		public static bool IsSubclassOf (this TypeDefinition type, string typeName, IMetadataResolver resolver)
 		{
-			foreach (var t in type.GetTypeAndBaseTypes (resolver)) {
+			TypeDefinition? t = type;
+
+			while (t is not null) {
 				if (t.FullName == typeName) {
 					return true;
 				}
+
+				t = t.GetBaseType (resolver);
 			}
+			return false;
+		}
+
+		public static bool IsSubclassOfAny (this TypeDefinition type, IList<string> typeNames, IMetadataResolver resolver, out string? subclassType)
+		{
+			subclassType = null;
+
+			TypeDefinition? t = type;
+
+			while (t is not null) {
+				if (typeNames.Contains (t.FullName)) {
+					subclassType = t.FullName;
+					return true;
+				}
+
+				t = t.GetBaseType (resolver);
+			}
+
 			return false;
 		}
 
 		public static bool HasJavaPeer (this TypeDefinition type, IMetadataResolver resolver)
 		{
-			if (type.IsInterface && type.ImplementsInterface ("Java.Interop.IJavaPeerable", resolver))
-				return true;
+			if (type.IsInterface)
+				return type.ImplementsInterface ("Java.Interop.IJavaPeerable", resolver);
 
-			foreach (var t in type.GetTypeAndBaseTypes (resolver)) {
+			TypeDefinition? t = type;
+
+			while (t is not null) {
 				switch (t.FullName) {
 					case "Java.Lang.Object":
 					case "Java.Lang.Throwable":
@@ -107,6 +136,8 @@ namespace Java.Interop.Tools.Cecil {
 					default:
 						break;
 				}
+
+				t = t.GetBaseType (resolver);
 			}
 			return false;
 		}
@@ -119,13 +150,36 @@ namespace Java.Interop.Tools.Cecil {
 
 		public static bool ImplementsInterface (this TypeDefinition type, string interfaceName, IMetadataResolver resolver)
 		{
-			foreach (var t in type.GetTypeAndBaseTypes (resolver)) {
+			TypeDefinition? t = type;
+
+			while (t is not null) {
 				foreach (var i in t.Interfaces) {
 					if (i.InterfaceType.FullName == interfaceName) {
 						return true;
 					}
 				}
+
+				t = t.GetBaseType (resolver);
 			}
+			return false;
+		}
+
+		public static bool ImplementsAnyInterface (this TypeDefinition type, IList<string> interfaceNames, IMetadataResolver resolver, out string? implementedInterface)
+		{
+			implementedInterface = null;
+			TypeDefinition? t = type;
+
+			while (t is not null) {
+				foreach (var i in t.Interfaces) {
+					if (interfaceNames.Contains (i.InterfaceType.FullName)) {
+						implementedInterface = i.InterfaceType.FullName;
+						return true;
+					}
+				}
+
+				t = t.GetBaseType (resolver);
+			}
+
 			return false;
 		}
 

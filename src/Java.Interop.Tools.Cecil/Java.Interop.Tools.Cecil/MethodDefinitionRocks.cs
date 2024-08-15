@@ -20,7 +20,9 @@ namespace Java.Interop.Tools.Cecil {
 			if (method.IsStatic || method.IsNewSlot || !method.IsVirtual)
 				return method;
 
-			foreach (var baseType in method.DeclaringType.GetBaseTypes (resolver)) {
+			TypeDefinition? baseType = method.DeclaringType;
+
+			while ((baseType = baseType.GetBaseType (resolver)) != null) {
 				foreach (var m in baseType.Methods) {
 					if (!m.IsConstructor &&
 							m.Name == method.Name &&

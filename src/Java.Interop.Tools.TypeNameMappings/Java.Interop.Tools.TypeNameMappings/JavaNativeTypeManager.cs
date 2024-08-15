@@ -438,7 +438,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		public static bool IsApplication (TypeDefinition type, IMetadataResolver resolver)
 		{
-			return type.GetBaseTypes (resolver).Any (b => b.FullName == "Android.App.Application");
+			return type.IsSubclassOf ("Android.App.Application", resolver);
 		}
 
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
@@ -449,7 +449,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		public static bool IsInstrumentation (TypeDefinition type, IMetadataResolver resolver)
 		{
-			return type.GetBaseTypes (resolver).Any (b => b.FullName == "Android.App.Instrumentation");
+			return type.IsSubclassOf ("Android.App.Instrumentation", resolver);
 		}
 
 		// moved from JavaTypeInfo
@@ -529,6 +529,8 @@ namespace Java.Interop.Tools.TypeNameMappings
 			return x;
 		}
 
+		static IList<string> java_interface_types = ["Android.Runtime.IJavaObject", "Java.Interop.IJavaPeerable"];
+
 		static string? ToJniName (TypeDefinition type, ExportParameterKind exportKind, IMetadataResolver cache)
 		{
 			if (type == null)
@@ -540,8 +542,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 			if (type.FullName == "System.String")
 				return "java/lang/String";
 
-			if (!type.ImplementsInterface ("Android.Runtime.IJavaObject", cache) && 
-					!type.ImplementsInterface ("Java.Interop.IJavaPeerable", cache)) {
+			if (!type.ImplementsAnyInterface (java_interface_types, cache, out var _)) {
 				return GetSpecialExportJniType (type.FullName, exportKind);
 			}
 
@@ -734,9 +735,10 @@ namespace Java.Interop.Tools.TypeNameMappings
 			if (!type.DeclaringType.HasJavaPeer (cache))
 				return false;
 
-			foreach (var baseType in type.GetBaseTypes (cache)) {
-				if (baseType == null)
-					continue;
+			TypeDefinition? baseType = type;
+
+			while ((baseType = baseType.GetBaseType (cache)) != null) {
+
 				if (!baseType.AnyCustomAttributes (typeof (RegisterAttribute)))
 					continue;
 
