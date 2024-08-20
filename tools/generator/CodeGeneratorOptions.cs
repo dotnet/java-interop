@@ -57,7 +57,6 @@ namespace Xamarin.Android.Binder
 		public bool		    FixObsoleteOverrides { get; set;} = true;
 		public bool		    UseLegacyJavaResolver { get; set; }
 		public bool			UseObsoletedOSPlatformAttributes { get; set; }
-		public bool		    RegisterInterfaceAlternativesInOriginalNamespace { get; set; }
 
 		public XmldocStyle		    XmldocStyle { get; set; } = XmldocStyle.IntelliSense;
 
@@ -117,7 +116,6 @@ namespace Xamarin.Android.Binder
 						opts.UseObsoletedOSPlatformAttributes = v?.Contains ("obsoleted-platform-attributes") == true;
 						opts.UseRestrictToAttributes = v?.Contains ("restrict-to-attributes") == true;
 						opts.FixObsoleteOverrides = v?.Contains ("do-not-fix-obsolete-overrides") == false;
-						opts.RegisterInterfaceAlternativesInOriginalNamespace = v?.Contains ("register-interface-alternatives-original-ns") == true;
 						}},
 				{ "preserve-enums",
 					"For internal use.",
