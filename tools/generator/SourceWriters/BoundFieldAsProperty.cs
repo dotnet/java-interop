@@ -16,6 +16,7 @@ namespace generator.SourceWriters
 	{
 		readonly Field field;
 		readonly CodeGenerationOptions opt;
+		readonly FieldWriter? cached_field;
 
 		public BoundFieldAsProperty (GenBase type, Field field, CodeGenerationOptions opt)
 		{
@@ -59,10 +60,23 @@ namespace generator.SourceWriters
 
 			if (!field.IsConst)
 				HasSet = true;
+
+			// This is considerably harder to support if we don't have NRT, due to the
+			// differences in handling nullable value and reference types.
+			if (field.IsConst && opt.SupportNullableReferenceTypes)
+				cached_field = new FieldWriter {
+					Name = field.CachedMemberName,
+					Type = new TypeReferenceWriter (fieldType.TrimEnd ('?')) { Nullable = true },
+					IsStatic = true,
+					IsPrivate = true,
+					UseExplicitPrivateKeyword = type is InterfaceGen,
+				};
 		}
 
 		public override void Write (CodeWriter writer)
 		{
+			cached_field?.Write (writer);
+
 			// This is just a temporary hack to write the [GeneratedEnum] attribute before the // Metadata.xml
 			// comment so that we are 100% equal to pre-refactor.
 			var generated_attr = Attributes.OfType<GeneratedEnumAttr> ().FirstOrDefault ();
@@ -82,6 +96,13 @@ namespace generator.SourceWriters
 
 		protected override void WriteGetterBody (CodeWriter writer)
 		{
+			var cached_field_type = cached_field is not null ? new TypeReferenceWriter (cached_field.Type.Namespace, cached_field.Type.Name) : null;
+
+			if (cached_field is not null) {
+				writer.WriteLine ($"if ({field.CachedMemberName} != null) return ({cached_field_type}){field.CachedMemberName};");
+				writer.WriteLine ();
+			}
+
 			writer.WriteLine ($"const string __id = \"{field.JavaName}.{field.Symbol.JniName}\";");
 			writer.WriteLine ();
 
@@ -93,24 +114,27 @@ namespace generator.SourceWriters
 
 			writer.WriteLine ($"var __v = {field.Symbol.ReturnCast}_members.{indirect}.{invoke} (__id{(field.IsStatic ? "" : ", this")});");
 
+			var cache_setter = cached_field is not null ? $"({PropertyType})({field.CachedMemberName} = " : "";
+			var cache_setter_end = cached_field is not null ? ")" : "";
+
 			if (opt.CodeGenerationTarget == CodeGenerationTarget.JavaInterop1) {
 				if (field.Symbol.NativeType == field.Symbol.FullName) {
-					writer.WriteLine ("return __v;");
+					writer.WriteLine ($"return {cache_setter}__v{cache_setter_end};");
 					return;
 				}
-				writer.Write ("return global::Java.Interop.JniEnvironment.Runtime.ValueManager.GetValue<");
+				writer.Write ($"return {cache_setter}global::Java.Interop.JniEnvironment.Runtime.ValueManager.GetValue<");
 				PropertyType.WriteTypeReference (writer);
 				writer.Write (">(ref __v, JniObjectReferenceOptions.Copy)");
-				writer.WriteLine (";");
+				writer.WriteLine ($"{cache_setter_end};");
 				return;
 			}
 
 			if (field.Symbol.IsArray) {
-				writer.WriteLine ($"return global::Android.Runtime.JavaArray<{opt.GetOutputName (field.Symbol.ElementType)}>.FromJniHandle (__v.Handle, JniHandleOwnership.TransferLocalRef);");
+				writer.WriteLine ($"return {cache_setter}global::Android.Runtime.JavaArray<{opt.GetOutputName (field.Symbol.ElementType)}>.FromJniHandle (__v.Handle, JniHandleOwnership.TransferLocalRef){cache_setter_end};");
 			} else if (field.Symbol.NativeType != field.Symbol.FullName) {
-				writer.WriteLine ($"return {field.Symbol.ReturnCast}{(field.Symbol.FromNative (opt, invokeType != "Object" ? "__v" : "__v.Handle", true) + opt.GetNullForgiveness (field))};");
+				writer.WriteLine ($"return {cache_setter}{field.Symbol.ReturnCast}{(field.Symbol.FromNative (opt, invokeType != "Object" ? "__v" : "__v.Handle", true) + opt.GetNullForgiveness (field))}{cache_setter_end};");
 			} else {
-				writer.WriteLine ("return __v;");
+				writer.WriteLine ($"return {cache_setter}__v{cache_setter_end};");
 			}
 		}
 

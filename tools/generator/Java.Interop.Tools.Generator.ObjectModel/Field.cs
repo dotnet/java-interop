@@ -42,6 +42,8 @@ namespace MonoDroid.Generation
 
 		public bool NeedsProperty => !IsStatic || !IsFinal || string.IsNullOrEmpty (Value) || Symbol.IsArray || !primitive_types.Contains (Symbol.JavaName);
 
+		public string CachedMemberName => $"_{Name}_cache";
+
 		public bool Validate (CodeGenerationOptions opt, GenericParameterDefinitionList type_params, CodeGeneratorContext context)
 		{
 			Symbol = opt.SymbolTable.Lookup (TypeName, type_params);

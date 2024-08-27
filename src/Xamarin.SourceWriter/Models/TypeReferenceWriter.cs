@@ -40,12 +40,17 @@ namespace Xamarin.SourceWriter
 
 		public virtual void WriteTypeReference (CodeWriter writer)
 		{
-			if (Namespace.HasValue ())
-				writer.Write ($"{Namespace}.{Name}{NullableOperator} ");
-			else
-				writer.Write ($"{Name}{NullableOperator} ");
+			writer.Write ($"{ToString ()} ");
 		}
 
 		string NullableOperator => Nullable ? "?" : string.Empty;
+
+		public override string ToString ()
+		{
+			if (Namespace.HasValue ())
+				return $"{Namespace}.{Name}{NullableOperator}";
+
+			return $"{Name}{NullableOperator}";
+		}
 	}
 }
