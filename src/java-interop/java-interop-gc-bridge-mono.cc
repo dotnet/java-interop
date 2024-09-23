@@ -33,7 +33,6 @@ typedef struct MonoJavaGCBridgeInfo {
 	MonoClassField     *handle;
 	MonoClassField     *handle_type;
 	MonoClassField     *refs_added;
-	MonoClassField     *weak_handle;
 } MonoJavaGCBridgeInfo;
 
 #define NUM_GC_BRIDGE_TYPES     (4)
@@ -354,10 +353,9 @@ java_interop_gc_bridge_register_bridgeable_type (
 	info->handle            = mono_class_get_field_from_name (info->klass, const_cast<char*> ("handle"));
 	info->handle_type       = mono_class_get_field_from_name (info->klass, const_cast<char*> ("handle_type"));
 	info->refs_added        = mono_class_get_field_from_name (info->klass, const_cast<char*> ("refs_added"));
-	info->weak_handle       = mono_class_get_field_from_name (info->klass, const_cast<char*> ("weak_handle"));
 
 	if (info->klass == NULL || info->handle == NULL || info->handle_type == NULL ||
-			info->refs_added == NULL || info->weak_handle == NULL)
+			info->refs_added == NULL)
 		return -1;
 	bridge->num_bridge_types++;
 	return 0;
