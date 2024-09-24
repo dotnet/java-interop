@@ -22,6 +22,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Java.Interop {
 
@@ -80,6 +81,25 @@ namespace Java.Interop {
 				}
 			}
 
+			public unsafe <#= returnType.ReturnType #> InvokeAbstract<#= returnType.ManagedType #>Method (JniMemberInfoLookup member, IJavaPeerable self, ReadOnlySpan<JniArgumentValue> parameters)
+			{
+				JniPeerMembers.AssertSelf (self);
+
+				try {
+					var m   = GetMethodInfo (member);
+					fixed (JniArgumentValue* params_ptr = &MemoryMarshal.GetReference (parameters)) {
+						if (TryInvoke<#= returnType.ManagedType #>StaticRedirect (m, self, params_ptr<#= byRefParamDecl #>)) {
+							<#= returnByRefParam #>;
+						}
+						<#= setByRefParam #>JniEnvironment.InstanceMethods.Call<#= returnType.JniCallType #>Method (self.PeerReference, m, params_ptr);
+						<#= returnByRefParam #>;
+					}
+				}
+				finally {
+					GC.KeepAlive (self);
+				}
+			}
+
 			public unsafe <#= returnType.ReturnType #> InvokeVirtual<#= returnType.ManagedType #>Method (string encodedMember, IJavaPeerable self, JniArgumentValue* parameters)
 			{
 				JniPeerMembers.AssertSelf (self);
@@ -109,6 +129,37 @@ namespace Java.Interop {
 				}
 			}
 
+			public unsafe <#= returnType.ReturnType #> InvokeVirtual<#= returnType.ManagedType #>Method (JniMemberInfoLookup member, IJavaPeerable self, ReadOnlySpan<JniArgumentValue> parameters)
+			{
+				JniPeerMembers.AssertSelf (self);
+
+				try {
+					var declaringType   = DeclaringType;
+					fixed (JniArgumentValue* params_ptr = &MemoryMarshal.GetReference (parameters)) {
+						if (Members.UsesVirtualDispatch (self, declaringType)) {
+							var m   = GetMethodInfo (member);
+							if (TryInvoke<#= returnType.ManagedType #>StaticRedirect (m, self, params_ptr<#= byRefParamDecl #>)) {
+								<#= returnByRefParam #>;
+							}
+							<#= setByRefParam #>JniEnvironment.InstanceMethods.Call<#= returnType.JniCallType #>Method (self.PeerReference, m, params_ptr);
+							<#= returnByRefParam #>;
+						}
+						var j = Members.GetPeerMembers (self);
+						var n = j.InstanceMethods.GetMethodInfo (member);
+						do {
+							if (TryInvoke<#= returnType.ManagedType #>StaticRedirect (n, self, params_ptr<#= byRefParamDecl #>)) {
+								<#= returnByRefParam #>;
+							}
+							<#= setByRefParam #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, j.JniPeerType.PeerReference, n, params_ptr);
+							<#= returnByRefParam #>;
+						} while (false);
+					}
+				}
+				finally {
+					GC.KeepAlive (self);
+				}
+			}
+
 			public unsafe <#= returnType.ReturnType #> InvokeNonvirtual<#= returnType.ManagedType #>Method (string encodedMember, IJavaPeerable self, JniArgumentValue* parameters)
 			{
 				JniPeerMembers.AssertSelf (self);
@@ -120,6 +171,25 @@ namespace Java.Interop {
 					}
 					<#= setByRefParam #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, JniPeerType.PeerReference, m, parameters);
 					<#= returnByRefParam #>;
+				}
+				finally {
+					GC.KeepAlive (self);
+				}
+			}
+
+			public unsafe <#= returnType.ReturnType #> InvokeNonvirtual<#= returnType.ManagedType #>Method (JniMemberInfoLookup member, IJavaPeerable self, ReadOnlySpan<JniArgumentValue> parameters)
+			{
+				JniPeerMembers.AssertSelf (self);
+
+				var m   = GetMethodInfo (member);
+				try {
+					fixed (JniArgumentValue* params_ptr = &MemoryMarshal.GetReference (parameters)) {
+						if (TryInvoke<#= returnType.ManagedType #>StaticRedirect (m, self, params_ptr<#= byRefParamDecl #>)) {
+							<#= returnByRefParam #>;
+						}
+						<#= setByRefParam #>JniEnvironment.InstanceMethods.CallNonvirtual<#= returnType.JniCallType #>Method (self.PeerReference, JniPeerType.PeerReference, m, params_ptr);
+						<#= returnByRefParam #>;
+					}
 				}
 				finally {
 					GC.KeepAlive (self);

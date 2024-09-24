@@ -357,6 +357,12 @@ namespace Java.Interop.PerformanceTests {
 				}
 				tp.Stop ();
 
+				var tl = Stopwatch.StartNew ();
+				for (int i = 0; i < count; ++i) {
+					var s = o.Timing_ToString_JniPeerMembers_Lookup ();
+					JniObjectReference.Dispose (ref s);
+				}
+				tl.Stop ();
 
 				var vtt = Stopwatch.StartNew ();
 				for (int i = 0; i < count; ++i) {
@@ -370,6 +376,12 @@ namespace Java.Interop.PerformanceTests {
 				}
 				vti.Stop ();
 
+				var vtl = Stopwatch.StartNew ();
+				for (int i = 0; i < count; ++i) {
+					o.Timing_Lookup_VirtualIntMethod_Marshal1Args (i);
+				}
+				vtl.Stop ();
+
 
 				Console.WriteLine ("Method Lookup + Invoke Timing:");
 				Console.WriteLine ("\t   Traditional: {0}", tt.Elapsed);
@@ -377,9 +389,11 @@ namespace Java.Interop.PerformanceTests {
 				Console.WriteLine ("\t  Dict w/ lock: {0}", td.Elapsed);
 				Console.WriteLine ("\tConcurrentDict: {0}", tc.Elapsed);
 				Console.WriteLine ("\tJniPeerMembers: {0}", tp.Elapsed);
+				Console.WriteLine ("\t    JPM+Lookup: {0}", tl.Elapsed);
 				Console.WriteLine ();
 				Console.WriteLine ("\t      (I)I virtual+traditional: {0}", vtt.Elapsed);
 				Console.WriteLine ("\t   (I)I virtual+JniPeerMembers: {0}", vti.Elapsed);
+				Console.WriteLine ("\t       (I)I virtual+JPM+Lookup: {0}", vtl.Elapsed);
 			}
 			using (var o = new DerivedJavaTiming ()) {
 				var ntt = Stopwatch.StartNew ();
@@ -399,6 +413,37 @@ namespace Java.Interop.PerformanceTests {
 
 			total.Stop ();
 			Console.WriteLine ("## {0} Timing: {1}", nameof (MethodLookupTiming), total.Elapsed);
+		}
+	}
+
+	[TestFixture]
+	class JniFieldLookupTiming : Java.InteropTests.JavaVMFixture {
+
+		[Test]
+		public void FieldLookupTiming ()
+		{
+			const string JniType = "com/xamarin/interop/performance/JavaTiming";
+			const string EncodedMember = "instanceIntField.I";
+			const int count = 10000;
+
+			var strLookupTime = Stopwatch.StartNew ();
+			for (int i = 0; i < count; ++i) {
+				var p = new JniPeerMembers (JniType, typeof (JavaTiming));
+				var f = p.InstanceFields.GetFieldInfo (EncodedMember);
+			}
+			strLookupTime.Stop ();
+
+			var encLookupTime = Stopwatch.StartNew ();
+			for (int i = 0; i < count; ++i) {
+				var p = new JniPeerMembers (JniType, typeof (JavaTiming));
+				var lookup = new JniMemberInfoLookup (EncodedMember, "instanceIntField"u8, "I"u8);
+				var f = p.InstanceFields.GetFieldInfo (lookup);
+			}
+			encLookupTime.Stop ();
+
+			Console.WriteLine ($"# {nameof (FieldLookupTiming)} Timing: looking up JavaTiming.instanceIntField {count} times");
+			Console.WriteLine ($"#   .InstanceMethods.GetFieldInfo(string):              {strLookupTime.Elapsed}");
+			Console.WriteLine ($"#   .InstanceMethods.GetFieldInfo(JniMemberInfoLookup): {encLookupTime.Elapsed}");
 		}
 	}
 
