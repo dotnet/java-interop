@@ -33,7 +33,6 @@ typedef struct MonoJavaGCBridgeInfo {
 	MonoClassField     *handle;
 	MonoClassField     *handle_type;
 	MonoClassField     *refs_added;
-	MonoClassField     *weak_handle;
 } MonoJavaGCBridgeInfo;
 
 #define NUM_GC_BRIDGE_TYPES     (4)
@@ -59,10 +58,6 @@ struct JavaInteropGCBridge {
 
 	jobject                             Runtime_instance;
 	jmethodID                           Runtime_gc;
-
-	jclass                              WeakReference_class;
-	jmethodID                           WeakReference_init;
-	jmethodID                           WeakReference_get;
 
 	jclass                              GCUserPeerable_class;
 	jmethodID                           GCUserPeerable_add;
@@ -106,12 +101,9 @@ java_interop_gc_bridge_destroy (JavaInteropGCBridge *bridge)
 	JNIEnv *env = ensure_jnienv (bridge);
 	if (env != NULL) {
 		env->DeleteGlobalRef (bridge->Runtime_instance);
-		env->DeleteGlobalRef (bridge->WeakReference_class);
 		env->DeleteGlobalRef (bridge->GCUserPeerable_class);
 
-		bridge->Runtime_instance    = NULL;
-		bridge->WeakReference_class = NULL;
-
+		bridge->Runtime_instance        = NULL;
 		bridge->GCUserPeerable_class    = NULL;
 	}
 
@@ -277,13 +269,6 @@ java_interop_gc_bridge_new (JavaVM *jvm)
 		env->DeleteLocalRef (Runtime_class);
 	}
 
-	jclass      WeakReference_class     = env->FindClass ("java/lang/ref/WeakReference");
-	if (WeakReference_class != NULL) {
-		bridge.WeakReference_init       = env->GetMethodID (WeakReference_class, "<init>", "(Ljava/lang/Object;)V");
-		bridge.WeakReference_get        = env->GetMethodID (WeakReference_class, "get", "()Ljava/lang/Object;");
-		bridge.WeakReference_class      = static_cast<jclass>(lref_to_gref (env, WeakReference_class));
-	}
-
 	jclass      GCUserPeerable_class    = env->FindClass ("net/dot/jni/GCUserPeerable");
 	if (GCUserPeerable_class) {
 		bridge.GCUserPeerable_add       = env->GetMethodID (GCUserPeerable_class, "jiAddManagedReference",      "(Ljava/lang/Object;)V");
@@ -295,8 +280,7 @@ java_interop_gc_bridge_new (JavaVM *jvm)
 	JavaInteropGCBridge *p  = static_cast<JavaInteropGCBridge*>(calloc (1, sizeof (JavaInteropGCBridge)));
 
 	if (p == NULL || bridge.jvm == NULL ||
-			bridge.Runtime_instance == NULL || bridge.Runtime_gc == NULL ||
-			bridge.WeakReference_class == NULL || bridge.WeakReference_init == NULL || bridge.WeakReference_get == NULL) {
+			bridge.Runtime_instance == NULL || bridge.Runtime_gc == NULL) {
 		java_interop_gc_bridge_destroy (&bridge);
 		free (p);
 		return NULL;
@@ -369,10 +353,9 @@ java_interop_gc_bridge_register_bridgeable_type (
 	info->handle            = mono_class_get_field_from_name (info->klass, const_cast<char*> ("handle"));
 	info->handle_type       = mono_class_get_field_from_name (info->klass, const_cast<char*> ("handle_type"));
 	info->refs_added        = mono_class_get_field_from_name (info->klass, const_cast<char*> ("refs_added"));
-	info->weak_handle       = mono_class_get_field_from_name (info->klass, const_cast<char*> ("weak_handle"));
 
 	if (info->klass == NULL || info->handle == NULL || info->handle_type == NULL ||
-			info->refs_added == NULL || info->weak_handle == NULL)
+			info->refs_added == NULL)
 		return -1;
 	bridge->num_bridge_types++;
 	return 0;
@@ -772,72 +755,8 @@ get_gc_bridge_info_for_object (JavaInteropGCBridge *bridge, MonoObject *object)
 	return get_gc_bridge_info_for_class (bridge, mono_object_get_class (object));
 }
 
-typedef mono_bool (*MonodroidGCTakeRefFunc) (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id);
-
-static  MonodroidGCTakeRefFunc  take_global_ref;
-static  MonodroidGCTakeRefFunc  take_weak_global_ref;
-
 static mono_bool
-take_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
-{
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
-	if (bridge_info == NULL)
-		return 0;
-
-	jobject weak;
-	mono_field_get_value (obj, bridge_info->weak_handle, &weak);
-
-	jobject handle  = env->CallObjectMethod (weak, bridge->WeakReference_get);
-	log_gref (bridge, "*try_take_global_2_1 obj=%p -> wref=%p handle=%p\n", obj, weak, handle);
-
-	if (handle) {
-		jobject h   = env->NewGlobalRef (handle);
-		env->DeleteLocalRef (handle);
-		handle      = h;
-		java_interop_gc_bridge_gref_log_new (bridge, weak, get_object_ref_type (env, weak),
-				handle, get_object_ref_type (env, handle), thread_name, thread_id, "take_global_ref_java");
-	}
-	java_interop_gc_bridge_weak_gref_log_delete (bridge, weak, get_object_ref_type (env, weak), thread_name, thread_id, "take_global_ref_java");
-	env->DeleteGlobalRef (weak);
-	weak        = NULL;
-	mono_field_set_value (obj, bridge_info->weak_handle, &weak);
-
-	mono_field_set_value (obj, bridge_info->handle, &handle);
-
-	int type    = JNIGlobalRefType;
-	mono_field_set_value (obj, bridge_info->handle_type, &type);
-
-	return handle != NULL;
-}
-
-static mono_bool
-take_weak_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
-{
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
-	if (bridge_info == NULL)
-		return 0;
-
-	jobject handle;
-	mono_field_get_value (obj, bridge_info->handle, &handle);
-
-	jobject weaklocal   = env->NewObject (bridge->WeakReference_class, bridge->WeakReference_init, handle);
-	jobject weakglobal  = env->NewGlobalRef (weaklocal);
-	env->DeleteLocalRef (weaklocal);
-
-	log_gref (bridge, "*take_weak_2_1 obj=%p -> wref=%p handle=%p\n", obj, weakglobal, handle);
-	java_interop_gc_bridge_weak_gref_log_new (bridge, handle, get_object_ref_type (env, handle),
-			weakglobal, get_object_ref_type (env, weakglobal), thread_name, thread_id, "take_weak_global_ref_2_1_compat");
-
-	java_interop_gc_bridge_gref_log_delete (bridge, handle, get_object_ref_type (env, handle), thread_name, thread_id, "take_weak_global_ref_2_1_compat");
-	env->DeleteGlobalRef (handle);
-
-	mono_field_set_value (obj, bridge_info->weak_handle, &weakglobal);
-
-	return 1;
-}
-
-static mono_bool
-take_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
+take_global_ref (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
 {
 	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
 	if (bridge_info == NULL)
@@ -853,11 +772,11 @@ take_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, 
 		java_interop_gc_bridge_gref_log_new (bridge, weak, get_object_ref_type (env, weak),
 				handle, get_object_ref_type (env, handle),
 				thread_name, thread_id,
-				"take_global_ref_jni");
+				"take_global_ref");
 	}
 
 	java_interop_gc_bridge_weak_gref_log_delete (bridge, weak, 'W',
-			thread_name, thread_id, "take_global_ref_jni");
+			thread_name, thread_id, "take_global_ref");
 	env->DeleteWeakGlobalRef (weak);
 
 	mono_field_set_value (obj, bridge_info->handle, &handle);
@@ -868,7 +787,7 @@ take_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, 
 }
 
 static mono_bool
-take_weak_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
+take_weak_global_ref (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
 {
 	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
 	if (bridge_info == NULL)
@@ -882,10 +801,10 @@ take_weak_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *
 	jobject weak    = env->NewWeakGlobalRef (handle);
 	java_interop_gc_bridge_weak_gref_log_new (bridge, handle, get_object_ref_type (env, handle),
 			weak, get_object_ref_type (env, weak),
-			thread_name, thread_id, "take_weak_global_ref_jni");
+			thread_name, thread_id, "take_weak_global_ref");
 
 	java_interop_gc_bridge_gref_log_delete (bridge, handle, get_object_ref_type (env, handle),
-			thread_name, thread_id, "take_weak_global_ref_jni");
+			thread_name, thread_id, "take_weak_global_ref");
 	env->DeleteGlobalRef (handle);
 
 	mono_field_set_value (obj, bridge_info->handle, &weak);
@@ -1272,7 +1191,7 @@ gc_cross_references (int num_sccs, MonoGCBridgeSCC **sccs, int num_xrefs, MonoGC
 }
 
 int
-java_interop_gc_bridge_register_hooks (JavaInteropGCBridge *bridge, int weak_ref_kind)
+java_interop_gc_bridge_register_hooks (JavaInteropGCBridge *bridge, [[maybe_unused]] int weak_ref_kind)
 {
 	if (bridge == NULL)
 		return -1;
@@ -1283,23 +1202,6 @@ java_interop_gc_bridge_register_hooks (JavaInteropGCBridge *bridge, int weak_ref
 
 	MonoGCBridgeCallbacks   bridge_cbs;
 	memset (&bridge_cbs, 0, sizeof (bridge_cbs));
-
-	switch (weak_ref_kind) {
-	case JAVA_INTEROP_GC_BRIDGE_USE_WEAK_REFERENCE_KIND_JAVA:
-		message = "Using java.lang.ref.WeakReference for JNI Weak References.";
-		take_global_ref         = take_global_ref_java;
-		take_weak_global_ref    = take_weak_global_ref_java;
-		break;
-	case JAVA_INTEROP_GC_BRIDGE_USE_WEAK_REFERENCE_KIND_JNI:
-		message = "Using JNIEnv::NewWeakGlobalRef() for JNI Weak References.";
-		take_global_ref         = take_global_ref_jni;
-		take_weak_global_ref    = take_weak_global_ref_jni;
-		break;
-	default:
-		return -1;
-	}
-
-	log_gref (mono_bridge, "%s\n", message);
 
 	bridge_cbs.bridge_version       = SGEN_BRIDGE_VERSION;
 	bridge_cbs.bridge_class_kind    = gc_bridge_class_kind;
