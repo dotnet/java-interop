@@ -1644,5 +1644,47 @@ namespace generatortests
 			// Ignore nullable operator so this test works on all generators  ;)
 			Assert.AreEqual (expected.NormalizeLineEndings (), writer.ToString ().NormalizeLineEndings ().Replace ("?", ""));
 		}
+
+		[Test]
+		public void WriteCachedReferenceTypeField ()
+		{
+			options.SymbolTable.AddType (new TestClass (null, "Java.Lang.Object"));
+			var eClass = new TestClass ("Java.Lang.Object", "java.code.Example");
+			options.SymbolTable.AddType (eClass);
+
+			var klass = new TestClass ("Object", "java.code.MyClass");
+
+			var field = SupportTypeBuilder.CreateField ("field", options, "java.code.Example", true);
+			field.IsFinal = true;
+
+			klass.Fields.Add (field);
+
+			generator.Context.ContextTypes.Push (klass);
+			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			AssertTargetedExpected (nameof (WriteCachedReferenceTypeField), writer.ToString ());
+		}
+
+		[Test]
+		public void WriteCachedValueTypeField ()
+		{
+			options.SymbolTable.AddType (new TestClass (null, "Java.Lang.Object"));
+			var eClass = new TestClass ("Java.Lang.Object", "java.code.Example");
+			options.SymbolTable.AddType (eClass);
+
+			var klass = new TestClass ("Object", "java.code.MyClass");
+
+			var field = SupportTypeBuilder.CreateField ("field", options, "int", true);
+			field.IsFinal = true;
+
+			klass.Fields.Add (field);
+
+			generator.Context.ContextTypes.Push (klass);
+			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
+			generator.Context.ContextTypes.Pop ();
+
+			AssertTargetedExpected (nameof (WriteCachedValueTypeField), writer.ToString ());
+		}
 	}
 }
