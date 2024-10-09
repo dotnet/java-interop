@@ -20,10 +20,10 @@
       _GenerateManagedBinding;
       _CleanupManagedBinding;
     </JavaCreateManagedBindingsDependsOn>
-    <JavaCreateJavaCallableWrappersDependsOn>
+    <JavaCreateOutputJarDependsOn>
       _JavaCreateJcws;
       _JavaCreateOutputJar;
-    </JavaCreateJavaCallableWrappersDependsOn>
+    </JavaCreateOutputJarDependsOn>
   </PropertyGroup>
 
   <Target Name="JavaCreateManagedBindings"
@@ -31,9 +31,9 @@
       DependsOnTargets="$(JavaCreateManagedBindingsDependsOn)">
   </Target>
 
-  <Target Name="JavaCreateJavaCallableWrappers"
-      AfterTargets="CoreCompile"
-      DependsOnTargets="$(JavaCreateJavaCallableWrappersDependsOn)">
+  <Target Name="JavaCreateOutputJar"
+      AfterTargets="Build"
+      DependsOnTargets="$(JavaCreateOutputJarDependsOn)">
   </Target>
 
   <PropertyGroup>
