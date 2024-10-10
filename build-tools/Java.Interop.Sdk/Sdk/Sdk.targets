@@ -210,9 +210,9 @@
         Lines="@(_Source)"
         Overwrite="True"
     />
-    <Exec Command="&quot;$(JavaCPath)&quot; $(_JavacSourceOptions) -d &quot;$(_JavaJcwClassesDir)&quot; -classpath &quot;$(_Classpath)&quot; &quot;@$(_JavaIntermediateDir)_java_sources.txt&quot;" />
+    <Exec Command="&quot;$(JavaCPath)&quot; $(_JavacSourceOptions) -d &quot;$(_JavaJcwClassesDir).&quot; -classpath &quot;$(_Classpath)&quot; &quot;@$(_JavaIntermediateDir)_java_sources.txt&quot;" />
     <Delete Files="$(_JavaIntermediateDir)_java_sources.txt" />
-    <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(JavaOutputJar)&quot; -C &quot;$(_JavaJcwClassesDir)&quot; ." />
+    <Exec Command="&quot;$(JarPath)&quot; cf &quot;$(JavaOutputJar)&quot; -C &quot;$(_JavaJcwClassesDir).&quot; ." />
   </Target>
 
 </Project>
