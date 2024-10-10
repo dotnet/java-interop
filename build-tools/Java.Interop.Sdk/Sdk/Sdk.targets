@@ -126,12 +126,12 @@
     <PropertyGroup>
       <Generator>"$(_GeneratorPath)"</Generator>
       <_GenFlags>--public --global</_GenFlags>
-      <_Out>-o "$(_JavaManagedBindingDir)"</_Out>
+      <_Out>-o "$(_JavaManagedBindingDir)."</_Out>
       <_Codegen>--codegen-target=JavaInterop1</_Codegen>
       <_Assembly>"--assembly=$(AssemblyName)"</_Assembly>
       <_TypeMap>--type-map-report=$(_JavaManagedBindingDir)type-mapping.txt</_TypeMap>
       <_Api>$(_JavaManagedBindingDir)api.xml</_Api>
-      <_Dirs>--enumdir=$(_JavaManagedBindingDir)</_Dirs>
+      <_Dirs>"--enumdir=$(_JavaManagedBindingDir)."</_Dirs>
       <_FullIntermediateOutputPath>$([System.IO.Path]::GetFullPath('$(_JavaManagedBindingDir)'))</_FullIntermediateOutputPath>
       <_LangFeatures>--lang-features=nullable-reference-types,default-interface-methods,nested-interface-types,interface-constants</_LangFeatures>
     </PropertyGroup>
