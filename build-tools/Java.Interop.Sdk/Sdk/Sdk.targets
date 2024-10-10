@@ -178,7 +178,7 @@
     <PropertyGroup>
       <_JcwGen>"$(UtilityOutputFullPath)/jcw-gen.dll"</_JcwGen>
       <_Target>--codegen-target JavaInterop1</_Target>
-      <_Output>-o "$(_JavaJcwSourcesDir)"</_Output>
+      <_Output>-o "$(_JavaJcwSourcesDir)."</_Output>
       <_Libpath>@(_RefAsmDirs->'-L "%(Identity)"', ' ')</_Libpath>
     </PropertyGroup>
     <Exec Command="$(DotnetToolPath) $(_JcwGen) -v &quot;$(TargetPath)&quot; $(_Target) $(_Output) $(_Libpath)" />
