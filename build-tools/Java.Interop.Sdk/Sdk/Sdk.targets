@@ -160,7 +160,7 @@
     </XmlPeek>
     <PropertyGroup>
       <DefineConstants>$(DefineConstants);$([System.String]::Copy('$(_GeneratedDefineConstants)').Replace ('%24(DefineConstants);', ''))</DefineConstants>
-    </PropertyGroup>    
+    </PropertyGroup>
   </Target>
 
   <Target Name="_CleanupManagedBinding" />
