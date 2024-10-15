@@ -22,7 +22,7 @@ namespace generator
 			var options = new ApiImporterOptions ();
 
 			if (opt.CodeGenerationTarget == CodeGenerationTarget.JavaInterop1)
-				options.SupportedRegisterAttributes.Add ("Java.Interop.JniTypeSignatureAttribute");
+				options.SupportedTypeMapAttributes.Add ("Java.Interop.JniTypeSignatureAttribute");
 
 			// Add in reference types from assemblies
 			foreach (var reference in references.Distinct ()) {

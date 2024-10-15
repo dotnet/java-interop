@@ -333,7 +333,7 @@ namespace Java.Interop.Tools.JavaTypeSystem
 			attributes.FirstOrDefault (a => {
 				var attrType    = a.AttributeType.FullNameCorrected ();
 
-				return options.SupportedRegisterAttributes.Contains (attrType);
+				return options.SupportedTypeMapAttributes.Contains (attrType);
 			});
 
 		static string? GetRegisteredJavaTypeName (TypeDefinition type, ApiImporterOptions options)
