@@ -21,8 +21,10 @@ namespace generator
 			var type_collection = JavaXmlApiImporter.Parse (xmlFile);
 			var options = new ApiImporterOptions ();
 
-			if (opt.CodeGenerationTarget == CodeGenerationTarget.JavaInterop1)
+			if (opt.CodeGenerationTarget == CodeGenerationTarget.JavaInterop1) {
+				options.SupportedTypeMapAttributes.Clear ();
 				options.SupportedTypeMapAttributes.Add ("Java.Interop.JniTypeSignatureAttribute");
+			}
 
 			// Add in reference types from assemblies
 			foreach (var reference in references.Distinct ()) {
