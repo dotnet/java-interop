@@ -91,8 +91,7 @@ namespace generator.SourceWriters
 
 			writer.WriteLine ("} catch (global::System.Exception __e) {");
 			writer.Indent ();
-			writer.WriteLine ("__envp.SetPendingException (__e);");
-			writer.WriteLine ("global::System.Diagnostics.Debugger.BreakForUserUnhandledException (__e);");
+			writer.WriteLine ("JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);");
 
 			if (!method.IsVoid)
 				writer.WriteLine ("return default;");
