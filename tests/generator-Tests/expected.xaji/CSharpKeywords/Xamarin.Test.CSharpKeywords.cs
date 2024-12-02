@@ -50,15 +50,23 @@ namespace Xamarin.Test {
 #pragma warning disable 0169
 		static Delegate GetUsePartial_IHandler ()
 		{
-			if (cb_usePartial_UsePartial_I_Ljava_lang_String_ == null)
-				cb_usePartial_UsePartial_I_Ljava_lang_String_ = JNINativeWrapper.CreateDelegate (new _JniMarshal_PPI_L (n_UsePartial_I));
-			return cb_usePartial_UsePartial_I_Ljava_lang_String_;
+			return cb_usePartial_UsePartial_I_Ljava_lang_String_ ??= new _JniMarshal_PPI_L (n_UsePartial_I);
 		}
 
+		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_UsePartial_I (IntPtr jnienv, IntPtr native__this, int partial)
 		{
-			var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.CSharpKeywords> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			return JNIEnv.NewString (__this.UsePartial (partial));
+			var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+			try {
+				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.CSharpKeywords> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+				return JNIEnv.NewString (__this.UsePartial (partial));
+			} catch (global::System.Exception __e) {
+				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				return default;
+			} finally {
+				__envp.Dispose ();
+			}
 		}
 #pragma warning restore 0169
 

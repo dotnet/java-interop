@@ -50,15 +50,23 @@ namespace Xamarin.Test {
 #pragma warning disable 0169
 		static Delegate GetGenericReturnHandler ()
 		{
-			if (cb_GenericReturn_GenericReturn_Lxamarin_test_AdapterView_ == null)
-				cb_GenericReturn_GenericReturn_Lxamarin_test_AdapterView_ = JNINativeWrapper.CreateDelegate (new _JniMarshal_PP_L (n_GenericReturn));
-			return cb_GenericReturn_GenericReturn_Lxamarin_test_AdapterView_;
+			return cb_GenericReturn_GenericReturn_Lxamarin_test_AdapterView_ ??= new _JniMarshal_PP_L (n_GenericReturn);
 		}
 
+		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_GenericReturn (IntPtr jnienv, IntPtr native__this)
 		{
-			var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.GenericReturnObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			return JNIEnv.ToLocalJniHandle (__this.GenericReturn ());
+			var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+			try {
+				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.GenericReturnObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+				return JNIEnv.ToLocalJniHandle (__this.GenericReturn ());
+			} catch (global::System.Exception __e) {
+				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				return default;
+			} finally {
+				__envp.Dispose ();
+			}
 		}
 #pragma warning restore 0169
 

@@ -46,17 +46,25 @@ namespace Android.Text {
 #pragma warning disable 0169
 		static Delegate GetGetSpanFlags_Ljava_lang_Object_Handler ()
 		{
-			if (cb_getSpanFlags_GetSpanFlags_Ljava_lang_Object__I == null)
-				cb_getSpanFlags_GetSpanFlags_Ljava_lang_Object__I = JNINativeWrapper.CreateDelegate (new _JniMarshal_PPL_I (n_GetSpanFlags_Ljava_lang_Object_));
-			return cb_getSpanFlags_GetSpanFlags_Ljava_lang_Object__I;
+			return cb_getSpanFlags_GetSpanFlags_Ljava_lang_Object__I ??= new _JniMarshal_PPL_I (n_GetSpanFlags_Ljava_lang_Object_);
 		}
 
+		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_GetSpanFlags_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_tag)
 		{
-			var __this = global::Java.Lang.Object.GetObject<global::Android.Text.ISpannable> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			var tag = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_tag, JniHandleOwnership.DoNotTransfer);
-			int __ret = (int) __this.GetSpanFlags (tag);
-			return __ret;
+			var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+			try {
+				var __this = global::Java.Lang.Object.GetObject<global::Android.Text.ISpannable> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+				var tag = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_tag, JniHandleOwnership.DoNotTransfer);
+				int __ret = (int) __this.GetSpanFlags (tag);
+				return __ret;
+			} catch (global::System.Exception __e) {
+				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				return default;
+			} finally {
+				__envp.Dispose ();
+			}
 		}
 #pragma warning restore 0169
 

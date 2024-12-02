@@ -28,15 +28,23 @@ namespace Java.Lang {
 #pragma warning disable 0169
 		static Delegate GetGetMessageHandler ()
 		{
-			if (cb_getMessage_GetMessage_Ljava_lang_String_ == null)
-				cb_getMessage_GetMessage_Ljava_lang_String_ = JNINativeWrapper.CreateDelegate (new _JniMarshal_PP_L (n_GetMessage));
-			return cb_getMessage_GetMessage_Ljava_lang_String_;
+			return cb_getMessage_GetMessage_Ljava_lang_String_ ??= new _JniMarshal_PP_L (n_GetMessage);
 		}
 
+		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_GetMessage (IntPtr jnienv, IntPtr native__this)
 		{
-			var __this = global::Java.Lang.Object.GetObject<global::Java.Lang.Throwable> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			return JNIEnv.NewString (__this.Message);
+			var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+			try {
+				var __this = global::Java.Lang.Object.GetObject<global::Java.Lang.Throwable> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+				return JNIEnv.NewString (__this.Message);
+			} catch (global::System.Exception __e) {
+				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				return default;
+			} finally {
+				__envp.Dispose ();
+			}
 		}
 #pragma warning restore 0169
 

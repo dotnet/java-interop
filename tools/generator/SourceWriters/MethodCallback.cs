@@ -91,7 +91,7 @@ namespace generator.SourceWriters
 
 			writer.WriteLine ("} catch (global::System.Exception __e) {");
 			writer.Indent ();
-			writer.WriteLine ("JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);");
+			writer.WriteLine ("global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);");
 
 			if (!method.IsVoid)
 				writer.WriteLine ("return default;");

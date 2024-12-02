@@ -50,15 +50,22 @@ namespace Java.IO {
 #pragma warning disable 0169
 		static Delegate GetPrintStackTraceHandler ()
 		{
-			if (cb_printStackTrace_PrintStackTrace_V == null)
-				cb_printStackTrace_PrintStackTrace_V = JNINativeWrapper.CreateDelegate (new _JniMarshal_PP_V (n_PrintStackTrace));
-			return cb_printStackTrace_PrintStackTrace_V;
+			return cb_printStackTrace_PrintStackTrace_V ??= new _JniMarshal_PP_V (n_PrintStackTrace);
 		}
 
+		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_PrintStackTrace (IntPtr jnienv, IntPtr native__this)
 		{
-			var __this = global::Java.Lang.Object.GetObject<global::Java.IO.IOException> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			__this.PrintStackTrace ();
+			var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+			try {
+				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.IOException> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+				__this.PrintStackTrace ();
+			} catch (global::System.Exception __e) {
+				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+			} finally {
+				__envp.Dispose ();
+			}
 		}
 #pragma warning restore 0169
 

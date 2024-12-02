@@ -48,15 +48,22 @@ namespace Xamarin.Test {
 #pragma warning disable 0169
 		static Delegate GetCloseHandler ()
 		{
-			if (cb_close_Close_V == null)
-				cb_close_Close_V = JNINativeWrapper.CreateDelegate (new _JniMarshal_PP_V (n_Close));
-			return cb_close_Close_V;
+			return cb_close_Close_V ??= new _JniMarshal_PP_V (n_Close);
 		}
 
+		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Close (IntPtr jnienv, IntPtr native__this)
 		{
-			var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.II2> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-			__this.Close ();
+			var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+			try {
+				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.II2> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+				__this.Close ();
+			} catch (global::System.Exception __e) {
+				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+			} finally {
+				__envp.Dispose ();
+			}
 		}
 #pragma warning restore 0169
 

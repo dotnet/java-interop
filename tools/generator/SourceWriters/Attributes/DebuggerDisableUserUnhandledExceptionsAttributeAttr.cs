@@ -11,7 +11,7 @@ namespace generator.SourceWriters
 	{
 		public override void WriteAttribute (CodeWriter writer)
 		{
-			writer.WriteLine ("[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptionsAttribute]");
+			writer.WriteLine ("[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]");
 		}
 	}
 }

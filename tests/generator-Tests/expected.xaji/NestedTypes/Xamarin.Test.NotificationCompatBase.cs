@@ -64,15 +64,23 @@ namespace Xamarin.Test {
 #pragma warning disable 0169
 				static Delegate GetBuild_IHandler ()
 				{
-					if (cb_build_Build_I_Lxamarin_test_NotificationCompatBase_Action_ == null)
-						cb_build_Build_I_Lxamarin_test_NotificationCompatBase_Action_ = JNINativeWrapper.CreateDelegate (new _JniMarshal_PPI_L (n_Build_I));
-					return cb_build_Build_I_Lxamarin_test_NotificationCompatBase_Action_;
+					return cb_build_Build_I_Lxamarin_test_NotificationCompatBase_Action_ ??= new _JniMarshal_PPI_L (n_Build_I);
 				}
 
+				[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 				static IntPtr n_Build_I (IntPtr jnienv, IntPtr native__this, int p0)
 				{
-					var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.NotificationCompatBase.Action.IFactory> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
-					return JNIEnv.ToLocalJniHandle (__this.Build (p0));
+					var __envp = new global::Java.Interop.JniTransition (jnienv);
+
+					try {
+						var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.NotificationCompatBase.Action.IFactory> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
+						return JNIEnv.ToLocalJniHandle (__this.Build (p0));
+					} catch (global::System.Exception __e) {
+						global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+						return default;
+					} finally {
+						__envp.Dispose ();
+					}
 				}
 #pragma warning restore 0169
 
