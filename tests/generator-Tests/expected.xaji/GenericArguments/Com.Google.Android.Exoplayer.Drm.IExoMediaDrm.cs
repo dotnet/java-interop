@@ -55,11 +55,10 @@ namespace Com.Google.Android.Exoplayer.Drm {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_OnEvent_Lcom_google_android_exoplayer_drm_ExoMediaDrm_arrayBIIarrayB (IntPtr jnienv, IntPtr native__this, IntPtr native_p0, IntPtr native_p1, int p2, int p3, IntPtr native_p4)
 		{
-			var __envp = new global::Java.Interop.JniTransition (jnienv);
-			var __r = global::Java.Interop.JniEnvironment.Runtime;
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				return;
 
 			try {
-				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrmOnEventListener> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var p0 = (global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrm)global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrm> (native_p0, JniHandleOwnership.DoNotTransfer);
 				var p1 = (byte[]) JNIEnv.GetArray (native_p1, JniHandleOwnership.DoNotTransfer, typeof (byte));
@@ -72,7 +71,7 @@ namespace Com.Google.Android.Exoplayer.Drm {
 			} catch (global::System.Exception __e) {
 				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
-				__envp.Dispose ();
+				global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);
 			}
 		}
 #pragma warning restore 0169
@@ -234,18 +233,17 @@ namespace Com.Google.Android.Exoplayer.Drm {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetOnEventListener_Lcom_google_android_exoplayer_drm_ExoMediaDrm_OnEventListener_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
-			var __envp = new global::Java.Interop.JniTransition (jnienv);
-			var __r = global::Java.Interop.JniEnvironment.Runtime;
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				return;
 
 			try {
-				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrm> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var p0 = (global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrmOnEventListener)global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrmOnEventListener> (native_p0, JniHandleOwnership.DoNotTransfer);
 				__this.SetOnEventListener (p0);
 			} catch (global::System.Exception __e) {
 				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
-				__envp.Dispose ();
+				global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);
 			}
 		}
 #pragma warning restore 0169

@@ -58,13 +58,15 @@ namespace generator.SourceWriters
 
 		protected override void WriteBody (CodeWriter writer)
 		{
-			writer.WriteLine ("var __envp = new global::Java.Interop.JniTransition (jnienv);");
-			writer.WriteLine ("var __r = global::Java.Interop.JniEnvironment.Runtime;");
+			writer.WriteLine ("if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) ");
+			writer.Indent ();
+			writer.WriteLine (method.IsVoid ? "return;" : "return default;");
+			writer.Unindent ();
+
 			writer.WriteLine ();
 			writer.WriteLine ("try {");
 
 			writer.Indent ();
-			writer.WriteLine ("__r.OnEnterMarshalMethod ();");
 			writer.WriteLine ($"var __this = global::Java.Lang.Object.GetObject<{opt.GetOutputName (type.FullName)}> (jnienv, native__this, JniHandleOwnership.DoNotTransfer){opt.NullForgivingOperator};");
 
 			foreach (var s in method.Parameters.GetCallbackPrep (opt))
@@ -101,7 +103,7 @@ namespace generator.SourceWriters
 			writer.Unindent ();
 			writer.WriteLine ("} finally {");
 			writer.Indent ();
-			writer.WriteLine ("__envp.Dispose ();");
+			writer.WriteLine ("global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);");
 			writer.Unindent ();
 			writer.WriteLine ("}");
 

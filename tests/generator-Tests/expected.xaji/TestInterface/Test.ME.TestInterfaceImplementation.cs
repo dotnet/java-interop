@@ -94,11 +94,10 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_GetSpanFlags_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_tag)
 		{
-			var __envp = new global::Java.Interop.JniTransition (jnienv);
-			var __r = global::Java.Interop.JniEnvironment.Runtime;
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				return default;
 
 			try {
-				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Test.ME.TestInterfaceImplementation> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var tag = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_tag, JniHandleOwnership.DoNotTransfer);
 				int __ret = __this.GetSpanFlags (tag);
@@ -107,7 +106,7 @@ namespace Test.ME {
 				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
-				__envp.Dispose ();
+				global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);
 			}
 		}
 #pragma warning restore 0169
@@ -126,18 +125,17 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Append_Ljava_lang_CharSequence_ (IntPtr jnienv, IntPtr native__this, IntPtr native_value)
 		{
-			var __envp = new global::Java.Interop.JniTransition (jnienv);
-			var __r = global::Java.Interop.JniEnvironment.Runtime;
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				return;
 
 			try {
-				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Test.ME.TestInterfaceImplementation> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var value = global::Java.Lang.Object.GetObject<global::Java.Lang.ICharSequence> (native_value, JniHandleOwnership.DoNotTransfer);
 				__this.Append (value);
 			} catch (global::System.Exception __e) {
 				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
-				__envp.Dispose ();
+				global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);
 			}
 		}
 #pragma warning restore 0169
@@ -163,11 +161,10 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_Identity_Ljava_lang_CharSequence_ (IntPtr jnienv, IntPtr native__this, IntPtr native_value)
 		{
-			var __envp = new global::Java.Interop.JniTransition (jnienv);
-			var __r = global::Java.Interop.JniEnvironment.Runtime;
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				return default;
 
 			try {
-				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Test.ME.TestInterfaceImplementation> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var value = global::Java.Lang.Object.GetObject<global::Java.Lang.ICharSequence> (native_value, JniHandleOwnership.DoNotTransfer);
 				IntPtr __ret = CharSequence.ToLocalJniHandle (__this.IdentityFormatted (value));
@@ -176,7 +173,7 @@ namespace Test.ME {
 				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
-				__envp.Dispose ();
+				global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);
 			}
 		}
 #pragma warning restore 0169

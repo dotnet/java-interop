@@ -55,11 +55,10 @@ namespace Android.Text {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_GetSpanFlags_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_tag)
 		{
-			var __envp = new global::Java.Interop.JniTransition (jnienv);
-			var __r = global::Java.Interop.JniEnvironment.Runtime;
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				return default;
 
 			try {
-				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Android.Text.ISpanned> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var tag = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_tag, JniHandleOwnership.DoNotTransfer);
 				int __ret = (int) __this.GetSpanFlags (tag);
@@ -68,7 +67,7 @@ namespace Android.Text {
 				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
-				__envp.Dispose ();
+				global::Java.Interop.JniEnvironment.EndMarshalMethod (ref __envp);
 			}
 		}
 #pragma warning restore 0169
