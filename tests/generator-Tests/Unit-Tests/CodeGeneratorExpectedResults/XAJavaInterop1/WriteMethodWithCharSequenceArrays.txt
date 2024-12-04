@@ -39,7 +39,7 @@ public partial class MyClass : Java.Lang.Object {
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static IntPtr n_Echo_arrayLjava_lang_CharSequence_ (IntPtr jnienv, IntPtr native__this, IntPtr native_messages)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {

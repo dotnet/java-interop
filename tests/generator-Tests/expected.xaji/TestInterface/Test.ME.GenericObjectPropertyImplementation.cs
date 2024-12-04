@@ -73,7 +73,7 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_GetObject (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -98,7 +98,7 @@ namespace Test.ME {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetObject_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native__object)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

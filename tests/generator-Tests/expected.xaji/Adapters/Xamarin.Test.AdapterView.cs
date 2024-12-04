@@ -57,7 +57,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_GetAdapter (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -82,7 +82,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetAdapter_Lxamarin_test_Adapter_ (IntPtr jnienv, IntPtr native__this, IntPtr native_adapter)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

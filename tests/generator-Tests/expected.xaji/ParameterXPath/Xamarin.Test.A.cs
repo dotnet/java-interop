@@ -57,7 +57,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetA_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_adapter)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -98,7 +98,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_ListTest_Ljava_util_List_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

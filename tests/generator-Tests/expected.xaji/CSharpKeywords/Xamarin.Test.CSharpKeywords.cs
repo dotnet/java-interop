@@ -56,7 +56,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static IntPtr n_UsePartial_I (IntPtr jnienv, IntPtr native__this, int partial)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {

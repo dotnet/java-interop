@@ -57,17 +57,15 @@ namespace Java.Interop {
 			Justification = "Exceptions cannot cross a JNI boundary.")]
 		public static bool BeginMarshalMethod (IntPtr jnienv, out JniTransition transition, [NotNullWhen (true)] out JniRuntime? runtime)
 		{
-			JniEnvironmentInfo? env;
+			runtime = null;
 			Exception?          ex  = null;
 			try {
-				env     = Info.Value;
-				runtime = env.Runtime;
+				runtime = Info.Value?.Runtime;
 			}
 			catch (Exception e) {
 				ex  = e;
-				env = null;
 			}
-			if (env == null || runtime == null || ex != null) {
+			if (runtime == null || ex != null) {
 				transition  = default;
 				runtime     = null;
 				Console.Error.WriteLine ("JNI Environment Information is not available on this thread.");

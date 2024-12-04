@@ -74,7 +74,7 @@ internal partial class IParentChildInvoker : global::Java.Lang.Object, IParentCh
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static int n_GetBar (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {
@@ -176,7 +176,7 @@ internal partial class IParentInvoker : global::Java.Lang.Object, IParent {
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static int n_GetBar (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {

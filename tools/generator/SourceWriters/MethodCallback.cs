@@ -58,7 +58,7 @@ namespace generator.SourceWriters
 
 		protected override void WriteBody (CodeWriter writer)
 		{
-			writer.WriteLine ("if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) ");
+			writer.WriteLine ("if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))");
 			writer.Indent ();
 			writer.WriteLine (method.IsVoid ? "return;" : "return default;");
 			writer.Unindent ();

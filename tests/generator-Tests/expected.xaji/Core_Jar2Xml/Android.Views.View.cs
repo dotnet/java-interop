@@ -67,7 +67,7 @@ namespace Android.Views {
 			[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 			static void n_OnClick_Landroid_view_View_ (IntPtr jnienv, IntPtr native__this, IntPtr native_v)
 			{
-				if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+				if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 					return;
 
 				try {
@@ -164,7 +164,7 @@ namespace Android.Views {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetOnClickListener_Landroid_view_View_OnClickListener_ (IntPtr jnienv, IntPtr native__this, IntPtr native_l)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -203,7 +203,7 @@ namespace Android.Views {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetOn123Listener_Landroid_view_View_OnClickListener_ (IntPtr jnienv, IntPtr native__this, IntPtr native_l)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -242,7 +242,7 @@ namespace Android.Views {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_AddTouchables_Ljava_util_ArrayList_ (IntPtr jnienv, IntPtr native__this, IntPtr native_views)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

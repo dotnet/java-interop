@@ -54,7 +54,7 @@ namespace Com.Google.Android.Exoplayer.Drm {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static bool n_RequiresSecureDecoderComponent_Ljava_lang_String_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {

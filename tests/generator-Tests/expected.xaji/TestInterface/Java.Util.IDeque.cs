@@ -59,7 +59,7 @@ namespace Java.Util {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static bool n_Add_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_e)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -101,7 +101,7 @@ namespace Java.Util {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Clear (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

@@ -17,7 +17,7 @@ public partial interface IMyInterface : IJavaObject, IJavaPeerable {
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	private static void n_DoDefault (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return;
 
 		try {
@@ -109,7 +109,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static void n_DoDeclaration (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return;
 
 		try {

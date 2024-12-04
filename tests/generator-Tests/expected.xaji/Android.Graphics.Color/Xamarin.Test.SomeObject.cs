@@ -76,7 +76,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_GetSomeColor (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -101,7 +101,7 @@ namespace Xamarin.Test {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_SetSomeColor_I (IntPtr jnienv, IntPtr native__this, int native_newvalue)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

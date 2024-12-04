@@ -73,7 +73,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Close (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -108,7 +108,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Flush (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -143,7 +143,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Write_arrayB (IntPtr jnienv, IntPtr native__this, IntPtr native_buffer)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -189,7 +189,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Write_arrayBII (IntPtr jnienv, IntPtr native__this, IntPtr native_buffer, int offset, int count)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -237,7 +237,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Write_I (IntPtr jnienv, IntPtr native__this, int oneByte)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {

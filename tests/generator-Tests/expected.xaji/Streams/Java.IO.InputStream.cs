@@ -73,7 +73,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_Available (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -110,7 +110,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Close (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -145,7 +145,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Mark_I (IntPtr jnienv, IntPtr native__this, int readlimit)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -182,7 +182,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static bool n_MarkSupported (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -219,7 +219,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_Read (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -248,7 +248,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_Read_arrayB (IntPtr jnienv, IntPtr native__this, IntPtr native_buffer)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -297,7 +297,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static int n_Read_arrayBII (IntPtr jnienv, IntPtr native__this, IntPtr native_buffer, int byteOffset, int byteCount)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {
@@ -348,7 +348,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static void n_Reset (IntPtr jnienv, IntPtr native__this)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return;
 
 			try {
@@ -383,7 +383,7 @@ namespace Java.IO {
 		[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 		static long n_Skip_J (IntPtr jnienv, IntPtr native__this, long byteCount)
 		{
-			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+			if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 				return default;
 
 			try {

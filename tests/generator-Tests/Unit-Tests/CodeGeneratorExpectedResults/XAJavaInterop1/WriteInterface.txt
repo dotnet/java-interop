@@ -140,7 +140,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static int n_get_Count (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {
@@ -165,7 +165,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static void n_set_Count_I (IntPtr jnienv, IntPtr native__this, int value)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return;
 
 		try {
@@ -206,7 +206,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static IntPtr n_get_Key (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {
@@ -231,7 +231,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static void n_set_Key_Ljava_lang_String_ (IntPtr jnienv, IntPtr native__this, IntPtr native_value)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return;
 
 		try {
@@ -275,7 +275,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static int n_get_AbstractCount (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {
@@ -300,7 +300,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static void n_set_AbstractCount_I (IntPtr jnienv, IntPtr native__this, int value)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return;
 
 		try {
@@ -341,7 +341,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static int n_GetCountForKey_Ljava_lang_String_ (IntPtr jnienv, IntPtr native__this, IntPtr native_key)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {
@@ -381,7 +381,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static IntPtr n_Key (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return default;
 
 		try {
@@ -414,7 +414,7 @@ internal partial class IMyInterfaceInvoker : global::Java.Lang.Object, IMyInterf
 	[global::System.Diagnostics.DebuggerDisableUserUnhandledExceptions]
 	static void n_AbstractMethod (IntPtr jnienv, IntPtr native__this)
 	{
-		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r)) 
+		if (!global::Java.Interop.JniEnvironment.BeginMarshalMethod (jnienv, out var __envp, out var __r))
 			return;
 
 		try {
