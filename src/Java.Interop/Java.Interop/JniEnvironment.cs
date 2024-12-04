@@ -60,13 +60,14 @@ namespace Java.Interop {
 			JniEnvironmentInfo? env;
 			Exception?          ex  = null;
 			try {
-				env = Info.Value;
+				env     = Info.Value;
+				runtime = env.Runtime;
 			}
 			catch (Exception e) {
 				ex  = e;
 				env = null;
 			}
-			if (env == null || env.runtime == null) {
+			if (env == null || runtime == null || ex != null) {
 				transition  = default;
 				runtime     = null;
 				Console.Error.WriteLine ("JNI Environment Information is not available on this thread.");
@@ -75,8 +76,6 @@ namespace Java.Interop {
 				}
 				return false;
 			}
-
-			runtime     = env.runtime;
 
 			try {
 				runtime.OnEnterMarshalMethod ();
@@ -255,7 +254,7 @@ namespace Java.Interop {
 		IntPtr                  environmentPointer;
 		char[]?                 nameBuffer;
 		bool                    disposed;
-		internal    JniRuntime? runtime;
+		JniRuntime?             runtime;
 
 		public      int                     LocalReferenceCount     {get; internal set;}
 		public      bool                    WithinNewObjectScope    {get; set;}
