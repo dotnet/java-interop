@@ -84,12 +84,14 @@ public partial interface IParent : IJavaObject, IJavaPeerable {
 		static int n_GetBar (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<Com.Xamarin.Android.IParent.IChild> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				return __this.Bar;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();
@@ -176,12 +178,14 @@ internal partial class IParentInvoker : global::Java.Lang.Object, IParent {
 	static int n_GetBar (IntPtr jnienv, IntPtr native__this)
 	{
 		var __envp = new global::Java.Interop.JniTransition (jnienv);
+		var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 		try {
+			__r.OnEnterMarshalMethod ();
 			var __this = global::Java.Lang.Object.GetObject<Com.Xamarin.Android.IParent> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			return __this.Bar;
 		} catch (global::System.Exception __e) {
-			global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+			__r.OnUserUnhandledException (ref __envp, __e);
 			return default;
 		} finally {
 			__envp.Dispose ();

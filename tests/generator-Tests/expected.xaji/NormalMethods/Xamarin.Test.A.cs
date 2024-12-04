@@ -61,12 +61,14 @@ namespace Xamarin.Test {
 			static IntPtr n_SetCustomDimension_I (IntPtr jnienv, IntPtr native__this, int index)
 			{
 				var __envp = new global::Java.Interop.JniTransition (jnienv);
+				var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 				try {
+					__r.OnEnterMarshalMethod ();
 					var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.A.B> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 					return JNIEnv.ToLocalJniHandle (__this.SetCustomDimension (index));
 				} catch (global::System.Exception __e) {
-					global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+					__r.OnUserUnhandledException (ref __envp, __e);
 					return default;
 				} finally {
 					__envp.Dispose ();
@@ -129,12 +131,14 @@ namespace Xamarin.Test {
 		static int n_GetHandle (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.A> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				return __this.GetHandle ();
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();

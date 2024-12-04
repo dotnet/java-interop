@@ -57,12 +57,14 @@ namespace Java.IO {
 		static void n_PrintStackTrace (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.IOException> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				__this.PrintStackTrace ();
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

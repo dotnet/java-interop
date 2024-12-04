@@ -1,2 +1,3 @@
 #nullable enable
+virtual Java.Interop.JniRuntime.OnEnterMarshalMethod() -> void
 virtual Java.Interop.JniRuntime.OnUserUnhandledException(ref Java.Interop.JniTransition transition, System.Exception! e) -> void

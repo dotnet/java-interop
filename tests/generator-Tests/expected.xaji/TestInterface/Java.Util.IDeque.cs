@@ -60,14 +60,16 @@ namespace Java.Util {
 		static bool n_Add_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_e)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.Util.IDeque> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var e = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_e, JniHandleOwnership.DoNotTransfer);
 				bool __ret = __this.Add (e);
 				return __ret;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();
@@ -101,12 +103,14 @@ namespace Java.Util {
 		static void n_Clear (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.Util.IDeque> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				__this.Clear ();
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

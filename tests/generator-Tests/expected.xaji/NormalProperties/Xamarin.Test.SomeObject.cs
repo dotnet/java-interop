@@ -57,12 +57,14 @@ namespace Xamarin.Test {
 		static int n_GetSomeInteger (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.SomeObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				return __this.SomeInteger;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();
@@ -81,12 +83,14 @@ namespace Xamarin.Test {
 		static void n_SetSomeInteger_I (IntPtr jnienv, IntPtr native__this, int newvalue)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.SomeObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				__this.SomeInteger = newvalue;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -114,12 +118,14 @@ namespace Xamarin.Test {
 		static IntPtr n_GetSomeObjectProperty (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.SomeObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				return JNIEnv.ToLocalJniHandle (__this.SomeObjectProperty);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();
@@ -138,13 +144,15 @@ namespace Xamarin.Test {
 		static void n_SetSomeObjectProperty_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_newvalue)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.SomeObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var newvalue = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_newvalue, JniHandleOwnership.DoNotTransfer);
 				__this.SomeObjectProperty = newvalue;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -172,12 +180,14 @@ namespace Xamarin.Test {
 		static IntPtr n_GetSomeString (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.SomeObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				return JNIEnv.NewString (__this.SomeString);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();
@@ -196,13 +206,15 @@ namespace Xamarin.Test {
 		static void n_SetSomeString_Ljava_lang_String_ (IntPtr jnienv, IntPtr native__this, IntPtr native_newvalue)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.SomeObject> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var newvalue = JNIEnv.GetString (native_newvalue, JniHandleOwnership.DoNotTransfer);
 				__this.SomeString = newvalue;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

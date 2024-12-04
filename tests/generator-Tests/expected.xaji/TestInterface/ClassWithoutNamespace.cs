@@ -72,12 +72,14 @@ public abstract partial class ClassWithoutNamespace : global::Java.Lang.Object, 
 	static void n_Foo (IntPtr jnienv, IntPtr native__this)
 	{
 		var __envp = new global::Java.Interop.JniTransition (jnienv);
+		var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 		try {
+			__r.OnEnterMarshalMethod ();
 			var __this = global::Java.Lang.Object.GetObject<ClassWithoutNamespace> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			__this.Foo ();
 		} catch (global::System.Exception __e) {
-			global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+			__r.OnUserUnhandledException (ref __envp, __e);
 		} finally {
 			__envp.Dispose ();
 		}

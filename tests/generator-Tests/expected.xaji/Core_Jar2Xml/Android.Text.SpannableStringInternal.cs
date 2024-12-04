@@ -57,14 +57,16 @@ namespace Android.Text {
 		static int n_GetSpanFlags_Ljava_lang_Object_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Android.Text.SpannableStringInternal> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var p0 = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_p0, JniHandleOwnership.DoNotTransfer);
 				int __ret = (int) __this.GetSpanFlags (p0);
 				return __ret;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();

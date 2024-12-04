@@ -68,13 +68,15 @@ namespace Android.Views {
 			static void n_OnClick_Landroid_view_View_ (IntPtr jnienv, IntPtr native__this, IntPtr native_v)
 			{
 				var __envp = new global::Java.Interop.JniTransition (jnienv);
+				var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 				try {
+					__r.OnEnterMarshalMethod ();
 					var __this = global::Java.Lang.Object.GetObject<global::Android.Views.View.IOnClickListener> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 					var v = global::Java.Lang.Object.GetObject<global::Android.Views.View> (native_v, JniHandleOwnership.DoNotTransfer);
 					__this.OnClick (v);
 				} catch (global::System.Exception __e) {
-					global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+					__r.OnUserUnhandledException (ref __envp, __e);
 				} finally {
 					__envp.Dispose ();
 				}
@@ -164,13 +166,15 @@ namespace Android.Views {
 		static void n_SetOnClickListener_Landroid_view_View_OnClickListener_ (IntPtr jnienv, IntPtr native__this, IntPtr native_l)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Android.Views.View> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var l = (global::Android.Views.View.IOnClickListener)global::Java.Lang.Object.GetObject<global::Android.Views.View.IOnClickListener> (native_l, JniHandleOwnership.DoNotTransfer);
 				__this.SetOnClickListener (l);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -202,13 +206,15 @@ namespace Android.Views {
 		static void n_SetOn123Listener_Landroid_view_View_OnClickListener_ (IntPtr jnienv, IntPtr native__this, IntPtr native_l)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Android.Views.View> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var l = (global::Android.Views.View.IOnClickListener)global::Java.Lang.Object.GetObject<global::Android.Views.View.IOnClickListener> (native_l, JniHandleOwnership.DoNotTransfer);
 				__this.SetOn123Listener (l);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -240,13 +246,15 @@ namespace Android.Views {
 		static void n_AddTouchables_Ljava_util_ArrayList_ (IntPtr jnienv, IntPtr native__this, IntPtr native_views)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Android.Views.View> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var views = global::Android.Runtime.JavaList<global::Android.Views.View>.FromJniHandle (native_views, JniHandleOwnership.DoNotTransfer);
 				__this.AddTouchables (views);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

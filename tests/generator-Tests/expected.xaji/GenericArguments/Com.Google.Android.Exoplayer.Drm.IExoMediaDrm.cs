@@ -56,8 +56,10 @@ namespace Com.Google.Android.Exoplayer.Drm {
 		static void n_OnEvent_Lcom_google_android_exoplayer_drm_ExoMediaDrm_arrayBIIarrayB (IntPtr jnienv, IntPtr native__this, IntPtr native_p0, IntPtr native_p1, int p2, int p3, IntPtr native_p4)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrmOnEventListener> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var p0 = (global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrm)global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrm> (native_p0, JniHandleOwnership.DoNotTransfer);
 				var p1 = (byte[]) JNIEnv.GetArray (native_p1, JniHandleOwnership.DoNotTransfer, typeof (byte));
@@ -68,7 +70,7 @@ namespace Com.Google.Android.Exoplayer.Drm {
 				if (p4 != null)
 					JNIEnv.CopyArray (p4, native_p4);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -233,13 +235,15 @@ namespace Com.Google.Android.Exoplayer.Drm {
 		static void n_SetOnEventListener_Lcom_google_android_exoplayer_drm_ExoMediaDrm_OnEventListener_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrm> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var p0 = (global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrmOnEventListener)global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaDrmOnEventListener> (native_p0, JniHandleOwnership.DoNotTransfer);
 				__this.SetOnEventListener (p0);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

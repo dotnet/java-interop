@@ -55,14 +55,16 @@ namespace Com.Google.Android.Exoplayer.Drm {
 		static bool n_RequiresSecureDecoderComponent_Ljava_lang_String_ (IntPtr jnienv, IntPtr native__this, IntPtr native_p0)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Com.Google.Android.Exoplayer.Drm.IExoMediaCrypto> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var p0 = JNIEnv.GetString (native_p0, JniHandleOwnership.DoNotTransfer);
 				bool __ret = __this.RequiresSecureDecoderComponent (p0);
 				return __ret;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();

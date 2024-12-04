@@ -77,12 +77,14 @@ internal partial class AnimatorListenerInvoker : global::Java.Lang.Object, Anima
 	static bool n_OnAnimationEnd_I (IntPtr jnienv, IntPtr native__this, int param1)
 	{
 		var __envp = new global::Java.Interop.JniTransition (jnienv);
+		var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 		try {
+			__r.OnEnterMarshalMethod ();
 			var __this = global::Java.Lang.Object.GetObject<java.code.AnimatorListener> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			return __this.OnAnimationEnd (param1);
 		} catch (global::System.Exception __e) {
-			global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+			__r.OnUserUnhandledException (ref __envp, __e);
 			return default;
 		} finally {
 			__envp.Dispose ();
@@ -111,12 +113,14 @@ internal partial class AnimatorListenerInvoker : global::Java.Lang.Object, Anima
 	static bool n_OnAnimationEnd_II (IntPtr jnienv, IntPtr native__this, int param1, int param2)
 	{
 		var __envp = new global::Java.Interop.JniTransition (jnienv);
+		var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 		try {
+			__r.OnEnterMarshalMethod ();
 			var __this = global::Java.Lang.Object.GetObject<java.code.AnimatorListener> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 			return __this.OnAnimationEnd (param1, param2);
 		} catch (global::System.Exception __e) {
-			global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+			__r.OnUserUnhandledException (ref __envp, __e);
 			return default;
 		} finally {
 			__envp.Dispose ();

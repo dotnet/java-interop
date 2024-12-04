@@ -437,6 +437,11 @@ namespace Java.Interop
 
 	partial class JniRuntime {
 
+		public virtual void OnEnterMarshalMethod ()
+		{
+			ValueManager.WaitForGCBridgeProcessing ();
+		}
+
 		public virtual void OnUserUnhandledException (ref JniTransition transition, Exception e)
 		{
 			transition.SetPendingException (e);

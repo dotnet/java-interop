@@ -74,12 +74,14 @@ namespace Java.IO {
 		static void n_Close (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.OutputStream> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				__this.Close ();
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -108,12 +110,14 @@ namespace Java.IO {
 		static void n_Flush (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.OutputStream> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				__this.Flush ();
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -142,15 +146,17 @@ namespace Java.IO {
 		static void n_Write_arrayB (IntPtr jnienv, IntPtr native__this, IntPtr native_buffer)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.OutputStream> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var buffer = (byte[]) JNIEnv.GetArray (native_buffer, JniHandleOwnership.DoNotTransfer, typeof (byte));
 				__this.Write (buffer);
 				if (buffer != null)
 					JNIEnv.CopyArray (buffer, native_buffer);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -187,15 +193,17 @@ namespace Java.IO {
 		static void n_Write_arrayBII (IntPtr jnienv, IntPtr native__this, IntPtr native_buffer, int offset, int count)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.OutputStream> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var buffer = (byte[]) JNIEnv.GetArray (native_buffer, JniHandleOwnership.DoNotTransfer, typeof (byte));
 				__this.Write (buffer, offset, count);
 				if (buffer != null)
 					JNIEnv.CopyArray (buffer, native_buffer);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
@@ -234,12 +242,14 @@ namespace Java.IO {
 		static void n_Write_I (IntPtr jnienv, IntPtr native__this, int oneByte)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Java.IO.OutputStream> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				__this.Write (oneByte);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

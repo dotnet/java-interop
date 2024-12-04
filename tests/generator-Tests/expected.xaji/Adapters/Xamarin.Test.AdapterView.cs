@@ -58,12 +58,14 @@ namespace Xamarin.Test {
 		static IntPtr n_GetAdapter (IntPtr jnienv, IntPtr native__this)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.AdapterView> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				return JNIEnv.ToLocalJniHandle (__this.RawAdapter);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 				return default;
 			} finally {
 				__envp.Dispose ();
@@ -82,13 +84,15 @@ namespace Xamarin.Test {
 		static void n_SetAdapter_Lxamarin_test_Adapter_ (IntPtr jnienv, IntPtr native__this, IntPtr native_adapter)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.AdapterView> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var adapter = global::Java.Lang.Object.GetObject<global::Java.Lang.Object> (native_adapter, JniHandleOwnership.DoNotTransfer);
 				__this.RawAdapter = adapter;
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}

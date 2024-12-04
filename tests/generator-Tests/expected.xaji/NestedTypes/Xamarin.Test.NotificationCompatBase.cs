@@ -71,12 +71,14 @@ namespace Xamarin.Test {
 				static IntPtr n_Build_I (IntPtr jnienv, IntPtr native__this, int p0)
 				{
 					var __envp = new global::Java.Interop.JniTransition (jnienv);
+					var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 					try {
+						__r.OnEnterMarshalMethod ();
 						var __this = global::Java.Lang.Object.GetObject<global::Xamarin.Test.NotificationCompatBase.Action.IFactory> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 						return JNIEnv.ToLocalJniHandle (__this.Build (p0));
 					} catch (global::System.Exception __e) {
-						global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+						__r.OnUserUnhandledException (ref __envp, __e);
 						return default;
 					} finally {
 						__envp.Dispose ();

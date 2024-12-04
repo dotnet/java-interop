@@ -74,15 +74,17 @@ namespace Test.ME {
 		static void n_SetObject_arrayB (IntPtr jnienv, IntPtr native__this, IntPtr native_value)
 		{
 			var __envp = new global::Java.Interop.JniTransition (jnienv);
+			var __r = global::Java.Interop.JniEnvironment.Runtime;
 
 			try {
+				__r.OnEnterMarshalMethod ();
 				var __this = global::Java.Lang.Object.GetObject<global::Test.ME.GenericImplementation> (jnienv, native__this, JniHandleOwnership.DoNotTransfer);
 				var value = (byte[]) JNIEnv.GetArray (native_value, JniHandleOwnership.DoNotTransfer, typeof (byte));
 				__this.SetObject (value);
 				if (value != null)
 					JNIEnv.CopyArray (value, native_value);
 			} catch (global::System.Exception __e) {
-				global::Java.Interop.JniEnvironment.Runtime.OnUserUnhandledException (ref __envp, __e);
+				__r.OnUserUnhandledException (ref __envp, __e);
 			} finally {
 				__envp.Dispose ();
 			}
