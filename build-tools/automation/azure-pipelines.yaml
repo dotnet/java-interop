@@ -25,8 +25,8 @@ parameters:
 variables:
   RunningOnCI: true
   Build.Configuration: Release
-  DotNetCoreVersion: 8.0.303
-  DotNetTargetFramework: net8.0
+  DotNetCoreVersion: 9.0.100
+  DotNetTargetFramework: net9.0
   NetCoreTargetFrameworkPathSuffix: -$(DotNetTargetFramework)
   1ESWindowsPool: AzurePipelines-EO
   1ESWindowsImage: AzurePipelinesWindows2022compliant
