@@ -48,8 +48,8 @@ namespace generator.SourceWriters
 
 			if (!iface.IsConstSugar (opt)) {
 				var signature = string.IsNullOrWhiteSpace (iface.Namespace)
-					? iface.FullName
-					: iface.Namespace + "." + iface.FullName.Substring (iface.Namespace.Length + 1);
+					? iface.FullName.Replace ('.', '/')
+					: iface.Namespace + "." + iface.FullName.Substring (iface.Namespace.Length + 1).Replace ('.', '/');
 
 				var noAcw       = false;
 				var memberType  = (MemberTypes?) null;

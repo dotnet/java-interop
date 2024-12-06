@@ -19,7 +19,7 @@ namespace Xamarin.Test {
 	[global::Android.Runtime.Register ("xamarin/test/PublicClass", DoNotGenerateAcw=true)]
 	public partial class PublicClass : global::Java.Lang.Object {
 		// Metadata.xml XPath interface reference: path="/api/package[@name='xamarin.test']/interface[@name='PublicClass.ProtectedInterface']"
-		[Register ("xamarin/test/PublicClass$ProtectedInterface", "", "Xamarin.Test.PublicClass.IProtectedInterfaceInvoker")]
+		[Register ("xamarin/test/PublicClass$ProtectedInterface", "", "Xamarin.Test.PublicClass/IProtectedInterfaceInvoker")]
 		protected internal partial interface IProtectedInterface : IJavaObject, IJavaPeerable {
 			// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/interface[@name='PublicClass.ProtectedInterface']/method[@name='foo' and count(parameter)=0]"
 			[Register ("foo", "()V", "GetFooHandler:Xamarin.Test.PublicClass/IProtectedInterfaceInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
