@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-
+using System.Reflection;
 using Java.Interop;
 
 namespace Java.Interop.Samples.NativeAotFromAndroid;
@@ -38,11 +38,20 @@ static class JavaInteropRuntime
 			var options = new JreRuntimeOptions {
 				EnvironmentPointer          = jnienv,
 				TypeManager                 = new NativeAotTypeManager (),
+				ValueManager                = new NativeAotValueManager (),
 				UseMarshalMemberBuilder     = false,
 				JniGlobalReferenceLogWriter = new LogcatTextWriter (AndroidLogLevel.Debug, "NativeAot:GREF"),
 				JniLocalReferenceLogWriter  = new LogcatTextWriter (AndroidLogLevel.Debug, "NativeAot:LREF"),
 			};
 			runtime = options.CreateJreVM ();
+
+			var jnienvinit = Type.GetType("Android.Runtime.JNIEnvInit, Mono.Android");
+			ArgumentNullException.ThrowIfNull(jnienvinit);
+
+			var init = jnienvinit.GetMethod("InitializeNativeAot", BindingFlags.Static | BindingFlags.NonPublic);
+			ArgumentNullException.ThrowIfNull(init);
+
+			init.Invoke(null, [ runtime ]);
 		}
 		catch (Exception e) {
 			AndroidLog.Print (AndroidLogLevel.Error, "JavaInteropRuntime", $"JavaInteropRuntime.init: error: {e}");
