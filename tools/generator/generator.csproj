@@ -4,6 +4,7 @@
     <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
     <OutputType>Exe</OutputType>
     <DefineConstants>$(DefineConstants);GENERATOR;HAVE_CECIL;JCW_ONLY_TYPE_NAMES</DefineConstants>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <Import Project="..\..\TargetFrameworkDependentValues.props" />
