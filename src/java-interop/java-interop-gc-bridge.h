@@ -10,11 +10,6 @@ JAVA_INTEROP_BEGIN_DECLS
 
 typedef struct  JavaInteropGCBridge     JavaInteropGCBridge;
 
-typedef enum    JavaInteropGCBridgeUseWeakReferenceKind {
-	JAVA_INTEROP_GC_BRIDGE_USE_WEAK_REFERENCE_KIND_JAVA,
-	JAVA_INTEROP_GC_BRIDGE_USE_WEAK_REFERENCE_KIND_JNI,
-} JavaInteropGCBridgeUseWeakReferenceKind;
-
 struct JavaInterop_System_RuntimeTypeHandle {
 	void   *value;
 };
@@ -25,7 +20,7 @@ JAVA_INTEROP_API    int                     java_interop_gc_bridge_set_current_o
 JAVA_INTEROP_API    JavaInteropGCBridge    *java_interop_gc_bridge_new                          (JavaVM *jvm);
 JAVA_INTEROP_API    int                     java_interop_gc_bridge_free                         (JavaInteropGCBridge *bridge);
 
-JAVA_INTEROP_API    int                     java_interop_gc_bridge_register_hooks               (JavaInteropGCBridge *bridge, int weak_ref_kind);
+JAVA_INTEROP_API    int                     java_interop_gc_bridge_register_hooks               (JavaInteropGCBridge *bridge);
 JAVA_INTEROP_API    int                     java_interop_gc_bridge_wait_for_bridge_processing   (JavaInteropGCBridge *bridge);
 
 JAVA_INTEROP_API    int                     java_interop_gc_bridge_add_current_app_domain       (JavaInteropGCBridge *bridge);
