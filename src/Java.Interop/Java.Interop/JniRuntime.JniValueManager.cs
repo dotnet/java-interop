@@ -50,7 +50,6 @@ namespace Java.Interop
 		public abstract partial class JniValueManager : ISetRuntime, IDisposable {
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
-			internal const DynamicallyAccessedMemberTypes ConstructorsAndInterfaces = Constructors | DynamicallyAccessedMemberTypes.Interfaces;
 
 			JniRuntime?             runtime;
 			bool                    disposed;
@@ -386,17 +385,8 @@ namespace Java.Interop
 			[return: DynamicallyAccessedMembers (Constructors)]
 			static Type? GetInvokerType (Type type)
 			{
-				const string suffix = "Invoker";
-
 				// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L176-L186
-				const string assemblyGetTypeMessage = "'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
 				const string makeGenericTypeMessage = "Generic 'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
-
-				[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = assemblyGetTypeMessage)]
-				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = assemblyGetTypeMessage)]
-				[return: DynamicallyAccessedMembers (Constructors)]
-				static Type? AssemblyGetType (Assembly assembly, string typeName) =>
-					assembly.GetType (typeName);
 
 				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
 				[return: DynamicallyAccessedMembers (Constructors)]
@@ -409,24 +399,22 @@ namespace Java.Interop
 					type.MakeGenericType (arguments);
 					#pragma warning restore IL3050
 
+				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
+				if (signature == null || signature.InvokerType == null) {
+					return null;
+				}
+
 				Type[] arguments = type.GetGenericArguments ();
 				if (arguments.Length == 0)
-					return AssemblyGetType (type.Assembly, type + suffix);
-				Type definition = type.GetGenericTypeDefinition ();
-				int bt = definition.FullName!.IndexOf ("`", StringComparison.Ordinal);
-				if (bt == -1)
-					throw new NotSupportedException ("Generic type doesn't follow generic type naming convention! " + type.FullName);
-				Type? suffixDefinition = AssemblyGetType (definition.Assembly,
-						definition.FullName.Substring (0, bt) + suffix + definition.FullName.Substring (bt));
-				if (suffixDefinition == null)
-					return null;
-				return MakeGenericType (suffixDefinition, arguments);
+					return signature.InvokerType;
+
+				return MakeGenericType (signature.InvokerType, arguments);
 			}
 
 			public object? CreateValue (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					Type? targetType = null)
 			{
 				if (disposed)
@@ -458,12 +446,12 @@ namespace Java.Interop
 
 			[return: MaybeNull]
 			public T CreateValue<
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					T
 			> (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					Type? targetType = null)
 			{
 				if (disposed)
@@ -501,7 +489,7 @@ namespace Java.Interop
 				return marshaler.CreateGenericValue (ref reference, options, targetType);
 			}
 
-			[return: DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			[return: DynamicallyAccessedMembers (Constructors)]
 			internal Type? GetRuntimeType (JniObjectReference reference)
 			{
 				if (!reference.IsValid)
@@ -515,7 +503,7 @@ namespace Java.Interop
 			public object? GetValue (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					Type? targetType = null)
 			{
 				if (disposed)
@@ -545,7 +533,7 @@ namespace Java.Interop
 
 			[return: MaybeNull]
 			public T GetValue<
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					T
 			> (
 					IntPtr handle)
@@ -556,12 +544,12 @@ namespace Java.Interop
 
 			[return: MaybeNull]
 			public T GetValue<
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					T
 			> (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					Type? targetType = null)
 			{
 				if (!reference.IsValid) {
@@ -599,7 +587,7 @@ namespace Java.Interop
 			Dictionary<Type, JniValueMarshaler> Marshalers = new Dictionary<Type, JniValueMarshaler> ();
 
 			public JniValueMarshaler<T> GetValueMarshaler<
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					T
 			> ()
 			{
@@ -617,9 +605,7 @@ namespace Java.Interop
 				}
 			}
 
-			public JniValueMarshaler GetValueMarshaler (
-					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
-					Type type)
+			public JniValueMarshaler GetValueMarshaler (Type type)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -644,12 +630,8 @@ namespace Java.Interop
 						return marshaler.Value;
 				}
 
-				var listIface   = typeof (IList<>);
-				var listType    =
-					(from iface in type.GetInterfaces ().Concat (new[]{type})
-					 where (listIface).IsAssignableFrom (iface.IsGenericType ? iface.GetGenericTypeDefinition () : iface)
-					 select iface)
-					.FirstOrDefault ();
+				
+				var listType    = GetListType (type);
 				if (listType != null) {
 					var elementType = listType.GenericTypeArguments [0];
 					if (elementType.IsValueType) {
@@ -666,20 +648,20 @@ namespace Java.Interop
 					return JavaPeerableValueMarshaler.Instance;
 				}
 
-				JniValueMarshalerAttribute? ifaceAttribute = null;
-				foreach (var iface in type.GetInterfaces ()) {
-					marshalerAttr = iface.GetCustomAttribute<JniValueMarshalerAttribute> ();
-					if (marshalerAttr != null) {
-						if (ifaceAttribute != null)
-							throw new NotSupportedException ($"There is more than one interface with custom marshaler for type {type}.");
-
-						ifaceAttribute = marshalerAttr;
-					}
-				}
-				if (ifaceAttribute != null)
-					return (JniValueMarshaler) Activator.CreateInstance (ifaceAttribute.MarshalerType)!;
-
 				return GetValueMarshalerCore (type);
+			}
+
+			static Type? GetListType(Type type)
+			{
+				foreach (var iface in GetInterfaces (type).Concat (new [] { type })) {
+					if (typeof (IList<>).IsAssignableFrom (iface.IsGenericType ? iface.GetGenericTypeDefinition () : iface))
+						return iface;
+				}
+				return null;
+
+				[UnconditionalSuppressMessage ("Trimming", "IL2070", Justification = "We handle the case if IList<> is trimmed away")]
+				static Type [] GetInterfaces (Type type) =>
+					type.GetInterfaces ();
 			}
 
 			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
@@ -701,7 +683,7 @@ namespace Java.Interop
 			}
 
 			static JniValueMarshaler GetObjectArrayMarshalerHelper<
-					[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+					[DynamicallyAccessedMembers (Constructors)]
 					T
 			> ()
 			{
@@ -726,7 +708,7 @@ namespace Java.Interop
 		public override object? CreateValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			throw new NotSupportedException ();
@@ -751,7 +733,7 @@ namespace Java.Interop
 		public override IJavaPeerable? CreateGenericValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			var jvm         = JniEnvironment.Runtime;
@@ -828,7 +810,7 @@ namespace Java.Interop
 	}
 
 	sealed class DelegatingValueMarshaler<
-			[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+			[DynamicallyAccessedMembers (Constructors)]
 			T
 	>
 		: JniValueMarshaler<T>
@@ -845,7 +827,7 @@ namespace Java.Interop
 		public override T CreateGenericValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
@@ -890,7 +872,7 @@ namespace Java.Interop
 		public override object? CreateGenericValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			var jvm     = JniEnvironment.Runtime;
@@ -916,16 +898,12 @@ namespace Java.Interop
 
 		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]object? value, ParameterAttributes synchronize)
 		{
-			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "This code path is not used in Android projects.")]
-			[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.Interfaces)]
-			static Type GetType (object value) => value.GetType ();
-
 			if (value == null)
 				return new JniValueMarshalerState ();
 
 			var jvm     = JniEnvironment.Runtime;
 
-			var vm      = jvm.ValueManager.GetValueMarshaler (GetType (value));
+			var vm      = jvm.ValueManager.GetValueMarshaler (value.GetType ());
 			if (vm != Instance) {
 				var s   = vm.CreateObjectReferenceArgumentState (value, synchronize);
 				return new JniValueMarshalerState (s, vm);
