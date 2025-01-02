@@ -63,7 +63,7 @@ namespace Java.Interop.Tools.JavaSource {
 				};
 
 				var fontstyle_tt    = CreateHtmlToCrefElement (grammar, "tt",   "c", InlineDeclarations, optionalEnd: true);
-				var fontstyle_i     = CreateHtmlToCrefElement (grammar, "i",    "i", InlineDeclarations, optionalEnd: true);
+				var fontstyle_i     = CreateHtmlToCrefElement (grammar, "i",    "i", InlineDeclarations, optionalEnd: true, ignoreAttributes: true);
 
 				var preText = new PreBlockDeclarationBodyTerminal ();
 				PreBlockDeclaration.Rule = CreateStartElementIgnoreAttribute ("pre") + preText + CreateEndElement ("pre", grammar, optional: true);
@@ -258,9 +258,12 @@ namespace Java.Interop.Tools.JavaSource {
 				},
 			};
 
-			static NonTerminal CreateHtmlToCrefElement (Grammar grammar, string htmlElement, string crefElement, BnfTerm body, bool optionalEnd = false)
+			static NonTerminal CreateHtmlToCrefElement (Grammar grammar, string htmlElement, string crefElement, BnfTerm body, bool optionalEnd = false, bool ignoreAttributes = false)
 			{
-				var start       = CreateStartElement (htmlElement, grammar);
+				BnfTerm start   = CreateStartElement (htmlElement, grammar);
+				if (ignoreAttributes) {
+					start = CreateStartElementIgnoreAttribute (htmlElement);
+				}
 				var end         = CreateEndElement (htmlElement, grammar, optionalEnd);
 				var nonTerminal = new NonTerminal ("<" + htmlElement + ">", ConcatChildNodes) {
 					Rule = start + body + end,
@@ -285,7 +288,7 @@ namespace Java.Interop.Tools.JavaSource {
 
 			static RegexBasedTerminal CreateStartElementIgnoreAttribute (string startElement, string attribute)
 			{
-				return new RegexBasedTerminal ($"<{startElement} {attribute}", $@"(?i)<{startElement}\s*{attribute}[^>]*>") {
+				return new RegexBasedTerminal ($"<{startElement} {attribute}", $@"(?i)<\b{startElement}\b\s*{attribute}[^>]*>") {
 					AstConfig = new AstNodeConfig {
 						NodeCreator = (context, parseNode) => parseNode.AstNode = "",
 					},
