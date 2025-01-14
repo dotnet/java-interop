@@ -9,11 +9,6 @@ using System.Text;
 
 namespace Java.Interop {
 
-	enum GCBridgeUseWeakReferenceKind {
-		Java,
-		Jni,
-	}
-
 	class MonoRuntimeValueManager : JniRuntime.JniValueManager {
 
 		#pragma warning disable 0649
@@ -52,7 +47,7 @@ namespace Java.Interop {
 				bridge  = IntPtr.Zero;
 				throw;
 			}
-			if (JreNativeMethods.java_interop_gc_bridge_register_hooks (bridge, GCBridgeUseWeakReferenceKind.Jni) < 0)
+			if (JreNativeMethods.java_interop_gc_bridge_register_hooks (bridge) < 0)
 				throw new NotSupportedException ("Could not register GC Bridge with Mono!");
 		}
 
@@ -393,7 +388,7 @@ namespace Java.Interop {
 		internal static extern int java_interop_gc_bridge_set_current_once (IntPtr bridge);
 
 		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_register_hooks (IntPtr bridge, GCBridgeUseWeakReferenceKind weak_ref_kind);
+		internal static extern int java_interop_gc_bridge_register_hooks (IntPtr bridge);
 
 		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
 		internal static extern IntPtr java_interop_gc_bridge_new (IntPtr jvm);

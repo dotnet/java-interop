@@ -22,7 +22,6 @@ namespace Java.Interop
 		JniObjectReferenceType  handle_type;
 	#pragma warning disable 0169
 		// Used by JavaInteropGCBridge
-		IntPtr                  weak_handle;
 		int                     refs_added;
 	#pragma warning restore 0169
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
