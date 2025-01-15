@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Java.Interop
 {
 	[JniTypeSignature ("java/lang/Object", GenerateJavaPeer=false)]
+	[Serializable]
 	unsafe public class JavaObject : IJavaPeerable
 	{
 		internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
