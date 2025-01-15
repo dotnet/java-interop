@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace Java.Interop
 {
@@ -13,19 +14,23 @@ namespace Java.Interop
 
 		readonly static JniPeerMembers _members = new JniPeerMembers ("java/lang/Object", typeof (JavaObject));
 
-		public int                  JniIdentityHashCode { get; private set; }
-		public JniManagedPeerStates JniManagedPeerState { get; private set; }
+		[NonSerialized] int                     identityHashCode;
+		[NonSerialized] JniManagedPeerStates    managedPeerState;
+
+		public int                  JniIdentityHashCode => identityHashCode;
+
+		public JniManagedPeerStates JniManagedPeerState => managedPeerState;
 
 #if FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
-		JniObjectReference  reference;
+		[NonSerialized] JniObjectReference  reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-		IntPtr                  handle;
-		JniObjectReferenceType  handle_type;
+		[NonSerialized] IntPtr                  handle;
+		[NonSerialized] JniObjectReferenceType  handle_type;
 	#pragma warning disable 0169
 		// Used by JavaInteropGCBridge
-		IntPtr                  weak_handle;
-		int                     refs_added;
+		[NonSerialized] IntPtr                  weak_handle;
+		[NonSerialized] int                     refs_added;
 	#pragma warning restore 0169
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
@@ -152,12 +157,12 @@ namespace Java.Interop
 
 		void IJavaPeerable.SetJniIdentityHashCode (int value)
 		{
-			JniIdentityHashCode = value;
+			identityHashCode    = value;
 		}
 
 		void IJavaPeerable.SetJniManagedPeerState (JniManagedPeerStates value)
 		{
-			JniManagedPeerState = value;
+			managedPeerState    = value;
 		}
 
 		void IJavaPeerable.SetPeerReference (JniObjectReference reference)
