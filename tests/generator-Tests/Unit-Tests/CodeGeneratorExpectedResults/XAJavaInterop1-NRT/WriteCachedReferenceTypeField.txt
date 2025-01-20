@@ -1,0 +1,29 @@
+// Metadata.xml XPath class reference: path="/api/package[@name='java.code']/class[@name='MyClass']"
+[global::Android.Runtime.Register ("java/code/MyClass", DoNotGenerateAcw=true)]
+public partial class MyClass {
+	private static java.code.Example? _field_cache;
+
+	// Metadata.xml XPath field reference: path="/api/package[@name='java.code']/class[@name='MyClass']/field[@name='field']"
+	[Register ("field")]
+	public static java.code.Example? field {
+		get {
+			if (_field_cache != null) return (java.code.Example)_field_cache;
+
+			const string __id = "field.Ljava/code/Example;";
+
+			var __v = _members.StaticFields.GetObjectValue (__id);
+			return (java.code.Example?)(_field_cache = global::Java.Lang.Object.GetObject<java.code.Example> (__v.Handle, JniHandleOwnership.TransferLocalRef));
+		}
+	}
+
+	static readonly JniPeerMembers _members = new XAPeerMembers ("java/code/MyClass", typeof (MyClass));
+
+	internal static IntPtr class_ref {
+		get { return _members.JniPeerType.PeerReference.Handle; }
+	}
+
+	protected MyClass (IntPtr javaReference, JniHandleOwnership transfer) : base (javaReference, transfer)
+	{
+	}
+
+}
