@@ -88,10 +88,11 @@ namespace generator.SourceWriters
 			var invokeType = SourceWriterExtensions.GetInvokeType (field.GetMethodPrefix);
 			var indirect = field.IsStatic ? "StaticFields" : "InstanceFields";
 			var invoke = "Get{0}Value";
+			var body_cast = invokeType == "Boolean" ? " ? (sbyte)1 : (sbyte)0" : string.Empty;
 
 			invoke = string.Format (invoke, invokeType);
 
-			writer.WriteLine ($"var __v = {field.Symbol.ReturnCast}_members.{indirect}.{invoke} (__id{(field.IsStatic ? "" : ", this")});");
+			writer.WriteLine ($"var __v = {field.Symbol.ReturnCast}_members.{indirect}.{invoke} (__id{(field.IsStatic ? "" : ", this")}){body_cast};");
 
 			if (opt.CodeGenerationTarget == CodeGenerationTarget.JavaInterop1) {
 				if (field.Symbol.NativeType == field.Symbol.FullName) {

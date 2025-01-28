@@ -277,7 +277,8 @@ namespace generator.SourceWriters
 			var this_param = method.IsStatic ? $"__id{call_args}" : $"__id, this{call_args}";
 
 			// Example: var __rm = _members.InstanceMethods.InvokeVirtualObjectMethod (__id, this, __args);
-			body.Add ($"\t{return_var}{members}.{method_type}.Invoke{virt_type}{invokeType}Method ({this_param});");
+			var body_cast = invokeType == "Boolean" ? " ? (sbyte)1 : (sbyte)0" : string.Empty;
+			body.Add ($"\t{return_var}{members}.{method_type}.Invoke{virt_type}{invokeType}Method ({this_param}){body_cast};");
 
 			if (!method.IsVoid) {
 				var r = "__rm";
