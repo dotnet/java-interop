@@ -12,8 +12,11 @@ using NUnit.Framework;
 
 namespace Java.InteropTests {
 
+	// Android doesn't support `[NonParallelizable]`, but runs tests sequentially by default.
+#if !__ANDROID__
 	// Modifies JniRuntime.valueManager instance field; can't be done in parallel
 	[NonParallelizable]
+#endif  // !__ANDROID__
 	public abstract class JniRuntimeJniValueManagerContract : JavaVMFixture {
 
 		protected abstract Type ValueManagerType {
