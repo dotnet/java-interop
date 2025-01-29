@@ -277,6 +277,7 @@ namespace Java.InteropTests {
 		protected override Type ValueManagerType => typeof (T);
 	}
 
+#if !__ANDROID__
 #if !NETCOREAPP
 	[TestFixture]
 	public class JniRuntimeJniValueManagerContract_Mono : JniRuntimeJniValueManagerContract {
@@ -293,3 +294,4 @@ namespace Java.InteropTests {
 		protected override Type ValueManagerType => ManagedValueManagerType;
 	}
 }
+#endif  // !__ANDROID__
