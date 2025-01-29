@@ -293,5 +293,5 @@ namespace Java.InteropTests {
 
 		protected override Type ValueManagerType => ManagedValueManagerType;
 	}
-}
 #endif  // !__ANDROID__
+}
