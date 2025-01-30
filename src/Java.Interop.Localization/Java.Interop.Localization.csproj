@@ -5,8 +5,6 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <Import Project="..\..\TargetFrameworkDependentValues.props" />

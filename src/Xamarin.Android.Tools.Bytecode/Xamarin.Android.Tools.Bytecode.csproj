@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
