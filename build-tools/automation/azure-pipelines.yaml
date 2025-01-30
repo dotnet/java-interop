@@ -15,10 +15,6 @@ pr:
     - README.md
     - Documentation/*
 
-parameters:
-- name: ApiScanSourceBranch
-  default: 'refs/heads/main'
-
 # Global variables
 variables:
   RunningOnCI: true
@@ -67,7 +63,7 @@ jobs:
 - job: mac_dotnet_build
   displayName: Mac - .NET
   pool:
-    name: $(HostedPool)
+    name: $(HostedPoolName)
     vmImage: $(HostedMacImage)
   timeoutInMinutes: 20
   workspace:
