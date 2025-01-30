@@ -25,13 +25,13 @@ variables:
   HostedPoolName: Azure Pipelines
   HostedWinImage: windows-2022
   HostedMacImage: macOS-14
-  DncEngPublicPoolName: NetCore-Public
 
 jobs:
 - job: windows_dotnet_build
   displayName: Windows - .NET
   pool:
-    name: $(DncEngPublicPoolName)
+    name: $(HostedPoolName)
+    vmImage: $(HostedWinImage)
   timeoutInMinutes: 60
   workspace:
     clean: all
