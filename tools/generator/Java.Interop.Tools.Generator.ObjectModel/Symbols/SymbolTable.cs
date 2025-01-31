@@ -57,7 +57,7 @@ namespace MonoDroid.Generation {
 			this.target = target;
 
 			AddType (new SimpleSymbol ("IntPtr.Zero", "void", "void", "V"));
-			AddType (new SimpleSymbol ("false", "boolean", "bool", "Z"));
+			AddType (new SimpleSymbol ("false", "boolean", "bool", "Z", "sbyte", from_fmt: "{0} != 0", to_fmt: "{0} ? (sbyte)1 : (sbyte)0"));
 			AddType (new SimpleSymbol ("0", "byte", "sbyte", "B"));
 			AddType (new SimpleSymbol ("(char)0", "char", "char", "C"));
 			AddType (new SimpleSymbol ("0.0", "double", "double", "D"));

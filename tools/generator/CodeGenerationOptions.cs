@@ -217,6 +217,7 @@ namespace MonoDroid.Generation
 				case "uint": return "i";
 				case "ulong": return "j";
 				case "ushort": return "s";
+				case "boolean": return "B";     // We marshal boolean (Z) as byte (B)
 			}
 
 			var jni_name = symbol.JniName;
