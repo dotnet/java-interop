@@ -336,31 +336,21 @@ namespace Java.Interop
 
 				JniObjectReference.Dispose (ref targetClass);
 
-				var ctor = GetPeerConstructor (ref refClass, targetType);
-				if (ctor == null) {
+				var peer = CreatePeerInstance (ref refClass, targetType, ref reference, transfer);
+				if (peer == null) {
 					throw new NotSupportedException (string.Format ("Could not find an appropriate constructable wrapper type for Java type '{0}', targetType='{1}'.",
 							JniEnvironment.Types.GetJniTypeNameFromInstance (reference), targetType));
 				}
-
-				var acts = new object[] {
-					reference,
-					transfer,
-				};
-				try {
-					var peer    = (IJavaPeerable) ctor.Invoke (acts);
-					peer.SetJniManagedPeerState (peer.JniManagedPeerState | JniManagedPeerStates.Replaceable);
-					return peer;
-				} finally {
-					reference   = (JniObjectReference) acts [0];
-				}
+				peer.SetJniManagedPeerState (peer.JniManagedPeerState | JniManagedPeerStates.Replaceable);
+				return peer;
 			}
 
-			static  readonly    Type    ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
-
-			ConstructorInfo? GetPeerConstructor (
+			IJavaPeerable? CreatePeerInstance (
 					ref JniObjectReference klass,
 					[DynamicallyAccessedMembers (Constructors)]
-					Type fallbackType)
+					Type fallbackType,
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions transfer)
 			{
 				var jniTypeName = JniEnvironment.Types.GetJniTypeNameFromClass (klass);
 
@@ -373,11 +363,12 @@ namespace Java.Interop
 					type    = Runtime.TypeManager.GetType (sig);
 
 					if (type != null) {
-						var ctor = GetActivationConstructor (type);
+						type     = GetInvokerType (type) ?? type;
+						var peer = TryCreatePeer (ref reference, transfer, type);
 
-						if (ctor != null) {
+						if (peer != null) {
 							JniObjectReference.Dispose (ref klass);
-							return ctor;
+							return peer;
 						}
 					}
 
@@ -391,20 +382,29 @@ namespace Java.Interop
 				}
 				JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
 
-				return GetActivationConstructor (fallbackType);
+				return TryCreatePeer (ref reference, transfer, fallbackType);
 			}
 
-			static ConstructorInfo? GetActivationConstructor (
+			const               BindingFlags    ActivationConstructorBindingFlags   = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+			static  readonly    Type            ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
+			static  readonly    Type[]          JIConstructorSignature  = new Type [] { ByRefJniObjectReference, typeof (JniObjectReferenceOptions) };
+
+
+			protected virtual IJavaPeerable? TryCreatePeer (
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
-				if (type.IsAbstract || type.IsInterface) {
-					type = GetInvokerType (type) ?? type;
-				}
-				foreach (var c in type.GetConstructors (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
-					var p = c.GetParameters ();
-					if (p.Length == 2 && p [0].ParameterType == ByRefJniObjectReference && p [1].ParameterType == typeof (JniObjectReferenceOptions))
-						return c;
+				var c = type.GetConstructor (ActivationConstructorBindingFlags, null, JIConstructorSignature, null);
+				if (c != null) {
+					var args = new object[] {
+						reference,
+						options,
+					};
+					var p       = (IJavaPeerable) c.Invoke (args);
+					reference   = (JniObjectReference) args [0];
+					return p;
 				}
 				return null;
 			}
