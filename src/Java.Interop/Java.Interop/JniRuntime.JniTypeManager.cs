@@ -81,6 +81,7 @@ namespace Java.Interop {
 
 		public partial class JniTypeManager : IDisposable, ISetRuntime {
 
+			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 			internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
 			internal const DynamicallyAccessedMemberTypes MethodsAndPrivateNested = Methods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 			internal const DynamicallyAccessedMemberTypes MethodsConstructors = MethodsAndPrivateNested | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
@@ -383,6 +384,37 @@ namespace Java.Interop {
 					yield return ret;
 				}
 				yield break;
+			}
+
+			[return: DynamicallyAccessedMembers (Constructors)]
+			internal protected virtual Type? GetInvokerType (
+					[DynamicallyAccessedMembers (Constructors)]
+					Type type)
+			{
+				// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L176-L186
+				const string makeGenericTypeMessage = "Generic 'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
+
+				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
+				[return: DynamicallyAccessedMembers (Constructors)]
+				static Type MakeGenericType (
+						[DynamicallyAccessedMembers (Constructors)]
+						Type type,
+						Type [] arguments) =>
+					// FIXME: https://github.com/dotnet/java-interop/issues/1192
+					#pragma warning disable IL3050
+					type.MakeGenericType (arguments);
+					#pragma warning restore IL3050
+
+				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
+				if (signature == null || signature.InvokerType == null) {
+					return null;
+				}
+
+				Type[] arguments = type.GetGenericArguments ();
+				if (arguments.Length == 0)
+					return signature.InvokerType;
+
+				return MakeGenericType (signature.InvokerType, arguments);
 			}
 
 #if NET
