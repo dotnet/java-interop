@@ -363,8 +363,7 @@ namespace Java.Interop
 					type    = Runtime.TypeManager.GetType (sig);
 
 					if (type != null) {
-						type     = GetInvokerType (type) ?? type;
-						var peer = TryCreatePeer (ref reference, transfer, type);
+						var peer = TryCreatePeerInstance (ref reference, transfer, type);
 
 						if (peer != null) {
 							JniObjectReference.Dispose (ref klass);
@@ -382,7 +381,19 @@ namespace Java.Interop
 				}
 				JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
 
-				return TryCreatePeer (ref reference, transfer, fallbackType);
+				return TryCreatePeerInstance (ref reference, transfer, fallbackType);
+			}
+
+			IJavaPeerable? TryCreatePeerInstance (
+					ref JniObjectReference reference,
+					JniObjectReferenceOptions options,
+					[DynamicallyAccessedMembers (Constructors)]
+					Type type)
+			{
+				if (type.IsAbstract || type.IsInterface) {
+					type = GetInvokerType (type) ?? type;
+				}
+				return TryCreatePeer (ref reference, options, type);
 			}
 
 			const               BindingFlags    ActivationConstructorBindingFlags   = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
