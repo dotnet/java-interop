@@ -79,6 +79,7 @@ namespace Java.Interop {
 		}
 #endif  // NET
 
+		/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='T:JniTypeManager']/*" />
 		public partial class JniTypeManager : IDisposable, ISetRuntime {
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
@@ -386,6 +387,7 @@ namespace Java.Interop {
 				yield break;
 			}
 
+			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='T:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]
 			public Type? GetInvokerType (
 					[DynamicallyAccessedMembers (Constructors)]
