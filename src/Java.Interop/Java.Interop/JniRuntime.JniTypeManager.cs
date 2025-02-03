@@ -387,7 +387,7 @@ namespace Java.Interop {
 				yield break;
 			}
 
-			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='T:GetInvokerType']/*" />
+			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]
 			public Type? GetInvokerType (
 					[DynamicallyAccessedMembers (Constructors)]
