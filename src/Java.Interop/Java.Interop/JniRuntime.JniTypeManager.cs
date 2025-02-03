@@ -387,7 +387,7 @@ namespace Java.Interop {
 			}
 
 			[return: DynamicallyAccessedMembers (Constructors)]
-			internal protected virtual Type? GetInvokerType (
+			public virtual Type? GetInvokerType (
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
