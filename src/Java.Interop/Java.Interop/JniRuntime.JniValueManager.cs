@@ -390,9 +390,7 @@ namespace Java.Interop
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
-				if (type.IsAbstract || type.IsInterface) {
-					type = Runtime.TypeManager.GetInvokerType (type) ?? type;
-				}
+				type    = Runtime.TypeManager.GetInvokerType (type) ?? type;
 				return TryCreatePeer (ref reference, options, type);
 			}
 
