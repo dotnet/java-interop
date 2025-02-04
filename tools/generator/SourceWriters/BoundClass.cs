@@ -83,7 +83,7 @@ namespace generator.SourceWriters
 				NestedTypes.Add (ic);
 
 			// Sibling classes
-			if (!klass.AssemblyQualifiedName.Contains ('/')) {
+			if (!klass.AssemblyQualifiedName.Contains ('+')) {
 				foreach (InterfaceExtensionInfo nestedIface in klass.GetNestedInterfaceTypes ())
 					if (nestedIface.Type.Methods.Any (m => m.CanHaveStringOverload) || nestedIface.Type.Methods.Any (m => m.Asyncify))
 						sibling_types.Add (new InterfaceExtensionsClass (nestedIface.Type, nestedIface.DeclaringType, opt));
