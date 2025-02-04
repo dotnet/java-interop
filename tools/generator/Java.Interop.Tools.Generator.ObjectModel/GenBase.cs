@@ -181,10 +181,10 @@ namespace MonoDroid.Generation
 		public string AnnotatedVisibility => support.AnnotatedVisibility;
 
 		// not: not currently assembly qualified, but it uses needed
-		// Type.GetType() conventions such as '/' for nested types.
+		// Type.GetType() conventions such as '+' for nested types.
 		public string AssemblyQualifiedName => string.IsNullOrWhiteSpace (Namespace)
-			? $"{FullName.Replace ('.', '/')}"
-			: $"{Namespace}." + $"{FullName.Substring (Namespace.Length + 1).Replace ('.', '/')}";
+			? $"{FullName.Replace ('.', '+')}"
+			: $"{Namespace}." + $"{FullName.Substring (Namespace.Length + 1).Replace ('.', '+')}";
 
 		public int ApiAvailableSince { get; set; }
 

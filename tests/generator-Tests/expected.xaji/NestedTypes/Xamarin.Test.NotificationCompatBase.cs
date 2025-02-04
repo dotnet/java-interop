@@ -25,7 +25,7 @@ namespace Xamarin.Test {
 			[Register ("xamarin/test/NotificationCompatBase$Action$Factory", "", "Xamarin.Test.NotificationCompatBase/Action/IFactoryInvoker")]
 			public partial interface IFactory : IJavaObject, IJavaPeerable {
 				// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/interface[@name='NotificationCompatBase.Action.Factory']/method[@name='build' and count(parameter)=1 and parameter[1][@type='int']]"
-				[Register ("build", "(I)Lxamarin/test/NotificationCompatBase$Action;", "GetBuild_IHandler:Xamarin.Test.NotificationCompatBase/Action/IFactoryInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
+				[Register ("build", "(I)Lxamarin/test/NotificationCompatBase$Action;", "GetBuild_IHandler:Xamarin.Test.NotificationCompatBase+Action+IFactoryInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
 				global::Xamarin.Test.NotificationCompatBase.Action Build (int p0);
 
 			}

@@ -8,11 +8,11 @@ public partial interface IParent : IJavaObject, IJavaPeerable {
 	}
 
 	// Metadata.xml XPath interface reference: path="/api/package[@name='com.xamarin.android']/interface[@name='Parent.Child']"
-	[Register ("com/xamarin/android/Parent$Child", "", "Com.Xamarin.Android.IParent/IChildInvoker")]
+	[Register ("com/xamarin/android/Parent$Child", "", "Com.Xamarin.Android.IParent+IChildInvoker")]
 	public partial interface IChild : IJavaObject, IJavaPeerable {
 		int Bar {
 			// Metadata.xml XPath method reference: path="/api/package[@name='com.xamarin.android']/interface[@name='Parent.Child']/method[@name='getBar' and count(parameter)=0]"
-			[Register ("getBar", "()I", "GetGetBarHandler:Com.Xamarin.Android.IParent/IChildInvoker, MyAssembly")]
+			[Register ("getBar", "()I", "GetGetBarHandler:Com.Xamarin.Android.IParent+IChildInvoker, MyAssembly")]
 			get; 
 		}
 

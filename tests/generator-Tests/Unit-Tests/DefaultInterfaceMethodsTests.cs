@@ -461,7 +461,7 @@ namespace generatortests
 
 			var generated = writer.ToString ();
 
-			Assert.True (generated.Contains ("GetOnActivityDestroyed_IHandler:Com.Xamarin.Android.Application/IActivityLifecycleInterface, MyAssembly"));
+			Assert.True (generated.Contains ("GetOnActivityDestroyed_IHandler:Com.Xamarin.Android.Application+IActivityLifecycleInterface, MyAssembly"));
 			Assert.False (generated.Contains ("GetOnActivityDestroyed_IHandler:Com.Xamarin.Android.Application.IActivityLifecycleInterface, MyAssembly"));
 		}
 

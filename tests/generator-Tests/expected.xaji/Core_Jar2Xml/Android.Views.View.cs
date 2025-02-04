@@ -22,7 +22,7 @@ namespace Android.Views {
 		[Register ("android/view/View$OnClickListener", "", "Android.Views.View/IOnClickListenerInvoker")]
 		public partial interface IOnClickListener : IJavaObject, IJavaPeerable {
 			// Metadata.xml XPath method reference: path="/api/package[@name='android.view']/interface[@name='View.OnClickListener']/method[@name='onClick' and count(parameter)=1 and parameter[1][@type='android.view.View']]"
-			[Register ("onClick", "(Landroid/view/View;)V", "GetOnClick_Landroid_view_View_Handler:Android.Views.View/IOnClickListenerInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
+			[Register ("onClick", "(Landroid/view/View;)V", "GetOnClick_Landroid_view_View_Handler:Android.Views.View+IOnClickListenerInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
 			void OnClick (global::Android.Views.View v);
 
 		}

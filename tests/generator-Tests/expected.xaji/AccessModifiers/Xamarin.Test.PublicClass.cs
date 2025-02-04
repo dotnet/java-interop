@@ -22,7 +22,7 @@ namespace Xamarin.Test {
 		[Register ("xamarin/test/PublicClass$ProtectedInterface", "", "Xamarin.Test.PublicClass/IProtectedInterfaceInvoker")]
 		protected internal partial interface IProtectedInterface : IJavaObject, IJavaPeerable {
 			// Metadata.xml XPath method reference: path="/api/package[@name='xamarin.test']/interface[@name='PublicClass.ProtectedInterface']/method[@name='foo' and count(parameter)=0]"
-			[Register ("foo", "()V", "GetFooHandler:Xamarin.Test.PublicClass/IProtectedInterfaceInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
+			[Register ("foo", "()V", "GetFooHandler:Xamarin.Test.PublicClass+IProtectedInterfaceInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")]
 			void Foo ();
 
 		}
