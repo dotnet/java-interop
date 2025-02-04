@@ -78,7 +78,7 @@ namespace generator.SourceWriters
 			if (iface.IsConstSugar (opt))
 				return;
 
-			if (!iface.AssemblyQualifiedName.Contains ('/')) {
+			if (!iface.AssemblyQualifiedName.Contains ('+')) {
 				if (iface.Methods.Any (m => m.CanHaveStringOverload) || iface.Methods.Any (m => m.Asyncify))
 					post_sibling_types.Add (new InterfaceExtensionsClass (iface, null, opt));
 			}
