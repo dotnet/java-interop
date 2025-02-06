@@ -21,10 +21,10 @@ class BlittableTypeTests : CodeGeneratorTestBase
 		var actual = GetGeneratedTypeOutput (klass);
 
 		// Return type should be byte
-		Assert.That (actual, Contains.Substring ("static byte n_IsEmpty"));
+		Assert.That (actual, Contains.Substring ("static sbyte n_IsEmpty"));
 
 		// Return statement should convert to 0 or 1
-		Assert.That (actual, Contains.Substring ("return __this.IsEmpty () ? 1 : 0"));
+		Assert.That (actual, Contains.Substring ("return __this.IsEmpty () ? (sbyte)1 : (sbyte)0"));
 
 		// Ensure the marshal delegate is byte
 		Assert.That (actual, Contains.Substring ("new _JniMarshal_PP_B"));
@@ -42,7 +42,7 @@ class BlittableTypeTests : CodeGeneratorTestBase
 		var actual = GetGeneratedTypeOutput (klass);
 
 		// Method parameter should be byte
-		Assert.That (actual, Contains.Substring ("static void n_SetEmpty_Z (IntPtr jnienv, IntPtr native__this, byte native_value)"));
+		Assert.That (actual, Contains.Substring ("static void n_SetEmpty_Z (IntPtr jnienv, IntPtr native__this, sbyte native_value)"));
 
 		// Method should convert from 0 or 1
 		Assert.That (actual, Contains.Substring ("var value = native_value != 0;"));
@@ -59,13 +59,13 @@ class BlittableTypeTests : CodeGeneratorTestBase
 		var actual = GetGeneratedTypeOutput (klass);
 
 		// Getter return type should be byte
-		Assert.That (actual, Contains.Substring ("static byte n_get_IsEmpty"));
+		Assert.That (actual, Contains.Substring ("static sbyte n_get_IsEmpty"));
 
 		// Getter return statement should convert to 0 or 1
-		Assert.That (actual, Contains.Substring ("return __this.IsEmpty ? 1 : 0"));
+		Assert.That (actual, Contains.Substring ("return __this.IsEmpty ? (sbyte)1 : (sbyte)0"));
 
 		// Setter parameter should be byte
-		Assert.That (actual, Contains.Substring ("static void n_set_IsEmpty_Z (IntPtr jnienv, IntPtr native__this, byte native_value)"));
+		Assert.That (actual, Contains.Substring ("static void n_set_IsEmpty_Z (IntPtr jnienv, IntPtr native__this, sbyte native_value)"));
 
 		// Setter should convert from 0 or 1
 		Assert.That (actual, Contains.Substring ("var value = native_value != 0;"));
