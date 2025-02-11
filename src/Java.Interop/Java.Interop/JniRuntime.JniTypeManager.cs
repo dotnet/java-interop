@@ -169,17 +169,6 @@ namespace Java.Interop {
 						return new JniTypeSignature (genericSimpleRef, rank, false);
 				}
 
-				var name = type.GetCustomAttribute<JniTypeSignatureAttribute> (inherit: false);
-				if (name != null) {
-#if NET
-					var altRef = GetReplacementType (name.SimpleReference);
-					if (altRef != null) {
-						return new JniTypeSignature (altRef, name.ArrayRank + rank, name.IsKeyword);
-					}
-#endif  // NET
-					return new JniTypeSignature (name.SimpleReference, name.ArrayRank + rank, name.IsKeyword);
-				}
-
 				var simpleRef = GetSimpleReference (type);
 				if (simpleRef != null)
 					return new JniTypeSignature (simpleRef, rank, false);
@@ -218,15 +207,6 @@ namespace Java.Interop {
 							continue;
 						yield return new JniTypeSignature (genericSimpleRef, rank, false);
 					}
-				}
-
-				var name = type.GetCustomAttribute<JniTypeSignatureAttribute> (inherit: false);
-				if (name != null) {
-					var altRef = GetReplacementType (name.SimpleReference);
-					if (altRef != null) {
-						yield return new JniTypeSignature (altRef, name.ArrayRank + rank, name.IsKeyword);
-					}
-					yield return new JniTypeSignature (name.SimpleReference, name.ArrayRank + rank, name.IsKeyword);
 				}
 
 				foreach (var simpleRef in GetSimpleReferences (type)) {
@@ -268,7 +248,18 @@ namespace Java.Interop {
 					throw new ArgumentNullException (nameof (type));
 				if (type.IsArray)
 					throw new ArgumentException ("Array type '" + type.FullName + "' is not supported.", nameof (type));
-				return EmptyStringArray;
+
+				var name = type.GetCustomAttribute<JniTypeSignatureAttribute> (inherit: false);
+				if (name != null) {
+					var altRef = GetReplacementType (name.SimpleReference);
+					if (altRef != null) {
+						yield return altRef;
+					} else {
+						yield return name.SimpleReference;
+					}
+				}
+
+				yield break;
 			}
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
