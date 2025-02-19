@@ -39,6 +39,8 @@ jobs:
   - checkout: self
     submodules: recursive
 
+  - script: echo hello
+
   - template: templates\install-dependencies.yaml
 
   - template: templates\core-build.yaml
