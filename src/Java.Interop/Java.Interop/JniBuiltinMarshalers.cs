@@ -49,6 +49,7 @@ namespace Java.Interop {
 				case TypeCode.Boolean:
 					signature = GetCachedTypeSignature (ref __BooleanTypeSignature, "Z", arrayRank: 0, keyword: true);
 					return true;
+				case TypeCode.Byte:
 				case TypeCode.SByte:
 					signature = GetCachedTypeSignature (ref __SByteTypeSignature, "B", arrayRank: 0, keyword: true);
 					return true;

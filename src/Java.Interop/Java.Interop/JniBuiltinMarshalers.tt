@@ -57,6 +57,11 @@ namespace Java.Interop {
 					return true;
 <#
 	foreach (var type in types) {
+		if (type.Name == "Byte") {
+#>
+				case TypeCode.Byte:
+<#
+		}
 #>
 				case TypeCode.<#= type.Type #>:
 					signature = GetCachedTypeSignature (ref __<#= type.Type #>TypeSignature, "<#= type.JniType #>", arrayRank: 0, keyword: true);
@@ -185,7 +190,7 @@ namespace Java.Interop {
 		public override object? CreateValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			if (!reference.IsValid)
@@ -196,7 +201,7 @@ namespace Java.Interop {
 		public override <#= type.Type #> CreateGenericValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			if (!reference.IsValid)
@@ -230,6 +235,7 @@ namespace Java.Interop {
 			state   = new JniValueMarshalerState ();
 		}
 
+		[RequiresDynamicCode (ExpressionRequiresUnreferencedCode)]
 		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
 		{
@@ -242,6 +248,7 @@ namespace Java.Interop {
 			return sourceValue;
 		}
 
+		[RequiresDynamicCode (ExpressionRequiresUnreferencedCode)]
 		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
@@ -256,7 +263,7 @@ namespace Java.Interop {
 		public override <#= type.Type #>? CreateGenericValue (
 				ref JniObjectReference reference,
 				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (ConstructorsAndInterfaces)]
+				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
 			if (!reference.IsValid)

@@ -18,7 +18,7 @@ namespace Java.InteropTests
 			Assert.Throws<ArgumentException>(() => JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (typeof (int[,])));
 			Assert.Throws<ArgumentException>(() => JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (typeof (int[,][])));
 			Assert.Throws<ArgumentException>(() => JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (typeof (int[][,])));
-			Assert.Throws<ArgumentException>(() => JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (typeof (Action<>)));
+			Assert.Throws<NotSupportedException>(() => JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (typeof (Action<>)));
 			Assert.AreEqual (null, JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (typeof (JniRuntimeTest)).SimpleReference);
 
 			AssertGetJniTypeInfoForType (typeof (string),   "java/lang/String",   false,  0);
@@ -40,6 +40,7 @@ namespace Java.InteropTests
 			AssertGetJniTypeInfoForType (typeof (StringComparison[]),   "[I",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (StringComparison[][]), "[[I",  true,   2);
 
+			AssertGetJniTypeInfoForType (typeof (byte[]),       "[B",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (int[]),        "[I",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (int[][]),      "[[I",  true,   2);
 			AssertGetJniTypeInfoForType (typeof (int[][][]),    "[[[I", true,   3);
@@ -89,14 +90,16 @@ namespace Java.InteropTests
 		static void AssertGetJniTypeInfoForType (Type type, string jniType, bool isKeyword, int arrayRank)
 		{
 			var info = JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (type);
+			Assert.IsTrue (info.IsValid, $"info.IsValid for `{type}`");
 
 			// `GetTypeSignature() and `GetTypeSignatures()` should be "in sync"; verify that!
 			var info2   = JniRuntime.CurrentRuntime.TypeManager.GetTypeSignatures (type).FirstOrDefault ();
+			Assert.IsTrue (info2.IsValid, $"info2.IsValid for `{type}`");
 
 			Assert.AreEqual (jniType,   info.Name,          $"info.Name for `{type}`");
-			Assert.AreEqual (jniType,   info2.Name,         $"info.Name for `{type}`");
+			Assert.AreEqual (jniType,   info2.Name,         $"info2.Name for `{type}`");
 			Assert.AreEqual (arrayRank, info.ArrayRank,     $"info.ArrayRank for `{type}`");
-			Assert.AreEqual (arrayRank, info2.ArrayRank,    $"info.ArrayRank for `{type}`");
+			Assert.AreEqual (arrayRank, info2.ArrayRank,    $"info2.ArrayRank for `{type}`");
 		}
 
 		[Test]
