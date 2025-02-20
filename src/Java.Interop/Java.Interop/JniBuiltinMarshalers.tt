@@ -18,14 +18,14 @@ using Java.Interop.Expressions;
 namespace Java.Interop {
 <#
 	var types = new[]{
-		new { Name = "Boolean",     Type = "Boolean",   JniCallType = "Boolean",    JniType = "Z",  GetValue = "booleanValue" },
-		new { Name = "Byte",        Type = "SByte",     JniCallType = "Byte",       JniType = "B",  GetValue = "byteValue" },
-		new { Name = "Character",   Type = "Char",      JniCallType = "Char",       JniType = "C",  GetValue = "charValue" },
-		new { Name = "Short",       Type = "Int16",     JniCallType = "Short",      JniType = "S",  GetValue = "shortValue" },
-		new { Name = "Integer",     Type = "Int32",     JniCallType = "Int",        JniType = "I",  GetValue = "intValue" },
-		new { Name = "Long",        Type = "Int64",     JniCallType = "Long",       JniType = "J",  GetValue = "longValue" },
-		new { Name = "Float",       Type = "Single",    JniCallType = "Float",      JniType = "F",  GetValue = "floatValue" },
-		new { Name = "Double",      Type = "Double",    JniCallType = "Double",     JniType = "D",  GetValue = "doubleValue" },
+		new { Name = "Boolean",     Type = "Boolean",   UnsignedType = "",          JniCallType = "Boolean",    JniType = "Z",  GetValue = "booleanValue" },
+		new { Name = "Byte",        Type = "SByte",     UnsignedType = "Byte",	    JniCallType = "Byte",       JniType = "B",  GetValue = "byteValue" },
+		new { Name = "Character",   Type = "Char",      UnsignedType = "",          JniCallType = "Char",       JniType = "C",  GetValue = "charValue" },
+		new { Name = "Short",       Type = "Int16",     UnsignedType = "UInt16",    JniCallType = "Short",      JniType = "S",  GetValue = "shortValue" },
+		new { Name = "Integer",     Type = "Int32",     UnsignedType = "UInt32",    JniCallType = "Int",        JniType = "I",  GetValue = "intValue" },
+		new { Name = "Long",        Type = "Int64",     UnsignedType = "UInt64",    JniCallType = "Long",       JniType = "J",  GetValue = "longValue" },
+		new { Name = "Float",       Type = "Single",    UnsignedType = "",          JniCallType = "Float",      JniType = "F",  GetValue = "floatValue" },
+		new { Name = "Double",      Type = "Double",    UnsignedType = "",          JniCallType = "Double",     JniType = "D",  GetValue = "doubleValue" },
 	};
 #>
 
@@ -57,9 +57,9 @@ namespace Java.Interop {
 					return true;
 <#
 	foreach (var type in types) {
-		if (type.Name == "Byte") {
+		if (!string.IsNullOrEmpty (type.UnsignedType)) {
 #>
-				case TypeCode.Byte:
+				case TypeCode.<#= type.UnsignedType #>:
 <#
 		}
 #>
@@ -73,9 +73,6 @@ namespace Java.Interop {
 				case TypeCode.DBNull:
 				case TypeCode.Decimal:
 				case TypeCode.Empty:
-				case TypeCode.UInt16:
-				case TypeCode.UInt32:
-				case TypeCode.UInt64:
 					return false;
 			}
 

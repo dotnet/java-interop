@@ -40,10 +40,15 @@ namespace Java.InteropTests
 			AssertGetJniTypeInfoForType (typeof (StringComparison[]),   "[I",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (StringComparison[][]), "[[I",  true,   2);
 
-			AssertGetJniTypeInfoForType (typeof (byte[]),       "[B",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (int[]),        "[I",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (int[][]),      "[[I",  true,   2);
 			AssertGetJniTypeInfoForType (typeof (int[][][]),    "[[[I", true,   3);
+
+			// We map unsigned types to their signed counterparts
+			AssertGetJniTypeInfoForType (typeof (byte[]),       "[B",   true,   1);
+			AssertGetJniTypeInfoForType (typeof (ushort[]),     "[S",   true,   1);
+			AssertGetJniTypeInfoForType (typeof (uint[]),       "[I",   true,   1);
+			AssertGetJniTypeInfoForType (typeof (ulong[]),      "[J",   true,   1);
 
 			AssertGetJniTypeInfoForType (typeof (JavaSByteArray),       "[B",   true,   1);
 			AssertGetJniTypeInfoForType (typeof (JavaInt16Array),       "[S",   true,   1);

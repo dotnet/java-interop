@@ -56,12 +56,15 @@ namespace Java.Interop {
 				case TypeCode.Char:
 					signature = GetCachedTypeSignature (ref __CharTypeSignature, "C", arrayRank: 0, keyword: true);
 					return true;
+				case TypeCode.UInt16:
 				case TypeCode.Int16:
 					signature = GetCachedTypeSignature (ref __Int16TypeSignature, "S", arrayRank: 0, keyword: true);
 					return true;
+				case TypeCode.UInt32:
 				case TypeCode.Int32:
 					signature = GetCachedTypeSignature (ref __Int32TypeSignature, "I", arrayRank: 0, keyword: true);
 					return true;
+				case TypeCode.UInt64:
 				case TypeCode.Int64:
 					signature = GetCachedTypeSignature (ref __Int64TypeSignature, "J", arrayRank: 0, keyword: true);
 					return true;
@@ -75,9 +78,6 @@ namespace Java.Interop {
 				case TypeCode.DBNull:
 				case TypeCode.Decimal:
 				case TypeCode.Empty:
-				case TypeCode.UInt16:
-				case TypeCode.UInt32:
-				case TypeCode.UInt64:
 					return false;
 			}
 
