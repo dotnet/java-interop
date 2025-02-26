@@ -49,9 +49,9 @@ namespace Hello
 				ClassPath   = {
 					Path.Combine (Path.GetDirectoryName (typeof (App).Assembly.Location)!, "Hello-Java.Base.jar"),
 				},
-				TypeManager = new HelloTypeManager (new () {
+				TypeMappings = {
 					[MyJLO.JniTypeName]     = typeof (MyJLO),
-				}),
+				},
 			};
 			builder.AddOption ("-Xcheck:jni");
 
@@ -121,38 +121,6 @@ namespace Hello
 			}
 			foreach (var h in JniRuntime.GetRegisteredRuntimes ()) {
 				Console.WriteLine ("POST: GetCreatedJavaVMs: {0}", h);
-			}
-		}
-	}
-	public class HelloTypeManager : JreTypeManager
-	{
-
-		Dictionary<string, Type> typeMappings;
-
-		public HelloTypeManager (Dictionary<string, Type> typeMappings)
-		{
-			this.typeMappings = typeMappings;
-		}
-
-		protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
-		{
-			foreach (var t in base.GetTypesForSimpleReference (jniSimpleReference))
-				yield return t;
-			if (typeMappings.TryGetValue (jniSimpleReference, out var target))
-				yield return target;
-		}
-
-		protected override IEnumerable<string> GetSimpleReferences (Type type)
-		{
-			return base.GetSimpleReferences (type)
-				.Concat (CreateSimpleReferencesEnumerator (type));
-		}
-
-		IEnumerable<string> CreateSimpleReferencesEnumerator (Type type)
-		{
-			foreach (var e in typeMappings) {
-				if (e.Value == type)
-					yield return e.Key;
 			}
 		}
 	}
