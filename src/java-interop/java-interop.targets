@@ -47,7 +47,7 @@
   </Target>
 
   <Target Name="_GetCmakeOptions">
-    <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' And '@(MonoIncludePath->Count())' != '0' ">
+    <PropertyGroup Condition=" '@(MonoIncludePath->Count())' != '0' ">
       <_MonoDirs>"-DMONO_INCLUDE_LIST=@(MonoIncludePath, ';')"</_MonoDirs>
       <_MonoLib>"-DMONO_LINK_FLAGS=$(MonoLibs)"</_MonoLib>
       <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
