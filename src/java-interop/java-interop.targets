@@ -1,6 +1,18 @@
 <Project>
 
   <Import Project="..\..\build-tools\scripts\NativeToolchain.targets" />
+  <Import Project="obj\java-interop.csproj.nuget.g.props" />
+
+  <PropertyGroup>
+    <RuntimeIdentifier Condition=" '$(RuntimeIdentifier)' == '' ">osx-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RuntimeIdentifier)' != '' ">
+    <_MonoNativePath>$(NuGetPackageRoot)/microsoft.netcore.app.runtime.mono.$(RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(RuntimeIdentifier)/native/</_MonoNativePath>
+    <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
+    <_MonoLib>-L $(_MonoNativePath) -lcoreclr</_MonoLib>
+    <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
+  </PropertyGroup>
 
   <PropertyGroup>
     <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">libjava-interop.dylib</_JavaInteropLibName>
@@ -47,15 +59,12 @@
   </Target>
 
   <Target Name="_GetCmakeOptions">
-    <PropertyGroup Condition=" '@(MonoIncludePath->Count())' != '0' ">
-      <_MonoDirs>"-DMONO_INCLUDE_LIST=@(MonoIncludePath, ';')"</_MonoDirs>
-      <_MonoLib>"-DMONO_LINK_FLAGS=$(MonoLibs)"</_MonoLib>
-      <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
-    </PropertyGroup>
     <PropertyGroup>
+      <_DMonoDirs>"-DMONO_INCLUDE_LIST=$(_MonoIncludePath)"</_DMonoDirs>
+      <_DMonoLinkFlags>"-DMONO_LINK_FLAGS=$(_MonoLib)"</_DMonoLinkFlags>
       <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
       <_Jni_c>"-DJNI_C_PATH=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)jni.c"</_Jni_c>
-      <_ExtraArgs>$([MSBuild]::Escape('$(_JdkDirs) $(_Jni_c) $(_EnableMono) $(_MonoDirs) $(_MonoLib)'))</_ExtraArgs>
+      <_ExtraArgs>$([MSBuild]::Escape('$(_JdkDirs) $(_Jni_c) $(_EnableMono) $(_DMonoDirs) $(_DMonoLinkFlags)'))</_ExtraArgs>
     </PropertyGroup>
   </Target>
 
