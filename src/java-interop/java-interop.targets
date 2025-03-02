@@ -5,14 +5,21 @@
   <PropertyGroup Condition=" '$(RuntimeIdentifier)' != '' ">
     <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(RuntimeIdentifier)/native/</_MonoNativePath>
     <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
-    <_MonoLib>-L $(_MonoNativePath) -lcoreclr</_MonoLib>
     <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
+    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">java-interop.dll</_JavaInteropLibName>
+    <_MonoLib>$(MSBuildThisFileDirectory)coreclr.lib</_MonoLib>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">
+    <_MonoLib>-L $(_MonoNativePath) -lcoreclr</_MonoLib>
   </PropertyGroup>
 
   <PropertyGroup>
     <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">libjava-interop.dylib</_JavaInteropLibName>
     <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('linux')) ">libjava-interop.so</_JavaInteropLibName>
-    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">java-interop.dll</_JavaInteropLibName>
   </PropertyGroup>
 
   <ItemGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
