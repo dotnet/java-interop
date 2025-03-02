@@ -2,10 +2,6 @@
 
   <Import Project="..\..\build-tools\scripts\NativeToolchain.targets" />
 
-  <PropertyGroup>
-    <RuntimeIdentifier Condition=" '$(RuntimeIdentifier)' == '' ">osx-x64</RuntimeIdentifier>
-  </PropertyGroup>
-
   <PropertyGroup Condition=" '$(RuntimeIdentifier)' != '' ">
     <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(RuntimeIdentifier)/native/</_MonoNativePath>
     <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
