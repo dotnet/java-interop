@@ -27,10 +27,6 @@
       <Arch>x86_amd64</Arch>
       <Dir>win-x64\</Dir>
     </_JavaInteropNativeLib>
-    <_JavaInteropNativeLib Include="CMakeLists.txt">
-      <Arch>x86</Arch>
-      <Dir>win-x86\</Dir>
-    </_JavaInteropNativeLib>
   </ItemGroup>
 
   <ItemGroup Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">
