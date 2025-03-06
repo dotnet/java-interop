@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.10.2)
+
 project(
     java-interop
     DESCRIPTION "Java.Interop native support"
@@ -13,8 +15,6 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 option(ENABLE_MONO_INTEGRATION "Require Mono runtime" OFF)
 option(ENABLE_OSX_ARCHITECTURES "macOS architectures" "")
-
-cmake_minimum_required(VERSION 3.10.2)
 
 set(CMAKE_OSX_ARCHITECTURES ${ENABLE_OSX_ARCHITECTURES})
 
