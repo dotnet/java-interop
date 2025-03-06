@@ -1,5 +1,3 @@
-set(CMAKE_OSX_ARCHITECTURES x86_64 arm64)
-
 project(
     java-interop
     DESCRIPTION "Java.Interop native support"
@@ -14,8 +12,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 option(ENABLE_MONO_INTEGRATION "Require Mono runtime" OFF)
+option(ENABLE_OSX_ARCHITECTURES "macOS architectures" "")
 
 cmake_minimum_required(VERSION 3.10.2)
+
+set(CMAKE_OSX_ARCHITECTURES ${ENABLE_OSX_ARCHITECTURES})
 
 set(JAVA_INTEROP_CORE_SOURCES
     java-interop-dlfcn.cc

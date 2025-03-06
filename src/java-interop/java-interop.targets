@@ -45,7 +45,9 @@
     </Exec>
     <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">
       <_RuntimeIdentifier Condition=" '$(_Arch)' == 'i386'  ">osx-x64</_RuntimeIdentifier>
+      <_CmakeOsxArch      Condition=" '$(_Arch)' == 'i386'  ">x86_64</_CmakeOsxArch>
       <_RuntimeIdentifier Condition=" '$(_Arch)' == 'arm64' ">osx-arm64</_RuntimeIdentifier>
+      <_CmakeOsxArch      Condition=" '$(_Arch)' == 'arm64'  ">arm64</_CmakeOsxArch>
     </PropertyGroup>
   </Target>
 
@@ -63,13 +65,14 @@
       <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(_RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(_RuntimeIdentifier)/native/</_MonoNativePath>
       <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
       <_DEnableMono>-DENABLE_MONO_INTEGRATION=ON</_DEnableMono>
+      <_DEnableOsxArchitectures Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">"-DENABLE_OSX_ARCHITECTURES=$(_CmakeOsxArch)"</_DEnableOsxArchitectures>
       <_DMonoDirs>"-DMONO_INCLUDE_LIST=$(_MonoIncludePath)"</_DMonoDirs>
       <_DJdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_DJdkDirs>
       <_DJni_c>"-DJNI_C_PATH=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)jni.c"</_DJni_c>
       <_MonoLinkFlags Condition=" $([MSBuild]::IsOSPlatform ('windows')) " >$(MSBuildThisFileDirectory)coreclr.lib</_MonoLinkFlags>
       <_MonoLinkFlags Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">-L $(_MonoNativePath) -lcoreclr</_MonoLinkFlags>
       <_DMonoLinkFlags>"-DMONO_LINK_FLAGS=$(_MonoLinkFlags)"</_DMonoLinkFlags>
-      <_ExtraArgs>$([MSBuild]::Escape('$(_DJdkDirs) $(_DJni_c) $(_DEnableMono) $(_DMonoDirs) $(_DMonoLinkFlags)'))</_ExtraArgs>
+      <_ExtraArgs>$([MSBuild]::Escape('$(_DJdkDirs) $(_DJni_c) $(_DEnableMono) $(_DMonoDirs) $(_DMonoLinkFlags) $(_DEnableOsxArchitectures)'))</_ExtraArgs>
     </PropertyGroup>
   </Target>
 
