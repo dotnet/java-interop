@@ -47,16 +47,6 @@
       <_DMonoLinkFlags>"-DMONO_LINK_FLAGS=$(_MonoLinkFlags)"</_DMonoLinkFlags>
       <_ExtraArgs>$([MSBuild]::Escape('$(_DJdkDirs) $(_DJni_c) $(_DEnableMono) $(_DMonoDirs) $(_DMonoLinkFlags) $(_DEnableOsxArchitectures)'))</_ExtraArgs>
     </PropertyGroup>
-    <Message Text="# jonp: _MonoNativePath: $(_MonoNativePath)" Importance="High" />
-    <PropertyGroup>
-      <_HaveMonoNativePath Condition=" Exists('$(_MonoNativePath)') ">True</_HaveMonoNativePath>
-    </PropertyGroup>
-    <Message Text="# jonp: Does _MonoNativePath exist?: $(_HaveMonoNativePath)" Importance="High" />
-    <ItemGroup>
-      <_MonoIncludeFiles Include="$(_MonoIncludePath)\**\*" />
-    </ItemGroup>
-    <Message Text="# jonp: _MonoIncludeFiles: @(_MonoIncludeFiles, '
-')" Importance="High" />
   </Target>
 
   <Target Name="_BuildJni_c"
