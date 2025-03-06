@@ -2,41 +2,16 @@
 
   <Import Project="..\..\build-tools\scripts\NativeToolchain.targets" />
 
-  <PropertyGroup Condition=" '$(RuntimeIdentifier)' != '' ">
-    <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(RuntimeIdentifier)/native/</_MonoNativePath>
-    <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
-    <_EnableMono>-DENABLE_MONO_INTEGRATION=ON</_EnableMono>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
-    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">java-interop.dll</_JavaInteropLibName>
-    <_MonoLib>$(MSBuildThisFileDirectory)coreclr.lib</_MonoLib>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">
-    <_MonoLib>-L $(_MonoNativePath) -lcoreclr</_MonoLib>
-  </PropertyGroup>
-
   <PropertyGroup>
     <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">libjava-interop.dylib</_JavaInteropLibName>
     <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('linux')) ">libjava-interop.so</_JavaInteropLibName>
+    <_JavaInteropLibName Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">java-interop.dll</_JavaInteropLibName>
   </PropertyGroup>
 
-  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
-    <_JavaInteropNativeLib Include="CMakeLists.txt">
-      <Arch>x86_amd64</Arch>
-      <Dir>win-x64\</Dir>
-    </_JavaInteropNativeLib>
-  </ItemGroup>
-
-  <ItemGroup Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">
-    <_JavaInteropNativeLib Include="CMakeLists.txt" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(NativeToolchainSupported)' == 'True' ">
-    <None Include="@(_JavaInteropNativeLib->'$(OutputPath)%(Dir)$(_JavaInteropLibName)')">
+    <None Include="$(IntermediateOutputPath)$(_JavaInteropLibName)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>%(Dir)$(_JavaInteropLibName)</Link>
+      <TargetPath>$(_JavaInteropLibName)</TargetPath>
     </None>
   </ItemGroup>
 
@@ -49,39 +24,78 @@
     <ClCompile Include="*.cc" />
   </ItemGroup>
 
+  <Target Name="_GetRuntimeIdentifier"
+      DependsOnTargets="_GetRuntimeIdentifier_linux;_GetRuntimeIdentifier_osx;_GetRuntimeIdentifier_windows">
+  </Target>
+
+  <Target Name="_GetRuntimeIdentifier_linux"
+      Condition=" $([MSBuild]::IsOSPlatform ('linux')) ">
+    <PropertyGroup>
+      <_RuntimeIdentifier>linux-x64</_RuntimeIdentifier>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_GetRuntimeIdentifier_osx"
+      Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">
+    <Exec
+        Condition=" $([MSBuild]::IsOSPlatform ('osx')) "
+        Command="arch"
+        ConsoleToMsBuild="True">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_Arch" />
+    </Exec>
+    <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">
+      <_RuntimeIdentifier Condition=" '$(_Arch)' == 'i386'  ">osx-x64</_RuntimeIdentifier>
+      <_RuntimeIdentifier Condition=" '$(_Arch)' == 'arm64' ">osx-arm64</_RuntimeIdentifier>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_GetRuntimeIdentifier_windows"
+      Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
+    <PropertyGroup>
+      <_RuntimeIdentifier>win-x64</_RuntimeIdentifier>
+      <_PrepareArch>x86_amd64</_PrepareArch>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_GetJavaInteropBuildInfo"
+      DependsOnTargets="_GetRuntimeIdentifier">
+    <PropertyGroup>
+      <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(_RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(_RuntimeIdentifier)/native/</_MonoNativePath>
+      <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
+      <_DEnableMono>-DENABLE_MONO_INTEGRATION=ON</_DEnableMono>
+      <_DMonoDirs>"-DMONO_INCLUDE_LIST=$(_MonoIncludePath)"</_DMonoDirs>
+      <_DJdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_DJdkDirs>
+      <_DJni_c>"-DJNI_C_PATH=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)jni.c"</_DJni_c>
+      <_MonoLinkFlags Condition=" $([MSBuild]::IsOSPlatform ('windows')) " >$(MSBuildThisFileDirectory)coreclr.lib</_MonoLinkFlags>
+      <_MonoLinkFlags Condition=" !$([MSBuild]::IsOSPlatform ('windows')) ">-L $(_MonoNativePath) -lcoreclr</_MonoLinkFlags>
+      <_DMonoLinkFlags>"-DMONO_LINK_FLAGS=$(_MonoLinkFlags)"</_DMonoLinkFlags>
+      <_ExtraArgs>$([MSBuild]::Escape('$(_DJdkDirs) $(_DJni_c) $(_DEnableMono) $(_DMonoDirs) $(_DMonoLinkFlags)'))</_ExtraArgs>
+    </PropertyGroup>
+  </Target>
+
   <Target Name="_BuildJni_c"
       Inputs="$(_JNIEnvGenPath)"
       Outputs="$(IntermediateOutputPath)jni.c">
-    <MakeDir Directories="$(OutputPath)" />
+    <MakeDir Directories="$(IntermediateOutputPath)" />
     <Exec Command="$(_RunJNIEnvGen) $(IntermediateOutputPath)jni.g.cs $(IntermediateOutputPath)jni.c" />
-  </Target>
-
-  <Target Name="_GetCmakeOptions">
-    <PropertyGroup>
-      <_DMonoDirs>"-DMONO_INCLUDE_LIST=$(_MonoIncludePath)"</_DMonoDirs>
-      <_DMonoLinkFlags>"-DMONO_LINK_FLAGS=$(_MonoLib)"</_DMonoLinkFlags>
-      <_JdkDirs>"-DJDK_INCLUDE_LIST=@(JdkIncludePath, ';')"</_JdkDirs>
-      <_Jni_c>"-DJNI_C_PATH=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)jni.c"</_Jni_c>
-      <_ExtraArgs>$([MSBuild]::Escape('$(_JdkDirs) $(_Jni_c) $(_EnableMono) $(_DMonoDirs) $(_DMonoLinkFlags)'))</_ExtraArgs>
-    </PropertyGroup>
   </Target>
 
   <Target Name="_BuildLibs"
       Condition=" '$(NativeToolchainSupported)' == 'True' "
-      DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetCmakeOptions"
-      BeforeTargets="Build"
-      Inputs="@(_JavaInteropNativeLib);$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);@(ClCompile)"
-      Outputs="$(OutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)">
-    <MakeDir Directories="$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)" />
+      DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetJavaInteropBuildInfo"
+      BeforeTargets="BeforeBuild"
+      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);@(ClCompile)"
+      Outputs="$(OutputPath)$(_JavaInteropLibName)">
+    <MakeDir Directories="$(IntermediateOutputPath)" />
     <ItemGroup>
       <_Cmake
           Condition=" '$(PrepareNativeToolchain)' != '' "
-          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) %(_JavaInteropNativeLib.Arch)"
+          Include="PrepareNativeToolchain=$(PrepareNativeToolchain) $(_PrepareArch)"
       />
       <_Cmake Include="CmakePath=$(CmakePath)" />
       <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
       <_Cmake Include="CmakeSourceDir=$(MSBuildThisFileDirectory)" />
-      <_Cmake Include="CmakeBuildDir=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)" />
+      <_Cmake Include="CmakeBuildDir=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)" />
       <_Cmake Include="CmakeExtraArgs=$(_ExtraArgs)" />
     </ItemGroup>
     <MSBuild
@@ -89,15 +103,9 @@
         Properties="@(_Cmake)"
         Targets="Cmake"
     />
-    <MakeDir Directories="$(OutputPath)%(_JavaInteropNativeLib.Dir)" />
     <ItemGroup>
-      <_Libs Include="$(IntermediateOutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)*" />
+      <FileWrites Include="$(IntermediateOutputPath)$(_JavaInteropLibName)" />
     </ItemGroup>
-    <Copy
-        SourceFiles="@(_Libs)"
-        DestinationFolder="$(OutputPath)%(_JavaInteropNativeLib.Dir)"
-    />
-    <Touch Files="$(OutputPath)%(_JavaInteropNativeLib.Dir)$(_JavaInteropLibName)" />
   </Target>
 
   <Target Name="_Clean"

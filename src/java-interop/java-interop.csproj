@@ -35,7 +35,26 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(UseMonoRuntime)' != 'true' And '$(RuntimeIdentifier)' != '' ">
-    <PackageDownload Include="Microsoft.NETCore.App.Runtime.Mono.$(RuntimeIdentifier)" Version="[$(DotNetRuntimePacksVersion)]" />
+    <PackageDownload
+        Condition=" $([MSBuild]::IsOSPlatform ('windows')) "
+        Include="Microsoft.NETCore.App.Runtime.Mono.win-x64"
+        Version="[$(DotNetRuntimePacksVersion)]"
+    />
+    <PackageDownload
+        Condition=" $([MSBuild]::IsOSPlatform ('osx')) "
+        Include="Microsoft.NETCore.App.Runtime.Mono.osx-x64"
+        Version="[$(DotNetRuntimePacksVersion)]"
+    />
+    <PackageDownload
+        Condition=" $([MSBuild]::IsOSPlatform ('osx')) "
+        Include="Microsoft.NETCore.App.Runtime.Mono.osx-arm64"
+        Version="[$(DotNetRuntimePacksVersion)]"
+    />
+    <PackageDownload
+        Condition=" $([MSBuild]::IsOSPlatform ('linux')) "
+        Include="Microsoft.NETCore.App.Runtime.Mono.linux-x64"
+        Version="[$(DotNetRuntimePacksVersion)]"
+    />
   </ItemGroup>
 
   <Import Project="java-interop.targets" />
