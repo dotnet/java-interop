@@ -34,25 +34,9 @@
     <DotNetRuntimePacksVersion>8.0.13</DotNetRuntimePacksVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(UseMonoRuntime)' != 'true' And '$(RuntimeIdentifier)' != '' ">
+  <ItemGroup Condition=" '$(UseMonoRuntime)' != 'true' ">
     <PackageDownload
-        Condition=" $([MSBuild]::IsOSPlatform ('windows')) "
-        Include="Microsoft.NETCore.App.Runtime.Mono.win-x64"
-        Version="[$(DotNetRuntimePacksVersion)]"
-    />
-    <PackageDownload
-        Condition=" $([MSBuild]::IsOSPlatform ('osx')) "
-        Include="Microsoft.NETCore.App.Runtime.Mono.osx-x64"
-        Version="[$(DotNetRuntimePacksVersion)]"
-    />
-    <PackageDownload
-        Condition=" $([MSBuild]::IsOSPlatform ('osx')) "
-        Include="Microsoft.NETCore.App.Runtime.Mono.osx-arm64"
-        Version="[$(DotNetRuntimePacksVersion)]"
-    />
-    <PackageDownload
-        Condition=" $([MSBuild]::IsOSPlatform ('linux')) "
-        Include="Microsoft.NETCore.App.Runtime.Mono.linux-x64"
+        Include="Microsoft.NETCore.App.Runtime.Mono.$(NETCoreSdkRuntimeIdentifier)"
         Version="[$(DotNetRuntimePacksVersion)]"
     />
   </ItemGroup>

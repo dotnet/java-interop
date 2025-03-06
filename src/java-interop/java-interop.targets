@@ -24,45 +24,18 @@
     <ClCompile Include="*.cc" />
   </ItemGroup>
 
-  <Target Name="_GetRuntimeIdentifier"
-      DependsOnTargets="_GetRuntimeIdentifier_linux;_GetRuntimeIdentifier_osx;_GetRuntimeIdentifier_windows">
-  </Target>
-
-  <Target Name="_GetRuntimeIdentifier_linux"
-      Condition=" $([MSBuild]::IsOSPlatform ('linux')) ">
-    <PropertyGroup>
-      <_RuntimeIdentifier>linux-x64</_RuntimeIdentifier>
+  <Target Name="_GetJavaInteropBuildInfo">
+    <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
+      <_PrepareArch   Condition=" '$(NETCoreSdkRuntimeIdentifier)' == 'win-x64' ">x86_amd64</_PrepareArch>
     </PropertyGroup>
-  </Target>
 
-  <Target Name="_GetRuntimeIdentifier_osx"
-      Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">
-    <Exec
-        Condition=" $([MSBuild]::IsOSPlatform ('osx')) "
-        Command="arch"
-        ConsoleToMsBuild="True">
-      <Output TaskParameter="ConsoleOutput" PropertyName="_Arch" />
-    </Exec>
     <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">
-      <_RuntimeIdentifier Condition=" '$(_Arch)' == 'i386'  ">osx-x64</_RuntimeIdentifier>
-      <_CmakeOsxArch      Condition=" '$(_Arch)' == 'i386'  ">x86_64</_CmakeOsxArch>
-      <_RuntimeIdentifier Condition=" '$(_Arch)' == 'arm64' ">osx-arm64</_RuntimeIdentifier>
-      <_CmakeOsxArch      Condition=" '$(_Arch)' == 'arm64'  ">arm64</_CmakeOsxArch>
+      <_CmakeOsxArch  Condition=" '$(NETCoreSdkRuntimeIdentifier)' == 'osx-x64'  ">x86_64</_CmakeOsxArch>
+      <_CmakeOsxArch  Condition=" '$(NETCoreSdkRuntimeIdentifier)' == 'osx-arm64'  ">arm64</_CmakeOsxArch>
     </PropertyGroup>
-  </Target>
 
-  <Target Name="_GetRuntimeIdentifier_windows"
-      Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
     <PropertyGroup>
-      <_RuntimeIdentifier>win-x64</_RuntimeIdentifier>
-      <_PrepareArch>x86_amd64</_PrepareArch>
-    </PropertyGroup>
-  </Target>
-
-  <Target Name="_GetJavaInteropBuildInfo"
-      DependsOnTargets="_GetRuntimeIdentifier">
-    <PropertyGroup>
-      <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(_RuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(_RuntimeIdentifier)/native/</_MonoNativePath>
+      <_MonoNativePath>$(NuGetPackageRoot)microsoft.netcore.app.runtime.mono.$(NETCoreSdkRuntimeIdentifier)/$(DotNetRuntimePacksVersion)/runtimes/$(NETCoreSdkRuntimeIdentifier)/native/</_MonoNativePath>
       <_MonoIncludePath>$(_MonoNativePath)include/mono-2.0</_MonoIncludePath>
       <_DEnableMono>-DENABLE_MONO_INTEGRATION=ON</_DEnableMono>
       <_DEnableOsxArchitectures Condition=" $([MSBuild]::IsOSPlatform ('osx')) ">"-DENABLE_OSX_ARCHITECTURES=$(_CmakeOsxArch)"</_DEnableOsxArchitectures>
