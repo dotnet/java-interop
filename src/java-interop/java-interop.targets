@@ -86,7 +86,7 @@
   <Target Name="_BuildLibs"
       Condition=" '$(NativeToolchainSupported)' == 'True' "
       DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetJavaInteropBuildInfo"
-      BeforeTargets="BeforeBuild"
+      AfterTargets="ResolveReferences"
       Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);@(ClCompile)"
       Outputs="$(OutputPath)$(_JavaInteropLibName)">
     <MakeDir Directories="$(IntermediateOutputPath)" />
