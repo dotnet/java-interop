@@ -58,10 +58,10 @@
 
   <Target Name="_BuildLibs"
       Condition=" '$(NativeToolchainSupported)' == 'True' "
-      DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetJavaInteropBuildInfo"
+      DependsOnTargets="GetNativeBuildCommands;_BuildJni_c;_GetJavaInteropBuildInfo;_UpdateCoreCLRLib"
       AfterTargets="ResolveReferences"
-      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);@(ClCompile)"
-      Outputs="$(OutputPath)$(_JavaInteropLibName)">
+      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj;@(ClInclude);@(ClCompile);coreclr.lib"
+      Outputs="$(IntermediateOutputPath)$(_JavaInteropLibName)">
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <ItemGroup>
       <_Cmake
@@ -82,6 +82,13 @@
     <ItemGroup>
       <FileWrites Include="$(IntermediateOutputPath)$(_JavaInteropLibName)" />
     </ItemGroup>
+  </Target>
+
+  <Target Name="_UpdateCoreCLRLib"
+      Condition="  $([MSBuild]::IsOSPlatform ('windows'))  And '$(NativeToolchainSupported)' == 'True' "
+      Inputs="coreclr.def"
+      Outputs="corclr.lib">
+    <Exec Command="lib /def:coreclr.def /out:coreclr.lib /machine:X64" />
   </Target>
 
   <Target Name="_Clean"
