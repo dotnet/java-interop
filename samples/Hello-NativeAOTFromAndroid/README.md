@@ -9,7 +9,7 @@ Extend this idea for Android!
 ## Prerequisites
 
 In order to build this sample, the Android SDK and Android NDK must be present.
-*An* easy way to provision these is to build dotnet/anddroid:
+*An* easy way to provision these is to build dotnet/android:
 
   * [Windows build instructions](https://github.com/dotnet/android/blob/155709f9917666ca046c79a4e9769924ff4ab9bb/Documentation/building/windows/instructions.md)
   * [Linux and macOS build instructions](https://github.com/dotnet/android/blob/main/Documentation/building/unix/instructions.md)
