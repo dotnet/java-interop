@@ -17,32 +17,27 @@ public static class XmlExporter
 		OmitXmlDeclaration = true,
 	};
 
-	public static void Export (string filename, IEnumerable<CallableWrapperType> types, bool wasScanned)
+	public static void Export (string filename, IEnumerable<CallableWrapperType> types)
 	{
 		using (var sw = new StreamWriter (filename, false, Encoding.UTF8))
-			Export (sw, types, wasScanned);
+			Export (sw, types);
 	}
 
-	public static void Export (TextWriter sw, IEnumerable<CallableWrapperType> types, bool wasScanned)
+	public static void Export (TextWriter sw, IEnumerable<CallableWrapperType> types)
 	{
 		using (var xml = XmlWriter.Create (sw, settings))
-			Export (xml, types, wasScanned);
+			Export (xml, types);
 	}
 
-	public static void Export (XmlWriter xml, IEnumerable<CallableWrapperType> types, bool wasScanned)
+	public static void Export (XmlWriter xml, IEnumerable<CallableWrapperType> types)
 	{
-		ExportTypes (xml, types, wasScanned);
+		ExportTypes (xml, types);
 	}
 
-	static void ExportTypes (XmlWriter xml, IEnumerable<CallableWrapperType> types, bool wasScanned)
+	static void ExportTypes (XmlWriter xml, IEnumerable<CallableWrapperType> types)
 	{
-		xml.WriteStartElement ("types");
-		xml.WriteAttributeString ("was_scanned", wasScanned.ToString ());
-
 		foreach (var type in types)
 			ExportType (xml, type);
-
-		xml.WriteEndElement ();
 	}
 
 	public static void ExportType (XmlWriter xml, CallableWrapperType type)
@@ -57,7 +52,7 @@ public static class XmlExporter
 		xml.WriteAttributeStringIfNotNull ("extends_type", type.ExtendsType);
 		xml.WriteAttributeStringIfNotFalse ("is_application", type.IsApplication);
 		xml.WriteAttributeStringIfNotFalse ("is_instrumentation", type.IsInstrumentation);
-		xml.WriteAttributeString ("partial_assmbly_qualified_name", type.PartialAssemblyQualifiedName);
+		xml.WriteAttributeString ("partial_assembly_qualified_name", type.PartialAssemblyQualifiedName);
 		xml.WriteAttributeStringIfNotFalse ("has_export", type.HasExport);
 
 		if (type.ApplicationConstructor is not null)
