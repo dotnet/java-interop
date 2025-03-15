@@ -168,12 +168,16 @@ namespace Java.InteropTests {
 
 			try {
 				var peer1   = valueManager.CreatePeer (ref lref, JniObjectReferenceOptions.Copy, typeof (AnotherJavaInterfaceImpl));
-				Assert.IsTrue (peer1!.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable));
+				Assert.IsTrue (
+						peer1!.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable),
+						$"Expected peer1.JniManagedPeerState to have .Replaceable, but was {peer1.JniManagedPeerState}.");
 				var peer2   = valueManager.CreatePeer (ref lref, JniObjectReferenceOptions.Copy, typeof (AnotherJavaInterfaceImpl));
-				Assert.IsTrue (peer2!.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable));
-				Assert.AreNotSame (peer1, peer2);
+				Assert.IsTrue (
+						peer2!.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable),
+						$"Expected peer2.JniManagedPeerState to have .Replaceable, but was {peer1.JniManagedPeerState}.");
+				Assert.AreNotSame (peer1, peer2, "Expected peer1 and peer2 to be different instances.");
 				var peeked  = valueManager.PeekPeer (peer2.PeerReference);
-				Assert.AreSame (peer1, peeked);
+				Assert.AreSame (peer1, peeked, "Expected peer1 and peeked to be the same instance.");
 			} finally {
 				JniObjectReference.Dispose (ref lref);
 			}
