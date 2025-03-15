@@ -168,9 +168,9 @@ namespace Java.InteropTests {
 
 			try {
 				var peer1   = valueManager.CreatePeer (ref lref, JniObjectReferenceOptions.Copy, typeof (AnotherJavaInterfaceImpl));
-				Assert.IsTrue (peer1.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable));
+				Assert.IsTrue (peer1!.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable));
 				var peer2   = valueManager.CreatePeer (ref lref, JniObjectReferenceOptions.Copy, typeof (AnotherJavaInterfaceImpl));
-				Assert.IsTrue (peer2.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable));
+				Assert.IsTrue (peer2!.JniManagedPeerState.HasFlag (JniManagedPeerStates.Replaceable));
 				Assert.AreNotSame (peer1, peer2);
 				var peeked  = valueManager.PeekPeer (peer2.PeerReference);
 				Assert.AreSame (peer1, peeked);
