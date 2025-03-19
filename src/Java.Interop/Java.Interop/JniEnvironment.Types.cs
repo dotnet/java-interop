@@ -32,7 +32,7 @@ namespace Java.Interop
 				using (var t = new JniType ("java/lang/Class")) {
 					Class_reference = t.PeerReference.NewGlobalRef ();
 					Class_getName   = t.GetInstanceMethod ("getName", "()Ljava/lang/String;");
-					Class_forName   = t.GetStaticMethod ("forName", "(Ljava/lang/String;)Ljava/lang/Class;");
+					Class_forName   = t.GetStaticMethod ("forName", "(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;");
 				}
 			}
 
@@ -63,8 +63,10 @@ namespace Java.Interop
 
 				if (Class_forName.IsValid) {
 					var java    = info.ToJavaName (classname);
-					var __args  = stackalloc JniArgumentValue [1];
+					var __args  = stackalloc JniArgumentValue [3];
 					__args [0]  = new JniArgumentValue (java);
+					__args [1]  = new JniArgumentValue (true);  // initialize the class
+					__args [2]  = new JniArgumentValue (info.Runtime.ClassLoader);
 
 					c = RawCallStaticObjectMethodA (info.EnvironmentPointer, out thrown, Class_reference.Handle, Class_forName.ID, (IntPtr) __args);
 					JniObjectReference.Dispose (ref java);

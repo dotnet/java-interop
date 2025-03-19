@@ -58,7 +58,6 @@ namespace Java.Interop
 			public  IntPtr                      InvocationPointer           {get; set;}
 			public  IntPtr                      EnvironmentPointer          {get; set;}
 
-			[Obsolete ("No longer supported; Class.forName() is now used instead")]
 			public  JniObjectReference          ClassLoader                 {get; set;}
 			[Obsolete ("No longer supported; Class.forName() is now used instead")]
 			public  IntPtr                      ClassLoader_LoadClass_id    {get; set;}
@@ -154,7 +153,6 @@ namespace Java.Interop
 		bool                                            DestroyRuntimeOnDispose;
 
 		internal    JniObjectReference                  ClassLoader;
-		internal    JniMethodInfo?                      ClassLoader_LoadClass;
 
 		public  IntPtr                                  InvocationPointer   {get; private set;}
 
@@ -206,6 +204,18 @@ namespace Java.Interop
 			}
 			var env     = new JniEnvironmentInfo (envp, this);
 			JniEnvironment.SetEnvironmentInfo (env);
+
+			ClassLoader = options.ClassLoader;
+			if (ClassLoader.IsValid) {
+				ClassLoader = ClassLoader.NewGlobalRef ();
+			} else {
+				using (var t = new JniType ("java/lang/ClassLoader")) {
+					var m       = t.GetStaticMethod ("getSystemClassLoader", "()Ljava/lang/ClassLoader;");
+					var loader  = JniEnvironment.StaticMethods.CallStaticObjectMethod (t.PeerReference, m);
+					ClassLoader = loader.NewGlobalRef ();
+					JniObjectReference.Dispose (ref loader);
+				}
+			}
 
 #if !XA_JI_EXCLUDE
 			ManagedPeer.Init ();
