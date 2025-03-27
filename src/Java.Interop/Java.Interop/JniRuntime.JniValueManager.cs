@@ -385,8 +385,12 @@ namespace Java.Interop
 				[return: DynamicallyAccessedMembers (Constructors)]
 				Type? GetTypeAssignableTo (JniTypeSignature sig, Type targetType)
 				{
-					return Runtime.TypeManager.GetTypes (sig)
-						.FirstOrDefault (targetType.IsAssignableFrom);
+					foreach (var t in Runtime.TypeManager.GetTypes (sig)) {
+						if (targetType.IsAssignableFrom (t)) {
+							return t;
+						}
+					}
+					return null;
 				}
 			}
 
