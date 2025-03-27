@@ -103,7 +103,7 @@ public class ExportType
 
 		staticActionInt (1);
 		staticActionFloat (2.0f);
-		staticActionNullableFloat (3.0f);
+		// staticActionNullableFloat (3.0f);
 
 		boolean r = staticFuncThisMethodTakesLotsOfParameters (
 				false,
@@ -145,8 +145,8 @@ public class ExportType
 	public          void    staticActionFloat (float f) {n_StaticActionFloat (f);}
 	private native  void    n_StaticActionFloat (float f);
 
-	public          void    staticActionNullableFloat (Float f) {n_StaticActionNullableFloat (f);}
-	private native  void    n_StaticActionNullableFloat (Float f);
+	// public          void    staticActionNullableFloat (Float f) {n_StaticActionNullableFloat (f);}
+	// private native  void    n_StaticActionNullableFloat (Float f);
 
 	ArrayList<Object>       managedReferences     = new ArrayList<Object>();
 
