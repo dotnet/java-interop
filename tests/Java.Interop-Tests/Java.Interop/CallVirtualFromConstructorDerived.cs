@@ -27,10 +27,22 @@ namespace Java.InteropTests
 		public  bool    InvokedConstructor;
 
 		public CallVirtualFromConstructorDerived (int value)
-			: base (value)
+			: this (value, useNewObject: false)
+		{
+		}
+
+		public CallVirtualFromConstructorDerived (int value, bool useNewObject)
+			: base (value, useNewObject)
 		{
 			InvokedConstructor = true;
-			if (value != calledValue)
+
+			if (useNewObject && calledValue != 0) {
+				// calledValue was set on a *different* instance! So it's 0 here.
+				throw new ArgumentException (
+						string.Format ("value '{0}' doesn't match expected value '{1}'.", value, 0),
+						"value");
+			}
+			if (!useNewObject && value != calledValue)
 				throw new ArgumentException (
 						string.Format ("value '{0}' doesn't match expected value '{1}'.", value, calledValue),
 						"value");
