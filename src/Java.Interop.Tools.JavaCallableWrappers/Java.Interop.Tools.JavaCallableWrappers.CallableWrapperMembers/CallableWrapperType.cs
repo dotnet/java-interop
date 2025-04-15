@@ -295,7 +295,7 @@ public class CallableWrapperType
 	}
 
 	// If there are no methods, we need to generate "empty" registration because of backward compatibility
-	public bool HasDynamicallyRegisteredMethods => Methods.Count == 0 || Methods.Any (sig => sig.IsDynamicallyRegistered);
+	public bool HasDynamicallyRegisteredMethods => true;// Methods.Count == 0 || Methods.Any (sig => sig.IsDynamicallyRegistered);
 
 	/// <summary>
 	/// Returns a destination file path based on the package name of this Java type
