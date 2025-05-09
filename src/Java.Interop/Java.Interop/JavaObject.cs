@@ -2,10 +2,20 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace Java.Interop
 {
+	internal struct JniObjectInfo {
+		public IntPtr                  handle;
+		public JniObjectReferenceType  handle_type;
+		// Used by JavaInteropGCBridge
+		public IntPtr                  weak_handle;
+		public int                     refs_added;
+	}
+
 	[JniTypeSignature ("java/lang/Object", GenerateJavaPeer=false)]
 	[Serializable]
 	unsafe public class JavaObject : IJavaPeerable
@@ -25,13 +35,7 @@ namespace Java.Interop
 		[NonSerialized] JniObjectReference  reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-		[NonSerialized] IntPtr                  handle;
-		[NonSerialized] JniObjectReferenceType  handle_type;
-	#pragma warning disable 0169
-		// Used by JavaInteropGCBridge
-		[NonSerialized] IntPtr                  weak_handle;
-		[NonSerialized] int                     refs_added;
-	#pragma warning restore 0169
+		[NonSerialized] IntPtr              JniObjectInfo = Marshal.AllocHGlobal (Marshal.SizeOf<JniObjectInfo> ());
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
 		protected   static  readonly    JniObjectReference*     InvalidJniObjectReference  = null;
@@ -47,7 +51,8 @@ namespace Java.Interop
 				return reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-				return new JniObjectReference (handle, handle_type);
+				var info = Unsafe.Read<JniObjectInfo> ((void*) JniObjectInfo);
+				return new JniObjectReference (info.handle, info.handle_type);
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 			}
 		}
@@ -61,6 +66,7 @@ namespace Java.Interop
 
 		public JavaObject (ref JniObjectReference reference, JniObjectReferenceOptions options)
 		{
+			Unsafe.Write<JniObjectInfo> ((void*) JniObjectInfo, new JniObjectInfo ());
 			Construct (ref reference, options);
 		}
 
@@ -91,8 +97,10 @@ namespace Java.Interop
 			this.reference      = reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-			this.handle         = reference.Handle;
-			this.handle_type    = reference.Type;
+			var info = Unsafe.Read<JniObjectInfo> ((void*) JniObjectInfo);
+			info.handle         = reference.Handle;
+			info.handle_type    = reference.Type;
+			Unsafe.Write<JniObjectInfo> ((void*) JniObjectInfo, info);
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
 			JniObjectReference.Dispose (ref reference, options);
@@ -107,6 +115,11 @@ namespace Java.Interop
 
 		public void Dispose ()
 		{
+			if (JniObjectInfo != IntPtr.Zero)
+			{
+				Marshal.FreeHGlobal (JniObjectInfo);
+				JniObjectInfo = IntPtr.Zero;
+			}
 			JniEnvironment.Runtime.ValueManager.DisposePeer (this);
 		}
 
