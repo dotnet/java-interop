@@ -35,7 +35,9 @@ namespace Java.Interop
 		[NonSerialized] JniObjectReference  reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-		[NonSerialized] IntPtr              JniObjectInfo = Marshal.AllocHGlobal (Marshal.SizeOf<JniObjectInfo> ());
+		[NonSerialized] IntPtr              handle = Marshal.AllocHGlobal (Marshal.SizeOf<JniObjectInfo> ());
+
+		ref JniObjectInfo JniObjectInfo => ref Unsafe.AsRef<JniObjectInfo> ((void*) handle);
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
 		protected   static  readonly    JniObjectReference*     InvalidJniObjectReference  = null;
@@ -51,7 +53,7 @@ namespace Java.Interop
 				return reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-				var info = Unsafe.Read<JniObjectInfo> ((void*) JniObjectInfo);
+				var info = JniObjectInfo;
 				return new JniObjectReference (info.handle, info.handle_type);
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 			}
@@ -66,7 +68,7 @@ namespace Java.Interop
 
 		public JavaObject (ref JniObjectReference reference, JniObjectReferenceOptions options)
 		{
-			Unsafe.Write<JniObjectInfo> ((void*) JniObjectInfo, new JniObjectInfo ());
+			Unsafe.Write<JniObjectInfo> ((void*) handle, new JniObjectInfo ());
 			Construct (ref reference, options);
 		}
 
@@ -97,10 +99,9 @@ namespace Java.Interop
 			this.reference      = reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-			var info = Unsafe.Read<JniObjectInfo> ((void*) JniObjectInfo);
+			var info = JniObjectInfo;
 			info.handle         = reference.Handle;
 			info.handle_type    = reference.Type;
-			Unsafe.Write<JniObjectInfo> ((void*) JniObjectInfo, info);
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
 			JniObjectReference.Dispose (ref reference, options);
@@ -115,10 +116,10 @@ namespace Java.Interop
 
 		public void Dispose ()
 		{
-			if (JniObjectInfo != IntPtr.Zero)
+			if (handle != IntPtr.Zero)
 			{
-				Marshal.FreeHGlobal (JniObjectInfo);
-				JniObjectInfo = IntPtr.Zero;
+				Marshal.FreeHGlobal (handle);
+				handle = IntPtr.Zero;
 			}
 			JniEnvironment.Runtime.ValueManager.DisposePeer (this);
 		}
