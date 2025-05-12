@@ -13,7 +13,7 @@ internal struct JniObjectReferenceControlBlock {
 
 	public static unsafe JniObjectReferenceControlBlock* Alloc ()
 	{
-		return (JniObjectReferenceControlBlock*)NativeMemory.AllocZeroed (1, (uint) Size);
+		return (JniObjectReferenceControlBlock*) NativeMemory.AllocZeroed (1, (uint) Size);
 	}
 
 	public static unsafe void Free (ref JniObjectReferenceControlBlock* value)
