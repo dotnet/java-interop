@@ -11,15 +11,17 @@ internal struct JniObjectReferenceControlBlock {
 
 	public  static  readonly    int Size    = Marshal.SizeOf<JniObjectReferenceControlBlock>();
 
-	public  static  unsafe  IntPtr Alloc () =>
-		(IntPtr) NativeMemory.AllocZeroed (1, (uint) Size);
-
-	public  static  unsafe  void Free (ref IntPtr value)
+	public static unsafe JniObjectReferenceControlBlock* Alloc ()
 	{
-		if (value == 0) {
+		return (JniObjectReferenceControlBlock*)NativeMemory.AllocZeroed (1, (uint) Size);
+	}
+
+	public static unsafe void Free (ref JniObjectReferenceControlBlock* value)
+	{
+		if (value == null) {
 			return;
 		}
-		NativeMemory.Free ((void*) value);
-		value   = IntPtr.Zero;
+		NativeMemory.Free (value);
+		value   = null;
 	}
 }
