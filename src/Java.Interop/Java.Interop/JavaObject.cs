@@ -25,9 +25,7 @@ namespace Java.Interop
 		[NonSerialized] JniObjectReference  reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-		IntPtr  jniObjectReferenceControlBlock;
-		unsafe  JniObjectReferenceControlBlock* JniObjectReferenceControlBlock =>
-			(JniObjectReferenceControlBlock*) jniObjectReferenceControlBlock;
+		unsafe  JniObjectReferenceControlBlock* jniObjectReferenceControlBlock;
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
 		protected   static  readonly    JniObjectReference*     InvalidJniObjectReference  = null;
@@ -43,7 +41,7 @@ namespace Java.Interop
 				return reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-				var c = JniObjectReferenceControlBlock;
+				var c = jniObjectReferenceControlBlock;
 				if (c == null) {
 					return default;
 				}
@@ -92,11 +90,10 @@ namespace Java.Interop
 			this.reference      = reference;
 #endif  // FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 #if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-			var c   = JniObjectReferenceControlBlock;
+			var c   = jniObjectReferenceControlBlock;
 			if (c == null) {
-				jniObjectReferenceControlBlock    =
+				c   = jniObjectReferenceControlBlock    =
 					Java.Interop.JniObjectReferenceControlBlock.Alloc ();
-				c   = JniObjectReferenceControlBlock;
 			}
 			c->handle       = reference.Handle;
 			c->handle_type  = (int) reference.Type;
@@ -181,7 +178,7 @@ namespace Java.Interop
 		}
 
 		IntPtr IJavaPeerable.JniObjectReferenceControlBlock =>
-			jniObjectReferenceControlBlock;
+			(IntPtr) jniObjectReferenceControlBlock;
 	}
 }
 
