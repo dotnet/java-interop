@@ -30,11 +30,15 @@ using namespace xamarin::android;
 
 typedef struct MonoJavaGCBridgeInfo {
 	MonoClass          *klass;
-	MonoClassField     *handle;
-	MonoClassField     *handle_type;
-	MonoClassField     *refs_added;
-	MonoClassField     *weak_handle;
+	MonoClassField     *jniObjectReferenceControlBlock;
 } MonoJavaGCBridgeInfo;
+
+typedef struct JniObjectReferenceControlBlock {
+	jobject handle;
+	int     handle_type;
+	jobject weak_handle;
+	int     refs_added;
+} JniObjectReferenceControlBlock;
 
 #define NUM_GC_BRIDGE_TYPES     (4)
 
@@ -366,13 +370,10 @@ java_interop_gc_bridge_register_bridgeable_type (
 	MonoJavaGCBridgeInfo   *info    = &bridge->mono_java_gc_bridge_info [i];
 
 	info->klass             = mono_class_from_mono_type (type);
-	info->handle            = mono_class_get_field_from_name (info->klass, const_cast<char*> ("handle"));
-	info->handle_type       = mono_class_get_field_from_name (info->klass, const_cast<char*> ("handle_type"));
-	info->refs_added        = mono_class_get_field_from_name (info->klass, const_cast<char*> ("refs_added"));
-	info->weak_handle       = mono_class_get_field_from_name (info->klass, const_cast<char*> ("weak_handle"));
 
-	if (info->klass == NULL || info->handle == NULL || info->handle_type == NULL ||
-			info->refs_added == NULL || info->weak_handle == NULL)
+	info->jniObjectReferenceControlBlock    = mono_class_get_field_from_name (info->klass, const_cast<char*> ("jniObjectReferenceControlBlock"));
+
+	if (info->klass == NULL || info->jniObjectReferenceControlBlock == NULL)
 		return -1;
 	bridge->num_bridge_types++;
 	return 0;
@@ -780,6 +781,18 @@ get_gc_bridge_info_for_object (JavaInteropGCBridge *bridge, MonoObject *object)
 	return get_gc_bridge_info_for_class (bridge, mono_object_get_class (object));
 }
 
+static JniObjectReferenceControlBlock*
+get_gc_control_block_for_object (JavaInteropGCBridge *bridge, MonoObject *obj)
+{
+	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
+	if (bridge_info == NULL)
+		return NULL;
+
+	JniObjectReferenceControlBlock *control_block;
+	mono_field_get_value (obj, bridge_info->jniObjectReferenceControlBlock, &control_block);
+	return control_block;
+}
+
 typedef mono_bool (*MonodroidGCTakeRefFunc) (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id);
 
 static  MonodroidGCTakeRefFunc  take_global_ref;
@@ -788,12 +801,11 @@ static  MonodroidGCTakeRefFunc  take_weak_global_ref;
 static mono_bool
 take_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
 {
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
-	if (bridge_info == NULL)
+	JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (bridge, obj);
+	if (control_block == NULL)
 		return 0;
 
-	jobject weak;
-	mono_field_get_value (obj, bridge_info->weak_handle, &weak);
+	jobject weak = control_block->weak_handle;
 
 	jobject handle  = env->CallObjectMethod (weak, bridge->WeakReference_get);
 	log_gref (bridge, "*try_take_global_2_1 obj=%p -> wref=%p handle=%p\n", obj, weak, handle);
@@ -808,12 +820,10 @@ take_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj,
 	java_interop_gc_bridge_weak_gref_log_delete (bridge, weak, get_object_ref_type (env, weak), thread_name, thread_id, "take_global_ref_java");
 	env->DeleteGlobalRef (weak);
 	weak        = NULL;
-	mono_field_set_value (obj, bridge_info->weak_handle, &weak);
 
-	mono_field_set_value (obj, bridge_info->handle, &handle);
-
-	int type    = JNIGlobalRefType;
-	mono_field_set_value (obj, bridge_info->handle_type, &type);
+	control_block->weak_handle  = weak;
+	control_block->handle       = handle;
+	control_block->handle_type  = JNIGlobalRefType;
 
 	return handle != NULL;
 }
@@ -821,12 +831,11 @@ take_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj,
 static mono_bool
 take_weak_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
 {
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
-	if (bridge_info == NULL)
+	JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (bridge, obj);
+	if (control_block == NULL)
 		return 0;
 
-	jobject handle;
-	mono_field_get_value (obj, bridge_info->handle, &handle);
+	jobject handle  = control_block->handle;
 
 	jobject weaklocal   = env->NewObject (bridge->WeakReference_class, bridge->WeakReference_init, handle);
 	jobject weakglobal  = env->NewGlobalRef (weaklocal);
@@ -838,8 +847,8 @@ take_weak_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject 
 
 	java_interop_gc_bridge_gref_log_delete (bridge, handle, get_object_ref_type (env, handle), thread_name, thread_id, "take_weak_global_ref_2_1_compat");
 	env->DeleteGlobalRef (handle);
-
-	mono_field_set_value (obj, bridge_info->weak_handle, &weakglobal);
+	control_block->handle       = NULL;
+	control_block->weak_handle  = weakglobal;
 
 	return 1;
 }
@@ -847,13 +856,11 @@ take_weak_global_ref_java (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject 
 static mono_bool
 take_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
 {
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
-	if (bridge_info == NULL)
+	JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (bridge, obj);
+	if (control_block == NULL)
 		return 0;
 
-	jobject weak;
-	mono_field_get_value (obj, bridge_info->handle, &weak);
-
+	jobject weak    = control_block->handle;
 	jobject handle  = env->NewGlobalRef (weak);
 	log_gref (bridge, "*try_take_global obj=%p -> wref=%p handle=%p\n", obj, weak, handle);
 
@@ -868,22 +875,20 @@ take_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, 
 			thread_name, thread_id, "take_global_ref_jni");
 	env->DeleteWeakGlobalRef (weak);
 
-	mono_field_set_value (obj, bridge_info->handle, &handle);
+	control_block->handle       = handle;
+	control_block->handle_type  = JNIGlobalRefType;
 
-	int type = JNIGlobalRefType;
-	mono_field_set_value (obj, bridge_info->handle_type, &type);
 	return handle != NULL;
 }
 
 static mono_bool
 take_weak_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, const char *thread_name, int64_t thread_id)
 {
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, obj);
-	if (bridge_info == NULL)
+	JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (bridge, obj);
+	if (control_block == NULL)
 		return 0;
 
-	jobject handle;
-	mono_field_get_value (obj, bridge_info->handle, &handle);
+	jobject handle  = control_block->handle;
 
 	log_gref (bridge, "*take_weak obj=%p; handle=%p\n", obj, handle);
 
@@ -896,10 +901,8 @@ take_weak_global_ref_jni (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *
 			thread_name, thread_id, "take_weak_global_ref_jni");
 	env->DeleteGlobalRef (handle);
 
-	mono_field_set_value (obj, bridge_info->handle, &weak);
-
-	int type = JNIWeakGlobalRefType;
-	mono_field_set_value (obj, bridge_info->handle_type, &type);
+	control_block->handle       = weak;
+	control_block->handle_type  = JNIWeakGlobalRefType;
 
 	return 1;
 }
@@ -921,17 +924,18 @@ get_add_reference_method (JavaInteropGCBridge *bridge, JNIEnv *env, jobject obj,
 }
 
 static mono_bool
-add_reference (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, MonoJavaGCBridgeInfo *bridge_info, MonoObject *reffed_obj)
+add_reference (JavaInteropGCBridge *bridge, JNIEnv *env, MonoObject *obj, JniObjectReferenceControlBlock *control_block, MonoObject *reffed_obj)
 {
 	MonoClass *klass    = mono_object_get_class (obj);
 
-	jobject handle;
-	mono_field_get_value (obj, bridge_info->handle, &handle);
+	jobject handle = control_block->handle;
 
 	jmethodID   add_method_id   = get_add_reference_method (bridge, env, handle, klass);
 	if (add_method_id) {
-		jobject reffed_handle;
-		mono_field_get_value (reffed_obj, bridge_info->handle, &reffed_handle);
+		JniObjectReferenceControlBlock  *reffed_control_block   = get_gc_control_block_for_object (bridge, reffed_obj);
+		if (reffed_control_block == NULL)
+			return 0;
+		jobject reffed_handle   = reffed_control_block->handle;
 		env->CallVoidMethod (handle, add_method_id, reffed_handle);
 #if DEBUG
 		if (bridge->gref_log_level > 1)
@@ -979,28 +983,30 @@ gc_prepare_for_java_collection (JavaInteropGCBridge *bridge, JNIEnv *env, int nu
 	/* add java refs for items on the list which reference each other */
 	for (int i = 0; i < num_sccs; i++) {
 		MonoGCBridgeSCC        *scc         = sccs [i];
-		MonoJavaGCBridgeInfo   *bridge_info = NULL;
+
+		JniObjectReferenceControlBlock  *control_block  = NULL;
+
 		/* start at the second item, ref j from j-1 */
 		for (int j = 1; j < scc->num_objs; j++) {
-			bridge_info = get_gc_bridge_info_for_object (bridge, scc->objs [j-1]);
-			if (bridge_info != NULL && add_reference (bridge, env, scc->objs [j-1], bridge_info, scc->objs [j])) {
-				mono_field_set_value (scc->objs [j-1], bridge_info->refs_added, &ref_val);
+			control_block   = get_gc_control_block_for_object (bridge, scc->objs [j-1]);
+			if (control_block != NULL && add_reference (bridge, env, scc->objs [j-1], control_block, scc->objs [j])) {
+				control_block->refs_added   = ref_val;
 			}
 		}
 		/* ref the first from the last */
 		if (scc->num_objs > 1) {
-			bridge_info = get_gc_bridge_info_for_object (bridge, scc->objs [scc->num_objs-1]);
-			if (bridge_info != NULL && add_reference (bridge, env, scc->objs [scc->num_objs-1], bridge_info, scc->objs [0])) {
-				mono_field_set_value (scc->objs [scc->num_objs-1], bridge_info->refs_added, &ref_val);
+			control_block   = get_gc_control_block_for_object (bridge, scc->objs [scc->num_objs-1]);
+			if (control_block != NULL && add_reference (bridge, env, scc->objs [scc->num_objs-1], control_block, scc->objs [0])) {
+				control_block->refs_added   = ref_val;
 			}
 		}
 	}
 
 	/* add the cross scc refs */
 	for (int i = 0; i < num_xrefs; i++) {
-		MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (bridge, sccs [xrefs [i].src_scc_index]->objs [0]);
-		if (bridge_info != NULL && add_reference (bridge, env, sccs [xrefs [i].src_scc_index]->objs [0], bridge_info, sccs [xrefs [i].dst_scc_index]->objs [0])) {
-			mono_field_set_value (sccs [xrefs [i].src_scc_index]->objs [0], bridge_info->refs_added, &ref_val);
+		JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (bridge, sccs [xrefs [i].src_scc_index]->objs [0]);
+		if (control_block != NULL && add_reference (bridge, env, sccs [xrefs [i].src_scc_index]->objs [0], control_block, sccs [xrefs [i].dst_scc_index]->objs [0])) {
+			control_block->refs_added   = ref_val;
 		}
 	}
 
@@ -1041,19 +1047,18 @@ gc_cleanup_after_java_collection (JavaInteropGCBridge *bridge, JNIEnv *env, int 
 		sccs [i]->is_alive = 0;
 		for (int j = 0; j < sccs [i]->num_objs; j++) {
 			MonoObject             *obj         = sccs [i]->objs [j];
-			MonoJavaGCBridgeInfo   *bridge_info = get_gc_bridge_info_for_object (bridge, obj);
-			if (bridge_info == NULL)
+
+			JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (bridge, obj);
+			if (control_block == NULL)
 				continue;
 
-			jobject jref;
-			mono_field_get_value (obj, bridge_info->handle, &jref);
+			jobject jref    = control_block->handle;
 			if (jref) {
 				alive++;
 				if (j > 0)
 					assert (sccs [i]->is_alive);
 				sccs [i]->is_alive = 1;
-				int refs_added;
-				mono_field_get_value (obj, bridge_info->refs_added, &refs_added);
+				int refs_added  = control_block->refs_added;
 				if (refs_added) {
 					jmethodID   clear_method_id = get_clear_references_method (bridge, env, jref);
 					if (clear_method_id) {
@@ -1201,13 +1206,12 @@ gc_bridge_class_kind (MonoClass *klass)
 static mono_bool
 gc_is_bridge_object (MonoObject *object)
 {
-	void *handle;
 
-	MonoJavaGCBridgeInfo    *bridge_info    = get_gc_bridge_info_for_object (mono_bridge, object);
-	if (bridge_info == NULL)
-		return 0;
+	JniObjectReferenceControlBlock  *control_block  = get_gc_control_block_for_object (mono_bridge, object);
+	if (control_block == NULL)
+		return 0;;
 
-	mono_field_get_value (object, bridge_info->handle, &handle);
+	void *handle    = control_block->handle;
 	if (handle == NULL) {
 #if DEBUG
 		MonoClass *mclass = mono_object_get_class (object);
