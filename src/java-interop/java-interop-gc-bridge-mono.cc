@@ -76,6 +76,8 @@ struct JavaInteropGCBridge {
 	char                               *gref_path,     *lref_path;
 	int                                 gref_log_level, lref_log_level;
 	int                                 gref_cleanup,   lref_cleanup;
+
+	JavaInteropMarkCrossReferencesCallback  mark_cross_references;
 };
 
 static jobject
@@ -1283,6 +1285,46 @@ gc_cross_references (int num_sccs, MonoGCBridgeSCC **sccs, int num_xrefs, MonoGC
 	free (thread_name);
 }
 
+static void
+managed_gc_cross_references (int num_sccs, MonoGCBridgeSCC **sccs, int num_xrefs, MonoGCBridgeXRef *xrefs)
+{
+	if (mono_bridge->mark_cross_references == NULL) {
+		assert (!"mono_bridge->mark_cross_references is NULL; WE SHOULD NOT BE EXECUTING");
+		return;
+	}
+	int i;
+
+	Srij_MarkCrossReferences cross_references = {};
+
+	cross_references.ComponentsLen  = (void*) (intptr_t) num_sccs;
+	cross_references.Components     = (Srij_StronglyConnectedComponent*) calloc (num_sccs, sizeof (Srij_StronglyConnectedComponent));
+	for (i = 0; i < num_sccs; ++i) {
+		Srij_StronglyConnectedComponent *scc    = &cross_references.Components [i];
+
+		scc->Count      = (void*) (intptr_t) sccs [i]->num_objs;
+		scc->Context    = (void**) calloc (sccs [i]->num_objs, sizeof (void*));
+		for (int j = 0; j < sccs [i]->num_objs; ++j) {
+			MonoObject *obj	    = sccs [i]->objs [j];
+			scc->Context [j]    = get_gc_control_block_for_object (mono_bridge, obj);
+		}
+	}
+
+	cross_references.CrossReferencesLen = (void*) (intptr_t) num_xrefs;
+	cross_references.CrossReferences    = (Srij_ComponentCrossReference*) calloc (num_xrefs, sizeof (Srij_ComponentCrossReference));
+	for (i = 0; i < num_xrefs; ++i) {
+		Srij_ComponentCrossReference *xref = &cross_references.CrossReferences [i];
+		xref->SourceGroupIndex      = (void*) (intptr_t) xrefs [i].src_scc_index;
+		xref->DestinationGroupIndex = (void*) (intptr_t) xrefs [i].dst_scc_index;
+	}
+
+	mono_bridge->mark_cross_references (&cross_references);
+
+	for (i = 0; i < num_sccs; ++i) {
+		Srij_StronglyConnectedComponent *scc    = &cross_references.Components [i];
+		sccs [i]->is_alive = scc->IsAlive;
+	}
+}
+
 int
 java_interop_gc_bridge_register_hooks (JavaInteropGCBridge *bridge, int weak_ref_kind)
 {
@@ -1316,7 +1358,9 @@ java_interop_gc_bridge_register_hooks (JavaInteropGCBridge *bridge, int weak_ref
 	bridge_cbs.bridge_version       = SGEN_BRIDGE_VERSION;
 	bridge_cbs.bridge_class_kind    = gc_bridge_class_kind;
 	bridge_cbs.is_bridge_object     = gc_is_bridge_object;
-	bridge_cbs.cross_references     = gc_cross_references;
+	bridge_cbs.cross_references     = bridge->mark_cross_references
+		? managed_gc_cross_references
+		: gc_cross_references;
 
 	mono_gc_register_bridge_callbacks (&bridge_cbs);
 
@@ -1330,5 +1374,30 @@ java_interop_gc_bridge_wait_for_bridge_processing (JavaInteropGCBridge *bridge)
 		return -1;
 
 	mono_gc_wait_for_bridge_processing ();
+	return 0;
+}
+
+int
+java_interop_gc_bridge_set_mark_cross_references (JavaInteropGCBridge *bridge, JavaInteropMarkCrossReferencesCallback markCrossReferences)
+{
+	if (bridge == NULL)
+		return -1;
+
+	bridge->mark_cross_references   = markCrossReferences;
+
+	return 0;
+}
+
+int
+java_interop_gc_bridge_release_mark_cross_references_resources (JavaInteropGCBridge *bridge, Srij_MarkCrossReferences *crossReferences)
+{
+	if (bridge == NULL)
+		return -1;
+
+	if (crossReferences == NULL)
+		return -1;
+
+	// leak it…
+
 	return 0;
 }
