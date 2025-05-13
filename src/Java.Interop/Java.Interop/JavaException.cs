@@ -5,7 +5,7 @@ using System;
 namespace Java.Interop
 {
 	[JniTypeSignature (JniTypeName, GenerateJavaPeer=false)]
-	unsafe public class JavaException : Exception, IJavaPeerable
+	unsafe public partial class JavaException : Exception, IJavaPeerable
 	{
 		internal    const   string          JniTypeName = "java/lang/Throwable";
 		readonly    static  JniPeerMembers  _members    = new JniPeerMembers (JniTypeName, typeof (JavaException));
@@ -171,9 +171,6 @@ namespace Java.Interop
 			if (inner != null) {
 				inner.Dispose ();
 			}
-#if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-			Java.Interop.JniObjectReferenceControlBlock.Free (ref jniObjectReferenceControlBlock);
-#endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 		}
 
 		public override bool Equals (object? obj)
@@ -267,11 +264,13 @@ namespace Java.Interop
 
 		void IJavaPeerable.Disposed ()
 		{
+			JniManagedPeerState |= Disposed;
 			Dispose (disposing: true);
 		}
 
 		void IJavaPeerable.Finalized ()
 		{
+			JniManagedPeerState |= Disposed;
 			Dispose (disposing: false);
 		}
 
@@ -288,6 +287,11 @@ namespace Java.Interop
 		void IJavaPeerable.SetPeerReference (JniObjectReference reference)
 		{
 			SetPeerReference (ref reference, JniObjectReferenceOptions.Copy);
+#if FEATURE_JNIOBJECTREFERENCE_INTPTRS
+			if (!reference.IsValid && JniManagedPeerState.HasFlag (Disposed)) {
+				Java.Interop.JniObjectReferenceControlBlock.Free (ref jniObjectReferenceControlBlock);
+			}
+#endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 		}
 
 		IntPtr IJavaPeerable.JniObjectReferenceControlBlock =>

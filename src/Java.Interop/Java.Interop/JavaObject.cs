@@ -8,7 +8,7 @@ namespace Java.Interop
 {
 	[JniTypeSignature ("java/lang/Object", GenerateJavaPeer=false)]
 	[Serializable]
-	unsafe public class JavaObject : IJavaPeerable
+	unsafe public partial class JavaObject : IJavaPeerable
 	{
 		internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 
@@ -122,9 +122,6 @@ namespace Java.Interop
 
 		protected virtual void Dispose (bool disposing)
 		{
-#if FEATURE_JNIOBJECTREFERENCE_INTPTRS
-			Java.Interop.JniObjectReferenceControlBlock.Free (ref jniObjectReferenceControlBlock);
-#endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 		}
 
 		public override bool Equals (object? obj)
@@ -155,11 +152,13 @@ namespace Java.Interop
 
 		void IJavaPeerable.Disposed ()
 		{
+			managedPeerState    |= Disposed;
 			Dispose (disposing: true);
 		}
 
 		void IJavaPeerable.Finalized ()
 		{
+			managedPeerState    |= Disposed;
 			Dispose (disposing: false);
 		}
 
@@ -176,6 +175,12 @@ namespace Java.Interop
 		void IJavaPeerable.SetPeerReference (JniObjectReference reference)
 		{
 			SetPeerReference (ref reference, JniObjectReferenceOptions.Copy);
+
+#if FEATURE_JNIOBJECTREFERENCE_INTPTRS
+			if (!reference.IsValid && managedPeerState.HasFlag (Disposed)) {
+				Java.Interop.JniObjectReferenceControlBlock.Free (ref jniObjectReferenceControlBlock);
+			}
+#endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 		}
 
 		IntPtr IJavaPeerable.JniObjectReferenceControlBlock =>
