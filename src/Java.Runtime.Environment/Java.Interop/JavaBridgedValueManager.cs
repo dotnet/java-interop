@@ -23,6 +23,7 @@ namespace System.Runtime.InteropServices.Java {
 	}
 
 	public unsafe struct StronglyConnectedComponent {
+		public int IsAlive;
 		public nint Count;
 		public System.IntPtr* Context;
 	}
