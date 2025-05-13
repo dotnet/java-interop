@@ -14,7 +14,7 @@ namespace Java.Interop {
 		Jni,
 	}
 
-	class MonoRuntimeValueManager : JniRuntime.JniValueManager {
+	partial class MonoRuntimeValueManager : JniRuntime.JniValueManager {
 
 		#pragma warning disable 0649
 		// This field is mutated by the java-interop native lib
@@ -46,6 +46,10 @@ namespace Java.Interop {
 					throw new NotSupportedException ("Could not register current AppDomain!");
 				if (JreNativeMethods.java_interop_gc_bridge_set_current_once (bridge) < 0)
 					throw new NotSupportedException ("Could not set GC Bridge instance!");
+				unsafe {
+					if (JreNativeMethods.java_interop_gc_bridge_set_mark_cross_references(bridge, &MarkCrossReferences) < 0)
+						throw new NotSupportedException("Could not set MarkCrossReferences!");
+				}
 			}
 			catch (Exception) {
 				JreNativeMethods.java_interop_gc_bridge_free (bridge);

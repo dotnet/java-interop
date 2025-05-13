@@ -1288,6 +1288,7 @@ gc_cross_references (int num_sccs, MonoGCBridgeSCC **sccs, int num_xrefs, MonoGC
 static void
 managed_gc_cross_references (int num_sccs, MonoGCBridgeSCC **sccs, int num_xrefs, MonoGCBridgeXRef *xrefs)
 {
+	fprintf (stderr, "# jonp: managed_gc_cross_references: %d sccs and %d xrefs\n", num_sccs, num_xrefs);
 	if (mono_bridge->mark_cross_references == NULL) {
 		assert (!"mono_bridge->mark_cross_references is NULL; WE SHOULD NOT BE EXECUTING");
 		return;
@@ -1317,12 +1318,14 @@ managed_gc_cross_references (int num_sccs, MonoGCBridgeSCC **sccs, int num_xrefs
 		xref->DestinationGroupIndex = (void*) (intptr_t) xrefs [i].dst_scc_index;
 	}
 
+	fprintf (stderr, "# jonp: calling managed mark_cross_references\n");
 	mono_bridge->mark_cross_references (&cross_references);
 
 	for (i = 0; i < num_sccs; ++i) {
 		Srij_StronglyConnectedComponent *scc    = &cross_references.Components [i];
 		sccs [i]->is_alive = scc->IsAlive;
 	}
+	fprintf (stderr, "# jonp: calling done\n");
 }
 
 int
