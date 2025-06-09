@@ -1391,13 +1391,9 @@ java_interop_gc_bridge_set_mark_cross_references (JavaInteropGCBridge *bridge, J
 int
 java_interop_gc_bridge_release_mark_cross_references_resources (JavaInteropGCBridge *bridge, Srij_MarkCrossReferences *crossReferences)
 {
-	if (bridge == NULL)
-		return -1;
-
-	if (crossReferences == NULL)
+	if (bridge == NULL || crossReferences == NULL)
 		return -1;
 
 	// leak it…
-
 	return 0;
 }
