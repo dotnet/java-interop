@@ -6,7 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>$(DefineConstants);NO_MARSHAL_MEMBER_BUILDER_SUPPORT</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_MARSHAL_MEMBER_BUILDER_SUPPORT;NO_GC_BRIDGE_SUPPORT</DefineConstants>
   </PropertyGroup>
 
   <Import Project="..\..\TargetFrameworkDependentValues.props" />
