@@ -415,18 +415,6 @@ namespace Java.Interop {
 
 		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
 		internal static extern void java_interop_gc_bridge_wait_for_bridge_processing (IntPtr bridge);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern unsafe int java_interop_gc_bridge_set_mark_cross_references (
-				IntPtr bridge,
-				delegate* unmanaged[Cdecl]<System.Runtime.InteropServices.Java.MarkCrossReferences*, void> markCrossReferences
-		);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern unsafe int java_interop_gc_bridge_release_mark_cross_references_resources (
-				IntPtr bridge,
-				System.Runtime.InteropServices.Java.MarkCrossReferences* crossReferences
-		);
 	}
 
 	sealed class OverrideStackTrace : Exception {
