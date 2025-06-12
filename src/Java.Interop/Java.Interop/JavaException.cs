@@ -138,10 +138,11 @@ namespace Java.Interop
 			var c   = jniObjectReferenceControlBlock;
 			if (c == null) {
 				c   = jniObjectReferenceControlBlock    =
-					Java.Interop.JniObjectReferenceControlBlock.Alloc ();
+					Java.Interop.JniObjectReferenceControlBlock.Alloc (reference);
+			} else {
+				c->handle       = reference.Handle;
+				c->handle_type  = (int) reference.Type;
 			}
-			c->handle       = reference.Handle;
-			c->handle_type  = (int) reference.Type;
 #endif  // FEATURE_JNIOBJECTREFERENCE_INTPTRS
 
 			JniObjectReference.Dispose (ref reference, options);
