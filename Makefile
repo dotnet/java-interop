@@ -18,7 +18,7 @@ PREPARE_EXTERNAL_FILES  = \
 DEPENDENCIES = \
 	bin/Test$(CONFIGURATION)/libNativeTiming$(NATIVE_EXT)
 
-NET_SUFFIX = -net9.0
+NET_SUFFIX = -net7.0
 
 TESTS = \
 	bin/Test$(CONFIGURATION)/Java.Interop-Tests.dll \
