@@ -4,8 +4,6 @@
 
 **Java.Interop** is a .NET library that provides Java Native Interface (JNI) bindings for managed languages such as C#. It enables bidirectional interoperability between .NET's Common Language Runtime (CLR) and Java Virtual Machines (JVMs), allowing .NET code to invoke Java methods and Java code to call back into managed code.
 
-**Key Purpose**: Bridge code running on .NET's CLR and code running on a Java VM without requiring one runtime to run on the other.
-
 **Primary Use Cases**:
 - .NET for Android development (successor to Xamarin.Android)
 - Desktop Java interop scenarios  
@@ -67,10 +65,44 @@
 
 ## Development Patterns & Conventions
 
-### Naming Conventions
-- **`Java*` prefix**: High-level types participating in cross-VM object reference semantics
-- **`Jni*` prefix**: Low-level types that do NOT participate in automatic object lifecycle management
-- **`*Marshaler` suffix**: Types responsible for converting between Java and .NET types
+### Code Formatting
+
+C# code uses tabs (not spaces) and the Mono code-formatting style defined in `.editorconfig`
+
+* Your mission is to make diffs as absolutely as small as possible, preserving existing code formatting.
+
+* If you encounter additional spaces or formatting within existing code blocks, LEAVE THEM AS-IS.
+
+* If you encounter code comments, LEAVE THEM AS-IS.
+
+* Place a space prior to any parentheses `(` or `[`
+
+* Use `""` for empty string and *not* `string.Empty`
+
+* Use `[]` for empty arrays and *not* `Array.Empty<T>()`
+
+Examples of properly formatted code:
+
+```csharp
+Foo ();
+Bar (1, 2, "test");
+myarray [0] = 1;
+
+if (someValue) {
+    // Code here
+}
+
+try {
+    // Code here
+} catch (Exception e) {
+    // Code here
+}
+```
+
+### Code Comments
+- Use XML documentation comments (`///`) for public APIs
+- Document JNI interop behavior and threading requirements
+- Include usage examples for complex scenarios
 
 ### Error Handling
 - Java exceptions are automatically converted to .NET exceptions
@@ -87,33 +119,10 @@
 - Use `JniEnvironment.Current` to access the current thread's JNI environment
 - Java objects can be shared across threads with proper reference management
 
-## Common Development Tasks
-
-### Binding a Java Library
-1. Generate API description XML using `class-parse` tool
-2. Customize binding with metadata XML files (method signatures, parameter names, etc.)
-3. Run `generator` tool to create C# binding assemblies
-4. Handle any manual fixups for complex scenarios
-
-### Adding New Marshalers
-1. Implement `JniValueMarshaler<T>` for your type
-2. Register with `JniRuntime.ValueManager.RegisterMarshaler<T>()`
-3. Add `[JniValueMarshaler]` attribute to types needing custom marshaling
-
-### Working with Javadoc
-- Use `Java.Interop.Tools.JavaSource` for parsing Javadoc comments
-- Convert to XML documentation comments for C# intellisense
-- Handle `@param`, `@return`, `@throws`, and other Javadoc tags
-
-### Performance Optimization
-- Cache `JniPeerMembers` instances to avoid repeated JNI lookups
-- Use `JniArgumentValue` structs for efficient parameter passing
-- Consider AOT compilation for marshal methods in production
-
 ## Build System
 
 ### Prerequisites
-- .NET 7+ SDK
+- .NET 9+ SDK
 - Java Development Kit (for compiling Java test classes)
 - Platform-specific JVM libraries
 
@@ -125,8 +134,8 @@ dotnet build -t:Prepare
 # Build all projects
 dotnet build
 
-# Run specific tests  
-dotnet test tests/Java.Interop-Tests/
+# Run specific tests
+dotnet test tests/Java.Interop-Tests/Java.Interop-Tests.csproj
 
 # Build with specific configuration
 dotnet build -c Release
@@ -136,52 +145,6 @@ dotnet build -c Release
 - Use `Configuration.Override.props` for local build customization
 - Set `$(JdkJvmPath)` to specify JVM library location
 - Configure `$(JAVA_HOME)` for Java tooling
-
-## Testing Guidelines
-
-### Unit Testing
-- Mock JVM interactions where possible using test doubles
-- Use `TestJVM` project for integration tests requiring real JVM
-- Test both success and error scenarios
-
-### Performance Testing
-- Use `Java.Interop-PerformanceTests` for benchmarking
-- Compare against baseline Xamarin.Android performance
-- Test both SafeHandle and IntPtr-based implementations
-
-### Generator Testing
-- Create minimal API XML for testing specific binding scenarios
-- Verify generated C# code compiles and behaves correctly
-- Test edge cases like generic types, nested classes, annotations
-
-## Documentation Standards
-
-### Code Comments
-- Use XML documentation comments (`///`) for public APIs
-- Document JNI interop behavior and threading requirements
-- Include usage examples for complex scenarios
-
-### API Documentation
-- Javadoc comments are automatically converted to XML docs
-- Maintain consistency between Java and C# documentation
-- Document platform differences and limitations
-
-## Known Limitations & Considerations
-
-### Platform Support
-- Primary focus on Android and desktop JVMs
-- Some features may be Android-specific (e.g., certain marshal methods)
-- Cross-platform JVM library loading differences
-
-### Performance
-- JNI calls have inherent overhead compared to native .NET calls
-- SafeHandle usage provides safety at performance cost
-- Consider batching operations to minimize JNI boundary crossings
-
-### Compatibility
-- JNI specification compatibility across different JVM implementations
-- Android vs desktop JVM behavioral differences
-- .NET Framework vs .NET Core/.NET 5+ differences
 
 ## Useful Resources
 
