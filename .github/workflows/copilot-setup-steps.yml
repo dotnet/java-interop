@@ -20,20 +20,10 @@ jobs:
     - name: Setup Java 17
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
         java-version: '17'
 
-    - name: Verify .NET installation
-      run: dotnet --version
-
-    - name: Verify Java installation
-      run: java -version
-
-    - name: Prepare build
+    - name: Prepare
       run: dotnet build -t:Prepare
 
-    - name: Build project (verification)
-      run: dotnet build --no-restore
-
-    - name: Run basic tests (verification)
-      run: dotnet test tests/Java.Interop-Tests/Java.Interop-Tests.csproj --verbosity minimal
+    - name: Build
+      run: dotnet build
