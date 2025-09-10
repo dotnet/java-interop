@@ -14,49 +14,46 @@ using Java.Interop.Expressions;
 
 namespace Java.Interop
 {
-	public class JniSurfacedPeerInfo
-	{
+	public class JniSurfacedPeerInfo {
 
-		public int JniIdentityHashCode { get; private set; }
-		public WeakReference<IJavaPeerable> SurfacedPeer { get; private set; }
+		public  int                             JniIdentityHashCode     {get; private set;}
+		public  WeakReference<IJavaPeerable>    SurfacedPeer            {get; private set;}
 
 		public JniSurfacedPeerInfo (int jniIdentityHashCode, WeakReference<IJavaPeerable> surfacedPeer)
 		{
-			JniIdentityHashCode = jniIdentityHashCode;
-			SurfacedPeer = surfacedPeer;
+			JniIdentityHashCode     = jniIdentityHashCode;
+			SurfacedPeer            = surfacedPeer;
 		}
 	}
 
 	partial class JniRuntime
 	{
-		partial class CreationOptions
-		{
-			public JniValueManager? ValueManager { get; set; }
+		partial class CreationOptions {
+			public  JniValueManager?        ValueManager                {get; set;}
 		}
 
-		internal JniValueManager? valueManager;
-		public JniValueManager ValueManager {
+		internal    JniValueManager?        valueManager;
+		public  JniValueManager             ValueManager                {
 			get => valueManager ?? throw new NotSupportedException ();
 		}
 
 		partial void SetValueManager (CreationOptions options)
 		{
-			var manager = options.ValueManager;
+			var manager     = options.ValueManager;
 			if (manager == null)
 				throw new ArgumentException (
 						"No JniValueManager specified in JniRuntime.CreationOptions.ValueManager.",
 						nameof (options));
-			valueManager = SetRuntime (manager);
+			valueManager    = SetRuntime (manager);
 		}
 
-		public abstract partial class JniValueManager : ISetRuntime, IDisposable
-		{
+		public abstract partial class JniValueManager : ISetRuntime, IDisposable {
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 
-			JniRuntime? runtime;
-			bool disposed;
-			public JniRuntime Runtime {
+			JniRuntime?             runtime;
+			bool                    disposed;
+			public      JniRuntime  Runtime {
 				get => runtime ?? throw new NotSupportedException ();
 			}
 
@@ -89,7 +86,7 @@ namespace Java.Interop
 
 			public abstract void FinalizePeer (IJavaPeerable value);
 
-			public abstract List<JniSurfacedPeerInfo> GetSurfacedPeers ();
+			public abstract List<JniSurfacedPeerInfo>   GetSurfacedPeers ();
 
 			public abstract void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, ConstructorInfo cinfo, object? []? argumentValues);
 
@@ -98,7 +95,7 @@ namespace Java.Interop
 				if (peer == null)
 					throw new ArgumentNullException (nameof (peer));
 
-				var newRef = peer.PeerReference;
+				var newRef  = peer.PeerReference;
 				if (newRef.IsValid) {
 					JniObjectReference.Dispose (ref reference, options);
 
@@ -108,17 +105,17 @@ namespace Java.Interop
 						return;
 					}
 					JniObjectReference.Dispose (ref reference, options);
-					newRef = newRef.NewGlobalRef ();
+					newRef   = newRef.NewGlobalRef ();
 				} else if (options == JniObjectReferenceOptions.None) {
 					// `reference` is likely *InvalidJniObjectReference, and can't be touched
 					return;
 				} else if (!reference.IsValid) {
 					throw new ArgumentException ("JNI Object Reference is invalid.", nameof (reference));
 				} else {
-					newRef = reference;
+					newRef  = reference;
 
 					if ((options & JniObjectReferenceOptions.Copy) == JniObjectReferenceOptions.Copy) {
-						newRef = reference.NewGlobalRef ();
+						newRef  = reference.NewGlobalRef ();
 					}
 
 					JniObjectReference.Dispose (ref reference, options);
@@ -225,7 +222,7 @@ namespace Java.Interop
 				if (!reference.IsValid)
 					return null;
 
-				var t = PeekPeer (reference);
+				var t   = PeekPeer (reference);
 				if (t == null)
 					return t;
 
@@ -237,15 +234,15 @@ namespace Java.Interop
 
 			protected virtual bool TryUnboxPeerObject (IJavaPeerable value, [NotNullWhen (true)] out object? result)
 			{
-				result = null;
-				var p = value as JavaProxyObject;
+				result  = null;
+				var p   = value as JavaProxyObject;
 				if (p != null) {
-					result = p.Value;
+					result  = p.Value;
 					return true;
 				}
-				var x = value as JavaProxyThrowable;
+				var x   = value as JavaProxyThrowable;
 				if (x != null) {
-					result = x.Exception;
+					result  = x.Exception;
 					return true;
 				}
 				return false;
@@ -253,7 +250,7 @@ namespace Java.Interop
 
 			object? PeekBoxedObject (JniObjectReference reference)
 			{
-				var t = PeekPeer (reference);
+				var t   = PeekPeer (reference);
 				if (t == null)
 					return null;
 				object? r;
@@ -287,7 +284,7 @@ namespace Java.Interop
 					return null;
 				}
 
-				var peeked = PeekPeer (reference);
+				var peeked  = PeekPeer (reference);
 				if (peeked != null &&
 						(targetType == null ||
 						 targetType.IsAssignableFrom (peeked.GetType ()))) {
@@ -295,72 +292,7 @@ namespace Java.Interop
 				}
 				return CreatePeer (ref reference, JniObjectReferenceOptions.Copy, targetType);
 			}
-#if false
-			class AndroidTypeMapUniverse { }
-			public IJavaPeerable? CreatePeer(
-					ref JniObjectReference reference,
-					JniObjectReferenceOptions options,
-					[DynamicallyAccessedMembers (Constructors)]
-					Type? targetType)
-			{
-				if (disposed)
-					throw new ObjectDisposedException (GetType ().Name);
 
-				if (!reference.IsValid) {
-					return null;
-				}
-
-				targetType  = targetType ?? typeof (JavaObject);
-				targetType  = GetPeerType (targetType);
-				if (!typeof (IJavaPeerable).IsAssignableFrom (targetType))
-					throw new ArgumentException ($"targetType `{targetType.AssemblyQualifiedName}` must implement IJavaPeerable!", nameof (targetType));
-				IReadOnlyDictionary<string, Type> typemap = System.Runtime.InteropServices.TypeMapping.GetOrCreateExternalTypeMapping<AndroidTypeMapUniverse>();
-				string? className;
-				JniObjectReference refClass;
-				Type? mappedType = null;
-				do {
-					refClass = JniEnvironment.Types.GetObjectClass (reference);
-					className = JniEnvironment.Types.GetJniTypeNameFromClass (refClass);
-					if (className is not null && typemap.TryGetValue (className, out mappedType)) {
-						JniObjectReference.Dispose (ref refClass);
-						break;
-					}
-					var oldClass = refClass;
-					refClass = JniEnvironment.Types.GetSuperclass (refClass);
-					JniObjectReference.Dispose (ref oldClass);
-				}
-				while (refClass.IsValid);
-
-				if (mappedType is null) {
-					throw new InvalidOperationException ("Java object type does not have mapping to .NET type.");
-				}
-				if (!mappedType.IsAssignableTo(targetType)) {
-					throw new InvalidOperationException("Mapped .NET type is not assignable to target type.");
-				}
-
-				var managedObject = GetUninitializedObject (mappedType);
-				var constructed = false;
-				try {
-					constructed = TryConstructPeer (managedObject, ref reference, options, mappedType);
-				} finally {
-					if (!constructed) {
-						GC.SuppressFinalize (managedObject);
-						managedObject    = null;
-					}
-				}
-				return managedObject;
-
-				static IJavaPeerable GetUninitializedObject (
-						[DynamicallyAccessedMembers (Constructors)]
-						Type type)
-				{
-					var v   = (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
-					v.SetJniManagedPeerState (JniManagedPeerStates.Replaceable | JniManagedPeerStates.Activatable);
-					return v;
-				}
-
-			}
-#else
 			public virtual IJavaPeerable? CreatePeer (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions transfer,
@@ -374,18 +306,18 @@ namespace Java.Interop
 					return null;
 				}
 
-				targetType = targetType ?? typeof (JavaObject);
-				targetType = GetPeerType (targetType);
+				targetType  = targetType ?? typeof (JavaObject);
+				targetType  = GetPeerType (targetType);
 
 				if (!typeof (IJavaPeerable).IsAssignableFrom (targetType))
 					throw new ArgumentException ($"targetType `{targetType.AssemblyQualifiedName}` must implement IJavaPeerable!", nameof (targetType));
 
-				var targetSig = Runtime.TypeManager.GetTypeSignature (targetType);
+				var targetSig  = Runtime.TypeManager.GetTypeSignature (targetType);
 				if (!targetSig.IsValid || targetSig.SimpleReference == null) {
 					throw new ArgumentException ($"Could not determine Java type corresponding to `{targetType.AssemblyQualifiedName}`.", nameof (targetType));
 				}
 
-				var refClass = JniEnvironment.Types.GetObjectClass (reference);
+				var refClass    = JniEnvironment.Types.GetObjectClass (reference);
 				JniObjectReference targetClass;
 				try {
 					targetClass = JniEnvironment.Types.FindClass (targetSig.SimpleReference);
@@ -437,13 +369,13 @@ namespace Java.Interop
 						}
 					}
 
-					var super = JniEnvironment.Types.GetSuperclass (klass);
+					var super   = JniEnvironment.Types.GetSuperclass (klass);
 					jniTypeName = super.IsValid
 						? JniEnvironment.Types.GetJniTypeNameFromClass (super)
 						: null;
 
 					JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
-					klass = super;
+					klass      = super;
 				}
 				JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
 
@@ -494,13 +426,10 @@ namespace Java.Interop
 							continue;
 						}
 					}
+
 					if (best is not null && best.IsAssignableTo (targetType))
 						return best;
 					return null;
-					//throw new InvalidOperationException (
-					//	$"Best type for instance of Java class '{sig.Name}' is '{best.FullName}', "
-					//	+ $"which is not assignable to target type '{targetType.FullName}'."
-					//	+ $"\nOther mapped types:\n{string.Join("\n", Runtime.TypeManager.GetTypes(sig).Select(t => t.FullName))}");
 				}
 			}
 
@@ -510,16 +439,16 @@ namespace Java.Interop
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
-				type = Runtime.TypeManager.GetInvokerType (type) ?? type;
+				type    = Runtime.TypeManager.GetInvokerType (type) ?? type;
 
-				var self = GetUninitializedObject (type);
+				var self        = GetUninitializedObject (type);
 				var constructed = false;
 				try {
 					constructed = TryConstructPeer (self, ref reference, options, type);
 				} finally {
 					if (!constructed) {
 						GC.SuppressFinalize (self);
-						self = null;
+						self    = null;
 					}
 				}
 				return self;
@@ -528,16 +457,15 @@ namespace Java.Interop
 						[DynamicallyAccessedMembers (Constructors)]
 						Type type)
 				{
-					var v = (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
+					var v   = (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
 					v.SetJniManagedPeerState (JniManagedPeerStates.Replaceable | JniManagedPeerStates.Activatable);
 					return v;
 				}
 			}
-#endif
 
-			const BindingFlags ActivationConstructorBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-			static readonly Type ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
-			static readonly Type [] JIConstructorSignature = new Type [] { ByRefJniObjectReference, typeof (JniObjectReferenceOptions) };
+			const               BindingFlags    ActivationConstructorBindingFlags   = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+			static  readonly    Type            ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
+			static  readonly    Type[]          JIConstructorSignature  = new Type [] { ByRefJniObjectReference, typeof (JniObjectReferenceOptions) };
 
 
 			protected virtual bool TryConstructPeer (
@@ -549,12 +477,12 @@ namespace Java.Interop
 			{
 				var c = type.GetConstructor (ActivationConstructorBindingFlags, null, JIConstructorSignature, null);
 				if (c != null) {
-					var args = new object [] {
+					var args = new object[] {
 						reference,
 						options,
 					};
 					c.Invoke (self, args);
-					reference = (JniObjectReference) args [0];
+					reference   = (JniObjectReference) args [0];
 					return true;
 				}
 				return false;
@@ -576,7 +504,7 @@ namespace Java.Interop
 					return JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
 				}
 
-				var boxed = PeekBoxedObject (reference);
+				var boxed   = PeekBoxedObject (reference);
 				if (boxed != null) {
 					JniObjectReference.Dispose (ref reference, options);
 					if (targetType != null)
@@ -589,14 +517,14 @@ namespace Java.Interop
 					// Let's hope this is an IJavaPeerable!
 					return JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
 				}
-				var marshaler = GetValueMarshaler (targetType);
+				var marshaler   = GetValueMarshaler (targetType);
 				return marshaler.CreateValue (ref reference, options, targetType);
 			}
 
 			[return: MaybeNull]
 			public T CreateValue<
 					[DynamicallyAccessedMembers (Constructors)]
-			T
+					T
 			> (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
@@ -620,21 +548,21 @@ namespace Java.Interop
 								typeof (T)),
 							nameof (targetType));
 
-				var boxed = PeekBoxedObject (reference);
+				var boxed   = PeekBoxedObject (reference);
 				if (boxed != null) {
 					JniObjectReference.Dispose (ref reference, options);
 					return (T) Convert.ChangeType (boxed, targetType ?? typeof (T));
 				}
 
-				targetType = targetType ?? typeof (T);
+				targetType  = targetType ?? typeof (T);
 
 				if (typeof (IJavaPeerable).IsAssignableFrom (targetType)) {
-#pragma warning disable CS8600, CS8601 // Possible null reference assignment.
+#pragma warning disable CS8600,CS8601 // Possible null reference assignment.
 					return (T) JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
-#pragma warning restore CS8600, CS8601 // Possible null reference assignment.
+#pragma warning restore CS8600,CS8601 // Possible null reference assignment.
 				}
 
-				var marshaler = GetValueMarshaler<T> ();
+				var marshaler   = GetValueMarshaler<T> ();
 				return marshaler.CreateGenericValue (ref reference, options, targetType);
 			}
 
@@ -676,25 +604,25 @@ namespace Java.Interop
 					// Let's hope this is an IJavaPeerable!
 					return JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
 				}
-				var marshaler = GetValueMarshaler (targetType);
+				var marshaler   = GetValueMarshaler (targetType);
 				return marshaler.CreateValue (ref reference, options, targetType);
 			}
 
 			[return: MaybeNull]
 			public T GetValue<
 					[DynamicallyAccessedMembers (Constructors)]
-			T
+					T
 			> (
 					IntPtr handle)
 			{
-				var r = new JniObjectReference (handle);
+				var r   = new JniObjectReference (handle);
 				return GetValue<T> (ref r, JniObjectReferenceOptions.Copy);
 			}
 
 			[return: MaybeNull]
 			public T GetValue<
 					[DynamicallyAccessedMembers (Constructors)]
-			T
+					T
 			> (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
@@ -715,7 +643,7 @@ namespace Java.Interop
 								typeof (T)),
 							nameof (targetType));
 
-				targetType = targetType ?? typeof (T);
+				targetType  = targetType ?? typeof (T);
 
 				var existing = PeekValue (reference);
 				if (existing != null && (targetType == null || targetType.IsAssignableFrom (existing.GetType ()))) {
@@ -724,12 +652,12 @@ namespace Java.Interop
 				}
 
 				if (typeof (IJavaPeerable).IsAssignableFrom (targetType)) {
-#pragma warning disable CS8600, CS8601 // Possible null reference assignment.
+#pragma warning disable CS8600,CS8601 // Possible null reference assignment.
 					return (T) JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
-#pragma warning restore CS8600, CS8601 // Possible null reference assignment.
+#pragma warning restore CS8600,CS8601 // Possible null reference assignment.
 				}
 
-				var marshaler = GetValueMarshaler<T> ();
+				var marshaler   = GetValueMarshaler<T> ();
 				return marshaler.CreateGenericValue (ref reference, options, targetType);
 			}
 
@@ -737,14 +665,14 @@ namespace Java.Interop
 
 			public JniValueMarshaler<T> GetValueMarshaler<
 					[DynamicallyAccessedMembers (Constructors)]
-			T
+					T
 			> ()
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
 
-				var m = GetValueMarshaler (typeof (T));
-				var r = m as JniValueMarshaler<T>;
+				var m   = GetValueMarshaler (typeof (T));
+				var r   = m as JniValueMarshaler<T>;
 				if (r != null)
 					return r;
 				lock (Marshalers) {
@@ -764,7 +692,7 @@ namespace Java.Interop
 				if (type.ContainsGenericParameters)
 					throw new ArgumentException ("Generic type definitions are not supported.", nameof (type));
 
-				var marshalerAttr = type.GetCustomAttribute<JniValueMarshalerAttribute> ();
+				var marshalerAttr   = type.GetCustomAttribute<JniValueMarshalerAttribute> ();
 				if (marshalerAttr != null)
 					return (JniValueMarshaler) Activator.CreateInstance (marshalerAttr.MarshalerType)!;
 
@@ -780,7 +708,7 @@ namespace Java.Interop
 				}
 
 
-				var listType = GetListType (type);
+				var listType    = GetListType (type);
 				if (listType != null) {
 					var elementType = listType.GenericTypeArguments [0];
 					if (elementType.IsValueType) {
@@ -800,7 +728,7 @@ namespace Java.Interop
 				return GetValueMarshalerCore (type);
 			}
 
-			static Type? GetListType (Type type)
+			static Type? GetListType(Type type)
 			{
 				foreach (var iface in GetInterfaces (type).Concat (new [] { type })) {
 					if (typeof (IList<>).IsAssignableFrom (iface.IsGenericType ? iface.GetGenericTypeDefinition () : iface))
@@ -832,7 +760,7 @@ namespace Java.Interop
 
 			static JniValueMarshaler GetObjectArrayMarshalerHelper<
 					[DynamicallyAccessedMembers (Constructors)]
-			T
+					T
 			> ()
 			{
 				return JavaObjectArray<T>.Instance;
@@ -845,13 +773,12 @@ namespace Java.Interop
 		}
 	}
 
-	sealed class VoidValueMarshaler : JniValueMarshaler
-	{
+	sealed class VoidValueMarshaler : JniValueMarshaler {
 
-		internal static VoidValueMarshaler Instance = new VoidValueMarshaler ();
+		internal    static  VoidValueMarshaler              Instance    = new VoidValueMarshaler ();
 
 		public override Type MarshalType {
-			get { return typeof (void); }
+			get {return typeof (void);}
 		}
 
 		public override object? CreateValue (
@@ -874,10 +801,9 @@ namespace Java.Interop
 		}
 	}
 
-	sealed class JavaPeerableValueMarshaler : JniValueMarshaler<IJavaPeerable?>
-	{
+	sealed class JavaPeerableValueMarshaler : JniValueMarshaler<IJavaPeerable?> {
 
-		internal static JavaPeerableValueMarshaler Instance = new JavaPeerableValueMarshaler ();
+		internal    static  JavaPeerableValueMarshaler      Instance    = new JavaPeerableValueMarshaler ();
 
 		[return: MaybeNull]
 		public override IJavaPeerable? CreateGenericValue (
@@ -886,26 +812,26 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
-			var jvm = JniEnvironment.Runtime;
-			var marshaler = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof (IJavaPeerable));
+			var jvm         = JniEnvironment.Runtime;
+			var marshaler   = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof(IJavaPeerable));
 			if (marshaler != Instance)
 				return (IJavaPeerable) marshaler.CreateValue (ref reference, options, targetType)!;
 			return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
 		}
 
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull] IJavaPeerable? value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]IJavaPeerable? value, ParameterAttributes synchronize)
 		{
 			if (value == null || !value.PeerReference.IsValid)
 				return new JniValueMarshalerState ();
-			var r = value.PeerReference.NewLocalRef ();
+			var r   = value.PeerReference.NewLocalRef ();
 			return new JniValueMarshalerState (r);
 		}
 
-		public override void DestroyGenericArgumentState ([MaybeNull] IJavaPeerable? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		public override void DestroyGenericArgumentState ([MaybeNull]IJavaPeerable? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
-			var r = state.ReferenceValue;
+			var r   = state.ReferenceValue;
 			JniObjectReference.Dispose (ref r);
-			state = new JniValueMarshalerState ();
+			state   = new JniValueMarshalerState ();
 		}
 
 		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
@@ -922,13 +848,13 @@ namespace Java.Interop
 		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
 		Expression CreateIntermediaryExpressionFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
 		{
-			var r = Expression.Variable (typeof (JniObjectReference), sourceValue.Name + "_ref");
+			var r   = Expression.Variable (typeof (JniObjectReference), sourceValue.Name + "_ref");
 			context.LocalVariables.Add (r);
 			context.CreationStatements.Add (
 					Expression.IfThenElse (
-						test: Expression.Equal (Expression.Constant (null), sourceValue),
-						ifTrue: Expression.Assign (r, Expression.New (typeof (JniObjectReference))),
-						ifFalse: Expression.Assign (r, Expression.Property (Expression.Convert (sourceValue, typeof (IJavaPeerable)), "PeerReference"))));
+						test:       Expression.Equal (Expression.Constant (null), sourceValue),
+						ifTrue:     Expression.Assign (r, Expression.New (typeof (JniObjectReference))),
+						ifFalse:    Expression.Assign (r, Expression.Property (Expression.Convert (sourceValue, typeof (IJavaPeerable)), "PeerReference"))));
 
 			return r;
 		}
@@ -946,14 +872,14 @@ namespace Java.Interop
 		{
 			targetType ??= typeof (object);
 
-			var r = Expression.Variable (targetType, sourceValue.Name + "_val");
+			var r   = Expression.Variable (targetType, sourceValue.Name + "_val");
 			context.LocalVariables.Add (r);
 			context.CreationStatements.Add (
 					Expression.Assign (r,
 						Expression.Call (
 							context.ValueManager ?? Expression.Property (context.Runtime, "ValueManager"),
 							"GetValue",
-							new [] { targetType },
+							new[]{targetType},
 							sourceValue)));
 			return r;
 		}
@@ -961,16 +887,16 @@ namespace Java.Interop
 
 	sealed class DelegatingValueMarshaler<
 			[DynamicallyAccessedMembers (Constructors)]
-	T
+			T
 	>
 		: JniValueMarshaler<T>
 	{
 
-		JniValueMarshaler ValueMarshaler;
+		JniValueMarshaler   ValueMarshaler;
 
 		public DelegatingValueMarshaler (JniValueMarshaler valueMarshaler)
 		{
-			ValueMarshaler = valueMarshaler;
+			ValueMarshaler  = valueMarshaler;
 		}
 
 		[return: MaybeNull]
@@ -983,12 +909,12 @@ namespace Java.Interop
 			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
 		}
 
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull] T value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]T value, ParameterAttributes synchronize)
 		{
 			return ValueMarshaler.CreateObjectReferenceArgumentState (value, synchronize);
 		}
 
-		public override void DestroyGenericArgumentState ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+		public override void DestroyGenericArgumentState ([AllowNull]T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
 			ValueMarshaler.DestroyArgumentState (value, ref state, synchronize);
 		}
@@ -1014,10 +940,9 @@ namespace Java.Interop
 		}
 	}
 
-	sealed class ProxyValueMarshaler : JniValueMarshaler<object?>
-	{
+	sealed class ProxyValueMarshaler : JniValueMarshaler<object?> {
 
-		internal static ProxyValueMarshaler Instance = new ProxyValueMarshaler ();
+		internal    static  ProxyValueMarshaler     Instance    = new ProxyValueMarshaler ();
 
 		[return: MaybeNull]
 		public override object? CreateGenericValue (
@@ -1026,19 +951,19 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType)
 		{
-			var jvm = JniEnvironment.Runtime;
+			var jvm     = JniEnvironment.Runtime;
 
 			if (targetType == null || targetType == typeof (object)) {
-				targetType = jvm.ValueManager.GetRuntimeType (reference);
+				targetType      = jvm.ValueManager.GetRuntimeType (reference);
 			}
 			if (targetType != null) {
-				var vm = jvm.ValueManager.GetValueMarshaler (targetType);
+				var vm  = jvm.ValueManager.GetValueMarshaler (targetType);
 				if (vm != Instance) {
 					return vm.CreateValue (ref reference, options, targetType)!;
 				}
 			}
 
-			var target = jvm.ValueManager.PeekValue (reference);
+			var target  = jvm.ValueManager.PeekValue (reference);
 			if (target != null) {
 				JniObjectReference.Dispose (ref reference, options);
 				return target;
@@ -1047,31 +972,31 @@ namespace Java.Interop
 			return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
 		}
 
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull] object? value, ParameterAttributes synchronize)
+		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]object? value, ParameterAttributes synchronize)
 		{
 			if (value == null)
 				return new JniValueMarshalerState ();
 
-			var jvm = JniEnvironment.Runtime;
+			var jvm     = JniEnvironment.Runtime;
 
-			var vm = jvm.ValueManager.GetValueMarshaler (value.GetType ());
+			var vm      = jvm.ValueManager.GetValueMarshaler (value.GetType ());
 			if (vm != Instance) {
-				var s = vm.CreateObjectReferenceArgumentState (value, synchronize);
+				var s   = vm.CreateObjectReferenceArgumentState (value, synchronize);
 				return new JniValueMarshalerState (s, vm);
 			}
 
-			var p = JavaProxyObject.GetProxy (value);
+			var p   = JavaProxyObject.GetProxy (value);
 			return new JniValueMarshalerState (p!.PeerReference.NewLocalRef ());
 		}
 
 		public override void DestroyGenericArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
 		{
-			var vm = state.Extra as JniValueMarshaler;
+			var vm  = state.Extra as JniValueMarshaler;
 			if (vm != null) {
 				vm.DestroyArgumentState (value, ref state, synchronize);
 				return;
 			}
-			var r = state.ReferenceValue;
+			var r   = state.ReferenceValue;
 			JniObjectReference.Dispose (ref r);
 			state = new JniValueMarshalerState ();
 		}
