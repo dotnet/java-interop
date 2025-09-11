@@ -360,7 +360,7 @@ namespace Java.Interop
 						return null;
 
 					Type? type = GetBestTypeForSignature (sig);
-					if (type != null) {
+					if (type != null && type.IsAssignableTo(targetType)) {
 						var peer = TryCreatePeerInstance (ref reference, transfer, type);
 
 						if (peer != null) {
