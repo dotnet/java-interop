@@ -259,6 +259,18 @@ namespace Java.Interop
 					: null;
 			}
 
+			[return: DynamicallyAccessedMembers (Constructors)]
+			static Type GetPeerType ([DynamicallyAccessedMembers (Constructors)] Type type)
+			{
+				if (type == typeof (object))
+					return typeof (JavaObject);
+				if (type == typeof (IJavaPeerable))
+					return typeof (JavaObject);
+				if (type == typeof (Exception))
+					return typeof (JavaException);
+				return type;
+			}
+
 			public IJavaPeerable? GetPeer (
 					JniObjectReference reference,
 					[DynamicallyAccessedMembers (Constructors)]
@@ -295,6 +307,7 @@ namespace Java.Interop
 				}
 
 				targetType  = targetType ?? typeof (JavaObject);
+				targetType = GetPeerType(targetType);
 
 				if (!typeof (IJavaPeerable).IsAssignableFrom (targetType))
 					throw new ArgumentException ($"targetType `{targetType.AssemblyQualifiedName}` must implement IJavaPeerable!", nameof (targetType));
