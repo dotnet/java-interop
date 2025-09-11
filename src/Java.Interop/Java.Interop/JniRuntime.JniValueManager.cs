@@ -259,18 +259,6 @@ namespace Java.Interop
 					: null;
 			}
 
-			[return: DynamicallyAccessedMembers (Constructors)]
-			static Type GetPeerType ([DynamicallyAccessedMembers (Constructors)] Type type)
-			{
-				if (type == typeof (object))
-					return typeof (JavaObject);
-				if (type == typeof (IJavaPeerable))
-					return typeof (JavaObject);
-				if (type == typeof (Exception))
-					return typeof (JavaException);
-				return type;
-			}
-
 			public IJavaPeerable? GetPeer (
 					JniObjectReference reference,
 					[DynamicallyAccessedMembers (Constructors)]
@@ -297,7 +285,7 @@ namespace Java.Interop
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions transfer,
 					[DynamicallyAccessedMembers (Constructors)]
-					Type? targetType)
+					Type? targetType = null)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
@@ -307,7 +295,6 @@ namespace Java.Interop
 				}
 
 				targetType  = targetType ?? typeof (JavaObject);
-				targetType  = GetPeerType (targetType);
 
 				if (!typeof (IJavaPeerable).IsAssignableFrom (targetType))
 					throw new ArgumentException ($"targetType `{targetType.AssemblyQualifiedName}` must implement IJavaPeerable!", nameof (targetType));
@@ -336,7 +323,7 @@ namespace Java.Interop
 
 				JniObjectReference.Dispose (ref targetClass);
 
-				var peer = CreatePeerInstance (ref refClass, targetType, ref reference, transfer);
+				var peer = CreatePeerInstance (ref refClass, ref reference, transfer);
 				if (peer == null) {
 					throw new NotSupportedException (string.Format ("Could not find an appropriate constructable wrapper type for Java type '{0}', targetType='{1}'.",
 							JniEnvironment.Types.GetJniTypeNameFromInstance (reference), targetType));
@@ -347,8 +334,6 @@ namespace Java.Interop
 
 			IJavaPeerable? CreatePeerInstance (
 					ref JniObjectReference klass,
-					[DynamicallyAccessedMembers (Constructors)]
-					Type targetType,
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions transfer)
 			{
@@ -359,7 +344,7 @@ namespace Java.Interop
 					if (!JniTypeSignature.TryParse (jniTypeName, out sig))
 						return null;
 
-					Type? type = GetTypeAssignableTo (sig, targetType);
+					Type? type = GetBestTypeForSignature (sig);
 					if (type != null) {
 						var peer = TryCreatePeerInstance (ref reference, transfer, type);
 
@@ -379,13 +364,14 @@ namespace Java.Interop
 				}
 				JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
 
-				return TryCreatePeerInstance (ref reference, transfer, targetType);
+				// Instance has no mapped type
+				return null;
 
 				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 				[return: DynamicallyAccessedMembers (Constructors)]
-				Type? GetTypeAssignableTo (JniTypeSignature sig, Type targetType)
+				Type? GetTypeAssignableTo (JniTypeSignature sig)
 				{
-					string[] sdkAssemblyNames = ["Mono.Android", "Java.Base", "Java.Runtime", "Java.Interop"];
+					string[] sdkAssemblyNames = ["Mono.Android", "Java.Base", "Java.Interop"];
 					// Find single best instance
 					Type? best = null;
 					foreach (Type type in Runtime.TypeManager.GetTypes (sig)) {
@@ -427,9 +413,7 @@ namespace Java.Interop
 						}
 					}
 
-					if (best is not null && best.IsAssignableTo (targetType))
-						return best;
-					return null;
+					return best;
 				}
 			}
 
