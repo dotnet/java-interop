@@ -323,7 +323,7 @@ namespace Java.Interop
 
 				JniObjectReference.Dispose (ref targetClass);
 
-				var peer = CreatePeerInstance (ref refClass, ref reference, transfer);
+				var peer = CreatePeerInstance (ref refClass, targetType, ref reference, transfer);
 				if (peer == null) {
 					throw new NotSupportedException (string.Format ("Could not find an appropriate constructable wrapper type for Java type '{0}', targetType='{1}'.",
 							JniEnvironment.Types.GetJniTypeNameFromInstance (reference), targetType));
@@ -334,6 +334,8 @@ namespace Java.Interop
 
 			IJavaPeerable? CreatePeerInstance (
 					ref JniObjectReference klass,
+					[DynamicallyAccessedMembers (Constructors)]
+					Type targetType,
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions transfer)
 			{
@@ -364,8 +366,9 @@ namespace Java.Interop
 				}
 				JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
 
-				// Instance has no mapped type
-				return null;
+				// If we have nothing in the hierarchy, assume caller knows best and create targetType
+				return TryCreatePeerInstance (ref reference, transfer, targetType);
+
 
 				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 				[return: DynamicallyAccessedMembers (Constructors)]
