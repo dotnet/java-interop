@@ -285,7 +285,7 @@ namespace Java.Interop
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions transfer,
 					[DynamicallyAccessedMembers (Constructors)]
-					Type? targetType = null)
+					Type? targetType)
 			{
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
