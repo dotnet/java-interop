@@ -369,7 +369,7 @@ namespace Java.Interop
 
 				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 				[return: DynamicallyAccessedMembers (Constructors)]
-				Type? GetTypeAssignableTo (JniTypeSignature sig)
+				Type? GetBestTypeForSignature (JniTypeSignature sig)
 				{
 					string[] sdkAssemblyNames = ["Mono.Android", "Java.Base", "Java.Interop"];
 					// Find single best instance
