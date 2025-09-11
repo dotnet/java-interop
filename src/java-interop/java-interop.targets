@@ -88,7 +88,7 @@
       Condition="  $([MSBuild]::IsOSPlatform ('windows'))  And '$(NativeToolchainSupported)' == 'True' "
       Inputs="$(MSBuildThisFileDirectory)coreclr.def"
       Outputs="$(MSBuildThisFileDirectory)coreclr.lib">
-    <Exec Command="'C:\Program Files\Microsoft Visual Studio\18\Preview\VC\Tools\MSVC\14.50.35503\bin\Hostx64\x64\lib.exe' /def:$(MSBuildThisFileDirectory)coreclr.def /out:$(MSBuildThisFileDirectory)coreclr.lib /machine:X64" />
+    <Exec Command="lib /def:$(MSBuildThisFileDirectory)coreclr.def /out:$(MSBuildThisFileDirectory)coreclr.lib /machine:X64" />
   </Target>
 
   <Target Name="_Clean"
