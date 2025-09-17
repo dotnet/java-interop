@@ -41,7 +41,7 @@ namespace Java.Interop {
 			s_keepAlive.Add (marshaler);
 			Marshaler = GetFunctionPointerForDelegate (marshaler);
 
-			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "TBD")]
+			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Dynamic method registration does not work with Native AOT.")]
 			static IntPtr GetFunctionPointerForDelegate (Delegate marshaler)
 				=> Marshal.GetFunctionPointerForDelegate (marshaler);
 		}
