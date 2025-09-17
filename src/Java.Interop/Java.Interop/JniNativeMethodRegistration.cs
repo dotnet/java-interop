@@ -16,6 +16,7 @@ namespace Java.Interop {
 		public  string      Name;
 		public  string      Signature;
 		public  IntPtr      MarshalerPtr;
+		[Obsolete ("Use MarshalerPtr instead.")]
 		public  Delegate    Marshaler => s_reverseMapping.TryGetValue (MarshalerPtr, out var mappedDelegate)
 			? mappedDelegate
 			: throw new InvalidOperationException ($"Cannot convert MarshalerPtr {MarshalerPtr} for {Name}{Signature} to Delegate.");
