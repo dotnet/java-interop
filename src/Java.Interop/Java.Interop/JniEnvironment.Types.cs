@@ -256,17 +256,6 @@ namespace Java.Interop
 					throw new ArgumentOutOfRangeException (nameof (numMethods), numMethods,
 							$"`numMethods` must be between 0 and `methods.Length` ({methods?.Length ?? 0})!");
 				}
-#if DEBUG && NETCOREAPP
-				for (int i = 0; methods != null && i < numMethods; ++i) {
-					var m   = methods [i];
-					if (m.Marshaler != null && m.Marshaler.GetType ().GenericTypeArguments.Length != 0) {
-						var method  = m.Marshaler.Method;
-						Debug.WriteLine ($"JNIEnv::RegisterNatives() given a generic delegate type `{m.Marshaler.GetType()}`.  .NET Core doesn't like this.");
-						Debug.WriteLine ($"  Java: {m.Name}{m.Signature}");
-						Debug.WriteLine ($"  Marshaler Type={m.Marshaler.GetType ().FullName} Method={method.DeclaringType?.FullName}.{method.Name}");
-					}
-				}
-#endif  // DEBUG && NETCOREAPP
 
 				int r   = _RegisterNatives (type, methods ?? Array.Empty<JniNativeMethodRegistration>(), numMethods);
 

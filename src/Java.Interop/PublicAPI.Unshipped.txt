@@ -12,3 +12,6 @@ Java.Interop.JniRuntime.JniValueManager.GetPeer(Java.Interop.JniObjectReference 
 Java.Interop.JniTypeSignatureAttribute.InvokerType.get -> System.Type?
 Java.Interop.JniTypeSignatureAttribute.InvokerType.set -> void
 Java.Interop.IJavaPeerable.JniObjectReferenceControlBlock.get -> nint
+Java.Interop.JniNativeMethodRegistration.JniNativeMethodRegistration(string! name, string! signature, nint marshaler) -> void
+*REMOVED*Java.Interop.JniNativeMethodRegistration.Marshaler -> System.Delegate!
+Java.Interop.JniNativeMethodRegistration.Marshaler -> nint
