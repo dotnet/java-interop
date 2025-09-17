@@ -33,6 +33,7 @@ namespace Java.InteropTests
 				Assert.IsTrue (methods [0].MarshalerPtr != IntPtr.Zero);
 				Assert.IsTrue (methods [1].MarshalerPtr != IntPtr.Zero);
 
+#pragma warning disable CS0618
 #if NET
 				Assert.AreEqual ("_JniMarshal_PP_V",    methods [0].Marshaler.GetType ().FullName);
 				Assert.AreEqual ("_JniMarshal_PP_V",    methods [1].Marshaler.GetType ().FullName);
@@ -40,6 +41,7 @@ namespace Java.InteropTests
 				Assert.IsTrue (methods [0].Marshaler is Action<IntPtr, IntPtr>);
 				Assert.IsTrue (methods [1].Marshaler is Action<IntPtr, IntPtr>);
 #endif  // NET
+#pragma warning restore CS0618
 
 				var m = t.GetStaticMethod ("testStaticMethods", "()V");
 				JniEnvironment.StaticMethods.CallStaticVoidMethod (t.PeerReference, m);
