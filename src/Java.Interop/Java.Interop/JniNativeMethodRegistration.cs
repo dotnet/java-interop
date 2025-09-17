@@ -15,9 +15,12 @@ namespace Java.Interop {
 
 		public  string      Name;
 		public  string      Signature;
-		public  IntPtr      Marshaler;
+		public  IntPtr      MarshalerPtr;
+		public  Delegate    Marshaler => s_reverseMapping.TryGetValue (MarshalerPtr, out var mappedDelegate)
+			? mappedDelegate
+			: throw new InvalidOperationException ($"Cannot convert MarshalerPtr {MarshalerPtr} for {Name}{Signature} to Delegate.");
 
-		private static HashSet<Delegate> s_keepAlive = new ();
+		private static readonly Dictionary<IntPtr, Delegate> s_reverseMapping = new ();
 
 		public JniNativeMethodRegistration (string name, string signature, Delegate marshaler)
 		{
@@ -38,8 +41,8 @@ namespace Java.Interop {
 			}
 #endif  // DEBUG
 
-			s_keepAlive.Add (marshaler);
-			Marshaler = GetFunctionPointerForDelegate (marshaler);
+			MarshalerPtr = GetFunctionPointerForDelegate (marshaler);
+			s_reverseMapping.Add (MarshalerPtr, marshaler);
 
 			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Dynamic method registration does not work with Native AOT.")]
 			static IntPtr GetFunctionPointerForDelegate (Delegate marshaler)
@@ -56,7 +59,7 @@ namespace Java.Interop {
 				throw new ArgumentNullException (nameof (marshaler));
 			}
 
-			Marshaler = marshaler;
+			MarshalerPtr = marshaler;
 		}
 
 	}

@@ -30,8 +30,16 @@ namespace Java.InteropTests
 				Assert.AreEqual ("n_StaticAction",      methods [1].Name);
 				Assert.AreEqual ("()V",                 methods [1].Signature);
 
-				Assert.IsTrue (methods [0].Marshaler != IntPtr.Zero);
-				Assert.IsTrue (methods [1].Marshaler != IntPtr.Zero);
+				Assert.IsTrue (methods [0].MarshalerPtr != IntPtr.Zero);
+				Assert.IsTrue (methods [1].MarshalerPtr != IntPtr.Zero);
+
+#if NET
+				Assert.AreEqual ("_JniMarshal_PP_V",    methods [0].Marshaler.GetType ().FullName);
+				Assert.AreEqual ("_JniMarshal_PP_V",    methods [1].Marshaler.GetType ().FullName);
+#else
+				Assert.IsTrue (methods [0].Marshaler is Action<IntPtr, IntPtr>);
+				Assert.IsTrue (methods [1].Marshaler is Action<IntPtr, IntPtr>);
+#endif  // NET
 
 				var m = t.GetStaticMethod ("testStaticMethods", "()V");
 				JniEnvironment.StaticMethods.CallStaticVoidMethod (t.PeerReference, m);

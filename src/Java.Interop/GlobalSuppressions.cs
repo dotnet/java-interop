@@ -36,7 +36,7 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage ("Design", "CA1051:Do not declare visible instance fields", Justification = "This type is passed to native code, and should use fields, not properties.", Scope = "member", Target = "~F:Java.Interop.JniNativeMethodRegistration.Name")]
 [assembly: SuppressMessage ("Design", "CA1051:Do not declare visible instance fields", Justification = "This type is passed to native code, and should use fields, not properties.", Scope = "member", Target = "~F:Java.Interop.JniNativeMethodRegistration.Signature")]
-[assembly: SuppressMessage ("Design", "CA1051:Do not declare visible instance fields", Justification = "This type is passed to native code, and should use fields, not properties.", Scope = "member", Target = "~F:Java.Interop.JniNativeMethodRegistration.Marshaler")]
+[assembly: SuppressMessage ("Design", "CA1051:Do not declare visible instance fields", Justification = "This type is passed to native code, and should use fields, not properties.", Scope = "member", Target = "~F:Java.Interop.JniNativeMethodRegistration.MarshalerPtr")]
 
 [assembly: SuppressMessage ("Design", "CA1064:Exceptions should be public", Justification = "<Pending>", Scope = "type", Target = "~T:Java.Interop.JniLocationException")]
 

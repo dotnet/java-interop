@@ -14,4 +14,5 @@ Java.Interop.JniTypeSignatureAttribute.InvokerType.set -> void
 Java.Interop.IJavaPeerable.JniObjectReferenceControlBlock.get -> nint
 Java.Interop.JniNativeMethodRegistration.JniNativeMethodRegistration(string! name, string! signature, nint marshaler) -> void
 *REMOVED*Java.Interop.JniNativeMethodRegistration.Marshaler -> System.Delegate!
-Java.Interop.JniNativeMethodRegistration.Marshaler -> nint
+Java.Interop.JniNativeMethodRegistration.Marshaler.get -> System.Delegate!
+Java.Interop.JniNativeMethodRegistration.MarshalerPtr -> nint
