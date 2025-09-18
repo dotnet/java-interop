@@ -15,7 +15,8 @@ namespace Java.Interop {
 
 		public  string      Name;
 		public  string      Signature;
-		public  IntPtr      MarshalerPtr;
+		public IntPtr MarshalerPtr;
+
 		public Delegate Marshaler {
 			[Obsolete ("Use MarshalerPtr instead.")]
 			get {
@@ -49,7 +50,7 @@ namespace Java.Interop {
 
 		public JniNativeMethodRegistration (string name, string signature, Delegate marshaler)
 		{
-			Name = name ?? throw new ArgumentNullException (nameof (name));
+			Name      = name ?? throw new ArgumentNullException (nameof (name));
 			Signature = signature ?? throw new ArgumentNullException (nameof (signature));
 
 			if (marshaler == null) {
@@ -62,10 +63,9 @@ namespace Java.Interop {
 		public JniNativeMethodRegistration (string name, string signature, IntPtr marshaler)
 		{
 			Name        = name        ?? throw new ArgumentNullException (nameof (name));
-			Signature   = signature   ?? throw new ArgumentNullException(nameof(signature));
+			Signature   = signature   ?? throw new ArgumentNullException (nameof (signature));
 
-			if (marshaler == IntPtr.Zero)
-			{
+			if (marshaler == IntPtr.Zero) {
 				throw new ArgumentNullException (nameof (marshaler));
 			}
 
