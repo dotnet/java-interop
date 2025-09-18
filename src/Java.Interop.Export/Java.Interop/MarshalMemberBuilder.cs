@@ -64,10 +64,11 @@ namespace Java.Interop {
 				throw new ArgumentNullException ("method");
 
 			string signature = GetJniMethodSignature (export, method);
-			return new JniNativeMethodRegistration (
-				GetJniMethodName (export, method),
-				signature,
-				CreateJniMethodMarshaler (method, export, type));
+			return new JniNativeMethodRegistration () {
+				Name        = GetJniMethodName (export, method),
+				Signature   = signature,
+				Marshaler   = CreateJniMethodMarshaler (method, export, type),
+			};
 		}
 
 		string GetJniMethodName (JavaCallableAttribute export, MethodInfo method)
