@@ -1455,7 +1455,7 @@ namespace generatortests
 			// }
 			// public interface IBar : IFoo {
 			//   public Object doSomething () { ... }   // removed-since = 30
-			//   public static final String DATE_TAKEN = "datetaken";  // removed-since = 29
+			//   public static final String DATE_TAKEN = "datetaken";  // removed-since = 30
 			// }
 			// We should not write [UnsupportedOSPlatform] on overriding methods or fields, because the base methods/fields aren't "removed".
 			var xml = @$"<api>
@@ -1478,7 +1478,7 @@ namespace generatortests
 			    <interface abstract='true' deprecated='not deprecated' final='false' name='Bar' static='false' visibility='public' jni-signature='Lcom/example/Bar;'>
 			       <implements name='com.example.Foo' name-generic-aware='com.example.Foo' jni-type='Lcom/example/Foo;'></implements>
 			       <method abstract='true' deprecated='not deprecated' final='false' name='doSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
-			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false' removed-since='29'></field>
+			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false' removed-since='30'></field>
 			     </interface>
 			  </package>
 			</api>";
@@ -1516,7 +1516,7 @@ namespace generatortests
 			// }
 			// public interface IExtendedProvider : IPropertyProvider {
 			//   public Object getSomething () { ... }        // removed-since = 30
-			//   public static final String DATE_TAKEN = "datetaken";  // removed-since = 29
+			//   public static final String DATE_TAKEN = "datetaken";  // removed-since = 30
 			// }
 			// We should not write [UnsupportedOSPlatform] on overriding properties or fields, because the base methods/fields aren't "removed".
 			var xml = @$"<api>
@@ -1545,7 +1545,7 @@ namespace generatortests
 			    <interface abstract='true' deprecated='not deprecated' final='false' name='ExtendedProvider' static='false' visibility='public' jni-signature='Lcom/example/ExtendedProvider;'>
 			       <implements name='com.example.PropertyProvider' name-generic-aware='com.example.PropertyProvider' jni-type='Lcom/example/PropertyProvider;'></implements>
 			       <method abstract='true' deprecated='not deprecated' final='false' name='getSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
-			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false' removed-since='29'></field>
+			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false' removed-since='30'></field>
 			     </interface>
 			  </package>
 			</api>";
