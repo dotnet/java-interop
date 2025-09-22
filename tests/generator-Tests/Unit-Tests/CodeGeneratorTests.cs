@@ -1496,6 +1496,7 @@ namespace generatortests
 		public void UnsupportedOSPlatformIgnoresPropertyOverrides ()
 		{
 			// Given:
+			// Class inheritance scenario:
 			// public class TextView {
 			//   public Object getThing () { ... }
 			//   public void setThing (Object value) { ... }
@@ -1504,7 +1505,14 @@ namespace generatortests
 			//   public Object getThing () { ... }            // removed-since = 30
 			//   public void setThing (Object value) { ... }  // removed-since = 30
 			// }
-			// We should not write [UnsupportedOSPlatform] on TextView2.Thing property, because the base methods aren't "removed".
+			// Interface inheritance scenario:
+			// public interface IPropertyProvider {
+			//   public Object getSomething () { ... }
+			// }
+			// public interface IExtendedProvider : IPropertyProvider {
+			//   public Object getSomething () { ... }        // removed-since = 30
+			// }
+			// We should not write [UnsupportedOSPlatform] on overriding properties, because the base methods aren't "removed".
 			var xml = @$"<api>
 			  <package name='java.lang' jni-name='java/lang'>
 			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
@@ -1523,13 +1531,28 @@ namespace generatortests
 			       </method>
 			     </class>
 			  </package>
+			  <package name='com.example' jni-name='com/example'>
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='PropertyProvider' static='false' visibility='public' jni-signature='Lcom/example/PropertyProvider;'>
+			       <method abstract='true' deprecated='not deprecated' final='false' name='getSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' />
+			     </interface>
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='ExtendedProvider' static='false' visibility='public' jni-signature='Lcom/example/ExtendedProvider;'>
+			       <implements name='com.example.PropertyProvider' name-generic-aware='com.example.PropertyProvider' jni-type='Lcom/example/PropertyProvider;'></implements>
+			       <method abstract='true' deprecated='not deprecated' final='false' name='getSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
+			     </interface>
+			  </package>
 			</api>";
 
 			var gens = ParseApiDefinition (xml);
+			
+			// Test class inheritance scenario
 			var klass = gens.Single (g => g.Name == "TextView2");
 			var actual = GetGeneratedTypeOutput (klass);
+			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", actual, "Should not contain UnsupportedOSPlatform on class property override!");
 
-			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", actual, "Should not contain UnsupportedOSPlatform!");
+			// Test interface inheritance scenario  
+			var iface = gens.OfType<InterfaceGen> ().Single (g => g.Name == "IExtendedProvider");
+			var ifaceActual = GetGeneratedTypeOutput (iface);
+			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", ifaceActual, "Should not contain UnsupportedOSPlatform on interface property override!");
 		}
 
 		[Test]
