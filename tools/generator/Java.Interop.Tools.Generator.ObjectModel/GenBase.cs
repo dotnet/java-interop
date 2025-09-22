@@ -307,6 +307,7 @@ namespace MonoDroid.Generation
 
 		public void FixupMethodOverrides (CodeGenerationOptions opt)
 		{
+			// Process regular methods (non-static, non-interface default methods)
 			foreach (var m in Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
 				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
 					var bm = bt.Methods.FirstOrDefault (mm => mm.Name == m.Name && mm.Visibility == m.Visibility && ParameterList.Equals (mm.Parameters, m.Parameters));
@@ -329,6 +330,39 @@ namespace MonoDroid.Generation
 							m.ApiRemovedSince = default;
 
 						break;
+					}
+				}
+			}
+
+			// Process property getter/setter methods for ApiRemovedSince fixup
+			foreach (var prop in Properties) {
+				if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0) {
+					for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
+						var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Getter != null);
+						if (baseProp != null && baseProp.Getter.ApiRemovedSince == 0) {
+							if (baseProp.Getter.Visibility == prop.Getter.Visibility && 
+								ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
+								baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
+								// If a "removed" property getter overrides a "not removed" getter, the method was
+								// likely moved to a base class, so don't mark it as removed.
+								prop.Getter.ApiRemovedSince = default;
+								break;
+							}
+						}
+					}
+				}
+				if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0) {
+					for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
+						var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Setter != null);
+						if (baseProp != null && baseProp.Setter.ApiRemovedSince == 0) {
+							if (baseProp.Setter.Visibility == prop.Setter.Visibility && 
+								ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
+								// If a "removed" property setter overrides a "not removed" setter, the method was
+								// likely moved to a base class, so don't mark it as removed.
+								prop.Setter.ApiRemovedSince = default;
+								break;
+							}
+						}
 					}
 				}
 			}
