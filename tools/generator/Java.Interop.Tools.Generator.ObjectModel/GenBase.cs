@@ -413,6 +413,21 @@ namespace MonoDroid.Generation
 							break;
 					}
 				}
+
+				// Process interface field inheritance for ApiRemovedSince fixup
+				foreach (var field in Fields) {
+					foreach (var baseIface in baseInterfaces) {
+						var baseField = baseIface.Fields.FirstOrDefault (f => f.Name == field.Name && f.TypeName == field.TypeName);
+						if (baseField != null) {
+							// If a "removed" interface field overrides a "not removed" field, the field was
+							// likely moved to a base interface, so don't mark it as removed.
+							if (field.ApiRemovedSince > 0 && baseField.ApiRemovedSince == 0) {
+								field.ApiRemovedSince = default;
+								break;
+							}
+						}
+					}
+				}
 			}
 
 			// Interface default methods can be overriden. We want to process them differently.
