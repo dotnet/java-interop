@@ -1451,11 +1451,13 @@ namespace generatortests
 			// Interface inheritance scenario:
 			// public interface IFoo {
 			//   public Object doSomething () { ... }
+			//   public static final String DATE_TAKEN = "datetaken";
 			// }
 			// public interface IBar : IFoo {
 			//   public Object doSomething () { ... }   // removed-since = 30
+			//   public static final String DATE_TAKEN = "datetaken";  // removed-since = 29
 			// }
-			// We should not write [UnsupportedOSPlatform] on overriding methods, because the base methods aren't "removed".
+			// We should not write [UnsupportedOSPlatform] on overriding methods or fields, because the base methods/fields aren't "removed".
 			var xml = @$"<api>
 			  <package name='java.lang' jni-name='java/lang'>
 			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
@@ -1471,10 +1473,12 @@ namespace generatortests
 			  <package name='com.example' jni-name='com/example'>
 			    <interface abstract='true' deprecated='not deprecated' final='false' name='Foo' static='false' visibility='public' jni-signature='Lcom/example/Foo;'>
 			       <method abstract='true' deprecated='not deprecated' final='false' name='doSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' />
+			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false'></field>
 			     </interface>
 			    <interface abstract='true' deprecated='not deprecated' final='false' name='Bar' static='false' visibility='public' jni-signature='Lcom/example/Bar;'>
 			       <implements name='com.example.Foo' name-generic-aware='com.example.Foo' jni-type='Lcom/example/Foo;'></implements>
 			       <method abstract='true' deprecated='not deprecated' final='false' name='doSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
+			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false' removed-since='29'></field>
 			     </interface>
 			  </package>
 			</api>";
@@ -1508,11 +1512,13 @@ namespace generatortests
 			// Interface inheritance scenario:
 			// public interface IPropertyProvider {
 			//   public Object getSomething () { ... }
+			//   public static final String DATE_TAKEN = "datetaken";
 			// }
 			// public interface IExtendedProvider : IPropertyProvider {
 			//   public Object getSomething () { ... }        // removed-since = 30
+			//   public static final String DATE_TAKEN = "datetaken";  // removed-since = 29
 			// }
-			// We should not write [UnsupportedOSPlatform] on overriding properties, because the base methods aren't "removed".
+			// We should not write [UnsupportedOSPlatform] on overriding properties or fields, because the base methods/fields aren't "removed".
 			var xml = @$"<api>
 			  <package name='java.lang' jni-name='java/lang'>
 			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
@@ -1534,10 +1540,12 @@ namespace generatortests
 			  <package name='com.example' jni-name='com/example'>
 			    <interface abstract='true' deprecated='not deprecated' final='false' name='PropertyProvider' static='false' visibility='public' jni-signature='Lcom/example/PropertyProvider;'>
 			       <method abstract='true' deprecated='not deprecated' final='false' name='getSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' />
+			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false'></field>
 			     </interface>
 			    <interface abstract='true' deprecated='not deprecated' final='false' name='ExtendedProvider' static='false' visibility='public' jni-signature='Lcom/example/ExtendedProvider;'>
 			       <implements name='com.example.PropertyProvider' name-generic-aware='com.example.PropertyProvider' jni-type='Lcom/example/PropertyProvider;'></implements>
 			       <method abstract='true' deprecated='not deprecated' final='false' name='getSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
+			       <field deprecated='not deprecated' final='true' name='DATE_TAKEN' jni-signature='Ljava/lang/String;' static='true' transient='false' type='java.lang.String' type-generic-aware='java.lang.String' value='&quot;datetaken&quot;' visibility='public' volatile='false' removed-since='29'></field>
 			     </interface>
 			  </package>
 			</api>";
