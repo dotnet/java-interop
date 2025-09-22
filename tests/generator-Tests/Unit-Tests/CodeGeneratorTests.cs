@@ -1441,13 +1441,21 @@ namespace generatortests
 		public void UnsupportedOSPlatformIgnoresMethodOverrides ()
 		{
 			// Given:
+			// Class inheritance scenario:
 			// public class TextView {
 			//   public Object doThing () { ... }
 			// }
 			// public class TextView2 : TextView {
 			//   public Object doThing () { ... }   // removed-since = 30
 			// }
-			// We should not write [UnsupportedOSPlatform] on TextView2.doThing (), because the base method isn't "removed".
+			// Interface inheritance scenario:
+			// public interface IFoo {
+			//   public Object doSomething () { ... }
+			// }
+			// public interface IBar : IFoo {
+			//   public Object doSomething () { ... }   // removed-since = 30
+			// }
+			// We should not write [UnsupportedOSPlatform] on overriding methods, because the base methods aren't "removed".
 			var xml = @$"<api>
 			  <package name='java.lang' jni-name='java/lang'>
 			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
@@ -1460,13 +1468,28 @@ namespace generatortests
 			       <method abstract='false' deprecated='not deprecated' final='false' name='doThing' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
 			     </class>
 			  </package>
+			  <package name='com.example' jni-name='com/example'>
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='Foo' static='false' visibility='public' jni-signature='Lcom/example/Foo;'>
+			       <method abstract='true' deprecated='not deprecated' final='false' name='doSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' />
+			     </interface>
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='Bar' static='false' visibility='public' jni-signature='Lcom/example/Bar;'>
+			       <implements name='com.example.Foo' name-generic-aware='com.example.Foo' jni-type='Lcom/example/Foo;'></implements>
+			       <method abstract='true' deprecated='not deprecated' final='false' name='doSomething' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='30' />
+			     </interface>
+			  </package>
 			</api>";
 
 			var gens = ParseApiDefinition (xml);
+			
+			// Test class inheritance scenario
 			var klass = gens.Single (g => g.Name == "TextView2");
 			var actual = GetGeneratedTypeOutput (klass);
+			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", actual, "Should not contain UnsupportedOSPlatform on class override!");
 
-			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", actual, "Should contain UnsupportedOSPlatform!");
+			// Test interface inheritance scenario  
+			var iface = gens.OfType<InterfaceGen> ().Single (g => g.Name == "IBar");
+			var ifaceActual = GetGeneratedTypeOutput (iface);
+			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", ifaceActual, "Should not contain UnsupportedOSPlatform on interface override!");
 		}
 
 		[Test]
