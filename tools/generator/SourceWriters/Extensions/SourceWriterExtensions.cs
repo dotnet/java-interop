@@ -308,10 +308,7 @@ namespace generator.SourceWriters
 		}
 
 		public static void AddSupportedOSPlatform (List<AttributeWriter> attributes, ApiVersionsSupport.IApiAvailability member, CodeGenerationOptions opt)
-		{
-			AddSupportedOSPlatform (attributes, member.ApiAvailableSince, opt);
-			AddUnsupportedOSPlatform (attributes, member.ApiRemovedSince, opt);
-		}
+			=> AddSupportedOSPlatform (attributes, member.ApiAvailableSince, opt);
 
 		public static void AddSupportedOSPlatform (List<AttributeWriter> attributes, AndroidSdkVersion since, CodeGenerationOptions opt)
 		{
@@ -319,13 +316,6 @@ namespace generator.SourceWriters
 			// so those APIs will be available in all of our versions.
 			if (since > MINIMUM_API_LEVEL && opt.CodeGenerationTarget == Xamarin.Android.Binder.CodeGenerationTarget.XAJavaInterop1)
 				attributes.Add (new SupportedOSPlatformAttr (since));
-		}
-
-		public static void AddUnsupportedOSPlatform (List<AttributeWriter> attributes, AndroidSdkVersion since, CodeGenerationOptions opt)
-		{
-			// Here it makes sense to still write 'android15' because it will be missing in later versions like `android35`.
-			if (since > 0 && opt.CodeGenerationTarget == CodeGenerationTarget.XAJavaInterop1)
-				attributes.Add (new UnsupportedOSPlatformAttr (since));
 		}
 
 		public static void AddObsolete (List<AttributeWriter> attributes, string message, CodeGenerationOptions opt, bool forceDeprecate = false, bool isError = false, AndroidSdkVersion? deprecatedSince = null)

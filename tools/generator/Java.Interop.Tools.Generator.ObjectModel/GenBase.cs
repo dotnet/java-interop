@@ -188,8 +188,6 @@ namespace MonoDroid.Generation
 
 		public AndroidSdkVersion ApiAvailableSince { get; set; }
 
-		public AndroidSdkVersion ApiRemovedSince { get; set; }
-
 		public virtual ClassGen BaseGen => null;
 
 		public GenBase BaseSymbol =>
@@ -322,11 +320,6 @@ namespace MonoDroid.Generation
 							if (bm.DeprecatedSince.GetValueOrDefault (default) < m.DeprecatedSince.GetValueOrDefault (default))
 								m.DeprecatedSince = bm.DeprecatedSince;
 						}
-
-						// If a "removed" method overrides a "not removed" method, the method was
-						// likely moved to a base class, so don't mark it as removed.
-						if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0)
-							m.ApiRemovedSince = default;
 
 						break;
 					}
