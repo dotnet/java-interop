@@ -367,6 +367,54 @@ namespace MonoDroid.Generation
 				}
 			}
 
+			// Process interface inheritance for both regular and default interface methods
+			if (this is InterfaceGen currentInterface) {
+				// For interfaces, check all base interfaces (interfaces that this interface implements/extends)
+				var baseInterfaces = currentInterface.GetAllDerivedInterfaces ();
+
+				foreach (var m in Methods.Where (m => !m.IsStatic)) {
+					foreach (var baseIface in baseInterfaces) {
+						var bm = baseIface.Methods.FirstOrDefault (mm => mm.Name == m.Name && mm.Visibility == m.Visibility && ParameterList.Equals (mm.Parameters, m.Parameters));
+						if (bm != null && bm.RetVal.FullName == m.RetVal.FullName) {
+							// If a "removed" interface method overrides a "not removed" method, the method was
+							// likely moved to a base interface, so don't mark it as removed.
+							if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0)
+								m.ApiRemovedSince = default;
+							break;
+						}
+					}
+				}
+
+				// Process interface property getter/setter methods for ApiRemovedSince fixup
+				foreach (var prop in Properties) {
+					foreach (var baseIface in baseInterfaces) {
+						var baseProp = baseIface.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Type == prop.Type);
+						if (baseProp == null)
+							continue;
+
+						bool shouldBreak = false;
+						if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+							if (baseProp.Getter.Visibility == prop.Getter.Visibility && 
+								ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
+								baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
+								prop.Getter.ApiRemovedSince = default;
+								shouldBreak = true;
+							}
+						}
+						if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
+							if (baseProp.Setter.Visibility == prop.Setter.Visibility && 
+								ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
+								prop.Setter.ApiRemovedSince = default;
+								shouldBreak = true;
+							}
+						}
+
+						if (shouldBreak)
+							break;
+					}
+				}
+			}
+
 			// Interface default methods can be overriden. We want to process them differently.
 			var checkDimOverrideTargets = opt.SupportDefaultInterfaceMethods ? Methods : Methods.Where (m => m.IsInterfaceDefaultMethod);
 
