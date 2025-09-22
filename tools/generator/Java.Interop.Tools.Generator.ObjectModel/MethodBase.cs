@@ -16,7 +16,6 @@ namespace MonoDroid.Generation
 		public string AnnotatedVisibility { get; set; }
 		public string Annotation { get; internal set; }
 		public AndroidSdkVersion ApiAvailableSince { get; set; }
-		public AndroidSdkVersion ApiRemovedSince { get; set; }
 		public string AssemblyName { get; set; }
 		public GenBase DeclaringType { get; }
 		public string Deprecated { get; set; }

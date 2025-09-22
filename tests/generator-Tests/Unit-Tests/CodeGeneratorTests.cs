@@ -1407,36 +1407,6 @@ namespace generatortests
 		}
 
 		[Test]
-		public void UnsupportedOSPlatform ()
-		{
-			var klass = SupportTypeBuilder.CreateClass ("java.code.MyClass", options);
-			klass.ApiRemovedSince = new AndroidSdkVersion (30);
-
-			generator.Context.ContextTypes.Push (klass);
-			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
-			generator.Context.ContextTypes.Pop ();
-
-			StringAssert.Contains ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", builder.ToString (), "Should contain UnsupportedOSPlatform!");
-		}
-
-		[Test]
-		public void UnsupportedOSPlatformConstFields ()
-		{
-			var klass = new TestClass ("java.lang.Object", "com.mypackage.foo");
-			var field = new TestField ("java.lang.String", "bar").SetConstant ("MY_VALUE");
-
-			field.ApiRemovedSince = new AndroidSdkVersion (30);
-
-			klass.Fields.Add (field);
-
-			generator.Context.ContextTypes.Push (klass);
-			generator.WriteType (klass, string.Empty, new GenerationInfo ("", "", "MyAssembly"));
-			generator.Context.ContextTypes.Pop ();
-
-			StringAssert.Contains ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android30.0\")]", builder.ToString (), "Should contain UnsupportedOSPlatform!");
-		}
-
-		[Test]
 		public void StringPropertyOverride ([Values ("true", "false")] string final)
 		{
 			var xml = @$"<api>

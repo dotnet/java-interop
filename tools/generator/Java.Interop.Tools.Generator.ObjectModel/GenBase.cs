@@ -188,8 +188,6 @@ namespace MonoDroid.Generation
 
 		public AndroidSdkVersion ApiAvailableSince { get; set; }
 
-		public AndroidSdkVersion ApiRemovedSince { get; set; }
-
 		public virtual ClassGen BaseGen => null;
 
 		public GenBase BaseSymbol =>
