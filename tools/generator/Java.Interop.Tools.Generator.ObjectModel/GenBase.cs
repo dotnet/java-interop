@@ -417,7 +417,7 @@ namespace MonoDroid.Generation
 				// Process interface field inheritance for ApiRemovedSince fixup
 				foreach (var field in Fields) {
 					foreach (var baseIface in baseInterfaces) {
-						var baseField = baseIface.Fields.FirstOrDefault (f => f.Name == field.Name && f.TypeName == field.TypeName);
+						var baseField = baseIface.Fields.FirstOrDefault (f => f.Name == field.Name && f.TypeName == field.TypeName && f.Visibility == field.Visibility);
 						if (baseField != null) {
 							// If a "removed" interface field overrides a "not removed" field, the field was
 							// likely moved to a base interface, so don't mark it as removed.
