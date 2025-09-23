@@ -310,27 +310,32 @@ namespace MonoDroid.Generation
 			// Process regular methods (non-static, non-interface default methods)
 			foreach (var m in Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod)) {
 				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
-					var bm = bt.Methods.FirstOrDefault (mm => mm.Name == m.Name && mm.Visibility == m.Visibility && ParameterList.Equals (mm.Parameters, m.Parameters));
-					if (bm != null && bm.RetVal.FullName == m.RetVal.FullName) { // if return type is different, it could be still "new", not "override".
-						m.IsOverride = true;
-
-						if (opt.FixObsoleteOverrides) {
-							// If method overrides a deprecated method, it also needs to be marked as deprecated
-							if (bm.Deprecated.HasValue () && !m.Deprecated.HasValue ())
-								m.Deprecated = bm.Deprecated;
-
-							// Fix issue when base method was deprecated before the overriding method, set both both to base method value
-							if (bm.DeprecatedSince.GetValueOrDefault (default) < m.DeprecatedSince.GetValueOrDefault (default))
-								m.DeprecatedSince = bm.DeprecatedSince;
-						}
-
-						// If a "removed" method overrides a "not removed" method, the method was
-						// likely moved to a base class, so don't mark it as removed.
-						if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0)
-							m.ApiRemovedSince = default;
-
-						break;
+					var bm = bt.Methods.FirstOrDefault (mm =>
+						mm.Name == m.Name &&
+						mm.Visibility == m.Visibility &&
+						mm.RetVal.FullName == m.RetVal.FullName && // if return type is different, it could be still "new", not "override".
+						ParameterList.Equals (mm.Parameters, m.Parameters));
+					if (bm == null) {
+						continue;
 					}
+
+					m.IsOverride = true;
+					if (opt.FixObsoleteOverrides) {
+						// If method overrides a deprecated method, it also needs to be marked as deprecated
+						if (bm.Deprecated.HasValue () && !m.Deprecated.HasValue ())
+							m.Deprecated = bm.Deprecated;
+
+						// Fix issue when base method was deprecated before the overriding method, set both both to base method value
+						if (bm.DeprecatedSince.GetValueOrDefault (default) < m.DeprecatedSince.GetValueOrDefault (default))
+							m.DeprecatedSince = bm.DeprecatedSince;
+					}
+
+					// If a "removed" method overrides a "not removed" method, the method was
+					// likely moved to a base class, so don't mark it as removed.
+					if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0) {
+						m.ApiRemovedSince = default;
+					}
+					break;
 				}
 			}
 
@@ -344,7 +349,7 @@ namespace MonoDroid.Generation
 
 					bool shouldBreak = false;
 					if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
-						if (baseProp.Getter.Visibility == prop.Getter.Visibility && 
+						if (baseProp.Getter.Visibility == prop.Getter.Visibility &&
 							ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
 							baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
 							// If a "removed" property getter overrides a "not removed" getter, the method was
@@ -354,7 +359,7 @@ namespace MonoDroid.Generation
 						}
 					}
 					if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
-						if (baseProp.Setter.Visibility == prop.Setter.Visibility && 
+						if (baseProp.Setter.Visibility == prop.Setter.Visibility &&
 							ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
 							// If a "removed" property setter overrides a "not removed" setter, the method was
 							// likely moved to a base class, so don't mark it as removed.
@@ -387,8 +392,8 @@ namespace MonoDroid.Generation
 						// likely moved to a base interface, so don't mark it as removed.
 						if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0) {
 							m.ApiRemovedSince = default;
-							break;
 						}
+						break;
 					}
 				}
 
@@ -401,7 +406,7 @@ namespace MonoDroid.Generation
 
 						bool shouldBreak = false;
 						if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
-							if (baseProp.Getter.Visibility == prop.Getter.Visibility && 
+							if (baseProp.Getter.Visibility == prop.Getter.Visibility &&
 								ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
 								baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
 								prop.Getter.ApiRemovedSince = default;
@@ -409,7 +414,7 @@ namespace MonoDroid.Generation
 							}
 						}
 						if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
-							if (baseProp.Setter.Visibility == prop.Setter.Visibility && 
+							if (baseProp.Setter.Visibility == prop.Setter.Visibility &&
 								ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
 								prop.Setter.ApiRemovedSince = default;
 								shouldBreak = true;
@@ -432,8 +437,8 @@ namespace MonoDroid.Generation
 						// likely moved to a base interface, so don't mark it as removed.
 						if (field.ApiRemovedSince > 0 && baseField.ApiRemovedSince == 0) {
 							field.ApiRemovedSince = default;
-							break;
 						}
+						break;
 					}
 				}
 			}
