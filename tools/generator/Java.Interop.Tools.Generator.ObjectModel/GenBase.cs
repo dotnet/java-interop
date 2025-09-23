@@ -338,8 +338,9 @@ namespace MonoDroid.Generation
 			foreach (var prop in Properties) {
 				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
 					var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Type == prop.Type);
-					if (baseProp == null)
+					if (baseProp == null) {
 						continue;
+					}
 
 					bool shouldBreak = false;
 					if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
@@ -361,9 +362,9 @@ namespace MonoDroid.Generation
 							shouldBreak = true;
 						}
 					}
-
-					if (shouldBreak)
+					if (shouldBreak) {
 						break;
+					}
 				}
 			}
 
@@ -374,12 +375,18 @@ namespace MonoDroid.Generation
 
 				foreach (var m in Methods.Where (m => !m.IsStatic)) {
 					foreach (var baseIface in baseInterfaces) {
-						var bm = baseIface.Methods.FirstOrDefault (mm => mm.Name == m.Name && mm.Visibility == m.Visibility && ParameterList.Equals (mm.Parameters, m.Parameters));
-						if (bm != null && bm.RetVal.FullName == m.RetVal.FullName) {
-							// If a "removed" interface method overrides a "not removed" method, the method was
-							// likely moved to a base interface, so don't mark it as removed.
-							if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0)
-								m.ApiRemovedSince = default;
+						var bm = baseIface.Methods.FirstOrDefault (mm =>
+							mm.Name == m.Name &&
+							mm.Visibility == m.Visibility &&
+							mm.RetVal.FullName == m.RetVal.FullName &&
+							ParameterList.Equals (mm.Parameters, m.Parameters));
+						if (bm == null) {
+							continue;
+						}
+						// If a "removed" interface method overrides a "not removed" method, the method was
+						// likely moved to a base interface, so don't mark it as removed.
+						if (m.ApiRemovedSince > 0 && bm.ApiRemovedSince == 0) {
+							m.ApiRemovedSince = default;
 							break;
 						}
 					}
@@ -408,9 +415,9 @@ namespace MonoDroid.Generation
 								shouldBreak = true;
 							}
 						}
-
-						if (shouldBreak)
+						if (shouldBreak) {
 							break;
+						}
 					}
 				}
 
@@ -418,13 +425,14 @@ namespace MonoDroid.Generation
 				foreach (var field in Fields) {
 					foreach (var baseIface in baseInterfaces) {
 						var baseField = baseIface.Fields.FirstOrDefault (f => f.Name == field.Name && f.TypeName == field.TypeName && f.Visibility == field.Visibility);
-						if (baseField != null) {
-							// If a "removed" interface field overrides a "not removed" field, the field was
-							// likely moved to a base interface, so don't mark it as removed.
-							if (field.ApiRemovedSince > 0 && baseField.ApiRemovedSince == 0) {
-								field.ApiRemovedSince = default;
-								break;
-							}
+						if (baseField == null) {
+							continue;
+						}
+						// If a "removed" interface field overrides a "not removed" field, the field was
+						// likely moved to a base interface, so don't mark it as removed.
+						if (field.ApiRemovedSince > 0 && baseField.ApiRemovedSince == 0) {
+							field.ApiRemovedSince = default;
+							break;
 						}
 					}
 				}
