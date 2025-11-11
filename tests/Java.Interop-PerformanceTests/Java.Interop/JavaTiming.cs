@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Threading;
 
 using Java.Interop;
 using Java.Interop.GenericMarshaler;
@@ -34,6 +35,49 @@ namespace Java.Interop.PerformanceTests
 		{
 			var peer    = _NewObject ();
 			Construct (ref peer, JniObjectReferenceOptions.CopyAndDispose);
+		}
+
+		public static int StaticReadonlyField_NoCache {
+			get {
+				const string __id = "STATIC_READONLY_FIELD.I";
+				var __v = _members.StaticFields.GetInt32Value (__id);
+				return __v;
+			}
+		}
+
+		static int? _StaticReadonlyField_Cache;
+		public static int StaticReadonlyField_ThreadUnsafeCache {
+			get {
+				if (_StaticReadonlyField_Cache.HasValue)
+					return _StaticReadonlyField_Cache.Value;
+				const string __id = "STATIC_READONLY_FIELD.I";
+				var __v = _members.StaticFields.GetInt32Value (__id);
+				return (int) (_StaticReadonlyField_Cache = __v);
+			}
+		}
+		static int _StaticReadonlyField_haveValue;
+		static int _StaticReadonlyField_value;
+
+		public static int StaticReadonlyField_ThreadSafeCache {
+			get {
+				if (1 == Interlocked.CompareExchange (ref _StaticReadonlyField_haveValue, 1, 0))
+					return _StaticReadonlyField_value;
+				const string __id = "STATIC_READONLY_FIELD.I";
+				var __v = _members.StaticFields.GetInt32Value (__id);
+				return _StaticReadonlyField_value = __v;
+			}
+		}
+
+		static ReadOnlyProperty<int> _rop_StaticReadonlyField = new ReadOnlyProperty<int> ();
+		public static unsafe int StaticReadonlyField_Rop {
+			get {
+				static int _GetInt32Value ()
+				{
+					return _members.StaticFields.GetInt32Value ("STATIC_READONLY_FIELD.I");
+				}
+				delegate *managed <int> c = &_GetInt32Value;
+				return _rop_StaticReadonlyField.GetValue (c);
+			}
 		}
 
 		static JniMethodInfo svm;
