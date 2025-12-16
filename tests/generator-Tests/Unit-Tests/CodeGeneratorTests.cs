@@ -1601,6 +1601,43 @@ namespace generatortests
 		}
 
 		[Test]
+		public void UnsupportedOSPlatformIgnoresStandaloneSetterMethodWhenBaseHasGetterOnly ()
+		{
+			// Given:
+			// public class AdapterView {
+			//   public Object getAdapter () { ... }
+			// }
+			// public class ListView : AdapterView {
+			//   // no getAdapter override
+			//   public void setAdapter (Object value) { ... } // removed-since = 15
+			// }
+			// We should not write [UnsupportedOSPlatform] on ListView.SetAdapter because the base property (via getter) isn't "removed".
+			// The setAdapter remains a standalone method because there's no getAdapter to pair with in the derived class.
+			var xml = @$"<api>
+			  <package name='java.lang' jni-name='java/lang'>
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
+			  </package>
+			  <package name='android.widget' jni-name='android/widget'>
+			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' final='false' name='AdapterView' static='false' visibility='public'>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='getAdapter' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' />
+			     </class>
+			    <class abstract='false' deprecated='not deprecated' extends='android.widget.AdapterView' extends-generic-aware='android.widget.AdapterView' final='false' name='ListView' static='false' visibility='public'>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='setAdapter' bridge='false' native='false' return='void' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='15'>
+			         <parameter name='value' type='java.lang.Object' />
+			       </method>
+			     </class>
+			  </package>
+			</api>";
+
+			var gens = ParseApiDefinition (xml);
+			var klass = gens.Single (g => g.Name == "ListView");
+			var actual = GetGeneratedTypeOutput (klass);
+
+			// The standalone setter method should not have [UnsupportedOSPlatform] because the base property (getter) isn't removed
+			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android15.0\")]", actual, "Should not contain UnsupportedOSPlatform on standalone setter method when base has getter only!");
+		}
+
+		[Test]
 		public void StringPropertyOverride ([Values ("true", "false")] string final)
 		{
 			var xml = @$"<api>
