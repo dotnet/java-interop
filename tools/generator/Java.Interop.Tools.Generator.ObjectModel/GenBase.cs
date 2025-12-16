@@ -366,8 +366,27 @@ namespace MonoDroid.Generation
 							prop.Setter.ApiRemovedSince = default;
 							shouldBreak = true;
 						}
+					} else if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter == null && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+						// Base has getter-only property; setter in derived should not be marked removed
+						prop.Setter.ApiRemovedSince = default;
+						shouldBreak = true;
 					}
 					if (shouldBreak) {
+						break;
+					}
+				}
+			}
+
+			// Process standalone setter methods (setXxx) that correspond to base class properties.
+			// If the base property getter isn't removed, the setter shouldn't be either.
+			foreach (var m in Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod && m.ApiRemovedSince > 0)) {
+				if (!m.JavaName.StartsWith ("set", StringComparison.Ordinal) || m.Parameters.Count != 1 || m.RetVal.JavaName != "void")
+					continue;
+				var propertyName = m.JavaName.Substring (3);
+				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
+					var baseProp = bt.Properties.FirstOrDefault (p => p.Getter?.JavaName == "get" + propertyName);
+					if (baseProp?.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+						m.ApiRemovedSince = default;
 						break;
 					}
 				}
@@ -419,6 +438,10 @@ namespace MonoDroid.Generation
 								prop.Setter.ApiRemovedSince = default;
 								shouldBreak = true;
 							}
+						} else if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter == null && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+							// Base has getter-only property; setter in derived should not be marked removed
+							prop.Setter.ApiRemovedSince = default;
+							shouldBreak = true;
 						}
 						if (shouldBreak) {
 							break;
