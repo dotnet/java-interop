@@ -1638,6 +1638,46 @@ namespace generatortests
 		}
 
 		[Test]
+		public void UnsupportedOSPlatformIgnoresPropertySetterOverridesWhenBaseHasCovariantReturn ()
+		{
+			// Given:
+			// public class AdapterView {
+			//   public Object getAdapter () { ... }         // returns Object (generic erasure)
+			// }
+			// public class ListView : AdapterView {
+			//   public ListAdapter getAdapter () { ... }    // returns ListAdapter (covariant), removed-since = 15
+			//   public void setAdapter (ListAdapter) { ... } // removed-since = 15
+			// }
+			// We should not write [UnsupportedOSPlatform] on ListView.Adapter.set because the base property (via getter) isn't "removed",
+			// even though the return types differ (covariant return).
+			var xml = @$"<api>
+			  <package name='java.lang' jni-name='java/lang'>
+			    <class abstract='false' deprecated='not deprecated' final='false' name='Object' static='false' visibility='public' jni-signature='Ljava/lang/Object;' />
+			  </package>
+			  <package name='android.widget' jni-name='android/widget'>
+			    <interface abstract='true' deprecated='not deprecated' final='false' name='ListAdapter' static='false' visibility='public' jni-signature='Landroid/widget/ListAdapter;' />
+			    <class abstract='false' deprecated='not deprecated' extends='java.lang.Object' extends-generic-aware='java.lang.Object' final='false' name='AdapterView' static='false' visibility='public'>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='getAdapter' bridge='false' native='false' return='java.lang.Object' static='false' synchronized='false' synthetic='false' visibility='public' />
+			     </class>
+			    <class abstract='false' deprecated='not deprecated' extends='android.widget.AdapterView' extends-generic-aware='android.widget.AdapterView' final='false' name='ListView' static='false' visibility='public'>
+			       <method abstract='false' deprecated='not deprecated' final='false' name='getAdapter' bridge='false' native='false' return='android.widget.ListAdapter' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='15' />
+			       <method abstract='false' deprecated='not deprecated' final='false' name='setAdapter' bridge='false' native='false' return='void' static='false' synchronized='false' synthetic='false' visibility='public' removed-since='15'>
+			         <parameter name='value' type='android.widget.ListAdapter' />
+			       </method>
+			     </class>
+			  </package>
+			</api>";
+
+			var gens = ParseApiDefinition (xml);
+			var klass = gens.Single (g => g.Name == "ListView");
+			var actual = GetGeneratedTypeOutput (klass);
+
+			// Neither the getter nor the setter should have [UnsupportedOSPlatform] because the base property (getter) isn't removed,
+			// even though the return types differ (covariant return).
+			StringAssert.DoesNotContain ("[global::System.Runtime.Versioning.UnsupportedOSPlatformAttribute (\"android15.0\")]", actual, "Should not contain UnsupportedOSPlatform on property setter when base has covariant getter only!");
+		}
+
+		[Test]
 		public void StringPropertyOverride ([Values ("true", "false")] string final)
 		{
 			var xml = @$"<api>

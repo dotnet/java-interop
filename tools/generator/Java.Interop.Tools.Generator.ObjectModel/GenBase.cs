@@ -342,30 +342,26 @@ namespace MonoDroid.Generation
 			// Process property getter/setter methods for ApiRemovedSince fixup
 			foreach (var prop in Properties) {
 				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
-					var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Type == prop.Type);
+					// Match by name only (not type) to handle covariant return types
+					var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name);
 					if (baseProp == null) {
 						continue;
 					}
 
 					bool shouldBreak = false;
 					if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
-						if (baseProp.Getter.Visibility == prop.Getter.Visibility &&
-							ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
-							baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
-							// If a "removed" property getter overrides a "not removed" getter, the method was
-							// likely moved to a base class, so don't mark it as removed.
-							prop.Getter.ApiRemovedSince = default;
-							shouldBreak = true;
-						}
+						// If a "removed" property getter overrides a "not removed" getter, the method was
+						// likely moved to a base class (or is a covariant override), so don't mark it as removed.
+						// Note: We don't check return type equality to support covariant return types.
+						prop.Getter.ApiRemovedSince = default;
+						shouldBreak = true;
 					}
 					if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
-						if (baseProp.Setter.Visibility == prop.Setter.Visibility &&
-							ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
-							// If a "removed" property setter overrides a "not removed" setter, the method was
-							// likely moved to a base class, so don't mark it as removed.
-							prop.Setter.ApiRemovedSince = default;
-							shouldBreak = true;
-						}
+						// If a "removed" property setter overrides a "not removed" setter, the method was
+						// likely moved to a base class, so don't mark it as removed.
+						// Note: We don't check parameter types to support contravariant parameter types.
+						prop.Setter.ApiRemovedSince = default;
+						shouldBreak = true;
 					} else if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter == null && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
 						// Base has getter-only property; setter in derived should not be marked removed
 						prop.Setter.ApiRemovedSince = default;
@@ -419,25 +415,25 @@ namespace MonoDroid.Generation
 				// Process interface property getter/setter methods for ApiRemovedSince fixup
 				foreach (var prop in Properties) {
 					foreach (var baseIface in baseInterfaces) {
-						var baseProp = baseIface.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Type == prop.Type);
+						// Match by name only (not type) to handle covariant return types
+						var baseProp = baseIface.Properties.FirstOrDefault (p => p.Name == prop.Name);
 						if (baseProp == null)
 							continue;
 
 						bool shouldBreak = false;
 						if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
-							if (baseProp.Getter.Visibility == prop.Getter.Visibility &&
-								ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
-								baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
-								prop.Getter.ApiRemovedSince = default;
-								shouldBreak = true;
-							}
+							// If a "removed" property getter overrides a "not removed" getter, the method was
+							// likely moved to a base interface (or is a covariant override), so don't mark it as removed.
+							// Note: We don't check return type equality to support covariant return types.
+							prop.Getter.ApiRemovedSince = default;
+							shouldBreak = true;
 						}
 						if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
-							if (baseProp.Setter.Visibility == prop.Setter.Visibility &&
-								ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
-								prop.Setter.ApiRemovedSince = default;
-								shouldBreak = true;
-							}
+							// If a "removed" property setter overrides a "not removed" setter, the method was
+							// likely moved to a base interface, so don't mark it as removed.
+							// Note: We don't check parameter types to support contravariant parameter types.
+							prop.Setter.ApiRemovedSince = default;
+							shouldBreak = true;
 						} else if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter == null && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
 							// Base has getter-only property; setter in derived should not be marked removed
 							prop.Setter.ApiRemovedSince = default;
