@@ -345,6 +345,44 @@ namespace MonoDroid.Generation
 					// Match by name only (not type) to handle covariant return types
 					var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name);
 					if (baseProp == null) {
+						// Check if base has a property with same Java getter/setter names (different C# name due to type refinement)
+						// This handles cases like ListView.Adapter overriding AdapterView.RawAdapter
+						if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0) {
+							var basePropByGetter = bt.Properties.FirstOrDefault (p =>
+								p.Getter?.JavaName == prop.Getter.JavaName &&
+								p.Getter.ApiRemovedSince == 0);
+							if (basePropByGetter != null) {
+								prop.Getter.ApiRemovedSince = default;
+								// Also fix setter if it matches
+								if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 &&
+									basePropByGetter.Setter?.JavaName == prop.Setter.JavaName &&
+									basePropByGetter.Setter.ApiRemovedSince == 0) {
+									prop.Setter.ApiRemovedSince = default;
+								}
+								break;
+							}
+						}
+						// Check if base has a method that matches the setter (e.g. manually-defined property in partial class)
+						// This handles cases like AbsListView.Adapter which is defined in a partial class but has setAdapter method.
+						if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0) {
+							var baseSetterMethod = bt.Methods.FirstOrDefault (m =>
+								m.JavaName == prop.Setter.JavaName &&
+								m.Parameters.Count == prop.Setter.Parameters.Count &&
+								m.RetVal.JavaName == "void" &&
+								m.ApiRemovedSince == 0);
+							if (baseSetterMethod != null) {
+								prop.Setter.ApiRemovedSince = default;
+								break;
+							}
+							// Also check for base property with same Java setter name (different C# name due to type refinement)
+							var basePropBySetter = bt.Properties.FirstOrDefault (p =>
+								p.Setter?.JavaName == prop.Setter.JavaName &&
+								p.Setter.ApiRemovedSince == 0);
+							if (basePropBySetter != null) {
+								prop.Setter.ApiRemovedSince = default;
+								break;
+							}
+						}
 						continue;
 					}
 
