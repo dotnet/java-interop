@@ -307,7 +307,7 @@ namespace Java.Interop
 				}
 
 				targetType  = targetType ?? typeof (JavaObject);
-				targetType  = GetPeerType (targetType);
+				targetType = GetPeerType(targetType);
 
 				if (!typeof (IJavaPeerable).IsAssignableFrom (targetType))
 					throw new ArgumentException ($"targetType `{targetType.AssemblyQualifiedName}` must implement IJavaPeerable!", nameof (targetType));
@@ -359,8 +359,8 @@ namespace Java.Interop
 					if (!JniTypeSignature.TryParse (jniTypeName, out sig))
 						return null;
 
-					Type? type = GetTypeAssignableTo (sig, targetType);
-					if (type != null) {
+					Type? type = GetBestTypeForSignature (sig);
+					if (type != null && type.IsAssignableTo(targetType)) {
 						var peer = TryCreatePeerInstance (ref reference, transfer, type);
 
 						if (peer != null) {
@@ -379,18 +379,57 @@ namespace Java.Interop
 				}
 				JniObjectReference.Dispose (ref klass, JniObjectReferenceOptions.CopyAndDispose);
 
+				// If we have nothing in the hierarchy, assume caller knows best and create targetType
 				return TryCreatePeerInstance (ref reference, transfer, targetType);
+
 
 				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 				[return: DynamicallyAccessedMembers (Constructors)]
-				Type? GetTypeAssignableTo (JniTypeSignature sig, Type targetType)
+				Type? GetBestTypeForSignature (JniTypeSignature sig)
 				{
-					foreach (var t in Runtime.TypeManager.GetTypes (sig)) {
-						if (targetType.IsAssignableFrom (t)) {
-							return t;
+					string[] sdkAssemblyNames = ["Mono.Android", "Java.Base", "Java.Interop"];
+					// Find single best instance
+					Type? best = null;
+					foreach (Type type in Runtime.TypeManager.GetTypes (sig)) {
+						if (best is null) {
+							best = type;
+							continue;
+						}
+						if (type == best)
+							continue;
+						// Types in sdk assemblies should be first in the list
+						if ((uint)Array.IndexOf(sdkAssemblyNames, best.Module.Assembly.GetName ().Name) >
+								(uint)Array.IndexOf(sdkAssemblyNames, type.Module.Assembly.GetName ().Name)) {
+							best = type;
+							continue;
+						}
+						// We found the `Invoker` type *before* the declared type
+						// Fix things up so the abstract type is first, and the `Invoker` is considered a duplicate.
+						if ((type.IsAbstract || type.IsInterface) &&
+								!best.IsAbstract &&
+								!best.IsInterface &&
+								type.IsAssignableFrom (best)) {
+							best = type;
+							continue;
+						}
+
+						// If the type is a derived type of the current best, then it is better
+						if (type.IsAssignableTo(best))
+						{
+							best = type;
+							continue;
+						}
+
+						// we found a generic subclass of a non-generic type
+						if (type.IsGenericType &&
+								!best.IsGenericType &&
+								type.IsAssignableTo (best)) {
+							best = type;
+							continue;
 						}
 					}
-					return null;
+
+					return best;
 				}
 			}
 
