@@ -6,7 +6,6 @@ using System.Xml;
 using System.Xml.Linq;
 using Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 using Java.Interop.Tools.JavaCallableWrappers.Extensions;
-using Java.Interop.Tools.TypeNameMappings;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
