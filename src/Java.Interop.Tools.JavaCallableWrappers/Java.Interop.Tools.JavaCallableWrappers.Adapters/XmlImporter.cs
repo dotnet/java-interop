@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Java.Interop.Tools.JavaCallableWrappers.CallableWrapperMembers;
 using Java.Interop.Tools.JavaCallableWrappers.Extensions;
+using Java.Interop.Tools.TypeNameMappings;
 
 namespace Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
@@ -204,11 +205,11 @@ public static class XmlImporter
 	}
 
 	/// <summary>
-	/// Generates a crc64 package name from a partial assembly qualified name.
+	/// Generates a package name from a partial assembly qualified name.
 	/// This is used when the package attribute is missing or empty in the XML.
 	/// </summary>
 	/// <param name="partialAssemblyQualifiedName">The partial assembly qualified name in format "Namespace.TypeName, AssemblyName"</param>
-	/// <returns>A crc64 package name in format "crc64XXXXXXXXXXXXXXXX"</returns>
+	/// <returns>A package name based on the current <see cref="JavaNativeTypeManager.PackageNamingPolicy"/></returns>
 	static string GeneratePackageFromAssemblyQualifiedName (string partialAssemblyQualifiedName)
 	{
 		// Format: "Namespace.TypeName, AssemblyName" or "Namespace.TypeName+NestedType, AssemblyName"
@@ -231,12 +232,6 @@ public static class XmlImporter
 		if (string.IsNullOrEmpty (ns))
 			return "";
 
-		// Generate crc64 package name using the same formula as JavaNativeTypeManager
-		var data = Encoding.UTF8.GetBytes (ns + ":" + assemblyName);
-		var hash = Crc64Helper.Compute (data);
-		var buf = new StringBuilder ("crc64", 5 + hash.Length * 2);
-		foreach (var b in hash)
-			buf.AppendFormat ("{0:x2}", b);
-		return buf.ToString ();
+		return JavaNativeTypeManager.GetPackageName (ns, assemblyName);
 	}
 }
