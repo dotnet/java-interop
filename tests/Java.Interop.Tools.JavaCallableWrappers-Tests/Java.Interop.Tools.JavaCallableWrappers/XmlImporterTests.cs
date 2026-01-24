@@ -1,6 +1,7 @@
 using System.IO;
 using System.Xml.Linq;
 using Java.Interop.Tools.JavaCallableWrappers.Adapters;
+using Java.Interop.Tools.TypeNameMappings;
 using NUnit.Framework;
 
 namespace Java.Interop.Tools.JavaCallableWrappersTests
@@ -8,6 +9,21 @@ namespace Java.Interop.Tools.JavaCallableWrappersTests
 	[TestFixture]
 	public class XmlImporterTests
 	{
+		PackageNamingPolicy existingValue;
+
+		[SetUp]
+		public void SetUp ()
+		{
+			existingValue = JavaNativeTypeManager.PackageNamingPolicy;
+			JavaNativeTypeManager.PackageNamingPolicy = PackageNamingPolicy.LowercaseCrc64;
+		}
+
+		[TearDown]
+		public void TearDown ()
+		{
+			JavaNativeTypeManager.PackageNamingPolicy = existingValue;
+		}
+
 		[Test]
 		public void ImportType_EmptyPackage_GeneratesCrc64Package ()
 		{
