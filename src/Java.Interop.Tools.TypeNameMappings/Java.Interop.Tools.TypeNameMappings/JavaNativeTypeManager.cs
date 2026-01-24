@@ -221,7 +221,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 			string assemblyName = GetAssemblyName (type.Assembly);
 			if (IsPackageNamePreservedForAssembly (assemblyName))
 				return type.Namespace!.ToLowerInvariant ();
-			return GetPackageName (type.Namespace!, assemblyName);
+			return GetPackageName (type.Namespace ?? "", assemblyName);
 		}
 
 		/// <summary>
