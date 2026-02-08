@@ -57,7 +57,7 @@
       <_Cmake Include="CmakePath=$(CmakePath)" />
       <_Cmake Include="CmakeGenerator=$(CmakeGenerator)" />
       <_Cmake Include="CmakeSourceDir=$(MSBuildThisFileDirectory)" />
-      <_Cmake Include="CmakeBuildDir=$(MSBuildThisFileDirectory)$(IntermediateOutputPath)%(_NativeTimingLib.Dir)" />
+      <_Cmake Include="CmakeBuildDir=$(IntermediateOutputPath)%(_NativeTimingLib.Dir)" />
       <_Cmake Include="CmakeExtraArgs=$(_JdkDirs)" />
     </ItemGroup>
     <MSBuild
