@@ -308,6 +308,82 @@ namespace Java.Interop
 							string.Format ("Could not unregister native methods for class '{0}'; JNIEnv::UnregisterNatives() returned {1}.", GetJniTypeNameFromClass (type), r));
 				}
 			}
+
+#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
+			/// <summary>
+			/// Finds a Java class using a null-terminated UTF-8 class name span.
+			/// Use with <c>"java/lang/Object"u8</c> literals to avoid string marshalling overhead.
+			/// </summary>
+			public static unsafe JniObjectReference FindClass (ReadOnlySpan<byte> classname)
+			{
+				return TryFindClass (classname, throwOnError: true);
+			}
+
+			/// <summary>
+			/// Tries to find a Java class using a null-terminated UTF-8 class name span.
+			/// Returns <c>true</c> if the class was found, <c>false</c> otherwise.
+			/// </summary>
+			public static unsafe bool TryFindClass (ReadOnlySpan<byte> classname, out JniObjectReference instance)
+			{
+				instance = TryFindClass (classname, throwOnError: false);
+				return instance.IsValid;
+			}
+
+			static unsafe JniObjectReference TryFindClass (ReadOnlySpan<byte> classname, bool throwOnError)
+			{
+				var info = JniEnvironment.CurrentInfo;
+				fixed (byte* _classname_ptr = classname) {
+					var c      = JniNativeMethods.FindClass (info.EnvironmentPointer, (IntPtr) _classname_ptr);
+					var thrown  = JniNativeMethods.ExceptionOccurred (info.EnvironmentPointer);
+					if (thrown == IntPtr.Zero) {
+						var r = new JniObjectReference (c, JniObjectReferenceType.Local);
+						JniEnvironment.LogCreateLocalRef (r);
+						return r;
+					}
+
+					RawExceptionClear (info.EnvironmentPointer);
+
+					var findClassThrown  = new JniObjectReference (thrown, JniObjectReferenceType.Local);
+					LogCreateLocalRef (findClassThrown);
+					var pendingException = info.Runtime.GetExceptionForThrowable (ref findClassThrown, JniObjectReferenceOptions.CopyAndDispose);
+
+					if (Class_forName.IsValid) {
+						// Class.forName needs a Java-style name (dots instead of slashes)
+						// and a Java string — convert from the UTF-8 span
+						var classNameStr = System.Text.Encoding.UTF8.GetString (_classname_ptr, classname.IndexOf ((byte) 0) is int nullIdx && nullIdx >= 0 ? nullIdx : classname.Length);
+						var java = info.ToJavaName (classNameStr);
+						var __args = stackalloc JniArgumentValue [3];
+						__args [0] = new JniArgumentValue (java);
+						__args [1] = new JniArgumentValue (true);
+						__args [2] = new JniArgumentValue (info.Runtime.ClassLoader);
+
+						c = RawCallStaticObjectMethodA (info.EnvironmentPointer, out thrown, Class_reference.Handle, Class_forName.ID, (IntPtr) __args);
+						JniObjectReference.Dispose (ref java);
+						if (thrown == IntPtr.Zero) {
+							(pendingException as IJavaPeerable)?.Dispose ();
+							var r = new JniObjectReference (c, JniObjectReferenceType.Local);
+							JniEnvironment.LogCreateLocalRef (r);
+							return r;
+						}
+						RawExceptionClear (info.EnvironmentPointer);
+
+						if (pendingException != null) {
+							JniEnvironment.References.RawDeleteLocalRef (info.EnvironmentPointer, thrown);
+						} else {
+							var loadClassThrown = new JniObjectReference (thrown, JniObjectReferenceType.Local);
+							LogCreateLocalRef (loadClassThrown);
+							pendingException = info.Runtime.GetExceptionForThrowable (ref loadClassThrown, JniObjectReferenceOptions.CopyAndDispose);
+						}
+					}
+
+					if (!throwOnError) {
+						(pendingException as IJavaPeerable)?.Dispose ();
+						return default;
+					}
+					throw pendingException!;
+				}
+			}
+#endif  // FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 		}
 	}
 }
