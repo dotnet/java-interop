@@ -283,10 +283,16 @@ namespace Java.Interop
 			/// </summary>
 			public static unsafe void RegisterNatives (JniObjectReference type, ReadOnlySpan<JniNativeMethod> methods)
 			{
-				var info = JniEnvironment.CurrentInfo;
+				IntPtr env = JniEnvironment.EnvironmentPointer;
 				fixed (JniNativeMethod* methodsPtr = methods) {
-					var registerNatives = (delegate* unmanaged<IntPtr, IntPtr, JniNativeMethod*, int, int>) info.Invoker.env.RegisterNatives;
-					int r = registerNatives (info.EnvironmentPointer, type.Handle, methodsPtr, methods.Length);
+#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
+					var registerNatives = (delegate* unmanaged<IntPtr, IntPtr, JniNativeMethod*, int, int>)
+						(void*) (*((JNIEnv**)env))->RegisterNatives;
+#else
+					var registerNatives = (delegate* unmanaged<IntPtr, IntPtr, JniNativeMethod*, int, int>)
+						JniEnvironment.CurrentInfo.Invoker.env.RegisterNatives;
+#endif
+					int r = registerNatives (env, type.Handle, methodsPtr, methods.Length);
 					if (r != 0) {
 						throw new InvalidOperationException ($"Could not register native methods for class '{GetJniTypeNameFromClass (type)}'; JNIEnv::RegisterNatives() returned {r}.");
 					}
