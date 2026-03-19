@@ -1,5 +1,4 @@
 #nullable enable
-#pragma warning disable CA1034 // Do not nest type — partial extensions of existing nested types
 
 #if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 using System;
