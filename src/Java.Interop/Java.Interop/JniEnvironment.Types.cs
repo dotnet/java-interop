@@ -347,35 +347,6 @@ namespace Java.Interop
 					LogCreateLocalRef (findClassThrown);
 					var pendingException = info.Runtime.GetExceptionForThrowable (ref findClassThrown, JniObjectReferenceOptions.CopyAndDispose);
 
-					if (Class_forName.IsValid) {
-						// Class.forName needs a Java-style name (dots instead of slashes)
-						// and a Java string — convert from the UTF-8 span
-						var classNameStr = System.Text.Encoding.UTF8.GetString (_classname_ptr, classname.IndexOf ((byte) 0) is int nullIdx && nullIdx >= 0 ? nullIdx : classname.Length);
-						var java = info.ToJavaName (classNameStr);
-						var __args = stackalloc JniArgumentValue [3];
-						__args [0] = new JniArgumentValue (java);
-						__args [1] = new JniArgumentValue (true);
-						__args [2] = new JniArgumentValue (info.Runtime.ClassLoader);
-
-						c = RawCallStaticObjectMethodA (info.EnvironmentPointer, out thrown, Class_reference.Handle, Class_forName.ID, (IntPtr) __args);
-						JniObjectReference.Dispose (ref java);
-						if (thrown == IntPtr.Zero) {
-							(pendingException as IJavaPeerable)?.Dispose ();
-							var r = new JniObjectReference (c, JniObjectReferenceType.Local);
-							JniEnvironment.LogCreateLocalRef (r);
-							return r;
-						}
-						RawExceptionClear (info.EnvironmentPointer);
-
-						if (pendingException != null) {
-							JniEnvironment.References.RawDeleteLocalRef (info.EnvironmentPointer, thrown);
-						} else {
-							var loadClassThrown = new JniObjectReference (thrown, JniObjectReferenceType.Local);
-							LogCreateLocalRef (loadClassThrown);
-							pendingException = info.Runtime.GetExceptionForThrowable (ref loadClassThrown, JniObjectReferenceOptions.CopyAndDispose);
-						}
-					}
-
 					if (!throwOnError) {
 						(pendingException as IJavaPeerable)?.Dispose ();
 						return default;
