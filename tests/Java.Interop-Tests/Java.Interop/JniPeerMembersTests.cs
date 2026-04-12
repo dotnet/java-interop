@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace Java.InteropTests
 {
-	[TestFixture]
+	[TestFixture, Category ("TrimmableIgnore")]
 	public class JniPeerMembersTests : JavaVMFixture
 	{
 		[Test]

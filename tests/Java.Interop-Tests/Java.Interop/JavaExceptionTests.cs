@@ -84,7 +84,7 @@ namespace Java.InteropTests
 			JniObjectReference.Dispose (ref l);
 		}
 
-		[Test]
+		[Test, Category ("TrimmableIgnore")]
 		public void InnerExceptionIsNotAProxy ()
 		{
 			using (var t = new JniType ("java/lang/Throwable")) {
@@ -108,4 +108,3 @@ namespace Java.InteropTests
 		}
 	}
 }
-

@@ -575,7 +575,7 @@ namespace Java.InteropTests {
 		protected   override    string                  ValueMarshalerSourceType {get {return "JavaInt32Array";}}
 	}
 
-	[TestFixture]
+	[TestFixture, Category ("TrimmableIgnore")]
 	public class JniValueMarshaler_object_ContractTests : JniValueMarshalerContractTests<object> {
 
 		readonly    object      value   = new object ();
@@ -699,4 +699,3 @@ namespace Java.InteropTests {
 		protected   override    bool                IsJniValueType  {get {return true;}}
 	}
 }
-

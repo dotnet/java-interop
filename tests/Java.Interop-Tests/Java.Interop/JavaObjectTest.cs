@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Java.InteropTests
 {
-	[TestFixture]
+	[TestFixture, Category ("TrimmableIgnore")]
 	public class JavaObjectTest : JavaVMFixture
 	{
 #if !NO_GC_BRIDGE_SUPPORT
@@ -268,4 +268,3 @@ namespace Java.InteropTests
 		}
 	}
 }
-
