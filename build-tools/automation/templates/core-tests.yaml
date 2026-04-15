@@ -10,7 +10,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/generator-Tests.dll
+    arguments: --logger "trx;LogFileName=generator.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/generator-Tests.dll
   continueOnError: true
   
 - task: DotNetCoreCLI@2
@@ -18,7 +18,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll
+    arguments: --logger "trx;LogFileName=JavaCallableWrappers.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll
   continueOnError: true
    
 - task: DotNetCoreCLI@2
@@ -26,7 +26,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/logcat-parse-Tests.dll
+    arguments: --logger "trx;LogFileName=logcat-parse.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/logcat-parse-Tests.dll
   continueOnError: true
   
 - task: DotNetCoreCLI@2
@@ -34,7 +34,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll
+    arguments: --logger "trx;LogFileName=ApiXmlAdjuster.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll
   continueOnError: true
   
 - task: DotNetCoreCLI@2
@@ -42,7 +42,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaTypeSystem-Tests.dll
+    arguments: --logger "trx;LogFileName=JavaTypeSystem.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaTypeSystem-Tests.dll
   continueOnError: true
   
 - task: DotNetCoreCLI@2
@@ -50,7 +50,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.Bytecode-Tests.dll
+    arguments: --logger "trx;LogFileName=Bytecode.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.Bytecode-Tests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
@@ -58,7 +58,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Generator-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.Tools.Generator.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Generator-Tests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
@@ -66,7 +66,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaSource-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.Tools.JavaSource.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaSource-Tests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
@@ -74,7 +74,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.SourceWriter-Tests.dll
+    arguments: --logger "trx;LogFileName=Xamarin.SourceWriter.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.SourceWriter-Tests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
@@ -82,7 +82,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Maven-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.Tools.Maven.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Maven-Tests.dll
   continueOnError: true
 
 - task: DotNetCoreCLI@2
@@ -91,7 +91,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-Tests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -101,7 +101,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Dynamic-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.Dynamic.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Dynamic-Tests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -111,7 +111,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.Export.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -131,7 +131,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop.Export-jnimarshalmethod.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -141,7 +141,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) --logger "console;verbosity=detailed" bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-PerformanceTests.dll
+    arguments: --logger "trx;LogFileName=Java.Interop-Performance.trx" --results-directory $(Agent.TempDirectory) --logger "console;verbosity=detailed" bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-PerformanceTests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -151,7 +151,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Base-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Base.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Base-Tests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -171,7 +171,7 @@ steps:
   inputs:
     command: test
     publishTestResults: false
-    arguments: --logger trx --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Base-Tests.dll
+    arguments: --logger "trx;LogFileName=Java.Base-jnimarshalmethod.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Base-Tests.dll
   continueOnError: true
   retryCountOnTaskFailure: 1
 
@@ -209,5 +209,4 @@ steps:
   inputs:
     testResultsFormat: VSTest
     testResultsFiles: '$(Agent.TempDirectory)/**/*.trx'
-    testRunTitle: .NET Tests (${{ parameters.platformName }})
   continueOnError: true
