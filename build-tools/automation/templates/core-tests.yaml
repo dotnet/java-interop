@@ -5,232 +5,76 @@ parameters:
   nativeAotRid:
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: generator'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=generator.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/generator-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: generator'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/generator.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: generator (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: generator-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: JavaCallableWrappers'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=JavaCallableWrappers.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: JavaCallableWrappers'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/JavaCallableWrappers.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Tools.JavaCallableWrappers (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Tools.JavaCallableWrappers-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: logcat-parse'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=logcat-parse.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/logcat-parse-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: logcat-parse'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/logcat-parse.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: logcat-parse (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: logcat-parse-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: ApiXmlAdjuster'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=ApiXmlAdjuster.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: ApiXmlAdjuster'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/ApiXmlAdjuster.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Xamarin.Android.Tools.ApiXmlAdjuster (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Xamarin.Android.Tools.ApiXmlAdjuster-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: JavaTypeSystem'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=JavaTypeSystem.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaTypeSystem-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: JavaTypeSystem'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/JavaTypeSystem.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Xamarin.Android.Tools.JavaTypeSystem (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Tools.JavaTypeSystem-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Bytecode'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Bytecode.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.Android.Tools.Bytecode-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Bytecode'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Bytecode.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Xamarin.Android.Tools.Bytecode (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Xamarin.Android.Tools.Bytecode-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop.Tools.Generator'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.Tools.Generator.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Generator-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop.Tools.Generator'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.Tools.Generator.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Tools.Generator (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Tools.Generator-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop.Tools.JavaSource'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.Tools.JavaSource.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.JavaSource-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop.Tools.JavaSource'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.Tools.JavaSource.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Tools.JavaSource (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Tools.JavaSource-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Xamarin.SourceWriter'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Xamarin.SourceWriter.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Xamarin.SourceWriter-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Xamarin.SourceWriter'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Xamarin.SourceWriter.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Xamarin.SourceWriter (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Xamarin.SourceWriter-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop.Tools.Maven'
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.Tools.Maven.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Tools.Maven-Tests.dll
-  continueOnError: true
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop.Tools.Maven'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.Tools.Maven.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Tools.Maven (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Tools.Maven-Tests
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-Tests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop ($(DotNetTargetFramework) - ${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop-Tests
+    condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
+    retryCount: 1
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop.Dynamic'
-  condition: eq('${{ parameters.runNativeTests }}', 'true')
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.Dynamic.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Dynamic-Tests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop.Dynamic'
-  condition: eq('${{ parameters.runNativeTests }}', 'true')
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.Dynamic.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Dynamic (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Dynamic-Tests
+    condition: eq('${{ parameters.runNativeTests }}', 'true')
+    retryCount: 1
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop.Export'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.Export.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop.Export'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.Export.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Export (${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Export-Tests
+    condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
+    retryCount: 1
 
 - task: DotNetCoreCLI@2
   displayName: 'jnimarshalmethod-gen Java.Interop.Export-Tests.dll'
@@ -242,62 +86,28 @@ steps:
   continueOnError: true
   retryCountOnTaskFailure: 1
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop.Export w/ jnimarshalmethod-gen!'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop.Export-jnimarshalmethod.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop.Export-Tests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop.Export w/ jnimarshalmethod-gen!'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop.Export-jnimarshalmethod.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop.Export (jnimarshalmethod-gen + ${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop.Export-Tests
+    trxSuffix: -jnimarshalmethod
+    condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
+    retryCount: 1
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Interop-Performance-$(DotNetTargetFramework)'
-  condition: eq('${{ parameters.runNativeTests }}', 'true')
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Interop-Performance.trx" --results-directory $(Agent.TempDirectory) --logger "console;verbosity=detailed" bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Interop-PerformanceTests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Interop-Performance'
-  condition: eq('${{ parameters.runNativeTests }}', 'true')
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Interop-Performance.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Interop-Performance ($(DotNetTargetFramework) - ${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Interop-PerformanceTests
+    condition: eq('${{ parameters.runNativeTests }}', 'true')
+    retryCount: 1
+    extraArguments: --logger "console;verbosity=detailed"
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Base'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Base.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Base-Tests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Base'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Base.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Base ($(DotNetTargetFramework) - ${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Base-Tests
+    condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
+    retryCount: 1
 
 - task: DotNetCoreCLI@2
   displayName: 'jnimarshalmethod-gen Java.Base-Tests.dll'
@@ -309,24 +119,13 @@ steps:
   continueOnError: true
   retryCountOnTaskFailure: 1
 
-- task: DotNetCoreCLI@2
-  displayName: 'Tests: Java.Base w/ jnimarshalmethod-gen!'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    command: test
-    publishTestResults: false
-    arguments: --logger "trx;LogFileName=Java.Base-jnimarshalmethod.trx" --results-directory $(Agent.TempDirectory) bin/Test$(Build.Configuration)$(NetCoreTargetFrameworkPathSuffix)/Java.Base-Tests.dll
-  continueOnError: true
-  retryCountOnTaskFailure: 1
-
-- task: PublishTestResults@2
-  displayName: 'Publish: Java.Base w/ jnimarshalmethod-gen!'
-  condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)/Java.Base-jnimarshalmethod.trx'
+- template: run-dotnet-test.yaml
+  parameters:
     testRunTitle: Java.Base ($(DotNetTargetFramework) - ${{ parameters.platformName }})
-  continueOnError: true
+    testAssemblyName: Java.Base-Tests
+    trxSuffix: -jnimarshalmethod
+    condition: or(eq('${{ parameters.runNativeDotnetTests }}', 'true'), eq('${{ parameters.runNativeTests }}', 'true'))
+    retryCount: 1
 
 - task: DotNetCoreCLI@2
   displayName: 'Tests: java-source-utils'
