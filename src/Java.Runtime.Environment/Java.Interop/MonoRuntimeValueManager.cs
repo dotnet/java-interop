@@ -262,8 +262,10 @@ namespace Java.Interop {
 			var runtime = JniEnvironment.Runtime;
 
 			try {
-				var f = runtime.MarshalMemberBuilder.CreateConstructActivationPeerFunc (cinfo);
-				f (cinfo, reference, argumentValues);
+				var declType  = cinfo.DeclaringType ?? throw new NotSupportedException ("Do not know the type to create!");
+				var instance  = (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (declType);
+				instance.SetPeerReference (reference);
+				cinfo.Invoke (instance, argumentValues);
 			} catch (Exception e) {
 				var m = string.Format ("Could not activate {{ PeerReference={0} IdentityHashCode=0x{1} Java.Type={2} }} for managed type '{3}'.",
 						reference,
