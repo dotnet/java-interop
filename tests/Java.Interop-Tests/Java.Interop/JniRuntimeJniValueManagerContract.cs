@@ -148,22 +148,24 @@ namespace Java.InteropTests {
 				var peer = (IJavaPeerable) RuntimeHelpers.GetUninitializedObject (typeof (MyDisposableObject));
 				peer.SetPeerReference (new JniObjectReference (handle.Handle));
 
-				// Now simulate the constructor chain calling ConstructPeer multiple times
-				var ref1 = new JniObjectReference (handle.Handle);
-				valueManager.ConstructPeer (peer, ref ref1, JniObjectReferenceOptions.Copy);
+				try {
+					// Now simulate the constructor chain calling ConstructPeer multiple times
+					var ref1 = new JniObjectReference (handle.Handle);
+					valueManager.ConstructPeer (peer, ref ref1, JniObjectReferenceOptions.Copy);
 
-				int grefAfterFirst = JniEnvironment.Runtime.GlobalReferenceCount;
+					int grefAfterFirst = JniEnvironment.Runtime.GlobalReferenceCount;
 
-				var ref2 = new JniObjectReference (handle.Handle);
-				valueManager.ConstructPeer (peer, ref ref2, JniObjectReferenceOptions.Copy);
+					var ref2 = new JniObjectReference (handle.Handle);
+					valueManager.ConstructPeer (peer, ref ref2, JniObjectReferenceOptions.Copy);
 
-				int grefAfterSecond = JniEnvironment.Runtime.GlobalReferenceCount;
+					int grefAfterSecond = JniEnvironment.Runtime.GlobalReferenceCount;
 
-				// The second ConstructPeer should NOT create an additional global ref
-				Assert.AreEqual (grefAfterFirst, grefAfterSecond,
-					"Second ConstructPeer call should not create an additional global ref");
-
-				peer.Dispose ();
+					// The second ConstructPeer should NOT create an additional global ref
+					Assert.AreEqual (grefAfterFirst, grefAfterSecond,
+						"Second ConstructPeer call should not create an additional global ref");
+				} finally {
+					peer.Dispose ();
+				}
 			}
 		}
 
