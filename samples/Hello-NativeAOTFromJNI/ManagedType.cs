@@ -7,6 +7,7 @@ using Java.Interop;
 class ManagedType : Java.Lang.Object {
 	internal const string JniTypeName = "example/ManagedType";
 
+	[JavaCallableConstructor (SuperConstructorExpression="")]
 	public ManagedType (int value)
 	{
 		this.value = value;
@@ -14,17 +15,13 @@ class ManagedType : Java.Lang.Object {
 
 	int value;
 
+	[JavaCallable ("getString")]
 	public Java.Lang.String GetString ()
 	{
 		return new Java.Lang.String ($"Hello from C#, via Java.Interop! Value={value}");
 	}
 
 	delegate IntPtr _JniMarshal_PP_L (IntPtr jnienv, IntPtr n_self);
-
-	static Delegate GetGetStringHandler ()
-	{
-		return new _JniMarshal_PP_L (n_GetString);
-	}
 
 	static IntPtr n_GetString (IntPtr jnienv, IntPtr n_self)
 	{
