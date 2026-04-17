@@ -140,8 +140,7 @@ namespace Java.InteropTests
 				JniEnvironment.Runtime.ValueManager.CollectPeers ();
 				await Task.Yield ();
 			}
-			if (!predicate ())
-				Assert.Fail (message);
+			Assert.IsTrue (predicate (), message);
 		}
 
 		[Test]
