@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using Java.Interop;
@@ -122,7 +123,7 @@ namespace Java.InteropTests
 			});
 			JniEnvironment.Runtime.ValueManager.CollectPeers ();
 			await WaitForGC (
-					Task.WhenAny (disposed.Task, finalized.Task),
+					() => disposed.Task.IsCompleted || finalized.Task.IsCompleted,
 					"Expected JavaDisposedObject.Dispose(disposing: false) to run.");
 			Assert.IsFalse (disposed.Task.IsCompleted);
 			Assert.IsTrue (finalized.Task.IsCompleted);
@@ -131,8 +132,8 @@ namespace Java.InteropTests
 
 		static async Task WaitForGC (Func<bool> predicate, string message)
 		{
-			var deadline = DateTime.UtcNow + TimeSpan.FromSeconds (2);
-			while (true) {
+			var timeout = Stopwatch.StartNew ();
+			while (timeout.Elapsed < TimeSpan.FromSeconds (2)) {
 				if (predicate ())
 					return;
 				GC.Collect (generation: 2, mode: GCCollectionMode.Forced, blocking: true);
@@ -140,22 +141,11 @@ namespace Java.InteropTests
 				JniEnvironment.Runtime.ValueManager.CollectPeers ();
 				if (predicate ())
 					return;
-				var remaining = deadline - DateTime.UtcNow;
-				if (remaining <= TimeSpan.Zero)
-					Assert.Fail (message);
-				try {
-					await Task.Delay (TimeSpan.FromMilliseconds (50)).WaitAsync (remaining);
-				} catch (TimeoutException) {
-					if (predicate ())
-						return;
-					Assert.Fail (message);
-				}
+				await Task.Yield ();
 			}
-		}
-
-		static Task WaitForGC (Task task, string message)
-		{
-			return WaitForGC (() => task.IsCompleted, message);
+			if (predicate ())
+				return;
+			Assert.Fail (message);
 		}
 
 		[Test]
