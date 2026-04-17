@@ -122,7 +122,7 @@ namespace Java.InteropTests
 			});
 			JniEnvironment.Runtime.ValueManager.CollectPeers ();
 			await WaitForGC (
-					finalized.Task,
+					Task.WhenAny (disposed.Task, finalized.Task),
 					"Expected JavaDisposedObject.Dispose(disposing: false) to run.");
 			Assert.IsFalse (disposed.Task.IsCompleted);
 			Assert.IsTrue (finalized.Task.IsCompleted);
@@ -131,7 +131,7 @@ namespace Java.InteropTests
 
 		static async Task WaitForGC (Func<bool> predicate, string message)
 		{
-			var timeout = Task.Delay (TimeSpan.FromSeconds (2));
+			var deadline = DateTime.UtcNow + TimeSpan.FromSeconds (2);
 			while (true) {
 				if (predicate ())
 					return;
@@ -140,29 +140,22 @@ namespace Java.InteropTests
 				JniEnvironment.Runtime.ValueManager.CollectPeers ();
 				if (predicate ())
 					return;
-				var completed = await Task.WhenAny (Task.Delay (50), timeout);
-				if (completed == timeout)
+				var remaining = deadline - DateTime.UtcNow;
+				if (remaining <= TimeSpan.Zero)
 					Assert.Fail (message);
+				try {
+					await Task.Delay (TimeSpan.FromMilliseconds (50)).WaitAsync (remaining);
+				} catch (TimeoutException) {
+					if (predicate ())
+						return;
+					Assert.Fail (message);
+				}
 			}
 		}
 
-		static async Task WaitForGC (Task task, string message)
+		static Task WaitForGC (Task task, string message)
 		{
-			var timeout = Task.Delay (TimeSpan.FromSeconds (2));
-			while (true) {
-				if (task.IsCompleted)
-					return;
-				GC.Collect (generation: 2, mode: GCCollectionMode.Forced, blocking: true);
-				GC.WaitForPendingFinalizers ();
-				JniEnvironment.Runtime.ValueManager.CollectPeers ();
-				if (task.IsCompleted)
-					return;
-				var completed = await Task.WhenAny (task, Task.Delay (50), timeout);
-				if (completed == task)
-					return;
-				if (completed == timeout)
-					Assert.Fail (message);
-			}
+			return WaitForGC (() => task.IsCompleted, message);
 		}
 
 		[Test]
