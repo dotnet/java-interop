@@ -146,16 +146,6 @@ namespace Java.Interop
 			}
 
 #if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
-			static unsafe JniObjectReference TryLoadClassWithFallback (JniEnvironmentInfo info, IntPtr thrown, ReadOnlySpan<byte> classname, bool throwOnError)
-			{
-				var javaName = NewJavaNameFromUtf8 (info.EnvironmentPointer, classname);
-				try {
-					return TryLoadClassWithFallback (info, thrown, javaName, GetStringClassName (classname), throwOnError);
-				} finally {
-					JniObjectReference.Dispose (ref javaName);
-				}
-			}
-
 			static unsafe JniObjectReference NewJavaNameFromUtf8 (IntPtr env, ReadOnlySpan<byte> classname)
 			{
 				var terminator = classname.IndexOf ((byte) 0);
