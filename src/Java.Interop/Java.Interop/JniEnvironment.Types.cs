@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 
 namespace Java.Interop
@@ -141,6 +141,79 @@ namespace Java.Interop
 				throw new InvalidOperationException ($"Could not find Java class '{classname}'.");
 			}
 
+			static unsafe JniObjectReference TryLoadClassWithFallback (JniEnvironmentInfo info, IntPtr thrown, ReadOnlySpan<byte> classname, bool throwOnError)
+			{
+				var findClassThrown     = new JniObjectReference (thrown, JniObjectReferenceType.Local);
+				LogCreateLocalRef (findClassThrown);
+				Exception? pendingException = info.Runtime.GetExceptionForThrowable (ref findClassThrown, JniObjectReferenceOptions.CopyAndDispose);
+
+				if (Class_forName.IsValid) {
+					var java    = NewJavaNameFromUtf8 (info.EnvironmentPointer, classname);
+					try {
+						var __args  = stackalloc JniArgumentValue [3];
+						__args [0]  = new JniArgumentValue (java);
+						__args [1]  = new JniArgumentValue (true);  // initialize the class
+						__args [2]  = new JniArgumentValue (info.Runtime.ClassLoader);
+
+						var c = RawCallStaticObjectMethodA (info.EnvironmentPointer, out thrown, Class_reference.Handle, Class_forName.ID, (IntPtr) __args);
+						if (thrown == IntPtr.Zero) {
+							(pendingException as IJavaPeerable)?.Dispose ();
+							var r = new JniObjectReference (c, JniObjectReferenceType.Local);
+							JniEnvironment.LogCreateLocalRef (r);
+							return r;
+						}
+						RawExceptionClear (info.EnvironmentPointer);
+					} finally {
+						JniObjectReference.Dispose (ref java);
+					}
+
+					if (pendingException != null) {
+						JniEnvironment.References.RawDeleteLocalRef (info.EnvironmentPointer, thrown);
+					} else {
+						var loadClassThrown = new JniObjectReference (thrown, JniObjectReferenceType.Local);
+						LogCreateLocalRef (loadClassThrown);
+						pendingException = info.Runtime.GetExceptionForThrowable (ref loadClassThrown, JniObjectReferenceOptions.CopyAndDispose);
+					}
+				}
+
+				if (!throwOnError) {
+					(pendingException as IJavaPeerable)?.Dispose ();
+					return default;
+				}
+				if (pendingException != null)
+					throw pendingException;
+
+				throw new InvalidOperationException ("Could not find Java class from the supplied UTF-8 name.");
+			}
+
+			static unsafe JniObjectReference NewJavaNameFromUtf8 (IntPtr env, ReadOnlySpan<byte> classname)
+			{
+				var terminator = classname.IndexOf ((byte) 0);
+				if (terminator >= 0)
+					classname = classname.Slice (0, terminator);
+
+				// Class names here are binary/JNI names, so `NewStringUTF()` lets the fallback
+				// avoid a managed UTF-16 allocation while still calling `Class.forName()`.
+				Span<byte> javaName = classname.Length + 1 <= 256
+					? stackalloc byte [classname.Length + 1]
+					: new byte [classname.Length + 1];
+
+				for (int i = 0; i < classname.Length; ++i)
+					javaName [i] = classname [i] == (byte) '/' ? (byte) '.' : classname [i];
+				javaName [classname.Length] = 0;
+
+				fixed (byte* pJavaName = javaName) {
+					var s = RawNewStringUTF (env, (IntPtr) pJavaName);
+					var e = JniEnvironment.GetExceptionForLastThrowable ();
+					if (e != null)
+						ExceptionDispatchInfo.Capture (e).Throw ();
+
+					var r = new JniObjectReference (s, JniObjectReferenceType.Local);
+					JniEnvironment.LogCreateLocalRef (r);
+					return r;
+				}
+			}
+
 			static bool TryRawFindClass (IntPtr env, string classname, out IntPtr klass, out IntPtr thrown)
 			{
 #if FEATURE_JNIENVIRONMENT_JI_PINVOKES
@@ -159,6 +232,15 @@ namespace Java.Interop
 				}
 #endif  // !FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 				return false;
+			}
+
+			static unsafe IntPtr RawNewStringUTF (IntPtr env, IntPtr bytes)
+			{
+#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
+				return (*((JNIEnv**) env))->NewStringUTF (env, bytes);
+#else
+#error Unsupported backend
+#endif
 			}
 
 			static void RawExceptionClear (IntPtr env)
@@ -351,17 +433,8 @@ namespace Java.Interop
 					}
 
 					RawExceptionClear (info.EnvironmentPointer);
-					return TryLoadClassWithFallback (info, thrown, GetStringClassName (classname), throwOnError);
+					return TryLoadClassWithFallback (info, thrown, classname, throwOnError);
 				}
-			}
-
-			static string GetStringClassName (ReadOnlySpan<byte> classname)
-			{
-				var terminator = classname.IndexOf ((byte)0);
-				if (terminator >= 0)
-					classname = classname.Slice (0, terminator);
-
-				return Encoding.UTF8.GetString (classname);
 			}
 #endif  // FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 		}
