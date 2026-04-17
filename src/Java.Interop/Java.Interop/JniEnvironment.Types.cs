@@ -402,17 +402,12 @@ namespace Java.Interop
 					if (!throwOnError)
 						return default;
 
-					throw new InvalidOperationException ($"Could not find Java class '{GetStringClassName (classname)}'.");
+					var terminator = classname.IndexOf ((byte) 0);
+					var errorClassName = terminator >= 0
+						? Encoding.UTF8.GetString (classname.Slice (0, terminator))
+						: Encoding.UTF8.GetString (classname);
+					throw new InvalidOperationException ($"Could not find Java class '{errorClassName}'.");
 				}
-			}
-
-			static string GetStringClassName (ReadOnlySpan<byte> classname)
-			{
-				var terminator = classname.IndexOf ((byte) 0);
-				if (terminator >= 0)
-					classname = classname.Slice (0, terminator);
-
-				return Encoding.UTF8.GetString (classname);
 			}
 #endif  // FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 		}
