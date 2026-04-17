@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Java.Interop
 {
@@ -105,7 +104,7 @@ namespace Java.Interop
 #endif  // !FEATURE_JNIOBJECTREFERENCE_SAFEHANDLES
 			}
 
-			static unsafe JniObjectReference TryLoadClassWithFallback (JniEnvironmentInfo info, IntPtr thrown, JniObjectReference classNameJavaString, string classname, bool throwOnError)
+			static unsafe JniObjectReference TryLoadClassWithFallback (JniEnvironmentInfo info, IntPtr thrown, JniObjectReference classNameJavaString, string? classname, bool throwOnError)
 			{
 				var findClassThrown     = new JniObjectReference (thrown, JniObjectReferenceType.Local);
 				LogCreateLocalRef (findClassThrown);
@@ -142,6 +141,7 @@ namespace Java.Interop
 				if (pendingException != null)
 					throw pendingException;
 
+				classname ??= JniEnvironment.Strings.ToString (classNameJavaString) ?? "";
 				throw new InvalidOperationException ($"Could not find Java class '{classname}'.");
 			}
 
@@ -163,7 +163,7 @@ namespace Java.Interop
 				javaName [classname.Length] = 0;
 
 				fixed (byte* pJavaName = javaName) {
-					var s = RawNewStringUTF (env, (IntPtr) pJavaName);
+					var s = (*((JNIEnv**) env))->NewStringUTF (env, (IntPtr) pJavaName);
 					var e = JniEnvironment.GetExceptionForLastThrowable ();
 					if (e != null)
 						ExceptionDispatchInfo.Capture (e).Throw ();
@@ -172,15 +172,6 @@ namespace Java.Interop
 					JniEnvironment.LogCreateLocalRef (r);
 					return r;
 				}
-			}
-
-			static string GetStringClassName (ReadOnlySpan<byte> classname)
-			{
-				var terminator = classname.IndexOf ((byte) 0);
-				if (terminator >= 0)
-					classname = classname.Slice (0, terminator);
-
-				return Encoding.UTF8.GetString (classname);
 			}
 #endif
 
@@ -203,13 +194,6 @@ namespace Java.Interop
 #endif  // !FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 				return false;
 			}
-
-#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
-			static unsafe IntPtr RawNewStringUTF (IntPtr env, IntPtr bytes)
-			{
-				return (*((JNIEnv**) env))->NewStringUTF (env, bytes);
-			}
-#endif
 
 			static void RawExceptionClear (IntPtr env)
 			{
@@ -403,7 +387,7 @@ namespace Java.Interop
 					RawExceptionClear (info.EnvironmentPointer);
 					var javaName = NewJavaNameFromUtf8 (info.EnvironmentPointer, classname);
 					try {
-						return TryLoadClassWithFallback (info, thrown, javaName, GetStringClassName (classname), throwOnError);
+						return TryLoadClassWithFallback (info, thrown, javaName, null, throwOnError);
 					} finally {
 						JniObjectReference.Dispose (ref javaName);
 					}
