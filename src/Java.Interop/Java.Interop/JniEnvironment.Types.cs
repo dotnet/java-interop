@@ -411,7 +411,12 @@ namespace Java.Interop
 					}
 
 					RawExceptionClear (info.EnvironmentPointer);
-					return TryLoadClassWithFallback (info, thrown, classname, throwOnError);
+					var javaName = NewJavaNameFromUtf8 (info.EnvironmentPointer, classname);
+					try {
+						return TryLoadClassWithFallback (info, thrown, javaName, GetStringClassName (classname), throwOnError);
+					} finally {
+						JniObjectReference.Dispose (ref javaName);
+					}
 				}
 			}
 #endif  // FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
