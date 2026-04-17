@@ -133,17 +133,15 @@ namespace Java.InteropTests
 		static async Task WaitForGC (Func<bool> predicate, string message)
 		{
 			var timeout = Stopwatch.StartNew ();
-			while (timeout.Elapsed < TimeSpan.FromSeconds (2)) {
-				if (predicate ())
-					return;
+			var completed = predicate ();
+			while (!completed && timeout.Elapsed < TimeSpan.FromSeconds (2)) {
 				GC.Collect (generation: 2, mode: GCCollectionMode.Forced, blocking: true);
 				GC.WaitForPendingFinalizers ();
 				JniEnvironment.Runtime.ValueManager.CollectPeers ();
-				if (predicate ())
-					return;
 				await Task.Yield ();
+				completed = predicate ();
 			}
-			if (predicate ())
+			if (completed)
 				return;
 			Assert.Fail (message);
 		}
