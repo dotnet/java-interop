@@ -59,6 +59,10 @@ namespace Java.Interop {
 				return;
 			}
 
+			if (methods.IsEmpty) {
+				return;
+			}
+
 			throw new NotSupportedException (
 				$"Could not register native members for type '{type.FullName}'. " +
 				"Ensure that the type has the appropriate [JniAddNativeMethodRegistration] attribute and static registration method.");
