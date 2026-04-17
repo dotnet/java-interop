@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Java.Interop
 {
@@ -141,6 +142,7 @@ namespace Java.Interop
 				throw new InvalidOperationException ($"Could not find Java class '{classname}'.");
 			}
 
+#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 			static unsafe JniObjectReference TryLoadClassWithFallback (JniEnvironmentInfo info, IntPtr thrown, ReadOnlySpan<byte> classname, bool throwOnError)
 			{
 				var findClassThrown     = new JniObjectReference (thrown, JniObjectReferenceType.Local);
@@ -183,7 +185,7 @@ namespace Java.Interop
 				if (pendingException != null)
 					throw pendingException;
 
-				throw new InvalidOperationException ("Could not find Java class from the supplied UTF-8 name.");
+				throw new InvalidOperationException ($"Could not find Java class '{GetStringClassName (classname)}'.");
 			}
 
 			static unsafe JniObjectReference NewJavaNameFromUtf8 (IntPtr env, ReadOnlySpan<byte> classname)
@@ -214,6 +216,16 @@ namespace Java.Interop
 				}
 			}
 
+			static string GetStringClassName (ReadOnlySpan<byte> classname)
+			{
+				var terminator = classname.IndexOf ((byte) 0);
+				if (terminator >= 0)
+					classname = classname.Slice (0, terminator);
+
+				return Encoding.UTF8.GetString (classname);
+			}
+#endif
+
 			static bool TryRawFindClass (IntPtr env, string classname, out IntPtr klass, out IntPtr thrown)
 			{
 #if FEATURE_JNIENVIRONMENT_JI_PINVOKES
@@ -234,14 +246,12 @@ namespace Java.Interop
 				return false;
 			}
 
+#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 			static unsafe IntPtr RawNewStringUTF (IntPtr env, IntPtr bytes)
 			{
-#if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 				return (*((JNIEnv**) env))->NewStringUTF (env, bytes);
-#else
-#error Unsupported backend
-#endif
 			}
+#endif
 
 			static void RawExceptionClear (IntPtr env)
 			{
