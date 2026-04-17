@@ -130,20 +130,18 @@ namespace Java.InteropTests
 		}
 #endif  // !NO_GC_BRIDGE_SUPPORT
 
-		static async Task WaitForGC (Func<bool> predicate, string message)
+		static async Task WaitForGC (Func<bool> predicate, string message, int timeoutMilliseconds = 2000)
 		{
-			var timeout = Stopwatch.StartNew ();
-			var completed = predicate ();
-			while (!completed && timeout.Elapsed < TimeSpan.FromSeconds (2)) {
+			var timeout   = TimeSpan.FromMilliseconds (timeoutMilliseconds);
+			var stopwatch = Stopwatch.StartNew ();
+			while (!predicate () && stopwatch.Elapsed < timeout) {
 				GC.Collect (generation: 2, mode: GCCollectionMode.Forced, blocking: true);
 				GC.WaitForPendingFinalizers ();
 				JniEnvironment.Runtime.ValueManager.CollectPeers ();
 				await Task.Yield ();
-				completed = predicate ();
 			}
-			if (completed)
-				return;
-			Assert.Fail (message);
+			if (!predicate ())
+				Assert.Fail (message);
 		}
 
 		[Test]
