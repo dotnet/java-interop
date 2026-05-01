@@ -367,9 +367,8 @@ namespace Java.Interop
 					if (!JniTypeSignature.TryParse (jniTypeName, out sig))
 						return null;
 
-					Type? type = GetTypeAssignableTo (sig, targetType);
-					if (type != null) {
-						var peer = TryCreatePeerInstance (ref reference, transfer, type);
+					if (IsAssignableTo (sig, targetType)) {
+						var peer = TryCreatePeerInstance (ref reference, transfer, targetType);
 
 						if (peer != null) {
 							JniObjectReference.Dispose (ref klass);
@@ -389,16 +388,14 @@ namespace Java.Interop
 
 				return TryCreatePeerInstance (ref reference, transfer, targetType);
 
-				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
-				[return: DynamicallyAccessedMembers (Constructors)]
-				Type? GetTypeAssignableTo (JniTypeSignature sig, Type targetType)
+				bool IsAssignableTo (JniTypeSignature sig, Type targetType)
 				{
 					foreach (var t in Runtime.TypeManager.GetTypes (sig)) {
 						if (targetType.IsAssignableFrom (t)) {
-							return t;
+							return true;
 						}
 					}
-					return null;
+					return false;
 				}
 			}
 
@@ -699,26 +696,19 @@ namespace Java.Interop
 
 			static Type? GetListType(Type type)
 			{
-				foreach (var iface in GetInterfaces (type).Concat (new [] { type })) {
-					if (typeof (IList<>).IsAssignableFrom (iface.IsGenericType ? iface.GetGenericTypeDefinition () : iface))
-						return iface;
-				}
+				if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IList<>))
+					return type;
 				return null;
-
-				[UnconditionalSuppressMessage ("Trimming", "IL2070", Justification = "We handle the case if IList<> is trimmed away")]
-				static Type [] GetInterfaces (Type type) =>
-					type.GetInterfaces ();
 			}
 
 			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
 			{
-				const string makeGenericMethodMessage = "This code path is not used in Android projects.";
-
-				// FIXME: https://github.com/dotnet/java-interop/issues/1192
-				[UnconditionalSuppressMessage ("Trimming", "IL2060", Justification = makeGenericMethodMessage)]
-				[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = makeGenericMethodMessage)]
-				static MethodInfo MakeGenericMethod (MethodInfo method, Type type) =>
+				static MethodInfo MakeGenericMethod (
+						MethodInfo method,
+						Type type) =>
+					#pragma warning disable IL2060, IL3050
 					method.MakeGenericMethod (type);
+					#pragma warning restore IL2060, IL3050
 
 				Func<JniValueMarshaler> indirect = GetObjectArrayMarshalerHelper<object>;
 				var reifiedMethodInfo = MakeGenericMethod (

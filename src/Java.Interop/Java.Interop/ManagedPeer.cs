@@ -224,7 +224,9 @@ namespace Java.Interop {
 			var candidateParameterTypes = new List<Type>[parameterCount];
 			int i                       = 0;
 			foreach (var jniType in JniMemberSignature.GetParameterTypesFromMethodSignature (signature)) {
+				#pragma warning disable IL2026, IL3050
 				var possibleTypes       = new List<Type> (typeManager.GetTypes (jniType));
+				#pragma warning restore IL2026, IL3050
 				if (possibleTypes.Count == 0) {
 					throw new NotSupportedException (
 							$"Could not find System.Type corresponding to Java type `{jniType}` within constructor signature `{signature}`.",
@@ -237,10 +239,8 @@ namespace Java.Interop {
 
 		static object?[]? GetValues (JniRuntime runtime, JniObjectReference values, ConstructorInfo cinfo)
 		{
-			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L51-L132
-			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = "Constructors are preserved by the MarkJavaObjects trimmer step.")]
-			static object? ValueManagerGetValue (JniRuntime runtime, ref JniObjectReference value, ParameterInfo parameter) =>
-				runtime.ValueManager.GetValue (ref value, JniObjectReferenceOptions.CopyAndDispose, parameter.ParameterType);
+			static object? ValueManagerGetValue (JniRuntime runtime, ref JniObjectReference value) =>
+				runtime.ValueManager.GetValue (ref value, JniObjectReferenceOptions.CopyAndDispose);
 
 			if (!values.IsValid)
 				return null;
@@ -253,7 +253,7 @@ namespace Java.Interop {
 			var pvalues = new object? [len];
 			for (int i = 0; i < len; ++i) {
 				var n_value = JniEnvironment.Arrays.GetObjectArrayElement (values, i);
-				var value   = ValueManagerGetValue (runtime, ref n_value, parameters [i]);
+				var value   = ValueManagerGetValue (runtime, ref n_value);
 				pvalues [i] = value;
 			}
 
@@ -325,7 +325,9 @@ namespace Java.Interop {
 		[return: DynamicallyAccessedMembers (ConstructorsMethodsNestedTypes)]
 		static Type GetTypeFromSignature (JniRuntime.JniTypeManager typeManager, JniTypeSignature typeSignature, string? context = null)
 		{
+			#pragma warning disable IL2026, IL3050
 			return typeManager.GetType (typeSignature) ??
+			#pragma warning restore IL2026, IL3050
 				throw new NotSupportedException ($"Could not find System.Type corresponding to Java type {typeSignature} {(context == null ? "" : "within `" + context + "`")}.");
 		}
 	}

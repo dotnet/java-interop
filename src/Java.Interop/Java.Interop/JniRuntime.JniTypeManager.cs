@@ -261,26 +261,26 @@ namespace Java.Interop {
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
-			const string NotUsedInAndroid = "This code path is not used in Android projects.";
+			const string DynamicTypeConstruction = "JNI type lookup may need to construct array or generic wrapper types dynamically.";
 
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = NotUsedInAndroid)]
 			static Type MakeArrayType (Type type) =>
+				#pragma warning disable IL3050
 				type.MakeArrayType ();
+				#pragma warning restore IL3050
 
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = NotUsedInAndroid)]
-			[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = NotUsedInAndroid)]
 			static Type MakeGenericType (Type type, Type arrayType) =>
+				#pragma warning disable IL2055, IL3050
 				type.MakeGenericType (arrayType);
+				#pragma warning restore IL2055, IL3050
 
-			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
 
+				#pragma warning disable IL2073
 				return GetTypes (typeSignature).FirstOrDefault ();
+				#pragma warning restore IL2073
 			}
 
 			public virtual IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
@@ -393,18 +393,6 @@ namespace Java.Interop {
 					Type type)
 			{
 				// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L176-L186
-				const string makeGenericTypeMessage = "Generic 'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
-
-				// FIXME: https://github.com/dotnet/java-interop/issues/1192
-				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
-				[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = makeGenericTypeMessage)]
-				[return: DynamicallyAccessedMembers (Constructors)]
-				static Type MakeGenericType (
-						[DynamicallyAccessedMembers (Constructors)]
-						Type type,
-						Type [] arguments) =>
-					type.MakeGenericType (arguments);
-
 				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
 				if (signature == null || signature.InvokerType == null) {
 					return null;
@@ -414,7 +402,7 @@ namespace Java.Interop {
 				if (arguments.Length == 0)
 					return signature.InvokerType;
 
-				return MakeGenericType (signature.InvokerType, arguments);
+				return null;
 			}
 
 #if NET
@@ -511,8 +499,6 @@ namespace Java.Interop {
 			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/PreserveRegistrations.cs#L85
 			const string MarshalMethods = "'jni_marshal_methods' is preserved by the PreserveRegistrations trimmer step.";
 
-			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = MarshalMethods)]
-			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = MarshalMethods)]
 			bool TryLoadJniMarshalMethods (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
