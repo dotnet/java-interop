@@ -413,7 +413,7 @@ Java.Interop.JniRuntime.JniTypeManager.Dispose() -> void
 Java.Interop.JniRuntime.JniTypeManager.GetReplacementMethodInfo(string! jniSimpleReference, string! jniMethodName, string! jniMethodSignature) -> Java.Interop.JniRuntime.ReplacementMethodInfo?
 Java.Interop.JniRuntime.JniTypeManager.GetReplacementType(string! jniSimpleReference) -> string?
 Java.Interop.JniRuntime.JniTypeManager.GetStaticMethodFallbackTypes(string! jniSimpleReference) -> System.Collections.Generic.IReadOnlyList<string!>?
-Java.Interop.JniRuntime.JniTypeManager.GetType(Java.Interop.JniTypeSignature typeSignature) -> System.Type?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetType(Java.Interop.JniTypeSignature typeSignature) -> System.Type?
 Java.Interop.JniRuntime.JniTypeManager.GetTypeSignature(System.Type! type) -> Java.Interop.JniTypeSignature
 Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatures(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
 Java.Interop.JniRuntime.JniTypeManager.JniTypeManager() -> void

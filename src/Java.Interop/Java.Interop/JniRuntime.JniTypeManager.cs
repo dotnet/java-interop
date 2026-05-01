@@ -262,26 +262,28 @@ namespace Java.Interop {
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
+			[RequiresDynamicCode ("JNI type lookup may need to construct array types dynamically.")]
 			static Type MakeArrayType (Type type) =>
-				#pragma warning disable IL3050
 				type.MakeArrayType ();
-				#pragma warning restore IL3050
 
+			[RequiresDynamicCode ("JNI type lookup may need to construct generic wrapper types dynamically.")]
+			[RequiresUnreferencedCode ("JNI type lookup may need to construct generic wrapper types dynamically.")]
 			static Type MakeGenericType (Type type, Type arrayType) =>
-				#pragma warning disable IL2055, IL3050
 				type.MakeGenericType (arrayType);
-				#pragma warning restore IL2055, IL3050
 
-			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			public  Type?    GetType (JniTypeSignature typeSignature)
+			[return: DynamicallyAccessedMembers (Constructors)]
+			public virtual Type? GetType (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
 
-				#pragma warning disable IL2073
-				return GetTypes (typeSignature).FirstOrDefault ();
-				#pragma warning restore IL2073
+				if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0)
+					return null;
+
+				return GetBuiltInTypeForSimpleReference (typeSignature.SimpleReference);
 			}
 
+			[RequiresDynamicCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
+			[RequiresUnreferencedCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
 			public virtual IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
@@ -291,6 +293,8 @@ namespace Java.Interop {
 				return CreateGetTypesEnumerator (typeSignature);
 			}
 
+			[RequiresDynamicCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
+			[RequiresUnreferencedCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
 			IEnumerable<Type> CreateGetTypesEnumerator (JniTypeSignature typeSignature)
 			{
 				if (!typeSignature.IsValid)
@@ -328,6 +332,8 @@ namespace Java.Interop {
 				}
 			}
 
+			[RequiresDynamicCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
+			[RequiresUnreferencedCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
 			IEnumerable<Type> GetPrimitiveArrayTypesForSimpleReference (JniTypeSignature typeSignature, Type type)
 			{
 				int index   = -1;
@@ -368,10 +374,48 @@ namespace Java.Interop {
 
 			IEnumerable<Type> CreateGetTypesForSimpleReferenceEnumerator (string jniSimpleReference)
 			{
-				if (JniBuiltinSimpleReferenceToType.Value.TryGetValue (jniSimpleReference, out var ret)) {
+				var ret = GetBuiltInTypeForSimpleReference (jniSimpleReference);
+				if (ret != null) {
 					yield return ret;
 				}
 				yield break;
+			}
+
+			[return: DynamicallyAccessedMembers (Constructors)]
+			static Type? GetBuiltInTypeForSimpleReference (string jniSimpleReference)
+			{
+				return jniSimpleReference switch {
+					"java/lang/String" => typeof (string),
+					"net/dot/jni/internal/JavaProxyObject" => typeof (JavaProxyObject),
+					"net/dot/jni/internal/JavaProxyThrowable" => typeof (JavaProxyThrowable),
+					"net/dot/jni/ManagedPeer" => typeof (ManagedPeer),
+					"V" => typeof (void),
+					"Z" => typeof (Boolean),
+					"java/lang/Boolean" => typeof (Boolean?),
+					"B" => typeof (SByte),
+					"java/lang/Byte" => typeof (SByte?),
+					"C" => typeof (Char),
+					"java/lang/Character" => typeof (Char?),
+					"S" => typeof (Int16),
+					"java/lang/Short" => typeof (Int16?),
+					"I" => typeof (Int32),
+					"java/lang/Integer" => typeof (Int32?),
+					"J" => typeof (Int64),
+					"java/lang/Long" => typeof (Int64?),
+					"F" => typeof (Single),
+					"java/lang/Float" => typeof (Single?),
+					"D" => typeof (Double),
+					"java/lang/Double" => typeof (Double?),
+					_ => null,
+				};
+			}
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			public virtual Type? GetTypeForNativeRegistration (JniTypeSignature typeSignature)
+			{
+				AssertValid ();
+
+				return null;
 			}
 
 			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />

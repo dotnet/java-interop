@@ -390,12 +390,8 @@ namespace Java.Interop
 
 				bool IsAssignableTo (JniTypeSignature sig, Type targetType)
 				{
-					foreach (var t in Runtime.TypeManager.GetTypes (sig)) {
-						if (targetType.IsAssignableFrom (t)) {
-							return true;
-						}
-					}
-					return false;
+					var t = Runtime.TypeManager.GetType (sig);
+					return t != null && targetType.IsAssignableFrom (t);
 				}
 			}
 
@@ -684,7 +680,7 @@ namespace Java.Interop
 						}
 					}
 
-					return GetObjectArrayMarshaler (elementType);
+					return ProxyValueMarshaler.Instance;
 				}
 
 				if (typeof (IJavaPeerable).IsAssignableFrom (type)) {
@@ -699,30 +695,6 @@ namespace Java.Interop
 				if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IList<>))
 					return type;
 				return null;
-			}
-
-			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
-			{
-				static MethodInfo MakeGenericMethod (
-						MethodInfo method,
-						Type type) =>
-					#pragma warning disable IL2060, IL3050
-					method.MakeGenericMethod (type);
-					#pragma warning restore IL2060, IL3050
-
-				Func<JniValueMarshaler> indirect = GetObjectArrayMarshalerHelper<object>;
-				var reifiedMethodInfo = MakeGenericMethod (
-						indirect.Method.GetGenericMethodDefinition (), elementType);
-				Func<JniValueMarshaler> direct = (Func<JniValueMarshaler>) Delegate.CreateDelegate (typeof (Func<JniValueMarshaler>), reifiedMethodInfo);
-				return direct ();
-			}
-
-			static JniValueMarshaler GetObjectArrayMarshalerHelper<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ()
-			{
-				return JavaObjectArray<T>.Instance;
 			}
 
 			protected virtual JniValueMarshaler GetValueMarshalerCore (Type type)

@@ -224,14 +224,8 @@ namespace Java.Interop {
 			var candidateParameterTypes = new List<Type>[parameterCount];
 			int i                       = 0;
 			foreach (var jniType in JniMemberSignature.GetParameterTypesFromMethodSignature (signature)) {
-				#pragma warning disable IL2026, IL3050
-				var possibleTypes       = new List<Type> (typeManager.GetTypes (jniType));
-				#pragma warning restore IL2026, IL3050
-				if (possibleTypes.Count == 0) {
-					throw new NotSupportedException (
-							$"Could not find System.Type corresponding to Java type `{jniType}` within constructor signature `{signature}`.",
-							CreateJniLocationException ());
-				}
+				var possibleType        = GetTypeFromSignature (typeManager, jniType, signature);
+				var possibleTypes       = new List<Type> { possibleType };
 				candidateParameterTypes [i++]   = possibleTypes;
 			}
 			return candidateParameterTypes;
@@ -291,7 +285,7 @@ namespace Java.Interop {
 				var methodsRef              = new JniObjectReference (n_methods);
 
 				var typeSig                 = new JniTypeSignature (nativeClass.Name);
-				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
+				var type                    = GetNativeRegistrationTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 
 #if NET
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
@@ -322,13 +316,18 @@ namespace Java.Interop {
 			}
 		}
 
-		[return: DynamicallyAccessedMembers (ConstructorsMethodsNestedTypes)]
+		[return: DynamicallyAccessedMembers (Constructors)]
 		static Type GetTypeFromSignature (JniRuntime.JniTypeManager typeManager, JniTypeSignature typeSignature, string? context = null)
 		{
-			#pragma warning disable IL2026, IL3050
 			return typeManager.GetType (typeSignature) ??
-			#pragma warning restore IL2026, IL3050
 				throw new NotSupportedException ($"Could not find System.Type corresponding to Java type {typeSignature} {(context == null ? "" : "within `" + context + "`")}.");
+		}
+
+		[return: DynamicallyAccessedMembers (ConstructorsMethodsNestedTypes)]
+		static Type GetNativeRegistrationTypeFromSignature (JniRuntime.JniTypeManager typeManager, JniTypeSignature typeSignature)
+		{
+			return typeManager.GetTypeForNativeRegistration (typeSignature) ??
+				throw new NotSupportedException ($"Could not find System.Type corresponding to Java type {typeSignature} for native member registration.");
 		}
 	}
 

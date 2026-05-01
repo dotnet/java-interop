@@ -11,6 +11,8 @@ namespace Java.Interop {
 
 	public class JreTypeManager : JniRuntime.JniTypeManager {
 
+		const DynamicallyAccessedMemberTypes RequiredConstructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
+
 		IDictionary<string, Type>? typeMappings;
 
 		public JreTypeManager ()
@@ -21,6 +23,29 @@ namespace Java.Interop {
 		public JreTypeManager (IDictionary<string, Type>? typeMappings)
 		{
 			this.typeMappings = typeMappings;
+		}
+
+		[return: DynamicallyAccessedMembers (RequiredConstructors)]
+		public override Type? GetType (JniTypeSignature typeSignature)
+		{
+			var type = base.GetType (typeSignature);
+			if (type != null) {
+				return type;
+			}
+
+			if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0 || typeMappings == null) {
+				return null;
+			}
+
+			return typeMappings.TryGetValue (typeSignature.SimpleReference, out var target)
+				? target
+				: null;
+		}
+
+		[return: DynamicallyAccessedMembers (JniRuntime.JniTypeManager.MethodsConstructors)]
+		public override Type? GetTypeForNativeRegistration (JniTypeSignature typeSignature)
+		{
+			return GetType (typeSignature);
 		}
 
 		protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
