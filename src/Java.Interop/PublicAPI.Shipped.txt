@@ -11,7 +11,7 @@ abstract Java.Interop.JniRuntime.JniMarshalMemberBuilder.CreateMarshalToManagedE
 abstract Java.Interop.JniRuntime.JniMarshalMemberBuilder.GetExportedMemberRegistrations(System.Type! declaringType) -> System.Collections.Generic.IEnumerable<Java.Interop.JniNativeMethodRegistration>!
 abstract Java.Interop.JniRuntime.JniObjectReferenceManager.GlobalReferenceCount.get -> int
 abstract Java.Interop.JniRuntime.JniObjectReferenceManager.WeakGlobalReferenceCount.get -> int
-abstract Java.Interop.JniRuntime.JniValueManager.ActivatePeer(Java.Interop.IJavaPeerable? self, Java.Interop.JniObjectReference reference, System.Reflection.ConstructorInfo! cinfo, object?[]? argumentValues) -> void
+virtual Java.Interop.JniRuntime.JniValueManager.ActivatePeer(Java.Interop.IJavaPeerable? self, Java.Interop.JniObjectReference reference, System.Reflection.ConstructorInfo! cinfo, object?[]? argumentValues) -> void
 abstract Java.Interop.JniRuntime.JniValueManager.AddPeer(Java.Interop.IJavaPeerable! value) -> void
 abstract Java.Interop.JniRuntime.JniValueManager.CollectPeers() -> void
 abstract Java.Interop.JniRuntime.JniValueManager.FinalizePeer(Java.Interop.IJavaPeerable! value) -> void

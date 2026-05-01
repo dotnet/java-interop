@@ -88,7 +88,14 @@ namespace Java.Interop
 
 			public abstract List<JniSurfacedPeerInfo>   GetSurfacedPeers ();
 
-			public abstract void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, ConstructorInfo cinfo, object? []? argumentValues);
+			[RequiresUnreferencedCode ("Activating Java peers via ConstructorInfo cannot statically preserve the declaring type constructors.")]
+			public virtual void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, ConstructorInfo cinfo, object? []? argumentValues)
+			{
+				var declaringType = cinfo.DeclaringType ?? throw new NotSupportedException ("Do not know the type to create!");
+				ActivatePeer (self, reference, declaringType, cinfo, argumentValues);
+			}
+
+			public abstract void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, [DynamicallyAccessedMembers (Constructors)] Type declaringType, ConstructorInfo cinfo, object? []? argumentValues);
 
 			public void ConstructPeer (IJavaPeerable peer, ref JniObjectReference reference, JniObjectReferenceOptions options)
 			{
@@ -964,4 +971,3 @@ namespace Java.Interop
 		}
 	}
 }
-

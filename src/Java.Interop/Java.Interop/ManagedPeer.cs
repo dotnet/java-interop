@@ -18,7 +18,7 @@ namespace Java.Interop {
 	/* static */ sealed class ManagedPeer : JavaObject {
 
 		internal const string JniTypeName = "net/dot/jni/ManagedPeer";
-		internal const DynamicallyAccessedMemberTypes ConstructorsMethodsNestedTypes = Constructors | DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
+		internal const DynamicallyAccessedMemberTypes ConstructorsMethodsNestedTypes = Constructors | DynamicallyAccessedMemberTypes.AllMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 
 
 		static  readonly    JniPeerMembers  _members        = new JniPeerMembers (JniTypeName, typeof (ManagedPeer));
@@ -119,7 +119,7 @@ namespace Java.Interop {
 					return;
 				}
 
-				JniEnvironment.Runtime.ValueManager.ActivatePeer (self, new JniObjectReference (n_self), cinfo, pvalues);
+				JniEnvironment.Runtime.ValueManager.ActivatePeer (self, new JniObjectReference (n_self), type, cinfo, pvalues);
 			}
 			catch (Exception e) {
 				__r?.OnUserUnhandledException (ref envp, e);
@@ -346,4 +346,3 @@ namespace Java.Interop {
 		}
 	}
 }
-

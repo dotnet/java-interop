@@ -198,12 +198,12 @@ namespace Java.Interop {
 			value.Finalized ();
 		}
 
-		public override void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, ConstructorInfo cinfo, object?[]? argumentValues)
+		public override void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, [DynamicallyAccessedMembers (Constructors)] Type declaringType, ConstructorInfo cinfo, object?[]? argumentValues)
 		{
 			var runtime = JniEnvironment.Runtime;
 
 			try {
-				ActivateViaReflection (reference, cinfo, argumentValues);
+				ActivateViaReflection (reference, declaringType, cinfo, argumentValues);
 			} catch (Exception e) {
 				var m = string.Format ("Could not activate {{ PeerReference={0} IdentityHashCode=0x{1} Java.Type={2} }} for managed type '{3}'.",
 						reference,
@@ -216,11 +216,9 @@ namespace Java.Interop {
 			}
 		}
 
-		void ActivateViaReflection (JniObjectReference reference, ConstructorInfo cinfo, object?[]? argumentValues)
+		void ActivateViaReflection (JniObjectReference reference, [DynamicallyAccessedMembers (Constructors)] Type declaringType, ConstructorInfo cinfo, object?[]? argumentValues)
 		{
-			var declType  = cinfo.DeclaringType ?? throw new NotSupportedException ("Do not know the type to create!");
-
-			var self      = GetUninitializedObject (declType);
+			var self      = GetUninitializedObject (declaringType);
 			self.SetPeerReference (reference);
 
 			cinfo.Invoke (self, argumentValues);

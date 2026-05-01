@@ -260,13 +260,12 @@ namespace Java.Interop {
 
 		const string NotUsedInAndroid = "This code path is not used in Android projects.";
 
-		public override void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, ConstructorInfo cinfo, object?[]? argumentValues)
+		public override void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, [DynamicallyAccessedMembers (Constructors)] Type declaringType, ConstructorInfo cinfo, object?[]? argumentValues)
 		{
 			var runtime = JniEnvironment.Runtime;
 
 			try {
-				var declType  = cinfo.DeclaringType ?? throw new NotSupportedException ("Do not know the type to create!");
-				var instance  = GetUninitializedObject (declType);
+				var instance  = GetUninitializedObject (declaringType);
 				instance.SetPeerReference (reference);
 				cinfo.Invoke (instance, argumentValues);
 
@@ -444,4 +443,3 @@ namespace Java.Interop {
 		}
 	}
 }
-

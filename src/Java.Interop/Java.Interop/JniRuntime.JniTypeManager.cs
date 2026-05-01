@@ -83,7 +83,7 @@ namespace Java.Interop {
 		public partial class JniTypeManager : IDisposable, ISetRuntime {
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
-			internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
+			internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.AllMethods;
 			internal const DynamicallyAccessedMemberTypes MethodsAndPrivateNested = Methods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 			internal const DynamicallyAccessedMemberTypes MethodsConstructors = MethodsAndPrivateNested | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 
@@ -457,7 +457,7 @@ namespace Java.Interop {
 
 			public virtual void RegisterNativeMembers (
 					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.AllMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
 					Type type,
 					ReadOnlySpan<char> methods)
 			{
@@ -466,7 +466,7 @@ namespace Java.Interop {
 
 			protected bool TryRegisterNativeMembers (
 					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.AllMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
 					Type type,
 					ReadOnlySpan<char> methods)
 			{
@@ -485,7 +485,7 @@ namespace Java.Interop {
 #endif  // NET
 			public virtual void RegisterNativeMembers (
 					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.AllMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
 					Type type,
 					string? methods)
 			{
@@ -497,7 +497,7 @@ namespace Java.Interop {
 #endif  // NET
 			protected bool TryRegisterNativeMembers (
 					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.AllMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
 					Type type,
 					string? methods)
 			{
@@ -605,4 +605,3 @@ namespace Java.Interop {
 		}
 	}
 }
-
