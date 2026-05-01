@@ -262,15 +262,6 @@ namespace Java.Interop {
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
-			[RequiresDynamicCode ("JNI type lookup may need to construct array types dynamically.")]
-			static Type MakeArrayType (Type type) =>
-				type.MakeArrayType ();
-
-			[RequiresDynamicCode ("JNI type lookup may need to construct generic wrapper types dynamically.")]
-			[RequiresUnreferencedCode ("JNI type lookup may need to construct generic wrapper types dynamically.")]
-			static Type MakeGenericType (Type type, Type arrayType) =>
-				type.MakeGenericType (arrayType);
-
 			[return: DynamicallyAccessedMembers (Constructors)]
 			public virtual Type? GetType (JniTypeSignature typeSignature)
 			{
@@ -316,7 +307,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
+							arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -325,7 +316,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeArrayType (arrayType);
+							arrayType   = arrayType.MakeArrayType ();
 						}
 						yield return arrayType;
 					}
@@ -350,14 +341,14 @@ namespace Java.Interop {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
 					while (rank-- > 0) {
-						arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
+						arrayType   = typeof (JavaObjectArray<>).MakeGenericType (arrayType);
 					}
 					yield return arrayType;
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;
 					while (rank-- > 0) {
-						arrayType   = MakeArrayType (arrayType);
+						arrayType   = arrayType.MakeArrayType ();
 					}
 					yield return arrayType;
 				}
