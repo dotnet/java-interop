@@ -273,6 +273,21 @@ namespace Java.Interop {
 				return GetBuiltInTypeForSimpleReference (typeSignature.SimpleReference);
 			}
 
+			[return: DynamicallyAccessedMembers (Constructors)]
+			public virtual Type? GetTypeAssignableTo (
+					JniTypeSignature typeSignature,
+					[DynamicallyAccessedMembers (Constructors)]
+					Type targetType)
+			{
+				AssertValid ();
+
+				var type = GetType (typeSignature);
+				if (type != null && targetType.IsAssignableFrom (type)) {
+					return type;
+				}
+				return null;
+			}
+
 			[RequiresDynamicCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
 			[RequiresUnreferencedCode ("JNI type lookup may need to construct array or generic wrapper types dynamically.")]
 			public virtual IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
@@ -411,6 +426,8 @@ namespace Java.Interop {
 
 			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]
+			[RequiresDynamicCode ("Generic invoker type construction may require runtime generic code generation.")]
+			[RequiresUnreferencedCode ("Generic invoker type construction may require unreferenced generic parameter annotations.")]
 			public Type? GetInvokerType (
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
@@ -422,6 +439,36 @@ namespace Java.Interop {
 			}
 
 			[return: DynamicallyAccessedMembers (Constructors)]
+			internal Type? GetInvokerTypeForPeerCreation (
+					[DynamicallyAccessedMembers (Constructors)]
+					Type type)
+			{
+				if (type.IsAbstract || type.IsInterface) {
+					return GetInvokerTypeForPeerCreationCore (type);
+				}
+				return null;
+			}
+
+			[return: DynamicallyAccessedMembers (Constructors)]
+			protected virtual Type? GetInvokerTypeForPeerCreationCore (
+					[DynamicallyAccessedMembers (Constructors)]
+					Type type)
+			{
+				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
+				if (signature == null || signature.InvokerType == null) {
+					return null;
+				}
+
+				Type[] arguments = type.GetGenericArguments ();
+				if (arguments.Length == 0)
+					return signature.InvokerType;
+
+				return null;
+			}
+
+			[return: DynamicallyAccessedMembers (Constructors)]
+			[RequiresDynamicCode ("Generic invoker type construction may require runtime generic code generation.")]
+			[RequiresUnreferencedCode ("Generic invoker type construction may require unreferenced generic parameter annotations.")]
 			protected virtual Type? GetInvokerTypeCore (
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
@@ -436,7 +483,7 @@ namespace Java.Interop {
 				if (arguments.Length == 0)
 					return signature.InvokerType;
 
-				return null;
+				return signature.InvokerType.MakeGenericType (arguments);
 			}
 
 #if NET

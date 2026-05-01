@@ -367,8 +367,9 @@ namespace Java.Interop
 					if (!JniTypeSignature.TryParse (jniTypeName, out sig))
 						return null;
 
-					if (IsAssignableTo (sig, targetType)) {
-						var peer = TryCreatePeerInstance (ref reference, transfer, targetType);
+					Type? type = Runtime.TypeManager.GetTypeAssignableTo (sig, targetType);
+					if (type != null) {
+						var peer = TryCreatePeerInstance (ref reference, transfer, type);
 
 						if (peer != null) {
 							JniObjectReference.Dispose (ref klass);
@@ -388,11 +389,6 @@ namespace Java.Interop
 
 				return TryCreatePeerInstance (ref reference, transfer, targetType);
 
-				bool IsAssignableTo (JniTypeSignature sig, Type targetType)
-				{
-					var t = Runtime.TypeManager.GetType (sig);
-					return t != null && targetType.IsAssignableFrom (t);
-				}
 			}
 
 			IJavaPeerable? TryCreatePeerInstance (
@@ -401,7 +397,7 @@ namespace Java.Interop
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
-				type    = Runtime.TypeManager.GetInvokerType (type) ?? type;
+				type    = Runtime.TypeManager.GetInvokerTypeForPeerCreation (type) ?? type;
 
 				var self        = GetUninitializedObject (type);
 				var constructed = false;
@@ -479,7 +475,7 @@ namespace Java.Interop
 					// Let's hope this is an IJavaPeerable!
 					return JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
 				}
-				var marshaler   = GetValueMarshaler (targetType);
+				var marshaler   = GetKnownValueMarshaler (targetType) ?? GetValueMarshalerCore (targetType);
 				return marshaler.CreateValue (ref reference, options, targetType);
 			}
 
@@ -566,7 +562,7 @@ namespace Java.Interop
 					// Let's hope this is an IJavaPeerable!
 					return JavaPeerableValueMarshaler.Instance.CreateGenericValue (ref reference, options, targetType);
 				}
-				var marshaler   = GetValueMarshaler (targetType);
+				var marshaler   = GetKnownValueMarshaler (targetType) ?? GetValueMarshalerCore (targetType);
 				return marshaler.CreateValue (ref reference, options, targetType);
 			}
 
@@ -633,7 +629,8 @@ namespace Java.Interop
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().Name);
 
-				var m   = GetValueMarshaler (typeof (T));
+				var type = typeof (T);
+				var m   = GetKnownValueMarshaler (type) ?? GetValueMarshalerCore (type);
 				var r   = m as JniValueMarshaler<T>;
 				if (r != null)
 					return r;
@@ -644,6 +641,8 @@ namespace Java.Interop
 				}
 			}
 
+			[RequiresDynamicCode ("Type-based value marshaler lookup may need runtime generic method instantiation.")]
+			[RequiresUnreferencedCode ("Type-based value marshaler lookup may need runtime generic method instantiation.")]
 			public JniValueMarshaler GetValueMarshaler (Type type)
 			{
 				if (disposed)
@@ -654,6 +653,23 @@ namespace Java.Interop
 				if (type.ContainsGenericParameters)
 					throw new ArgumentException ("Generic type definitions are not supported.", nameof (type));
 
+				var marshaler = GetKnownValueMarshaler (type);
+				if (marshaler != null)
+					return marshaler;
+
+				var listType    = GetListType (type);
+				if (listType != null) {
+					var elementType = GetListElementType (listType);
+					if (elementType == null)
+						return GetValueMarshalerCore (type);
+					return GetObjectArrayMarshaler (elementType);
+				}
+
+				return GetValueMarshalerCore (type);
+			}
+
+			internal JniValueMarshaler? GetKnownValueMarshaler (Type type)
+			{
 				var marshalerAttr   = type.GetCustomAttribute<JniValueMarshalerAttribute> ();
 				if (marshalerAttr != null)
 					return (JniValueMarshaler) Activator.CreateInstance (marshalerAttr.MarshalerType)!;
@@ -669,32 +685,84 @@ namespace Java.Interop
 						return marshaler.Value;
 				}
 
+				foreach (var marshaler in JniPrimitiveArrayMarshalers.Value) {
+					if (marshaler.Key.IsAssignableFrom (type))
+						return marshaler.Value;
+				}
 
-				var listType    = GetListType (type);
+				var listType = GetListType (type);
 				if (listType != null) {
-					var elementType = listType.GenericTypeArguments [0];
+					var elementType = GetListElementType (listType);
+					if (elementType == null)
+						return null;
+					if (elementType == typeof (bool []))
+						return JavaObjectArray<bool []>.Instance;
+					if (elementType == typeof (sbyte []))
+						return JavaObjectArray<sbyte []>.Instance;
+					if (elementType == typeof (char []))
+						return JavaObjectArray<char []>.Instance;
+					if (elementType == typeof (short []))
+						return JavaObjectArray<short []>.Instance;
+					if (elementType == typeof (int []))
+						return JavaObjectArray<int []>.Instance;
+					if (elementType == typeof (long []))
+						return JavaObjectArray<long []>.Instance;
+					if (elementType == typeof (float []))
+						return JavaObjectArray<float []>.Instance;
+					if (elementType == typeof (double []))
+						return JavaObjectArray<double []>.Instance;
 					if (elementType.IsValueType) {
 						foreach (var marshaler in JniPrimitiveArrayMarshalers.Value) {
 							if (type.IsAssignableFrom (marshaler.Key))
 								return marshaler.Value;
 						}
 					}
-
-					return ProxyValueMarshaler.Instance;
 				}
 
 				if (typeof (IJavaPeerable).IsAssignableFrom (type)) {
 					return JavaPeerableValueMarshaler.Instance;
 				}
 
-				return GetValueMarshalerCore (type);
+				return null;
 			}
 
 			static Type? GetListType(Type type)
 			{
+				if (type.IsArray)
+					return type;
+				if (type.IsGenericType) {
+					var genericDefinition = type.GetGenericTypeDefinition ();
+					if (genericDefinition == typeof (JavaArray<>) ||
+							genericDefinition == typeof (JavaObjectArray<>) ||
+							genericDefinition == typeof (JavaPrimitiveArray<>))
+						return type;
+				}
 				if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IList<>))
 					return type;
 				return null;
+			}
+
+			static Type? GetListElementType (Type type)
+			{
+				return type.IsArray ? type.GetElementType () : type.GenericTypeArguments [0];
+			}
+
+			[RequiresDynamicCode ("Object array marshaler construction requires runtime generic method instantiation.")]
+			[RequiresUnreferencedCode ("Object array marshaler construction requires runtime generic method instantiation.")]
+			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
+			{
+				Func<JniValueMarshaler> indirect = GetObjectArrayMarshalerHelper<object>;
+				var reifiedMethodInfo = indirect.Method.GetGenericMethodDefinition ().MakeGenericMethod (elementType);
+				Func<JniValueMarshaler> direct = (Func<JniValueMarshaler>) Delegate.CreateDelegate (typeof (Func<JniValueMarshaler>), reifiedMethodInfo);
+				return direct ();
+			}
+
+			static JniValueMarshaler GetObjectArrayMarshalerHelper<
+					[DynamicallyAccessedMembers (Constructors)]
+					T
+			> ()
+			{
+				return JavaObjectArray<T>.Instance;
 			}
 
 			protected virtual JniValueMarshaler GetValueMarshalerCore (Type type)
@@ -744,8 +812,8 @@ namespace Java.Interop
 				Type? targetType)
 		{
 			var jvm         = JniEnvironment.Runtime;
-			var marshaler   = jvm.ValueManager.GetValueMarshaler (targetType ?? typeof(IJavaPeerable));
-			if (marshaler != Instance)
+			var marshaler   = jvm.ValueManager.GetKnownValueMarshaler (targetType ?? typeof(IJavaPeerable));
+			if (marshaler != null && marshaler != Instance)
 				return (IJavaPeerable) marshaler.CreateValue (ref reference, options, targetType)!;
 			return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
 		}
@@ -888,8 +956,8 @@ namespace Java.Interop
 				targetType      = jvm.ValueManager.GetRuntimeType (reference);
 			}
 			if (targetType != null) {
-				var vm  = jvm.ValueManager.GetValueMarshaler (targetType);
-				if (vm != Instance) {
+				var vm  = jvm.ValueManager.GetKnownValueMarshaler (targetType);
+				if (vm != null && vm != Instance) {
 					return vm.CreateValue (ref reference, options, targetType)!;
 				}
 			}
@@ -910,8 +978,8 @@ namespace Java.Interop
 
 			var jvm     = JniEnvironment.Runtime;
 
-			var vm      = jvm.ValueManager.GetValueMarshaler (value.GetType ());
-			if (vm != Instance) {
+			var vm      = jvm.ValueManager.GetKnownValueMarshaler (value.GetType ());
+			if (vm != null && vm != Instance) {
 				var s   = vm.CreateObjectReferenceArgumentState (value, synchronize);
 				return new JniValueMarshalerState (s, vm);
 			}

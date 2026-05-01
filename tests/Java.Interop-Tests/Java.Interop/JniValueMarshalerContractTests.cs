@@ -236,6 +236,7 @@ namespace Java.InteropTests {
 		{
 			var valueType       = GetTypeName (typeof (T));
 			var marshalerType   = marshaler.GetType ().Name;
+			var marshalerValue  = marshaler.GetType ().FullName;
 			return $@"{{
 	JniRuntime {jvm};
 	{valueType} {value};
@@ -246,7 +247,7 @@ namespace Java.InteropTests {
 
 	try
 	{{
-		{value}_marshaler = new {marshalerType}();
+		{value}_marshaler = {marshalerValue};
 		{value}_state = {value}_marshaler.CreateArgumentState((object){value}, ParameterAttributes.None);
 		{value}_val = {value}_state.ReferenceValue.Handle;
 		{value}_rtn = References.NewReturnToJniRef({value}_state.ReferenceValue);
@@ -503,7 +504,7 @@ namespace Java.InteropTests {
 
 	try
 	{{
-		__value_marshaler = new ValueMarshaler();
+		__value_marshaler = Java.Interop.JavaInt32Array+ValueMarshaler;
 		__value_state = __value_marshaler.CreateArgumentState((object)__value, ParameterAttributes.None);
 		__value_val = __value_state.ReferenceValue.Handle;
 		__value_rtn = References.NewReturnToJniRef(__value_state.ReferenceValue);
@@ -699,4 +700,3 @@ namespace Java.InteropTests {
 		protected   override    bool                IsJniValueType  {get {return true;}}
 	}
 }
-

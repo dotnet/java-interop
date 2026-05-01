@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Versioning;
 
 using Java.Interop;
 
@@ -114,6 +116,8 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[RequiresDynamicCode ("Tests dynamic JNI array type construction.")]
+		[RequiresUnreferencedCode ("Tests dynamic JNI array type construction.")]
 		public new void GetType ()
 		{
 			var manager = JniRuntime.CurrentRuntime.TypeManager;
@@ -168,6 +172,8 @@ namespace Java.InteropTests
 			Assert.AreEqual (null, GetType ("Ljava/lang/String"));
 		}
 
+		[RequiresDynamicCode ("Tests dynamic JNI array type construction.")]
+		[RequiresUnreferencedCode ("Tests dynamic JNI array type construction.")]
 		static void AssertPrimitiveArrayTypesFromSignature<T> (JniRuntime.JniTypeManager manager, string signature, params Type[] expectedTypes)
 		{
 			var sig             = JniTypeSignature.Parse (signature);
@@ -183,6 +189,8 @@ namespace Java.InteropTests
 			}
 		}
 
+		[RequiresDynamicCode ("Tests dynamic JNI array type construction.")]
+		[RequiresUnreferencedCode ("Tests dynamic JNI array type construction.")]
 		static void AssertArrayTypesFromSignature<T> (JniRuntime.JniTypeManager manager, string signature, params Type[] expectedTypes)
 		{
 			var sig             = JniTypeSignature.Parse (signature);
@@ -246,4 +254,3 @@ namespace Java.InteropTests
 		public  T   Value   {get; set;}
 	}
 }
-

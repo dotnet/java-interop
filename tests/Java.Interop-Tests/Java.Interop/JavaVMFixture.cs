@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Java.Interop;
@@ -54,6 +55,22 @@ namespace Java.InteropTests {
 		{
 		}
 
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+		public override Type? GetType (JniTypeSignature typeSignature)
+		{
+			var type = base.GetType (typeSignature);
+			if (type != null) {
+				return type;
+			}
+			if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0) {
+				return null;
+			}
+			if (TypeMappings.TryGetValue (typeSignature.SimpleReference, out var target)) {
+				return target;
+			}
+			return null;
+		}
+
 		protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
 		{
 			foreach (var t in base.GetTypesForSimpleReference (jniSimpleReference))
@@ -63,6 +80,37 @@ namespace Java.InteropTests {
 			if (TypeMappings.TryGetValue (jniSimpleReference, out target))
 				yield return target;
 #pragma warning restore CS8600
+		}
+
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+		public override Type? GetTypeAssignableTo (
+				JniTypeSignature typeSignature,
+				[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+				Type targetType)
+		{
+			var type = base.GetTypeAssignableTo (typeSignature, targetType);
+			if (type != null) {
+				return type;
+			}
+			if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0) {
+				return null;
+			}
+			if (TypeMappings.TryGetValue (typeSignature.SimpleReference, out var target) && targetType.IsAssignableFrom (target)) {
+				return target;
+			}
+			return null;
+		}
+
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.AllMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
+		public override Type? GetTypeForNativeRegistration (JniTypeSignature typeSignature)
+		{
+			if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0) {
+				return null;
+			}
+			if (TypeMappings.TryGetValue (typeSignature.SimpleReference, out var target)) {
+				return target;
+			}
+			return base.GetTypeForNativeRegistration (typeSignature);
 		}
 
 		protected override IEnumerable<string> GetSimpleReferences (Type type)
@@ -167,4 +215,3 @@ namespace Java.InteropTests {
 #endif  // NET
 	}
 }
-

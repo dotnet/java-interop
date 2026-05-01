@@ -284,14 +284,20 @@ namespace Java.Interop {
 
 				var methodsRef              = new JniObjectReference (n_methods);
 
-				var typeSig                 = new JniTypeSignature (nativeClass.Name);
-				var type                    = GetNativeRegistrationTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
-
 #if NET
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
-				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
+				Type? type                  = null;
 				try {
+					var methods             = new ReadOnlySpan<char>(methodsChars, methodsLength);
+					var typeSig             = new JniTypeSignature (nativeClass.Name);
+					type                    = JniEnvironment.Runtime.TypeManager.GetTypeForNativeRegistration (typeSig);
+					if (type == null) {
+						if (methodsLength == 0) {
+							return;
+						}
+						throw CreateMissingNativeRegistrationTypeException (typeSig);
+					}
 					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 				}
 				catch (Exception e) {
@@ -304,6 +310,14 @@ namespace Java.Interop {
 				}
 #else   // NET
 				var methods                 = JniEnvironment.Strings.ToString (methodsRef);
+				var typeSig                 = new JniTypeSignature (nativeClass.Name);
+				var type                    = JniEnvironment.Runtime.TypeManager.GetTypeForNativeRegistration (typeSig);
+				if (type == null) {
+					if (string.IsNullOrEmpty (methods)) {
+						return;
+					}
+					throw CreateMissingNativeRegistrationTypeException (typeSig);
+				}
 				JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 #endif  // NET
 
@@ -327,7 +341,12 @@ namespace Java.Interop {
 		static Type GetNativeRegistrationTypeFromSignature (JniRuntime.JniTypeManager typeManager, JniTypeSignature typeSignature)
 		{
 			return typeManager.GetTypeForNativeRegistration (typeSignature) ??
-				throw new NotSupportedException ($"Could not find System.Type corresponding to Java type {typeSignature} for native member registration.");
+				throw CreateMissingNativeRegistrationTypeException (typeSignature);
+		}
+
+		static NotSupportedException CreateMissingNativeRegistrationTypeException (JniTypeSignature typeSignature)
+		{
+			return new NotSupportedException ($"Could not find System.Type corresponding to Java type {typeSignature} for native member registration.");
 		}
 	}
 

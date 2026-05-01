@@ -8,7 +8,9 @@ abstract Java.Interop.JniRuntime.JniValueManager.ActivatePeer(Java.Interop.IJava
 virtual Java.Interop.JniRuntime.JniValueManager.TryConstructPeer(Java.Interop.IJavaPeerable! self, ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type! type) -> bool
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
+virtual Java.Interop.JniRuntime.JniTypeManager.GetInvokerTypeForPeerCreationCore(System.Type! type) -> System.Type?
 Java.Interop.JniRuntime.JniTypeManager.GetInvokerType(System.Type! type) -> System.Type?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeAssignableTo(Java.Interop.JniTypeSignature typeSignature, System.Type! targetType) -> System.Type?
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeForNativeRegistration(Java.Interop.JniTypeSignature typeSignature) -> System.Type?
 Java.Interop.JniRuntime.JniValueManager.GetPeer(Java.Interop.JniObjectReference reference, System.Type? targetType = null) -> Java.Interop.IJavaPeerable?
 Java.Interop.JniTypeSignatureAttribute.InvokerType.get -> System.Type?
