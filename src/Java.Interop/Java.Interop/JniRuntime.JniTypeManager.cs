@@ -261,7 +261,6 @@ namespace Java.Interop {
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
-			const string DynamicTypeConstruction = "JNI type lookup may need to construct array or generic wrapper types dynamically.";
 
 			static Type MakeArrayType (Type type) =>
 				#pragma warning disable IL3050
