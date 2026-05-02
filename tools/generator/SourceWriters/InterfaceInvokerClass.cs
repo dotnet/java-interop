@@ -30,7 +30,6 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (iface.RawJniName, noAcw: true, additionalProperties: iface.AdditionalAttributeString ()) {
 				UseGlobal       = true,
 				MemberType	    = (!ji) ? null : (MemberTypes?) MemberTypes.TypeInfo,
-				EmitJniTypeSignatureAttribute = !ji,
 			});
 
 			SourceWriterExtensions.AddObsolete (Attributes, iface.DeprecatedComment, opt, iface.IsDeprecated, deprecatedSince: iface.DeprecatedSince);

@@ -60,7 +60,6 @@ namespace generator.SourceWriters
 
 				Attributes.Add (new RegisterAttr (iface.RawJniName, string.Empty, signature + "Invoker", noAcw, additionalProperties: iface.AdditionalAttributeString ()) {
 					MemberType	    = memberType,
-					EmitJniTypeSignatureAttribute = opt.CodeGenerationTarget != CodeGenerationTarget.JavaInterop1,
 				});
 			}
 

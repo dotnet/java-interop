@@ -57,7 +57,6 @@ namespace generator.SourceWriters
 				UseGlobal       = true,
 				UseShortForm    = true,
 				MemberType      = opt.CodeGenerationTarget != CodeGenerationTarget.JavaInterop1 ? null : (MemberTypes?) MemberTypes.TypeInfo,
-				EmitJniTypeSignatureAttribute = opt.CodeGenerationTarget != CodeGenerationTarget.JavaInterop1,
 			});
 
 			if (klass.TypeParameters != null && klass.TypeParameters.Any ())
