@@ -27,7 +27,7 @@ namespace MonoDroid.Generation
 		public string FromNative (CodeGenerationOptions opt, string var_name, bool owned)
 		{
 			if (IsArray)
-				return String.Format ("({0}[]{3}) JNIEnv.GetArray ({1}, {2}, typeof ({0}))", opt.GetOutputName (enum_type), var_name, owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer", opt.NullableOperator);
+				return String.Format ("({0}[]{3}) JNIEnv.GetArray<{0}> ({1}, {2})", opt.GetOutputName (enum_type), var_name, owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer", opt.NullableOperator);
 			else
 				return String.Format ("({0}) {1}", opt.GetOutputName (enum_type), var_name);
 		}
@@ -112,4 +112,3 @@ namespace MonoDroid.Generation
 		public bool NeedsPrep { get { return false; } }
 	}
 }
-

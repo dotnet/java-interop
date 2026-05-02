@@ -92,7 +92,7 @@ namespace MonoDroid.Generation {
 				return $"global::Java.Interop.JniEnvironment.Runtime.ValueManager.GetValue<global::{GetJavaInterop1MarshalType ()}>" +
 					$"(ref {var_name}, {transfer})";
 			}
-			return String.Format ("({0}[]{4}) JNIEnv.GetArray ({1}, {2}, typeof ({3}))", opt.GetOutputName (ElementType), var_name, owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer", opt.GetOutputName (sym.FullName), opt.NullableOperator);
+			return String.Format ("({0}[]{3}) JNIEnv.GetArray<{2}> ({1}, {4})", opt.GetOutputName (ElementType), var_name, opt.GetOutputName (sym.FullName), opt.NullableOperator, owned ? "JniHandleOwnership.TransferLocalRef" : "JniHandleOwnership.DoNotTransfer");
 		}
 
 		public string ToNative (CodeGenerationOptions opt, string var_name, Dictionary<string, string> mappings = null)
@@ -157,7 +157,7 @@ namespace MonoDroid.Generation {
 
 		public string[] PreCallback (CodeGenerationOptions opt, string var_name, bool owned)
 		{
-			return new string[] { String.Format ("var {1} = ({0}[]{4}) JNIEnv.GetArray ({2}, JniHandleOwnership.DoNotTransfer, typeof ({3}));", opt.GetOutputName (ElementType), opt.GetSafeIdentifier (var_name), opt.GetSafeIdentifier (TypeNameUtilities.GetNativeName (var_name)), opt.GetOutputName (sym.FullName), opt.NullableOperator) };
+			return new string[] { String.Format ("var {0} = ({1}[]{4}) JNIEnv.GetArray<{3}> ({2}, JniHandleOwnership.DoNotTransfer);", opt.GetSafeIdentifier (var_name), opt.GetOutputName (ElementType), opt.GetSafeIdentifier (TypeNameUtilities.GetNativeName (var_name)), opt.GetOutputName (sym.FullName), opt.NullableOperator) };
 		}
 
 		public string[] PreCall (CodeGenerationOptions opt, string var_name)
@@ -211,4 +211,3 @@ namespace MonoDroid.Generation {
 		}
 	}
 }
-
