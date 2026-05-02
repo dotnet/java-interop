@@ -14,6 +14,10 @@ using Android.Runtime;
 
 namespace Java.Interop {
 
+#if NET5_0_OR_GREATER
+	[System.Diagnostics.CodeAnalysis.RequiresDynamicCode ("Generated type registrations use legacy TypeManager mappings.")]
+	[System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode ("Generated type registrations use legacy TypeManager mappings that cannot be statically analyzed.")]
+#endif
 	partial class __TypeRegistrations {
 
 		public static void RegisterPackages ()
@@ -37,9 +41,6 @@ namespace Java.Interop {
 #endif // def MONODROID_TIMING
 		}
 
-#if NET5_0_OR_GREATER
-		[System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage ("Trimming", "IL2057")]
-#endif
 		static Type Lookup (string[] mappings, string javaType)
 		{
 			var managedType = Java.Interop.TypeManager.LookupTypeMapping (mappings, javaType);

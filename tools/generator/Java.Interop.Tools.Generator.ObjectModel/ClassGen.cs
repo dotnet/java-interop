@@ -197,6 +197,10 @@ namespace MonoDroid.Generation
 				sw.WriteLine ();
 				sw.WriteLine ("namespace Java.Interop {");
 				sw.WriteLine ();
+				sw.WriteLine ("#if NET5_0_OR_GREATER");
+				sw.WriteLine ("\t[System.Diagnostics.CodeAnalysis.RequiresDynamicCode (\"Generated type registrations use legacy TypeManager mappings.\")]");
+				sw.WriteLine ("\t[System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode (\"Generated type registrations use legacy TypeManager mappings that cannot be statically analyzed.\")]");
+				sw.WriteLine ("#endif");
 				sw.WriteLine ("\tpartial class __TypeRegistrations {");
 				sw.WriteLine ();
 				sw.WriteLine ("\t\tpublic static void RegisterPackages ()");
@@ -222,9 +226,6 @@ namespace MonoDroid.Generation
 				sw.WriteLine ("#endif // def MONODROID_TIMING");
 				sw.WriteLine ("\t\t}");
 				sw.WriteLine ();
-				sw.WriteLine ("#if NET5_0_OR_GREATER");
-				sw.WriteLine("\t\t[System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage (\"Trimming\", \"IL2057\")]");
-				sw.WriteLine ("#endif");
 				sw.WriteLine ("\t\tstatic Type{0} Lookup (string[] mappings, string javaType)", opt.NullableOperator);
 				sw.WriteLine ("\t\t{");
 				sw.WriteLine ("\t\t\tvar managedType = Java.Interop.TypeManager.LookupTypeMapping (mappings, javaType);");
