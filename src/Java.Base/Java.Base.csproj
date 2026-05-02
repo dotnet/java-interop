@@ -4,6 +4,7 @@
     <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
+    <IsAotCompatible>true</IsAotCompatible>
     <NoWarn>$(NoWarn);8764;0109;0114</NoWarn>
   </PropertyGroup>
 

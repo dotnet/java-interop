@@ -66,7 +66,18 @@ namespace Java.Interop {
 		[return: DynamicallyAccessedMembers (JniRuntime.JniTypeManager.MethodsConstructors)]
 		public override Type? GetTypeForNativeRegistration (JniTypeSignature typeSignature)
 		{
-			return GetType (typeSignature);
+			var type = base.GetTypeForNativeRegistration (typeSignature);
+			if (type != null) {
+				return type;
+			}
+
+			if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0 || typeMappings == null) {
+				return null;
+			}
+
+			return typeMappings.TryGetValue (typeSignature.SimpleReference, out var target)
+				? target
+				: null;
 		}
 
 		protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
