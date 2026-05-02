@@ -42,6 +42,27 @@ namespace Java.Interop {
 				: null;
 		}
 
+		[return: DynamicallyAccessedMembers (RequiredConstructors)]
+		public override Type? GetTypeAssignableTo (
+				JniTypeSignature typeSignature,
+				[DynamicallyAccessedMembers (RequiredConstructors)]
+				Type targetType)
+		{
+			var type = base.GetTypeAssignableTo (typeSignature, targetType);
+			if (type != null) {
+				return type;
+			}
+
+			if (!typeSignature.IsValid || typeSignature.SimpleReference == null || typeSignature.ArrayRank != 0 || typeMappings == null) {
+				return null;
+			}
+
+			if (typeMappings.TryGetValue (typeSignature.SimpleReference, out var target) && targetType.IsAssignableFrom (target)) {
+				return target;
+			}
+			return null;
+		}
+
 		[return: DynamicallyAccessedMembers (JniRuntime.JniTypeManager.MethodsConstructors)]
 		public override Type? GetTypeForNativeRegistration (JniTypeSignature typeSignature)
 		{

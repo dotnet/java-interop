@@ -37,4 +37,3 @@ namespace Java.Interop
 		public      Type?       InvokerType             {get; set;}
 	}
 }
-

@@ -30,6 +30,7 @@ namespace generator.SourceWriters
 			Attributes.Add (new RegisterAttr (klass.RawJniName, noAcw: true, additionalProperties: klass.AdditionalAttributeString ()) {
 				UseGlobal       = true,
 				MemberType	    = opt.CodeGenerationTarget != CodeGenerationTarget.JavaInterop1 ? null : (MemberTypes?) MemberTypes.TypeInfo,
+				EmitJniTypeSignatureAttribute = opt.CodeGenerationTarget != CodeGenerationTarget.JavaInterop1,
 			});
 
 			SourceWriterExtensions.AddSupportedOSPlatform (Attributes, klass, opt);

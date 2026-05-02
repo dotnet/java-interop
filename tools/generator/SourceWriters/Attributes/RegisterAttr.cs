@@ -18,6 +18,7 @@ namespace generator.SourceWriters
 		public bool UseGlobal { get; set; }	// TODO: Temporary for matching existing unit tests
 		public bool UseShortForm { get; set; }  // TODO: Temporary for matching existing unit tests
 		public bool AcwLast { get; set; }       // TODO: Temporary for matching existing unit tests
+		public bool EmitJniTypeSignatureAttribute { get; set; }
 
 		public MemberTypes? MemberType { get; set; }
 
@@ -58,16 +59,24 @@ namespace generator.SourceWriters
 			sb.Append (")]");
 
 			writer.WriteLine (sb.ToString ());
+
+			if (EmitJniTypeSignatureAttribute)
+				WriteJniTypeSignatureAttribute (writer);
+		}
+
+		void WriteJniTypeSignatureAttribute (CodeWriter writer)
+		{
+			var invokerType = string.IsNullOrEmpty (Connector)
+				? ""
+				: $", InvokerType=typeof ({Connector.Replace ('/', '.')})";
+			writer.WriteLine ($"[global::Java.Interop.JniTypeSignature (\"{Name}\", GenerateJavaPeer={(!DoNotGenerateAcw ? "true" : "false")}{invokerType})]");
 		}
 
 		private void WriteJavaInterop1Attribute (CodeWriter writer)
 		{
 			switch (MemberType) {
 				case MemberTypes.TypeInfo:
-					var invokerType = string.IsNullOrEmpty (Connector)
-						? ""
-						: $", InvokerType=typeof ({Connector.Replace ('/', '.')})";
-					writer.WriteLine ($"[global::Java.Interop.JniTypeSignature (\"{Name}\", GenerateJavaPeer={(DoNotGenerateAcw ? "false" : "true")}{invokerType})]");
+					WriteJniTypeSignatureAttribute (writer);
 					break;
 				case MemberTypes.Constructor:
 					writer.WriteLine ($"[global::Java.Interop.JniConstructorSignature (\"{Signature}\")]");
