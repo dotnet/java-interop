@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -108,9 +106,8 @@ namespace Java.Interop {
 			builder.LibraryHandler.LoadJvmLibrary (builder.JvmLibraryPath!);
 
 			if (!builder.ClassPath.Any (p => p.EndsWith ("java-interop.jar", StringComparison.OrdinalIgnoreCase))) {
-				var loc = GetAssemblyLocation (typeof (JreRuntimeOptions).Assembly);
-				var dir = string.IsNullOrEmpty (loc) ? null : Path.GetDirectoryName (loc);
-				var jij = string.IsNullOrEmpty (dir) ? null : Path.Combine (dir, "java-interop.jar");
+				var dir = GetBaseDirectory ();
+				var jij = Path.Combine (dir, "java-interop.jar");
 				if (!File.Exists (jij)) {
 					throw new FileNotFoundException ($"`java-interop.jar` is required.  Please add to `JreRuntimeOptions.ClassPath`.  Tried to find it in `{jij}`.");
 				}
@@ -151,13 +148,9 @@ namespace Java.Interop {
 			}
 		}
 
-		[UnconditionalSuppressMessage ("Trimming", "IL3000", Justification = "We check for a null Assembly.Location value!")]
-		internal static string? GetAssemblyLocation (Assembly assembly)
+		internal static string GetBaseDirectory ()
 		{
-			var location = assembly.Location;
-			if (!string.IsNullOrEmpty (location))
-				return location;
-			return null;
+			return AppContext.BaseDirectory;
 		}
 
 		JvmLibraryHandler LibraryHandler;
@@ -338,8 +331,7 @@ namespace Java.Interop {
 		static JreNativeMethods ()
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				var loc     = JreRuntime.GetAssemblyLocation (typeof (JreRuntime).Assembly) ?? throw new NotSupportedException ();
-				var baseDir = Path.GetDirectoryName (loc) ?? throw new NotSupportedException ();
+				var baseDir = JreRuntime.GetBaseDirectory ();
 				var newDir  = Path.Combine (baseDir, Environment.Is64BitProcess ? "win-x64" : "win-x86");
 				JreNativeMethods.AddDllDirectory (newDir);
 			}
@@ -362,4 +354,3 @@ namespace Java.Interop {
 		internal static extern int AddDllDirectory (string NewDirectory);
 	}
 }
-

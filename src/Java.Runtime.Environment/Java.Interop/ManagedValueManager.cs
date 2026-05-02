@@ -222,13 +222,11 @@ namespace Java.Interop {
 			self.SetPeerReference (reference);
 
 			cinfo.Invoke (self, argumentValues);
+		}
 
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			const string getUninitializedObject = "This code path is not used in Android projects.";
-			[UnconditionalSuppressMessage ("Trimming", "IL2067", Justification = getUninitializedObject)]
-			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = getUninitializedObject)]
-			static IJavaPeerable GetUninitializedObject (Type type) =>
-				(IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
+		static IJavaPeerable GetUninitializedObject ([DynamicallyAccessedMembers (Constructors)] Type type)
+		{
+			return (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
 		}
 
 		public override List<JniSurfacedPeerInfo> GetSurfacedPeers ()

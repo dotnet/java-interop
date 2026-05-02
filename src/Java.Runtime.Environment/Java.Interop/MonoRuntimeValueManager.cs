@@ -258,8 +258,6 @@ namespace Java.Interop {
 			}
 		}
 
-		const string NotUsedInAndroid = "This code path is not used in Android projects.";
-
 		public override void ActivatePeer (IJavaPeerable? self, JniObjectReference reference, [DynamicallyAccessedMembers (Constructors)] Type declaringType, ConstructorInfo cinfo, object?[]? argumentValues)
 		{
 			var runtime = JniEnvironment.Runtime;
@@ -268,12 +266,6 @@ namespace Java.Interop {
 				var instance  = GetUninitializedObject (declaringType);
 				instance.SetPeerReference (reference);
 				cinfo.Invoke (instance, argumentValues);
-
-				// FIXME: https://github.com/dotnet/java-interop/issues/1192
-				[UnconditionalSuppressMessage ("Trimming", "IL2067", Justification = NotUsedInAndroid)]
-				[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = NotUsedInAndroid)]
-				static IJavaPeerable GetUninitializedObject (Type type) =>
-					(IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
 			} catch (Exception e) {
 				var m = string.Format ("Could not activate {{ PeerReference={0} IdentityHashCode=0x{1} Java.Type={2} }} for managed type '{3}'.",
 						reference,
@@ -284,6 +276,11 @@ namespace Java.Interop {
 
 				throw new NotSupportedException (m, e);
 			}
+		}
+
+		static IJavaPeerable GetUninitializedObject ([DynamicallyAccessedMembers (Constructors)] Type type)
+		{
+			return (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
 		}
 
 		public override void FinalizePeer (IJavaPeerable value)
