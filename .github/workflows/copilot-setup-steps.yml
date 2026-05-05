@@ -1,20 +1,11 @@
-name: Copilot Setup Steps CI
+name: "Copilot Setup Steps"
 
-on:
-  pull_request:
-    paths:
-      - '.github/workflows/copilot-setup-steps.yml'
-      - '.github/workflows/java-interop-reviewer.md'
-      - '.github/workflows/java-interop-reviewer.lock.yml'
-
-permissions:
-  contents: read
-  pull-requests: write
+on: workflow_dispatch
 
 jobs:
   copilot-setup-steps:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
