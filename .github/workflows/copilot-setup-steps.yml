@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - '.github/workflows/copilot-setup-steps.yml'
+      - '.github/workflows/java-interop-reviewer.md'
+      - '.github/workflows/java-interop-reviewer.lock.yml'
 
 permissions:
   contents: read
@@ -18,11 +20,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-
-    - name: Install gh-aw extension
-      uses: github/gh-aw-actions/setup-cli@ba90f2186d7ad780ec640f364005fa24e797b360 # v0.68.3
-      with:
-        version: v0.68.3
 
     - name: Setup .NET 9
       uses: actions/setup-dotnet@v4
