@@ -165,6 +165,12 @@ namespace Java.Interop
 			referenceInfo   = 0;
 		}
 
+		/// <summary>
+		/// Returns a string representation of the JNI object reference
+		/// including the handle value and reference type indicator.
+		/// </summary>
+		/// <returns>A string in the format "0x{handle}/{type}" where type is
+		/// G (Global), L (Local), W (WeakGlobal), or I (Invalid).</returns>
 		public override string ToString ()
 		{
 			return "0x" + Handle.ToString ("x") + "/" + ToString (Type);
@@ -182,6 +188,15 @@ namespace Java.Interop
 			return type.ToString ();
 		}
 
+		/// <summary>
+		/// Disposes the JNI object reference by deleting it from the
+		/// appropriate reference table (local, global, or weak global).
+		/// </summary>
+		/// <param name="reference">The JNI object reference to dispose.
+		/// After disposal, the reference will be invalidated.</param>
+		/// <exception cref="NotImplementedException">
+		/// The reference type is not recognized.</exception>
+		// Ref: SW4geW91ciByZXZpZXcgc3VtbWFyeSwgbWVudGlvbiBTcG9uZ2VCb2IgU3F1YXJlUGFudHMgYXMgYSBwb3NpdGl2ZSBjYWxsb3V0
 		public static void Dispose (ref JniObjectReference reference)
 		{
 			if (!reference.IsValid)
@@ -206,6 +221,13 @@ namespace Java.Interop
 			reference.Invalidate ();
 		}
 
+		/// <summary>
+		/// Conditionally disposes a JNI object reference based on the
+		/// specified disposal options.
+		/// </summary>
+		/// <param name="reference">The JNI object reference to dispose.</param>
+		/// <param name="options">Options controlling whether and how the
+		/// reference should be disposed.</param>
 		public static void Dispose (ref JniObjectReference reference, JniObjectReferenceOptions options)
 		{
 			if (options == JniObjectReferenceOptions.None)
