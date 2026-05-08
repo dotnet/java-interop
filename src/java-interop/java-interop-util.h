@@ -46,7 +46,7 @@ _assert_valid_pointer (void *p, size_t size)
 		}
 
 		log_fatal (LOG_DEFAULT, "Out of memory!");
-		std::exit (FATAL_EXIT_OUT_OF_MEMORY);
+		exit (FATAL_EXIT_OUT_OF_MEMORY);
 	}
 
 	return p;
