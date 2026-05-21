@@ -33,6 +33,16 @@ namespace Java.Interop {
 				yield return target;
 		}
 
+		protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+		{
+			var type = base.GetTypeForSimpleReference (jniSimpleReference);
+			if (type != null)
+				return type;
+			if (typeMappings == null)
+				return null;
+			return typeMappings.TryGetValue (jniSimpleReference, out var target) ? target : null;
+		}
+
 		protected override IEnumerable<string> GetSimpleReferences (Type type)
 		{
 			return base.GetSimpleReferences (type)

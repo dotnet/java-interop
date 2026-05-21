@@ -261,27 +261,127 @@ namespace Java.Interop {
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
-			const string NotUsedInAndroid = "This code path is not used in Android projects.";
 
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = NotUsedInAndroid)]
-			static Type MakeArrayType (Type type) =>
-				type.MakeArrayType ();
+			readonly struct KnownArrayTypesInfo
+			{
+				public readonly Dictionary<Type, Type> ArrayTypes;
+				public readonly Dictionary<Type, Type> JavaObjectArrayTypes;
 
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = NotUsedInAndroid)]
-			[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = NotUsedInAndroid)]
-			static Type MakeGenericType (Type type, Type arrayType) =>
-				type.MakeGenericType (arrayType);
+				public KnownArrayTypesInfo (Dictionary<Type, Type> arrayTypes, Dictionary<Type, Type> javaObjectArrayTypes)
+				{
+					ArrayTypes            = arrayTypes;
+					JavaObjectArrayTypes = javaObjectArrayTypes;
+				}
+			}
 
-			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
+			static readonly Lazy<KnownArrayTypesInfo> KnownArrayTypes = new Lazy<KnownArrayTypesInfo> (InitKnownArrayTypes);
+
+			static KnownArrayTypesInfo InitKnownArrayTypes ()
+			{
+				var arrayTypes           = new Dictionary<Type, Type> ();
+				var javaObjectArrayTypes = new Dictionary<Type, Type> ();
+
+				AddKnownArrayTypes<string> (arrayTypes, javaObjectArrayTypes);
+
+				AddKnownPrimitiveArrayTypes<Boolean, JavaBooleanArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<SByte, JavaSByteArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Char, JavaCharArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Int16, JavaInt16Array> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Int32, JavaInt32Array> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Int64, JavaInt64Array> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Single, JavaSingleArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Double, JavaDoubleArray> (arrayTypes, javaObjectArrayTypes);
+
+				return new KnownArrayTypesInfo (arrayTypes, javaObjectArrayTypes);
+			}
+
+			static void AddKnownPrimitiveArrayTypes<
+					[DynamicallyAccessedMembers (Constructors)]
+					T,
+					[DynamicallyAccessedMembers (Constructors)]
+					TArray> (Dictionary<Type, Type> arrayTypes, Dictionary<Type, Type> javaObjectArrayTypes)
+			{
+				AddKnownArrayTypes<T> (arrayTypes, javaObjectArrayTypes);
+				AddKnownArrayTypes<JavaArray<T>> (arrayTypes, javaObjectArrayTypes);
+				AddKnownArrayTypes<JavaPrimitiveArray<T>> (arrayTypes, javaObjectArrayTypes);
+				AddKnownArrayTypes<TArray> (arrayTypes, javaObjectArrayTypes);
+			}
+
+			static void AddKnownArrayTypes<
+					[DynamicallyAccessedMembers (Constructors)]
+					T> (Dictionary<Type, Type> arrayTypes, Dictionary<Type, Type> javaObjectArrayTypes)
+			{
+				arrayTypes [typeof (T)]                         = typeof (T[]);
+				arrayTypes [typeof (T[])]                       = typeof (T[][]);
+				arrayTypes [typeof (T[][])]                     = typeof (T[][][]);
+				javaObjectArrayTypes [typeof (T)]               = typeof (JavaObjectArray<T>);
+				javaObjectArrayTypes [typeof (JavaObjectArray<T>)] = typeof (JavaObjectArray<JavaObjectArray<T>>);
+			}
+
+			static bool TryMakeArrayType (Type type, out Type? arrayType) =>
+				KnownArrayTypes.Value.ArrayTypes.TryGetValue (type, out arrayType);
+
+			static bool TryMakeJavaObjectArrayType (Type type, out Type? arrayType) =>
+				KnownArrayTypes.Value.JavaObjectArrayTypes.TryGetValue (type, out arrayType);
+
+			static Type GetUnsupportedArrayType (Type type) =>
+				throw new NotSupportedException ($"Array type construction for `{type}` is not supported.");
+
+			static Type GetUnsupportedJavaObjectArrayType (Type type) =>
+				throw new NotSupportedException ($"Generic Java array wrapper type construction for `{type}` is not supported.");
+
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
 
-				return GetTypes (typeSignature).FirstOrDefault ();
+				if (!typeSignature.IsValid || typeSignature.SimpleReference == null)
+					return null;
+
+				var type = GetTypeForSimpleReference (typeSignature.SimpleReference);
+				if (type == null)
+					return null;
+				if (typeSignature.ArrayRank == 0)
+					return type;
+				throw new NotSupportedException ($"DAM-annotated type lookup for array signature `{typeSignature}` is not supported. Use {nameof (GetTypes)} instead.");
 			}
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			protected virtual Type? GetTypeForSimpleReference (string jniSimpleReference)
+			{
+				AssertValid ();
+				AssertSimpleReference (jniSimpleReference);
+
+				return jniSimpleReference switch {
+					"java/lang/String"                         => TypeOf<string> (),
+					"V"                                        => TypeOfVoid (),
+					"Z"                                        => TypeOf<Boolean> (),
+					"java/lang/Boolean"                        => TypeOf<Boolean?> (),
+					"B"                                        => TypeOf<SByte> (),
+					"java/lang/Byte"                           => TypeOf<SByte?> (),
+					"C"                                        => TypeOf<Char> (),
+					"java/lang/Character"                      => TypeOf<Char?> (),
+					"S"                                        => TypeOf<Int16> (),
+					"java/lang/Short"                          => TypeOf<Int16?> (),
+					"I"                                        => TypeOf<Int32> (),
+					"java/lang/Integer"                        => TypeOf<Int32?> (),
+					"J"                                        => TypeOf<Int64> (),
+					"java/lang/Long"                           => TypeOf<Int64?> (),
+					"F"                                        => TypeOf<Single> (),
+					"java/lang/Float"                          => TypeOf<Single?> (),
+					"D"                                        => TypeOf<Double> (),
+					"java/lang/Double"                         => TypeOf<Double?> (),
+					_                                          => null,
+				};
+			}
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type TypeOf<
+					[DynamicallyAccessedMembers (MethodsConstructors)]
+					T> () => typeof (T);
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type TypeOfVoid () => typeof (void);
 
 			public virtual IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
 			{
@@ -313,7 +413,9 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
+							arrayType = TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)
+								? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+								: GetUnsupportedJavaObjectArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -322,7 +424,9 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeArrayType (arrayType);
+							arrayType = TryMakeArrayType (arrayType, out var nextArrayType)
+								? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+								: GetUnsupportedArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -345,14 +449,18 @@ namespace Java.Interop {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
 					while (rank-- > 0) {
-						arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
+						arrayType = TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)
+							? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+							: GetUnsupportedJavaObjectArrayType (arrayType);
 					}
 					yield return arrayType;
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;
 					while (rank-- > 0) {
-						arrayType   = MakeArrayType (arrayType);
+						arrayType = TryMakeArrayType (arrayType, out var nextArrayType)
+							? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+							: GetUnsupportedArrayType (arrayType);
 					}
 					yield return arrayType;
 				}
@@ -392,19 +500,6 @@ namespace Java.Interop {
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
-				// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L176-L186
-				const string makeGenericTypeMessage = "Generic 'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
-
-				// FIXME: https://github.com/dotnet/java-interop/issues/1192
-				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
-				[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = makeGenericTypeMessage)]
-				[return: DynamicallyAccessedMembers (Constructors)]
-				static Type MakeGenericType (
-						[DynamicallyAccessedMembers (Constructors)]
-						Type type,
-						Type [] arguments) =>
-					type.MakeGenericType (arguments);
-
 				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
 				if (signature == null || signature.InvokerType == null) {
 					return null;
@@ -414,7 +509,11 @@ namespace Java.Interop {
 				if (arguments.Length == 0)
 					return signature.InvokerType;
 
-				return MakeGenericType (signature.InvokerType, arguments);
+#if NET
+				throw new NotSupportedException ($"Generic invoker type construction for `{type}` is not supported.");
+#else   // NET
+				return signature.InvokerType.MakeGenericType (arguments);
+#endif  // NET
 			}
 
 #if NET
@@ -605,4 +704,3 @@ namespace Java.Interop {
 		}
 	}
 }
-

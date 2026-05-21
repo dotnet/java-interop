@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
 using System.Linq;
 
 using Java.Interop;
@@ -65,6 +64,12 @@ namespace Java.InteropTests {
 #pragma warning restore CS8600
 		}
 
+		protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+		{
+			return base.GetTypeForSimpleReference (jniSimpleReference) ??
+				(TypeMappings.TryGetValue (jniSimpleReference, out var target) ? target : null);
+		}
+
 		protected override IEnumerable<string> GetSimpleReferences (Type type)
 		{
 			return base.GetSimpleReferences (type)
@@ -91,7 +96,6 @@ namespace Java.InteropTests {
 		protected override IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimpleReference)
 		{
 			RequestedFallbackTypesForSimpleReference = jniSimpleReference;
-			Debug.WriteLine ($"# GetStaticMethodFallbackTypes (jniSimpleReference={jniSimpleReference})");
 
 			var slash       = jniSimpleReference.LastIndexOf ('/');
 			var desugarType = slash <= 0
@@ -167,4 +171,3 @@ namespace Java.InteropTests {
 #endif  // NET
 	}
 }
-

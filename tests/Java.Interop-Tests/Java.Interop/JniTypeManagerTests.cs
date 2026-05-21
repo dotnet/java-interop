@@ -137,6 +137,11 @@ namespace Java.InteropTests
 			Assert.AreEqual (typeof (double),   GetType ("D"));
 			Assert.AreEqual (typeof (string),   GetType ("java/lang/String"));
 			Assert.AreEqual (typeof (float?),   GetType ("java/lang/Float"));
+#if !__ANDROID__
+			Assert.AreEqual (typeof (GenericHolder<>), GetType (GenericHolder<int>.JniTypeName));
+#endif  // !__ANDROID__
+			Assert.Throws<NotSupportedException> (() => GetType ("[I"));
+			Assert.Throws<NotSupportedException> (() => GetType ("[Ljava/lang/String;"));
 			Assert.AreEqual (null,              GetType ("com/example/does/not/exist"));
 			Assert.AreEqual (null,              GetType ("Lcom/example/does/not/exist;"));
 			Assert.AreEqual (null,              GetType ("[Lcom/example/does/not/exist;"));
@@ -246,4 +251,3 @@ namespace Java.InteropTests
 		public  T   Value   {get; set;}
 	}
 }
-

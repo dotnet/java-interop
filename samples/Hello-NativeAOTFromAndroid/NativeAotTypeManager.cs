@@ -19,28 +19,19 @@ partial class NativeAotTypeManager : JniRuntime.JniTypeManager {
 		["my/MainActivity"]                     = typeof (MainActivity),
 	};
 
-	public override void RegisterNativeMembers (
-			JniType nativeClass,
-			[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
-			Type type,
-			ReadOnlySpan<char> methods)
-	{
-		Console.WriteLine ($"# jonp: RegisterNativeMembers: nativeClass={nativeClass} type=`{type}`");
-		base.RegisterNativeMembers (nativeClass, type, methods);
-	}
-
-
 	protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
 	{
-		Console.WriteLine ($"# jonp: GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}`");
-		if (typeMappings.TryGetValue (jniSimpleReference, out var target)) {
-			Console.WriteLine ($"# jonp:   GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}` -> `{target}`");
+		if (typeMappings.TryGetValue (jniSimpleReference, out var target))
 			yield return target;
-		}
-		foreach (var t in base.GetTypesForSimpleReference (jniSimpleReference)) {
-			Console.WriteLine ($"# jonp:   GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}` -> `{t}`");
+		foreach (var t in base.GetTypesForSimpleReference (jniSimpleReference))
 			yield return t;
-		}
+	}
+
+	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+	{
+		if (typeMappings.TryGetValue (jniSimpleReference, out var target))
+			return target;
+		return base.GetTypeForSimpleReference (jniSimpleReference);
 	}
 
 	protected override IEnumerable<string> GetSimpleReferences (Type type)

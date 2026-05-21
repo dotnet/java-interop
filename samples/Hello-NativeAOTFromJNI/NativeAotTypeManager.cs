@@ -19,6 +19,13 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 			yield return t;
 	}
 
+	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+	{
+		if (typeMappings.TryGetValue (jniSimpleReference, out var target))
+			return target;
+		return base.GetTypeForSimpleReference (jniSimpleReference);
+	}
+
 	protected override IEnumerable<string> GetSimpleReferences (Type type)
 	{
 		return base.GetSimpleReferences (type)
