@@ -51,30 +51,30 @@ namespace Java.Interop.Tools.Generator.Transformation
 			RemoveCollidingSiblings (gen, mangled);
 		}
 
-		// When multiple hash-mangled siblings of the same Kotlin source-name exist
-		// (common for Jetpack Compose `@Composable` functions with inline-class
-		// parameters), the rename above produces several methods with the same
-		// name and identical C#-erased parameter lists. Emitting them all causes
+		// After the rename above, hash-mangled siblings can collide with each
+		// other AND with pre-existing non-mangled overloads. Both cases produce
 		// CS0111 in the generated code. Until step 2 of dotnet/java-interop#1431
 		// projects inline-class params as strongly-typed wrappers, drop the
-		// duplicates deterministically (keep the first) and warn so the user can
-		// override via Metadata.xml if desired.
+		// mangled duplicates deterministically and warn so the user can
+		// override via Metadata.xml if desired. Non-mangled methods are always
+		// kept; only mangled methods are ever removed.
 		private static void RemoveCollidingSiblings (GenBase gen, List<Method> renamed)
 		{
-			if (renamed.Count < 2)
+			if (renamed.Count == 0)
 				return;
 
-			foreach (var group in renamed.GroupBy (m => m.Name)) {
-				var kept = new List<Method> ();
+			foreach (var method in renamed) {
+				// Collide against every other method on the type, not just other
+				// mangled siblings, so `tint(MyInlineLong)` collapsing to
+				// `tint(long)` collides with a pre-existing non-mangled
+				// `tint(long)` too.
+				var conflict = gen.Methods.FirstOrDefault (other => other != method &&
+					other.Name == method.Name && other.Matches (method));
+				if (conflict == null)
+					continue;
 
-				foreach (var method in group) {
-					if (kept.Any (k => k.Matches (method))) {
-						Report.LogCodedWarning (0, Report.WarningKotlinNameMangledCollision, method, gen.FullName, method.Name, method.JavaName);
-						gen.Methods.Remove (method);
-					} else {
-						kept.Add (method);
-					}
-				}
+				Report.LogCodedWarning (0, Report.WarningKotlinNameMangledCollision, method, gen.FullName, method.Name, method.JavaName);
+				gen.Methods.Remove (method);
 			}
 		}
 

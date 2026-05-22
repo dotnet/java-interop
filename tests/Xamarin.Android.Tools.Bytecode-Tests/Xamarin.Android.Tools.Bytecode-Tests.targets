@@ -41,23 +41,22 @@
   </Target>
 
   <!--
-      Build the real Kotlin/Gradle fixture in kotlin-gradle\ using the committed
-      Gradle wrapper. Unlike BuildKotlinClasses above, this is run unconditionally
-      (a JDK is already required for BuildClasses), so the .class files do not need
-      to be committed. The wrapper downloads Gradle + Kotlin on first run.
+      Build the real Kotlin/Gradle fixture in kotlin-gradle\ using the shared
+      Gradle wrapper from build-tools/gradle. Unlike BuildKotlinClasses above,
+      this is run unconditionally (a JDK is already required for BuildClasses),
+      so the .class files do not need to be committed. The wrapper downloads
+      Gradle + Kotlin on first run.
   -->
   <PropertyGroup>
     <_KotlinGradleProjectDir>$(MSBuildThisFileDirectory)kotlin-gradle</_KotlinGradleProjectDir>
-    <_GradleWrapperDir>$(MSBuildThisFileDirectory)..\..\build-tools\gradle</_GradleWrapperDir>
-    <_GradlewCommand Condition=" '$(OS)' == 'Windows_NT' ">$(_GradleWrapperDir)\gradlew.bat</_GradlewCommand>
-    <_GradlewCommand Condition=" '$(OS)' != 'Windows_NT' ">$(_GradleWrapperDir)/gradlew</_GradlewCommand>
   </PropertyGroup>
 
   <Target Name="BuildKotlinGradleProject"
         BeforeTargets="BeforeCompile"
         Inputs="@(TestKotlinGradleSource)"
         Outputs="@(TestKotlinGradleOutput)">
-    <Exec Command="&quot;$(_GradlewCommand)&quot; --quiet --no-daemon -p &quot;$(_KotlinGradleProjectDir)&quot; classes" />
+    <Exec Command="&quot;$(GradleWPath)&quot; $(GradleArgs) -p &quot;$(_KotlinGradleProjectDir)&quot; classes"
+          EnvironmentVariables="JAVA_HOME=$(JavaSdkDirectory);APP_HOME=$(GradleHome)" />
   </Target>
 
   <Target Name="BuildJar"
