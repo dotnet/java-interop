@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Java.Interop.Tools.Generator;
 using MonoDroid.Generation;
 using MonoDroid.Utils;
 
@@ -23,7 +24,9 @@ namespace Java.Interop.Tools.Generator.Transformation
 			// We need to generate C# compatible names as well as prevent overriding 
 			// them as we cannot generate JCW for them.
 
-			foreach (var method in c.Methods.Where (m => m.IsKotlinNameMangled)) {
+			var mangled = c.Methods.Where (m => m.IsKotlinNameMangled).ToList ();
+
+			foreach (var method in mangled) {
 
 				// If the method is virtual, mark it as !virtual as it can't be overridden in Java
 				if (!method.IsFinal)
@@ -34,12 +37,45 @@ namespace Java.Interop.Tools.Generator.Transformation
 
 				FixMethodName (method);
 			}
+
+			RemoveCollidingSiblings (c, mangled);
 		}
 
 		private static void FixupInterface (InterfaceGen gen)
 		{
-			foreach (var method in gen.Methods.Where (m => m.IsKotlinNameMangled))
+			var mangled = gen.Methods.Where (m => m.IsKotlinNameMangled).ToList ();
+
+			foreach (var method in mangled)
 				FixMethodName (method);
+
+			RemoveCollidingSiblings (gen, mangled);
+		}
+
+		// When multiple hash-mangled siblings of the same Kotlin source-name exist
+		// (common for Jetpack Compose `@Composable` functions with inline-class
+		// parameters), the rename above produces several methods with the same
+		// name and identical C#-erased parameter lists. Emitting them all causes
+		// CS0111 in the generated code. Until step 2 of dotnet/java-interop#1431
+		// projects inline-class params as strongly-typed wrappers, drop the
+		// duplicates deterministically (keep the first) and warn so the user can
+		// override via Metadata.xml if desired.
+		private static void RemoveCollidingSiblings (GenBase gen, List<Method> renamed)
+		{
+			if (renamed.Count < 2)
+				return;
+
+			foreach (var group in renamed.GroupBy (m => m.Name)) {
+				var kept = new List<Method> ();
+
+				foreach (var method in group) {
+					if (kept.Any (k => k.Matches (method))) {
+						Report.LogCodedWarning (0, Report.WarningKotlinNameMangledCollision, method, gen.FullName, method.Name, method.JavaName);
+						gen.Methods.Remove (method);
+					} else {
+						kept.Add (method);
+					}
+				}
+			}
 		}
 
 		private static void FixMethodName (Method method)
