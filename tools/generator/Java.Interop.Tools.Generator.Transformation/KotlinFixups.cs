@@ -55,7 +55,7 @@ namespace Java.Interop.Tools.Generator.Transformation
 		// other AND with pre-existing non-mangled overloads. Both cases produce
 		// CS0111 in the generated code. Until step 2 of dotnet/java-interop#1431
 		// projects inline-class params as strongly-typed wrappers, drop the
-		// mangled duplicates deterministically and warn so the user can
+		// later mangled duplicate deterministically and warn so the user can
 		// override via Metadata.xml if desired. Non-mangled methods are always
 		// kept; only mangled methods are ever removed.
 		private static void RemoveCollidingSiblings (GenBase gen, List<Method> renamed)
@@ -64,13 +64,14 @@ namespace Java.Interop.Tools.Generator.Transformation
 				return;
 
 			foreach (var method in renamed) {
-				// Collide against every other method on the type, not just other
-				// mangled siblings, so `tint(MyInlineLong)` collapsing to
-				// `tint(long)` collides with a pre-existing non-mangled
-				// `tint(long)` too.
-				var conflict = gen.Methods.FirstOrDefault (other => other != method &&
-					other.Name == method.Name && other.Matches (method));
-				if (conflict == null)
+				// Only treat `method` as the duplicate if a matching method
+				// (mangled or non-mangled) appears EARLIER in source order on
+				// the type. This keeps the first-declared overload and removes
+				// every later mangled sibling that collapses onto it.
+				var earlier = gen.Methods
+					.TakeWhile (m => m != method)
+					.FirstOrDefault (m => m.Name == method.Name && m.Matches (method));
+				if (earlier == null)
 					continue;
 
 				Report.LogCodedWarning (0, Report.WarningKotlinNameMangledCollision, method, gen.FullName, method.Name, method.JavaName);

@@ -62,6 +62,7 @@ namespace generatortests
 
 			Assert.AreEqual (1, klass.Methods.Count, "Duplicate hash-mangled sibling should have been removed.");
 			Assert.AreEqual ("Add", klass.Methods [0].Name);
+			Assert.AreEqual ("add-AAAAAAA", klass.Methods [0].JavaName, "The first hash-mangled sibling in source order should survive.");
 			Assert.IsTrue (warnings.Messages.Any (m => m.Contains ("BG8C02")), "Expected BG8C02 warning, got: " + string.Join (Environment.NewLine, warnings.Messages));
 		}
 
