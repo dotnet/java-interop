@@ -2,6 +2,13 @@ package com.xamarin.interop.performance;
 
 public class JavaTiming {
 
+	public static final int STATIC_READONLY_FIELD = getStaticReadonlyFieldValue ();
+
+	static int getStaticReadonlyFieldValue ()
+	{
+		return 42;
+	}
+
 	public static void StaticVoidMethod ()
 	{
 	}
