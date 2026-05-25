@@ -129,30 +129,28 @@ namespace Java.Interop {
 
 		static Dictionary<string, Type> InitJniBuiltinSimpleReferenceToType ()
 		{
-			var types = new Dictionary<string, Type> (StringComparer.Ordinal) {
-				{"java/lang/String", typeof (string)},
-				{"net/dot/jni/internal/JavaProxyObject",    typeof (JavaProxyObject)},
-				{"net/dot/jni/internal/JavaProxyThrowable", typeof (JavaProxyThrowable)},
-				{"V", typeof (void)},
-				{"Z", typeof (Boolean)},
-				{"java/lang/Boolean", typeof (Boolean?)},
-				{"B", typeof (SByte)},
-				{"java/lang/Byte", typeof (SByte?)},
-				{"C", typeof (Char)},
-				{"java/lang/Character", typeof (Char?)},
-				{"S", typeof (Int16)},
-				{"java/lang/Short", typeof (Int16?)},
-				{"I", typeof (Int32)},
-				{"java/lang/Integer", typeof (Int32?)},
-				{"J", typeof (Int64)},
-				{"java/lang/Long", typeof (Int64?)},
-				{"F", typeof (Single)},
-				{"java/lang/Float", typeof (Single?)},
-				{"D", typeof (Double)},
-				{"java/lang/Double", typeof (Double?)},
-			};
-
-			return types;
+				return new Dictionary<string, Type> (StringComparer.Ordinal) {
+					{"java/lang/String", typeof (string)},
+					{"net/dot/jni/internal/JavaProxyObject",    typeof (JavaProxyObject)},
+					{"net/dot/jni/internal/JavaProxyThrowable", typeof (JavaProxyThrowable)},
+					{"V", typeof (void)},
+					{"Z", typeof (Boolean)},
+					{"java/lang/Boolean", typeof (Boolean?)},
+					{"B", typeof (SByte)},
+					{"java/lang/Byte", typeof (SByte?)},
+					{"C", typeof (Char)},
+					{"java/lang/Character", typeof (Char?)},
+					{"S", typeof (Int16)},
+					{"java/lang/Short", typeof (Int16?)},
+					{"I", typeof (Int32)},
+					{"java/lang/Integer", typeof (Int32?)},
+					{"J", typeof (Int64)},
+					{"java/lang/Long", typeof (Int64?)},
+					{"F", typeof (Single)},
+					{"java/lang/Float", typeof (Single?)},
+					{"D", typeof (Double)},
+					{"java/lang/Double", typeof (Double?)},
+				};
 		}
 
 		static readonly Lazy<KeyValuePair<Type, JniValueMarshaler>[]> JniBuiltinMarshalers = new Lazy<KeyValuePair<Type, JniValueMarshaler>[]> (InitJniBuiltinMarshalers);

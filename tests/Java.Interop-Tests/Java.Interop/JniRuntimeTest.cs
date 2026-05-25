@@ -9,6 +9,9 @@ using NUnit.Framework;
 
 namespace Java.InteropTests
 {
+#if !__ANDROID__
+	[NonParallelizable]
+#endif  // !__ANDROID__
 	[TestFixture]
 	public class JniRuntimeTest : JavaVMFixture
 	{
@@ -63,6 +66,31 @@ namespace Java.InteropTests
 			Assert.Throws<ArgumentNullException> (() => new JavaVMWithNullBuilder ());
 		}
 
+#if !__ANDROID__
+		[Test]
+		public void ManagedPeerNativeRegistrationFalse_DoesNotInitializeManagedPeer ()
+		{
+			var c      = JniRuntime.CurrentRuntime;
+			int count  = ManagedPeer.InitCallCount;
+			JniRuntime r = null;
+			Exception error = null;
+			var t = new Thread (() => {
+				try {
+					r = new JniProxyRuntime (c, managedPeerNativeRegistration: false);
+					JniRuntime.SetCurrent (r);
+					Assert.AreEqual (count, ManagedPeer.InitCallCount);
+				} catch (Exception e) {
+					error = e;
+				}
+			});
+			t.Start ();
+			t.Join ();
+			Assert.IsNull (error);
+			Assert.IsNotNull (r);
+			JniRuntime.SetCurrent (c);
+		}
+#endif  // !__ANDROID__
+
 		class JavaVMWithNullBuilder : JniRuntime {
 			public JavaVMWithNullBuilder ()
 				: base ((JniRuntime.CreationOptions) null)
@@ -102,13 +130,13 @@ namespace Java.InteropTests
 	{
 		JniRuntime          Proxy;
 
-		public JniProxyRuntime (JniRuntime proxy)
-			: base (CreateOptions (proxy))
+		public JniProxyRuntime (JniRuntime proxy, bool managedPeerNativeRegistration = true)
+			: base (CreateOptions (proxy, managedPeerNativeRegistration))
 		{
 			Proxy   = proxy;
 		}
 
-		static JniRuntime.CreationOptions CreateOptions (JniRuntime proxy)
+		static JniRuntime.CreationOptions CreateOptions (JniRuntime proxy, bool managedPeerNativeRegistration)
 		{
 			return new JniRuntime.CreationOptions {
 				DestroyRuntimeOnDispose     = false,
@@ -116,6 +144,7 @@ namespace Java.InteropTests
 				ObjectReferenceManager      = new ProxyObjectReferenceManager (),
 				ValueManager                = new ProxyValueManager (),
 				TypeManager                 = new ProxyTypeManager (),
+				ManagedPeerNativeRegistration = managedPeerNativeRegistration,
 			};
 		}
 
@@ -167,4 +196,3 @@ namespace Java.InteropTests
 		}
 	}
 }
-
