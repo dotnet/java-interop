@@ -12,6 +12,7 @@ using System.Threading;
 namespace Java.Interop
 {
 	[SuppressMessage ("Performance", "CA1823:Avoid unused private fields", Justification = "Fields preserve the unmanaged JavaVM vtable layout.")]
+	// These fields are populated from native memory and some are only present to preserve the JavaVM vtable layout.
 #pragma warning disable CS0169, CS0649
 	unsafe struct JavaVMInterface {
 		IntPtr reserved0;
