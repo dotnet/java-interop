@@ -19,11 +19,11 @@ namespace Java.Interop
 		IntPtr reserved1;
 		IntPtr reserved2;
 
-		delegate* unmanaged<IntPtr, int> destroyJavaVM; // jint       (*DestroyJavaVM)(JavaVM*);
+		delegate* unmanaged<IntPtr, int> destroyJavaVM;
 		delegate* unmanaged<IntPtr, IntPtr*, JavaVMThreadAttachArgs*, int> attachCurrentThread;
 		delegate* unmanaged<IntPtr, int> detachCurrentThread;
 		delegate* unmanaged<IntPtr, IntPtr*, int, int> getEnv;
-		delegate* unmanaged<IntPtr, IntPtr*, IntPtr, int> attachCurrentThreadAsDaemon; //jint        (*AttachCurrentThreadAsDaemon)(JavaVM*, JNIEnv**, void*);
+		delegate* unmanaged<IntPtr, IntPtr*, IntPtr, int> attachCurrentThreadAsDaemon;
 
 		public int DestroyJavaVM (IntPtr javavm)
 		{
