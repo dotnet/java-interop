@@ -137,6 +137,7 @@ namespace Java.Interop {
 				}
 			}
 
+
 			// NOTE: This method needs to be kept in sync with GetTypeSignatures()
 			// This version of the method has removed IEnumerable for performance reasons.
 			public JniTypeSignature GetTypeSignature (Type type)
@@ -372,6 +373,9 @@ namespace Java.Interop {
 				if (JniBuiltinSimpleReferenceToType.Value.TryGetValue (jniSimpleReference, out var ret)) {
 					yield return ret;
 				}
+				if (RuntimeFeature.ManagedPeerNativeRegistration && jniSimpleReference == ManagedPeer.JniTypeName) {
+					yield return typeof (ManagedPeer);
+				}
 				yield break;
 			}
 
@@ -605,4 +609,3 @@ namespace Java.Interop {
 		}
 	}
 }
-

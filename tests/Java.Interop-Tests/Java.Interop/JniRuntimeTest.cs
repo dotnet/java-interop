@@ -75,28 +75,13 @@ namespace Java.InteropTests
 
 #if !__ANDROID__
 		[Test]
-		public void ManagedPeerNativeRegistrationFalse_DoesNotInitializeManagedPeer ()
+		public void ManagedPeerNativeRegistrationFalse_RemovesManagedPeerBuiltinMapping ()
 		{
 			var c      = JniRuntime.CurrentRuntime;
-			int count  = ManagedPeer.InitCallCount;
-			JniRuntime r = null;
-			Exception error = null;
 			AppContext.SetSwitch ("Java.Interop.RuntimeFeature.ManagedPeerNativeRegistration", false);
 			try {
-				var t = new Thread (() => {
-					try {
-						r = new JniProxyRuntime (c);
-						JniRuntime.SetCurrent (r);
-						Assert.AreEqual (count, ManagedPeer.InitCallCount);
-					} catch (Exception e) {
-						error = e;
-					}
-				});
-				t.Start ();
-				t.Join ();
-				Assert.IsNull (error);
-				Assert.IsNotNull (r);
-				JniRuntime.SetCurrent (c);
+				var types = c.TypeManager.GetTypes (new JniTypeSignature (ManagedPeer.JniTypeName));
+				Assert.IsEmpty (types);
 			} finally {
 				AppContext.SetSwitch ("Java.Interop.RuntimeFeature.ManagedPeerNativeRegistration", true);
 			}
