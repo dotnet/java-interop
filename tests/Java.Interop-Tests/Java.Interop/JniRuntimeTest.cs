@@ -66,6 +66,13 @@ namespace Java.InteropTests
 			Assert.Throws<ArgumentNullException> (() => new JavaVMWithNullBuilder ());
 		}
 
+		[Test]
+		public void BuiltInSimpleReferenceMap_DoesNotRootManagedPeer ()
+		{
+			var types = JniRuntime.CurrentRuntime.TypeManager.GetTypes (new JniTypeSignature (ManagedPeer.JniTypeName));
+			Assert.IsEmpty (types);
+		}
+
 #if !__ANDROID__
 		[Test]
 		public void ManagedPeerNativeRegistrationFalse_DoesNotInitializeManagedPeer ()
