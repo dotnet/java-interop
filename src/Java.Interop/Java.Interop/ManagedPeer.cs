@@ -37,6 +37,8 @@ namespace Java.Interop {
 			);
 		}
 
+		internal static int InitCallCount;
+
 		ManagedPeer ()
 		{
 		}
@@ -45,6 +47,7 @@ namespace Java.Interop {
 		{
 			// Present so that JniRuntime has _something_ to reference to
 			// prompt invocation of the static constructor & registration
+			InitCallCount++;
 		}
 
 		public override JniPeerMembers JniPeerMembers {
