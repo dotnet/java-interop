@@ -152,10 +152,6 @@ namespace Java.Interop {
 				{"java/lang/Double", typeof (Double?)},
 			};
 
-			if (RuntimeFeature.ManagedPeerNativeRegistration) {
-				types.Add ("net/dot/jni/ManagedPeer", typeof (ManagedPeer));
-			}
-
 			return types;
 		}
 
