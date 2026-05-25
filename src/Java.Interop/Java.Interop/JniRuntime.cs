@@ -66,7 +66,6 @@ namespace Java.Interop
 			public  JniTypeManager?             TypeManager                 {get; set;}
 			public  string?                     JvmLibraryPath              {get; set;}
 			public  bool                        JniAddNativeMethodRegistrationAttributePresent { get; set; } = true;
-			public  bool                        ManagedPeerNativeRegistration { get; set; } = true;
 
 			public CreationOptions ()
 			{
@@ -218,7 +217,7 @@ namespace Java.Interop
 			}
 
 #if !XA_JI_EXCLUDE
-			if (options.ManagedPeerNativeRegistration) {
+			if (RuntimeFeature.ManagedPeerNativeRegistration) {
 				ManagedPeer.Init ();
 			}
 #endif  // !XA_JI_EXCLUDE
