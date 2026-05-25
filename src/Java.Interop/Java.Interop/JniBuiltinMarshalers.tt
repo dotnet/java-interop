@@ -102,7 +102,7 @@ namespace Java.Interop {
 
 		static Dictionary<string, Type> InitJniBuiltinSimpleReferenceToType ()
 		{
-				var mappings = new Dictionary<string, Type> (StringComparer.Ordinal) {
+				return new Dictionary<string, Type> (StringComparer.Ordinal) {
 					{"java/lang/String", typeof (string)},
 					{"net/dot/jni/internal/JavaProxyObject",    typeof (JavaProxyObject)},
 					{"net/dot/jni/internal/JavaProxyThrowable", typeof (JavaProxyThrowable)},
@@ -116,10 +116,6 @@ namespace Java.Interop {
 	 }
 #>
 				};
-			if (RuntimeFeature.ManagedPeerNativeRegistration) {
-				mappings.Add (ManagedPeer.JniTypeName, typeof (ManagedPeer));
-			}
-			return mappings;
 		}
 
 		static readonly Lazy<KeyValuePair<Type, JniValueMarshaler>[]> JniBuiltinMarshalers = new Lazy<KeyValuePair<Type, JniValueMarshaler>[]> (InitJniBuiltinMarshalers);
