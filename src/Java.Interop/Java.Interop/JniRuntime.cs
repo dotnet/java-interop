@@ -11,23 +11,38 @@ using System.Threading;
 
 namespace Java.Interop
 {
-	delegate int DestroyJavaVMDelegate (IntPtr javavm);
-	delegate int GetEnvDelegate (IntPtr javavm, out IntPtr envptr, int version);
-	delegate int AttachCurrentThreadDelegate (IntPtr javavm, out IntPtr env, ref JavaVMThreadAttachArgs args);
-	delegate int DetachCurrentThreadDelegate (IntPtr javavm);
-	delegate int AttachCurrentThreadAsDaemonDelegate (IntPtr javavm, out IntPtr env, IntPtr args);
+	[SuppressMessage ("Performance", "CA1823:Avoid unused private fields", Justification = "Fields preserve the unmanaged JavaVM vtable layout.")]
+#pragma warning disable CS0169, CS0649
+	unsafe struct JavaVMInterface {
+		IntPtr reserved0;
+		IntPtr reserved1;
+		IntPtr reserved2;
 
-	struct JavaVMInterface {
-		public IntPtr reserved0;
-		public IntPtr reserved1;
-		public IntPtr reserved2;
+		delegate* unmanaged<IntPtr, int> destroyJavaVM; // jint       (*DestroyJavaVM)(JavaVM*);
+		delegate* unmanaged<IntPtr, IntPtr*, JavaVMThreadAttachArgs*, int> attachCurrentThread;
+		delegate* unmanaged<IntPtr, int> detachCurrentThread;
+		delegate* unmanaged<IntPtr, IntPtr*, int, int> getEnv;
+		delegate* unmanaged<IntPtr, IntPtr*, IntPtr, int> attachCurrentThreadAsDaemon; //jint        (*AttachCurrentThreadAsDaemon)(JavaVM*, JNIEnv**, void*);
 
-		public DestroyJavaVMDelegate DestroyJavaVM; // jint       (*DestroyJavaVM)(JavaVM*);
-		public AttachCurrentThreadDelegate AttachCurrentThread;
-		public DetachCurrentThreadDelegate DetachCurrentThread;
-		public GetEnvDelegate GetEnv;
-		public AttachCurrentThreadAsDaemonDelegate AttachCurrentThreadAsDaemon; //jint        (*AttachCurrentThreadAsDaemon)(JavaVM*, JNIEnv**, void*);
+		public int DestroyJavaVM (IntPtr javavm)
+		{
+			return destroyJavaVM (javavm);
+		}
+
+		public int AttachCurrentThread (IntPtr javavm, out IntPtr env, ref JavaVMThreadAttachArgs args)
+		{
+			fixed (IntPtr* envp = &env)
+			fixed (JavaVMThreadAttachArgs* argsp = &args)
+				return attachCurrentThread (javavm, envp, argsp);
+		}
+
+		public int GetEnv (IntPtr javavm, out IntPtr envptr, int version)
+		{
+			fixed (IntPtr* envp = &envptr)
+				return getEnv (javavm, envp, version);
+		}
 	}
+#pragma warning restore CS0169, CS0649
 
 	public enum JniVersion {
 		// v1_1    = 0x00010001,
@@ -179,7 +194,9 @@ namespace Java.Interop
 			} else {
 				InvocationPointer   = options.InvocationPointer;
 			}
-			Invoker             = CreateInvoker (InvocationPointer);
+			unsafe {
+				Invoker = *(JavaVMInterface*) Marshal.ReadIntPtr (InvocationPointer);
+			}
 
 			SetValueManager (options);
 
@@ -252,12 +269,6 @@ namespace Java.Interop
 		}
 
 		partial void SetValueManager (CreationOptions options);
-
-		static unsafe JavaVMInterface CreateInvoker (IntPtr handle)
-		{
-			IntPtr p = Marshal.ReadIntPtr (handle);
-			return (JavaVMInterface) Marshal.PtrToStructure<JavaVMInterface> (p)!;
-		}
 
 		~JniRuntime ()
 		{
@@ -442,4 +453,3 @@ namespace Java.Interop
 		}
 	}
 }
-
