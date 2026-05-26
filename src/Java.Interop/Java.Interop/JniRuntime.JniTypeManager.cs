@@ -137,7 +137,6 @@ namespace Java.Interop {
 				}
 			}
 
-
 			// NOTE: This method needs to be kept in sync with GetTypeSignatures()
 			// This version of the method has removed IEnumerable for performance reasons.
 			public JniTypeSignature GetTypeSignature (Type type)
