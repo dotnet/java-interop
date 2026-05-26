@@ -142,6 +142,31 @@ namespace generatortests
 			Assert.IsTrue (warnings.Messages.Any (m => m.Contains ("BG8C02")), "Expected BG8C02 warning.");
 		}
 
+		[Test, NonParallelizable]
+		public void MangledMethod_CollidesWithNonMangledOverload_ReversedOrder ()
+		{
+			// Same as above but with the mangled method declared FIRST. The
+			// non-mangled real Kotlin API must still win regardless of order.
+			var xml = XDocument.Parse (@"<package name='com.example.test' jni-name='com/example/test'>
+				<class name='test'>
+					<method name='add-AAAAAAA' final='false'>
+						<parameter name='p0' type='long' jni-type='J' />
+					</method>
+					<method name='add' final='false'>
+						<parameter name='p0' type='long' jni-type='J' />
+					</method>
+				</class>
+			</package>");
+			var klass = XmlApiImporter.CreateClass (xml.Root, xml.Root.Element ("class"), new CodeGenerationOptions ());
+
+			using var warnings = CaptureWarnings ();
+			KotlinFixups.Fixup (new [] { (GenBase) klass }.ToList ());
+
+			Assert.AreEqual (1, klass.Methods.Count, "Mangled duplicate should have been removed regardless of source order.");
+			Assert.AreEqual ("add", klass.Methods [0].JavaName, "The non-mangled method should survive regardless of order.");
+			Assert.IsTrue (warnings.Messages.Any (m => m.Contains ("BG8C02")), "Expected BG8C02 warning.");
+		}
+
 		static WarningCapture CaptureWarnings () => new WarningCapture ();
 
 		sealed class WarningCapture : IDisposable

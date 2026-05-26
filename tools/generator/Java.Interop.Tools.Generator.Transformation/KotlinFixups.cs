@@ -55,24 +55,30 @@ namespace Java.Interop.Tools.Generator.Transformation
 		// other AND with pre-existing non-mangled overloads. Both cases produce
 		// CS0111 in the generated code. Until step 2 of dotnet/java-interop#1431
 		// projects inline-class params as strongly-typed wrappers, drop the
-		// later mangled duplicate deterministically and warn so the user can
-		// override via Metadata.xml if desired. Non-mangled methods are always
-		// kept; only mangled methods are ever removed.
+		// mangled duplicate deterministically and warn so the user can override
+		// via Metadata.xml if desired. Non-mangled methods are always kept; only
+		// mangled methods are ever removed.
 		private static void RemoveCollidingSiblings (GenBase gen, List<Method> renamed)
 		{
 			if (renamed.Count == 0)
 				return;
 
 			foreach (var method in renamed) {
-				// Only treat `method` as the duplicate if a matching method
-				// (mangled or non-mangled) appears EARLIER in source order on
-				// the type. This keeps the first-declared overload and removes
-				// every later mangled sibling that collapses onto it.
-				var earlier = gen.Methods
-					.TakeWhile (m => m != method)
-					.FirstOrDefault (m => m.Name == method.Name && m.Matches (method));
-				if (earlier == null)
-					continue;
+				// A mangled method is always the "lesser" choice compared to a
+				// real non-mangled Kotlin API, so drop it whenever ANY non-mangled
+				// overload matches — regardless of source order.
+				var nonMangledMatch = gen.Methods
+					.FirstOrDefault (m => m != method && !m.IsKotlinNameMangled
+						&& m.Name == method.Name && m.Matches (method));
+				if (nonMangledMatch == null) {
+					// Otherwise (only mangled siblings collide), keep the
+					// first-declared one and drop later mangled duplicates.
+					var earlierMangled = gen.Methods
+						.TakeWhile (m => m != method)
+						.FirstOrDefault (m => m.Name == method.Name && m.Matches (method));
+					if (earlierMangled == null)
+						continue;
+				}
 
 				Report.LogCodedWarning (0, Report.WarningKotlinNameMangledCollision, method, gen.FullName, method.Name, method.JavaName);
 				gen.Methods.Remove (method);
