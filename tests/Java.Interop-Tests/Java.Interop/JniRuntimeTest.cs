@@ -70,7 +70,7 @@ namespace Java.InteropTests
 		public void BuiltInSimpleReferenceMap_ContainsManagedPeerByDefault ()
 		{
 			var types = JniRuntime.CurrentRuntime.TypeManager.GetTypes (new JniTypeSignature (ManagedPeer.JniTypeName));
-			CollectionAssert.Contains (types, typeof (ManagedPeer));
+			Assert.IsTrue (types.Contains (typeof (ManagedPeer)));
 		}
 
 #if !__ANDROID__
