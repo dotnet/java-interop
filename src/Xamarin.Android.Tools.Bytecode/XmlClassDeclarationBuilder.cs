@@ -59,7 +59,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if (string.IsNullOrEmpty (underlying))
 				yield break;
 			yield return new XAttribute ("kotlin-inline-class", "true");
-			yield return new XAttribute ("kotlin-inline-class-underlying-jni-type", underlying!);
+			yield return new XAttribute ("kotlin-inline-class-underlying-jni-type", underlying);
 		}
 
 		string GetElementName ()
@@ -383,7 +383,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 		{
 			if (string.IsNullOrEmpty (method.KotlinName))
 				return null;
-			return new XAttribute ("managedName", method.KotlinName!);
+			return new XAttribute ("managedName", method.KotlinName);
 		}
 
 		// dotnet/java-interop#1431 (Phase 2): when a method's Kotlin source-level
@@ -393,7 +393,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 		{
 			if (string.IsNullOrEmpty (method.KotlinInlineClassReturnJniType))
 				return null;
-			return new XAttribute ("kotlin-inline-class-return-jni-type", method.KotlinInlineClassReturnJniType!);
+			return new XAttribute ("kotlin-inline-class-return-jni-type", method.KotlinInlineClassReturnJniType);
 		}
 
 		static XAttribute? GetNative (MethodInfo method)
@@ -464,7 +464,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 		{
 			if (string.IsNullOrEmpty (p.KotlinInlineClassJniType))
 				return null;
-			return new XAttribute ("kotlin-inline-class-jni-type", p.KotlinInlineClassJniType!);
+			return new XAttribute ("kotlin-inline-class-jni-type", p.KotlinInlineClassJniType);
 		}
 
 		IEnumerable<XElement> GetExceptions (MethodInfo method)

@@ -1,3 +1,4 @@
+using System;
 using MonoDroid.Generation;
 using Xamarin.SourceWriter;
 
@@ -72,7 +73,7 @@ namespace generator.SourceWriters
 				"I" => "int",
 				"J" => "long",
 				"S" => "short",
-				_ => "long",
+				_ => throw new ArgumentOutOfRangeException (nameof (jni), jni, "Unsupported JNI primitive descriptor"),
 			};
 		}
 	}
