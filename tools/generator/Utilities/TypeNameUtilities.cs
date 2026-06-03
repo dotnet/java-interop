@@ -19,7 +19,9 @@ namespace MonoDroid.Generation
 				return null;
 			if (jniSignature.Length < 3 || jniSignature [0] != 'L' || jniSignature [jniSignature.Length - 1] != ';')
 				return null;
-			return jniSignature.Substring (1, jniSignature.Length - 2).Replace ('/', '.');
+			return jniSignature.Substring (1, jniSignature.Length - 2)
+				.Replace ('/', '.')
+				.Replace ('$', '.');
 		}
 
 		// These must be sorted for BinarySearch to work

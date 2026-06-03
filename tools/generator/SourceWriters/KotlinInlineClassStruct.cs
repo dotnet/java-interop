@@ -1,4 +1,3 @@
-using System;
 using MonoDroid.Generation;
 using Xamarin.SourceWriter;
 
@@ -11,13 +10,13 @@ namespace generator.SourceWriters
 	// thunks marshal the primitive value unchanged.
 	public class KotlinInlineClassStruct : TypeWriter
 	{
-		readonly ClassGen klass;
 		readonly string underlying_csharp_type;
+		readonly string nullable;
 
 		public KotlinInlineClassStruct (ClassGen klass, CodeGenerationOptions opt)
 		{
-			this.klass = klass;
 			underlying_csharp_type = JniPrimitiveToCSharpType (klass.KotlinInlineClassUnderlyingJniType);
+			nullable = opt.NullableOperator;
 
 			Name = klass.Name;
 			SetVisibility (klass.Visibility);
@@ -44,6 +43,7 @@ namespace generator.SourceWriters
 		{
 			var t = underlying_csharp_type;
 			var n = Name;
+			var q = nullable;
 
 			writer.WriteLine ($"public readonly {t} Value;");
 			writer.WriteLine ();
@@ -56,9 +56,9 @@ namespace generator.SourceWriters
 			writer.WriteLine ($"public static bool operator != ({n} left, {n} right) => !left.Equals (right);");
 			writer.WriteLine ();
 			writer.WriteLine ($"public bool Equals ({n} other) => Value.Equals (other.Value);");
-			writer.WriteLine ($"public override bool Equals (object? obj) => obj is {n} other && Equals (other);");
+			writer.WriteLine ($"public override bool Equals (object{q} obj) => obj is {n} other && Equals (other);");
 			writer.WriteLine ("public override int GetHashCode () => Value.GetHashCode ();");
-			writer.WriteLine ("public override string? ToString () => Value.ToString ();");
+			writer.WriteLine ($"public override string{q} ToString () => Value.ToString ();");
 		}
 
 		static string JniPrimitiveToCSharpType (string jni)
