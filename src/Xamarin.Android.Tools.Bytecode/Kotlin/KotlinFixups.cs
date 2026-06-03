@@ -11,6 +11,13 @@ namespace Xamarin.Android.Tools.Bytecode
 	{
 		public static void Fixup (IList<ClassFile> classes)
 		{
+			// Pre-pass: identify Kotlin `@JvmInline value class` types and record
+			// each one's JNI name -> backing primitive descriptor. We need this
+			// map before processing methods so that a method on class A that takes
+			// an inline class B as a parameter (via Kotlin metadata) can be stamped
+			// even if B is later in `classes`. See dotnet/java-interop#1431.
+			var inlineClasses = DetectInlineClasses (classes);
+
 			foreach (var c in classes) {
 				// See if this is a Kotlin class
 				var attr = c.Attributes.OfType<RuntimeVisibleAnnotationsAttribute> ().FirstOrDefault ();
@@ -51,7 +58,7 @@ namespace Xamarin.Android.Tools.Bytecode
 						// and we need to find the "best" match for each Java method.
 						foreach (var java_method in c.Methods)
 							if (FindKotlinFunctionMetadata (metadata, java_method) is KotlinFunction function_metadata)
-								FixupFunction (java_method, function_metadata, class_metadata);
+								FixupFunction (java_method, function_metadata, class_metadata, inlineClasses);
 					}
 
 					if (metadata.Properties != null) {
@@ -59,7 +66,7 @@ namespace Xamarin.Android.Tools.Bytecode
 							var getter = FindJavaPropertyGetter (metadata, prop, c);
 							var setter = FindJavaPropertySetter (metadata, prop, c);
 
-							FixupProperty (getter, setter, prop);
+							FixupProperty (getter, setter, prop, inlineClasses);
 
 							FixupField (FindJavaFieldProperty (metadata, prop, c), prop);
 						}
@@ -69,6 +76,75 @@ namespace Xamarin.Android.Tools.Bytecode
 					Log.Warning (0, $"class-parse: warning: Unable to parse Kotlin metadata on '{c.ThisClass.Name}': {ex}");
 				}
 			}
+		}
+
+		// Identifies Kotlin `@JvmInline value class` types in `classes` and stamps
+		// each `ClassFile.KotlinInlineClassUnderlyingJniType` with the JNI descriptor
+		// of its single backing field. Returns a map from the class's *Kotlin metadata*
+		// class-name representation (e.g. `com/example/MyColor;`) to that descriptor,
+		// for use when projecting `KotlinType.ClassName` references on parameters and
+		// return types of OTHER methods. See dotnet/java-interop#1431 (Phase 2).
+		static Dictionary<string, string> DetectInlineClasses (IList<ClassFile> classes)
+		{
+			var map = new Dictionary<string, string> (StringComparer.Ordinal);
+			foreach (var c in classes) {
+				var ann = c.Attributes.OfType<RuntimeVisibleAnnotationsAttribute> ().FirstOrDefault ();
+				if (ann is null)
+					continue;
+
+				// `@JvmInline` is the JVM-level marker for Kotlin inline/value classes.
+				if (!ann.Annotations.Any (a => a.Type == "Lkotlin/jvm/JvmInline;"))
+					continue;
+
+				// Sanity-check via Kotlin metadata: must be `kind == 1` (Class) and
+				// have IsInlineClass set. This filters out `@JvmInline` on things
+				// kotlinc may have emitted in the future for non-class kinds.
+				var meta = ann.Annotations.SingleOrDefault (a => a.Type == "Lkotlin/Metadata;");
+				if (meta is null)
+					continue;
+
+				try {
+					var km = KotlinMetadata.FromAnnotation (meta);
+					if (km.AsClassMetadata () is not KotlinClass kc)
+						continue;
+					if ((kc.Flags & KotlinClassFlags.IsInlineClass) == 0)
+						continue;
+
+					// The single non-synthetic, non-static instance field is the
+					// inline-class backing value. (Synthetic fields like `Companion`
+					// are filtered out.)
+					var backing = c.Fields.FirstOrDefault (f =>
+						!f.AccessFlags.HasFlag (FieldAccessFlags.Synthetic) &&
+						!f.AccessFlags.HasFlag (FieldAccessFlags.Static));
+					if (backing is null)
+						continue;
+
+					c.KotlinInlineClassUnderlyingJniType = backing.Descriptor;
+
+					// Kotlin's `KotlinType.ClassName` strings are stored without the
+					// leading `L` but with a trailing `;` (e.g. `com/example/MyColor;`).
+					// We index by that form so callers can look up directly from
+					// `kotlin_p.Type.ClassName` without string surgery.
+					var jvmName = c.ThisClass.Name.Value + ";";
+					map [jvmName] = backing.Descriptor;
+				} catch (Exception ex) {
+					Log.Warning (0, $"class-parse: warning: Unable to detect inline class on '{c.ThisClass.Name}': {ex}");
+				}
+			}
+			return map;
+		}
+
+		// JNI signature for the Kotlin inline class referenced by `kotlinTypeClassName`,
+		// or null when the name is unknown / not an inline class. The returned form
+		// has a leading `L` and trailing `;` so it matches `ClassFile.FullJniName`
+		// and other JNI-signature strings used throughout the pipeline.
+		static string? GetInlineClassJniType (string? kotlinTypeClassName, IDictionary<string, string> inlineClasses)
+		{
+			if (kotlinTypeClassName is null)
+				return null;
+			if (!inlineClasses.ContainsKey (kotlinTypeClassName))
+				return null;
+			return "L" + kotlinTypeClassName;
 		}
 
 		static void FixupClassVisibility (ClassFile klass, KotlinClass metadata)
@@ -179,7 +255,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			}
 		}
 
-		static void FixupFunction (MethodInfo? method, KotlinFunction metadata, KotlinClass? kotlinClass)
+		static void FixupFunction (MethodInfo? method, KotlinFunction metadata, KotlinClass? kotlinClass, IDictionary<string, string> inlineClasses)
 		{
 			if (method is null || !method.IsPubliclyVisible)
 				return;
@@ -209,10 +285,20 @@ namespace Xamarin.Android.Tools.Bytecode
 
 				// Handle erasure of Kotlin unsigned types
 				java_p.KotlinType = GetKotlinType (java_p.Type.TypeSignature, kotlin_p.Type.ClassName);
+
+				// Inline-class projection: if the Kotlin source-level type for this
+				// parameter is a `@JvmInline value class` we know about, record its
+				// JNI signature so the generator can later swap the parameter type
+				// for a strongly-typed wrapper struct while keeping JNI marshaling
+				// on the underlying primitive. See dotnet/java-interop#1431 (Phase 2).
+				java_p.KotlinInlineClassJniType = GetInlineClassJniType (kotlin_p.Type.ClassName, inlineClasses);
 			}
 
 			// Handle erasure of Kotlin unsigned types
 			method.KotlinReturnType = GetKotlinType (method.ReturnType.TypeSignature, metadata.ReturnType?.ClassName);
+
+			// Same projection as above, but for the return type.
+			method.KotlinInlineClassReturnJniType = GetInlineClassJniType (metadata.ReturnType?.ClassName, inlineClasses);
 		}
 
 		public static (int start, int end) CreateParameterMap (MethodInfo method, KotlinFunction function, KotlinClass? kotlinClass)
@@ -267,7 +353,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			}
 		}
 
-		static void FixupProperty (MethodInfo? getter, MethodInfo? setter, KotlinProperty metadata)
+		static void FixupProperty (MethodInfo? getter, MethodInfo? setter, KotlinProperty metadata, IDictionary<string, string> inlineClasses)
 		{
 			if (getter is null && setter is null)
 				return;
@@ -289,8 +375,10 @@ namespace Xamarin.Android.Tools.Bytecode
 			}
 
 			// Handle erasure of Kotlin unsigned types
-			if (getter != null)
+			if (getter != null) {
 				getter.KotlinReturnType = GetKotlinType (getter.ReturnType.TypeSignature, metadata.ReturnType?.ClassName);
+				getter.KotlinInlineClassReturnJniType = GetInlineClassJniType (metadata.ReturnType?.ClassName, inlineClasses);
+			}
 
 			if (setter != null) {
 				var setter_parameter = setter.GetParameters ().First ();
@@ -302,6 +390,7 @@ namespace Xamarin.Android.Tools.Bytecode
 
 				// Handle erasure of Kotlin unsigned types
 				setter_parameter.KotlinType = GetKotlinType (setter_parameter.Type.TypeSignature, metadata.ReturnType?.ClassName);
+				setter_parameter.KotlinInlineClassJniType = GetInlineClassJniType (metadata.ReturnType?.ClassName, inlineClasses);
 			}
 		}
 

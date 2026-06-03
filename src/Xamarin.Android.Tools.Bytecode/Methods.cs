@@ -35,6 +35,14 @@ namespace Xamarin.Android.Tools.Bytecode {
 		public  AttributeCollection Attributes      {get; private set;}
 		public  string?             KotlinReturnType {get; set;}
 
+		// JNI signature of the Kotlin `@JvmInline` class that this method's return
+		// type was originally declared as in Kotlin source, when the JVM-erased
+		// return type is the inline class's underlying primitive. e.g.
+		// `Lcom/example/MyColor;` for a method declared `fun f(): MyColor` whose
+		// JVM signature is `()J`. null when no projection applies.
+		// See dotnet/java-interop#1431 (Phase 2).
+		public  string?             KotlinInlineClassReturnJniType { get; set; }
+
 		public MethodInfo (ConstantPool constantPool, ClassFile declaringType, Stream stream)
 		{
 			ConstantPool    = constantPool;
@@ -377,6 +385,14 @@ namespace Xamarin.Android.Tools.Bytecode {
 		public  int         Position;
 		public  TypeInfo    Type;
 		public  string?     KotlinType;
+
+		// JNI signature of the Kotlin `@JvmInline` class that this parameter was
+		// originally declared as in Kotlin source, when the JVM-erased parameter
+		// type is the inline class's underlying primitive. e.g.
+		// `Lcom/example/MyColor;` for a Kotlin parameter declared `color: MyColor`
+		// whose JVM type is `J`. null when no projection applies.
+		// See dotnet/java-interop#1431 (Phase 2).
+		public  string?     KotlinInlineClassJniType;
 
 		public  MethodParameterAccessFlags      AccessFlags;
 

@@ -10,7 +10,6 @@
     <TestKotlinGradleOutput Include="kotlin-gradle\classes\xat\bytecode\tests\MyColor.class" />
     <TestKotlinGradleOutput Include="kotlin-gradle\classes\xat\bytecode\tests\MyAlpha.class" />
     <TestKotlinGradleOutput Include="kotlin-gradle\classes\xat\bytecode\tests\MyDp.class" />
-    <TestKotlinGradleOutput Include="kotlin-gradle\classes\xat\bytecode\tests\InlineClassCollisionsKt.class" />
   </ItemGroup>
 
   <ItemGroup>
