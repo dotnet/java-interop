@@ -33,9 +33,17 @@ namespace MonoDroid.Generation {
 			NotNull = notNull;
 		}
 
+		// Kotlin @JvmInline value class JNI signature (e.g. "Lcom/example/MyColor;")
+		// for inline-class projection. When set, Validate replaces the managed type
+		// with the wrapper struct's full name so the C# parameter signature uses the
+		// struct, while JNI marshaling stays on the underlying primitive (the `type`).
+		public string KotlinInlineClassJniType { get; set; }
+
 		public Parameter Clone ()
 		{
-			return new Parameter (name, type, managed_type, is_enumified, rawtype, NotNull);
+			return new Parameter (name, type, managed_type, is_enumified, rawtype, NotNull) {
+				KotlinInlineClassJniType = KotlinInlineClassJniType,
+			};
 		}
 
 		public string GetCall (CodeGenerationOptions opt)
@@ -286,7 +294,26 @@ namespace MonoDroid.Generation {
 				Report.LogCodedWarning (0, Report.WarningInvalidParameterType, this, type, context.GetContextTypeMember ());
 				return false;
 			}
+			ApplyKotlinInlineClassProjection (opt, type_params);
 			return true;
+		}
+
+		// If KotlinInlineClassJniType is set, look up the wrapper ClassGen and
+		// override managed_type so the C# parameter type is the struct (e.g.
+		// "Com.Example.MyColor") while sym remains the underlying primitive
+		// for JNI marshaling.
+		void ApplyKotlinInlineClassProjection (CodeGenerationOptions opt, GenericParameterDefinitionList type_params)
+		{
+			if (string.IsNullOrEmpty (KotlinInlineClassJniType))
+				return;
+			var javaName = TypeNameUtilities.JniSignatureToJavaTypeName (KotlinInlineClassJniType);
+			if (javaName == null)
+				return;
+			var wrapper = opt.SymbolTable.Lookup (javaName, type_params) as ClassGen;
+			if (wrapper == null || !wrapper.IsKotlinInlineClass)
+				return;
+			managed_type = wrapper.FullName;
+			NotNull = true;
 		}
 
 		public bool ShouldGenerateKeepAlive ()

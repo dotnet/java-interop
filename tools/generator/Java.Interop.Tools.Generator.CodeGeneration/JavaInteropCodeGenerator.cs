@@ -42,8 +42,10 @@ namespace MonoDroid.Generation
 
 			if (gen is InterfaceGen iface)
 				type_writer = new BoundInterface (iface, opt, Context, gen_info);
-			else if (gen is ClassGen klass)
-				type_writer = new BoundClass (klass, opt, Context, gen_info);
+			else if (gen is ClassGen klass && klass.IsKotlinInlineClass)
+				type_writer = new KotlinInlineClassStruct (klass, opt);
+			else if (gen is ClassGen klass2)
+				type_writer = new BoundClass (klass2, opt, Context, gen_info);
 			else
 				throw new InvalidOperationException ("Unknown GenBase type");
 
