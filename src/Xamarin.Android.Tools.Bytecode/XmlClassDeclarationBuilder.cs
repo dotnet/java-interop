@@ -356,6 +356,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				new XAttribute ("deprecated",   GetDeprecatedValue (method.Attributes)),
 				new XAttribute ("final",        (method.AccessFlags & MethodAccessFlags.Final) != 0),
 				new XAttribute ("name",         name),
+				GetManagedName (method),
 				GetNative (method),
 				ret,
 				jniRet,
@@ -371,6 +372,18 @@ namespace Xamarin.Android.Tools.Bytecode {
 				GetTypeParmeters (msig == null ? null : msig.TypeParameters),
 				GetMethodParameters (method),
 				GetExceptions (method));
+		}
+
+		// dotnet/java-interop#1431 (Phase 2): when the Kotlin compiler mangled
+		// the JVM method name for inline-class binary compatibility (e.g.
+		// `tint-Rn_QMJI`), expose the unmangled Kotlin source name via
+		// `managedName` so the generator emits a clean C# overload. The JVM
+		// name remains in `name`/`jni-signature` for JNI invocation.
+		static XAttribute? GetManagedName (MethodInfo method)
+		{
+			if (string.IsNullOrEmpty (method.KotlinName))
+				return null;
+			return new XAttribute ("managedName", method.KotlinName!);
 		}
 
 		// dotnet/java-interop#1431 (Phase 2): when a method's Kotlin source-level

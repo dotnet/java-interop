@@ -299,6 +299,22 @@ namespace Xamarin.Android.Tools.Bytecode
 
 			// Same projection as above, but for the return type.
 			method.KotlinInlineClassReturnJniType = GetInlineClassJniType (metadata.ReturnType?.ClassName, inlineClasses);
+
+			// Recover the unmangled Kotlin source-level name when the Kotlin
+			// compiler mangled the JVM name for inline-class binary compat
+			// (e.g. JVM name `tint-Rn_QMJI`, Kotlin name `tint`). The generator
+			// will emit this as the C# binding name (PascalCased to match
+			// `managedName` conventions); the JVM name stays the JNI invocation
+			// target. See dotnet/java-interop#1431 (Phase 2).
+			if (metadata.Name != null && metadata.JvmName != null && metadata.Name != metadata.JvmName)
+				method.KotlinName = PascalCase (metadata.Name);
+		}
+
+		static string PascalCase (string name)
+		{
+			if (string.IsNullOrEmpty (name) || char.IsUpper (name [0]))
+				return name;
+			return char.ToUpperInvariant (name [0]) + name.Substring (1);
 		}
 
 		public static (int start, int end) CreateParameterMap (MethodInfo method, KotlinFunction function, KotlinClass? kotlinClass)

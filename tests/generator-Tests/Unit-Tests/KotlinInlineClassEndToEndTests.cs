@@ -46,15 +46,22 @@ namespace generatortests
 			StringAssert.Contains ("public static implicit operator MyDp (float", output);
 
 			// Widgets.tint(MyColor) / tint(MyAlpha) / tint(MyDp) overloads must
-			// project the inline-class param in the C# signature. Phase 1
-			// (#1432) appends a JVM-name-mangle hash suffix to disambiguate.
-			StringAssert.Contains ("Tint_Rn_QMJI (Xat.Bytecode.Tests.MyColor color)", output);
-			StringAssert.Contains ("Tint_uzYZ1wI (Xat.Bytecode.Tests.MyAlpha alpha)", output);
-			StringAssert.Contains ("Tint_L3D9Hvg (Xat.Bytecode.Tests.MyDp dp)", output);
+			// project the inline-class param in the C# signature. The Kotlin
+			// compiler mangles the JVM names for inline-class binary compat
+			// (e.g. `tint-Rn_QMJI`); we recover the unmangled name so they
+			// emit as plain C# overloads distinguished by struct type.
+			StringAssert.Contains ("Tint (Xat.Bytecode.Tests.MyColor color)", output);
+			StringAssert.Contains ("Tint (Xat.Bytecode.Tests.MyAlpha alpha)", output);
+			StringAssert.Contains ("Tint (Xat.Bytecode.Tests.MyDp dp)", output);
 
 			// Widgets.pad(MyDp): MyDp -> the return type uses MyDp.
-			StringAssert.Contains ("Xat.Bytecode.Tests.MyDp Pad_D3yWXm0 (Xat.Bytecode.Tests.MyDp dp)", output);
-			StringAssert.Contains ("Xat.Bytecode.Tests.MyDp Pad_Puo4k8A (Xat.Bytecode.Tests.MyDp dp1, Xat.Bytecode.Tests.MyDp dp2)", output);
+			StringAssert.Contains ("Xat.Bytecode.Tests.MyDp Pad (Xat.Bytecode.Tests.MyDp dp)", output);
+			StringAssert.Contains ("Xat.Bytecode.Tests.MyDp Pad (Xat.Bytecode.Tests.MyDp dp1, Xat.Bytecode.Tests.MyDp dp2)", output);
+
+			// And the JVM-mangled hash-suffix names must NOT leak into the
+			// generated C# (regression guard for the unmangling path).
+			StringAssert.DoesNotContain ("Tint_", output);
+			StringAssert.DoesNotContain ("Pad_", output);
 
 			// And no `Java.Lang.Object`-derived peer class for the inline classes
 			// (the wrapper struct fully replaces the peer-class binding).

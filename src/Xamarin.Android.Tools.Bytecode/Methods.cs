@@ -43,6 +43,15 @@ namespace Xamarin.Android.Tools.Bytecode {
 		// See dotnet/java-interop#1431 (Phase 2).
 		public  string?             KotlinInlineClassReturnJniType { get; set; }
 
+		// Unmangled Kotlin source-level method name when it differs from the
+		// JVM-level `Name`. Populated for methods that the Kotlin compiler
+		// mangles for inline-class binary compatibility (e.g. JVM name
+		// `tint-Rn_QMJI`, Kotlin name `tint`). Surfaced into api.xml as
+		// `managedName` so the generator emits a clean C# overload while the
+		// JVM `Name` stays in `name`/`jni-signature` for native invocation.
+		// See dotnet/java-interop#1431 (Phase 2).
+		public  string?             KotlinName { get; set; }
+
 		public MethodInfo (ConstantPool constantPool, ClassFile declaringType, Stream stream)
 		{
 			ConstantPool    = constantPool;
