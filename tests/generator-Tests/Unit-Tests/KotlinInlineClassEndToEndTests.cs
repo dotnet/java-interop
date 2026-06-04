@@ -86,7 +86,7 @@ namespace generatortests
 				LoadClassFile ("MyDp.class"),
 				LoadClassFile ("Widgets.class"),
 			};
-			KotlinFixups.Fixup (classes);
+			Xamarin.Android.Tools.Bytecode.KotlinFixups.Fixup (classes);
 
 			var classPath = new ClassPath { ApiSource = "class-parse" };
 			foreach (var c in classes)
@@ -136,6 +136,14 @@ namespace generatortests
 
 			foreach (var gen in gens)
 				gen.FixupAccessModifiers (options);
+
+			// dotnet/java-interop#1431 (Phase 2): match the real CodeGenerator
+			// pipeline (see CodeGenerator.cs line 209), which runs
+			// Java.Interop.Tools.Generator.Transformation.KotlinFixups.Fixup
+			// (including RemoveCollidingSiblings) before Validate. Without
+			// this, the test would mask the interaction between Phase 1's
+			// mangled-name dedup and Phase 2's inline-class projection.
+			Java.Interop.Tools.Generator.Transformation.KotlinFixups.Fixup (gens);
 
 			foreach (var gen in gens)
 				gen.Validate (options, new GenericParameterDefinitionList (), generator.Context);

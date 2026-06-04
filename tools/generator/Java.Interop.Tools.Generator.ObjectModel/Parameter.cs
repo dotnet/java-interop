@@ -321,6 +321,15 @@ namespace MonoDroid.Generation {
 			if (Symbol.IsEnum)
 				return false;
 
+			// dotnet/java-interop#1431 (Phase 2): a Kotlin @JvmInline value
+			// class is projected as a `readonly struct` wrapping a primitive.
+			// The projection rewrites Type to the wrapper struct's FullName,
+			// which wouldn't match any case below and would fall through to
+			// `true`, generating an unnecessary GC.KeepAlive call for what is
+			// ultimately a value-type holding a primitive.
+			if (!string.IsNullOrEmpty (KotlinInlineClassJniType))
+				return false;
+
 			return Type switch {
 				"bool" => false,
 				"sbyte" => false,
