@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Java.Interop {
 
-	public class JreTypeManager : JniRuntime.JniTypeManager {
+	public class JreTypeManager : JniRuntime.DynamicJniTypeManager {
 
 		IDictionary<string, Type>? typeMappings;
 
@@ -31,6 +31,17 @@ namespace Java.Interop {
 				yield break;
 			if (typeMappings.TryGetValue (jniSimpleReference, out var target))
 				yield return target;
+		}
+
+		[return: DynamicallyAccessedMembers (JniRuntime.JniTypeManager.MethodsConstructors)]
+		protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+		{
+			var type = base.GetTypeForSimpleReference (jniSimpleReference);
+			if (type != null)
+				return type;
+			if (typeMappings == null)
+				return null;
+			return typeMappings.TryGetValue (jniSimpleReference, out var target) ? target : null;
 		}
 
 		protected override IEnumerable<string> GetSimpleReferences (Type type)

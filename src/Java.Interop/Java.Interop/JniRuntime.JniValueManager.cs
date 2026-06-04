@@ -407,13 +407,12 @@ namespace Java.Interop
 
 				return TryCreatePeerInstance (ref reference, transfer, targetType);
 
-				[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
 				[return: DynamicallyAccessedMembers (Constructors)]
 				Type? GetTypeAssignableTo (JniTypeSignature sig, Type targetType)
 				{
-					foreach (var t in Runtime.TypeManager.GetTypes (sig)) {
-						if (targetType.IsAssignableFrom (t)) {
-							return t;
+					foreach (var t in Runtime.TypeManager.GetReflectionConstructibleTypes (sig)) {
+						if (targetType.IsAssignableFrom (t.Type)) {
+							return t.Type;
 						}
 					}
 					return null;
@@ -428,7 +427,9 @@ namespace Java.Interop
 			{
 				type    = Runtime.TypeManager.GetInvokerType (type) ?? type;
 
-				var self        = GetUninitializedObject (type);
+				var self = (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
+				self.SetJniManagedPeerState (JniManagedPeerStates.Replaceable | JniManagedPeerStates.Activatable);
+
 				var constructed = false;
 				try {
 					constructed = TryConstructPeer (self, ref reference, options, type);
@@ -439,15 +440,6 @@ namespace Java.Interop
 					}
 				}
 				return self;
-
-				static IJavaPeerable GetUninitializedObject (
-						[DynamicallyAccessedMembers (Constructors)]
-						Type type)
-				{
-					var v   = (IJavaPeerable) System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject (type);
-					v.SetJniManagedPeerState (JniManagedPeerStates.Replaceable | JniManagedPeerStates.Activatable);
-					return v;
-				}
 			}
 
 			const               BindingFlags    ActivationConstructorBindingFlags   = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;

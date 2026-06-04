@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 using Java.Interop;
 
@@ -189,7 +190,11 @@ namespace Java.InteropTests
 			}
 		}
 
-		class ProxyTypeManager : JniTypeManager {
+		class ProxyTypeManager : DynamicJniTypeManager {
+			[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Tests intentionally use the default reflection-based type manager.")]
+			public ProxyTypeManager ()
+			{
+			}
 		}
 	}
 }

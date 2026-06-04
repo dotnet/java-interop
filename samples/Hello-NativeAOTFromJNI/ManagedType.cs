@@ -38,7 +38,7 @@ class ManagedType : Java.Lang.Object {
 	}
 
 	[JniAddNativeMethodRegistration]
-	static void RegisterNativeMembers (JniNativeMethodRegistrationArguments args)
+	internal static void RegisterNativeMembers (JniNativeMethodRegistrationArguments args)
 	{
 		args.AddRegistrations (new [] {
 			new JniNativeMethodRegistration ("n_GetString", "()Ljava/lang/String;", new _JniMarshal_PP_L (n_GetString)),

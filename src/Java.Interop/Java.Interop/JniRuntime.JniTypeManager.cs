@@ -80,7 +80,7 @@ namespace Java.Interop {
 #endif  // NET
 
 		/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='T:JniTypeManager']/*" />
-		public partial class JniTypeManager : IDisposable, ISetRuntime {
+		public abstract partial class JniTypeManager : IDisposable, ISetRuntime {
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 			internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
@@ -112,7 +112,7 @@ namespace Java.Interop {
 			}
 
 			[MethodImpl (MethodImplOptions.AggressiveInlining)]
-			void AssertValid ()
+			private protected void AssertValid ()
 			{
 				if (!disposed)
 					return;
@@ -146,7 +146,135 @@ namespace Java.Interop {
 				if (type == null)
  					throw new ArgumentNullException (nameof (type));
 
+				return GetTypeSignatureCore (type);
+			}
 
+			protected abstract JniTypeSignature GetTypeSignatureCore (Type type);
+
+			// NOTE: This method needs to be kept in sync with GetTypeSignature()
+			public IEnumerable<JniTypeSignature> GetTypeSignatures (Type type)
+			{
+				AssertValid ();
+
+				if (type == null)
+					return [];
+
+				return GetTypeSignaturesCore (type);
+			}
+
+			protected abstract IEnumerable<JniTypeSignature> GetTypeSignaturesCore (Type type);
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			public  Type?    GetType (JniTypeSignature typeSignature)
+			{
+				AssertValid ();
+
+				if (!typeSignature.IsValid || typeSignature.SimpleReference == null)
+					return null;
+
+				var type = GetTypeForSimpleReference (typeSignature.SimpleReference);
+				if (type == null)
+					return null;
+				if (typeSignature.ArrayRank == 0)
+					return type;
+				throw new NotSupportedException ($"DAM-annotated type lookup for array signature `{typeSignature}` is not supported. Use {nameof (GetTypes)} instead.");
+			}
+
+			protected abstract string? GetSimpleReference (Type type);
+			protected abstract IEnumerable<string> GetSimpleReferences (Type type);
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			protected abstract Type? GetTypeForSimpleReference (string jniSimpleReference);
+			public abstract IEnumerable<Type> GetTypes (JniTypeSignature typeSignature);
+
+			public abstract IEnumerable<ReflectionConstructibleType> GetReflectionConstructibleTypes (JniTypeSignature typeSignature);
+
+			public class ReflectionConstructibleType
+			{
+				public ReflectionConstructibleType (
+						[DynamicallyAccessedMembers (Constructors)]
+						Type type)
+				{
+					Type = type;
+				}
+
+				[DynamicallyAccessedMembers (Constructors)]
+				public Type Type { get; }
+			}
+
+			protected abstract IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference);
+
+			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
+			[return: DynamicallyAccessedMembers (Constructors)]
+			public Type? GetInvokerType (
+					[DynamicallyAccessedMembers (Constructors)]
+					Type type)
+			{
+				if (type.IsAbstract || type.IsInterface) {
+					return GetInvokerTypeCore (type);
+				}
+				return null;
+			}
+			
+			[return: DynamicallyAccessedMembers (Constructors)]
+			protected abstract Type? GetInvokerTypeCore ([DynamicallyAccessedMembers (Constructors)] Type type);
+#if NET
+			protected abstract IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple);
+
+			public string? GetReplacementType (string jniSimpleReference)
+			{
+				AssertValid ();
+				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
+
+				return GetReplacementTypeCore (jniSimpleReference);
+			}
+
+			protected abstract string? GetReplacementTypeCore (string jniSimpleReference);
+
+			public IReadOnlyList<string>? GetStaticMethodFallbackTypes (string jniSimpleReference)
+			{
+				AssertValid ();
+				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
+
+				return GetStaticMethodFallbackTypesCore (jniSimpleReference);
+			}
+
+			public ReplacementMethodInfo? GetReplacementMethodInfo (string jniSimpleReference, string jniMethodName, string jniMethodSignature)
+			{
+				AssertValid ();
+				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
+				if (string.IsNullOrEmpty (jniMethodName)) {
+					throw new ArgumentNullException (nameof (jniMethodName));
+				}
+				if (string.IsNullOrEmpty (jniMethodSignature)) {
+					throw new ArgumentNullException (nameof (jniMethodSignature));
+				}
+
+				return GetReplacementMethodInfoCore (jniSimpleReference, jniMethodName, jniMethodSignature);
+			}
+
+			protected abstract ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature);
+
+			public abstract void RegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					ReadOnlySpan<char> methods);
+#endif
+#if NET
+			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
+#endif  // NET
+			public abstract void RegisterNativeMembers (
+					JniType nativeClass,
+					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
+					Type type,
+					string? methods);
+		}
+
+		[RequiresUnreferencedCode ("The default JniTypeManager implementation does not support trimming. Use a custom JniTypeManager implementation that supports trimming, or ensure that all types used with the default JniTypeManager are preserved.")]
+		public partial class DynamicJniTypeManager : JniTypeManager {
+
+			protected override JniTypeSignature GetTypeSignatureCore (Type type)
+			{
 				type = GetUnderlyingType (type, out int rank);
 
 				JniTypeSignature signature = JniTypeSignature.Empty;
@@ -175,14 +303,8 @@ namespace Java.Interop {
 				return default;
 			}
 
-			// NOTE: This method needs to be kept in sync with GetTypeSignature()
-			public IEnumerable<JniTypeSignature> GetTypeSignatures (Type type)
+			protected override IEnumerable<JniTypeSignature> GetTypeSignaturesCore (Type type)
 			{
-				AssertValid ();
-
-				if (type == null)
-					yield break;
-
 				type = GetUnderlyingType (type, out int rank);
 
 				var signature = JniTypeSignature.Empty;
@@ -231,13 +353,13 @@ namespace Java.Interop {
 			}
 
 			// `type` will NOT be an array type.
-			protected virtual string? GetSimpleReference (Type type)
+			protected override string? GetSimpleReference (Type type)
 			{
 				return GetSimpleReferences (type).FirstOrDefault ();
 			}
 
 			// `type` will NOT be an array type.
-			protected virtual IEnumerable<string> GetSimpleReferences (Type type)
+			protected override IEnumerable<string> GetSimpleReferences (Type type)
 			{
 				AssertValid ();
 
@@ -261,29 +383,113 @@ namespace Java.Interop {
 
 			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
-			const string NotUsedInAndroid = "This code path is not used in Android projects.";
 
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = NotUsedInAndroid)]
-			static Type MakeArrayType (Type type) =>
-				type.MakeArrayType ();
-
-			// FIXME: https://github.com/dotnet/java-interop/issues/1192
-			[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = NotUsedInAndroid)]
-			[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = NotUsedInAndroid)]
-			static Type MakeGenericType (Type type, Type arrayType) =>
-				type.MakeGenericType (arrayType);
-
-			[UnconditionalSuppressMessage ("Trimming", "IL2073", Justification = "Types returned here should be preserved via other means.")]
-			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			public  Type?    GetType (JniTypeSignature typeSignature)
+			readonly struct KnownArrayTypesInfo
 			{
-				AssertValid ();
+				public readonly Dictionary<Type, Type> ArrayTypes;
+				public readonly Dictionary<Type, Type> JavaObjectArrayTypes;
 
-				return GetTypes (typeSignature).FirstOrDefault ();
+				public KnownArrayTypesInfo (Dictionary<Type, Type> arrayTypes, Dictionary<Type, Type> javaObjectArrayTypes)
+				{
+					ArrayTypes            = arrayTypes;
+					JavaObjectArrayTypes = javaObjectArrayTypes;
+				}
 			}
 
-			public virtual IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
+			static readonly Lazy<KnownArrayTypesInfo> KnownArrayTypes = new Lazy<KnownArrayTypesInfo> (InitKnownArrayTypes);
+
+			static KnownArrayTypesInfo InitKnownArrayTypes ()
+			{
+				var arrayTypes           = new Dictionary<Type, Type> ();
+				var javaObjectArrayTypes = new Dictionary<Type, Type> ();
+
+				AddKnownArrayTypes<string> (arrayTypes, javaObjectArrayTypes);
+
+				AddKnownPrimitiveArrayTypes<Boolean, JavaBooleanArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<SByte, JavaSByteArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Char, JavaCharArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Int16, JavaInt16Array> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Int32, JavaInt32Array> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Int64, JavaInt64Array> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Single, JavaSingleArray> (arrayTypes, javaObjectArrayTypes);
+				AddKnownPrimitiveArrayTypes<Double, JavaDoubleArray> (arrayTypes, javaObjectArrayTypes);
+
+				return new KnownArrayTypesInfo (arrayTypes, javaObjectArrayTypes);
+			}
+
+			static void AddKnownPrimitiveArrayTypes<
+					[DynamicallyAccessedMembers (Constructors)]
+					T,
+					[DynamicallyAccessedMembers (Constructors)]
+					TArray> (Dictionary<Type, Type> arrayTypes, Dictionary<Type, Type> javaObjectArrayTypes)
+			{
+				AddKnownArrayTypes<T> (arrayTypes, javaObjectArrayTypes);
+				AddKnownArrayTypes<JavaArray<T>> (arrayTypes, javaObjectArrayTypes);
+				AddKnownArrayTypes<JavaPrimitiveArray<T>> (arrayTypes, javaObjectArrayTypes);
+				AddKnownArrayTypes<TArray> (arrayTypes, javaObjectArrayTypes);
+			}
+
+			static void AddKnownArrayTypes<
+					[DynamicallyAccessedMembers (Constructors)]
+					T> (Dictionary<Type, Type> arrayTypes, Dictionary<Type, Type> javaObjectArrayTypes)
+			{
+				arrayTypes [typeof (T)]                         = typeof (T[]);
+				arrayTypes [typeof (T[])]                       = typeof (T[][]);
+				arrayTypes [typeof (T[][])]                     = typeof (T[][][]);
+				javaObjectArrayTypes [typeof (T)]               = typeof (JavaObjectArray<T>);
+				javaObjectArrayTypes [typeof (JavaObjectArray<T>)] = typeof (JavaObjectArray<JavaObjectArray<T>>);
+			}
+
+			static bool TryMakeArrayType (Type type, out Type? arrayType) =>
+				KnownArrayTypes.Value.ArrayTypes.TryGetValue (type, out arrayType);
+
+			static bool TryMakeJavaObjectArrayType (Type type, out Type? arrayType) =>
+				KnownArrayTypes.Value.JavaObjectArrayTypes.TryGetValue (type, out arrayType);
+
+			static Type GetUnsupportedArrayType (Type type) =>
+				throw new NotSupportedException ($"Array type construction for `{type}` is not supported.");
+
+			static Type GetUnsupportedJavaObjectArrayType (Type type) =>
+				throw new NotSupportedException ($"Generic Java array wrapper type construction for `{type}` is not supported.");
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+			{
+				AssertValid ();
+				AssertSimpleReference (jniSimpleReference);
+
+				return jniSimpleReference switch {
+					"java/lang/String"                         => TypeOf<string> (),
+					"V"                                        => TypeOfVoid (),
+					"Z"                                        => TypeOf<Boolean> (),
+					"java/lang/Boolean"                        => TypeOf<Boolean?> (),
+					"B"                                        => TypeOf<SByte> (),
+					"java/lang/Byte"                           => TypeOf<SByte?> (),
+					"C"                                        => TypeOf<Char> (),
+					"java/lang/Character"                      => TypeOf<Char?> (),
+					"S"                                        => TypeOf<Int16> (),
+					"java/lang/Short"                          => TypeOf<Int16?> (),
+					"I"                                        => TypeOf<Int32> (),
+					"java/lang/Integer"                        => TypeOf<Int32?> (),
+					"J"                                        => TypeOf<Int64> (),
+					"java/lang/Long"                           => TypeOf<Int64?> (),
+					"F"                                        => TypeOf<Single> (),
+					"java/lang/Float"                          => TypeOf<Single?> (),
+					"D"                                        => TypeOf<Double> (),
+					"java/lang/Double"                         => TypeOf<Double?> (),
+					_                                          => null,
+				};
+			}
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type TypeOf<
+					[DynamicallyAccessedMembers (MethodsConstructors)]
+					T> () => typeof (T);
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type TypeOfVoid () => typeof (void);
+
+			public override IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
 			{
 				AssertValid ();
 
@@ -292,11 +498,18 @@ namespace Java.Interop {
 				return CreateGetTypesEnumerator (typeSignature);
 			}
 
+			public override IEnumerable<ReflectionConstructibleType> GetReflectionConstructibleTypes (JniTypeSignature typeSignature)
+			{
+				foreach (var type in GetTypes (typeSignature)) {
+					yield return new ReflectionConstructibleType (type);
+				}
+			}
+
 			IEnumerable<Type> CreateGetTypesEnumerator (JniTypeSignature typeSignature)
 			{
 				if (!typeSignature.IsValid)
 					yield break;
-				foreach (var type in GetTypesForSimpleReference (typeSignature.SimpleReference ?? throw new InvalidOperationException ("Should not be reached")) ){
+				foreach (var type in GetTypesForSimpleReference (typeSignature.SimpleReference ?? throw new InvalidOperationException ("Should not be reached"))) {
 					if (typeSignature.ArrayRank == 0) {
 						yield return type;
 						continue;
@@ -313,7 +526,9 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
+							arrayType = TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)
+								? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+								: GetUnsupportedJavaObjectArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -322,7 +537,9 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType   = MakeArrayType (arrayType);
+							arrayType = TryMakeArrayType (arrayType, out var nextArrayType)
+								? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+								: GetUnsupportedArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -345,20 +562,24 @@ namespace Java.Interop {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
 					while (rank-- > 0) {
-						arrayType   = MakeGenericType (typeof (JavaObjectArray<>), arrayType);
+						arrayType = TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)
+							? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+							: GetUnsupportedJavaObjectArrayType (arrayType);
 					}
 					yield return arrayType;
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;
 					while (rank-- > 0) {
-						arrayType   = MakeArrayType (arrayType);
+						arrayType = TryMakeArrayType (arrayType, out var nextArrayType)
+							? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
+							: GetUnsupportedArrayType (arrayType);
 					}
 					yield return arrayType;
 				}
 			}
 
-			protected virtual IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
+			protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
 			{
 				AssertValid ();
 				AssertSimpleReference (jniSimpleReference);
@@ -378,36 +599,11 @@ namespace Java.Interop {
 				yield break;
 			}
 
-			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]
-			public Type? GetInvokerType (
+			protected override Type? GetInvokerTypeCore (
 					[DynamicallyAccessedMembers (Constructors)]
 					Type type)
 			{
-				if (type.IsAbstract || type.IsInterface) {
-					return GetInvokerTypeCore (type);
-				}
-				return null;
-			}
-
-			[return: DynamicallyAccessedMembers (Constructors)]
-			protected virtual Type? GetInvokerTypeCore (
-					[DynamicallyAccessedMembers (Constructors)]
-					Type type)
-			{
-				// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L176-L186
-				const string makeGenericTypeMessage = "Generic 'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
-
-				// FIXME: https://github.com/dotnet/java-interop/issues/1192
-				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
-				[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = makeGenericTypeMessage)]
-				[return: DynamicallyAccessedMembers (Constructors)]
-				static Type MakeGenericType (
-						[DynamicallyAccessedMembers (Constructors)]
-						Type type,
-						Type [] arguments) =>
-					type.MakeGenericType (arguments);
-
 				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
 				if (signature == null || signature.InvokerType == null) {
 					return null;
@@ -417,48 +613,22 @@ namespace Java.Interop {
 				if (arguments.Length == 0)
 					return signature.InvokerType;
 
-				return MakeGenericType (signature.InvokerType, arguments);
+#if NET
+				throw new NotSupportedException ($"Generic invoker type construction for `{type}` is not supported.");
+#else   // NET
+				return signature.InvokerType.MakeGenericType (arguments);
+#endif  // NET
 			}
 
 #if NET
 
-			public IReadOnlyList<string>? GetStaticMethodFallbackTypes (string jniSimpleReference)
-			{
-				AssertValid ();
-				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
+			protected override IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple) => null;
 
-				return GetStaticMethodFallbackTypesCore (jniSimpleReference);
-			}
+			protected override string? GetReplacementTypeCore (string jniSimpleReference) => null;
 
-			protected virtual IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple) => null;
+			protected override ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
-			public string? GetReplacementType (string jniSimpleReference)
-			{
-				AssertValid ();
-				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
-
-				return GetReplacementTypeCore (jniSimpleReference);
-			}
-
-			protected virtual string? GetReplacementTypeCore (string jniSimpleReference) => null;
-
-			public ReplacementMethodInfo? GetReplacementMethodInfo (string jniSimpleReference, string jniMethodName, string jniMethodSignature)
-			{
-				AssertValid ();
-				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
-				if (string.IsNullOrEmpty (jniMethodName)) {
-					throw new ArgumentNullException (nameof (jniMethodName));
-				}
-				if (string.IsNullOrEmpty (jniMethodSignature)) {
-					throw new ArgumentNullException (nameof (jniMethodSignature));
-				}
-
-				return GetReplacementMethodInfoCore (jniSimpleReference, jniMethodName, jniMethodSignature);
-			}
-
-			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
-
-			public virtual void RegisterNativeMembers (
+			public override void RegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
 					Type type,
@@ -486,7 +656,7 @@ namespace Java.Interop {
 #if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
 #endif  // NET
-			public virtual void RegisterNativeMembers (
+			public override void RegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
 					Type type,
@@ -605,6 +775,7 @@ namespace Java.Interop {
 
 				return found;
 			}
+
 		}
 	}
 }
