@@ -46,7 +46,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="protobuf-net"                                 Version="3.2.56" />
+    <PackageReference Update="protobuf-net"                                 Version="2.4.4" />
   </ItemGroup>
 
   <Import Project="build-tools\scripts\VersionInfo.targets" />
