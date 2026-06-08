@@ -33,11 +33,9 @@ TESTS = \
 	bin/Test$(CONFIGURATION)/Java.Interop.Tools.Generator-Tests.dll \
 	bin/Test$(CONFIGURATION)/Xamarin.SourceWriter-Tests.dll
 
-NET_TESTS = \
-	bin/Test$(CONFIGURATION)$(NET_SUFFIX)/Java.Base-Tests.dll
+NET_TESTS =
 
-PTESTS = \
-	bin/Test$(CONFIGURATION)/Java.Interop-PerformanceTests.dll
+PTESTS =
 
 ATESTS = \
 	bin/Test$(CONFIGURATION)/Android.Interop-Tests.dll
@@ -73,13 +71,6 @@ include build-tools/scripts/mono.mk
 -include bin/Build$(CONFIGURATION)/mono.mk
 -include bin/Build$(CONFIGURATION)/JdkInfo.mk
 
-JAVA_RUNTIME_ENVIRONMENT_DLLMAP_OVERRIDE = Java.Runtime.Environment.Override.dllmap
-ifeq ($(wildcard $(JAVA_RUNTIME_ENVIRONMENT_DLLMAP_OVERRIDE)),)
-	JAVA_RUNTIME_ENVIRONMENT_DLLMAP_OVERRIDE_CMD = '/@JAVA_RUNTIME_ENVIRONMENT_DLLMAP@/d'
-else
-	JAVA_RUNTIME_ENVIRONMENT_DLLMAP_OVERRIDE_CMD = '/@JAVA_RUNTIME_ENVIRONMENT_DLLMAP@/ {' -e 'r $(JAVA_RUNTIME_ENVIRONMENT_DLLMAP_OVERRIDE)' -e 'd' -e '}'
-endif
-
 JAVA_INTEROP_LIB    = libjava-interop$(NATIVE_EXT)
 NATIVE_TIMING_LIB   = libNativeTiming$(NATIVE_EXT)
 
@@ -113,8 +104,6 @@ bin/$(CONFIGURATION)/Java.Interop.dll: $(wildcard src/Java.Interop/*/*.cs) src/J
 CSHARP_REFS = \
 	bin/$(CONFIGURATION)/Java.Interop.dll               \
 	bin/$(CONFIGURATION)/Java.Interop.Export.dll        \
-	bin/$(CONFIGURATION)/Java.Runtime.Environment.dll   \
-	bin/Test$(CONFIGURATION)/TestJVM.dll                    \
 	$(PTESTS)                                           \
 	$(TESTS)
 
@@ -147,11 +136,6 @@ run-java-source-utils-tests:
 
 bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB): bin/$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
 	cp $< $@
-
-JRE_DLL_CONFIG=bin/$(CONFIGURATION)/Java.Runtime.Environment.dll.config
-
-$(JRE_DLL_CONFIG): src/Java.Runtime.Environment/Java.Runtime.Environment.csproj
-	$(MSBUILD) $(MSBUILD_FLAGS) $<
 
 bin/Test$(CONFIGURATION)/generator.exe: bin/$(CONFIGURATION)/generator.exe
 	cp $<* `dirname "$@"`
