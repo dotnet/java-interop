@@ -19,17 +19,12 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
 	{
 		return jniSimpleReference switch {
-			Example.ManagedType.JniTypeName => TypeOf<Example.ManagedType> (),
-			"java/lang/Object"             => TypeOf<Java.Lang.Object> (),
-			"java/lang/String"             => TypeOf<Java.Lang.String> (),
+			Example.ManagedType.JniTypeName => typeof (Example.ManagedType),
+			"java/lang/Object"             => typeof (Java.Lang.Object),
+			"java/lang/String"             => typeof (Java.Lang.String),
 			_                              => null,
 		};
 	}
-
-	[return: DynamicallyAccessedMembers (MethodsConstructors)]
-	static Type TypeOf<
-			[DynamicallyAccessedMembers (MethodsConstructors)]
-			T> () => typeof (T);
 
 	public override IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
 	{

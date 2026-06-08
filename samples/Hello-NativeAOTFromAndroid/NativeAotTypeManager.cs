@@ -60,21 +60,16 @@ partial class NativeAotTypeManager : JniRuntime.JniTypeManager {
 	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
 	{
 		return jniSimpleReference switch {
-			"android/app/Activity"                => TypeOf<Android.App.Activity> (),
-			"android/content/Context"             => TypeOf<Android.Content.Context> (),
-			"android/content/ContextWrapper"      => TypeOf<Android.Content.ContextWrapper> (),
-			"android/os/BaseBundle"               => TypeOf<Android.OS.BaseBundle> (),
-			"android/os/Bundle"                   => TypeOf<Android.OS.Bundle> (),
-			"android/view/ContextThemeWrapper"    => TypeOf<Android.View.ContextThemeWrapper> (),
-			"my/MainActivity"                     => TypeOf<MainActivity> (),
+			"android/app/Activity"                => typeof (Android.App.Activity),
+			"android/content/Context"             => typeof (Android.Content.Context),
+			"android/content/ContextWrapper"      => typeof (Android.Content.ContextWrapper),
+			"android/os/BaseBundle"               => typeof (Android.OS.BaseBundle),
+			"android/os/Bundle"                   => typeof (Android.OS.Bundle),
+			"android/view/ContextThemeWrapper"    => typeof (Android.View.ContextThemeWrapper),
+			"my/MainActivity"                     => typeof (MainActivity),
 			_                                     => null,
 		};
 	}
-
-	[return: DynamicallyAccessedMembers (MethodsConstructors)]
-	static Type TypeOf<
-			[DynamicallyAccessedMembers (MethodsConstructors)]
-			T> () => typeof (T);
 
 	protected override IEnumerable<string> GetSimpleReferences (Type type)
 	{
