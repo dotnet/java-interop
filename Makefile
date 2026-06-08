@@ -15,32 +15,28 @@ endif
 PREPARE_EXTERNAL_FILES  = \
 	external/xamarin-android-tools/src/Xamarin.Android.Tools.AndroidSdk/Xamarin.Android.Tools.AndroidSdk.csproj
 
-DEPENDENCIES = \
-	bin/Test$(CONFIGURATION)/libNativeTiming$(NATIVE_EXT)
+DEPENDENCIES =
 
-NET_SUFFIX = -net7.0
+NET_SUFFIX = -net10.0
+TEST_OUTPUT = bin/Test$(CONFIGURATION)$(NET_SUFFIX)
 
-TESTS = \
-	bin/Test$(CONFIGURATION)/Java.Interop-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Dynamic-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Tools.JavaSource-Tests.dll \
-	bin/Test$(CONFIGURATION)/logcat-parse-Tests.dll \
-	bin/Test$(CONFIGURATION)/generator-Tests.dll \
-	bin/Test$(CONFIGURATION)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Tools.JavaTypeSystem-Tests.dll \
-	bin/Test$(CONFIGURATION)/Xamarin.Android.Tools.Bytecode-Tests.dll \
-	bin/Test$(CONFIGURATION)/Java.Interop.Tools.Generator-Tests.dll \
-	bin/Test$(CONFIGURATION)/Xamarin.SourceWriter-Tests.dll
+TESTS =
 
-NET_TESTS =
+NET_TESTS = \
+	$(TEST_OUTPUT)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll \
+	$(TEST_OUTPUT)/Java.Interop.Tools.JavaSource-Tests.dll \
+	$(TEST_OUTPUT)/Java.Interop.Tools.Maven-Tests.dll \
+	$(TEST_OUTPUT)/Java.Interop.Tools.JavaTypeSystem-Tests.dll \
+	$(TEST_OUTPUT)/Java.Interop.Tools.Generator-Tests.dll \
+	$(TEST_OUTPUT)/Xamarin.Android.Tools.ApiXmlAdjuster-Tests.dll \
+	$(TEST_OUTPUT)/Xamarin.Android.Tools.Bytecode-Tests.dll \
+	$(TEST_OUTPUT)/Xamarin.SourceWriter-Tests.dll \
+	$(TEST_OUTPUT)/generator-Tests.dll \
+	$(TEST_OUTPUT)/logcat-parse-Tests.dll
 
 PTESTS =
 
-ATESTS = \
-	bin/Test$(CONFIGURATION)/Android.Interop-Tests.dll
-
-all: $(DEPENDENCIES) $(TESTS)
+all: $(DEPENDENCIES) $(TESTS) $(NET_TESTS)
 
 bin/ilverify:
 	-mkdir bin
@@ -78,23 +74,7 @@ bin/Test$(CONFIGURATION)/$(NATIVE_TIMING_LIB): tests/NativeTiming/timing.c $(wil
 	mkdir -p `dirname "$@"`
 	gcc -g -shared -m64 -fPIC -o $@ $< $(JI_JDK_INCLUDE_PATHS:%=-I%)
 
-# Usage: $(call TestAssemblyTemplate,assembly-basename)
-define TestAssemblyTemplate
-bin/Test$$(CONFIGURATION)/$(1)-Tests.dll: $(wildcard src/$(1)/*/*.cs src/$(1)/Test*/*/*.cs)
-	$$(MSBUILD) $$(MSBUILD_FLAGS)
-	touch $$@
-endef # TestAssemblyTemplate
-
-$(eval $(call TestAssemblyTemplate,Java.Interop))
-$(eval $(call TestAssemblyTemplate,Java.Interop.Dynamic))
-$(eval $(call TestAssemblyTemplate,Java.Interop.Export))
-$(eval $(call TestAssemblyTemplate,Java.Interop.Tools.JavaCallableWrappers))
-
-bin/Test$(CONFIGURATION)/Java.Interop-PerformanceTests.dll: $(wildcard tests/Java.Interop-PerformanceTests/*.cs) bin/Test$(CONFIGURATION)/$(NATIVE_TIMING_LIB)
-	$(MSBUILD) $(MSBUILD_FLAGS)
-	touch $@
-
-bin/Test$(CONFIGURATION)/Android.Interop-Tests.dll: $(wildcard src/Android.Interop/*/*.cs src/Android.Interop/Tests/*/*.cs)
+$(TEST_OUTPUT)/%-Tests.dll: tests/%-Tests/%-Tests.csproj
 	$(MSBUILD) $(MSBUILD_FLAGS)
 	touch $@
 
@@ -116,17 +96,17 @@ define RUN_TEST
 	$(MSBUILD) $(MSBUILD_FLAGS) build-tools/scripts/RunNUnitTests.targets /p:TestAssembly=$(1) || r=1;
 endef
 
-run-tests: $(TESTS) bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
+run-tests: $(TESTS)
 	r=0; \
 	$(foreach t,$(TESTS), $(call RUN_TEST,$(t),1)) \
 	exit $$r;
 
-run-net-tests: $(NET_TESTS) bin/Test$(CONFIGURATION)$(NET_SUFFIX)/$(JAVA_INTEROP_LIB)
+run-net-tests: $(NET_TESTS)
 	r=0; \
 	$(foreach t,$(NET_TESTS), dotnet test $(t) || r=1) \
 	exit $$r;
 
-run-ptests: $(PTESTS) bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
+run-ptests: $(PTESTS)
 	r=0; \
 	$(foreach t,$(PTESTS), $(call RUN_TEST,$(t))) \
 	exit $$r;
