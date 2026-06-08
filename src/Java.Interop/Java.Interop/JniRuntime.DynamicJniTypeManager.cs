@@ -205,6 +205,8 @@ namespace Java.Interop {
 
 				return jniSimpleReference switch {
 					"java/lang/String"                         => TypeOf<string> (),
+					"net/dot/jni/internal/JavaProxyObject"     => typeof (JavaProxyObject),
+					"net/dot/jni/internal/JavaProxyThrowable"  => typeof (JavaProxyThrowable),
 					"V"                                        => TypeOfVoid (),
 					"Z"                                        => TypeOf<Boolean> (),
 					"java/lang/Boolean"                        => TypeOf<Boolean?> (),
@@ -306,12 +308,17 @@ namespace Java.Interop {
 				foreach (var t in JniPrimitiveArrayTypes [index].ArrayTypes) {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
+					var unsupported = false;
 					while (rank-- > 0) {
-						arrayType = TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)
-							? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
-							: GetUnsupportedJavaObjectArrayType (arrayType);
+						if (!TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)) {
+							unsupported = true;
+							break;
+						}
+						arrayType = nextArrayType ?? throw new InvalidOperationException ("Should not be reached");
 					}
-					yield return arrayType;
+					if (!unsupported) {
+						yield return arrayType;
+					}
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;

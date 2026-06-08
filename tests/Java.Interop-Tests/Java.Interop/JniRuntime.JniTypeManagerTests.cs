@@ -39,6 +39,7 @@ namespace Java.InteropTests {
 
 		class MyTypeManager : JniRuntime.DynamicJniTypeManager {
 			[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Tests intentionally use the default reflection-based type manager.")]
+			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Tests intentionally use the default reflection-based type manager.")]
 			public MyTypeManager ()
 			{
 			}
