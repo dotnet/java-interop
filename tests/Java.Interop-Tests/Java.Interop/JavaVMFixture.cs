@@ -51,8 +51,8 @@ namespace Java.InteropTests {
 			[MyJavaInterfaceImpl.JniTypeName]               = typeof (MyJavaInterfaceImpl),
 		};
 
-		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Tests intentionally use the default reflection-based type manager.")]
-		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Tests intentionally use the default reflection-based type manager.")]
+		[RequiresDynamicCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public JavaVMFixtureTypeManager ()
 		{
 		}

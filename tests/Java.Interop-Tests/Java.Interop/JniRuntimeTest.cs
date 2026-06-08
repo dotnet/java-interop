@@ -98,6 +98,8 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[RequiresDynamicCode ("This test uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public void Dispose_ClearsJniEnvironment ()
 		{
 			var c   = JniRuntime.CurrentRuntime;
@@ -129,12 +131,16 @@ namespace Java.InteropTests
 	{
 		JniRuntime          Proxy;
 
+		[RequiresDynamicCode ("JniProxyRuntime uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("JniProxyRuntime uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public JniProxyRuntime (JniRuntime proxy)
 			: base (CreateOptions (proxy))
 		{
 			Proxy   = proxy;
 		}
 
+		[RequiresDynamicCode ("JniProxyRuntime uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("JniProxyRuntime uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		static JniRuntime.CreationOptions CreateOptions (JniRuntime proxy)
 		{
 			return new JniRuntime.CreationOptions {
@@ -191,8 +197,8 @@ namespace Java.InteropTests
 		}
 
 		class ProxyTypeManager : DynamicJniTypeManager {
-			[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Tests intentionally use the default reflection-based type manager.")]
-			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Tests intentionally use the default reflection-based type manager.")]
+			[RequiresDynamicCode ("ProxyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+			[RequiresUnreferencedCode ("ProxyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 			public ProxyTypeManager ()
 			{
 			}

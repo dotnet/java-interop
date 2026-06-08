@@ -13,6 +13,8 @@ namespace Java.InteropTests {
 	public class JniRuntimeJniTypeManagerTests : JavaVMFixture {
 
 		[Test]
+		[RequiresDynamicCode ("This test uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public void GetInvokerType ()
 		{
 			using (var vm  = new MyTypeManager ()) {
@@ -29,6 +31,8 @@ namespace Java.InteropTests {
 
 #if NET
 		[Test]
+		[RequiresDynamicCode ("This test uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public void GetInvokerType_GenericType_Throws ()
 		{
 			using (var vm  = new MyTypeManager ()) {
@@ -38,8 +42,8 @@ namespace Java.InteropTests {
 #endif  // NET
 
 		class MyTypeManager : JniRuntime.DynamicJniTypeManager {
-			[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Tests intentionally use the default reflection-based type manager.")]
-			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Tests intentionally use the default reflection-based type manager.")]
+			[RequiresDynamicCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+			[RequiresUnreferencedCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 			public MyTypeManager ()
 			{
 			}
