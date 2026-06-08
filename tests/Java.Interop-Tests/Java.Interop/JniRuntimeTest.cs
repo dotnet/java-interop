@@ -27,6 +27,8 @@ namespace Java.InteropTests
 
 #if !__ANDROID__
 		[Test]
+		[RequiresDynamicCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not trimming-compatible.")]
 		public void JDK_OnlySupportsOneVM ()
 		{
 			try {
@@ -43,6 +45,8 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[RequiresDynamicCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not trimming-compatible.")]
 		public void UseInvocationPointerOnNewThread ()
 		{
 			var InvocationPointer = JniRuntime.CurrentRuntime.InvocationPointer;
