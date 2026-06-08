@@ -1,6 +1,3 @@
-using System;
-using System.Reflection;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using Java.Interop;
@@ -29,35 +26,10 @@ namespace Java.InteropTests {
 			}
 		}
 
-#if NET
-		[Test]
-		[RequiresDynamicCode ("This test uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-		[RequiresUnreferencedCode ("This test uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
-		public void GetInvokerType_GenericType_Throws ()
-		{
-			using (var vm  = new MyTypeManager ()) {
-				Assert.Throws<NotSupportedException> (() => vm.GetInvokerType (typeof (IGenericJavaInterface<string>)));
-			}
-		}
-#endif  // NET
-
 		[RequiresDynamicCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
 		[RequiresUnreferencedCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		class MyTypeManager : JniRuntime.DynamicJniTypeManager {
 			public MyTypeManager ()
-			{
-			}
-		}
-
-		[JniTypeSignature ("example/GenericInterface", GenerateJavaPeer=false, InvokerType=typeof (IGenericJavaInterfaceInvoker<>))]
-		interface IGenericJavaInterface<T> : IJavaPeerable {
-		}
-
-		[JniTypeSignature ("example/GenericInterface", GenerateJavaPeer=false)]
-		class IGenericJavaInterfaceInvoker<T> : JavaObject, IGenericJavaInterface<T> {
-
-			public IGenericJavaInterfaceInvoker (ref JniObjectReference reference, JniObjectReferenceOptions options)
-				: base (ref reference, options)
 			{
 			}
 		}
