@@ -196,9 +196,9 @@ namespace Java.InteropTests
 			}
 		}
 
+		[RequiresDynamicCode ("ProxyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("ProxyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		class ProxyTypeManager : DynamicJniTypeManager {
-			[RequiresDynamicCode ("ProxyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-			[RequiresUnreferencedCode ("ProxyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 			public ProxyTypeManager ()
 			{
 			}

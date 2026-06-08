@@ -41,9 +41,9 @@ namespace Java.InteropTests {
 		}
 #endif  // NET
 
+		[RequiresDynamicCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		class MyTypeManager : JniRuntime.DynamicJniTypeManager {
-			[RequiresDynamicCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-			[RequiresUnreferencedCode ("MyTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 			public MyTypeManager ()
 			{
 			}

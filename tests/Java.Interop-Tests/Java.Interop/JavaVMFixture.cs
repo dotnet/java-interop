@@ -29,6 +29,8 @@ namespace Java.InteropTests {
 		}
 	}
 
+	[RequiresDynamicCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+	[RequiresUnreferencedCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 	class JavaVMFixtureTypeManager : JniRuntime.DynamicJniTypeManager {
 
 		Dictionary<string, Type> TypeMappings = new() {
@@ -51,8 +53,6 @@ namespace Java.InteropTests {
 			[MyJavaInterfaceImpl.JniTypeName]               = typeof (MyJavaInterfaceImpl),
 		};
 
-		[RequiresDynamicCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-		[RequiresUnreferencedCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public JavaVMFixtureTypeManager ()
 		{
 		}
