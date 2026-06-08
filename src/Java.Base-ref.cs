@@ -219,31 +219,31 @@ namespace Java.IO
     [Java.Interop.JniTypeSignatureAttribute("java/io/Console", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-    public sealed partial class Console : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.IFlushable, System.IDisposable
+    public partial class Console : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.IFlushable, System.IDisposable
     {
-        internal Console() { }
+        protected Console(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("flush", "()V")]
-        public void Flush() { }
+        public virtual void Flush() { }
         [Java.Interop.JniMethodSignatureAttribute("format", "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/Console;")]
-        public Java.IO.Console? Format(string? fmt, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
+        public virtual Java.IO.Console? Format(string? fmt, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("printf", "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/Console;")]
-        public Java.IO.Console? Printf(string? format, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
+        public virtual Java.IO.Console? Printf(string? format, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("reader", "()Ljava/io/Reader;")]
-        public Java.IO.Reader? Reader() { throw null; }
+        public virtual Java.IO.Reader? Reader() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("readLine", "()Ljava/lang/String;")]
-        public string? ReadLine() { throw null; }
+        public virtual string? ReadLine() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("readLine", "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;")]
-        public string? ReadLine(string? fmt, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
+        public virtual string? ReadLine(string? fmt, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("readPassword", "()[C")]
-        public Java.Interop.JavaCharArray? ReadPassword() { throw null; }
+        public virtual Java.Interop.JavaCharArray? ReadPassword() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("readPassword", "(Ljava/lang/String;[Ljava/lang/Object;)[C")]
-        public Java.Interop.JavaCharArray? ReadPassword(string? fmt, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
+        public virtual Java.Interop.JavaCharArray? ReadPassword(string? fmt, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? args) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("writer", "()Ljava/io/PrintWriter;")]
-        public Java.IO.PrintWriter? Writer() { throw null; }
+        public virtual Java.IO.PrintWriter? Writer() { throw null; }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/io/DataInputStream", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
@@ -829,8 +829,12 @@ namespace Java.IO
         protected InvalidClassException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;)V")]
         public InvalidClassException(string? reason) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/Throwable;)V")]
+        public InvalidClassException(string? reason, Java.Lang.Throwable? cause) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/String;)V")]
         public InvalidClassException(string? cname, string? reason) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V")]
+        public InvalidClassException(string? cname, string? reason, Java.Lang.Throwable? cause) { }
         public string? Classname { get { throw null; } set { } }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
@@ -846,6 +850,9 @@ namespace Java.IO
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;)V")]
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public InvalidObjectException(string? reason) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/Throwable;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public InvalidObjectException(string? reason, Java.Lang.Throwable? cause) { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
@@ -1357,25 +1364,25 @@ namespace Java.IO
     [Java.Interop.JniTypeSignatureAttribute("java/io/ObjectStreamClass", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-    public partial class ObjectStreamClass : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.ISerializable, System.IDisposable
+    public sealed partial class ObjectStreamClass : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.ISerializable, System.IDisposable
     {
-        protected ObjectStreamClass(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
+        internal ObjectStreamClass() { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
-        public virtual string? Name { get { throw null; } }
+        public string? Name { get { throw null; } }
         [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
         [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
         public static Java.Interop.JavaObjectArray<Java.IO.ObjectStreamField>? NoFields { get { throw null; } }
-        public virtual long SerialVersionUID { get { throw null; } }
+        public long SerialVersionUID { get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("forClass", "()Ljava/lang/Class;")]
-        public virtual Java.Lang.Class? ForClass() { throw null; }
+        public Java.Lang.Class? ForClass() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("getField", "(Ljava/lang/String;)Ljava/io/ObjectStreamField;")]
-        public virtual Java.IO.ObjectStreamField? GetField(string? name) { throw null; }
+        public Java.IO.ObjectStreamField? GetField(string? name) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("getFields", "()[Ljava/io/ObjectStreamField;")]
         [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
-        public virtual Java.Interop.JavaObjectArray<Java.IO.ObjectStreamField>? GetFields() { throw null; }
+        public Java.Interop.JavaObjectArray<Java.IO.ObjectStreamField>? GetFields() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lookup", "(Ljava/lang/Class;)Ljava/io/ObjectStreamClass;")]
         public static Java.IO.ObjectStreamClass? Lookup(Java.Lang.Class? cl) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lookupAny", "(Ljava/lang/Class;)Ljava/io/ObjectStreamClass;")]
@@ -1389,9 +1396,15 @@ namespace Java.IO
         [Java.Interop.JniConstructorSignatureAttribute("()V")]
         protected ObjectStreamException() { }
         protected ObjectStreamException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/Throwable;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        protected ObjectStreamException(Java.Lang.Throwable? cause) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;)V")]
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         protected ObjectStreamException(string? message) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/Throwable;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        protected ObjectStreamException(string? message, Java.Lang.Throwable? cause) { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
@@ -1850,7 +1863,7 @@ namespace Java.IO
         [Java.Interop.JniMethodSignatureAttribute("seek", "(J)V")]
         public virtual void Seek(long pos) { }
         [Java.Interop.JniMethodSignatureAttribute("setLength", "(J)V")]
-        public virtual void SetLength(long p0) { }
+        public virtual void SetLength(long newLength) { }
         [Java.Interop.JniMethodSignatureAttribute("skipBytes", "(I)I")]
         public virtual int SkipBytes(int n) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("write", "([B)V")]
@@ -2537,6 +2550,18 @@ namespace Java.Lang
         public static bool IsDigit(char ch) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("isDigit", "(I)Z")]
         public static bool IsDigit(int codePoint) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("isEmoji", "(I)Z")]
+        public static bool IsEmoji(int codePoint) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("isEmojiComponent", "(I)Z")]
+        public static bool IsEmojiComponent(int codePoint) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("isEmojiModifier", "(I)Z")]
+        public static bool IsEmojiModifier(int codePoint) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("isEmojiModifierBase", "(I)Z")]
+        public static bool IsEmojiModifierBase(int codePoint) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("isEmojiPresentation", "(I)Z")]
+        public static bool IsEmojiPresentation(int codePoint) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("isExtendedPictographic", "(I)Z")]
+        public static bool IsExtendedPictographic(int codePoint) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("isHighSurrogate", "(C)Z")]
         public static bool IsHighSurrogate(char ch) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("isIdentifierIgnorable", "(C)Z")]
@@ -2686,6 +2711,8 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock AncientSymbols { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Arabic { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock ArabicExtendedA { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock ArabicExtendedB { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock ArabicExtendedC { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock ArabicMathematicalAlphabeticSymbols { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock ArabicPresentationFormsA { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock ArabicPresentationFormsB { get { throw null; } }
@@ -2733,6 +2760,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock CjkUnifiedIdeographsExtensionE { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CjkUnifiedIdeographsExtensionF { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CjkUnifiedIdeographsExtensionG { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock CjkUnifiedIdeographsExtensionH { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CombiningDiacriticalMarks { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CombiningDiacriticalMarksExtended { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CombiningDiacriticalMarksSupplement { get { throw null; } }
@@ -2747,14 +2775,17 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock CuneiformNumbersAndPunctuation { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CurrencySymbols { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CypriotSyllabary { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock CyproMinoan { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Cyrillic { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CyrillicExtendedA { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CyrillicExtendedB { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CyrillicExtendedC { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock CyrillicExtendedD { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock CyrillicSupplementary { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Deseret { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Devanagari { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock DevanagariExtended { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock DevanagariExtendedA { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Dingbats { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock DivesAkuru { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Dogra { get { throw null; } }
@@ -2773,6 +2804,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock Ethiopic { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock EthiopicExtended { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock EthiopicExtendedA { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock EthiopicExtendedB { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock EthiopicSupplement { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock GeneralPunctuation { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock GeometricShapes { get { throw null; } }
@@ -2815,13 +2847,16 @@ namespace Java.Lang
             [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
             public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Kaithi { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock KaktovikNumerals { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock KanaExtendedA { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock KanaExtendedB { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock KanaSupplement { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Kanbun { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock KangxiRadicals { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Kannada { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Katakana { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock KatakanaPhoneticExtensions { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock Kawi { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock KayahLi { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Kharoshthi { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock KhitanSmallScript { get { throw null; } }
@@ -2837,6 +2872,8 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock LatinExtendedC { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock LatinExtendedD { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock LatinExtendedE { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock LatinExtendedF { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock LatinExtendedG { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Lepcha { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock LetterlikeSymbols { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Limbu { get { throw null; } }
@@ -2883,6 +2920,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock MyanmarExtendedA { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock MyanmarExtendedB { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Nabataean { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock NagMundari { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Nandinagari { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Newa { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock NewTaiLue { get { throw null; } }
@@ -2900,6 +2938,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock OldSogdian { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock OldSouthArabian { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock OldTurkic { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock OldUyghur { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock OpticalCharacterRecognition { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Oriya { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock OrnamentalDingbats { get { throw null; } }
@@ -2964,6 +3003,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock Takri { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Tamil { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock TamilSupplement { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock Tangsa { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Tangut { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock TangutComponents { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock TangutSupplement { get { throw null; } }
@@ -2973,15 +3013,18 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock Tibetan { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Tifinagh { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Tirhuta { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock Toto { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock TransportAndMapSymbols { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Ugaritic { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock UnifiedCanadianAboriginalSyllabics { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock UnifiedCanadianAboriginalSyllabicsExtended { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock UnifiedCanadianAboriginalSyllabicsExtendedA { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Vai { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock VariationSelectors { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock VariationSelectorsSupplement { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock VedicExtensions { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock VerticalForms { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock Vithkuqi { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Wancho { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock WarangCiti { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock Yezidi { get { throw null; } }
@@ -2989,6 +3032,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeBlock YiRadicals { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock YiSyllables { get { throw null; } }
             public static Java.Lang.Character.UnicodeBlock ZanabazarSquare { get { throw null; } }
+            public static Java.Lang.Character.UnicodeBlock ZnamennyMusicalNotation { get { throw null; } }
             [Java.Interop.JniMethodSignatureAttribute("forName", "(Ljava/lang/String;)Ljava/lang/Character$UnicodeBlock;")]
             public static Java.Lang.Character.UnicodeBlock ForName(string blockName) { throw null; }
             [Java.Interop.JniMethodSignatureAttribute("of", "(C)Ljava/lang/Character$UnicodeBlock;")]
@@ -3029,6 +3073,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeScript Coptic { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Cuneiform { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Cypriot { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript CyproMinoan { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Cyrillic { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Deseret { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Devanagari { get { throw null; } }
@@ -3066,6 +3111,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeScript Kaithi { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Kannada { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Katakana { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript Kawi { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript KayahLi { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Kharoshthi { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript KhitanSmallScript { get { throw null; } }
@@ -3100,6 +3146,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeScript Multani { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Myanmar { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Nabataean { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript NagMundari { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Nandinagari { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Newa { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript NewTaiLue { get { throw null; } }
@@ -3116,6 +3163,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeScript OldSogdian { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript OldSouthArabian { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript OldTurkic { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript OldUyghur { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Oriya { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Osage { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Osmanya { get { throw null; } }
@@ -3147,6 +3195,7 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeScript TaiViet { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Takri { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Tamil { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript Tangsa { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Tangut { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Telugu { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Thaana { get { throw null; } }
@@ -3154,9 +3203,11 @@ namespace Java.Lang
             public static Java.Lang.Character.UnicodeScript Tibetan { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Tifinagh { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Tirhuta { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript Toto { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Ugaritic { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Unknown { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Vai { get { throw null; } }
+            public static Java.Lang.Character.UnicodeScript Vithkuqi { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Wancho { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript WarangCiti { get { throw null; } }
             public static Java.Lang.Character.UnicodeScript Yezidi { get { throw null; } }
@@ -3201,6 +3252,7 @@ namespace Java.Lang
         public bool IsRecord { get { throw null; } }
         public bool IsSealed { get { throw null; } }
         public bool IsSynthetic { get { throw null; } }
+        public bool IsUnnamedClass { get { throw null; } }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
@@ -3504,30 +3556,6 @@ namespace Java.Lang
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
     }
-    [Java.Interop.JniTypeSignatureAttribute("java/lang/Compiler", GenerateJavaPeer=false)]
-    [System.ObsoleteAttribute("This class is obsoleted in this android platform")]
-    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
-    [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
-    public sealed partial class Compiler : Java.Lang.Object
-    {
-        internal Compiler() { }
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
-        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
-        [Java.Interop.JniMethodSignatureAttribute("command", "(Ljava/lang/Object;)Ljava/lang/Object;")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-        public static Java.Lang.Object? Command(Java.Lang.Object? any) { throw null; }
-        [Java.Interop.JniMethodSignatureAttribute("compileClass", "(Ljava/lang/Class;)Z")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-        public static bool CompileClass(Java.Lang.Class? clazz) { throw null; }
-        [Java.Interop.JniMethodSignatureAttribute("compileClasses", "(Ljava/lang/String;)Z")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-        public static bool CompileClasses(string? @string) { throw null; }
-        [Java.Interop.JniMethodSignatureAttribute("disable", "()V")]
-        public static void Disable() { }
-        [Java.Interop.JniMethodSignatureAttribute("enable", "()V")]
-        public static void Enable() { }
-    }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/Double", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
@@ -3542,6 +3570,7 @@ namespace Java.Lang
         public const double NaN = 0.0 / 0.0;
         public const double NegativeInfinity = -1.0 / 0.0;
         public const double PositiveInfinity = 1.0 / 0.0;
+        public const int Precision = 53;
         public const int Size = 64;
         [Java.Interop.JniConstructorSignatureAttribute("(D)V")]
         [System.ObsoleteAttribute("deprecated")]
@@ -3740,6 +3769,7 @@ namespace Java.Lang
         public const float NaN = 0.0f / 0.0f;
         public const float NegativeInfinity = -1.0f / 0.0f;
         public const float PositiveInfinity = 1.0f / 0.0f;
+        public const int Precision = 24;
         public const int Size = 32;
         [Java.Interop.JniConstructorSignatureAttribute("(D)V")]
         [System.ObsoleteAttribute("deprecated")]
@@ -3763,6 +3793,10 @@ namespace Java.Lang
         public int CompareTo(Java.Lang.Float? anotherFloat) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("doubleValue", "()D")]
         public override double DoubleValue() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("float16ToFloat", "(S)F")]
+        public static float Float16ToFloat(short floatBinary16) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("floatToFloat16", "(F)S")]
+        public static short FloatToFloat16(float f) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floatToIntBits", "(F)I")]
         public static int FloatToIntBits(float value) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floatToRawIntBits", "(F)I")]
@@ -4110,12 +4144,16 @@ namespace Java.Lang
         public int CompareTo(Java.Lang.Integer? anotherInteger) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("compareUnsigned", "(II)I")]
         public static int CompareUnsigned(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("compress", "(II)I")]
+        public static int Compress(int i, int mask) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("decode", "(Ljava/lang/String;)Ljava/lang/Integer;")]
         public static Java.Lang.Integer? Decode(string? nm) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("divideUnsigned", "(II)I")]
         public static int DivideUnsigned(int dividend, int divisor) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("doubleValue", "()D")]
         public override double DoubleValue() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("expand", "(II)I")]
+        public static int Expand(int i, int mask) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floatValue", "()F")]
         public override float FloatValue() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("getInteger", "(Ljava/lang/String;)Ljava/lang/Integer;")]
@@ -4321,12 +4359,16 @@ namespace Java.Lang
         public int CompareTo(Java.Lang.Long? anotherLong) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("compareUnsigned", "(JJ)I")]
         public static int CompareUnsigned(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("compress", "(JJ)J")]
+        public static long Compress(long i, long mask) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("decode", "(Ljava/lang/String;)Ljava/lang/Long;")]
         public static Java.Lang.Long? Decode(string? nm) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("divideUnsigned", "(JJ)J")]
         public static long DivideUnsigned(long dividend, long divisor) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("doubleValue", "()D")]
         public override double DoubleValue() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("expand", "(JJ)J")]
+        public static long Expand(long i, long mask) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floatValue", "()F")]
         public override float FloatValue() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("getLong", "(Ljava/lang/String;)Ljava/lang/Long;")]
@@ -4406,6 +4448,18 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/String;I)Ljava/lang/Long;")]
         public static Java.Lang.Long? ValueOf(string? s, int radix) { throw null; }
     }
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/MatchException", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
+    public sealed partial class MatchException : Java.Lang.RuntimeException
+    {
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/Throwable;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public MatchException(string? message, Java.Lang.Throwable? cause) { }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+    }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/Math", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
@@ -4414,6 +4468,7 @@ namespace Java.Lang
         internal Math() { }
         public const double E = 2.718281828459045;
         public const double Pi = 3.141592653589793;
+        public const double Tau = 6.283185307179586;
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
@@ -4445,6 +4500,30 @@ namespace Java.Lang
         public static double Cbrt(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("ceil", "(D)D")]
         public static double Ceil(double a) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDiv", "(II)I")]
+        public static int CeilDiv(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDiv", "(JI)J")]
+        public static long CeilDiv(long x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDiv", "(JJ)J")]
+        public static long CeilDiv(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDivExact", "(II)I")]
+        public static int CeilDivExact(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDivExact", "(JJ)J")]
+        public static long CeilDivExact(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilMod", "(II)I")]
+        public static int CeilMod(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilMod", "(JI)I")]
+        public static int CeilMod(long x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilMod", "(JJ)J")]
+        public static long CeilMod(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(DDD)D")]
+        public static double Clamp(double value, double min, double max) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(JII)I")]
+        public static int Clamp(long value, int min, int max) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(JJJ)J")]
+        public static long Clamp(long value, long min, long max) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(FFF)F")]
+        public static float Clamp(float value, float min, float max) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("copySign", "(DD)D")]
         public static double CopySign(double magnitude, double sign) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("copySign", "(FF)F")]
@@ -4457,6 +4536,10 @@ namespace Java.Lang
         public static int DecrementExact(int a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("decrementExact", "(J)J")]
         public static long DecrementExact(long a) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("divideExact", "(II)I")]
+        public static int DivideExact(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("divideExact", "(JJ)J")]
+        public static long DivideExact(long x, long y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exp", "(D)D")]
         public static double Exp(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("expm1", "(D)D")]
@@ -4469,6 +4552,10 @@ namespace Java.Lang
         public static long FloorDiv(long x, int y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorDiv", "(JJ)J")]
         public static long FloorDiv(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("floorDivExact", "(II)I")]
+        public static int FloorDivExact(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("floorDivExact", "(JJ)J")]
+        public static long FloorDivExact(long x, long y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorMod", "(II)I")]
         public static int FloorMod(int x, int y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorMod", "(JI)I")]
@@ -4581,6 +4668,8 @@ namespace Java.Lang
         public static double Ulp(double d) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("ulp", "(F)F")]
         public static float Ulp(float f) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("unsignedMultiplyHigh", "(JJ)J")]
+        public static long UnsignedMultiplyHigh(long x, long y) { throw null; }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/Module", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
@@ -4591,6 +4680,7 @@ namespace Java.Lang
         public Java.Lang.ClassLoader? ClassLoader { get { throw null; } }
         public Java.Lang.Modules.ModuleDescriptor? Descriptor { get { throw null; } }
         public bool IsNamed { get { throw null; } }
+        public bool IsNativeAccessEnabled { get { throw null; } }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
@@ -4668,6 +4758,8 @@ namespace Java.Lang
             public Java.Lang.ModuleLayer.Controller? AddOpens(Java.Lang.Module? source, string? pn, Java.Lang.Module? target) { throw null; }
             [Java.Interop.JniMethodSignatureAttribute("addReads", "(Ljava/lang/Module;Ljava/lang/Module;)Ljava/lang/ModuleLayer$Controller;")]
             public Java.Lang.ModuleLayer.Controller? AddReads(Java.Lang.Module? source, Java.Lang.Module? target) { throw null; }
+            [Java.Interop.JniMethodSignatureAttribute("enableNativeAccess", "(Ljava/lang/Module;)Ljava/lang/ModuleLayer$Controller;")]
+            public Java.Lang.ModuleLayer.Controller? EnableNativeAccess(Java.Lang.Module? target) { throw null; }
             [Java.Interop.JniMethodSignatureAttribute("layer", "()Ljava/lang/ModuleLayer;")]
             public Java.Lang.ModuleLayer? Layer() { throw null; }
         }
@@ -4838,7 +4930,7 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("wait", "()V")]
         public void Wait() { }
         [Java.Interop.JniMethodSignatureAttribute("wait", "(J)V")]
-        public void Wait(long p0) { }
+        public void Wait(long timeoutMillis) { }
         [Java.Interop.JniMethodSignatureAttribute("wait", "(JI)V")]
         public void Wait(long timeoutMillis, int nanos) { }
     }
@@ -5087,10 +5179,13 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("exec", "([Ljava/lang/String;[Ljava/lang/String;Ljava/io/File;)Ljava/lang/Process;")]
         public virtual Java.Lang.Process? Exec([System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] Java.Interop.JavaObjectArray<string>? cmdarray, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] Java.Interop.JavaObjectArray<string>? envp, Java.IO.File? dir) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exec", "(Ljava/lang/String;)Ljava/lang/Process;")]
+        [System.ObsoleteAttribute("deprecated")]
         public virtual Java.Lang.Process? Exec(string? command) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exec", "(Ljava/lang/String;[Ljava/lang/String;)Ljava/lang/Process;")]
+        [System.ObsoleteAttribute("deprecated")]
         public virtual Java.Lang.Process? Exec(string? command, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] Java.Interop.JavaObjectArray<string>? envp) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exec", "(Ljava/lang/String;[Ljava/lang/String;Ljava/io/File;)Ljava/lang/Process;")]
+        [System.ObsoleteAttribute("deprecated")]
         public virtual Java.Lang.Process? Exec(string? command, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] Java.Interop.JavaObjectArray<string>? envp, Java.IO.File? dir) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exit", "(I)V")]
         public virtual void Exit(int status) { }
@@ -5113,6 +5208,7 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("removeShutdownHook", "(Ljava/lang/Thread;)Z")]
         public virtual bool RemoveShutdownHook(Java.Lang.Thread? hook) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("runFinalization", "()V")]
+        [System.ObsoleteAttribute("deprecated")]
         public virtual void RunFinalization() { }
         [Java.Interop.JniMethodSignatureAttribute("totalMemory", "()J")]
         public virtual long TotalMemory() { throw null; }
@@ -5173,6 +5269,65 @@ namespace Java.Lang
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+    }
+    [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/ScopedValue", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+    public sealed partial class ScopedValue : Java.Lang.Object
+    {
+        internal ScopedValue() { }
+        public bool IsBound { get { throw null; } }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T", "R"})]
+        [Java.Interop.JniMethodSignatureAttribute("callWhere", "(Ljava/lang/ScopedValue;Ljava/lang/Object;Ljava/util/concurrent/Callable;)Ljava/lang/Object;")]
+        public static Java.Lang.Object? CallWhere(Java.Lang.ScopedValue? key, Java.Lang.Object? value, Java.Util.Concurrent.ICallable? op) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("get", "()Ljava/lang/Object;")]
+        public Java.Lang.Object? Get() { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T", "R"})]
+        [Java.Interop.JniMethodSignatureAttribute("getWhere", "(Ljava/lang/ScopedValue;Ljava/lang/Object;Ljava/util/function/Supplier;)Ljava/lang/Object;")]
+        public static Java.Lang.Object? GetWhere(Java.Lang.ScopedValue? key, Java.Lang.Object? value, Java.Util.Function.ISupplier? op) { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniMethodSignatureAttribute("newInstance", "()Ljava/lang/ScopedValue;")]
+        public static Java.Lang.ScopedValue? NewInstance() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("orElse", "(Ljava/lang/Object;)Ljava/lang/Object;")]
+        public Java.Lang.Object? OrElse(Java.Lang.Object? other) { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "X extends java.lang.Throwable"})]
+        [Java.Interop.JniMethodSignatureAttribute("orElseThrow", "(Ljava/util/function/Supplier;)Ljava/lang/Object;")]
+        public Java.Lang.Object? OrElseThrow(Java.Util.Function.ISupplier? exceptionSupplier) { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniMethodSignatureAttribute("runWhere", "(Ljava/lang/ScopedValue;Ljava/lang/Object;Ljava/lang/Runnable;)V")]
+        public static void RunWhere(Java.Lang.ScopedValue? key, Java.Lang.Object? value, Java.Lang.IRunnable? op) { }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniMethodSignatureAttribute("where", "(Ljava/lang/ScopedValue;Ljava/lang/Object;)Ljava/lang/ScopedValue$Carrier;")]
+        public static Java.Lang.ScopedValue.Carrier? Where(Java.Lang.ScopedValue? key, Java.Lang.Object? value) { throw null; }
+        [Java.Interop.JniTypeSignatureAttribute("java/lang/ScopedValue$Carrier", GenerateJavaPeer=false)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+        public sealed partial class Carrier : Java.Lang.Object
+        {
+            internal Carrier() { }
+            [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+            [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+            [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+            public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "R"})]
+            [Java.Interop.JniMethodSignatureAttribute("call", "(Ljava/util/concurrent/Callable;)Ljava/lang/Object;")]
+            public Java.Lang.Object? Call(Java.Util.Concurrent.ICallable? op) { throw null; }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+            [Java.Interop.JniMethodSignatureAttribute("get", "(Ljava/lang/ScopedValue;)Ljava/lang/Object;")]
+            public Java.Lang.Object? Get(Java.Lang.ScopedValue? key) { throw null; }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "R"})]
+            [Java.Interop.JniMethodSignatureAttribute("get", "(Ljava/util/function/Supplier;)Ljava/lang/Object;")]
+            public Java.Lang.Object? Get(Java.Util.Function.ISupplier? op) { throw null; }
+            [Java.Interop.JniMethodSignatureAttribute("run", "(Ljava/lang/Runnable;)V")]
+            public void Run(Java.Lang.IRunnable? op) { }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+            [Java.Interop.JniMethodSignatureAttribute("where", "(Ljava/lang/ScopedValue;Ljava/lang/Object;)Ljava/lang/ScopedValue$Carrier;")]
+            public Java.Lang.ScopedValue.Carrier? Where(Java.Lang.ScopedValue? key, Java.Lang.Object? value) { throw null; }
+        }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/SecurityException", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
@@ -5413,6 +5568,7 @@ namespace Java.Lang
         internal StrictMath() { }
         public const double E = 2.718281828459045;
         public const double Pi = 3.141592653589793;
+        public const double Tau = 6.283185307179586;
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
@@ -5429,37 +5585,65 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("absExact", "(J)J")]
         public static long AbsExact(long a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("acos", "(D)D")]
-        public static double Acos(double p0) { throw null; }
+        public static double Acos(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("addExact", "(II)I")]
         public static int AddExact(int x, int y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("addExact", "(JJ)J")]
         public static long AddExact(long x, long y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("asin", "(D)D")]
-        public static double Asin(double p0) { throw null; }
+        public static double Asin(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("atan", "(D)D")]
-        public static double Atan(double p0) { throw null; }
+        public static double Atan(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("atan2", "(DD)D")]
-        public static double Atan2(double p0, double p1) { throw null; }
+        public static double Atan2(double y, double x) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("cbrt", "(D)D")]
         public static double Cbrt(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("ceil", "(D)D")]
         public static double Ceil(double a) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDiv", "(II)I")]
+        public static int CeilDiv(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDiv", "(JI)J")]
+        public static long CeilDiv(long x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDiv", "(JJ)J")]
+        public static long CeilDiv(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDivExact", "(II)I")]
+        public static int CeilDivExact(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilDivExact", "(JJ)J")]
+        public static long CeilDivExact(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilMod", "(II)I")]
+        public static int CeilMod(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilMod", "(JI)I")]
+        public static int CeilMod(long x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ceilMod", "(JJ)J")]
+        public static long CeilMod(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(DDD)D")]
+        public static double Clamp(double value, double min, double max) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(JII)I")]
+        public static int Clamp(long value, int min, int max) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(JJJ)J")]
+        public static long Clamp(long value, long min, long max) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("clamp", "(FFF)F")]
+        public static float Clamp(float value, float min, float max) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("copySign", "(DD)D")]
         public static double CopySign(double magnitude, double sign) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("copySign", "(FF)F")]
         public static float CopySign(float magnitude, float sign) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("cos", "(D)D")]
-        public static double Cos(double p0) { throw null; }
+        public static double Cos(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("cosh", "(D)D")]
-        public static double Cosh(double p0) { throw null; }
+        public static double Cosh(double x) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("decrementExact", "(I)I")]
         public static int DecrementExact(int a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("decrementExact", "(J)J")]
         public static long DecrementExact(long a) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("divideExact", "(II)I")]
+        public static int DivideExact(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("divideExact", "(JJ)J")]
+        public static long DivideExact(long x, long y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exp", "(D)D")]
         public static double Exp(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("expm1", "(D)D")]
-        public static double Expm1(double p0) { throw null; }
+        public static double Expm1(double x) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floor", "(D)D")]
         public static double Floor(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorDiv", "(II)I")]
@@ -5468,6 +5652,10 @@ namespace Java.Lang
         public static long FloorDiv(long x, int y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorDiv", "(JJ)J")]
         public static long FloorDiv(long x, long y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("floorDivExact", "(II)I")]
+        public static int FloorDivExact(int x, int y) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("floorDivExact", "(JJ)J")]
+        public static long FloorDivExact(long x, long y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorMod", "(II)I")]
         public static int FloorMod(int x, int y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("floorMod", "(JI)I")]
@@ -5485,17 +5673,17 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("hypot", "(DD)D")]
         public static double Hypot(double x, double y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("IEEEremainder", "(DD)D")]
-        public static double IEEEremainder(double p0, double p1) { throw null; }
+        public static double IEEEremainder(double f1, double f2) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("incrementExact", "(I)I")]
         public static int IncrementExact(int a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("incrementExact", "(J)J")]
         public static long IncrementExact(long a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("log", "(D)D")]
-        public static double Log(double p0) { throw null; }
+        public static double Log(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("log10", "(D)D")]
-        public static double Log10(double p0) { throw null; }
+        public static double Log10(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("log1p", "(D)D")]
-        public static double Log1p(double p0) { throw null; }
+        public static double Log1p(double x) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("max", "(DD)D")]
         public static double Max(double a, double b) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("max", "(II)I")]
@@ -5557,19 +5745,19 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("signum", "(F)F")]
         public static float Signum(float f) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("sin", "(D)D")]
-        public static double Sin(double p0) { throw null; }
+        public static double Sin(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("sinh", "(D)D")]
-        public static double Sinh(double p0) { throw null; }
+        public static double Sinh(double x) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("sqrt", "(D)D")]
-        public static double Sqrt(double p0) { throw null; }
+        public static double Sqrt(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("subtractExact", "(II)I")]
         public static int SubtractExact(int x, int y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("subtractExact", "(JJ)J")]
         public static long SubtractExact(long x, long y) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("tan", "(D)D")]
-        public static double Tan(double p0) { throw null; }
+        public static double Tan(double a) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("tanh", "(D)D")]
-        public static double Tanh(double p0) { throw null; }
+        public static double Tanh(double x) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("toDegrees", "(D)D")]
         public static double ToDegrees(double angrad) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("toIntExact", "(J)I")]
@@ -5580,6 +5768,8 @@ namespace Java.Lang
         public static double Ulp(double d) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("ulp", "(F)F")]
         public static float Ulp(float f) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("unsignedMultiplyHigh", "(JJ)J")]
+        public static long UnsignedMultiplyHigh(long x, long y) { throw null; }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/String", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
@@ -5674,10 +5864,14 @@ namespace Java.Lang
         public int IndexOf(int ch) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("indexOf", "(II)I")]
         public int IndexOf(int ch, int fromIndex) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("indexOf", "(III)I")]
+        public int IndexOf(int ch, int beginIndex, int endIndex) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("indexOf", "(Ljava/lang/String;)I")]
         public int IndexOf(string? str) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("indexOf", "(Ljava/lang/String;I)I")]
         public int IndexOf(string? str, int fromIndex) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("indexOf", "(Ljava/lang/String;II)I")]
+        public int IndexOf(string? str, int beginIndex, int endIndex) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("intern", "()Ljava/lang/String;")]
         public string? Intern() { throw null; }
         Java.Lang.Object? Java.Lang.Constants.IConstantDesc.ResolveConstantDesc(Java.Lang.Invoke.MethodHandles.Lookup? lookup) { throw null; }
@@ -5721,6 +5915,9 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("split", "(Ljava/lang/String;I)[Ljava/lang/String;")]
         [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
         public Java.Interop.JavaObjectArray<string>? Split(string? regex, int limit) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("splitWithDelimiters", "(Ljava/lang/String;I)[Ljava/lang/String;")]
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
+        public Java.Interop.JavaObjectArray<string>? SplitWithDelimiters(string? regex, int limit) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("startsWith", "(Ljava/lang/String;)Z")]
         public bool StartsWith(string? prefix) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("startsWith", "(Ljava/lang/String;I)Z")]
@@ -5775,7 +5972,7 @@ namespace Java.Lang
     [Java.Interop.JniTypeSignatureAttribute("java/lang/StringBuffer", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-    public sealed partial class StringBuffer : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.ISerializable, Java.Lang.ICharSequence, Java.Lang.IComparable, System.Collections.Generic.IEnumerable<char>, System.Collections.IEnumerable, System.IDisposable
+    public sealed partial class StringBuffer : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.ISerializable, Java.Lang.IAppendable, Java.Lang.ICharSequence, Java.Lang.IComparable, System.Collections.Generic.IEnumerable<char>, System.Collections.IEnumerable, System.IDisposable
     {
         [Java.Interop.JniConstructorSignatureAttribute("()V")]
         public StringBuffer() { }
@@ -5872,6 +6069,9 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("insert", "(ILjava/lang/String;)Ljava/lang/StringBuffer;")]
         public Java.Lang.StringBuffer? Insert(int offset, string? str) { throw null; }
         public Java.Lang.StringBuffer? Insert(int dstOffset, string? s, int start, int end) { throw null; }
+        Java.Lang.IAppendable? Java.Lang.IAppendable.Append(Java.Lang.ICharSequence? s) { throw null; }
+        Java.Lang.IAppendable? Java.Lang.IAppendable.Append(Java.Lang.ICharSequence? s, int a, int b) { throw null; }
+        Java.Lang.IAppendable? Java.Lang.IAppendable.Append(char c) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lastIndexOf", "(Ljava/lang/String;)I")]
         public int LastIndexOf(string? str) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lastIndexOf", "(Ljava/lang/String;I)I")]
@@ -5880,6 +6080,11 @@ namespace Java.Lang
         public int Length() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("offsetByCodePoints", "(II)I")]
         public int OffsetByCodePoints(int index, int codePointOffset) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("repeat", "(Ljava/lang/CharSequence;I)Ljava/lang/StringBuffer;")]
+        public Java.Lang.StringBuffer? Repeat(Java.Lang.ICharSequence? cs, int count) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("repeat", "(II)Ljava/lang/StringBuffer;")]
+        public Java.Lang.StringBuffer? Repeat(int codePoint, int count) { throw null; }
+        public Java.Lang.StringBuffer? Repeat(string? cs, int count) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("replace", "(IILjava/lang/String;)Ljava/lang/StringBuffer;")]
         public Java.Lang.StringBuffer? Replace(int start, int end, string? str) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("reverse", "()Ljava/lang/StringBuffer;")]
@@ -5903,7 +6108,7 @@ namespace Java.Lang
     [Java.Interop.JniTypeSignatureAttribute("java/lang/StringBuilder", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
-    public sealed partial class StringBuilder : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.ISerializable, Java.Lang.ICharSequence, Java.Lang.IComparable, System.Collections.Generic.IEnumerable<char>, System.Collections.IEnumerable, System.IDisposable
+    public sealed partial class StringBuilder : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.IO.ISerializable, Java.Lang.IAppendable, Java.Lang.ICharSequence, Java.Lang.IComparable, System.Collections.Generic.IEnumerable<char>, System.Collections.IEnumerable, System.IDisposable
     {
         [Java.Interop.JniConstructorSignatureAttribute("()V")]
         public StringBuilder() { }
@@ -6000,6 +6205,9 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("insert", "(ILjava/lang/String;)Ljava/lang/StringBuilder;")]
         public Java.Lang.StringBuilder? Insert(int offset, string? str) { throw null; }
         public Java.Lang.StringBuilder? Insert(int dstOffset, string? s, int start, int end) { throw null; }
+        Java.Lang.IAppendable? Java.Lang.IAppendable.Append(Java.Lang.ICharSequence? s) { throw null; }
+        Java.Lang.IAppendable? Java.Lang.IAppendable.Append(Java.Lang.ICharSequence? s, int a, int b) { throw null; }
+        Java.Lang.IAppendable? Java.Lang.IAppendable.Append(char c) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lastIndexOf", "(Ljava/lang/String;)I")]
         public int LastIndexOf(string? str) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lastIndexOf", "(Ljava/lang/String;I)I")]
@@ -6008,6 +6216,11 @@ namespace Java.Lang
         public int Length() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("offsetByCodePoints", "(II)I")]
         public int OffsetByCodePoints(int p0, int p1) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("repeat", "(Ljava/lang/CharSequence;I)Ljava/lang/StringBuilder;")]
+        public Java.Lang.StringBuilder? Repeat(Java.Lang.ICharSequence? cs, int count) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("repeat", "(II)Ljava/lang/StringBuilder;")]
+        public Java.Lang.StringBuilder? Repeat(int codePoint, int count) { throw null; }
+        public Java.Lang.StringBuilder? Repeat(string? cs, int count) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("replace", "(IILjava/lang/String;)Ljava/lang/StringBuilder;")]
         public Java.Lang.StringBuilder? Replace(int start, int end, string? str) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("reverse", "()Ljava/lang/StringBuilder;")]
@@ -6091,6 +6304,7 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("nanoTime", "()J")]
         public static long NanoTime() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("runFinalization", "()V")]
+        [System.ObsoleteAttribute("deprecated")]
         public static void RunFinalization() { }
         [Java.Interop.JniMethodSignatureAttribute("setErr", "(Ljava/io/PrintStream;)V")]
         public static void SetErr(Java.IO.PrintStream? err) { }
@@ -6128,17 +6342,17 @@ namespace Java.Lang
         public Thread() { }
         protected Thread(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/Runnable;)V")]
-        public Thread(Java.Lang.IRunnable? target) { }
+        public Thread(Java.Lang.IRunnable? task) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/Runnable;Ljava/lang/String;)V")]
-        public Thread(Java.Lang.IRunnable? target, string? name) { }
+        public Thread(Java.Lang.IRunnable? task, string? name) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/ThreadGroup;Ljava/lang/Runnable;)V")]
-        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? target) { }
+        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? task) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/ThreadGroup;Ljava/lang/Runnable;Ljava/lang/String;)V")]
-        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? target, string? name) { }
+        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? task, string? name) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/ThreadGroup;Ljava/lang/Runnable;Ljava/lang/String;J)V")]
-        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? target, string? name, long stackSize) { }
+        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? task, string? name, long stackSize) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/ThreadGroup;Ljava/lang/Runnable;Ljava/lang/String;JZ)V")]
-        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? target, string? name, long stackSize, bool inheritThreadLocals) { }
+        public Thread(Java.Lang.ThreadGroup? group, Java.Lang.IRunnable? task, string? name, long stackSize, bool inheritInheritableThreadLocals) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/ThreadGroup;Ljava/lang/String;)V")]
         public Thread(Java.Lang.ThreadGroup? group, string? name) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;)V")]
@@ -6146,9 +6360,11 @@ namespace Java.Lang
         public virtual Java.Lang.ClassLoader? ContextClassLoader { get { throw null; } set { } }
         public bool Daemon { get { throw null; } set { } }
         public static Java.Lang.Thread.IUncaughtExceptionHandler? DefaultUncaughtExceptionHandler { get { throw null; } set { } }
+        [System.ObsoleteAttribute("deprecated")]
         public virtual long Id { get { throw null; } }
         public bool IsAlive { get { throw null; } }
         public virtual bool IsInterrupted { get { throw null; } }
+        public bool IsVirtual { get { throw null; } }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
@@ -6188,6 +6404,10 @@ namespace Java.Lang
         public void Join(long millis) { }
         [Java.Interop.JniMethodSignatureAttribute("join", "(JI)V")]
         public void Join(long millis, int nanos) { }
+        [Java.Interop.JniMethodSignatureAttribute("ofPlatform", "()Ljava/lang/Thread$Builder$OfPlatform;")]
+        public static Java.Lang.Thread.IBuilder.IOfPlatform? OfPlatform() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ofVirtual", "()Ljava/lang/Thread$Builder$OfVirtual;")]
+        public static Java.Lang.Thread.IBuilder.IOfVirtual? OfVirtual() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("onSpinWait", "()V")]
         public static void OnSpinWait() { }
         [Java.Interop.JniMethodSignatureAttribute("resume", "()V")]
@@ -6196,19 +6416,75 @@ namespace Java.Lang
         [Java.Interop.JniMethodSignatureAttribute("run", "()V")]
         public virtual void Run() { }
         [Java.Interop.JniMethodSignatureAttribute("sleep", "(J)V")]
-        public static void Sleep(long p0) { }
+        public static void Sleep(long millis) { }
         [Java.Interop.JniMethodSignatureAttribute("sleep", "(JI)V")]
         public static void Sleep(long millis, int nanos) { }
         [Java.Interop.JniMethodSignatureAttribute("start", "()V")]
         public virtual void Start() { }
+        [Java.Interop.JniMethodSignatureAttribute("startVirtualThread", "(Ljava/lang/Runnable;)Ljava/lang/Thread;")]
+        public static Java.Lang.Thread? StartVirtualThread(Java.Lang.IRunnable? task) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("stop", "()V")]
         [System.ObsoleteAttribute("deprecated")]
         public void Stop() { }
         [Java.Interop.JniMethodSignatureAttribute("suspend", "()V")]
         [System.ObsoleteAttribute("deprecated")]
         public void Suspend() { }
+        [Java.Interop.JniMethodSignatureAttribute("threadId", "()J")]
+        public long ThreadId() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("yield", "()V")]
         public static void Yield() { }
+        [Java.Interop.JniTypeSignatureAttribute("java/lang/Thread$Builder", GenerateJavaPeer=false, InvokerType=typeof(Java.Lang.Thread.IBuilderInvoker))]
+        public partial interface IBuilder : Java.Interop.IJavaPeerable, System.IDisposable
+        {
+            [Java.Interop.JniMethodSignatureAttribute("factory", "()Ljava/util/concurrent/ThreadFactory;")]
+            Java.Util.Concurrent.IThreadFactory? Factory();
+            [Java.Interop.JniMethodSignatureAttribute("inheritInheritableThreadLocals", "(Z)Ljava/lang/Thread$Builder;")]
+            Java.Lang.Thread.IBuilder? InheritInheritableThreadLocals(bool p0);
+            [Java.Interop.JniMethodSignatureAttribute("name", "(Ljava/lang/String;)Ljava/lang/Thread$Builder;")]
+            Java.Lang.Thread.IBuilder? Name(string? p0);
+            [Java.Interop.JniMethodSignatureAttribute("name", "(Ljava/lang/String;J)Ljava/lang/Thread$Builder;")]
+            Java.Lang.Thread.IBuilder? Name(string? p0, long p1);
+            [Java.Interop.JniMethodSignatureAttribute("start", "(Ljava/lang/Runnable;)Ljava/lang/Thread;")]
+            Java.Lang.Thread? Start(Java.Lang.IRunnable? p0);
+            [Java.Interop.JniMethodSignatureAttribute("uncaughtExceptionHandler", "(Ljava/lang/Thread$UncaughtExceptionHandler;)Ljava/lang/Thread$Builder;")]
+            Java.Lang.Thread.IBuilder? UncaughtExceptionHandler(Java.Lang.Thread.IUncaughtExceptionHandler? p0);
+            [Java.Interop.JniMethodSignatureAttribute("unstarted", "(Ljava/lang/Runnable;)Ljava/lang/Thread;")]
+            Java.Lang.Thread? Unstarted(Java.Lang.IRunnable? p0);
+            [Java.Interop.JniTypeSignatureAttribute("java/lang/Thread$Builder$OfPlatform", GenerateJavaPeer=false, InvokerType=typeof(Java.Lang.Thread.IBuilder.IOfPlatformInvoker))]
+            public partial interface IOfPlatform : Java.Interop.IJavaPeerable, Java.Lang.Thread.IBuilder, System.IDisposable
+            {
+                [Java.Interop.JniMethodSignatureAttribute("daemon", "()Ljava/lang/Thread$Builder$OfPlatform;")]
+                Java.Lang.Thread.IBuilder.IOfPlatform? Daemon() { throw null; }
+                [Java.Interop.JniMethodSignatureAttribute("daemon", "(Z)Ljava/lang/Thread$Builder$OfPlatform;")]
+                Java.Lang.Thread.IBuilder.IOfPlatform? Daemon(bool p0);
+                [Java.Interop.JniMethodSignatureAttribute("group", "(Ljava/lang/ThreadGroup;)Ljava/lang/Thread$Builder$OfPlatform;")]
+                Java.Lang.Thread.IBuilder.IOfPlatform? Group(Java.Lang.ThreadGroup? p0);
+                [Java.Interop.JniMethodSignatureAttribute("inheritInheritableThreadLocals", "(Z)Ljava/lang/Thread$Builder$OfPlatform;")]
+                new Java.Lang.Thread.IBuilder.IOfPlatform? InheritInheritableThreadLocals(bool p0);
+                [Java.Interop.JniMethodSignatureAttribute("name", "(Ljava/lang/String;)Ljava/lang/Thread$Builder$OfPlatform;")]
+                new Java.Lang.Thread.IBuilder.IOfPlatform? Name(string? p0);
+                [Java.Interop.JniMethodSignatureAttribute("name", "(Ljava/lang/String;J)Ljava/lang/Thread$Builder$OfPlatform;")]
+                new Java.Lang.Thread.IBuilder.IOfPlatform? Name(string? p0, long p1);
+                [Java.Interop.JniMethodSignatureAttribute("priority", "(I)Ljava/lang/Thread$Builder$OfPlatform;")]
+                Java.Lang.Thread.IBuilder.IOfPlatform? Priority(int p0);
+                [Java.Interop.JniMethodSignatureAttribute("stackSize", "(J)Ljava/lang/Thread$Builder$OfPlatform;")]
+                Java.Lang.Thread.IBuilder.IOfPlatform? StackSize(long p0);
+                [Java.Interop.JniMethodSignatureAttribute("uncaughtExceptionHandler", "(Ljava/lang/Thread$UncaughtExceptionHandler;)Ljava/lang/Thread$Builder$OfPlatform;")]
+                new Java.Lang.Thread.IBuilder.IOfPlatform? UncaughtExceptionHandler(Java.Lang.Thread.IUncaughtExceptionHandler? p0);
+            }
+            [Java.Interop.JniTypeSignatureAttribute("java/lang/Thread$Builder$OfVirtual", GenerateJavaPeer=false, InvokerType=typeof(Java.Lang.Thread.IBuilder.IOfVirtualInvoker))]
+            public partial interface IOfVirtual : Java.Interop.IJavaPeerable, Java.Lang.Thread.IBuilder, System.IDisposable
+            {
+                [Java.Interop.JniMethodSignatureAttribute("inheritInheritableThreadLocals", "(Z)Ljava/lang/Thread$Builder$OfVirtual;")]
+                new Java.Lang.Thread.IBuilder.IOfVirtual? InheritInheritableThreadLocals(bool p0);
+                [Java.Interop.JniMethodSignatureAttribute("name", "(Ljava/lang/String;)Ljava/lang/Thread$Builder$OfVirtual;")]
+                new Java.Lang.Thread.IBuilder.IOfVirtual? Name(string? p0);
+                [Java.Interop.JniMethodSignatureAttribute("name", "(Ljava/lang/String;J)Ljava/lang/Thread$Builder$OfVirtual;")]
+                new Java.Lang.Thread.IBuilder.IOfVirtual? Name(string? p0, long p1);
+                [Java.Interop.JniMethodSignatureAttribute("uncaughtExceptionHandler", "(Ljava/lang/Thread$UncaughtExceptionHandler;)Ljava/lang/Thread$Builder$OfVirtual;")]
+                new Java.Lang.Thread.IBuilder.IOfVirtual? UncaughtExceptionHandler(Java.Lang.Thread.IUncaughtExceptionHandler? p0);
+            }
+        }
         [Java.Interop.JniTypeSignatureAttribute("java/lang/Thread$UncaughtExceptionHandler", GenerateJavaPeer=false, InvokerType=typeof(Java.Lang.Thread.IUncaughtExceptionHandlerInvoker))]
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)0)]
         public partial interface IUncaughtExceptionHandler : Java.Interop.IJavaPeerable, System.IDisposable
@@ -6240,6 +6516,7 @@ namespace Java.Lang
         }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/ThreadDeath", GenerateJavaPeer=false)]
+    [System.ObsoleteAttribute("This class is obsoleted in this android platform")]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
     public partial class ThreadDeath : Java.Lang.Error
@@ -6276,9 +6553,6 @@ namespace Java.Lang
         public virtual int ActiveCount() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("activeGroupCount", "()I")]
         public virtual int ActiveGroupCount() { throw null; }
-        [Java.Interop.JniMethodSignatureAttribute("allowThreadSuspension", "(Z)Z")]
-        [System.ObsoleteAttribute("deprecated")]
-        public virtual bool AllowThreadSuspension(bool b) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("checkAccess", "()V")]
         [System.ObsoleteAttribute("deprecated")]
         public void CheckAccess() { }
@@ -6508,6 +6782,26 @@ namespace Java.Lang
         [System.Runtime.CompilerServices.NullableAttribute((byte)2)]
         public static Java.Lang.Class? Type { [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)] get { throw null; } }
     }
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/WrongThreadException", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
+    public sealed partial class WrongThreadException : Java.Lang.RuntimeException
+    {
+        [Java.Interop.JniConstructorSignatureAttribute("()V")]
+        public WrongThreadException() { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/Throwable;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public WrongThreadException(Java.Lang.Throwable? cause) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public WrongThreadException(string? s) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/lang/Throwable;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public WrongThreadException(string? message, Java.Lang.Throwable? cause) { }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+    }
 }
 namespace Java.Lang.Annotation
 {
@@ -6665,19 +6959,22 @@ namespace Java.Lang.Constants
 {
     [Java.Interop.JniTypeSignatureAttribute("java/lang/constant/ConstantDescs", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
-    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
     public sealed partial class ConstantDescs : Java.Lang.Object
     {
         internal ConstantDescs() { }
-        [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+        public const string ClassInitName = "<clinit>";
         public const string DefaultName = "_";
-        public static Java.Lang.Constants.DynamicConstantDesc? False { get { throw null; } }
+        public const string InitName = "<init>";
+        [System.Runtime.CompilerServices.NullableAttribute((byte)2)]
+        public static Java.Lang.Constants.DynamicConstantDesc? False { [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)] get { throw null; } }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
-        [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
-        public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
-        public static Java.Lang.Constants.IConstantDesc? Null { get { throw null; } }
-        public static Java.Lang.Constants.DynamicConstantDesc? True { get { throw null; } }
+        public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+        [System.Runtime.CompilerServices.NullableAttribute((byte)2)]
+        public static Java.Lang.Constants.IConstantDesc? Null { [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)] get { throw null; } }
+        [System.Runtime.CompilerServices.NullableAttribute((byte)2)]
+        public static Java.Lang.Constants.DynamicConstantDesc? True { [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)] get { throw null; } }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/constant/DynamicCallSiteDesc", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
@@ -6733,6 +7030,32 @@ namespace Java.Lang.Constants
         [Java.Interop.JniMethodSignatureAttribute("resolveConstantDesc", "(Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/Object;")]
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         Java.Lang.Object? ResolveConstantDesc(Java.Lang.Invoke.MethodHandles.Lookup? p0);
+    }
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/constant/ModuleDesc", GenerateJavaPeer=false, InvokerType=typeof(Java.Lang.Constants.IModuleDescInvoker))]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+    public partial interface IModuleDesc : Java.Interop.IJavaPeerable, System.IDisposable
+    {
+        [Java.Interop.JniMethodSignatureAttribute("equals", "(Ljava/lang/Object;)Z")]
+        bool Equals(Java.Lang.Object? p0);
+        [Java.Interop.JniMethodSignatureAttribute("name", "()Ljava/lang/String;")]
+        string? Name();
+        [Java.Interop.JniMethodSignatureAttribute("of", "(Ljava/lang/String;)Ljava/lang/constant/ModuleDesc;")]
+        static Java.Lang.Constants.IModuleDesc? Of(string? name) { throw null; }
+    }
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/constant/PackageDesc", GenerateJavaPeer=false, InvokerType=typeof(Java.Lang.Constants.IPackageDescInvoker))]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+    public partial interface IPackageDesc : Java.Interop.IJavaPeerable, System.IDisposable
+    {
+        [Java.Interop.JniMethodSignatureAttribute("equals", "(Ljava/lang/Object;)Z")]
+        bool Equals(Java.Lang.Object? p0);
+        [Java.Interop.JniMethodSignatureAttribute("internalName", "()Ljava/lang/String;")]
+        string? InternalName();
+        [Java.Interop.JniMethodSignatureAttribute("name", "()Ljava/lang/String;")]
+        string? Name() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("of", "(Ljava/lang/String;)Ljava/lang/constant/PackageDesc;")]
+        static Java.Lang.Constants.IPackageDesc? Of(string? name) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("ofInternalName", "(Ljava/lang/String;)Ljava/lang/constant/PackageDesc;")]
+        static Java.Lang.Constants.IPackageDesc? OfInternalName(string? name) { throw null; }
     }
 }
 namespace Java.Lang.Invoke
@@ -6864,7 +7187,7 @@ namespace Java.Lang.Invoke
         [Java.Interop.JniMethodSignatureAttribute("asSpreader", "(ILjava/lang/Class;I)Ljava/lang/invoke/MethodHandle;")]
         public virtual Java.Lang.Invoke.MethodHandle? AsSpreader(int spreadArgPos, Java.Lang.Class? arrayType, int arrayLength) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("asType", "(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;")]
-        public virtual Java.Lang.Invoke.MethodHandle? AsType(Java.Lang.Invoke.MethodType? newType) { throw null; }
+        public Java.Lang.Invoke.MethodHandle? AsType(Java.Lang.Invoke.MethodType? newType) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("asVarargsCollector", "(Ljava/lang/Class;)Ljava/lang/invoke/MethodHandle;")]
         public virtual Java.Lang.Invoke.MethodHandle? AsVarargsCollector(Java.Lang.Class? arrayType) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("bindTo", "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;")]
@@ -6930,6 +7253,8 @@ namespace Java.Lang.Invoke
         public static Java.Lang.Object? ClassDataAt(Java.Lang.Invoke.MethodHandles.Lookup? caller, string? name, Java.Lang.Class? type, int index) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("collectArguments", "(Ljava/lang/invoke/MethodHandle;ILjava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? CollectArguments(Java.Lang.Invoke.MethodHandle? target, int pos, Java.Lang.Invoke.MethodHandle? filter) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("collectCoordinates", "(Ljava/lang/invoke/VarHandle;ILjava/lang/invoke/MethodHandle;)Ljava/lang/invoke/VarHandle;")]
+        public static Java.Lang.Invoke.VarHandle? CollectCoordinates(Java.Lang.Invoke.VarHandle? target, int pos, Java.Lang.Invoke.MethodHandle? filter) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("constant", "(Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? Constant(Java.Lang.Class? type, Java.Lang.Object? value) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("countedLoop", "(Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
@@ -6940,6 +7265,8 @@ namespace Java.Lang.Invoke
         public static Java.Lang.Invoke.MethodHandle? DoWhileLoop(Java.Lang.Invoke.MethodHandle? init, Java.Lang.Invoke.MethodHandle? body, Java.Lang.Invoke.MethodHandle? pred) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("dropArguments", "(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Class;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? DropArguments(Java.Lang.Invoke.MethodHandle? target, int pos, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Class[]? valueTypes) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("dropCoordinates", "(Ljava/lang/invoke/VarHandle;I[Ljava/lang/Class;)Ljava/lang/invoke/VarHandle;")]
+        public static Java.Lang.Invoke.VarHandle? DropCoordinates(Java.Lang.Invoke.VarHandle? target, int pos, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Class[]? valueTypes) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("dropReturn", "(Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? DropReturn(Java.Lang.Invoke.MethodHandle? target) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("empty", "(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;")]
@@ -6950,8 +7277,12 @@ namespace Java.Lang.Invoke
         public static Java.Lang.Invoke.MethodHandle? ExplicitCastArguments(Java.Lang.Invoke.MethodHandle? target, Java.Lang.Invoke.MethodType? newType) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("filterArguments", "(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? FilterArguments(Java.Lang.Invoke.MethodHandle? target, int pos, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Invoke.MethodHandle[]? filters) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("filterCoordinates", "(Ljava/lang/invoke/VarHandle;I[Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/VarHandle;")]
+        public static Java.Lang.Invoke.VarHandle? FilterCoordinates(Java.Lang.Invoke.VarHandle? target, int pos, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Invoke.MethodHandle[]? filters) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("filterReturnValue", "(Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? FilterReturnValue(Java.Lang.Invoke.MethodHandle? target, Java.Lang.Invoke.MethodHandle? filter) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("filterValue", "(Ljava/lang/invoke/VarHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/VarHandle;")]
+        public static Java.Lang.Invoke.VarHandle? FilterValue(Java.Lang.Invoke.VarHandle? target, Java.Lang.Invoke.MethodHandle? filterToTarget, Java.Lang.Invoke.MethodHandle? filterFromTarget) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("foldArguments", "(Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? FoldArguments(Java.Lang.Invoke.MethodHandle? target, Java.Lang.Invoke.MethodHandle? combiner) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("foldArguments", "(Ljava/lang/invoke/MethodHandle;ILjava/lang/invoke/MethodHandle;)Ljava/lang/invoke/MethodHandle;")]
@@ -6962,6 +7293,8 @@ namespace Java.Lang.Invoke
         public static Java.Lang.Invoke.MethodHandle? Identity(Java.Lang.Class? type) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("insertArguments", "(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;")]
         public static Java.Lang.Invoke.MethodHandle? InsertArguments(Java.Lang.Invoke.MethodHandle? target, int pos, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? values) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("insertCoordinates", "(Ljava/lang/invoke/VarHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/VarHandle;")]
+        public static Java.Lang.Invoke.VarHandle? InsertCoordinates(Java.Lang.Invoke.VarHandle? target, int pos, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? values) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("lookup", "()Ljava/lang/invoke/MethodHandles$Lookup;")]
         public static Java.Lang.Invoke.MethodHandles.Lookup? InvokeLookup() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("invoker", "(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;")]
@@ -7014,6 +7347,7 @@ namespace Java.Lang.Invoke
             [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
             [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
             public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
             [Java.Interop.JniMethodSignatureAttribute("accessClass", "(Ljava/lang/Class;)Ljava/lang/Class;")]
             public Java.Lang.Class? AccessClass(Java.Lang.Class? targetClass) { throw null; }
             [Java.Interop.JniMethodSignatureAttribute("bind", "(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;")]
@@ -7026,6 +7360,7 @@ namespace Java.Lang.Invoke
             public Java.Lang.Invoke.MethodHandles.Lookup? DefineHiddenClassWithClassData(Java.Interop.JavaSByteArray? bytes, Java.Lang.Object? classData, bool initialize, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Invoke.MethodHandles.Lookup.ClassOption[]? options) { throw null; }
             [Java.Interop.JniMethodSignatureAttribute("dropLookupMode", "(I)Ljava/lang/invoke/MethodHandles$Lookup;")]
             public Java.Lang.Invoke.MethodHandles.Lookup? DropLookupMode(int modeToDrop) { throw null; }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
             [Java.Interop.JniMethodSignatureAttribute("ensureInitialized", "(Ljava/lang/Class;)Ljava/lang/Class;")]
             public Java.Lang.Class? EnsureInitialized(Java.Lang.Class? targetClass) { throw null; }
             [Java.Interop.JniMethodSignatureAttribute("findClass", "(Ljava/lang/String;)Ljava/lang/Class;")]
@@ -7238,6 +7573,7 @@ namespace Java.Lang.Invoke
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+        public static int MaxIndyConcatArgSlots { get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("makeConcat", "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;")]
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public static Java.Lang.Invoke.CallSite? MakeConcat(Java.Lang.Invoke.MethodHandles.Lookup? lookup, string? name, Java.Lang.Invoke.MethodType? concatType) { throw null; }
@@ -7327,7 +7663,7 @@ namespace Java.Lang.Invoke
         [Java.Interop.JniMethodSignatureAttribute("getVolatile", "([Ljava/lang/Object;)Ljava/lang/Object;")]
         public Java.Lang.Object? GetVolatile([System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? p0) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("isAccessModeSupported", "(Ljava/lang/invoke/VarHandle$AccessMode;)Z")]
-        public bool IsAccessModeSupported(Java.Lang.Invoke.VarHandle.AccessMode? accessMode) { throw null; }
+        public virtual bool IsAccessModeSupported(Java.Lang.Invoke.VarHandle.AccessMode? accessMode) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("loadLoadFence", "()V")]
         public static void LoadLoadFence() { }
         [Java.Interop.JniMethodSignatureAttribute("releaseFence", "()V")]
@@ -7912,6 +8248,72 @@ namespace Java.Lang.Ref
 }
 namespace Java.Lang.Reflect
 {
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/reflect/AccessFlag", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+    public sealed partial class AccessFlag : Java.Lang.Enum
+    {
+        internal AccessFlag() : base (default(Java.Interop.JniObjectReference), default(Java.Interop.JniObjectReferenceOptions)) { }
+        public static Java.Lang.Reflect.AccessFlag? Abstract { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Annotation { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Bridge { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Enum { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Final { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Interface { get { throw null; } }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Mandated { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Module { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Native { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Open { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Private { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Protected { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Public { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Static { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? StaticPhase { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Strict { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Super { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Synchronized { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Synthetic { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Transient { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Transitive { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Varargs { get { throw null; } }
+        public static Java.Lang.Reflect.AccessFlag? Volatile { get { throw null; } }
+        [Java.Interop.JniMethodSignatureAttribute("mask", "()I")]
+        public int Mask() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("sourceModifier", "()Z")]
+        public bool SourceModifier() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/String;)Ljava/lang/reflect/AccessFlag;")]
+        public static Java.Lang.Reflect.AccessFlag? ValueOf(string? name) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("values", "()[Ljava/lang/reflect/AccessFlag;")]
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
+        public static Java.Interop.JavaObjectArray<Java.Lang.Reflect.AccessFlag>? Values() { throw null; }
+        [Java.Interop.JniTypeSignatureAttribute("java/lang/reflect/AccessFlag$Location", GenerateJavaPeer=false)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+        public sealed partial class Location : Java.Lang.Enum
+        {
+            internal Location() : base (default(Java.Interop.JniObjectReference), default(Java.Interop.JniObjectReferenceOptions)) { }
+            public static Java.Lang.Reflect.AccessFlag.Location? Field { get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? InnerClass { get { throw null; } }
+            [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+            [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+            [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+            public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? Method { get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? MethodParameter { get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? Module { get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? ModuleExports { get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? ModuleOpens { get { throw null; } }
+            public static Java.Lang.Reflect.AccessFlag.Location? ModuleRequires { get { throw null; } }
+            [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/String;)Ljava/lang/reflect/AccessFlag$Location;")]
+            public static Java.Lang.Reflect.AccessFlag.Location? ValueOf(string? name) { throw null; }
+            [Java.Interop.JniMethodSignatureAttribute("values", "()[Ljava/lang/reflect/AccessFlag$Location;")]
+            [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
+            public static Java.Interop.JavaObjectArray<Java.Lang.Reflect.AccessFlag.Location>? Values() { throw null; }
+        }
+    }
     [Java.Interop.JniTypeSignatureAttribute("java/lang/reflect/AccessibleObject", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
     [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
@@ -8008,6 +8410,54 @@ namespace Java.Lang.Reflect
         [Java.Interop.JniMethodSignatureAttribute("setShort", "(Ljava/lang/Object;IS)V")]
         public static void SetShort(Java.Lang.Object? p0, int p1, short p2) { }
     }
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/reflect/ClassFileFormatVersion", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+    public sealed partial class ClassFileFormatVersion : Java.Lang.Enum
+    {
+        internal ClassFileFormatVersion() : base (default(Java.Interop.JniObjectReference), default(Java.Interop.JniObjectReferenceOptions)) { }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release0 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release1 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release10 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release11 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release12 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release13 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release14 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release15 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release16 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release17 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release18 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release19 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release2 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release20 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release21 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release3 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release4 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release5 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release6 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release7 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release8 { get { throw null; } }
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Release9 { get { throw null; } }
+        [Java.Interop.JniMethodSignatureAttribute("fromMajor", "(I)Ljava/lang/reflect/ClassFileFormatVersion;")]
+        public static Java.Lang.Reflect.ClassFileFormatVersion? FromMajor(int major) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("latest", "()Ljava/lang/reflect/ClassFileFormatVersion;")]
+        public static Java.Lang.Reflect.ClassFileFormatVersion? Latest() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("major", "()I")]
+        public int Major() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("runtimeVersion", "()Ljava/lang/Runtime$Version;")]
+        public Java.Lang.Runtime.Version? RuntimeVersion() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/Runtime$Version;)Ljava/lang/reflect/ClassFileFormatVersion;")]
+        public static Java.Lang.Reflect.ClassFileFormatVersion? ValueOf(Java.Lang.Runtime.Version? rv) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/String;)Ljava/lang/reflect/ClassFileFormatVersion;")]
+        public static Java.Lang.Reflect.ClassFileFormatVersion? ValueOf(string? name) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("values", "()[Ljava/lang/reflect/ClassFileFormatVersion;")]
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
+        public static Java.Interop.JavaObjectArray<Java.Lang.Reflect.ClassFileFormatVersion>? Values() { throw null; }
+    }
     [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
     [Java.Interop.JniTypeSignatureAttribute("java/lang/reflect/Constructor", GenerateJavaPeer=false)]
     [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
@@ -8023,6 +8473,7 @@ namespace Java.Lang.Reflect
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
         public override int Modifiers { get { throw null; } }
         public override string? Name { get { throw null; } }
+        public override int ParameterCount { get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("getExceptionTypes", "()[Ljava/lang/Class;")]
         [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
         public override Java.Interop.JavaObjectArray<Java.Lang.Class>? GetExceptionTypes() { throw null; }
@@ -8057,7 +8508,7 @@ namespace Java.Lang.Reflect
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
         public abstract int Modifiers { [Java.Interop.JniMethodSignatureAttribute("getModifiers", "()I")] get; }
         public abstract string? Name { [Java.Interop.JniMethodSignatureAttribute("getName", "()Ljava/lang/String;")] get; }
-        public virtual int ParameterCount { get { throw null; } }
+        public abstract int ParameterCount { [Java.Interop.JniMethodSignatureAttribute("getParameterCount", "()I")] get; }
         [Java.Interop.JniMethodSignatureAttribute("getAnnotatedExceptionTypes", "()[Ljava/lang/reflect/AnnotatedType;")]
         [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
         public virtual Java.Interop.JavaObjectArray<Java.Lang.Reflect.IAnnotatedType>? GetAnnotatedExceptionTypes() { throw null; }
@@ -8404,6 +8855,7 @@ namespace Java.Lang.Reflect
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
         public override int Modifiers { get { throw null; } }
         public override string? Name { get { throw null; } }
+        public override int ParameterCount { get { throw null; } }
         public Java.Lang.Class? ReturnType { get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("getExceptionTypes", "()[Ljava/lang/Class;")]
         [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
@@ -8619,6 +9071,25 @@ namespace Java.Lang.Runtimes
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public static Java.Lang.Invoke.CallSite? TypeSwitch(Java.Lang.Invoke.MethodHandles.Lookup? lookup, string? invocationName, Java.Lang.Invoke.MethodType? invocationType, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params Java.Lang.Object[]? labels) { throw null; }
     }
+    [Java.Interop.JniTypeSignatureAttribute("java/lang/runtime/TemplateRuntime", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
+    public sealed partial class TemplateRuntime : Java.Lang.Object
+    {
+        internal TemplateRuntime() { }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+        [Java.Interop.JniMethodSignatureAttribute("newLargeStringTemplate", "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public static Java.Lang.Invoke.CallSite? NewLargeStringTemplate(Java.Lang.Invoke.MethodHandles.Lookup? lookup, string? name, Java.Lang.Invoke.MethodType? type) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("newStringTemplate", "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;[Ljava/lang/String;)Ljava/lang/invoke/CallSite;")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public static Java.Lang.Invoke.CallSite? NewStringTemplate(Java.Lang.Invoke.MethodHandles.Lookup? lookup, string? name, Java.Lang.Invoke.MethodType? type, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params string[]? fragments) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("processStringTemplate", "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;[Ljava/lang/String;)Ljava/lang/invoke/CallSite;")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public static Java.Lang.Invoke.CallSite? ProcessStringTemplate(Java.Lang.Invoke.MethodHandles.Lookup? lookup, string? name, Java.Lang.Invoke.MethodType? type, Java.Lang.Invoke.MethodHandle? processorGetter, [System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] params string[]? fragments) { throw null; }
+    }
 }
 namespace Java.Net
 {
@@ -8768,6 +9239,8 @@ namespace Java.Util.Concurrent
         public virtual Java.Util.Concurrent.CompletableFuture? ExceptionallyComposeAsync(Java.Util.Function.IFunction? fn) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("exceptionallyComposeAsync", "(Ljava/util/function/Function;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;")]
         public virtual Java.Util.Concurrent.CompletableFuture? ExceptionallyComposeAsync(Java.Util.Function.IFunction? fn, Java.Util.Concurrent.IExecutor? executor) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("exceptionNow", "()Ljava/lang/Throwable;")]
+        public virtual Java.Lang.Throwable? ExceptionNow() { throw null; }
         [Java.Interop.JavaTypeParametersAttribute(new string[]{ "U"})]
         [Java.Interop.JniMethodSignatureAttribute("failedFuture", "(Ljava/lang/Throwable;)Ljava/util/concurrent/CompletableFuture;")]
         public static Java.Util.Concurrent.CompletableFuture? FailedFuture(Java.Lang.Throwable? ex) { throw null; }
@@ -8802,6 +9275,8 @@ namespace Java.Util.Concurrent
         public virtual void ObtrudeValue(Java.Lang.Object? value) { }
         [Java.Interop.JniMethodSignatureAttribute("orTimeout", "(JLjava/util/concurrent/TimeUnit;)Ljava/util/concurrent/CompletableFuture;")]
         public virtual Java.Util.Concurrent.CompletableFuture? OrTimeout(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("resultNow", "()Ljava/lang/Object;")]
+        public virtual Java.Lang.Object? ResultNow() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("runAfterBoth", "(Ljava/util/concurrent/CompletionStage;Ljava/lang/Runnable;)Ljava/util/concurrent/CompletableFuture;")]
         public virtual Java.Util.Concurrent.ICompletionStage? RunAfterBoth(Java.Util.Concurrent.ICompletionStage? other, Java.Lang.IRunnable? action) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("runAfterBothAsync", "(Ljava/util/concurrent/CompletionStage;Ljava/lang/Runnable;)Ljava/util/concurrent/CompletableFuture;")]
@@ -8818,6 +9293,8 @@ namespace Java.Util.Concurrent
         public static Java.Util.Concurrent.CompletableFuture? RunAsync(Java.Lang.IRunnable? runnable) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("runAsync", "(Ljava/lang/Runnable;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;")]
         public static Java.Util.Concurrent.CompletableFuture? RunAsync(Java.Lang.IRunnable? runnable, Java.Util.Concurrent.IExecutor? executor) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("state", "()Ljava/util/concurrent/Future$State;")]
+        public virtual Java.Util.Concurrent.IFuture.State? State() { throw null; }
         [Java.Interop.JavaTypeParametersAttribute(new string[]{ "U"})]
         [Java.Interop.JniMethodSignatureAttribute("supplyAsync", "(Ljava/util/function/Supplier;)Ljava/util/concurrent/CompletableFuture;")]
         public static Java.Util.Concurrent.CompletableFuture? SupplyAsync(Java.Util.Function.ISupplier? supplier) { throw null; }
@@ -8918,17 +9395,23 @@ namespace Java.Util.Concurrent
         [Java.Interop.JniConstructorSignatureAttribute("([Ljava/lang/Object;)V")]
         public CopyOnWriteArrayList([System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})] Java.Interop.JavaObjectArray<Java.Lang.Object>? toCopyIn) { }
         protected CopyOnWriteArrayList(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
+        public virtual Java.Lang.Object? First { get { throw null; } }
         public virtual bool IsEmpty { get { throw null; } }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
         [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+        public virtual Java.Lang.Object? Last { get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("add", "(Ljava/lang/Object;)Z")]
         public virtual bool Add(Java.Lang.Object? e) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("add", "(ILjava/lang/Object;)V")]
         public virtual void Add(int index, Java.Lang.Object? element) { }
+        [Java.Interop.JniMethodSignatureAttribute("addFirst", "(Ljava/lang/Object;)V")]
+        public virtual void AddFirst(Java.Lang.Object? e) { }
         [Java.Interop.JniMethodSignatureAttribute("addIfAbsent", "(Ljava/lang/Object;)Z")]
         public virtual bool AddIfAbsent(Java.Lang.Object? e) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("addLast", "(Ljava/lang/Object;)V")]
+        public virtual void AddLast(Java.Lang.Object? e) { }
         [Java.Interop.JniMethodSignatureAttribute("clear", "()V")]
         public virtual void Clear() { }
         [Java.Interop.JniMethodSignatureAttribute("clone", "()Ljava/lang/Object;")]
@@ -8951,8 +9434,12 @@ namespace Java.Util.Concurrent
         public virtual bool Remove(Java.Lang.Object? o) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("remove", "(I)Ljava/lang/Object;")]
         public virtual Java.Lang.Object? Remove(int index) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("removeFirst", "()Ljava/lang/Object;")]
+        public virtual Java.Lang.Object? RemoveFirst() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("removeIf", "(Ljava/util/function/Predicate;)Z")]
         public virtual bool RemoveIf(Java.Util.Function.IPredicate? filter) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("removeLast", "()Ljava/lang/Object;")]
+        public virtual Java.Lang.Object? RemoveLast() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("replaceAll", "(Ljava/util/function/UnaryOperator;)V")]
         public virtual void ReplaceAll(Java.Util.Function.IUnaryOperator? @operator) { }
         [Java.Interop.JniMethodSignatureAttribute("set", "(ILjava/lang/Object;)Ljava/lang/Object;")]
@@ -9241,6 +9728,8 @@ namespace Java.Util.Concurrent
         public virtual bool AwaitQuiescence(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("awaitTermination", "(JLjava/util/concurrent/TimeUnit;)Z")]
         public virtual bool AwaitTermination(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("close", "()V")]
+        public virtual void Close() { }
         [Java.Interop.JniMethodSignatureAttribute("commonPool", "()Ljava/util/concurrent/ForkJoinPool;")]
         public static Java.Util.Concurrent.ForkJoinPool? CommonPool() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("execute", "(Ljava/lang/Runnable;)V")]
@@ -9248,12 +9737,20 @@ namespace Java.Util.Concurrent
         [Java.Interop.JniMethodSignatureAttribute("execute", "(Ljava/util/concurrent/ForkJoinTask;)V")]
         public virtual void Execute(Java.Util.Concurrent.ForkJoinTask? task) { }
         [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniMethodSignatureAttribute("externalSubmit", "(Ljava/util/concurrent/ForkJoinTask;)Ljava/util/concurrent/ForkJoinTask;")]
+        public virtual Java.Util.Concurrent.ForkJoinTask? ExternalSubmit(Java.Util.Concurrent.ForkJoinTask? task) { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
         [Java.Interop.JniMethodSignatureAttribute("invoke", "(Ljava/util/concurrent/ForkJoinTask;)Ljava/lang/Object;")]
         public virtual Java.Lang.Object? Invoke(Java.Util.Concurrent.ForkJoinTask? task) { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniMethodSignatureAttribute("lazySubmit", "(Ljava/util/concurrent/ForkJoinTask;)Ljava/util/concurrent/ForkJoinTask;")]
+        public virtual Java.Util.Concurrent.ForkJoinTask? LazySubmit(Java.Util.Concurrent.ForkJoinTask? task) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("managedBlock", "(Ljava/util/concurrent/ForkJoinPool$ManagedBlocker;)V")]
         public static void ManagedBlock(Java.Util.Concurrent.ForkJoinPool.IManagedBlocker? blocker) { }
         [Java.Interop.JniMethodSignatureAttribute("pollSubmission", "()Ljava/util/concurrent/ForkJoinTask;")]
         protected virtual Java.Util.Concurrent.ForkJoinTask? PollSubmission() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("setParallelism", "(I)I")]
+        public virtual int SetParallelism(int size) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("shutdown", "()V")]
         public virtual void Shutdown() { }
         [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
@@ -9307,6 +9804,9 @@ namespace Java.Util.Concurrent
         [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
         [Java.Interop.JniMethodSignatureAttribute("adapt", "(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/ForkJoinTask;")]
         public static Java.Util.Concurrent.ForkJoinTask? Adapt(Java.Util.Concurrent.ICallable? callable) { throw null; }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniMethodSignatureAttribute("adaptInterruptible", "(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/ForkJoinTask;")]
+        public static Java.Util.Concurrent.ForkJoinTask? AdaptInterruptible(Java.Util.Concurrent.ICallable? callable) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("cancel", "(Z)Z")]
         public virtual bool Cancel(bool mayInterruptIfRunning) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("compareAndSetForkJoinTaskTag", "(SS)Z")]
@@ -9315,6 +9815,8 @@ namespace Java.Util.Concurrent
         public virtual void Complete(Java.Lang.Object? value) { }
         [Java.Interop.JniMethodSignatureAttribute("completeExceptionally", "(Ljava/lang/Throwable;)V")]
         public virtual void CompleteExceptionally(Java.Lang.Throwable? ex) { }
+        [Java.Interop.JniMethodSignatureAttribute("exceptionNow", "()Ljava/lang/Throwable;")]
+        public virtual Java.Lang.Throwable? ExceptionNow() { throw null; }
         protected abstract bool Exec();
         [Java.Interop.JniMethodSignatureAttribute("fork", "()Ljava/util/concurrent/ForkJoinTask;")]
         public Java.Util.Concurrent.ForkJoinTask? Fork() { throw null; }
@@ -9348,11 +9850,19 @@ namespace Java.Util.Concurrent
         public void QuietlyInvoke() { }
         [Java.Interop.JniMethodSignatureAttribute("quietlyJoin", "()V")]
         public void QuietlyJoin() { }
+        [Java.Interop.JniMethodSignatureAttribute("quietlyJoin", "(JLjava/util/concurrent/TimeUnit;)Z")]
+        public bool QuietlyJoin(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("quietlyJoinUninterruptibly", "(JLjava/util/concurrent/TimeUnit;)Z")]
+        public bool QuietlyJoinUninterruptibly(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("reinitialize", "()V")]
         public virtual void Reinitialize() { }
+        [Java.Interop.JniMethodSignatureAttribute("resultNow", "()Ljava/lang/Object;")]
+        public virtual Java.Lang.Object? ResultNow() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("setForkJoinTaskTag", "(S)S")]
         public short SetForkJoinTaskTag(short newValue) { throw null; }
         protected abstract void SetRawResult(Java.Lang.Object? p0);
+        [Java.Interop.JniMethodSignatureAttribute("state", "()Ljava/util/concurrent/Future$State;")]
+        public virtual Java.Util.Concurrent.IFuture.State? State() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("tryUnfork", "()Z")]
         public virtual bool TryUnfork() { throw null; }
     }
@@ -9362,6 +9872,8 @@ namespace Java.Util.Concurrent
     public partial class ForkJoinWorkerThread : Java.Lang.Thread
     {
         protected ForkJoinWorkerThread(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/ThreadGroup;Ljava/util/concurrent/ForkJoinPool;Z)V")]
+        protected ForkJoinWorkerThread(Java.Lang.ThreadGroup? group, Java.Util.Concurrent.ForkJoinPool? pool, bool preserveThreadLocals) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/util/concurrent/ForkJoinPool;)V")]
         protected ForkJoinWorkerThread(Java.Util.Concurrent.ForkJoinPool? pool) { }
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
@@ -9370,6 +9882,7 @@ namespace Java.Util.Concurrent
         public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
         public virtual Java.Util.Concurrent.ForkJoinPool? Pool { get { throw null; } }
         public virtual int PoolIndex { get { throw null; } }
+        public virtual int QueuedTaskCount { get { throw null; } }
         [Java.Interop.JniMethodSignatureAttribute("onStart", "()V")]
         protected virtual void OnStart() { }
         [Java.Interop.JniMethodSignatureAttribute("onTermination", "(Ljava/lang/Throwable;)V")]
@@ -9377,14 +9890,14 @@ namespace Java.Util.Concurrent
     }
     [Java.Interop.JavaTypeParametersAttribute(new string[]{ "V"})]
     [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/FutureTask", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
     public partial class FutureTask : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.Lang.IRunnable, Java.Util.Concurrent.IFuture, Java.Util.Concurrent.IRunnableFuture, System.IDisposable
     {
         protected FutureTask(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/Runnable;Ljava/lang/Object;)V")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public FutureTask(Java.Lang.IRunnable? runnable, Java.Lang.Object? result) { }
         [Java.Interop.JniConstructorSignatureAttribute("(Ljava/util/concurrent/Callable;)V")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public FutureTask(Java.Util.Concurrent.ICallable? callable) { }
         public virtual bool IsCancelled { get { throw null; } }
         public virtual bool IsDone { get { throw null; } }
@@ -9396,22 +9909,24 @@ namespace Java.Util.Concurrent
         public virtual bool Cancel(bool mayInterruptIfRunning) { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("done", "()V")]
         protected virtual void Done() { }
+        [Java.Interop.JniMethodSignatureAttribute("exceptionNow", "()Ljava/lang/Throwable;")]
+        public virtual Java.Lang.Throwable? ExceptionNow() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("get", "()Ljava/lang/Object;")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public virtual Java.Lang.Object? Get() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("get", "(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public virtual Java.Lang.Object? Get(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("resultNow", "()Ljava/lang/Object;")]
+        public virtual Java.Lang.Object? ResultNow() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("run", "()V")]
         public virtual void Run() { }
         [Java.Interop.JniMethodSignatureAttribute("runAndReset", "()Z")]
         protected virtual bool RunAndReset() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("set", "(Ljava/lang/Object;)V")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         protected virtual void Set(Java.Lang.Object? v) { }
         [Java.Interop.JniMethodSignatureAttribute("setException", "(Ljava/lang/Throwable;)V")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         protected virtual void SetException(Java.Lang.Throwable? t) { }
+        [Java.Interop.JniMethodSignatureAttribute("state", "()Ljava/util/concurrent/Future$State;")]
+        public virtual Java.Util.Concurrent.IFuture.State? State() { throw null; }
     }
     [Java.Interop.JavaTypeParametersAttribute(new string[]{ "V"})]
     [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/Callable", GenerateJavaPeer=false, InvokerType=typeof(Java.Util.Concurrent.ICallableInvoker))]
@@ -9563,18 +10078,42 @@ namespace Java.Util.Concurrent
     }
     [Java.Interop.JavaTypeParametersAttribute(new string[]{ "V"})]
     [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/Future", GenerateJavaPeer=false, InvokerType=typeof(Java.Util.Concurrent.IFutureInvoker))]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
     public partial interface IFuture : Java.Interop.IJavaPeerable, System.IDisposable
     {
         bool IsCancelled { [Java.Interop.JniMethodSignatureAttribute("isCancelled", "()Z")] get; }
         bool IsDone { [Java.Interop.JniMethodSignatureAttribute("isDone", "()Z")] get; }
         [Java.Interop.JniMethodSignatureAttribute("cancel", "(Z)Z")]
         bool Cancel(bool p0);
+        [Java.Interop.JniMethodSignatureAttribute("exceptionNow", "()Ljava/lang/Throwable;")]
+        Java.Lang.Throwable? ExceptionNow() { throw null; }
         [Java.Interop.JniMethodSignatureAttribute("get", "()Ljava/lang/Object;")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         Java.Lang.Object? Get();
         [Java.Interop.JniMethodSignatureAttribute("get", "(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;")]
-        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         Java.Lang.Object? Get(long p0, Java.Util.Concurrent.TimeUnit? p1);
+        [Java.Interop.JniMethodSignatureAttribute("state", "()Ljava/util/concurrent/Future$State;")]
+        Java.Util.Concurrent.IFuture.State? InvokeState() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("resultNow", "()Ljava/lang/Object;")]
+        Java.Lang.Object? ResultNow() { throw null; }
+        [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/Future$State", GenerateJavaPeer=false)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+        public sealed partial class State : Java.Lang.Enum
+        {
+            internal State() : base (default(Java.Interop.JniObjectReference), default(Java.Interop.JniObjectReferenceOptions)) { }
+            public static Java.Util.Concurrent.IFuture.State? Cancelled { get { throw null; } }
+            public static Java.Util.Concurrent.IFuture.State? Failed { get { throw null; } }
+            [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+            [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+            [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+            public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+            public static Java.Util.Concurrent.IFuture.State? Running { get { throw null; } }
+            public static Java.Util.Concurrent.IFuture.State? Success { get { throw null; } }
+            [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/String;)Ljava/util/concurrent/Future$State;")]
+            public static Java.Util.Concurrent.IFuture.State? ValueOf(string? name) { throw null; }
+            [Java.Interop.JniMethodSignatureAttribute("values", "()[Ljava/util/concurrent/Future$State;")]
+            [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
+            public static Java.Interop.JavaObjectArray<Java.Util.Concurrent.IFuture.State>? Values() { throw null; }
+        }
     }
     [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/RejectedExecutionHandler", GenerateJavaPeer=false, InvokerType=typeof(Java.Util.Concurrent.IRejectedExecutionHandlerInvoker))]
     public partial interface IRejectedExecutionHandler : Java.Interop.IJavaPeerable, System.IDisposable
@@ -9795,6 +10334,129 @@ namespace Java.Util.Concurrent
         [Java.Interop.JniMethodSignatureAttribute("tryAcquire", "(JLjava/util/concurrent/TimeUnit;)Z")]
         [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
         public virtual bool TryAcquire(long timeout, Java.Util.Concurrent.TimeUnit? unit) { throw null; }
+    }
+    [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+    [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/StructuredTaskScope", GenerateJavaPeer=false)]
+    public partial class StructuredTaskScope : Java.Lang.Object, Java.Interop.IJavaPeerable, Java.Lang.IAutoCloseable, System.IDisposable
+    {
+        [Java.Interop.JniConstructorSignatureAttribute("()V")]
+        public StructuredTaskScope() { }
+        protected StructuredTaskScope(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/util/concurrent/ThreadFactory;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public StructuredTaskScope(string? name, Java.Util.Concurrent.IThreadFactory? factory) { }
+        public bool IsShutdown { get { throw null; } }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+        [Java.Interop.JniMethodSignatureAttribute("close", "()V")]
+        public virtual void Close() { }
+        [Java.Interop.JniMethodSignatureAttribute("ensureOwnerAndJoined", "()V")]
+        protected void EnsureOwnerAndJoined() { }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "U extends T"})]
+        [Java.Interop.JniMethodSignatureAttribute("fork", "(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/StructuredTaskScope$Subtask;")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public virtual Java.Util.Concurrent.StructuredTaskScope.ISubtask? Fork(Java.Util.Concurrent.ICallable? task) { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("handleComplete", "(Ljava/util/concurrent/StructuredTaskScope$Subtask;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        protected virtual void HandleComplete(Java.Util.Concurrent.StructuredTaskScope.ISubtask? subtask) { }
+        [Java.Interop.JniMethodSignatureAttribute("join", "()Ljava/util/concurrent/StructuredTaskScope;")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public virtual Java.Util.Concurrent.StructuredTaskScope? Join() { throw null; }
+        [Java.Interop.JniMethodSignatureAttribute("shutdown", "()V")]
+        public virtual void Shutdown() { }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/StructuredTaskScope$Subtask", GenerateJavaPeer=false, InvokerType=typeof(Java.Util.Concurrent.StructuredTaskScope.ISubtaskInvoker))]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public partial interface ISubtask : Java.Interop.IJavaPeerable, Java.Util.Function.ISupplier, System.IDisposable
+        {
+            [Java.Interop.JniMethodSignatureAttribute("exception", "()Ljava/lang/Throwable;")]
+            Java.Lang.Throwable? Exception();
+            [Java.Interop.JniMethodSignatureAttribute("get", "()Ljava/lang/Object;")]
+            new Java.Lang.Object? Get();
+            [Java.Interop.JniMethodSignatureAttribute("state", "()Ljava/util/concurrent/StructuredTaskScope$Subtask$State;")]
+            Java.Util.Concurrent.StructuredTaskScope.ISubtask.State? InvokeState();
+            [Java.Interop.JniMethodSignatureAttribute("task", "()Ljava/util/concurrent/Callable;")]
+            Java.Util.Concurrent.ICallable? Task();
+            [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/StructuredTaskScope$Subtask$State", GenerateJavaPeer=false)]
+            [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+            public sealed partial class State : Java.Lang.Enum
+            {
+                internal State() : base (default(Java.Interop.JniObjectReference), default(Java.Interop.JniObjectReferenceOptions)) { }
+                public static Java.Util.Concurrent.StructuredTaskScope.ISubtask.State? Failed { get { throw null; } }
+                [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+                [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+                [System.Runtime.CompilerServices.NullableAttribute((byte)1)]
+                public override Java.Interop.JniPeerMembers JniPeerMembers { [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)] get { throw null; } }
+                public static Java.Util.Concurrent.StructuredTaskScope.ISubtask.State? Success { get { throw null; } }
+                public static Java.Util.Concurrent.StructuredTaskScope.ISubtask.State? Unavailable { get { throw null; } }
+                [Java.Interop.JniMethodSignatureAttribute("valueOf", "(Ljava/lang/String;)Ljava/util/concurrent/StructuredTaskScope$Subtask$State;")]
+                public static Java.Util.Concurrent.StructuredTaskScope.ISubtask.State? ValueOf(string? name) { throw null; }
+                [Java.Interop.JniMethodSignatureAttribute("values", "()[Ljava/util/concurrent/StructuredTaskScope$Subtask$State;")]
+                [return: System.Runtime.CompilerServices.NullableAttribute(new byte[]{ (byte)2, (byte)1})]
+                public static Java.Interop.JavaObjectArray<Java.Util.Concurrent.StructuredTaskScope.ISubtask.State>? Values() { throw null; }
+            }
+        }
+        [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/StructuredTaskScope$ShutdownOnFailure", GenerateJavaPeer=false)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
+        public sealed partial class ShutdownOnFailure : Java.Util.Concurrent.StructuredTaskScope
+        {
+            [Java.Interop.JniConstructorSignatureAttribute("()V")]
+            public ShutdownOnFailure() { }
+            [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/util/concurrent/ThreadFactory;)V")]
+            [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+            public ShutdownOnFailure(string? name, Java.Util.Concurrent.IThreadFactory? factory) { }
+            [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+            [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+            public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+            [Java.Interop.JniMethodSignatureAttribute("handleComplete", "(Ljava/util/concurrent/StructuredTaskScope$Subtask;)V")]
+            [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+            protected override void HandleComplete(Java.Util.Concurrent.StructuredTaskScope.ISubtask? subtask) { }
+            [Java.Interop.JniMethodSignatureAttribute("throwIfFailed", "()V")]
+            public void ThrowIfFailed() { }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "X extends java.lang.Throwable"})]
+            [Java.Interop.JniMethodSignatureAttribute("throwIfFailed", "(Ljava/util/function/Function;)V")]
+            [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+            public void ThrowIfFailed(Java.Util.Function.IFunction? esf) { }
+        }
+        [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
+        [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/StructuredTaskScope$ShutdownOnSuccess", GenerateJavaPeer=false)]
+        [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
+        public sealed partial class ShutdownOnSuccess : Java.Util.Concurrent.StructuredTaskScope
+        {
+            [Java.Interop.JniConstructorSignatureAttribute("()V")]
+            public ShutdownOnSuccess() { }
+            [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;Ljava/util/concurrent/ThreadFactory;)V")]
+            [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+            public ShutdownOnSuccess(string? name, Java.Util.Concurrent.IThreadFactory? factory) { }
+            [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+            [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+            public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
+            [Java.Interop.JniMethodSignatureAttribute("result", "()Ljava/lang/Object;")]
+            [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+            public Java.Lang.Object? Result() { throw null; }
+            [Java.Interop.JavaTypeParametersAttribute(new string[]{ "X extends java.lang.Throwable"})]
+            [Java.Interop.JniMethodSignatureAttribute("result", "(Ljava/util/function/Function;)Ljava/lang/Object;")]
+            [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+            public Java.Lang.Object? Result(Java.Util.Function.IFunction? esf) { throw null; }
+        }
+    }
+    [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/StructureViolationException", GenerateJavaPeer=false)]
+    [System.Runtime.CompilerServices.NullableAttribute((byte)0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute((byte)1)]
+    public sealed partial class StructureViolationException : Java.Lang.RuntimeException
+    {
+        [Java.Interop.JniConstructorSignatureAttribute("()V")]
+        public StructureViolationException() { }
+        [Java.Interop.JniConstructorSignatureAttribute("(Ljava/lang/String;)V")]
+        [System.Runtime.CompilerServices.NullableContextAttribute((byte)2)]
+        public StructureViolationException(string? message) { }
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Diagnostics.DebuggerBrowsableAttribute(System.Diagnostics.DebuggerBrowsableState.Never)]
+        public override Java.Interop.JniPeerMembers JniPeerMembers { get { throw null; } }
     }
     [Java.Interop.JavaTypeParametersAttribute(new string[]{ "T"})]
     [Java.Interop.JniTypeSignatureAttribute("java/util/concurrent/SubmissionPublisher", GenerateJavaPeer=false)]
