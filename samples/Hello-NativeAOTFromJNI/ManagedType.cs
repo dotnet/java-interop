@@ -3,6 +3,9 @@ namespace Example;
 using System;
 using Java.Interop;
 
+[System.Runtime.InteropServices.UnmanagedFunctionPointer (System.Runtime.InteropServices.CallingConvention.Winapi)]
+delegate IntPtr _JniMarshal_PP_L (IntPtr jnienv, IntPtr n_self);
+
 [JniTypeSignature (JniTypeName)]
 class ManagedType : Java.Lang.Object {
 	internal const string JniTypeName = "example/ManagedType";
@@ -20,9 +23,6 @@ class ManagedType : Java.Lang.Object {
 	{
 		return new Java.Lang.String ($"Hello from C#, via Java.Interop! Value={value}");
 	}
-
-	[System.Runtime.InteropServices.UnmanagedFunctionPointer (System.Runtime.InteropServices.CallingConvention.Winapi)]
-	delegate IntPtr _JniMarshal_PP_L (IntPtr jnienv, IntPtr n_self);
 
 	static IntPtr n_GetString (IntPtr jnienv, IntPtr n_self)
 	{

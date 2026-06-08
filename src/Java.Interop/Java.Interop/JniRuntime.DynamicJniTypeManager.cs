@@ -191,11 +191,15 @@ namespace Java.Interop {
 			static bool TryMakeJavaObjectArrayType (Type type, out Type? arrayType) =>
 				KnownArrayTypes.Value.JavaObjectArrayTypes.TryGetValue (type, out arrayType);
 
-			static Type GetUnsupportedArrayType (Type type) =>
-				throw new NotSupportedException ($"Array type construction for `{type}` is not supported.");
+			static Type MakeArrayType (Type type) =>
+				TryMakeArrayType (type, out var arrayType)
+					? arrayType ?? throw new InvalidOperationException ("Should not be reached")
+					: type.MakeArrayType ();
 
-			static Type GetUnsupportedJavaObjectArrayType (Type type) =>
-				throw new NotSupportedException ($"Generic Java array wrapper type construction for `{type}` is not supported.");
+			static Type MakeJavaObjectArrayType (Type type) =>
+				TryMakeJavaObjectArrayType (type, out var arrayType)
+					? arrayType ?? throw new InvalidOperationException ("Should not be reached")
+					: typeof (JavaObjectArray<>).MakeGenericType (type);
 
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
 			protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
@@ -273,9 +277,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType = TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)
-								? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
-								: GetUnsupportedJavaObjectArrayType (arrayType);
+							arrayType = MakeJavaObjectArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -284,9 +286,7 @@ namespace Java.Interop {
 						var rank        = typeSignature.ArrayRank;
 						var arrayType   = type;
 						while (rank-- > 0) {
-							arrayType = TryMakeArrayType (arrayType, out var nextArrayType)
-								? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
-								: GetUnsupportedArrayType (arrayType);
+							arrayType = MakeArrayType (arrayType);
 						}
 						yield return arrayType;
 					}
@@ -308,24 +308,15 @@ namespace Java.Interop {
 				foreach (var t in JniPrimitiveArrayTypes [index].ArrayTypes) {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
-					var unsupported = false;
 					while (rank-- > 0) {
-						if (!TryMakeJavaObjectArrayType (arrayType, out var nextArrayType)) {
-							unsupported = true;
-							break;
-						}
-						arrayType = nextArrayType ?? throw new InvalidOperationException ("Should not be reached");
+						arrayType = MakeJavaObjectArrayType (arrayType);
 					}
-					if (!unsupported) {
-						yield return arrayType;
-					}
+					yield return arrayType;
 
 					rank            = typeSignature.ArrayRank-1;
 					arrayType       = t;
 					while (rank-- > 0) {
-						arrayType = TryMakeArrayType (arrayType, out var nextArrayType)
-							? nextArrayType ?? throw new InvalidOperationException ("Should not be reached")
-							: GetUnsupportedArrayType (arrayType);
+						arrayType = MakeArrayType (arrayType);
 					}
 					yield return arrayType;
 				}

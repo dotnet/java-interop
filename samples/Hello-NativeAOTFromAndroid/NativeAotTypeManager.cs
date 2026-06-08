@@ -4,10 +4,11 @@ using Java.Interop;
 
 namespace Java.Interop.Samples.NativeAotFromAndroid;
 
-partial class NativeAotTypeManager : JniRuntime.DynamicJniTypeManager {
+partial class NativeAotTypeManager : JniRuntime.JniTypeManager {
 
 	internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
 	internal const DynamicallyAccessedMemberTypes MethodsAndPrivateNested = Methods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
+	internal const DynamicallyAccessedMemberTypes MethodsConstructors = MethodsAndPrivateNested | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 
 	Dictionary<string, Type> typeMappings = new () {
 		["android/app/Activity"]                = typeof (Android.App.Activity),
@@ -30,6 +31,7 @@ partial class NativeAotTypeManager : JniRuntime.DynamicJniTypeManager {
 			throw new NotSupportedException ($"Could not register native members for type '{type.FullName}'.");
 	}
 
+	[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
 	public override void RegisterNativeMembers (
 			JniType nativeClass,
 			[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
@@ -42,18 +44,37 @@ partial class NativeAotTypeManager : JniRuntime.DynamicJniTypeManager {
 	protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
 	{
 		Console.WriteLine ($"# jonp: GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}`");
-		if (typeMappings.TryGetValue (jniSimpleReference, out var target)) {
+		var target = GetTypeForSimpleReference (jniSimpleReference);
+		if (target != null) {
 			Console.WriteLine ($"# jonp:   GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}` -> `{target}`");
 			yield return target;
 		}
 	}
 
+	protected override string? GetSimpleReference (Type type)
+	{
+		return GetSimpleReferences (type).FirstOrDefault ();
+	}
+
+	[return: DynamicallyAccessedMembers (MethodsConstructors)]
 	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
 	{
-		if (typeMappings.TryGetValue (jniSimpleReference, out var target))
-			return target;
-		return null;
+		return jniSimpleReference switch {
+			"android/app/Activity"                => TypeOf<Android.App.Activity> (),
+			"android/content/Context"             => TypeOf<Android.Content.Context> (),
+			"android/content/ContextWrapper"      => TypeOf<Android.Content.ContextWrapper> (),
+			"android/os/BaseBundle"               => TypeOf<Android.OS.BaseBundle> (),
+			"android/os/Bundle"                   => TypeOf<Android.OS.Bundle> (),
+			"android/view/ContextThemeWrapper"    => TypeOf<Android.View.ContextThemeWrapper> (),
+			"my/MainActivity"                     => TypeOf<MainActivity> (),
+			_                                     => null,
+		};
 	}
+
+	[return: DynamicallyAccessedMembers (MethodsConstructors)]
+	static Type TypeOf<
+			[DynamicallyAccessedMembers (MethodsConstructors)]
+			T> () => typeof (T);
 
 	protected override IEnumerable<string> GetSimpleReferences (Type type)
 	{
@@ -77,6 +98,15 @@ partial class NativeAotTypeManager : JniRuntime.DynamicJniTypeManager {
 		return GetTypesForSimpleReference (typeSignature.SimpleReference);
 	}
 
+	public override IEnumerable<JniRuntime.JniTypeManager.ReflectionConstructibleType> GetReflectionConstructibleTypes (JniTypeSignature typeSignature)
+	{
+		if (!typeSignature.IsValid || typeSignature.ArrayRank != 0 || typeSignature.SimpleReference == null)
+			yield break;
+		var target = GetTypeForSimpleReference (typeSignature.SimpleReference);
+		if (target != null)
+			yield return new JniRuntime.JniTypeManager.ReflectionConstructibleType (target);
+	}
+
 	protected override JniTypeSignature GetTypeSignatureCore (Type type)
 	{
 		var simpleReference = GetSimpleReferences (type).FirstOrDefault ();
@@ -88,5 +118,28 @@ partial class NativeAotTypeManager : JniRuntime.DynamicJniTypeManager {
 		var signature = GetTypeSignatureCore (type);
 		if (signature.IsValid)
 			yield return signature;
+	}
+
+	[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+	protected override Type? GetInvokerTypeCore (
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+			Type type)
+	{
+		return null;
+	}
+
+	protected override IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimpleReference)
+	{
+		return null;
+	}
+
+	protected override string? GetReplacementTypeCore (string jniSimpleReference)
+	{
+		return null;
+	}
+
+	protected override JniRuntime.ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSourceType, string jniMethodName, string jniMethodSignature)
+	{
+		return null;
 	}
 }
