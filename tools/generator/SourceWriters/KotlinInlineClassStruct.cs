@@ -31,8 +31,12 @@ namespace generator.SourceWriters
 		{
 			if (IsPublic)
 				writer.Write ("public ");
-			else if (IsInternal)
+			if (IsProtected)
+				writer.Write ("protected ");
+			if (IsInternal)
 				writer.Write ("internal ");
+			if (IsPrivate)
+				writer.Write ("private ");
 
 			writer.Write ("readonly partial struct ");
 			writer.Write (Name + " ");

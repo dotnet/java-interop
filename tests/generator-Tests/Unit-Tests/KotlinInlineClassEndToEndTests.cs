@@ -58,6 +58,12 @@ namespace generatortests
 			StringAssert.Contains ("Xat.Bytecode.Tests.MyDp Pad (Xat.Bytecode.Tests.MyDp dp)", output);
 			StringAssert.Contains ("Xat.Bytecode.Tests.MyDp Pad (Xat.Bytecode.Tests.MyDp dp1, Xat.Bytecode.Tests.MyDp dp2)", output);
 
+			// Widgets.tintColor: MyColor -> a Kotlin `var` typed as an inline
+			// class projects as a C# property typed as the wrapper struct, with
+			// the getter/setter still marshaling the underlying primitive (long)
+			// across JNI. This exercises the KotlinFixups.FixupProperty path.
+			StringAssert.Contains ("Xat.Bytecode.Tests.MyColor TintColor", output);
+
 			// And the JVM-mangled hash-suffix names must NOT leak into the
 			// generated C# (regression guard for the unmangling path).
 			StringAssert.DoesNotContain ("Tint_", output);

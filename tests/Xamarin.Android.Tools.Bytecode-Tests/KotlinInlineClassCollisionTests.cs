@@ -149,6 +149,30 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				$"All `pad` overloads return MyDp; got: [{string.Join (", ", pads.Select (m => m.KotlinInlineClassReturnJniType ?? "<null>"))}]");
 		}
 
+		// dotnet/java-interop#1431 (Phase 2): KotlinFixups.FixupProperty must also
+		// stamp inline-class JNI types on property getter return values and setter
+		// parameters, not just on function parameters/returns.
+		[Test]
+		public void Fixup_StampsPropertyInlineClassJniType ()
+		{
+			var classes = LoadInlineClassFixture ();
+			KotlinFixups.Fixup (classes);
+
+			var widgets = classes.Single (c => c.ThisClass.Name.Value == "xat/bytecode/tests/Widgets");
+
+			// `var tintColor: MyColor` emits a mangled getter/setter pair —
+			// the property finder must look past the inline-class mangled name
+			// suffix (`-<hash>`) AND past the erased primitive return/parameter
+			// to bind these to the Kotlin property.
+			var getter = widgets.Methods.Single (m => m.Name.StartsWith ("getTintColor-", StringComparison.Ordinal));
+			var setter = widgets.Methods.Single (m => m.Name.StartsWith ("setTintColor-", StringComparison.Ordinal));
+
+			Assert.AreEqual ("Lxat/bytecode/tests/MyColor;", getter.KotlinInlineClassReturnJniType,
+				"Inline-class typed property getter must be stamped with the wrapper's JNI signature.");
+			Assert.AreEqual ("Lxat/bytecode/tests/MyColor;", setter.GetParameters ().Single ().KotlinInlineClassJniType,
+				"Inline-class typed property setter parameter must be stamped with the wrapper's JNI signature.");
+		}
+
 		// dotnet/java-interop#1431 (Phase 2): the new fields must round-trip
 		// through XmlClassDeclarationBuilder onto the api.xml that the generator
 		// consumes.

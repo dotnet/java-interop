@@ -63,8 +63,8 @@ namespace Xamarin.Android.Tools.Bytecode
 
 					if (metadata.Properties != null) {
 						foreach (var prop in metadata.Properties) {
-							var getter = FindJavaPropertyGetter (metadata, prop, c);
-							var setter = FindJavaPropertySetter (metadata, prop, c);
+							var getter = FindJavaPropertyGetter (metadata, prop, c, inlineClasses);
+							var setter = FindJavaPropertySetter (metadata, prop, c, inlineClasses);
 
 							FixupProperty (getter, setter, prop, inlineClasses);
 
@@ -527,7 +527,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			return possible_methods.FirstOrDefault ();
 		}
 
-		static MethodInfo? FindJavaPropertyGetter (KotlinFile kotlinClass, KotlinProperty property, ClassFile klass)
+		static MethodInfo? FindJavaPropertyGetter (KotlinFile kotlinClass, KotlinProperty property, ClassFile klass, IDictionary<string, string> inlineClasses)
 		{
 			// Private properties do not have getters
 			if (property.IsPrivateVisibility)
@@ -544,12 +544,12 @@ namespace Xamarin.Android.Tools.Bytecode
 			possible_methods = possible_methods.Where (method =>
 					method.GetParameters ().Length == 0 &&
 					property.ReturnType != null &&
-					TypesMatch (method.ReturnType, property.ReturnType, kotlinClass));
+					TypesMatch (method.ReturnType, property.ReturnType, kotlinClass, inlineClasses));
 
 			return possible_methods.FirstOrDefault ();
 		}
 
-		static MethodInfo? FindJavaPropertySetter (KotlinFile kotlinClass, KotlinProperty property, ClassFile klass)
+		static MethodInfo? FindJavaPropertySetter (KotlinFile kotlinClass, KotlinProperty property, ClassFile klass, IDictionary<string, string> inlineClasses)
 		{
 			// Private properties do not have setters
 			if (property.IsPrivateVisibility)
@@ -567,7 +567,7 @@ namespace Xamarin.Android.Tools.Bytecode
 						property.ReturnType != null &&
 						method.GetParameters ().Length == 1 &&
 						method.ReturnType.BinaryName == "V" &&
-						TypesMatch (method.GetParameters () [0].Type, property.ReturnType, kotlinClass));
+						TypesMatch (method.GetParameters () [0].Type, property.ReturnType, kotlinClass, inlineClasses));
 
 			return possible_methods.FirstOrDefault ();
 		}
@@ -590,7 +590,7 @@ namespace Xamarin.Android.Tools.Bytecode
 			return true;
 		}
 
-		static bool TypesMatch (TypeInfo javaType, KotlinType kotlinType, KotlinFile? kotlinFile)
+		static bool TypesMatch (TypeInfo javaType, KotlinType kotlinType, KotlinFile? kotlinFile, IDictionary<string, string>? inlineClasses = null)
 		{
 			// Generic type
 			if (!string.IsNullOrWhiteSpace (kotlinType.TypeParameterName) && $"T{kotlinType.TypeParameterName};" == javaType.TypeSignature)
@@ -601,6 +601,18 @@ namespace Xamarin.Android.Tools.Bytecode
 
 			// Could be a generic type erasure
 			if (javaType.BinaryName == "Ljava/lang/Object;")
+				return true;
+
+			// dotnet/java-interop#1431 (Phase 2): the JVM erases @JvmInline value
+			// class types to their underlying primitive descriptor, so e.g. a
+			// `MyColor` property (ULong-backed) appears in the bytecode as `()J`
+			// even though the Kotlin metadata still says `MyColor`. Accept the
+			// match when the JVM primitive matches the inline class's recorded
+			// underlying-primitive descriptor.
+			if (inlineClasses != null && IsJvmPrimitiveDescriptor (javaType.BinaryName) &&
+					kotlinType.ClassName != null &&
+					inlineClasses.TryGetValue (kotlinType.ClassName, out var underlying) &&
+					underlying == javaType.BinaryName)
 				return true;
 
 			// Sometimes Kotlin keeps its native types rather than converting them to Java native types
