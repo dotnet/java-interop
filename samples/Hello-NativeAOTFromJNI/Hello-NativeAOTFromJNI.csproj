@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="..\..\TargetFrameworkDependentValues.props" />
+
+  <PropertyGroup>
+    <RootNamespace>Hello_NativeAOTFromJNI</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishAot>true</PublishAot>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NativeLib>Shared</NativeLib>
+    <!-- Needed for cross-compilation, e.g. build osx-x64 from osx-arm64 -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Java.Interop\Java.Interop.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Hello-NativeAOTFromJNI" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <HelloNativeAOTFromJNIJar Include="$(MSBuildThisFileDirectory)java\**\*.java" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(OutputPath)hello-from-java.jar" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$(OutputPath)java-interop.jar" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform('linux')) Or $([MSBuild]::IsOSPlatform('FreeBSD')) Or $([MSBuild]::IsOSPlatform('Android')) ">
+    <CustomLinkerArg Include="-Wl,-soname,lib$(NativeBinary)$(NativeBinaryExt)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform('osx')) And Exists('/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk') ">
+    <CustomLinkerArg Include="-isysroot" />
+    <CustomLinkerArg Include="/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk" />
+  </ItemGroup>
+
+  <Import Project="Hello-NativeAOTFromJNI.targets" />
+
+</Project>
