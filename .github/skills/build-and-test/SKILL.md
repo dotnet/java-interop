@@ -56,7 +56,6 @@ Common test projects:
 - `Java.Interop-Tests` — core JNI binding tests (largest suite)
 - `Java.Interop.Export-Tests` — export attribute tests
 - `Java.Interop.Dynamic-Tests` — dynamic invocation tests
-- `Java.Base-Tests` — Java.Base binding tests
 - `generator-Tests` — C# binding generator tests
 - `Java.Interop.Tools.JavaCallableWrappers-Tests` — JCW generation tests
 
