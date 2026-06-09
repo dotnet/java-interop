@@ -79,19 +79,8 @@ namespace Java.Interop {
 				var runtime = JniEnvironment.Runtime;
 				var r_self  = new JniObjectReference (n_self);
 				var self    = runtime.ValueManager.PeekPeer (r_self);
-				if (self != null) {
 					var state   = self.JniManagedPeerState;
-					if ((state & JniManagedPeerStates.Activatable) != JniManagedPeerStates.Activatable &&
-							(state & JniManagedPeerStates.Replaceable) != JniManagedPeerStates.Replaceable) {
-						return;
-					}
-				}
-
-				if (JniEnvironment.WithinNewObjectScope) {
-					if (runtime.ObjectReferenceManager.LogGlobalReferenceMessages) {
-						runtime.ObjectReferenceManager.WriteGlobalReferenceLine (
-								"Warning: Skipping managed constructor invocation for PeerReference={0} IdentityHashCode=0x{1} Java.Type={2}. " +
-								"Please use JniPeerMembers.InstanceMethods.StartCreateInstance() + JniPeerMembers.InstanceMethods.FinishCreateInstance() instead of " +
+								JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, typeSig, methods);
 								"JniEnvironment.Object.NewObject().",
 								r_self,
 								runtime.ValueManager.GetJniIdentityHashCode (r_self).ToString ("x"),
@@ -225,11 +214,6 @@ namespace Java.Interop {
 			int i                       = 0;
 			foreach (var jniType in JniMemberSignature.GetParameterTypesFromMethodSignature (signature)) {
 				var possibleTypes       = new List<Type> (typeManager.GetTypes (jniType));
-				if (possibleTypes.Count == 0 && jniType.ArrayRank == 0) {
-					var type = typeManager.GetType (jniType);
-					if (type != null)
-						possibleTypes.Add (type);
-				}
 				if (possibleTypes.Count == 0) {
 					throw new NotSupportedException (
 							$"Could not find System.Type corresponding to Java type `{jniType}` within constructor signature `{signature}`.",
@@ -296,18 +280,12 @@ namespace Java.Interop {
 				var methodsRef              = new JniObjectReference (n_methods);
 
 				var typeSig                 = new JniTypeSignature (nativeClass.Name);
-
+				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 #if NET
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
 				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
-				Type? type                  = null;
 				try {
-					if (typeSig.SimpleReference != null &&
-							JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers (nativeClass, typeSig.SimpleReference, methods))
-						return;
-
-					type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 				}
 				catch (Exception e) {
@@ -319,7 +297,6 @@ namespace Java.Interop {
 					JniEnvironment.Strings.ReleaseStringChars (methodsRef, methodsChars);
 				}
 #else   // NET
-				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 				var methods                 = JniEnvironment.Strings.ToString (methodsRef);
 				JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 #endif  // NET
