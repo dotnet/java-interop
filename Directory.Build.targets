@@ -17,7 +17,7 @@
 
   <!-- Add Roslyn analyzers NuGet to all projects -->
   <ItemGroup Condition=" '$(DisableRoslynAnalyzers)' != 'True' ">
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.300">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -40,13 +40,13 @@
     <PackageReference Update="Mono.Linq.Expressions"                        Version="2.0.0" />
     <PackageReference Update="Mono.Options"                                 Version="6.12.0.148" />
     <PackageReference Update="Mono.Terminal"                                Version="5.4.2" />
-    <PackageReference Update="nunit"                                        Version="3.14.0" />
+    <PackageReference Update="nunit"                                        Version="4.6.1" />
     <PackageReference Update="NUnit.ConsoleRunner"                          Version="3.22.0" />
-    <PackageReference Update="NUnit3TestAdapter"                            Version="4.6.0">
+    <PackageReference Update="NUnit3TestAdapter"                            Version="6.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="protobuf-net"                                 Version="2.4.4" />
+    <PackageReference Update="protobuf-net"                                 Version="3.2.56" />
   </ItemGroup>
 
   <Import Project="build-tools\scripts\VersionInfo.targets" />
