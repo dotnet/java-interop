@@ -46,7 +46,6 @@ jobs:
   - template: templates\core-tests.yaml
     parameters:
       runNativeDotnetTests: true
-      nativeAotRid: win-x64
       platformName: .NET - Windows
 
   - template: templates\fail-on-dirty-tree.yaml
@@ -79,7 +78,6 @@ jobs:
   - template: templates\core-tests.yaml
     parameters:
       runNativeTests: true
-      nativeAotRid: osx-x64
       platformName: .NET - MacOS
 
   - template: templates\fail-on-dirty-tree.yaml
