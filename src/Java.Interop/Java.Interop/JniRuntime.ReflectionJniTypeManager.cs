@@ -355,14 +355,8 @@ namespace Java.Interop {
 				if (arguments.Length == 0)
 					return signature.InvokerType;
 
-#if NET
 				throw new NotSupportedException ($"Generic invoker type construction for `{type}` is not supported.");
-#else   // NET
-				return signature.InvokerType.MakeGenericType (arguments);
-#endif  // NET
 			}
-
-#if NET
 
 			protected override IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple) => null;
 
@@ -393,11 +387,8 @@ namespace Java.Interop {
 
 				return TryLoadJniMarshalMethods (nativeClass, type, null) || TryRegisterNativeMembers (nativeClass, type, null, null);
 			}
-#endif  // NET
 
-#if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
-#endif  // NET
 			public override void RegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
@@ -407,9 +398,7 @@ namespace Java.Interop {
 				TryRegisterNativeMembers (nativeClass, type, methods);
 			}
 
-#if NET
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
-#endif  // NET
 			protected bool TryRegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]

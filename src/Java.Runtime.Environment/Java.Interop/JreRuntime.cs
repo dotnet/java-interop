@@ -91,9 +91,7 @@ namespace Java.Interop {
 		{
 			if (builder == null)
 				throw new ArgumentNullException ("builder");
-#if NET
 			builder.TypeManager     ??= new JreTypeManager (builder.typeMappings);
-#endif  // NET
 			return CreateJreVMCore (builder);
 		}
 
@@ -115,11 +113,7 @@ namespace Java.Interop {
 
 			builder.LibraryHandler  = JvmLibraryHandler.Create ();
 
-<<<<<<< HEAD
-=======
-			builder.TypeManager     ??= new JreTypeManager (builder.typeMappings);
 
->>>>>>> origin/main
 			bool onMono = Type.GetType ("Mono.RuntimeStructs", throwOnError: false) != null;
 			if (onMono) {
 				Console.WriteLine ($"MonoVM support enabled");

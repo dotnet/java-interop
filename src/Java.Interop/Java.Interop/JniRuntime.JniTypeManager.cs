@@ -261,7 +261,6 @@ namespace Java.Interop {
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
 			static Type TypeOfVoid () => typeof (void);
 
-#if NET
 			protected static bool TryRegisterBuiltInNativeMembers (
 					JniType nativeClass,
 					string jniSimpleReference,
@@ -277,7 +276,6 @@ namespace Java.Interop {
 
 				return jniSimpleReference == JavaProxyThrowable.JniTypeName && methods.IsEmpty;
 			}
-#endif
 
 			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]
@@ -292,51 +290,9 @@ namespace Java.Interop {
 			}
 			
 			[return: DynamicallyAccessedMembers (Constructors)]
-<<<<<<< HEAD
 			protected abstract Type? GetInvokerTypeCore ([DynamicallyAccessedMembers (Constructors)] Type type);
-#if NET
+
 			protected abstract IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple);
-=======
-			protected virtual Type? GetInvokerTypeCore (
-					[DynamicallyAccessedMembers (Constructors)]
-					Type type)
-			{
-				// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/MarkJavaObjects.cs#L176-L186
-				const string makeGenericTypeMessage = "Generic 'Invoker' types are preserved by the MarkJavaObjects trimmer step.";
-
-				// FIXME: https://github.com/dotnet/java-interop/issues/1192
-				[UnconditionalSuppressMessage ("Trimming", "IL2055", Justification = makeGenericTypeMessage)]
-				[UnconditionalSuppressMessage ("Trimming", "IL3050", Justification = makeGenericTypeMessage)]
-				[return: DynamicallyAccessedMembers (Constructors)]
-				static Type MakeGenericType (
-						[DynamicallyAccessedMembers (Constructors)]
-						Type type,
-						Type [] arguments) =>
-					type.MakeGenericType (arguments);
-
-				var signature   = type.GetCustomAttribute<JniTypeSignatureAttribute> ();
-				if (signature == null || signature.InvokerType == null) {
-					return null;
-				}
-
-				Type[] arguments = type.GetGenericArguments ();
-				if (arguments.Length == 0)
-					return signature.InvokerType;
-
-				return MakeGenericType (signature.InvokerType, arguments);
-			}
-
-
-			public IReadOnlyList<string>? GetStaticMethodFallbackTypes (string jniSimpleReference)
-			{
-				AssertValid ();
-				AssertSimpleReference (jniSimpleReference, nameof (jniSimpleReference));
-
-				return GetStaticMethodFallbackTypesCore (jniSimpleReference);
-			}
-
-			protected virtual IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple) => null;
->>>>>>> origin/main
 
 			public string? GetReplacementType (string jniSimpleReference)
 			{
@@ -376,157 +332,14 @@ namespace Java.Interop {
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
 					Type type,
-<<<<<<< HEAD
 					ReadOnlySpan<char> methods);
-#endif
-#if NET
+
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
-#endif  // NET
 			public abstract void RegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
 					Type type,
 					string? methods);
-=======
-					ReadOnlySpan<char> methods)
-			{
-				TryRegisterNativeMembers (nativeClass, type, methods);
-			}
-
-			protected bool TryRegisterNativeMembers (
-					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
-					Type type,
-					ReadOnlySpan<char> methods)
-			{
-				AssertValid ();
-
-#pragma warning disable CS1717
-				methods = methods;
-#pragma warning restore CS1717
-
-				return TryLoadJniMarshalMethods (nativeClass, type, null) || TryRegisterNativeMembers (nativeClass, type, null, null);
-			}
-
-			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
-			public virtual void RegisterNativeMembers (
-					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
-					Type type,
-					string? methods)
-			{
-				TryRegisterNativeMembers (nativeClass, type, methods);
-			}
-
-			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
-			protected bool TryRegisterNativeMembers (
-					JniType nativeClass,
-					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
-					Type type,
-					string? methods)
-			{
-				AssertValid ();
-
-				return TryLoadJniMarshalMethods (nativeClass, type, methods) || TryRegisterNativeMembers (nativeClass, type, methods, null);
-			}
-
-			static Type [] registerMethodParameters = new Type [] { typeof (JniNativeMethodRegistrationArguments) };
-
-			// https://github.com/xamarin/xamarin-android/blob/5472eec991cc075e4b0c09cd98a2331fb93aa0f3/src/Microsoft.Android.Sdk.ILLink/PreserveRegistrations.cs#L85
-			const string MarshalMethods = "'jni_marshal_methods' is preserved by the PreserveRegistrations trimmer step.";
-
-			[UnconditionalSuppressMessage ("Trimming", "IL2072", Justification = MarshalMethods)]
-			[UnconditionalSuppressMessage ("Trimming", "IL2075", Justification = MarshalMethods)]
-			bool TryLoadJniMarshalMethods (
-					JniType nativeClass,
-					[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
-					Type type,
-					string? methods)
-			{
-				var marshalType = type?.GetNestedType ("__<$>_jni_marshal_methods", BindingFlags.NonPublic);
-				if (marshalType == null) {
-					return false;
-				}
-
-				var registerMethod = marshalType.GetMethod (
-						name:           "__RegisterNativeMembers",
-						bindingAttr:    BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
-						binder:         null,
-						callConvention: default,
-						types:          registerMethodParameters,
-						modifiers:      null);
-				return TryRegisterNativeMembers (nativeClass, marshalType, methods, registerMethod);
-			}
-
-			static List<JniNativeMethodRegistration> sharedRegistrations = new List<JniNativeMethodRegistration> ();
-
-			bool TryRegisterNativeMembers (
-					JniType nativeClass,
-					[DynamicallyAccessedMembers (Methods)]
-					Type marshalType,
-					string? methods,
-					MethodInfo? registerMethod)
-			{
-				bool lockTaken = false;
-				bool rv = false;
-
-				try {
-					Monitor.TryEnter (sharedRegistrations, ref lockTaken);
-					List<JniNativeMethodRegistration> registrations;
-					if (lockTaken) {
-						sharedRegistrations.Clear ();
-						registrations = sharedRegistrations;
-					} else {
-						registrations = new List<JniNativeMethodRegistration> ();
-					}
-					JniNativeMethodRegistrationArguments arguments = new JniNativeMethodRegistrationArguments (registrations, methods);
-					if (registerMethod != null) {
-						registerMethod.Invoke (null, new object [] { arguments });
-						rv = true;
-					} else
-						rv = FindAndCallRegisterMethod (marshalType, arguments);
-
-					if (registrations.Count > 0)
-						nativeClass.RegisterNativeMethods (registrations.ToArray ());
-				} finally {
-					if (lockTaken) {
-						Monitor.Exit (sharedRegistrations);
-					}
-				}
-
-				return rv;
-			}
-
-			bool FindAndCallRegisterMethod (
-					[DynamicallyAccessedMembers (Methods)]
-					Type marshalType,
-					JniNativeMethodRegistrationArguments arguments)
-			{
-				if (!Runtime.JniAddNativeMethodRegistrationAttributePresent)
-					return false;
-
-				bool found = false;
-
-				foreach (var methodInfo in marshalType.GetRuntimeMethods ()) {
-					if (methodInfo.GetCustomAttribute (typeof (JniAddNativeMethodRegistrationAttribute)) == null) {
-						continue;
-					}
-
-					var declaringTypeName = methodInfo.DeclaringType?.FullName ?? "<no-decl-type>";
-
-					if ((methodInfo.Attributes & MethodAttributes.Static) != MethodAttributes.Static) {
-						throw new InvalidOperationException ($"The method `{declaringTypeName}.{methodInfo}` marked with [{nameof (JniAddNativeMethodRegistrationAttribute)}] must be static!");
-					}
-
-					var register = (Action<JniNativeMethodRegistrationArguments>)methodInfo.CreateDelegate (typeof (Action<JniNativeMethodRegistrationArguments>));
-					register (arguments);
-
-					found = true;
-				}
-
-				return found;
-			}
->>>>>>> origin/main
 		}
 	}
 }
