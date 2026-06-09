@@ -3,11 +3,11 @@ static Java.Interop.JniEnvironment.BeginMarshalMethod(nint jnienv, out Java.Inte
 static Java.Interop.JniEnvironment.EndMarshalMethod(ref Java.Interop.JniTransition transition) -> void
 virtual Java.Interop.JniRuntime.OnEnterMarshalMethod() -> void
 virtual Java.Interop.JniRuntime.OnUserUnhandledException(ref Java.Interop.JniTransition transition, System.Exception! e) -> void
-abstract Java.Interop.JniRuntime.JniTypeManager.GetInvokerTypeCore(System.Type! type) -> System.Type?
-abstract Java.Interop.JniRuntime.JniTypeManager.GetReflectionConstructibleTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<Java.Interop.JniRuntime.JniTypeManager.ReflectionConstructibleType!>!
-abstract Java.Interop.JniRuntime.JniTypeManager.GetTypeForSimpleReference(string! jniSimpleReference) -> System.Type?
-abstract Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
-abstract Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
+virtual Java.Interop.JniRuntime.JniTypeManager.GetInvokerTypeCore(System.Type! type) -> System.Type?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetReflectionConstructibleTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<Java.Interop.JniRuntime.JniTypeManager.ReflectionConstructibleType!>!
+virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeForSimpleReference(string! jniSimpleReference) -> System.Type?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
+virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
 static Java.Interop.JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers(Java.Interop.JniType! nativeClass, string! jniSimpleReference, System.ReadOnlySpan<char> methods) -> bool
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
@@ -56,6 +56,12 @@ abstract Java.Interop.JniRuntime.JniValueManager.CreateValueCore<T>(ref Java.Int
 abstract Java.Interop.JniRuntime.JniValueManager.GetValueCore(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> object?
 abstract Java.Interop.JniRuntime.JniValueManager.GetValueCore<T>(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> T
 abstract Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore<T>() -> Java.Interop.JniValueMarshaler<T>!
+*REMOVED*Java.Interop.JniRuntime.JniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> bool
+*REMOVED*Java.Interop.JniRuntime.JniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> bool
+*REMOVED*virtual Java.Interop.JniRuntime.JniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
+abstract Java.Interop.JniRuntime.JniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
+*REMOVED*virtual Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
+abstract Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
 override Java.Interop.JniRuntime.ReflectionJniValueManager.ActivatePeer(Java.Interop.JniObjectReference reference, System.Type! type, System.Reflection.ConstructorInfo! cinfo, object?[]? argumentValues) -> void
 override Java.Interop.JniRuntime.ReflectionJniValueManager.ConstructPeerCore(Java.Interop.IJavaPeerable! peer, ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) -> void
 override Java.Interop.JniRuntime.ReflectionJniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?

@@ -78,7 +78,7 @@ namespace Java.Interop {
 		}
 
 		/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='T:JniTypeManager']/*" />
-		public abstract partial class JniTypeManager : IDisposable, ISetRuntime {
+		public partial class JniTypeManager : IDisposable, ISetRuntime {
 
 			internal const DynamicallyAccessedMemberTypes Constructors = DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
 			internal const DynamicallyAccessedMemberTypes Methods = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods;
@@ -148,7 +148,7 @@ namespace Java.Interop {
 				return builtIn.IsValid ? builtIn : GetTypeSignatureCore (type);
 			}
 
-			protected abstract JniTypeSignature GetTypeSignatureCore (Type type);
+			protected virtual JniTypeSignature GetTypeSignatureCore (Type type) => default;
 
 			// NOTE: This method needs to be kept in sync with GetTypeSignature()
 			public IEnumerable<JniTypeSignature> GetTypeSignatures (Type type)
@@ -165,7 +165,7 @@ namespace Java.Interop {
 				return GetTypeSignaturesCore (type);
 			}
 
-			protected abstract IEnumerable<JniTypeSignature> GetTypeSignaturesCore (Type type);
+			protected virtual IEnumerable<JniTypeSignature> GetTypeSignaturesCore (Type type) => [];
 
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
 			public  Type?    GetType (JniTypeSignature typeSignature)
@@ -187,13 +187,13 @@ namespace Java.Interop {
 				throw new NotSupportedException ($"DAM-annotated type lookup for array signature `{typeSignature}` is not supported. Use {nameof (GetTypes)} instead.");
 			}
 
-			protected abstract string? GetSimpleReference (Type type);
-			protected abstract IEnumerable<string> GetSimpleReferences (Type type);
+			protected virtual string? GetSimpleReference (Type type) => null;
+			protected virtual IEnumerable<string> GetSimpleReferences (Type type) => [];
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			protected abstract Type? GetTypeForSimpleReference (string jniSimpleReference);
-			public abstract IEnumerable<Type> GetTypes (JniTypeSignature typeSignature);
+			protected virtual Type? GetTypeForSimpleReference (string jniSimpleReference) => null;
+			public virtual IEnumerable<Type> GetTypes (JniTypeSignature typeSignature) => [];
 
-			public abstract IEnumerable<ReflectionConstructibleType> GetReflectionConstructibleTypes (JniTypeSignature typeSignature);
+			public virtual IEnumerable<ReflectionConstructibleType> GetReflectionConstructibleTypes (JniTypeSignature typeSignature) => [];
 
 			public class ReflectionConstructibleType
 			{
@@ -208,7 +208,7 @@ namespace Java.Interop {
 				public Type Type { get; }
 			}
 
-			protected abstract IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference);
+			protected virtual IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference) => [];
 
 			static JniTypeSignature GetBuiltInTypeSignature (Type type)
 			{
@@ -282,9 +282,9 @@ namespace Java.Interop {
 			}
 			
 			[return: DynamicallyAccessedMembers (Constructors)]
-			protected abstract Type? GetInvokerTypeCore ([DynamicallyAccessedMembers (Constructors)] Type type);
+			protected virtual Type? GetInvokerTypeCore ([DynamicallyAccessedMembers (Constructors)] Type type) => null;
 
-			protected abstract IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple);
+			protected virtual IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimple) => null;
 
 			public string? GetReplacementType (string jniSimpleReference)
 			{
@@ -294,7 +294,7 @@ namespace Java.Interop {
 				return GetReplacementTypeCore (jniSimpleReference);
 			}
 
-			protected abstract string? GetReplacementTypeCore (string jniSimpleReference);
+			protected virtual string? GetReplacementTypeCore (string jniSimpleReference) => null;
 
 			public IReadOnlyList<string>? GetStaticMethodFallbackTypes (string jniSimpleReference)
 			{
@@ -318,20 +318,26 @@ namespace Java.Interop {
 				return GetReplacementMethodInfoCore (jniSimpleReference, jniMethodName, jniMethodSignature);
 			}
 
-			protected abstract ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature);
+			protected virtual ReplacementMethodInfo? GetReplacementMethodInfoCore (string jniSimpleReference, string jniMethodName, string jniMethodSignature) => null;
 
-			public abstract void RegisterNativeMembers (
+			// Default implementation is a no-op. Derived classes (e.g. `ReflectionJniTypeManager`)
+			// provide reflection-based registration. Override to provide custom registration.
+			public virtual void RegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
 					Type type,
-					ReadOnlySpan<char> methods);
+					ReadOnlySpan<char> methods)
+			{
+			}
 
 			[Obsolete ("Use RegisterNativeMembers(JniType, Type, ReadOnlySpan<char>)")]
-			public abstract void RegisterNativeMembers (
+			public virtual void RegisterNativeMembers (
 					JniType nativeClass,
 					[DynamicallyAccessedMembers (MethodsAndPrivateNested)]
 					Type type,
-					string? methods);
+					string? methods)
+			{
+			}
 		}
 	}
 }

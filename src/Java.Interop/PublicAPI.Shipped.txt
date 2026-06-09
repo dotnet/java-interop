@@ -418,6 +418,8 @@ Java.Interop.JniRuntime.JniTypeManager.GetTypeSignature(System.Type! type) -> Ja
 Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatures(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
 Java.Interop.JniRuntime.JniTypeManager.JniTypeManager() -> void
 Java.Interop.JniRuntime.JniTypeManager.Runtime.get -> Java.Interop.JniRuntime!
+Java.Interop.JniRuntime.JniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> bool
+Java.Interop.JniRuntime.JniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> bool
 Java.Interop.JniRuntime.JniValueManager
 Java.Interop.JniRuntime.JniValueManager.ConstructPeer(Java.Interop.IJavaPeerable! peer, ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) -> void
 Java.Interop.JniRuntime.JniValueManager.CreateValue(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> object?
@@ -897,21 +899,21 @@ virtual Java.Interop.JniRuntime.JniObjectReferenceManager.ReleaseLocalReference(
 virtual Java.Interop.JniRuntime.JniObjectReferenceManager.WriteGlobalReferenceLine(string! format, params object?[]! args) -> void
 virtual Java.Interop.JniRuntime.JniObjectReferenceManager.WriteLocalReferenceLine(string! format, params object![]! args) -> void
 virtual Java.Interop.JniRuntime.JniTypeManager.Dispose(bool disposing) -> void
-abstract Java.Interop.JniRuntime.JniTypeManager.GetReplacementMethodInfoCore(string! jniSimpleReference, string! jniMethodName, string! jniMethodSignature) -> Java.Interop.JniRuntime.ReplacementMethodInfo?
-abstract Java.Interop.JniRuntime.JniTypeManager.GetReplacementTypeCore(string! jniSimpleReference) -> string?
-abstract Java.Interop.JniRuntime.JniTypeManager.GetSimpleReference(System.Type! type) -> string?
-abstract Java.Interop.JniRuntime.JniTypeManager.GetSimpleReferences(System.Type! type) -> System.Collections.Generic.IEnumerable<string!>!
-abstract Java.Interop.JniRuntime.JniTypeManager.GetStaticMethodFallbackTypesCore(string! jniSimple) -> System.Collections.Generic.IReadOnlyList<string!>?
-abstract Java.Interop.JniRuntime.JniTypeManager.GetTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<System.Type!>!
-abstract Java.Interop.JniRuntime.JniTypeManager.GetTypesForSimpleReference(string! jniSimpleReference) -> System.Collections.Generic.IEnumerable<System.Type!>!
+virtual Java.Interop.JniRuntime.JniTypeManager.GetReplacementMethodInfoCore(string! jniSimpleReference, string! jniMethodName, string! jniMethodSignature) -> Java.Interop.JniRuntime.ReplacementMethodInfo?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetReplacementTypeCore(string! jniSimpleReference) -> string?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetSimpleReference(System.Type! type) -> string?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetSimpleReferences(System.Type! type) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Java.Interop.JniRuntime.JniTypeManager.GetStaticMethodFallbackTypesCore(string! jniSimple) -> System.Collections.Generic.IReadOnlyList<string!>?
+virtual Java.Interop.JniRuntime.JniTypeManager.GetTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<System.Type!>!
+virtual Java.Interop.JniRuntime.JniTypeManager.GetTypesForSimpleReference(string! jniSimpleReference) -> System.Collections.Generic.IEnumerable<System.Type!>!
 virtual Java.Interop.JniRuntime.JniTypeManager.OnSetRuntime(Java.Interop.JniRuntime! runtime) -> void
-abstract Java.Interop.JniRuntime.JniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> void
-abstract Java.Interop.JniRuntime.JniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> void
-abstract Java.Interop.JniRuntime.JniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
+virtual Java.Interop.JniRuntime.JniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> void
+virtual Java.Interop.JniRuntime.JniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> void
+virtual Java.Interop.JniRuntime.JniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
 virtual Java.Interop.JniRuntime.JniValueManager.Dispose(bool disposing) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.DisposePeer(Java.Interop.IJavaPeerable! value) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.DisposePeerUnlessReferenced(Java.Interop.IJavaPeerable! value) -> void
-abstract Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
+virtual Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
 virtual Java.Interop.JniRuntime.JniValueManager.OnSetRuntime(Java.Interop.JniRuntime! runtime) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.TryUnboxPeerObject(Java.Interop.IJavaPeerable! value, out object? result) -> bool
 virtual Java.Interop.JniRuntime.RaisePendingException(System.Exception! pendingException) -> void
