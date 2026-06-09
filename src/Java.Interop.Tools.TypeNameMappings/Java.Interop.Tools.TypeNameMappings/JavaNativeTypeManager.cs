@@ -186,20 +186,12 @@ namespace Java.Interop.Tools.TypeNameMappings
 			}, _ => false);
 		}
 
-#if !NETSTANDARD2_0
 		static readonly Lazy<Type> IJavaPeerableType = new Lazy<Type> (() =>
 			Type.GetType ("Java.Interop.IJavaPeerable, Java.Interop", throwOnError: true)!
 		);
-#endif
 
-		// NOTE: NETSTANDARD2_0 could be running in an MSBuild context where Java.Interop.dll is not available.
-		// Trimming warnings are not enabled for netstandard2.0 in this project.
 		static bool ShouldCheckSpecialExportJniType (Type type) =>
-#if NETSTANDARD2_0
-			!type.GetInterfaces ().Any (t => t.FullName == "Java.Interop.IJavaPeerable");
-#else
 			!IJavaPeerableType.Value.IsAssignableFrom (type);
-#endif
 
 		public static string ToJniName (string jniType, int rank)
 		{
@@ -787,5 +779,4 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 	}
 }
-
 
