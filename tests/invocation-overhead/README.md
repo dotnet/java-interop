@@ -103,7 +103,7 @@ For example, what should `JNIEnv::CallObjectMethod()` return? It needs to return
 in some form, and that type itself needs to be part of the stable API.
 
 We could say that it should be `IJavaObject` (or whatever), but the low-level wrappers shouldn't be *hidden*.
-Sometimes you don't want that marshaling overhead! (See also recent Java.Interop.Dynamic-related commits).
+Sometimes you don't want that marshaling overhead!
 
 The origial SafeHandle idea was that `JNIEnv::CallObjectMethod()` would return `JniLocalReference`,
 but that's clearly no good now.
