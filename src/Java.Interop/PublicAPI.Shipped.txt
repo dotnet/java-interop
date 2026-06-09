@@ -907,11 +907,11 @@ abstract Java.Interop.JniRuntime.JniTypeManager.GetTypesForSimpleReference(strin
 virtual Java.Interop.JniRuntime.JniTypeManager.OnSetRuntime(Java.Interop.JniRuntime! runtime) -> void
 abstract Java.Interop.JniRuntime.JniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> void
 abstract Java.Interop.JniRuntime.JniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> void
-virtual Java.Interop.JniRuntime.JniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
+abstract Java.Interop.JniRuntime.JniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
 virtual Java.Interop.JniRuntime.JniValueManager.Dispose(bool disposing) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.DisposePeer(Java.Interop.IJavaPeerable! value) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.DisposePeerUnlessReferenced(Java.Interop.IJavaPeerable! value) -> void
-virtual Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
+abstract Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
 virtual Java.Interop.JniRuntime.JniValueManager.OnSetRuntime(Java.Interop.JniRuntime! runtime) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.TryUnboxPeerObject(Java.Interop.IJavaPeerable! value, out object? result) -> bool
 virtual Java.Interop.JniRuntime.RaisePendingException(System.Exception! pendingException) -> void
