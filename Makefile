@@ -67,7 +67,6 @@ include build-tools/scripts/mono.mk
 -include bin/Build$(CONFIGURATION)/mono.mk
 -include bin/Build$(CONFIGURATION)/JdkInfo.mk
 
-JAVA_INTEROP_LIB    = libjava-interop$(NATIVE_EXT)
 NATIVE_TIMING_LIB   = libNativeTiming$(NATIVE_EXT)
 
 bin/Test$(CONFIGURATION)/$(NATIVE_TIMING_LIB): tests/NativeTiming/timing.c $(wildcard $(JI_JDK_INCLUDE_PATHS)/jni.h)
@@ -113,9 +112,6 @@ run-ptests: $(PTESTS)
 
 run-java-source-utils-tests:
 	$(MSBUILD) $(MSBUILD_FLAGS) tools/java-source-utils/java-source-utils.csproj /t:RunTests
-
-bin/Test$(CONFIGURATION)/$(JAVA_INTEROP_LIB): bin/$(CONFIGURATION)/$(JAVA_INTEROP_LIB)
-	cp $< $@
 
 bin/Test$(CONFIGURATION)/generator.exe: bin/$(CONFIGURATION)/generator.exe
 	cp $<* `dirname "$@"`
