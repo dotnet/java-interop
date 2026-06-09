@@ -23,6 +23,7 @@ TEST_OUTPUT = bin/Test$(CONFIGURATION)$(NET_SUFFIX)
 TESTS =
 
 NET_TESTS = \
+	$(TEST_OUTPUT)/Java.Interop-Tests.dll \
 	$(TEST_OUTPUT)/Java.Interop.Tools.JavaCallableWrappers-Tests.dll \
 	$(TEST_OUTPUT)/Java.Interop.Tools.JavaSource-Tests.dll \
 	$(TEST_OUTPUT)/Java.Interop.Tools.Maven-Tests.dll \
@@ -45,7 +46,6 @@ bin/ilverify:
 run-all-tests:
 	r=0; \
 	$(MAKE) run-tests                 || r=1 ; \
-	$(MAKE) run-test-jnimarshal       || r=1 ; \
 	$(MAKE) run-net-tests             || r=1 ; \
 	$(MAKE) run-ptests                || r=1 ; \
 	$(MAKE) run-java-source-utils-tests     || r=1 ; \
@@ -73,9 +73,23 @@ bin/Test$(CONFIGURATION)/$(NATIVE_TIMING_LIB): tests/NativeTiming/timing.c $(wil
 	mkdir -p `dirname "$@"`
 	gcc -g -shared -m64 -fPIC -o $@ $< $(JI_JDK_INCLUDE_PATHS:%=-I%)
 
-$(TEST_OUTPUT)/%-Tests.dll: tests/%-Tests/%-Tests.csproj
-	$(MSBUILD) $(MSBUILD_FLAGS)
-	touch $@
+define TestAssemblyTemplate
+$(TEST_OUTPUT)/$(1)-Tests.dll: tests/$(1)-Tests/$(1)-Tests.csproj
+	$$(MSBUILD) $$(MSBUILD_FLAGS)
+	touch $$@
+endef
+
+$(eval $(call TestAssemblyTemplate,Java.Interop))
+$(eval $(call TestAssemblyTemplate,Java.Interop.Tools.JavaCallableWrappers))
+$(eval $(call TestAssemblyTemplate,Java.Interop.Tools.JavaSource))
+$(eval $(call TestAssemblyTemplate,Java.Interop.Tools.Maven))
+$(eval $(call TestAssemblyTemplate,Java.Interop.Tools.JavaTypeSystem))
+$(eval $(call TestAssemblyTemplate,Java.Interop.Tools.Generator))
+$(eval $(call TestAssemblyTemplate,Xamarin.Android.Tools.ApiXmlAdjuster))
+$(eval $(call TestAssemblyTemplate,Xamarin.Android.Tools.Bytecode))
+$(eval $(call TestAssemblyTemplate,Xamarin.SourceWriter))
+$(eval $(call TestAssemblyTemplate,generator))
+$(eval $(call TestAssemblyTemplate,logcat-parse))
 
 bin/$(CONFIGURATION)/Java.Interop.dll: $(wildcard src/Java.Interop/*/*.cs) src/Java.Interop/Java.Interop.csproj
 	$(MSBUILD) $(if $(V),/v:diag,) /p:Configuration=$(CONFIGURATION) $(if $(SNK),"/p:AssemblyOriginatorKeyFile=$(SNK)",)
@@ -102,7 +116,7 @@ run-tests: $(TESTS)
 
 run-net-tests: $(NET_TESTS)
 	r=0; \
-	$(foreach t,$(NET_TESTS), dotnet test $(t) || r=1) \
+	$(foreach t,$(NET_TESTS), dotnet test $(t) || r=1;) \
 	exit $$r;
 
 run-ptests: $(PTESTS)
