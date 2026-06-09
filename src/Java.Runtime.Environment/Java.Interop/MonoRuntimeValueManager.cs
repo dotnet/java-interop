@@ -24,6 +24,12 @@ namespace Java.Interop {
 
 		IntPtr                                      bridge;
 
+		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Java.Runtime.Environment is the desktop/JRE runtime path and is removed by dotnet/java-interop#1447.")]
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Java.Runtime.Environment is the desktop/JRE runtime path and is removed by dotnet/java-interop#1447.")]
+		public MonoRuntimeValueManager ()
+		{
+		}
+
 		public override void OnSetRuntime (JniRuntime runtime)
 		{
 			base.OnSetRuntime (runtime);
@@ -415,4 +421,3 @@ namespace Java.Interop {
 		}
 	}
 }
-

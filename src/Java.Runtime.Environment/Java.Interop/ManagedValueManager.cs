@@ -16,6 +16,12 @@ namespace Java.Interop {
 
 		Dictionary<int, List<IJavaPeerable>>?   RegisteredInstances = new Dictionary<int, List<IJavaPeerable>>();
 
+		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Java.Runtime.Environment is the desktop/JRE runtime path and is removed by dotnet/java-interop#1447.")]
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Java.Runtime.Environment is the desktop/JRE runtime path and is removed by dotnet/java-interop#1447.")]
+		public ManagedValueManager ()
+		{
+		}
+
 		public override void WaitForGCBridgeProcessing ()
 		{
 		}
