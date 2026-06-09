@@ -375,6 +375,7 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType = null)
 			{
+				EnsureNotDisposed ();
 				if (!reference.IsValid) {
 	#pragma warning disable 8653
 					return default (T);
@@ -469,7 +470,7 @@ namespace Java.Interop
 				return ProxyValueMarshaler.Instance;
 			}
 
-			static Type? GetListType(Type type)
+			static Type? GetListType (Type type)
 			{
 				foreach (var iface in type.GetInterfaces ().Concat (new [] { type })) {
 					if (typeof (IList<>).IsAssignableFrom (iface.IsGenericType ? iface.GetGenericTypeDefinition () : iface))

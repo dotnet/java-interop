@@ -88,7 +88,7 @@ namespace Java.Interop {
 					if (type.IsArray && type.GetArrayRank () > 1)
 						throw new ArgumentException ("Multidimensional array '" + originalType.FullName + "' is not supported.", nameof (type));
 					rank++;
-					type = type.GetElementType ()!;
+					type = type.GetElementType () ?? throw new InvalidOperationException ("Array type has no element type.");
 				}
 
 				if (type.IsEnum)
@@ -126,7 +126,7 @@ namespace Java.Interop {
 				yield break;
 			}
 
-			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
+			static  readonly    Type[]      EmptyTypeArray      = [];
 
 			readonly struct KnownArrayTypesInfo
 			{
