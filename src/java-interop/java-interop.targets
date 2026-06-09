@@ -7,6 +7,11 @@
     <_JavaInteropValidationLibName Condition=" '$(_JavaInteropValidationLibName)' == '' ">libjava-interop-validation.a</_JavaInteropValidationLibName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <_JavaInteropValidationSource Include="*.cc" />
+    <_JavaInteropValidationHeader Include="*.h" />
+  </ItemGroup>
+
   <Target Name="_GetJavaInteropBuildInfo">
     <PropertyGroup Condition=" $([MSBuild]::IsOSPlatform ('windows')) ">
       <_PrepareArch   Condition=" '$(NETCoreSdkRuntimeIdentifier)' == 'win-x64' ">x86_amd64</_PrepareArch>
@@ -31,7 +36,7 @@
       Condition=" '$(NativeToolchainSupported)' == 'True' "
       DependsOnTargets="GetNativeBuildCommands;_GetJavaInteropBuildInfo"
       BeforeTargets="Build"
-      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj;*.cc;*.h"
+      Inputs="CMakeLists.txt;$(MSBuildThisFileFullPath);java-interop.csproj;@(_JavaInteropValidationSource);@(_JavaInteropValidationHeader)"
       Outputs="$(IntermediateOutputPath)$(_JavaInteropValidationLibName)">
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <ItemGroup>
