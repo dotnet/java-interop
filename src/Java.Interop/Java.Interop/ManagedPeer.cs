@@ -293,7 +293,11 @@ namespace Java.Interop {
 
 				var typeSig                 = new JniTypeSignature (nativeClass.Name);
 				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
+<<<<<<< HEAD
 #if NET
+=======
+
+>>>>>>> origin/main
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
 				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
@@ -308,10 +312,6 @@ namespace Java.Interop {
 				finally {
 					JniEnvironment.Strings.ReleaseStringChars (methodsRef, methodsChars);
 				}
-#else   // NET
-				var methods                 = JniEnvironment.Strings.ToString (methodsRef);
-				JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
-#endif  // NET
 
 			}
 			catch (Exception e) {

@@ -1,4 +1,3 @@
-#if NET
 
 using System;
 using System.Collections.Generic;
@@ -82,5 +81,3 @@ namespace Java.Interop {
 		}
 	}
 }
-
-#endif  // NET

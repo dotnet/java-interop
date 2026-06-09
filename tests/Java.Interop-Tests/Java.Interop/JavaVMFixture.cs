@@ -85,18 +85,15 @@ namespace Java.InteropTests {
 		{
 			foreach (var e in TypeMappings) {
 				if (e.Value == type) {
-#if NET
 					if (ReplacmentTypes.TryGetValue (e.Key, out var alt)) {
 						yield return alt;
 						continue;
 					}
-#endif  // NET
 					yield return e.Key;
 				}
 			}
 		}
 
-#if NET
 		public string? RequestedFallbackTypesForSimpleReference;
 		protected override IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimpleReference)
 		{
@@ -174,6 +171,5 @@ namespace Java.InteropTests {
 			// 	return value == null ? "null" : $"\"{value}\"";
 			// }
 		}
-#endif  // NET
 	}
 }

@@ -115,6 +115,11 @@ namespace Java.Interop {
 
 			builder.LibraryHandler  = JvmLibraryHandler.Create ();
 
+<<<<<<< HEAD
+=======
+			builder.TypeManager     ??= new JreTypeManager (builder.typeMappings);
+
+>>>>>>> origin/main
 			bool onMono = Type.GetType ("Mono.RuntimeStructs", throwOnError: false) != null;
 			if (onMono) {
 				Console.WriteLine ($"MonoVM support enabled");
@@ -245,18 +250,12 @@ namespace Java.Interop {
 		{
 			var handler = Environment.GetEnvironmentVariable ("JI_LOADER_TYPE");
 			switch (handler?.ToLowerInvariant ()) {
-#if !NET
-			case "":
-			case null:
-#endif  // NET
 			case "java-interop":
 				return new JavaInteropLibJvmLibraryHandler ();
-#if NET
 			case "":
 			case null:
 			case "native-library":
 				return new NativeLibraryJvmLibraryHandler ();
-#endif  // NET
 			default:
 				Console.Error.WriteLine ($"Unsupported JI_LOADER_TYPE value of `{handler}`.");
 				throw new NotSupportedException ();
@@ -264,7 +263,6 @@ namespace Java.Interop {
 		}
 	}
 
-#if NET
 
 	class NativeLibraryJvmLibraryHandler : JvmLibraryHandler {
 		IntPtr  handle;
@@ -328,7 +326,6 @@ namespace Java.Interop {
 		}
 	}
 
-#endif  // NET
 
 	class JavaInteropLibJvmLibraryHandler : JvmLibraryHandler {
 

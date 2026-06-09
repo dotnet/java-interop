@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using Java.Interop;
-using Java.Interop.GenericMarshaler;
-
 using NUnit.Framework;
 
 namespace Java.InteropTests
@@ -37,7 +35,6 @@ namespace Java.InteropTests
 			return (Dictionary<string, JniMethodInfo>) f.GetValue (methods);
 		}
 
-#if NET
 		[Test]
 		public void MethodLookupForNonexistentStaticMethodWillTryFallbacks ()
 		{
@@ -167,7 +164,6 @@ namespace Java.InteropTests
 			var s = IAndroidInterface.getClassName ();
 			Assert.AreEqual ("DesugarAndroidInterface$-CC", s);
 		}
-#endif  // NET
 	}
 
 	[JniTypeSignature (JniTypeName, GenerateJavaPeer=false)]
@@ -268,7 +264,6 @@ namespace Java.InteropTests
 		}
 	}
 
-#if NET
 	[JniTypeSignature (JniTypeName, GenerateJavaPeer=false)]
 	interface IAndroidInterface : IJavaPeerable {
 		internal            const       string          JniTypeName    = "net/dot/jni/test/AndroidInterface";
@@ -292,5 +287,4 @@ namespace Java.InteropTests
 		{
 		}
 	}
-#endif  // NET
 }
