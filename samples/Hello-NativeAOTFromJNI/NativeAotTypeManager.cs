@@ -104,6 +104,9 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 			Type type,
 			ReadOnlySpan<char> methods)
 	{
+		if (TryRegisterBuiltInNativeMembers (nativeClass, nativeClass.Name, methods))
+			return;
+
 		if (type != typeof (Example.ManagedType)) {
 			if (!methods.IsEmpty)
 				throw new NotSupportedException ($"Could not register native members for type '{type.FullName}'.");

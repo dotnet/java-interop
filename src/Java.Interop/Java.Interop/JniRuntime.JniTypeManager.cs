@@ -221,11 +221,26 @@ namespace Java.Interop {
 				return default;
 			}
 
+			// IL2026/IL2111: The MethodsConstructors DAM annotation on the return type causes ILLink to analyze
+			// JavaProxyObject/JavaProxyThrowable/ManagedPeer's delegate-typed nested members, whose base
+			// constructors (Delegate.Delegate(Object,String)) are marked RequiresUnreferencedCode.
+			// These warnings are false positives: the delegate constructors are invoked with
+			// compile-time-known static method references, not via string-based reflection.
+			[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Delegate constructors in JavaProxyObject/JavaProxyThrowable/ManagedPeer are invoked with compile-time-known method references, not via reflection.")]
+			[UnconditionalSuppressMessage ("Trimming", "IL2111", Justification = "Delegate constructors in JavaProxyObject/JavaProxyThrowable/ManagedPeer are invoked with compile-time-known method references, not via reflection.")]
 			[return: DynamicallyAccessedMembers (MethodsConstructors)]
 			static Type? GetBuiltInType (JniTypeSignature typeSignature)
 			{
-				if (!typeSignature.IsKeyword || typeSignature.ArrayRank != 0)
+				if (typeSignature.ArrayRank != 0)
 					return null;
+				if (!typeSignature.IsKeyword) {
+					return typeSignature.SimpleReference switch {
+						JavaProxyObject.JniTypeName     => typeof (JavaProxyObject),
+						JavaProxyThrowable.JniTypeName  => typeof (JavaProxyThrowable),
+						ManagedPeer.JniTypeName         => typeof (ManagedPeer),
+						_                               => null,
+					};
+				}
 				return typeSignature.SimpleReference switch {
 					"V" => TypeOfVoid (),
 					"Z" => TypeOf<bool> (),
@@ -249,7 +264,7 @@ namespace Java.Interop {
 			static Type TypeOfVoid () => typeof (void);
 
 #if NET
-			internal static bool TryRegisterBuiltInNativeMembers (
+			protected static bool TryRegisterBuiltInNativeMembers (
 					JniType nativeClass,
 					string jniSimpleReference,
 					ReadOnlySpan<char> methods)
