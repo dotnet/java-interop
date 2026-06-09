@@ -207,37 +207,29 @@ namespace Java.Interop {
 				AssertSimpleReference (jniSimpleReference);
 
 				return jniSimpleReference switch {
-					"java/lang/String"                         => TypeOf<string> (),
+					"java/lang/String"                         => typeof (string),
 					"net/dot/jni/internal/JavaProxyObject"     => typeof (JavaProxyObject),
 					"net/dot/jni/internal/JavaProxyThrowable"  => typeof (JavaProxyThrowable),
-					"V"                                        => TypeOfVoid (),
-					"Z"                                        => TypeOf<Boolean> (),
-					"java/lang/Boolean"                        => TypeOf<Boolean?> (),
-					"B"                                        => TypeOf<SByte> (),
-					"java/lang/Byte"                           => TypeOf<SByte?> (),
-					"C"                                        => TypeOf<Char> (),
-					"java/lang/Character"                      => TypeOf<Char?> (),
-					"S"                                        => TypeOf<Int16> (),
-					"java/lang/Short"                          => TypeOf<Int16?> (),
-					"I"                                        => TypeOf<Int32> (),
-					"java/lang/Integer"                        => TypeOf<Int32?> (),
-					"J"                                        => TypeOf<Int64> (),
-					"java/lang/Long"                           => TypeOf<Int64?> (),
-					"F"                                        => TypeOf<Single> (),
-					"java/lang/Float"                          => TypeOf<Single?> (),
-					"D"                                        => TypeOf<Double> (),
-					"java/lang/Double"                         => TypeOf<Double?> (),
+					"V"                                        => typeof (void),
+					"Z"                                        => typeof (Boolean),
+					"java/lang/Boolean"                        => typeof (Boolean?),
+					"B"                                        => typeof (SByte),
+					"java/lang/Byte"                           => typeof (SByte?),
+					"C"                                        => typeof (Char),
+					"java/lang/Character"                      => typeof (Char?),
+					"S"                                        => typeof (Int16),
+					"java/lang/Short"                          => typeof (Int16?),
+					"I"                                        => typeof (Int32),
+					"java/lang/Integer"                        => typeof (Int32?),
+					"J"                                        => typeof (Int64),
+					"java/lang/Long"                           => typeof (Int64?),
+					"F"                                        => typeof (Single),
+					"java/lang/Float"                          => typeof (Single?),
+					"D"                                        => typeof (Double),
+					"java/lang/Double"                         => typeof (Double?),
 					_                                          => null,
 				};
 			}
-
-			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			static Type TypeOf<
-					[DynamicallyAccessedMembers (MethodsConstructors)]
-					T> () => typeof (T);
-
-			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			static Type TypeOfVoid () => typeof (void);
 
 			public override IEnumerable<Type> GetTypes (JniTypeSignature typeSignature)
 			{

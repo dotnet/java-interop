@@ -240,26 +240,18 @@ namespace Java.Interop {
 					};
 				}
 				return typeSignature.SimpleReference switch {
-					"V" => TypeOfVoid (),
-					"Z" => TypeOf<bool> (),
-					"B" => TypeOf<sbyte> (),
-					"C" => TypeOf<char> (),
-					"S" => TypeOf<short> (),
-					"I" => TypeOf<int> (),
-					"J" => TypeOf<long> (),
-					"F" => TypeOf<float> (),
-					"D" => TypeOf<double> (),
+					"V" => typeof (void),
+					"Z" => typeof (bool),
+					"B" => typeof (sbyte),
+					"C" => typeof (char),
+					"S" => typeof (short),
+					"I" => typeof (int),
+					"J" => typeof (long),
+					"F" => typeof (float),
+					"D" => typeof (double),
 					_   => null,
 				};
 			}
-
-			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			static Type TypeOf<
-					[DynamicallyAccessedMembers (MethodsConstructors)]
-					T> () => typeof (T);
-
-			[return: DynamicallyAccessedMembers (MethodsConstructors)]
-			static Type TypeOfVoid () => typeof (void);
 
 			protected static bool TryRegisterBuiltInNativeMembers (
 					JniType nativeClass,
