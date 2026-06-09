@@ -9,6 +9,9 @@ using NUnit.Framework;
 
 namespace Java.InteropTests
 {
+#if !__ANDROID__
+	[NonParallelizable]
+#endif  // !__ANDROID__
 	[TestFixture]
 	public class JniRuntimeTest : JavaVMFixture
 	{

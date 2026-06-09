@@ -276,13 +276,12 @@ namespace Java.Interop {
 
 		IntPtr  handle;
 		IntPtr  create;
-		IntPtr  getCreated;
 
 		public void LoadJvmLibrary (string path)
 		{
 			handle = NativeLibrary.Load (path);
 			if (!NativeLibrary.TryGetExport (handle, "JNI_CreateJavaVM", out create) ||
-					!NativeLibrary.TryGetExport (handle, "JNI_GetCreatedJavaVMs", out getCreated)) {
+					!NativeLibrary.TryGetExport (handle, "JNI_GetCreatedJavaVMs", out _)) {
 				Dispose ();
 				throw new NotSupportedException ($"Library `{path}` does not export the required symbols `JNI_CreateJavaVM` or `JNI_GetCreatedJavaVMs`!");
 			}
@@ -300,7 +299,6 @@ namespace Java.Interop {
 				NativeLibrary.Free (handle);
 			handle      = IntPtr.Zero;
 			create      = IntPtr.Zero;
-			getCreated  = IntPtr.Zero;
 		}
 	}
 
