@@ -19,6 +19,23 @@ class NativeAotTypeManager : JniRuntime.JniTypeManager {
 	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
 	{
 		return jniSimpleReference switch {
+			"V"                            => typeof (void),
+			"Z"                            => typeof (bool),
+			"java/lang/Boolean"            => typeof (bool?),
+			"B"                            => typeof (sbyte),
+			"java/lang/Byte"               => typeof (sbyte?),
+			"C"                            => typeof (char),
+			"java/lang/Character"          => typeof (char?),
+			"S"                            => typeof (short),
+			"java/lang/Short"              => typeof (short?),
+			"I"                            => typeof (int),
+			"java/lang/Integer"            => typeof (int?),
+			"J"                            => typeof (long),
+			"java/lang/Long"               => typeof (long?),
+			"F"                            => typeof (float),
+			"java/lang/Float"              => typeof (float?),
+			"D"                            => typeof (double),
+			"java/lang/Double"             => typeof (double?),
 			Example.ManagedType.JniTypeName => typeof (Example.ManagedType),
 			"java/lang/Object"             => typeof (Java.Lang.Object),
 			"java/lang/String"             => typeof (Java.Lang.String),
