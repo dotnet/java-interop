@@ -225,6 +225,11 @@ namespace Java.Interop {
 			int i                       = 0;
 			foreach (var jniType in JniMemberSignature.GetParameterTypesFromMethodSignature (signature)) {
 				var possibleTypes       = new List<Type> (typeManager.GetTypes (jniType));
+				if (possibleTypes.Count == 0 && jniType.ArrayRank == 0) {
+					var type = typeManager.GetType (jniType);
+					if (type != null)
+						possibleTypes.Add (type);
+				}
 				if (possibleTypes.Count == 0) {
 					throw new NotSupportedException (
 							$"Could not find System.Type corresponding to Java type `{jniType}` within constructor signature `{signature}`.",

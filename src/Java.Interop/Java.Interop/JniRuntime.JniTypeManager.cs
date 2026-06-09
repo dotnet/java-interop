@@ -177,6 +177,10 @@ namespace Java.Interop {
 				if (!typeSignature.IsValid || typeSignature.SimpleReference == null)
 					return null;
 
+				var builtIn = GetBuiltInType (typeSignature);
+				if (builtIn != null)
+					return builtIn;
+
 				var type = GetTypeForSimpleReference (typeSignature.SimpleReference);
 				if (type == null)
 					return null;
@@ -216,6 +220,33 @@ namespace Java.Interop {
 					return new JniTypeSignature (JavaProxyThrowable.JniTypeName, 0, false);
 				return default;
 			}
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type? GetBuiltInType (JniTypeSignature typeSignature)
+			{
+				if (!typeSignature.IsKeyword || typeSignature.ArrayRank != 0)
+					return null;
+				return typeSignature.SimpleReference switch {
+					"V" => TypeOfVoid (),
+					"Z" => TypeOf<bool> (),
+					"B" => TypeOf<sbyte> (),
+					"C" => TypeOf<char> (),
+					"S" => TypeOf<short> (),
+					"I" => TypeOf<int> (),
+					"J" => TypeOf<long> (),
+					"F" => TypeOf<float> (),
+					"D" => TypeOf<double> (),
+					_   => null,
+				};
+			}
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type TypeOf<
+					[DynamicallyAccessedMembers (MethodsConstructors)]
+					T> () => typeof (T);
+
+			[return: DynamicallyAccessedMembers (MethodsConstructors)]
+			static Type TypeOfVoid () => typeof (void);
 
 #if NET
 			internal static bool TryRegisterBuiltInNativeMembers (
