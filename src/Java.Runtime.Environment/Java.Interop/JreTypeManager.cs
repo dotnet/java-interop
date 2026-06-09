@@ -9,9 +9,9 @@ using System.Reflection;
 
 namespace Java.Interop {
 
-	[RequiresDynamicCode ("JreTypeManager uses DynamicJniTypeManager reflection-based behavior and is not compatible with Native AOT.")]
-	[RequiresUnreferencedCode ("JreTypeManager uses DynamicJniTypeManager reflection-based behavior and is not trimming-compatible.")]
-	public class JreTypeManager : JniRuntime.DynamicJniTypeManager {
+	[RequiresDynamicCode ("JreTypeManager uses ReflectionJniTypeManager reflection-based behavior and is not compatible with Native AOT.")]
+	[RequiresUnreferencedCode ("JreTypeManager uses ReflectionJniTypeManager reflection-based behavior and is not trimming-compatible.")]
+	public class JreTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 		IDictionary<string, Type>? typeMappings;
 

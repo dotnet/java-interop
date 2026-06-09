@@ -16,7 +16,7 @@ namespace Java.Interop {
 
 		[RequiresDynamicCode ("This JniTypeManager implementation is not compatible with Native AOT. Use a different JniTypeManager implementation that supports Native AOT.")]
 		[RequiresUnreferencedCode ("This JniTypeManager implementation is not compatible with Native AOT. Use a different JniTypeManager implementation that supports Native AOT.")]
-		public partial class DynamicJniTypeManager : JniTypeManager {
+		public partial class ReflectionJniTypeManager : JniTypeManager {
 
 			protected override JniTypeSignature GetTypeSignatureCore (Type type)
 			{

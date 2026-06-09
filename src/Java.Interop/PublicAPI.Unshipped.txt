@@ -11,10 +11,10 @@ abstract Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Typ
 virtual Java.Interop.JniRuntime.JniValueManager.TryConstructPeer(Java.Interop.IJavaPeerable! self, ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type! type) -> bool
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
-Java.Interop.JniRuntime.DynamicJniTypeManager
-Java.Interop.JniRuntime.DynamicJniTypeManager.DynamicJniTypeManager() -> void
-Java.Interop.JniRuntime.DynamicJniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> bool
-Java.Interop.JniRuntime.DynamicJniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> bool
+Java.Interop.JniRuntime.ReflectionJniTypeManager
+Java.Interop.JniRuntime.ReflectionJniTypeManager.ReflectionJniTypeManager() -> void
+Java.Interop.JniRuntime.ReflectionJniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> bool
+Java.Interop.JniRuntime.ReflectionJniTypeManager.TryRegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> bool
 Java.Interop.JniRuntime.JniTypeManager.GetInvokerType(System.Type! type) -> System.Type?
 Java.Interop.JniRuntime.JniTypeManager.ReflectionConstructibleType
 Java.Interop.JniRuntime.JniTypeManager.ReflectionConstructibleType.ReflectionConstructibleType(System.Type! type) -> void
@@ -47,17 +47,17 @@ static Java.Interop.JniEnvironment.StaticFields.GetStaticFieldID(Java.Interop.Jn
 static Java.Interop.JniEnvironment.StaticMethods.GetStaticMethodID(Java.Interop.JniObjectReference type, System.ReadOnlySpan<byte> name, System.ReadOnlySpan<byte> signature) -> Java.Interop.JniMethodInfo!
 *REMOVED*abstract Java.Interop.JniRuntime.JniValueManager.ActivatePeer(Java.Interop.IJavaPeerable? self, Java.Interop.JniObjectReference reference, System.Reflection.ConstructorInfo! cinfo, object?[]? argumentValues) -> void
 virtual Java.Interop.JniRuntime.JniValueManager.ActivatePeer(Java.Interop.JniObjectReference reference, System.Type! type, System.Reflection.ConstructorInfo! cinfo, object?[]? argumentValues) -> void
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetInvokerTypeCore(System.Type! type) -> System.Type?
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetReflectionConstructibleTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<Java.Interop.JniRuntime.JniTypeManager.ReflectionConstructibleType!>!
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetReplacementMethodInfoCore(string! jniSimpleReference, string! jniMethodName, string! jniMethodSignature) -> Java.Interop.JniRuntime.ReplacementMethodInfo?
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetReplacementTypeCore(string! jniSimpleReference) -> string?
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetSimpleReference(System.Type! type) -> string?
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetSimpleReferences(System.Type! type) -> System.Collections.Generic.IEnumerable<string!>!
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetStaticMethodFallbackTypesCore(string! jniSimple) -> System.Collections.Generic.IReadOnlyList<string!>?
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetTypeForSimpleReference(string! jniSimpleReference) -> System.Type?
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<System.Type!>!
-override Java.Interop.JniRuntime.DynamicJniTypeManager.GetTypesForSimpleReference(string! jniSimpleReference) -> System.Collections.Generic.IEnumerable<System.Type!>!
-override Java.Interop.JniRuntime.DynamicJniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> void
-override Java.Interop.JniRuntime.DynamicJniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> void
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetInvokerTypeCore(System.Type! type) -> System.Type?
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetReflectionConstructibleTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<Java.Interop.JniRuntime.JniTypeManager.ReflectionConstructibleType!>!
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetReplacementMethodInfoCore(string! jniSimpleReference, string! jniMethodName, string! jniMethodSignature) -> Java.Interop.JniRuntime.ReplacementMethodInfo?
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetReplacementTypeCore(string! jniSimpleReference) -> string?
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetSimpleReference(System.Type! type) -> string?
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetSimpleReferences(System.Type! type) -> System.Collections.Generic.IEnumerable<string!>!
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetStaticMethodFallbackTypesCore(string! jniSimple) -> System.Collections.Generic.IReadOnlyList<string!>?
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypeForSimpleReference(string! jniSimpleReference) -> System.Type?
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypes(Java.Interop.JniTypeSignature typeSignature) -> System.Collections.Generic.IEnumerable<System.Type!>!
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypesForSimpleReference(string! jniSimpleReference) -> System.Collections.Generic.IEnumerable<System.Type!>!
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> void
+override Java.Interop.JniRuntime.ReflectionJniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> void

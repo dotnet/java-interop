@@ -29,9 +29,9 @@ namespace Java.InteropTests {
 		}
 	}
 
-	[RequiresDynamicCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-	[RequiresUnreferencedCode ("JavaVMFixtureTypeManager uses DynamicJniTypeManager, which is reflection-based and not trimming-compatible.")]
-	class JavaVMFixtureTypeManager : JniRuntime.DynamicJniTypeManager {
+	[RequiresDynamicCode ("JavaVMFixtureTypeManager uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+	[RequiresUnreferencedCode ("JavaVMFixtureTypeManager uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
+	class JavaVMFixtureTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 		Dictionary<string, Type> TypeMappings = new() {
 #if !NO_MARSHAL_MEMBER_BUILDER_SUPPORT
