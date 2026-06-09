@@ -6,10 +6,10 @@ using Java.Interop;
 
 namespace Java.InteropTests {
 
-	[RequiresDynamicCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-	[RequiresUnreferencedCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
 	public abstract partial class JavaVMFixture {
 
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "JavaVMFixture intentionally uses reflection-backed managers for non-AOT tests.")]
+		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "JavaVMFixture intentionally uses reflection-backed managers for non-trimming tests.")]
 		static JavaVMFixture ()
 		{
 			CreateJavaVM ();

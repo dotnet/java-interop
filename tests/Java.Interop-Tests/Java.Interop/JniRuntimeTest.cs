@@ -167,7 +167,9 @@ namespace Java.InteropTests
 			}
 		}
 
-		class ProxyValueManager : JniValueManager {
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "ProxyValueManager intentionally uses reflection-backed value manager behavior for tests.")]
+		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "ProxyValueManager intentionally uses reflection-backed value manager behavior for tests.")]
+		class ProxyValueManager : ReflectionJniValueManager {
 
 			public override void AddPeer (IJavaPeerable peer)
 			{

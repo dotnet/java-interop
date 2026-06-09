@@ -15,7 +15,7 @@ namespace Java.Interop {
 		Jni,
 	}
 
-	class MonoRuntimeValueManager : JniRuntime.JniValueManager {
+	class MonoRuntimeValueManager : JniRuntime.ReflectionJniValueManager {
 
 		#pragma warning disable 0649
 		// This field is mutated by the java-interop native lib

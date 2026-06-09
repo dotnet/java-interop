@@ -29,8 +29,8 @@ namespace Java.InteropTests {
 		}
 	}
 
-	[RequiresDynamicCode ("JavaVMFixtureTypeManager uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-	[RequiresUnreferencedCode ("JavaVMFixtureTypeManager uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
+	[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "JavaVMFixtureTypeManager intentionally uses reflection-backed type manager behavior for tests.")]
+	[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "JavaVMFixtureTypeManager intentionally uses reflection-backed type manager behavior for tests.")]
 	class JavaVMFixtureTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 		Dictionary<string, Type> TypeMappings = new() {
