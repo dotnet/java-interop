@@ -75,12 +75,24 @@ namespace Java.Interop {
 				Console.WriteLine ($"error: could not begin ManagedPeer.Construct!");
 				return;
 			}
+			
 			try {
 				var runtime = JniEnvironment.Runtime;
 				var r_self  = new JniObjectReference (n_self);
 				var self    = runtime.ValueManager.PeekPeer (r_self);
+				if (self != null) {
 					var state   = self.JniManagedPeerState;
-								JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, typeSig, methods);
+					if ((state & JniManagedPeerStates.Activatable) != JniManagedPeerStates.Activatable &&
+							(state & JniManagedPeerStates.Replaceable) != JniManagedPeerStates.Replaceable) {
+						return;
+					}
+				}
+
+				if (JniEnvironment.WithinNewObjectScope) {
+					if (runtime.ObjectReferenceManager.LogGlobalReferenceMessages) {
+						runtime.ObjectReferenceManager.WriteGlobalReferenceLine (
+								"Warning: Skipping managed constructor invocation for PeerReference={0} IdentityHashCode=0x{1} Java.Type={2}. " +
+								"Please use JniPeerMembers.InstanceMethods.StartCreateInstance() + JniPeerMembers.InstanceMethods.FinishCreateInstance() instead of " +
 								"JniEnvironment.Object.NewObject().",
 								r_self,
 								runtime.ValueManager.GetJniIdentityHashCode (r_self).ToString ("x"),

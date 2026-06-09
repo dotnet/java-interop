@@ -3,14 +3,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 using Java.Interop;
-using NUnit.Framework;
 
 namespace Java.InteropTests {
 
+	[RequiresDynamicCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+	[RequiresUnreferencedCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
 	public abstract partial class JavaVMFixture {
 
-		[RequiresDynamicCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-		[RequiresUnreferencedCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
+		static JavaVMFixture ()
+		{
+			CreateJavaVM ();
+		}
+
 		static partial void CreateJavaVM ();
 
 		// VM supports specifying a class to JNIEnv::CallNonvirtualVoidMethod()
@@ -21,17 +25,6 @@ namespace Java.InteropTests {
 
 		protected JavaVMFixture ()
 		{
-		}
-
-
-		[OneTimeSetUp]
-		[RequiresDynamicCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
-		[RequiresUnreferencedCode ("JavaVMFixture uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
-		public void EnsureJavaVM ()
-		{
-			if (VM == null) {
-				CreateJavaVM ();
-			}
 		}
 	}
 }
