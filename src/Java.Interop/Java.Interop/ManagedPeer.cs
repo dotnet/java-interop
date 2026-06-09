@@ -291,13 +291,18 @@ namespace Java.Interop {
 				var methodsRef              = new JniObjectReference (n_methods);
 
 				var typeSig                 = new JniTypeSignature (nativeClass.Name);
-				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 
 #if NET
 				int methodsLength           = JniEnvironment.Strings.GetStringLength (methodsRef);
 				var methodsChars            = JniEnvironment.Strings.GetStringChars (methodsRef, null);
 				var methods                 = new ReadOnlySpan<char>(methodsChars, methodsLength);
+				Type? type                  = null;
 				try {
+					if (typeSig.SimpleReference != null &&
+							JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers (nativeClass, typeSig.SimpleReference, methods))
+						return;
+
+					type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 					JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 				}
 				catch (Exception e) {
@@ -309,6 +314,7 @@ namespace Java.Interop {
 					JniEnvironment.Strings.ReleaseStringChars (methodsRef, methodsChars);
 				}
 #else   // NET
+				var type                    = GetTypeFromSignature (JniEnvironment.Runtime.TypeManager, typeSig);
 				var methods                 = JniEnvironment.Strings.ToString (methodsRef);
 				JniEnvironment.Runtime.TypeManager.RegisterNativeMembers (nativeClass, type, methods);
 #endif  // NET

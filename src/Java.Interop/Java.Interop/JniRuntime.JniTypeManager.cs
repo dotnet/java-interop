@@ -146,7 +146,8 @@ namespace Java.Interop {
 				if (type == null)
  					throw new ArgumentNullException (nameof (type));
 
-				return GetTypeSignatureCore (type);
+				var builtIn = GetBuiltInTypeSignature (type);
+				return builtIn.IsValid ? builtIn : GetTypeSignatureCore (type);
 			}
 
 			protected abstract JniTypeSignature GetTypeSignatureCore (Type type);
@@ -158,6 +159,10 @@ namespace Java.Interop {
 
 				if (type == null)
 					return [];
+
+				var builtIn = GetBuiltInTypeSignature (type);
+				if (builtIn.IsValid)
+					return new [] { builtIn };
 
 				return GetTypeSignaturesCore (type);
 			}
@@ -202,6 +207,33 @@ namespace Java.Interop {
 			}
 
 			protected abstract IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference);
+
+			static JniTypeSignature GetBuiltInTypeSignature (Type type)
+			{
+				if (type == typeof (JavaProxyObject))
+					return new JniTypeSignature (JavaProxyObject.JniTypeName, 0, false);
+				if (type == typeof (JavaProxyThrowable))
+					return new JniTypeSignature (JavaProxyThrowable.JniTypeName, 0, false);
+				return default;
+			}
+
+#if NET
+			internal static bool TryRegisterBuiltInNativeMembers (
+					JniType nativeClass,
+					string jniSimpleReference,
+					ReadOnlySpan<char> methods)
+			{
+				if (jniSimpleReference == JavaProxyObject.JniTypeName) {
+					var registrations = new List<JniNativeMethodRegistration> ();
+					JavaProxyObject.RegisterNativeMembers (new JniNativeMethodRegistrationArguments (registrations, null));
+					if (registrations.Count > 0)
+						nativeClass.RegisterNativeMethods (registrations.ToArray ());
+					return true;
+				}
+
+				return jniSimpleReference == JavaProxyThrowable.JniTypeName && methods.IsEmpty;
+			}
+#endif
 
 			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]

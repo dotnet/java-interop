@@ -26,7 +26,6 @@ partial class NativeAotTypeManager : JniRuntime.JniTypeManager {
 			Type type,
 			ReadOnlySpan<char> methods)
 	{
-		Console.WriteLine ($"# jonp: RegisterNativeMembers: nativeClass={nativeClass} type=`{type}`");
 		if (!methods.IsEmpty)
 			throw new NotSupportedException ($"Could not register native members for type '{type.FullName}'.");
 	}
@@ -43,12 +42,9 @@ partial class NativeAotTypeManager : JniRuntime.JniTypeManager {
 
 	protected override IEnumerable<Type> GetTypesForSimpleReference (string jniSimpleReference)
 	{
-		Console.WriteLine ($"# jonp: GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}`");
 		var target = GetTypeForSimpleReference (jniSimpleReference);
-		if (target != null) {
-			Console.WriteLine ($"# jonp:   GetTypesForSimpleReference: jniSimpleReference=`{jniSimpleReference}` -> `{target}`");
+		if (target != null)
 			yield return target;
-		}
 	}
 
 	protected override string? GetSimpleReference (Type type)
