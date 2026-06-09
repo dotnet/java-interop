@@ -46,6 +46,7 @@ namespace Java.InteropTests {
 				__vm.DestroyGenericArgumentState (value, ref arg);
 			}
 		}
+
 		public static unsafe void InvokeGenericVirtualVoidMethod<
 				[DynamicallyAccessedMembers (Constructors)]
 				T> (
