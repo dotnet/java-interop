@@ -16,8 +16,8 @@ namespace Java.Interop
 {
 	partial class JniRuntime
 	{
-		[RequiresDynamicCode ("TODO")]
-		[RequiresUnreferencedCode ("TODO")]
+		[RequiresDynamicCode ("This JniValueManager implementation is not compatible with Native AOT. Use a different JniValueManager implementation that supports Native AOT.")]
+		[RequiresUnreferencedCode ("This JniValueManager implementation is not compatible with Native AOT. Use a different JniValueManager implementation that supports Native AOT.")]
 		public abstract partial class ReflectionJniValueManager : JniValueManager
 		{
 			public override void ActivatePeer (
@@ -253,7 +253,7 @@ namespace Java.Interop
 				return false;
 			}
 
-		protected override object? CreateValueCore (
+			protected override object? CreateValueCore (
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
 					[DynamicallyAccessedMembers (Constructors)]
@@ -480,10 +480,17 @@ namespace Java.Interop
 
 			static JniValueMarshaler GetObjectArrayMarshaler (Type elementType)
 			{
-				Func<JniValueMarshaler> indirect = static () => JavaObjectArray<object>.Instance;
+				Func<JniValueMarshaler> indirect = GetObjectArrayMarshalerHelper<object>;
 				var reifiedMethodInfo = indirect.Method.GetGenericMethodDefinition ().MakeGenericMethod (elementType);
 				Func<JniValueMarshaler> direct = (Func<JniValueMarshaler>) Delegate.CreateDelegate (typeof (Func<JniValueMarshaler>), reifiedMethodInfo);
 				return direct ();
+			}
+
+			static JniValueMarshaler GetObjectArrayMarshalerHelper<
+					[DynamicallyAccessedMembers (Constructors)]
+					T> ()
+			{
+				return JavaObjectArray<T>.Instance;
 			}
 
 		}

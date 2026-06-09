@@ -126,7 +126,6 @@ namespace Java.Interop {
 				yield break;
 			}
 
-			static  readonly    string[]    EmptyStringArray    = Array.Empty<string> ();
 			static  readonly    Type[]      EmptyTypeArray      = Array.Empty<Type> ();
 
 			readonly struct KnownArrayTypesInfo
