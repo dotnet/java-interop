@@ -664,7 +664,7 @@ namespace Java.InteropTests {
 		public override DemoValueType CreateGenericValue (
 			ref JniObjectReference reference,
 			JniObjectReferenceOptions options,
-			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+			[DynamicallyAccessedMembers (Constructors)]
 			Type targetType)
 		{
 			var v   = Int32Marshaler.CreateGenericValue (ref reference, options, typeof (int));
@@ -699,3 +699,4 @@ namespace Java.InteropTests {
 		protected   override    bool                IsJniValueType  {get {return true;}}
 	}
 }
+
