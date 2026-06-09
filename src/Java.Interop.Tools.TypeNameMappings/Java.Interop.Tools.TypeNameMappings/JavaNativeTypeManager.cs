@@ -186,12 +186,21 @@ namespace Java.Interop.Tools.TypeNameMappings
 			}, _ => false);
 		}
 
-		static readonly Lazy<Type> IJavaPeerableType = new Lazy<Type> (() =>
-			Type.GetType ("Java.Interop.IJavaPeerable, Java.Interop", throwOnError: true)!
+		static readonly Lazy<Type?> IJavaPeerableType = new Lazy<Type?> (() =>
+			Type.GetType ("Java.Interop.IJavaPeerable, Java.Interop", throwOnError: false)
 		);
 
-		static bool ShouldCheckSpecialExportJniType (Type type) =>
-			!IJavaPeerableType.Value.IsAssignableFrom (type);
+		static bool ShouldCheckSpecialExportJniType (Type type)
+		{
+			var iJavaPeerableType = IJavaPeerableType.Value;
+			if (iJavaPeerableType != null)
+				return !iJavaPeerableType.IsAssignableFrom (type);
+
+#pragma warning disable IL2070 // Fallback path only when Java.Interop cannot be resolved.
+			return !type.GetInterfaces ()
+				.Any (i => i.FullName == "Java.Interop.IJavaPeerable");
+#pragma warning restore IL2070
+		}
 
 		public static string ToJniName (string jniType, int rank)
 		{
@@ -779,4 +788,3 @@ namespace Java.Interop.Tools.TypeNameMappings
 		}
 	}
 }
-
