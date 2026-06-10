@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 using Java.Interop;
 
@@ -25,6 +26,8 @@ namespace Java.InteropTests
 
 #if !__ANDROID__
 		[Test]
+		[RequiresDynamicCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not trimming-compatible.")]
 		public void JDK_OnlySupportsOneVM ()
 		{
 			try {
@@ -41,6 +44,8 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[RequiresDynamicCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test intentionally uses the default JRE type manager, which is reflection-based and not trimming-compatible.")]
 		public void UseInvocationPointerOnNewThread ()
 		{
 			var InvocationPointer = JniRuntime.CurrentRuntime.InvocationPointer;
@@ -74,6 +79,8 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[RequiresDynamicCode ("This test uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("This test uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public void Dispose_ClearsJniEnvironment ()
 		{
 			var c   = JniRuntime.CurrentRuntime;
@@ -105,12 +112,16 @@ namespace Java.InteropTests
 	{
 		JniRuntime          Proxy;
 
+		[RequiresDynamicCode ("JniProxyRuntime uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("JniProxyRuntime uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		public JniProxyRuntime (JniRuntime proxy)
 			: base (CreateOptions (proxy))
 		{
 			Proxy   = proxy;
 		}
 
+		[RequiresDynamicCode ("JniProxyRuntime uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("JniProxyRuntime uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
 		static JniRuntime.CreationOptions CreateOptions (JniRuntime proxy)
 		{
 			return new JniRuntime.CreationOptions {
@@ -133,7 +144,9 @@ namespace Java.InteropTests
 			}
 		}
 
-		class ProxyValueManager : JniValueManager {
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "ProxyValueManager intentionally uses reflection-backed value manager behavior for tests.")]
+		[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "ProxyValueManager intentionally uses reflection-backed value manager behavior for tests.")]
+		class ProxyValueManager : ReflectionJniValueManager {
 
 			public override void AddPeer (IJavaPeerable peer)
 			{
@@ -166,7 +179,12 @@ namespace Java.InteropTests
 			}
 		}
 
-		class ProxyTypeManager : JniTypeManager {
+		[RequiresDynamicCode ("ProxyTypeManager uses ReflectionJniTypeManager, which is reflection-based and not NativeAOT-compatible.")]
+		[RequiresUnreferencedCode ("ProxyTypeManager uses ReflectionJniTypeManager, which is reflection-based and not trimming-compatible.")]
+		class ProxyTypeManager : ReflectionJniTypeManager {
+			public ProxyTypeManager ()
+			{
+			}
 		}
 	}
 }

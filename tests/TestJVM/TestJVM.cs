@@ -341,7 +341,7 @@ namespace Java.Interop {
 		}
 	}
 
-	public class ManagedValueManager : JniRuntime.JniValueManager {
+	public class ManagedValueManager : JniRuntime.ReflectionJniValueManager {
 
 		Dictionary<int, List<IJavaPeerable>>? RegisteredInstances = new Dictionary<int, List<IJavaPeerable>> ();
 
@@ -515,7 +515,7 @@ namespace Java.Interop {
 		}
 	}
 
-	public class TestJvmTypeManager : JniRuntime.JniTypeManager {
+	public class TestJvmTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 		const DynamicallyAccessedMemberTypes MethodsAndPrivateNested = DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes;
 
