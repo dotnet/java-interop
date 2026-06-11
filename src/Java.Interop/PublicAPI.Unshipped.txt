@@ -9,6 +9,8 @@ virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeForSimpleReference(string!
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
 static Java.Interop.JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers(Java.Interop.JniType! nativeClass, string! jniSimpleReference, System.ReadOnlySpan<char> methods) -> bool
+static Java.Interop.JniRuntime.JniValueManager.ObjectValueMarshaler.get -> Java.Interop.JniValueMarshaler<object?>!
+static Java.Interop.JniRuntime.JniValueManager.PeerableValueMarshaler.get -> Java.Interop.JniValueMarshaler<Java.Interop.IJavaPeerable?>!
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
 Java.Interop.JniRuntime.ReflectionJniTypeManager

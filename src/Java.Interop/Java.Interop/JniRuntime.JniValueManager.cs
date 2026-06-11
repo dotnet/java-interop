@@ -190,6 +190,77 @@ namespace Java.Interop
 				return false;
 			}
 
+			protected internal static JniValueMarshaler<object?> ObjectValueMarshaler => ProxyValueMarshaler.Instance;
+			protected internal static JniValueMarshaler<IJavaPeerable?> PeerableValueMarshaler => JavaPeerableValueMarshaler.Instance;
+
+			sealed class ProxyValueMarshaler : JniValueMarshaler<object?> {
+
+				internal static ProxyValueMarshaler Instance = new ProxyValueMarshaler ();
+
+				[return: MaybeNull]
+				public override object? CreateGenericValue (
+						ref JniObjectReference reference,
+						JniObjectReferenceOptions options,
+						[DynamicallyAccessedMembers (Constructors)]
+						Type? targetType)
+				{
+					var jvm = JniEnvironment.Runtime;
+
+					if (targetType == null || targetType == typeof (object)) {
+						var target = jvm.ValueManager.PeekValue (reference);
+						if (target != null) {
+							JniObjectReference.Dispose (ref reference, options);
+							return target;
+						}
+
+						targetType = jvm.ValueManager.GetRuntimeType (reference);
+					}
+					if (targetType != null) {
+						var vm = jvm.ValueManager.GetValueMarshaler (targetType);
+						if (vm != Instance) {
+							return vm.CreateValue (ref reference, options, targetType)!;
+						}
+					}
+
+					var existing = jvm.ValueManager.PeekValue (reference);
+					if (existing != null) {
+						JniObjectReference.Dispose (ref reference, options);
+						return existing;
+					}
+					// Punt! Hope it's a java.lang.Object
+					return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
+				}
+
+				public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull] object? value, ParameterAttributes synchronize)
+				{
+					if (value == null)
+						return new JniValueMarshalerState ();
+
+					var jvm = JniEnvironment.Runtime;
+
+					var vm = jvm.ValueManager.GetValueMarshaler (value.GetType ());
+					if (vm != Instance) {
+						var s = vm.CreateObjectReferenceArgumentState (value, synchronize);
+						return new JniValueMarshalerState (s, vm);
+					}
+
+					var p = JavaProxyObject.GetProxy (value);
+					return new JniValueMarshalerState (p!.PeerReference.NewLocalRef ());
+				}
+
+				public override void DestroyGenericArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+				{
+					var vm = state.Extra as JniValueMarshaler;
+					if (vm != null) {
+						vm.DestroyArgumentState (value, ref state, synchronize);
+						return;
+					}
+					var r = state.ReferenceValue;
+					JniObjectReference.Dispose (ref r);
+					state = new JniValueMarshalerState ();
+				}
+			}
+
 			public IJavaPeerable? GetPeer (
 					JniObjectReference reference,
 					[DynamicallyAccessedMembers (Constructors)]
