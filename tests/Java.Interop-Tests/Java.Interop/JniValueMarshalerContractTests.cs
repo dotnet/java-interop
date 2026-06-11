@@ -216,6 +216,7 @@ namespace Java.InteropTests {
 		}
 
 		[Test]
+		[Category ("TrimmableTypeMapUnsupported")]
 		[RequiresUnreferencedCode ("CreateReturnValueFromManagedExpression")]
 		[RequiresDynamicCode ("CreateReturnValueFromManagedExpression")]
 		public void CreateReturnValueFromManagedExpression ()

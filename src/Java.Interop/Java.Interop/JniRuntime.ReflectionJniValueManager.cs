@@ -420,7 +420,7 @@ namespace Java.Interop
 					return r;
 				lock (Marshalers) {
 					if (!Marshalers.TryGetValue (typeof (T), out var d))
-						Marshalers.Add (typeof (T), d = new DelegatingValueMarshaler<T> (m));
+						Marshalers.Add (typeof (T), d = CreateDelegatingValueMarshaler<T> (m));
 					return (JniValueMarshaler<T>) d;
 				}
 			}
@@ -609,58 +609,4 @@ namespace Java.Interop
 		}
 	}
 
-	sealed class DelegatingValueMarshaler<
-			[DynamicallyAccessedMembers (Constructors)]
-			T
-	>
-		: JniValueMarshaler<T>
-	{
-
-		JniValueMarshaler   ValueMarshaler;
-
-		public DelegatingValueMarshaler (JniValueMarshaler valueMarshaler)
-		{
-			ValueMarshaler  = valueMarshaler;
-		}
-
-		[return: MaybeNull]
-		public override T CreateGenericValue (
-				ref JniObjectReference reference,
-				JniObjectReferenceOptions options,
-				[DynamicallyAccessedMembers (Constructors)]
-				Type? targetType)
-		{
-			return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
-		}
-
-		public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull]T value, ParameterAttributes synchronize)
-		{
-			return ValueMarshaler.CreateObjectReferenceArgumentState (value, synchronize);
-		}
-
-		public override void DestroyGenericArgumentState ([AllowNull]T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
-		{
-			ValueMarshaler.DestroyArgumentState (value, ref state, synchronize);
-		}
-
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
-		public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
-		{
-			return ValueMarshaler.CreateParameterFromManagedExpression (context, sourceValue, synchronize);
-		}
-
-		[RequiresDynamicCode (ExpressionRequiresUnreferencedCode)]
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
-		public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
-		{
-			return ValueMarshaler.CreateParameterToManagedExpression (context, sourceValue, synchronize, targetType);
-		}
-
-		[RequiresDynamicCode (ExpressionRequiresUnreferencedCode)]
-		[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
-		public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
-		{
-			return ValueMarshaler.CreateReturnValueFromManagedExpression (context, sourceValue);
-		}
-	}
 }

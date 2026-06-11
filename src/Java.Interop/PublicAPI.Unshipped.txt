@@ -1,6 +1,7 @@
 #nullable enable
 static Java.Interop.JniEnvironment.BeginMarshalMethod(nint jnienv, out Java.Interop.JniTransition transition, out Java.Interop.JniRuntime? runtime) -> bool
 static Java.Interop.JniEnvironment.EndMarshalMethod(ref Java.Interop.JniTransition transition) -> void
+static Java.Interop.JniRuntime.JniTypeManager.TryGetPrimitiveArrayTypeSignature(System.Type! type, out Java.Interop.JniTypeSignature signature) -> bool
 virtual Java.Interop.JniRuntime.OnEnterMarshalMethod() -> void
 virtual Java.Interop.JniRuntime.OnUserUnhandledException(ref Java.Interop.JniTransition transition, System.Exception! e) -> void
 virtual Java.Interop.JniRuntime.JniTypeManager.GetInvokerTypeCore(System.Type! type) -> System.Type?
@@ -9,8 +10,10 @@ virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeForSimpleReference(string!
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
 static Java.Interop.JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers(Java.Interop.JniType! nativeClass, string! jniSimpleReference, System.ReadOnlySpan<char> methods) -> bool
+static Java.Interop.JniRuntime.JniValueManager.CreateDelegatingValueMarshaler<T>(Java.Interop.JniValueMarshaler! valueMarshaler) -> Java.Interop.JniValueMarshaler<T>!
 static Java.Interop.JniRuntime.JniValueManager.ObjectValueMarshaler.get -> Java.Interop.JniValueMarshaler<object?>!
 static Java.Interop.JniRuntime.JniValueManager.PeerableValueMarshaler.get -> Java.Interop.JniValueMarshaler<Java.Interop.IJavaPeerable?>!
+static Java.Interop.JniRuntime.JniValueManager.TryGetPrimitiveArrayValueMarshaler(System.Type! type, out Java.Interop.JniValueMarshaler? marshaler) -> bool
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
 Java.Interop.JniRuntime.ReflectionJniTypeManager
