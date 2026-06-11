@@ -693,6 +693,7 @@ namespace Java.InteropTests {
 	}
 
 	[TestFixture]
+	[Category ("TrimmableTypeMapUnsupported")]
 	class JniValueMarshaler_DemoValueType_ContractTests : JniValueMarshalerContractTests<DemoValueType> {
 
 		protected   override    DemoValueType       Value           {get {return new DemoValueType (42);}}
