@@ -216,7 +216,6 @@ namespace Java.InteropTests {
 		}
 
 		[Test]
-		[Category ("TrimmableTypeMapUnsupported")]
 		[RequiresUnreferencedCode ("CreateReturnValueFromManagedExpression")]
 		[RequiresDynamicCode ("CreateReturnValueFromManagedExpression")]
 		public void CreateReturnValueFromManagedExpression ()
@@ -236,7 +235,7 @@ namespace Java.InteropTests {
 		protected virtual string GetExpectedReturnValueFromManagedExpression (string jvm, string value, Expression ret)
 		{
 			var valueType       = GetTypeName (typeof (T));
-			var marshalerType   = marshaler.GetType ().Name;
+			var marshalerType   = GetTypeName (marshaler.GetType ());
 			return $@"{{
 	JniRuntime {jvm};
 	{valueType} {value};
@@ -700,4 +699,3 @@ namespace Java.InteropTests {
 		protected   override    bool                IsJniValueType  {get {return true;}}
 	}
 }
-
