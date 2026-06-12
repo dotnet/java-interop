@@ -90,7 +90,7 @@ namespace Java.Interop
 		void SetElementAt (int index, T value)
 		{
 			var vm  = JniEnvironment.Runtime.ValueManager;
-			var r   = vm.CreateObjectReferenceArgument (typeof (T), value);
+			var r   = vm.CreateLocalObjectReferenceArgument (typeof (T), value);
 			try {
 				JniEnvironment.Arrays.SetObjectArrayElement (PeerReference, index, r);
 			} finally {
