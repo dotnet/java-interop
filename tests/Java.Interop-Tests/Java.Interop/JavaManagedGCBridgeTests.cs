@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Java.InteropTests {
 
 	[TestFixture]
-	[Category ("TrimmableTypeMapUnsupported")]
+	[Category ("GCBridge")]
 	public class JavaManagedGCBridgeTests : JavaVMFixture {
 
 #if !NO_GC_BRIDGE_SUPPORT
@@ -58,6 +58,11 @@ namespace Java.InteropTests {
 	[JniTypeSignature (JniTypeName, GenerateJavaPeer=false)]
 	public class CrossReferenceBridge : JavaObject {
 		internal    const    string         JniTypeName = "net/dot/jni/test/CrossReferenceBridge";
+		static      readonly JniPeerMembers _members    = new JniPeerMembers (JniTypeName, typeof (CrossReferenceBridge));
+
+		public override JniPeerMembers JniPeerMembers {
+			get {return _members;}
+		}
 
 		public  string          id;
 		public  List<object>    link        = new List<object> ();
