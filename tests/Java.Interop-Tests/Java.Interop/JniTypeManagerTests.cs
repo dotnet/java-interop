@@ -103,8 +103,14 @@ namespace Java.InteropTests
 			var info = JniRuntime.CurrentRuntime.TypeManager.GetTypeSignature (type);
 			Assert.IsTrue (info.IsValid, $"info.IsValid for `{type}`");
 
+			// `GetTypeSignature() and `GetTypeSignatures()` should be "in sync"; verify that!
+			var info2   = JniRuntime.CurrentRuntime.TypeManager.GetTypeSignatures (type).FirstOrDefault ();
+			Assert.IsTrue (info2.IsValid, $"info2.IsValid for `{type}`");
+
 			Assert.AreEqual (jniType,   info.Name,          $"info.Name for `{type}`");
+			Assert.AreEqual (jniType,   info2.Name,         $"info2.Name for `{type}`");
 			Assert.AreEqual (arrayRank, info.ArrayRank,     $"info.ArrayRank for `{type}`");
+			Assert.AreEqual (arrayRank, info2.ArrayRank,    $"info2.ArrayRank for `{type}`");
 		}
 
 		[Test]

@@ -276,11 +276,7 @@ namespace Java.Interop {
 
 		public override void DestroyArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0)
 		{
-			if (value == null) {
-				DestroyGenericArgumentState (default, ref state, synchronize);
-				return;
-			}
-			DestroyGenericArgumentState ((T) value, ref state, synchronize);
+			DestroyGenericArgumentState ((T) value!, ref state, synchronize);
 		}
 	}
 }
