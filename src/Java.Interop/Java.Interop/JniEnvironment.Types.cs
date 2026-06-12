@@ -322,7 +322,11 @@ namespace Java.Interop
 			/// </summary>
 			public static unsafe void RegisterNatives (JniObjectReference type, ReadOnlySpan<JniNativeMethod> methods)
 			{
+				if (!type.IsValid)
+					throw new ArgumentException ("Handle must be valid.", nameof (type));
+
 				IntPtr env = JniEnvironment.EnvironmentPointer;
+				int r;
 				fixed (JniNativeMethod* methodsPtr = methods) {
 #if FEATURE_JNIENVIRONMENT_JI_FUNCTION_POINTERS
 					var registerNatives = (delegate* unmanaged<IntPtr, IntPtr, JniNativeMethod*, int, int>)
@@ -331,10 +335,19 @@ namespace Java.Interop
 					var registerNatives = (delegate* unmanaged<IntPtr, IntPtr, JniNativeMethod*, int, int>)
 						JniEnvironment.CurrentInfo.Invoker.env.RegisterNatives;
 #endif
-					int r = registerNatives (env, type.Handle, methodsPtr, methods.Length);
-					if (r != 0) {
-						throw new InvalidOperationException ($"Could not register native methods for class '{GetJniTypeNameFromClass (type)}'; JNIEnv::RegisterNatives() returned {r}.");
-					}
+					r = registerNatives (env, type.Handle, methodsPtr, methods.Length);
+				}
+
+				// Surface (and clear) any pending Java exception raised by JNI::RegisterNatives()
+				// — e.g. NoSuchMethodError — before falling back to the return-code check, matching
+				// the behavior of the generated `_RegisterNatives` wrapper. Leaving a pending
+				// exception in the JNIEnv would make subsequent JNI calls fail or abort.
+				var thrown = JniEnvironment.GetExceptionForLastThrowable ();
+				if (thrown != null)
+					ExceptionDispatchInfo.Capture (thrown).Throw ();
+
+				if (r != 0) {
+					throw new InvalidOperationException ($"Could not register native methods for class '{GetJniTypeNameFromClass (type)}'; JNIEnv::RegisterNatives() returned {r}.");
 				}
 			}
 
