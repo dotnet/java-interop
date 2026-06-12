@@ -190,16 +190,14 @@ namespace Java.Interop
 				return false;
 			}
 
-			protected internal static JniValueMarshaler<object?> ObjectValueMarshaler => ProxyValueMarshaler.Instance;
-			protected internal static JniValueMarshaler<IJavaPeerable?> PeerableValueMarshaler => JavaPeerableValueMarshaler.Instance;
+			protected internal static JniValueMarshaler<object?> ObjectValueMarshaler
+				=> ProxyValueMarshaler.Instance;
 
-			protected internal static JniValueMarshaler<T> CreateDelegatingValueMarshaler<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> (JniValueMarshaler valueMarshaler)
-			{
-				return new DelegatingValueMarshaler<T> (valueMarshaler);
-			}
+			protected internal static JniValueMarshaler<IJavaPeerable?> PeerableValueMarshaler
+				=> JavaPeerableValueMarshaler.Instance;
+
+			protected internal static JniValueMarshaler<T> CreateDelegatingValueMarshaler<[DynamicallyAccessedMembers (Constructors)] T> (JniValueMarshaler valueMarshaler)
+				=> new DelegatingValueMarshaler<T> (valueMarshaler);
 
 			public IJavaPeerable? GetPeer (
 					JniObjectReference reference,
