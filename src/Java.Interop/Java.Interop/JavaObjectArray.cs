@@ -89,10 +89,10 @@ namespace Java.Interop
 
 		void SetElementAt (int index, T value)
 		{
-			var vm  = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
-			var s   = vm.CreateGenericObjectReferenceArgumentState (value);
+			var vm  = JniEnvironment.Runtime.ValueManager;
+			var s   = vm.CreateObjectReferenceValueMarshalerState (value);
 			JniEnvironment.Arrays.SetObjectArrayElement (PeerReference, index, s.ReferenceValue);
-			vm.DestroyGenericArgumentState (value, ref s, 0);
+			vm.DestroyValueMarshalerState (value, ref s, 0);
 		}
 
 		public override IEnumerator<T> GetEnumerator ()
@@ -108,13 +108,13 @@ namespace Java.Interop
 		public override void Clear ()
 		{
 			int len = Length;
-			var vm  = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
+			var vm  = JniEnvironment.Runtime.ValueManager;
 #pragma warning disable 8653
-			var s   = vm.CreateArgumentState (default (T));
+			var s   = vm.CreateValueMarshalerState (default (T));
 			for (int i = 0; i < len; i++) {
 				JniEnvironment.Arrays.SetObjectArrayElement (PeerReference, i, s.ReferenceValue);
 			}
-			vm.DestroyGenericArgumentState (default (T), ref s, 0);
+			vm.DestroyValueMarshalerState (default (T), ref s, 0);
 #pragma warning restore 8653
 		}
 
@@ -222,4 +222,3 @@ namespace Java.Interop
 		}
 	}
 }
-

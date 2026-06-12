@@ -470,6 +470,42 @@ namespace Java.Interop
 				return ProxyValueMarshaler.Instance;
 			}
 
+			protected override JniValueMarshalerState CreateValueMarshalerStateCore (Type type, object? value, ParameterAttributes synchronize)
+			{
+				EnsureNotDisposed ();
+				return GetValueMarshaler (type).CreateArgumentState (value, synchronize);
+			}
+
+			protected override JniValueMarshalerState CreateValueMarshalerStateCore<[DynamicallyAccessedMembers (Constructors)] T> ([MaybeNull] T value, ParameterAttributes synchronize)
+			{
+				EnsureNotDisposed ();
+				return GetValueMarshaler<T> ().CreateGenericArgumentState (value, synchronize);
+			}
+
+			protected override JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (Type type, object? value, ParameterAttributes synchronize)
+			{
+				EnsureNotDisposed ();
+				return GetValueMarshaler (type).CreateObjectReferenceArgumentState (value, synchronize);
+			}
+
+			protected override JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore<[DynamicallyAccessedMembers (Constructors)] T> ([MaybeNull] T value, ParameterAttributes synchronize)
+			{
+				EnsureNotDisposed ();
+				return GetValueMarshaler<T> ().CreateGenericObjectReferenceArgumentState (value, synchronize);
+			}
+
+			protected override void DestroyValueMarshalerStateCore (Type type, object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+			{
+				EnsureNotDisposed ();
+				GetValueMarshaler (type).DestroyArgumentState (value, ref state, synchronize);
+			}
+
+			protected override void DestroyValueMarshalerStateCore<[DynamicallyAccessedMembers (Constructors)] T> ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
+			{
+				EnsureNotDisposed ();
+				GetValueMarshaler<T> ().DestroyGenericArgumentState (value, ref state, synchronize);
+			}
+
 			static Type? GetListType (Type type)
 			{
 				foreach (var iface in type.GetInterfaces ().Concat (new [] { type })) {

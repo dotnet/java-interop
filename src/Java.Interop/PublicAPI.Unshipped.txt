@@ -11,6 +11,12 @@ virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Type
 static Java.Interop.JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers(Java.Interop.JniType! nativeClass, string! jniSimpleReference, System.ReadOnlySpan<char> methods) -> bool
 static Java.Interop.JniRuntime.JniValueManager.ObjectValueMarshaler.get -> Java.Interop.JniValueMarshaler<object?>!
 static Java.Interop.JniRuntime.JniValueManager.PeerableValueMarshaler.get -> Java.Interop.JniValueMarshaler<Java.Interop.IJavaPeerable?>!
+abstract Java.Interop.JniRuntime.JniValueManager.CreateObjectReferenceValueMarshalerStateCore(System.Type! type, object? value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+abstract Java.Interop.JniRuntime.JniValueManager.CreateObjectReferenceValueMarshalerStateCore<T>(T value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+abstract Java.Interop.JniRuntime.JniValueManager.CreateValueMarshalerStateCore(System.Type! type, object? value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+abstract Java.Interop.JniRuntime.JniValueManager.CreateValueMarshalerStateCore<T>(T value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+abstract Java.Interop.JniRuntime.JniValueManager.DestroyValueMarshalerStateCore(System.Type! type, object? value, ref Java.Interop.JniValueMarshalerState state, System.Reflection.ParameterAttributes synchronize) -> void
+abstract Java.Interop.JniRuntime.JniValueManager.DestroyValueMarshalerStateCore<T>(T value, ref Java.Interop.JniValueMarshalerState state, System.Reflection.ParameterAttributes synchronize) -> void
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
 Java.Interop.JniRuntime.ReflectionJniTypeManager
@@ -67,8 +73,14 @@ abstract Java.Interop.JniRuntime.JniValueManager.GetValueMarshalerCore(System.Ty
 override Java.Interop.JniRuntime.ReflectionJniValueManager.ActivatePeer(Java.Interop.JniObjectReference reference, System.Type! type, System.Reflection.ConstructorInfo! cinfo, object?[]? argumentValues) -> void
 override Java.Interop.JniRuntime.ReflectionJniValueManager.ConstructPeerCore(Java.Interop.IJavaPeerable! peer, ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options) -> void
 override Java.Interop.JniRuntime.ReflectionJniValueManager.CreatePeer(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, System.Type? targetType) -> Java.Interop.IJavaPeerable?
+override Java.Interop.JniRuntime.ReflectionJniValueManager.CreateObjectReferenceValueMarshalerStateCore(System.Type! type, object? value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+override Java.Interop.JniRuntime.ReflectionJniValueManager.CreateObjectReferenceValueMarshalerStateCore<T>(T value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
 override Java.Interop.JniRuntime.ReflectionJniValueManager.CreateValueCore(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> object?
 override Java.Interop.JniRuntime.ReflectionJniValueManager.CreateValueCore<T>(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> T
+override Java.Interop.JniRuntime.ReflectionJniValueManager.CreateValueMarshalerStateCore(System.Type! type, object? value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+override Java.Interop.JniRuntime.ReflectionJniValueManager.CreateValueMarshalerStateCore<T>(T value, System.Reflection.ParameterAttributes synchronize) -> Java.Interop.JniValueMarshalerState
+override Java.Interop.JniRuntime.ReflectionJniValueManager.DestroyValueMarshalerStateCore(System.Type! type, object? value, ref Java.Interop.JniValueMarshalerState state, System.Reflection.ParameterAttributes synchronize) -> void
+override Java.Interop.JniRuntime.ReflectionJniValueManager.DestroyValueMarshalerStateCore<T>(T value, ref Java.Interop.JniValueMarshalerState state, System.Reflection.ParameterAttributes synchronize) -> void
 override Java.Interop.JniRuntime.ReflectionJniValueManager.GetValueCore(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> object?
 override Java.Interop.JniRuntime.ReflectionJniValueManager.GetValueCore<T>(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type? targetType = null) -> T
 override Java.Interop.JniRuntime.ReflectionJniValueManager.GetValueMarshalerCore(System.Type! type) -> Java.Interop.JniValueMarshaler!
