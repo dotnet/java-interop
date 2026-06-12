@@ -10,10 +10,6 @@ using System.Runtime.CompilerServices;
 
 namespace Java.Interop {
 
-	[global::System.Diagnostics.CodeAnalysis.SuppressMessage (
-		"Design",
-		"CA1031:Do not catch general exception types",
-		Justification = "Exceptions cannot cross a JNI boundary.")]
 	public static partial class JniMarshal {
 
 		public static bool RecursiveEquals (object? objA, object? objB)
