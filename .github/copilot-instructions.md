@@ -34,7 +34,6 @@
 
 ### Core Libraries (`src/`)
 - **`Java.Interop/`**: Main JNI binding library with core types and runtime
-- **`Java.Interop.Dynamic/`**: C# 4.0 `dynamic` provider for runtime method invocation
 - **`Java.Interop.Export/`**: `[Export]` attribute support for exposing managed methods to Java
 
 ### Code Generation Tools (`tools/`)

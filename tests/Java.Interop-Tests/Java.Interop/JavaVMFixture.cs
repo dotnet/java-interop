@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Java.Interop;
@@ -28,7 +29,9 @@ namespace Java.InteropTests {
 		}
 	}
 
-	class JavaVMFixtureTypeManager : JniRuntime.JniTypeManager {
+	[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "JavaVMFixtureTypeManager intentionally uses reflection-backed type manager behavior for tests.")]
+	[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "JavaVMFixtureTypeManager intentionally uses reflection-backed type manager behavior for tests.")]
+	class JavaVMFixtureTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 		Dictionary<string, Type> TypeMappings = new() {
 #if !NO_MARSHAL_MEMBER_BUILDER_SUPPORT
@@ -65,6 +68,13 @@ namespace Java.InteropTests {
 #pragma warning restore CS8600
 		}
 
+		[return: DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.NonPublicNestedTypes | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+		protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
+		{
+			return base.GetTypeForSimpleReference (jniSimpleReference) ??
+				(TypeMappings.TryGetValue (jniSimpleReference, out var target) ? target : null);
+		}
+
 		protected override IEnumerable<string> GetSimpleReferences (Type type)
 		{
 			return base.GetSimpleReferences (type)
@@ -75,18 +85,15 @@ namespace Java.InteropTests {
 		{
 			foreach (var e in TypeMappings) {
 				if (e.Value == type) {
-#if NET
 					if (ReplacmentTypes.TryGetValue (e.Key, out var alt)) {
 						yield return alt;
 						continue;
 					}
-#endif  // NET
 					yield return e.Key;
 				}
 			}
 		}
 
-#if NET
 		public string? RequestedFallbackTypesForSimpleReference;
 		protected override IReadOnlyList<string>? GetStaticMethodFallbackTypesCore (string jniSimpleReference)
 		{
@@ -164,7 +171,5 @@ namespace Java.InteropTests {
 			// 	return value == null ? "null" : $"\"{value}\"";
 			// }
 		}
-#endif  // NET
 	}
 }
-

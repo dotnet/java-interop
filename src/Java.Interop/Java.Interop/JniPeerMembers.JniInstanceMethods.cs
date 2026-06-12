@@ -130,7 +130,6 @@ namespace Java.Interop
 
 		JniMethodInfo GetMethodInfo (string method, string signature)
 		{
-#if NET
 			var m              = (JniMethodInfo?) null;
 			var newMethod      = JniEnvironment.Runtime.TypeManager.GetReplacementMethodInfo (Members.JniPeerTypeName, method, signature);
 			if (newMethod.HasValue) {
@@ -150,7 +149,6 @@ namespace Java.Interop
 				}
 				Console.Error.WriteLine ($"warning: For declared method `{Members.JniPeerTypeName}.{method}.{signature}`, could not find requested method `{typeName}.{methodName}.{methodSig}`!");
 			}
-#endif  // NET
 			return JniPeerType.GetInstanceMethod (method, signature);
 		}
 

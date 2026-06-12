@@ -201,7 +201,7 @@ namespace Java.Interop
 			SetValueManager (options);
 
 			ObjectReferenceManager      = SetRuntime (options.ObjectReferenceManager ?? throw new NotSupportedException ($"Please set {nameof (CreationOptions)}.{nameof (options.ObjectReferenceManager)}!"));
-			TypeManager                 = SetRuntime (options.TypeManager ?? new JniTypeManager ());
+			TypeManager                 = SetRuntime (options.TypeManager ?? throw new NotSupportedException ($"Please set {nameof (CreationOptions)}.{nameof (options.TypeManager)}!"));
 
 			if (Interlocked.CompareExchange (ref current, this, null) != null) {
 				Debug.WriteLine ("WARNING: More than one JniRuntime instance created. This is DOOMED TO FAIL.");
@@ -444,9 +444,7 @@ namespace Java.Interop
 		public virtual void OnUserUnhandledException (ref JniTransition transition, Exception e)
 		{
 			transition.SetPendingException (e);
-#if NET9_0_OR_GREATER
 			Debugger.BreakForUserUnhandledException (e);
-#endif  // NET9_0_OR_GREATER
 		}
 
 		public virtual void RaisePendingException (Exception pendingException)
