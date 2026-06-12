@@ -13,7 +13,7 @@ namespace Java.Interop {
 
 	partial class JniRuntime {
 
-		partial class JniTypeManager {
+		partial class ReflectionJniTypeManager {
 			readonly struct JniPrimitiveArrayInfo {
 				public  readonly    JniTypeSignature    JniTypeSignature;
 				public  readonly    Type                PrimitiveType;
@@ -38,16 +38,7 @@ namespace Java.Interop {
 				new ("D", typeof (Double), typeof (Double[]), typeof (JavaArray<Double>), typeof (JavaPrimitiveArray<Double>), typeof (JavaDoubleArray)),
 			};
 
-			internal static Type[] GetPrimitiveArrayTypes (Type primitiveType)
-			{
-				foreach (var e in JniPrimitiveArrayTypes) {
-					if (e.PrimitiveType == primitiveType)
-						return e.ArrayTypes;
-				}
-				throw new InvalidOperationException ($"Should not be reached; Could not find JniPrimitiveArrayInfo for {primitiveType}");
-			}
-
-			protected internal static bool TryGetPrimitiveArrayTypeSignature (Type type, out JniTypeSignature signature)
+			static bool GetBuiltInTypeArraySignature (Type type, ref JniTypeSignature signature)
 			{
 				foreach (var e in JniPrimitiveArrayTypes) {
 					if (Array.IndexOf (e.ArrayTypes, type) < 0)
@@ -98,28 +89,6 @@ namespace Java.Interop {
 				new KeyValuePair<Type, JniValueMarshaler>(typeof (JavaPrimitiveArray<Double>), JavaDoubleArray.ArrayMarshaler),
 				new KeyValuePair<Type, JniValueMarshaler>(typeof (JavaDoubleArray),            JavaDoubleArray.ArrayMarshaler),
 			};
-		}
-
-		partial class JniValueManager {
-			protected internal static bool TryGetPrimitiveArrayValueMarshaler (Type type, [NotNullWhen (true)] out JniValueMarshaler? marshaler)
-			{
-				foreach (var entry in JniPrimitiveArrayMarshalers.Value) {
-					if (entry.Key == type || IsCompatiblePrimitiveListType (type, entry.Key)) {
-						marshaler = entry.Value;
-						return true;
-					}
-				}
-
-				marshaler = null;
-				return false;
-			}
-
-			static bool IsCompatiblePrimitiveListType (Type type, Type marshalerType)
-			{
-				return type.IsGenericType &&
-					type.GetGenericTypeDefinition () == typeof (IList<>) &&
-					type.IsAssignableFrom (marshalerType);
-			}
 		}
 	}
 

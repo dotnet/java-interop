@@ -3,10 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Java.Interop.Expressions;
 
 namespace Java.Interop
 {
@@ -201,129 +199,6 @@ namespace Java.Interop
 			> (JniValueMarshaler valueMarshaler)
 			{
 				return new DelegatingValueMarshaler<T> (valueMarshaler);
-			}
-
-			sealed class ProxyValueMarshaler : JniValueMarshaler<object?> {
-
-				internal static ProxyValueMarshaler Instance = new ProxyValueMarshaler ();
-
-				[return: MaybeNull]
-				public override object? CreateGenericValue (
-						ref JniObjectReference reference,
-						JniObjectReferenceOptions options,
-						[DynamicallyAccessedMembers (Constructors)]
-						Type? targetType)
-				{
-					var jvm = JniEnvironment.Runtime;
-
-					if (targetType == null || targetType == typeof (object)) {
-						var target = jvm.ValueManager.PeekValue (reference);
-						if (target != null) {
-							JniObjectReference.Dispose (ref reference, options);
-							return target;
-						}
-
-						targetType = jvm.ValueManager.GetRuntimeType (reference);
-					}
-					if (targetType != null) {
-						var vm = jvm.ValueManager.GetValueMarshaler (targetType);
-						if (vm != Instance) {
-							return vm.CreateValue (ref reference, options, targetType)!;
-						}
-					}
-
-					var existing = jvm.ValueManager.PeekValue (reference);
-					if (existing != null) {
-						JniObjectReference.Dispose (ref reference, options);
-						return existing;
-					}
-					// Punt! Hope it's a java.lang.Object
-					return jvm.ValueManager.CreatePeer (ref reference, options, targetType);
-				}
-
-				public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull] object? value, ParameterAttributes synchronize)
-				{
-					if (value == null)
-						return new JniValueMarshalerState ();
-
-					var jvm = JniEnvironment.Runtime;
-
-					var vm = jvm.ValueManager.GetValueMarshaler (value.GetType ());
-					if (vm != Instance) {
-						var s = vm.CreateObjectReferenceArgumentState (value, synchronize);
-						return new JniValueMarshalerState (s, vm);
-					}
-
-					var p = JavaProxyObject.GetProxy (value);
-					return new JniValueMarshalerState (p!.PeerReference.NewLocalRef ());
-				}
-
-				public override void DestroyGenericArgumentState (object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
-				{
-					var vm = state.Extra as JniValueMarshaler;
-					if (vm != null) {
-						vm.DestroyArgumentState (value, ref state, synchronize);
-						return;
-					}
-					var r = state.ReferenceValue;
-					JniObjectReference.Dispose (ref r);
-					state = new JniValueMarshalerState ();
-				}
-			}
-
-			sealed class DelegatingValueMarshaler<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			>
-				: JniValueMarshaler<T>
-			{
-
-				JniValueMarshaler ValueMarshaler;
-
-				public DelegatingValueMarshaler (JniValueMarshaler valueMarshaler)
-				{
-					ValueMarshaler = valueMarshaler;
-				}
-
-				[return: MaybeNull]
-				public override T CreateGenericValue (
-						ref JniObjectReference reference,
-						JniObjectReferenceOptions options,
-						[DynamicallyAccessedMembers (Constructors)]
-						Type? targetType)
-				{
-					return (T) ValueMarshaler.CreateValue (ref reference, options, targetType ?? typeof (T))!;
-				}
-
-				public override JniValueMarshalerState CreateGenericObjectReferenceArgumentState ([MaybeNull] T value, ParameterAttributes synchronize)
-				{
-					return ValueMarshaler.CreateObjectReferenceArgumentState (value, synchronize);
-				}
-
-				public override void DestroyGenericArgumentState ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
-				{
-					ValueMarshaler.DestroyArgumentState (value, ref state, synchronize);
-				}
-
-				[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
-				public override Expression CreateParameterFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize)
-				{
-					return ValueMarshaler.CreateParameterFromManagedExpression (context, sourceValue, synchronize);
-				}
-
-				[RequiresDynamicCode (ExpressionRequiresUnreferencedCode)]
-				[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
-				public override Expression CreateParameterToManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue, ParameterAttributes synchronize, Type? targetType)
-				{
-					return ValueMarshaler.CreateParameterToManagedExpression (context, sourceValue, synchronize, targetType);
-				}
-
-				[RequiresDynamicCode (ExpressionRequiresUnreferencedCode)]
-				[RequiresUnreferencedCode (ExpressionRequiresUnreferencedCode)]
-				public override Expression CreateReturnValueFromManagedExpression (JniValueMarshalerContext context, ParameterExpression sourceValue)
-				{
-					return ValueMarshaler.CreateReturnValueFromManagedExpression (context, sourceValue);
-				}
 			}
 
 			public IJavaPeerable? GetPeer (

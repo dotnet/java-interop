@@ -64,7 +64,11 @@ namespace Java.Interop {
 				return null;
 
 			lock (CachedValues) {
-				return CachedValues.GetValue (value, static v => new JavaProxyObject (v));
+				if (CachedValues.TryGetValue (value, out var proxy))
+					return proxy;
+				proxy = new JavaProxyObject (value);
+				CachedValues.Add (value, proxy);
+				return proxy;
 			}
 		}
 

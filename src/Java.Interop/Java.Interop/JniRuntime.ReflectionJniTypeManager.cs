@@ -25,7 +25,7 @@ namespace Java.Interop {
 				JniTypeSignature signature = JniTypeSignature.Empty;
 				if (GetBuiltInTypeSignature (type, ref signature))
 					return signature.AddArrayRank (rank);
-				if (TryGetPrimitiveArrayTypeSignature (type, out signature))
+				if (GetBuiltInTypeArraySignature (type, ref signature))
 					return signature.AddArrayRank (rank);
 
 				var isGeneric = type.IsGenericType;
@@ -55,7 +55,7 @@ namespace Java.Interop {
 				var signature = JniTypeSignature.Empty;
 				if (GetBuiltInTypeSignature (type, ref signature))
 					yield return signature.AddArrayRank (rank);
-				if (TryGetPrimitiveArrayTypeSignature (type, out signature))
+				if (GetBuiltInTypeArraySignature (type, ref signature))
 					yield return signature.AddArrayRank (rank);
 
 				var isGeneric = type.IsGenericType;
@@ -286,7 +286,17 @@ namespace Java.Interop {
 
 			IEnumerable<Type> GetPrimitiveArrayTypesForSimpleReference (JniTypeSignature typeSignature, Type type)
 			{
-				foreach (var t in GetPrimitiveArrayTypes (type)) {
+				int index   = -1;
+				for (int i = 0; i < JniPrimitiveArrayTypes.Length; ++i) {
+					if (JniPrimitiveArrayTypes [i].PrimitiveType == type) {
+						index   = i;
+						break;
+					}
+				}
+				if (index == -1) {
+					throw new InvalidOperationException ($"Should not be reached; Could not find JniPrimitiveArrayInfo for {type}");
+				}
+				foreach (var t in JniPrimitiveArrayTypes [index].ArrayTypes) {
 					var rank        = typeSignature.ArrayRank-1;
 					var arrayType   = t;
 					while (rank-- > 0) {
