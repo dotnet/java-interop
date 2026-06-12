@@ -64,9 +64,18 @@ namespace Java.Interop {
 			return this;
 		}
 
+		[RequiresDynamicCode ("The default JRE type manager is reflection-based and is not compatible with Native AOT. Use CreateJreVM(JniRuntime.JniTypeManager) with an AOT-safe type manager instead.")]
+		[RequiresUnreferencedCode ("The default JRE type manager is reflection-based and is not trimming-compatible. Use CreateJreVM(JniRuntime.JniTypeManager) with a trimming-safe type manager instead.")]
 		public JreRuntime CreateJreVM ()
 		{
 			return new JreRuntime (this);
+		}
+
+		public JreRuntime CreateJreVM (JniRuntime.JniTypeManager typeManager)
+		{
+			if (typeManager == null)
+				throw new ArgumentNullException (nameof (typeManager));
+			return new JreRuntime (this, typeManager);
 		}
 	}
 
@@ -76,10 +85,27 @@ namespace Java.Interop {
 		{
 		}
 
+		[RequiresDynamicCode ("The default JRE type manager is reflection-based and is not compatible with Native AOT.")]
+		[RequiresUnreferencedCode ("The default JRE type manager is reflection-based and is not trimming-compatible.")]
 		static unsafe JreRuntimeOptions CreateJreVM (JreRuntimeOptions builder)
 		{
 			if (builder == null)
 				throw new ArgumentNullException ("builder");
+			builder.TypeManager     ??= new JreTypeManager (builder.typeMappings);
+			return CreateJreVMCore (builder);
+		}
+
+		static unsafe JreRuntimeOptions CreateJreVMWithoutDefaultTypeManager (JreRuntimeOptions builder)
+		{
+			if (builder == null)
+				throw new ArgumentNullException ("builder");
+			if (builder.TypeManager == null)
+				throw new InvalidOperationException ($"Member `{nameof (JniRuntime.CreationOptions)}.{nameof (JniRuntime.CreationOptions.TypeManager)}` must be set.");
+			return CreateJreVMCore (builder);
+		}
+
+		static unsafe JreRuntimeOptions CreateJreVMCore (JreRuntimeOptions builder)
+		{
 			if (builder.InvocationPointer == IntPtr.Zero &&
 					builder.EnvironmentPointer == IntPtr.Zero &&
 					string.IsNullOrEmpty (builder.JvmLibraryPath))
@@ -87,9 +113,6 @@ namespace Java.Interop {
 
 			builder.LibraryHandler  = JvmLibraryHandler.Create ();
 
-#if NET
-			builder.TypeManager     ??= new JreTypeManager (builder.typeMappings);
-#endif  // NET
 
 			bool onMono = Type.GetType ("Mono.RuntimeStructs", throwOnError: false) != null;
 			if (onMono) {
@@ -162,10 +185,28 @@ namespace Java.Interop {
 
 		JvmLibraryHandler LibraryHandler;
 
+		[RequiresDynamicCode ("The default JRE type manager is reflection-based and is not compatible with Native AOT.")]
+		[RequiresUnreferencedCode ("The default JRE type manager is reflection-based and is not trimming-compatible.")]
 		internal protected JreRuntime (JreRuntimeOptions builder)
 			: base (CreateJreVM (builder))
 		{
 			LibraryHandler  = builder.LibraryHandler!;
+		}
+
+		internal protected JreRuntime (JreRuntimeOptions builder, JniRuntime.JniTypeManager typeManager)
+			: base (CreateJreVMWithoutDefaultTypeManager (SetTypeManager (builder, typeManager)))
+		{
+			LibraryHandler  = builder.LibraryHandler!;
+		}
+
+		static JreRuntimeOptions SetTypeManager (JreRuntimeOptions builder, JniRuntime.JniTypeManager typeManager)
+		{
+			if (builder == null)
+				throw new ArgumentNullException ("builder");
+			if (typeManager == null)
+				throw new ArgumentNullException (nameof (typeManager));
+			builder.TypeManager = typeManager;
+			return builder;
 		}
 
 		public override string? GetCurrentManagedThreadName ()
@@ -203,18 +244,12 @@ namespace Java.Interop {
 		{
 			var handler = Environment.GetEnvironmentVariable ("JI_LOADER_TYPE");
 			switch (handler?.ToLowerInvariant ()) {
-#if !NET
-			case "":
-			case null:
-#endif  // NET
 			case "java-interop":
 				return new JavaInteropLibJvmLibraryHandler ();
-#if NET
 			case "":
 			case null:
 			case "native-library":
 				return new NativeLibraryJvmLibraryHandler ();
-#endif  // NET
 			default:
 				Console.Error.WriteLine ($"Unsupported JI_LOADER_TYPE value of `{handler}`.");
 				throw new NotSupportedException ();
@@ -222,7 +257,6 @@ namespace Java.Interop {
 		}
 	}
 
-#if NET
 
 	class NativeLibraryJvmLibraryHandler : JvmLibraryHandler {
 		IntPtr  handle;
@@ -286,7 +320,6 @@ namespace Java.Interop {
 		}
 	}
 
-#endif  // NET
 
 	class JavaInteropLibJvmLibraryHandler : JvmLibraryHandler {
 

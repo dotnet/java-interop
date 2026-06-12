@@ -34,7 +34,6 @@
 
 ### Core Libraries (`src/`)
 - **`Java.Interop/`**: Main JNI binding library with core types and runtime
-- **`Java.Interop.Dynamic/`**: C# 4.0 `dynamic` provider for runtime method invocation
 - **`Java.Interop.Export/`**: `[Export]` attribute support for exposing managed methods to Java
 - **`Java.Runtime.Environment/`**: JVM loading and lifecycle management
 - **`Java.Base/`**: Bindings for core Java types (`java.lang.*`, etc.)
@@ -54,7 +53,6 @@
 
 ### Testing (`tests/`)
 - Unit tests for all major components
-- Performance benchmarks (`Java.Interop-PerformanceTests/`)
 - Integration tests with real JVM instances
 - Generator tests with sample API descriptions
 
