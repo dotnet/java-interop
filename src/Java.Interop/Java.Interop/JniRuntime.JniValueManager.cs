@@ -196,9 +196,6 @@ namespace Java.Interop
 			protected internal static JniValueMarshaler<IJavaPeerable?> PeerableValueMarshaler
 				=> JavaPeerableValueMarshaler.Instance;
 
-			protected internal static JniValueMarshaler<T> CreateDelegatingValueMarshaler<[DynamicallyAccessedMembers (Constructors)] T> (JniValueMarshaler valueMarshaler)
-				=> new DelegatingValueMarshaler<T> (valueMarshaler);
-
 			public IJavaPeerable? GetPeer (
 					JniObjectReference reference,
 					[DynamicallyAccessedMembers (Constructors)]
