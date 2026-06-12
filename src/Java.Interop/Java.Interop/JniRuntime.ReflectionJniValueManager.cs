@@ -247,6 +247,7 @@ namespace Java.Interop
 						options,
 					};
 					c.Invoke (self, args);
+					reference = (JniObjectReference) args [0];
 					JniObjectReference.Dispose (ref reference, options);
 					return true;
 				}
