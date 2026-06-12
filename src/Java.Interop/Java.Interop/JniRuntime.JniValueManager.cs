@@ -312,7 +312,7 @@ namespace Java.Interop
 			public JniValueMarshaler<T> GetValueMarshaler<[DynamicallyAccessedMembers (Constructors)] T> () => GetValueMarshalerCore<T> ();
 			protected abstract JniValueMarshaler<T> GetValueMarshalerCore<[DynamicallyAccessedMembers (Constructors)] T> ();
 
-			internal JniValueMarshalerState CreateObjectReferenceValueMarshalerState (
+			internal JniObjectReference CreateObjectReferenceArgument (
 				[DynamicallyAccessedMembers (Constructors)]
 				Type type,
 				object? value)
@@ -321,21 +321,13 @@ namespace Java.Interop
 
 				if (type == null)
 					throw new ArgumentNullException (nameof (type));
-				return CreateObjectReferenceValueMarshalerStateCore (type, value);
+				return CreateObjectReferenceArgumentCore (type, value);
 			}
 
-			protected abstract JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (
+			protected abstract JniObjectReference CreateObjectReferenceArgumentCore (
 				[DynamicallyAccessedMembers (Constructors)]
 				Type type,
 				object? value);
-
-			internal void DestroyValueMarshalerState (ref JniValueMarshalerState state)
-			{
-				EnsureNotDisposed ();
-				DestroyValueMarshalerStateCore (ref state);
-			}
-
-			protected abstract void DestroyValueMarshalerStateCore (ref JniValueMarshalerState state);
 		}
 	}
 }

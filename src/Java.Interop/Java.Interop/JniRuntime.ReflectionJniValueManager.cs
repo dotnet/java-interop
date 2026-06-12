@@ -470,50 +470,20 @@ namespace Java.Interop
 				return ProxyValueMarshaler.Instance;
 			}
 
-			protected override JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (
+			protected override JniObjectReference CreateObjectReferenceArgumentCore (
 				[DynamicallyAccessedMembers (Constructors)]
 				Type type,
 				object? value)
 			{
 				EnsureNotDisposed ();
 				var marshaler = GetValueMarshaler (type);
-				return CreateValueMarshalerState (marshaler, value, marshaler.CreateObjectReferenceArgumentState (value));
-			}
-
-			protected override void DestroyValueMarshalerStateCore (ref JniValueMarshalerState state)
-			{
-				EnsureNotDisposed ();
-				if (state.Extra is not ValueMarshalerStateCleanup cleanup) {
-					var r = state.ReferenceValue;
-					JniObjectReference.Dispose (ref r);
-					state = new JniValueMarshalerState ();
-					return;
-				}
-
-				cleanup.Destroy (ref state);
-			}
-
-			static JniValueMarshalerState CreateValueMarshalerState (JniValueMarshaler marshaler, object? value, JniValueMarshalerState state)
-			{
-				return new JniValueMarshalerState (state, new ValueMarshalerStateCleanup (marshaler, value, state.Extra));
-			}
-
-			sealed class ValueMarshalerStateCleanup
-			{
-				readonly JniValueMarshaler marshaler;
-				readonly object? value;
-				readonly object? extra;
-
-				public ValueMarshalerStateCleanup (JniValueMarshaler marshaler, object? value, object? extra)
-				{
-					this.marshaler = marshaler;
-					this.value = value;
-					this.extra = extra;
-				}
-
-				public void Destroy (ref JniValueMarshalerState state)
-				{
-					state = new JniValueMarshalerState (state, extra);
+				var state = marshaler.CreateObjectReferenceArgumentState (value);
+				try {
+					if (!state.ReferenceValue.IsValid) {
+						return new JniObjectReference ();
+					}
+					return state.ReferenceValue.NewLocalRef ();
+				} finally {
 					marshaler.DestroyArgumentState (value, ref state);
 				}
 			}

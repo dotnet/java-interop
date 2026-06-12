@@ -90,9 +90,12 @@ namespace Java.Interop
 		void SetElementAt (int index, T value)
 		{
 			var vm  = JniEnvironment.Runtime.ValueManager;
-			var s   = vm.CreateObjectReferenceValueMarshalerState (typeof (T), value);
-			JniEnvironment.Arrays.SetObjectArrayElement (PeerReference, index, s.ReferenceValue);
-			vm.DestroyValueMarshalerState (ref s);
+			var r   = vm.CreateObjectReferenceArgument (typeof (T), value);
+			try {
+				JniEnvironment.Arrays.SetObjectArrayElement (PeerReference, index, r);
+			} finally {
+				JniObjectReference.Dispose (ref r);
+			}
 		}
 
 		public override IEnumerator<T> GetEnumerator ()
