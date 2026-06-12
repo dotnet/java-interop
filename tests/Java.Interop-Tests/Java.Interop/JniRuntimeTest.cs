@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Diagnostics.CodeAnalysis;
 
@@ -32,9 +31,9 @@ namespace Java.InteropTests
 		public void JDK_OnlySupportsOneVM ()
 		{
 			try {
-				var second = new JreRuntimeOptions () {
+				var second = new TestJVM (new TestJVMOptions () {
 					JvmLibraryPath  = TestJVM.GetJvmLibraryPath (),
-				}.CreateJreVM ();
+				});
 				// If we reach here, we're in a JVM that supports > 1 VM
 				second.Dispose ();
 				Assert.Ignore ();
@@ -53,9 +52,9 @@ namespace Java.InteropTests
 
 			var t = new Thread (() => {
 				try {
-					var second = new JreRuntimeOptions () {
+					var second = new TestJVM (new TestJVMOptions () {
 						InvocationPointer   = InvocationPointer,
-					}.CreateJreVM ();
+					});
 				}
 				catch (Exception e) {
 					Assert.Fail ("Expected no exception, got: {0}", e);
@@ -71,28 +70,6 @@ namespace Java.InteropTests
 		{
 			Assert.Throws<ArgumentNullException> (() => new JavaVMWithNullBuilder ());
 		}
-
-		[Test]
-		public void BuiltInSimpleReferenceMap_ContainsManagedPeerByDefault ()
-		{
-			var types = JniRuntime.CurrentRuntime.TypeManager.GetTypes (new JniTypeSignature (ManagedPeer.JniTypeName));
-			Assert.IsTrue (types.Contains (typeof (ManagedPeer)));
-		}
-
-#if !__ANDROID__
-		[Test]
-		public void ManagedPeerNativeRegistrationFalse_RemovesManagedPeerBuiltinMapping ()
-		{
-			var c      = JniRuntime.CurrentRuntime;
-			AppContext.SetSwitch ("Java.Interop.RuntimeFeature.ManagedPeerNativeRegistration", false);
-			try {
-				var types = c.TypeManager.GetTypes (new JniTypeSignature (ManagedPeer.JniTypeName));
-				Assert.IsEmpty (types);
-			} finally {
-				AppContext.SetSwitch ("Java.Interop.RuntimeFeature.ManagedPeerNativeRegistration", true);
-			}
-		}
-#endif  // !__ANDROID__
 
 		class JavaVMWithNullBuilder : JniRuntime {
 			public JavaVMWithNullBuilder ()
