@@ -35,7 +35,6 @@
 ### Core Libraries (`src/`)
 - **`Java.Interop/`**: Main JNI binding library with core types and runtime
 - **`Java.Interop.Export/`**: `[Export]` attribute support for exposing managed methods to Java
-- **`Java.Base/`**: Bindings for core Java types (`java.lang.*`, etc.)
 
 ### Code Generation Tools (`tools/`)
 - **`generator/`**: Primary tool for generating C# bindings from Java API descriptions
