@@ -56,10 +56,8 @@ namespace generator.SourceWriters
 
 		protected override void WriteBody (CodeWriter writer)
 		{
-			var call = $"global::Java.Interop.JniMarshal.{(method.IsVoid ? "SafeInvokeAction" : "SafeInvokeFunc")} (jnienv, native__this";
-			foreach (var p in method.Parameters)
-				call += $", {opt.GetSafeIdentifier (p.UnsafeNativeName)}";
-			call += $", &__{Name})";
+			var paramArgs = string.Join ("", method.Parameters.Select (p => $", {opt.GetSafeIdentifier (p.UnsafeNativeName)}"));
+			var call = $"global::Java.Interop.JniMarshal.{(method.IsVoid ? "SafeInvokeAction" : "SafeInvokeFunc")} (jnienv, native__this{paramArgs}, &__{Name})";
 
 			writer.WriteLine ("unsafe {");
 			writer.Indent ();
