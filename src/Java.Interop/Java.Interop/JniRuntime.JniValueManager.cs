@@ -190,12 +190,6 @@ namespace Java.Interop
 				return false;
 			}
 
-			protected internal static JniValueMarshaler<object?> ObjectValueMarshaler
-				=> ProxyValueMarshaler.Instance;
-
-			protected internal static JniValueMarshaler<IJavaPeerable?> PeerableValueMarshaler
-				=> JavaPeerableValueMarshaler.Instance;
-
 			public IJavaPeerable? GetPeer (
 					JniObjectReference reference,
 					[DynamicallyAccessedMembers (Constructors)]
@@ -228,6 +222,8 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType = null)
 			{
+				EnsureNotDisposed ();
+
 				return CreateValueCore (ref reference, options, targetType);
 			}
 
@@ -238,6 +234,8 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType = null)
 			{
+				EnsureNotDisposed ();
+
 				return CreateValueCore<T> (ref reference, options, targetType);
 			}
 
@@ -260,6 +258,8 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType = null)
 			{
+				EnsureNotDisposed ();
+
 				return GetValueCore (ref reference, options, targetType);
 			}
 
@@ -277,6 +277,8 @@ namespace Java.Interop
 				[DynamicallyAccessedMembers (Constructors)]
 				Type? targetType = null)
 			{
+				EnsureNotDisposed ();
+
 				return GetValueCore<T> (ref reference, options, targetType);
 			}
 
@@ -310,71 +312,30 @@ namespace Java.Interop
 			public JniValueMarshaler<T> GetValueMarshaler<[DynamicallyAccessedMembers (Constructors)] T> () => GetValueMarshalerCore<T> ();
 			protected abstract JniValueMarshaler<T> GetValueMarshalerCore<[DynamicallyAccessedMembers (Constructors)] T> ();
 
-			internal JniValueMarshalerState CreateValueMarshalerState (Type type, object? value, ParameterAttributes synchronize = ParameterAttributes.In)
+			internal JniValueMarshalerState CreateObjectReferenceValueMarshalerState (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type,
+				object? value)
 			{
+				EnsureNotDisposed ();
+
 				if (type == null)
 					throw new ArgumentNullException (nameof (type));
-				return CreateValueMarshalerStateCore (type, value, synchronize);
+				return CreateObjectReferenceValueMarshalerStateCore (type, value);
 			}
 
-			protected abstract JniValueMarshalerState CreateValueMarshalerStateCore (Type type, object? value, ParameterAttributes synchronize);
+			protected abstract JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type,
+				object? value);
 
-			internal JniValueMarshalerState CreateValueMarshalerState<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ([MaybeNull] T value, ParameterAttributes synchronize = ParameterAttributes.In)
+			internal void DestroyValueMarshalerState (ref JniValueMarshalerState state)
 			{
-				return CreateValueMarshalerStateCore (value, synchronize);
+				EnsureNotDisposed ();
+				DestroyValueMarshalerStateCore (ref state);
 			}
 
-			protected abstract JniValueMarshalerState CreateValueMarshalerStateCore<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ([MaybeNull] T value, ParameterAttributes synchronize);
-
-			internal JniValueMarshalerState CreateObjectReferenceValueMarshalerState (Type type, object? value, ParameterAttributes synchronize = 0)
-			{
-				if (type == null)
-					throw new ArgumentNullException (nameof (type));
-				return CreateObjectReferenceValueMarshalerStateCore (type, value, synchronize);
-			}
-
-			protected abstract JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (Type type, object? value, ParameterAttributes synchronize);
-
-			internal JniValueMarshalerState CreateObjectReferenceValueMarshalerState<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ([MaybeNull] T value, ParameterAttributes synchronize = 0)
-			{
-				return CreateObjectReferenceValueMarshalerStateCore (value, synchronize);
-			}
-
-			protected abstract JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ([MaybeNull] T value, ParameterAttributes synchronize);
-
-			internal void DestroyValueMarshalerState (Type type, object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0)
-			{
-				if (type == null)
-					throw new ArgumentNullException (nameof (type));
-				DestroyValueMarshalerStateCore (type, value, ref state, synchronize);
-			}
-
-			protected abstract void DestroyValueMarshalerStateCore (Type type, object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize);
-
-			internal void DestroyValueMarshalerState<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize = 0)
-			{
-				DestroyValueMarshalerStateCore (value, ref state, synchronize);
-			}
-
-			protected abstract void DestroyValueMarshalerStateCore<
-					[DynamicallyAccessedMembers (Constructors)]
-					T
-			> ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize);
+			protected abstract void DestroyValueMarshalerStateCore (ref JniValueMarshalerState state);
 		}
 	}
 }

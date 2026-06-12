@@ -470,40 +470,52 @@ namespace Java.Interop
 				return ProxyValueMarshaler.Instance;
 			}
 
-			protected override JniValueMarshalerState CreateValueMarshalerStateCore (Type type, object? value, ParameterAttributes synchronize)
+			protected override JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type,
+				object? value)
 			{
 				EnsureNotDisposed ();
-				return GetValueMarshaler (type).CreateArgumentState (value, synchronize);
+				var marshaler = GetValueMarshaler (type);
+				return CreateValueMarshalerState (marshaler, value, marshaler.CreateObjectReferenceArgumentState (value));
 			}
 
-			protected override JniValueMarshalerState CreateValueMarshalerStateCore<[DynamicallyAccessedMembers (Constructors)] T> ([MaybeNull] T value, ParameterAttributes synchronize)
+			protected override void DestroyValueMarshalerStateCore (ref JniValueMarshalerState state)
 			{
 				EnsureNotDisposed ();
-				return GetValueMarshaler<T> ().CreateGenericArgumentState (value, synchronize);
+				if (state.Extra is not ValueMarshalerStateCleanup cleanup) {
+					var r = state.ReferenceValue;
+					JniObjectReference.Dispose (ref r);
+					state = new JniValueMarshalerState ();
+					return;
+				}
+
+				cleanup.Destroy (ref state);
 			}
 
-			protected override JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore (Type type, object? value, ParameterAttributes synchronize)
+			static JniValueMarshalerState CreateValueMarshalerState (JniValueMarshaler marshaler, object? value, JniValueMarshalerState state)
 			{
-				EnsureNotDisposed ();
-				return GetValueMarshaler (type).CreateObjectReferenceArgumentState (value, synchronize);
+				return new JniValueMarshalerState (state, new ValueMarshalerStateCleanup (marshaler, value, state.Extra));
 			}
 
-			protected override JniValueMarshalerState CreateObjectReferenceValueMarshalerStateCore<[DynamicallyAccessedMembers (Constructors)] T> ([MaybeNull] T value, ParameterAttributes synchronize)
+			sealed class ValueMarshalerStateCleanup
 			{
-				EnsureNotDisposed ();
-				return GetValueMarshaler<T> ().CreateGenericObjectReferenceArgumentState (value, synchronize);
-			}
+				readonly JniValueMarshaler marshaler;
+				readonly object? value;
+				readonly object? extra;
 
-			protected override void DestroyValueMarshalerStateCore (Type type, object? value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
-			{
-				EnsureNotDisposed ();
-				GetValueMarshaler (type).DestroyArgumentState (value, ref state, synchronize);
-			}
+				public ValueMarshalerStateCleanup (JniValueMarshaler marshaler, object? value, object? extra)
+				{
+					this.marshaler = marshaler;
+					this.value = value;
+					this.extra = extra;
+				}
 
-			protected override void DestroyValueMarshalerStateCore<[DynamicallyAccessedMembers (Constructors)] T> ([AllowNull] T value, ref JniValueMarshalerState state, ParameterAttributes synchronize)
-			{
-				EnsureNotDisposed ();
-				GetValueMarshaler<T> ().DestroyGenericArgumentState (value, ref state, synchronize);
+				public void Destroy (ref JniValueMarshalerState state)
+				{
+					state = new JniValueMarshalerState (state, extra);
+					marshaler.DestroyArgumentState (value, ref state);
+				}
 			}
 
 			static Type? GetListType (Type type)

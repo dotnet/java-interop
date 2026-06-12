@@ -81,7 +81,7 @@ namespace Java.Interop {
 			JniArgumentValue    = copy.JniArgumentValue;
 			ReferenceValue      = copy.ReferenceValue;
 			PeerableValue       = copy.PeerableValue;
-			Extra               = extra ?? copy.Extra;
+			Extra               = extra;
 		}
 
 		public override int GetHashCode ()
