@@ -253,19 +253,6 @@ namespace Java.Interop {
 				};
 			}
 
-			protected static bool TryRegisterBuiltInNativeMembers (
-					JniType nativeClass,
-					string jniSimpleReference,
-					ReadOnlySpan<char> methods)
-			{
-				if (jniSimpleReference == JavaProxyObject.JniTypeName) {
-					JavaProxyObject.RegisterBuiltInNativeMembers (nativeClass);
-					return true;
-				}
-
-				return jniSimpleReference == JavaProxyThrowable.JniTypeName && methods.IsEmpty;
-			}
-
 			/// <include file="../Documentation/Java.Interop/JniRuntime.JniTypeManager.xml" path="/docs/member[@name='M:GetInvokerType']/*" />
 			[return: DynamicallyAccessedMembers (Constructors)]
 			public Type? GetInvokerType (
