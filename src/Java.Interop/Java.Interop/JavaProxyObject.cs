@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -16,11 +17,23 @@ namespace Java.Interop {
 		static  readonly    ConditionalWeakTable<object, JavaProxyObject>   CachedValues    = new ConditionalWeakTable<object, JavaProxyObject> ();
 
 		[JniAddNativeMethodRegistrationAttribute]
-		internal static void RegisterNativeMembers (JniNativeMethodRegistrationArguments args)
+		static void RegisterNativeMembers (JniNativeMethodRegistrationArguments args)
 		{
 			args.Registrations.Add (new JniNativeMethodRegistration ("equals",   "(Ljava/lang/Object;)Z", new EqualsMarshalMethod (Equals)));
 			args.Registrations.Add (new JniNativeMethodRegistration ("hashCode", "()I",                   new GetHashCodeMarshalMethod (GetHashCode)));
 			args.Registrations.Add (new JniNativeMethodRegistration ("toString", "()Ljava/lang/String;",  new ToStringMarshalMethod (ToString)));
+		}
+
+		// Reflection-free registration entry point for the built-in proxy type, used by
+		// JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers (). Keeping the
+		// [JniAddNativeMethodRegistrationAttribute] method private ensures it is stripped
+		// from the reference assembly so the trimmable typemap scanner does not flag it.
+		internal static void RegisterBuiltInNativeMembers (JniType nativeClass)
+		{
+			var registrations = new List<JniNativeMethodRegistration> ();
+			RegisterNativeMembers (new JniNativeMethodRegistrationArguments (registrations, null));
+			if (registrations.Count > 0)
+				nativeClass.RegisterNativeMethods (registrations.ToArray ());
 		}
 
 		public override JniPeerMembers JniPeerMembers {

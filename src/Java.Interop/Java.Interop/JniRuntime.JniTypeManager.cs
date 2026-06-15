@@ -259,10 +259,7 @@ namespace Java.Interop {
 					ReadOnlySpan<char> methods)
 			{
 				if (jniSimpleReference == JavaProxyObject.JniTypeName) {
-					var registrations = new List<JniNativeMethodRegistration> ();
-					JavaProxyObject.RegisterNativeMembers (new JniNativeMethodRegistrationArguments (registrations, null));
-					if (registrations.Count > 0)
-						nativeClass.RegisterNativeMethods (registrations.ToArray ());
+					JavaProxyObject.RegisterBuiltInNativeMembers (nativeClass);
 					return true;
 				}
 
