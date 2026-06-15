@@ -244,7 +244,7 @@ namespace Java.Interop {
 
 		internal unsafe JniObjectReference ToJavaName (string jniTypeName)
 		{
-			int index = jniTypeName.IndexOf ("/", StringComparison.Ordinal);
+			int index = jniTypeName.IndexOf ('/');
 
 			if (index == -1)
 				return JniEnvironment.Strings.NewString (jniTypeName);

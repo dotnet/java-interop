@@ -6,7 +6,7 @@ using MonoDroid.Utils;
 
 namespace MonoDroid.Generation {
 
-	public class ColorSymbol : SimpleSymbol, ISymbol {
+	internal class ColorSymbol : SimpleSymbol, ISymbol {
 
 		public ColorSymbol ()
 			: base ("default (global::Android.Graphics.Color)",

@@ -8,7 +8,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class StringSymbol : ISymbol {
+	internal class StringSymbol : ISymbol {
 
 		public string DefaultValue {
 			get { return "IntPtr.Zero"; }

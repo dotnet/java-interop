@@ -53,8 +53,7 @@ namespace Java.Interop
 
 			public virtual void OnSetRuntime (JniRuntime runtime)
 			{
-				if (disposed)
-					throw new ObjectDisposedException (GetType ().Name);
+				ObjectDisposedException.ThrowIf (disposed, this);
 
 				this.runtime = runtime;
 			}
@@ -72,8 +71,7 @@ namespace Java.Interop
 
 			protected void EnsureNotDisposed ()
 			{
-				if (disposed)
-					throw new ObjectDisposedException (GetType ().Name);
+				ObjectDisposedException.ThrowIf (disposed, this);
 			}
 
 			public abstract void WaitForGCBridgeProcessing ();
@@ -105,8 +103,7 @@ namespace Java.Interop
 			{
 				EnsureNotDisposed ();
 
-				if (value == null)
-					throw new ArgumentNullException (nameof (value));
+				ArgumentNullException.ThrowIfNull (value);
 
 				if (!value.PeerReference.IsValid)
 					return;
@@ -143,8 +140,7 @@ namespace Java.Interop
 			{
 				EnsureNotDisposed ();
 
-				if (value == null)
-					throw new ArgumentNullException (nameof (value));
+				ArgumentNullException.ThrowIfNull (value);
 
 				var h = value.PeerReference;
 				if (!h.IsValid)

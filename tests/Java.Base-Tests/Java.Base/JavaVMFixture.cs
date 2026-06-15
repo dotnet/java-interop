@@ -11,11 +11,12 @@ using Java.InteropTests;
 namespace Java.BaseTests {
 
 	partial class JavaVMFixture {
+		private static readonly string [] jars = new []{ "java.base-tests.jar" };
 
 		static partial void CreateJavaVM ()
 		{
 			var c = new TestJVM (
-					jars:           new[]{ "java.base-tests.jar" },
+					jars: jars,
 					typeMappings:   new Dictionary<string, Type> () {
 						["java/lang/Float"]         = typeof (Java.Lang.Float),
 						["example/MyIntConsumer"]   = typeof (MyIntConsumer),

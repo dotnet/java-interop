@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
 
 namespace Xamarin.Android.Tools {
 
-	class App {
+	sealed class App {
 
 		public static void Main (string[] args)
 		{

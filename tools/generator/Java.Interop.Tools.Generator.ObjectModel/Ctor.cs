@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace MonoDroid.Generation
 {
-	public class Ctor : MethodBase
+	internal class Ctor : MethodBase
 	{
 		public Ctor (GenBase declaringType) : base (declaringType)
 		{

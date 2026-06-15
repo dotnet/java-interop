@@ -33,7 +33,7 @@ using System.Text.RegularExpressions;
 
 namespace Xamarin.Android.Tools.Bytecode
 {
-	class DroidDocScraper : AndroidDocScraper
+	sealed class DroidDocScraper : AndroidDocScraper
 	{
 		const String pattern_head_droiddoc = "<span class=\"sympad\"><a href=\".*";
 
@@ -44,7 +44,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		}
 	}
 	
-	class DroidDoc2Scraper : AndroidDocScraper
+	sealed class DroidDoc2Scraper : AndroidDocScraper
 	{
 		const String pattern_head_droiddoc = "<tr class=\"api .+\".*>.*<code>.*<a href=\".*";
 		const String reset_pattern_head = "<p>";
@@ -57,6 +57,7 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		string? prev_path;
 		string[]? prev_contents;
+		internal static readonly string [] separator = new string [] { "<p>", "</tr>" };
 
 		protected override IEnumerable<string> GetContentLines (string path)
 		{
@@ -72,7 +73,7 @@ namespace Xamarin.Android.Tools.Bytecode
 				// <tr>...</tr> is the basic structure so </tr> is used as the end of member, but we also use <p> here.
 				// Sometimes another </code> can appear after "</code>" (for the end of context member) and that messes regex match.
 				// So, with any <p>, we interrupt consecutive matches.
-				prev_contents = all.Split (new string [] { "<p>", "</tr>" }, StringSplitOptions.RemoveEmptyEntries);
+				prev_contents = all.Split (separator, StringSplitOptions.RemoveEmptyEntries);
 				return prev_contents;
 			}
 		}
@@ -83,7 +84,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		}
 	}
 
-	class JavaDocScraper : AndroidDocScraper
+	sealed class JavaDocScraper : AndroidDocScraper
 	{
 		const String pattern_head_javadoc = "<TD><CODE><B><A HREF=\"[./]*"; // I'm not sure how path could be specified... (./ , ../ , or even /)
 		const String reset_pattern_head_javadoc = "<TD><CODE>";
@@ -95,7 +96,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		}
 	}
 	
-	class Java7DocScraper : AndroidDocScraper
+	sealed class Java7DocScraper : AndroidDocScraper
 	{
 		const String pattern_head_javadoc = "<td class=\"col.+\"><code><strong><a href=\"[./]*"; // I'm not sure how path could be specified... (./ , ../ , or even /)
 		const String reset_pattern_head_javadoc = "<td><code>";
@@ -107,7 +108,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		}
 	}
 
-	class Java8DocScraper : AndroidDocScraper
+	sealed class Java8DocScraper : AndroidDocScraper
 	{
 		const String pattern_head_javadoc = "<td class=\"col.+\"><code><span class=\"memberNameLink\"><a href=\"[./]*"; // I'm not sure how path could be specified... (./ , ../ , or even /)
 		const String reset_pattern_head_javadoc = "<td><code>";
@@ -123,10 +124,9 @@ namespace Xamarin.Android.Tools.Bytecode
 		protected override string StripTagsFromParameters (string value)
 		{
 			// Java8 javadoc contains possibly linked types with <a> tags, so remove all of them.
-			while (value.IndexOf ("<", StringComparison.Ordinal) >= 0 &&
-					value.IndexOf (">", StringComparison.Ordinal) > value.IndexOf ("<", StringComparison.Ordinal))
-				value = value.Substring (0, value.IndexOf ("<", StringComparison.Ordinal)) +
-					value.Substring (value.IndexOf (">", StringComparison.Ordinal) + 1);
+			while (value.IndexOf ('<') >= 0 &&
+					value.IndexOf ('>') > value.IndexOf ('<'))
+				value = string.Concat (value.AsSpan (0, value.IndexOf ('<')), value.AsSpan (value.IndexOf ('>') + 1));
 			return value;
 		}
 	}
@@ -150,9 +150,8 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		protected AndroidDocScraper (string dir, String patternHead, String? resetPatternHead, String parameterPairSplitter, bool continuousParamLines, string openMethod, string paramSep, string closeMethod, string? postCloseMethodParens)
 		{
-			if (dir == null)
-				throw new ArgumentNullException ("dir");
-	
+			ArgumentNullException.ThrowIfNull (dir);
+
 			pattern_head = patternHead;
 			reset_pattern_head = resetPatternHead;
 			parameter_pair_splitter = new string [] { (parameterPairSplitter != null ? parameterPairSplitter : "\\s+") };
@@ -186,7 +185,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		{
 			// sometimes we get incomplete tag, so cache it until it gets complete or matched.
 			// I *know* this is a hack.
-			return reset_pattern_head == null || text.EndsWith (">", StringComparison.Ordinal) || !continuous_param_lines && !text.StartsWith (reset_pattern_head, StringComparison.Ordinal);
+			return reset_pattern_head == null || text.EndsWith ('>') || !continuous_param_lines && !text.StartsWith (reset_pattern_head, StringComparison.Ordinal);
 		}
 
 		protected virtual string StripTagsFromParameters (string value)
@@ -219,10 +218,9 @@ namespace Xamarin.Android.Tools.Bytecode
 					buffer.Append (param_sep);
 				var ptype = ptypes [i];
 				if (ShouldEliminateGenericArguments)
-					while (ptype.IndexOf ("<", StringComparison.Ordinal) > 0 &&
-							ptype.IndexOf (">", StringComparison.Ordinal) > ptype.IndexOf ("<", StringComparison.Ordinal))
-						ptype = ptype.Substring (0, ptype.IndexOf ("<", StringComparison.Ordinal)) +
-							ptype.Substring (ptype.IndexOf (">", StringComparison.Ordinal) + 1);
+					while (ptype.IndexOf ('<') > 0 &&
+							ptype.IndexOf ('>') > ptype.IndexOf ('<'))
+						ptype = string.Concat (ptype.AsSpan (0, ptype.IndexOf ('<')), ptype.AsSpan (ptype.IndexOf ('>') + 1));
 				buffer.Append (ptype.Replace ('$', '.'));
 			}
 			if (ShouldEscapeBrackets)
@@ -245,7 +243,7 @@ namespace Xamarin.Android.Tools.Bytecode
 					var matcher = pattern.Match (text);
 					if (matcher.Success) {
 						var plist = matcher.Groups [1];
-						String[] parms = StripTagsFromParameters (plist.Value).Split (new string [] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+						String[] parms = StripTagsFromParameters (plist.Value).Split (separator, StringSplitOptions.RemoveEmptyEntries);
 						if (parms.Length != ptypes.Length) {
 							Log.Warning (1, "failed matching {0} (expected {1} params, got {2} params)", buffer, ptypes.Length, parms.Length);
 							return null;
@@ -273,7 +271,8 @@ namespace Xamarin.Android.Tools.Bytecode
 		
 		static Dictionary<String,List<String>>? deprecatedFields;
 		static Dictionary<String,List<String>>? deprecatedMethods;
-		
+		private static readonly string [] separator = new string [] { ", " };
+
 		public static void LoadXml (String filename)
 		{
 			try {
@@ -378,7 +377,7 @@ namespace Xamarin.Android.Tools.Bytecode
 						 rawXML.IndexOf ("<javadoc-metadata", StringComparison.Ordinal) >= 0))
 					kind = JavaDocletType._ApiXml;
 				else if (rawXML.StartsWith ("package", StringComparison.Ordinal) ||
-						rawXML.StartsWith (";", StringComparison.Ordinal)) {
+						rawXML.StartsWith (';')) {
 					kind = JavaDocletType.JavaApiParameterNamesXml;
 				}
 			}
@@ -449,7 +448,7 @@ namespace Xamarin.Android.Tools.Bytecode
 				if (!jtype.StartsWith (".*", StringComparison.Ordinal)) {
 					return jtype == ptype;
 				}
-				jtype = "." + jtype.Substring (".*".Length);
+				jtype = string.Concat (".", jtype.AsSpan (".*".Length));
 				return ptype.EndsWith (jtype, StringComparison.Ordinal);
 			}
 		}

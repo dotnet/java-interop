@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.Generator_Tests;
 
 [TestFixture]
-public class NamingConverterTests
+internal sealed class NamingConverterTests
 {
 	[Test]
 	public void ParseApiLevel_Exceptions ()

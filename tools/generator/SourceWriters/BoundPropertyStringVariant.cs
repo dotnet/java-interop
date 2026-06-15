@@ -11,7 +11,7 @@ namespace generator.SourceWriters
 {
 	// When a property has a type of 'Java.Lang.ICharSequence' we usually generate
 	// an overload with type 'string' as a convenience for the user.
-	public class BoundPropertyStringVariant : PropertyWriter
+	internal class BoundPropertyStringVariant : PropertyWriter
 	{
 		public BoundPropertyStringVariant (Property property, CodeGenerationOptions opt, BoundAbstractProperty original)
 			: this (property, opt, original.IsVirtual)

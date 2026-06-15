@@ -1174,10 +1174,9 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.ThrowNew (__info.EnvironmentPointer, type.Handle, message);
 			return tmp;
 		}
@@ -1203,10 +1202,9 @@ namespace
 
 		public static unsafe void FatalError (string message)
 		{
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			__info.Invoker.FatalError (__info.EnvironmentPointer, message);
 		}
 
@@ -1224,12 +1222,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetFieldID (__info.EnvironmentPointer, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -1245,9 +1241,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1261,9 +1256,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1276,9 +1270,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1291,9 +1284,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1306,9 +1298,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1321,9 +1312,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1336,9 +1326,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1351,9 +1340,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1366,9 +1354,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1381,9 +1368,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1395,9 +1381,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1409,9 +1394,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1423,9 +1407,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1437,9 +1420,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1451,9 +1433,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1465,9 +1446,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1479,9 +1459,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1493,9 +1472,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -1510,12 +1488,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetMethodID (__info.EnvironmentPointer, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -1531,9 +1507,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1552,9 +1527,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1573,9 +1547,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1593,9 +1566,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1613,9 +1585,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1633,9 +1604,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1653,9 +1623,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1673,9 +1642,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1693,9 +1661,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1713,9 +1680,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1733,9 +1699,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1753,9 +1718,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1773,9 +1737,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1793,9 +1756,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1813,9 +1775,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1833,9 +1794,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1853,9 +1813,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1873,9 +1832,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1893,9 +1851,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1912,9 +1869,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1933,9 +1889,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1956,9 +1911,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -1979,9 +1933,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2001,9 +1954,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2023,9 +1975,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2045,9 +1996,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2067,9 +2017,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2089,9 +2038,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2111,9 +2059,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2133,9 +2080,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2155,9 +2101,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2177,9 +2122,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2199,9 +2143,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2221,9 +2164,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2243,9 +2185,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2265,9 +2206,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2287,9 +2227,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2309,9 +2248,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2331,9 +2269,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2352,9 +2289,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2452,9 +2388,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2473,9 +2408,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2578,9 +2512,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -2599,9 +2532,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -2623,12 +2555,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetStaticFieldID (__info.EnvironmentPointer, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -2644,9 +2574,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2660,9 +2589,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2675,9 +2603,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2690,9 +2617,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2705,9 +2631,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2720,9 +2645,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2735,9 +2659,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2750,9 +2673,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2765,9 +2687,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2780,9 +2701,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2794,9 +2714,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2808,9 +2727,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2822,9 +2740,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2836,9 +2753,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2850,9 +2766,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2864,9 +2779,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2878,9 +2792,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2892,9 +2805,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -2909,12 +2821,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetStaticMethodID (__info.EnvironmentPointer, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -2930,9 +2840,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -2951,9 +2860,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -2972,9 +2880,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -2992,9 +2899,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3012,9 +2918,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3032,9 +2937,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3052,9 +2956,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3072,9 +2975,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3092,9 +2994,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3112,9 +3013,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3132,9 +3032,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3152,9 +3051,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3172,9 +3070,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3192,9 +3089,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3212,9 +3108,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3232,9 +3127,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3252,9 +3146,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3272,9 +3165,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3292,9 +3184,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3311,9 +3202,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -3376,9 +3266,8 @@ namespace
 
 		public static unsafe JniObjectReference DefineClass (string name, JniObjectReference loader, IntPtr buffer, int bufferLength)
 		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (!loader.IsValid)
+				ArgumentNullException.ThrowIfNull (name);
+				if (!loader.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "loader");
 			if (buffer == IntPtr.Zero)
 				throw new ArgumentException ("'buffer' must not be IntPtr.Zero.", "buffer");
@@ -3396,10 +3285,9 @@ namespace
 
 		internal static unsafe JniObjectReference _FindClass (string classname)
 		{
-			if (classname == null)
-				throw new ArgumentNullException ("classname");
+				ArgumentNullException.ThrowIfNull (classname);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.FindClass (__info.EnvironmentPointer, classname);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -3514,7 +3402,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int GetVersion {
 			get {
 				if (_GetVersion == null)
-					_GetVersion = (JniFunc_JNIEnvPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetVersion, typeof (JniFunc_JNIEnvPtr_int));
+					_GetVersion = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int> (env.GetVersion);
 				return _GetVersion;
 			}
 		}
@@ -3523,7 +3411,7 @@ namespace
 		public JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject DefineClass {
 			get {
 				if (_DefineClass == null)
-					_DefineClass = (JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.DefineClass, typeof (JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject));
+					_DefineClass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject> (env.DefineClass);
 				return _DefineClass;
 			}
 		}
@@ -3532,7 +3420,7 @@ namespace
 		public JniFunc_JNIEnvPtr_string_jobject FindClass {
 			get {
 				if (_FindClass == null)
-					_FindClass = (JniFunc_JNIEnvPtr_string_jobject) Marshal.GetDelegateForFunctionPointer (env.FindClass, typeof (JniFunc_JNIEnvPtr_string_jobject));
+					_FindClass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_string_jobject> (env.FindClass);
 				return _FindClass;
 			}
 		}
@@ -3541,7 +3429,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr FromReflectedMethod {
 			get {
 				if (_FromReflectedMethod == null)
-					_FromReflectedMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.FromReflectedMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr));
+					_FromReflectedMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr> (env.FromReflectedMethod);
 				return _FromReflectedMethod;
 			}
 		}
@@ -3550,7 +3438,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr FromReflectedField {
 			get {
 				if (_FromReflectedField == null)
-					_FromReflectedField = (JniFunc_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.FromReflectedField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr));
+					_FromReflectedField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr> (env.FromReflectedField);
 				return _FromReflectedField;
 			}
 		}
@@ -3559,7 +3447,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject ToReflectedMethod {
 			get {
 				if (_ToReflectedMethod == null)
-					_ToReflectedMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject) Marshal.GetDelegateForFunctionPointer (env.ToReflectedMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject));
+					_ToReflectedMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject> (env.ToReflectedMethod);
 				return _ToReflectedMethod;
 			}
 		}
@@ -3568,7 +3456,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject GetSuperclass {
 			get {
 				if (_GetSuperclass == null)
-					_GetSuperclass = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.GetSuperclass, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_GetSuperclass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.GetSuperclass);
 				return _GetSuperclass;
 			}
 		}
@@ -3577,7 +3465,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_byte IsAssignableFrom {
 			get {
 				if (_IsAssignableFrom == null)
-					_IsAssignableFrom = (JniFunc_JNIEnvPtr_jobject_jobject_byte) Marshal.GetDelegateForFunctionPointer (env.IsAssignableFrom, typeof (JniFunc_JNIEnvPtr_jobject_jobject_byte));
+					_IsAssignableFrom = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_byte> (env.IsAssignableFrom);
 				return _IsAssignableFrom;
 			}
 		}
@@ -3586,7 +3474,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject ToReflectedField {
 			get {
 				if (_ToReflectedField == null)
-					_ToReflectedField = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject) Marshal.GetDelegateForFunctionPointer (env.ToReflectedField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject));
+					_ToReflectedField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject> (env.ToReflectedField);
 				return _ToReflectedField;
 			}
 		}
@@ -3595,7 +3483,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int Throw {
 			get {
 				if (_Throw == null)
-					_Throw = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.Throw, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_Throw = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.Throw);
 				return _Throw;
 			}
 		}
@@ -3604,7 +3492,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_int ThrowNew {
 			get {
 				if (_ThrowNew == null)
-					_ThrowNew = (JniFunc_JNIEnvPtr_jobject_string_int) Marshal.GetDelegateForFunctionPointer (env.ThrowNew, typeof (JniFunc_JNIEnvPtr_jobject_string_int));
+					_ThrowNew = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_int> (env.ThrowNew);
 				return _ThrowNew;
 			}
 		}
@@ -3613,7 +3501,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject ExceptionOccurred {
 			get {
 				if (_ExceptionOccurred == null)
-					_ExceptionOccurred = (JniFunc_JNIEnvPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.ExceptionOccurred, typeof (JniFunc_JNIEnvPtr_jobject));
+					_ExceptionOccurred = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject> (env.ExceptionOccurred);
 				return _ExceptionOccurred;
 			}
 		}
@@ -3622,7 +3510,7 @@ namespace
 		public JniAction_JNIEnvPtr ExceptionDescribe {
 			get {
 				if (_ExceptionDescribe == null)
-					_ExceptionDescribe = (JniAction_JNIEnvPtr) Marshal.GetDelegateForFunctionPointer (env.ExceptionDescribe, typeof (JniAction_JNIEnvPtr));
+					_ExceptionDescribe = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr> (env.ExceptionDescribe);
 				return _ExceptionDescribe;
 			}
 		}
@@ -3631,7 +3519,7 @@ namespace
 		public JniAction_JNIEnvPtr ExceptionClear {
 			get {
 				if (_ExceptionClear == null)
-					_ExceptionClear = (JniAction_JNIEnvPtr) Marshal.GetDelegateForFunctionPointer (env.ExceptionClear, typeof (JniAction_JNIEnvPtr));
+					_ExceptionClear = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr> (env.ExceptionClear);
 				return _ExceptionClear;
 			}
 		}
@@ -3640,7 +3528,7 @@ namespace
 		public JniAction_JNIEnvPtr_string FatalError {
 			get {
 				if (_FatalError == null)
-					_FatalError = (JniAction_JNIEnvPtr_string) Marshal.GetDelegateForFunctionPointer (env.FatalError, typeof (JniAction_JNIEnvPtr_string));
+					_FatalError = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_string> (env.FatalError);
 				return _FatalError;
 			}
 		}
@@ -3649,7 +3537,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_int PushLocalFrame {
 			get {
 				if (_PushLocalFrame == null)
-					_PushLocalFrame = (JniFunc_JNIEnvPtr_int_int) Marshal.GetDelegateForFunctionPointer (env.PushLocalFrame, typeof (JniFunc_JNIEnvPtr_int_int));
+					_PushLocalFrame = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_int> (env.PushLocalFrame);
 				return _PushLocalFrame;
 			}
 		}
@@ -3658,7 +3546,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject PopLocalFrame {
 			get {
 				if (_PopLocalFrame == null)
-					_PopLocalFrame = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.PopLocalFrame, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_PopLocalFrame = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.PopLocalFrame);
 				return _PopLocalFrame;
 			}
 		}
@@ -3667,7 +3555,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject NewGlobalRef {
 			get {
 				if (_NewGlobalRef == null)
-					_NewGlobalRef = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewGlobalRef, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_NewGlobalRef = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.NewGlobalRef);
 				return _NewGlobalRef;
 			}
 		}
@@ -3676,7 +3564,7 @@ namespace
 		public JniAction_JNIEnvPtr_IntPtr DeleteGlobalRef {
 			get {
 				if (_DeleteGlobalRef == null)
-					_DeleteGlobalRef = (JniAction_JNIEnvPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.DeleteGlobalRef, typeof (JniAction_JNIEnvPtr_IntPtr));
+					_DeleteGlobalRef = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_IntPtr> (env.DeleteGlobalRef);
 				return _DeleteGlobalRef;
 			}
 		}
@@ -3685,7 +3573,7 @@ namespace
 		public JniAction_JNIEnvPtr_IntPtr DeleteLocalRef {
 			get {
 				if (_DeleteLocalRef == null)
-					_DeleteLocalRef = (JniAction_JNIEnvPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.DeleteLocalRef, typeof (JniAction_JNIEnvPtr_IntPtr));
+					_DeleteLocalRef = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_IntPtr> (env.DeleteLocalRef);
 				return _DeleteLocalRef;
 			}
 		}
@@ -3694,7 +3582,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_byte IsSameObject {
 			get {
 				if (_IsSameObject == null)
-					_IsSameObject = (JniFunc_JNIEnvPtr_jobject_jobject_byte) Marshal.GetDelegateForFunctionPointer (env.IsSameObject, typeof (JniFunc_JNIEnvPtr_jobject_jobject_byte));
+					_IsSameObject = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_byte> (env.IsSameObject);
 				return _IsSameObject;
 			}
 		}
@@ -3703,7 +3591,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject NewLocalRef {
 			get {
 				if (_NewLocalRef == null)
-					_NewLocalRef = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewLocalRef, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_NewLocalRef = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.NewLocalRef);
 				return _NewLocalRef;
 			}
 		}
@@ -3712,7 +3600,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_int EnsureLocalCapacity {
 			get {
 				if (_EnsureLocalCapacity == null)
-					_EnsureLocalCapacity = (JniFunc_JNIEnvPtr_int_int) Marshal.GetDelegateForFunctionPointer (env.EnsureLocalCapacity, typeof (JniFunc_JNIEnvPtr_int_int));
+					_EnsureLocalCapacity = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_int> (env.EnsureLocalCapacity);
 				return _EnsureLocalCapacity;
 			}
 		}
@@ -3721,7 +3609,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject AllocObject {
 			get {
 				if (_AllocObject == null)
-					_AllocObject = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.AllocObject, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_AllocObject = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.AllocObject);
 				return _AllocObject;
 			}
 		}
@@ -3730,7 +3618,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject NewObject {
 			get {
 				if (_NewObject == null)
-					_NewObject = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.NewObject, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_NewObject = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.NewObject);
 				return _NewObject;
 			}
 		}
@@ -3739,7 +3627,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject NewObjectA {
 			get {
 				if (_NewObjectA == null)
-					_NewObjectA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.NewObjectA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_NewObjectA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.NewObjectA);
 				return _NewObjectA;
 			}
 		}
@@ -3748,7 +3636,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject GetObjectClass {
 			get {
 				if (_GetObjectClass == null)
-					_GetObjectClass = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.GetObjectClass, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_GetObjectClass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.GetObjectClass);
 				return _GetObjectClass;
 			}
 		}
@@ -3757,7 +3645,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_byte IsInstanceOf {
 			get {
 				if (_IsInstanceOf == null)
-					_IsInstanceOf = (JniFunc_JNIEnvPtr_jobject_jobject_byte) Marshal.GetDelegateForFunctionPointer (env.IsInstanceOf, typeof (JniFunc_JNIEnvPtr_jobject_jobject_byte));
+					_IsInstanceOf = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_byte> (env.IsInstanceOf);
 				return _IsInstanceOf;
 			}
 		}
@@ -3766,7 +3654,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetMethodID {
 			get {
 				if (_GetMethodID == null)
-					_GetMethodID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetMethodID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetMethodID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetMethodID);
 				return _GetMethodID;
 			}
 		}
@@ -3775,7 +3663,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject CallObjectMethod {
 			get {
 				if (_CallObjectMethod == null)
-					_CallObjectMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallObjectMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_CallObjectMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.CallObjectMethod);
 				return _CallObjectMethod;
 			}
 		}
@@ -3784,7 +3672,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject CallObjectMethodA {
 			get {
 				if (_CallObjectMethodA == null)
-					_CallObjectMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallObjectMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_CallObjectMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.CallObjectMethodA);
 				return _CallObjectMethodA;
 			}
 		}
@@ -3793,7 +3681,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte CallBooleanMethod {
 			get {
 				if (_CallBooleanMethod == null)
-					_CallBooleanMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallBooleanMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_CallBooleanMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.CallBooleanMethod);
 				return _CallBooleanMethod;
 			}
 		}
@@ -3802,7 +3690,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte CallBooleanMethodA {
 			get {
 				if (_CallBooleanMethodA == null)
-					_CallBooleanMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallBooleanMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte));
+					_CallBooleanMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte> (env.CallBooleanMethodA);
 				return _CallBooleanMethodA;
 			}
 		}
@@ -3811,7 +3699,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte CallByteMethod {
 			get {
 				if (_CallByteMethod == null)
-					_CallByteMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallByteMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_CallByteMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.CallByteMethod);
 				return _CallByteMethod;
 			}
 		}
@@ -3820,7 +3708,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte CallByteMethodA {
 			get {
 				if (_CallByteMethodA == null)
-					_CallByteMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallByteMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte));
+					_CallByteMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte> (env.CallByteMethodA);
 				return _CallByteMethodA;
 			}
 		}
@@ -3829,7 +3717,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char CallCharMethod {
 			get {
 				if (_CallCharMethod == null)
-					_CallCharMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.CallCharMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_CallCharMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.CallCharMethod);
 				return _CallCharMethod;
 			}
 		}
@@ -3838,7 +3726,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char CallCharMethodA {
 			get {
 				if (_CallCharMethodA == null)
-					_CallCharMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char) Marshal.GetDelegateForFunctionPointer (env.CallCharMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char));
+					_CallCharMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char> (env.CallCharMethodA);
 				return _CallCharMethodA;
 			}
 		}
@@ -3847,7 +3735,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short CallShortMethod {
 			get {
 				if (_CallShortMethod == null)
-					_CallShortMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.CallShortMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_CallShortMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.CallShortMethod);
 				return _CallShortMethod;
 			}
 		}
@@ -3856,7 +3744,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short CallShortMethodA {
 			get {
 				if (_CallShortMethodA == null)
-					_CallShortMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short) Marshal.GetDelegateForFunctionPointer (env.CallShortMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short));
+					_CallShortMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short> (env.CallShortMethodA);
 				return _CallShortMethodA;
 			}
 		}
@@ -3865,7 +3753,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int CallIntMethod {
 			get {
 				if (_CallIntMethod == null)
-					_CallIntMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.CallIntMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_CallIntMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.CallIntMethod);
 				return _CallIntMethod;
 			}
 		}
@@ -3874,7 +3762,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int CallIntMethodA {
 			get {
 				if (_CallIntMethodA == null)
-					_CallIntMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int) Marshal.GetDelegateForFunctionPointer (env.CallIntMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int));
+					_CallIntMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int> (env.CallIntMethodA);
 				return _CallIntMethodA;
 			}
 		}
@@ -3883,7 +3771,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long CallLongMethod {
 			get {
 				if (_CallLongMethod == null)
-					_CallLongMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.CallLongMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_CallLongMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.CallLongMethod);
 				return _CallLongMethod;
 			}
 		}
@@ -3892,7 +3780,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long CallLongMethodA {
 			get {
 				if (_CallLongMethodA == null)
-					_CallLongMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long) Marshal.GetDelegateForFunctionPointer (env.CallLongMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long));
+					_CallLongMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long> (env.CallLongMethodA);
 				return _CallLongMethodA;
 			}
 		}
@@ -3901,7 +3789,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float CallFloatMethod {
 			get {
 				if (_CallFloatMethod == null)
-					_CallFloatMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.CallFloatMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_CallFloatMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.CallFloatMethod);
 				return _CallFloatMethod;
 			}
 		}
@@ -3910,7 +3798,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float CallFloatMethodA {
 			get {
 				if (_CallFloatMethodA == null)
-					_CallFloatMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float) Marshal.GetDelegateForFunctionPointer (env.CallFloatMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float));
+					_CallFloatMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float> (env.CallFloatMethodA);
 				return _CallFloatMethodA;
 			}
 		}
@@ -3919,7 +3807,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double CallDoubleMethod {
 			get {
 				if (_CallDoubleMethod == null)
-					_CallDoubleMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.CallDoubleMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_CallDoubleMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.CallDoubleMethod);
 				return _CallDoubleMethod;
 			}
 		}
@@ -3928,7 +3816,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double CallDoubleMethodA {
 			get {
 				if (_CallDoubleMethodA == null)
-					_CallDoubleMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double) Marshal.GetDelegateForFunctionPointer (env.CallDoubleMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double));
+					_CallDoubleMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double> (env.CallDoubleMethodA);
 				return _CallDoubleMethodA;
 			}
 		}
@@ -3937,7 +3825,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr CallVoidMethod {
 			get {
 				if (_CallVoidMethod == null)
-					_CallVoidMethod = (JniAction_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.CallVoidMethod, typeof (JniAction_JNIEnvPtr_jobject_IntPtr));
+					_CallVoidMethod = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr> (env.CallVoidMethod);
 				return _CallVoidMethod;
 			}
 		}
@@ -3946,7 +3834,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr CallVoidMethodA {
 			get {
 				if (_CallVoidMethodA == null)
-					_CallVoidMethodA = (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr) Marshal.GetDelegateForFunctionPointer (env.CallVoidMethodA, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr));
+					_CallVoidMethodA = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr> (env.CallVoidMethodA);
 				return _CallVoidMethodA;
 			}
 		}
@@ -3955,7 +3843,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject CallNonvirtualObjectMethod {
 			get {
 				if (_CallNonvirtualObjectMethod == null)
-					_CallNonvirtualObjectMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualObjectMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject));
+					_CallNonvirtualObjectMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject> (env.CallNonvirtualObjectMethod);
 				return _CallNonvirtualObjectMethod;
 			}
 		}
@@ -3964,7 +3852,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject CallNonvirtualObjectMethodA {
 			get {
 				if (_CallNonvirtualObjectMethodA == null)
-					_CallNonvirtualObjectMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualObjectMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_CallNonvirtualObjectMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.CallNonvirtualObjectMethodA);
 				return _CallNonvirtualObjectMethodA;
 			}
 		}
@@ -3973,7 +3861,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte CallNonvirtualBooleanMethod {
 			get {
 				if (_CallNonvirtualBooleanMethod == null)
-					_CallNonvirtualBooleanMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualBooleanMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte));
+					_CallNonvirtualBooleanMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte> (env.CallNonvirtualBooleanMethod);
 				return _CallNonvirtualBooleanMethod;
 			}
 		}
@@ -3982,7 +3870,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte CallNonvirtualBooleanMethodA {
 			get {
 				if (_CallNonvirtualBooleanMethodA == null)
-					_CallNonvirtualBooleanMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualBooleanMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte));
+					_CallNonvirtualBooleanMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte> (env.CallNonvirtualBooleanMethodA);
 				return _CallNonvirtualBooleanMethodA;
 			}
 		}
@@ -3991,7 +3879,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte CallNonvirtualByteMethod {
 			get {
 				if (_CallNonvirtualByteMethod == null)
-					_CallNonvirtualByteMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualByteMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte));
+					_CallNonvirtualByteMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte> (env.CallNonvirtualByteMethod);
 				return _CallNonvirtualByteMethod;
 			}
 		}
@@ -4000,7 +3888,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte CallNonvirtualByteMethodA {
 			get {
 				if (_CallNonvirtualByteMethodA == null)
-					_CallNonvirtualByteMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualByteMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte));
+					_CallNonvirtualByteMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte> (env.CallNonvirtualByteMethodA);
 				return _CallNonvirtualByteMethodA;
 			}
 		}
@@ -4009,7 +3897,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char CallNonvirtualCharMethod {
 			get {
 				if (_CallNonvirtualCharMethod == null)
-					_CallNonvirtualCharMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualCharMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char));
+					_CallNonvirtualCharMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char> (env.CallNonvirtualCharMethod);
 				return _CallNonvirtualCharMethod;
 			}
 		}
@@ -4018,7 +3906,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char CallNonvirtualCharMethodA {
 			get {
 				if (_CallNonvirtualCharMethodA == null)
-					_CallNonvirtualCharMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualCharMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char));
+					_CallNonvirtualCharMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char> (env.CallNonvirtualCharMethodA);
 				return _CallNonvirtualCharMethodA;
 			}
 		}
@@ -4027,7 +3915,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short CallNonvirtualShortMethod {
 			get {
 				if (_CallNonvirtualShortMethod == null)
-					_CallNonvirtualShortMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualShortMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short));
+					_CallNonvirtualShortMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short> (env.CallNonvirtualShortMethod);
 				return _CallNonvirtualShortMethod;
 			}
 		}
@@ -4036,7 +3924,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short CallNonvirtualShortMethodA {
 			get {
 				if (_CallNonvirtualShortMethodA == null)
-					_CallNonvirtualShortMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualShortMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short));
+					_CallNonvirtualShortMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short> (env.CallNonvirtualShortMethodA);
 				return _CallNonvirtualShortMethodA;
 			}
 		}
@@ -4045,7 +3933,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int CallNonvirtualIntMethod {
 			get {
 				if (_CallNonvirtualIntMethod == null)
-					_CallNonvirtualIntMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualIntMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int));
+					_CallNonvirtualIntMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int> (env.CallNonvirtualIntMethod);
 				return _CallNonvirtualIntMethod;
 			}
 		}
@@ -4054,7 +3942,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int CallNonvirtualIntMethodA {
 			get {
 				if (_CallNonvirtualIntMethodA == null)
-					_CallNonvirtualIntMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualIntMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int));
+					_CallNonvirtualIntMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int> (env.CallNonvirtualIntMethodA);
 				return _CallNonvirtualIntMethodA;
 			}
 		}
@@ -4063,7 +3951,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long CallNonvirtualLongMethod {
 			get {
 				if (_CallNonvirtualLongMethod == null)
-					_CallNonvirtualLongMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualLongMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long));
+					_CallNonvirtualLongMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long> (env.CallNonvirtualLongMethod);
 				return _CallNonvirtualLongMethod;
 			}
 		}
@@ -4072,7 +3960,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long CallNonvirtualLongMethodA {
 			get {
 				if (_CallNonvirtualLongMethodA == null)
-					_CallNonvirtualLongMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualLongMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long));
+					_CallNonvirtualLongMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long> (env.CallNonvirtualLongMethodA);
 				return _CallNonvirtualLongMethodA;
 			}
 		}
@@ -4081,7 +3969,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float CallNonvirtualFloatMethod {
 			get {
 				if (_CallNonvirtualFloatMethod == null)
-					_CallNonvirtualFloatMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualFloatMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float));
+					_CallNonvirtualFloatMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float> (env.CallNonvirtualFloatMethod);
 				return _CallNonvirtualFloatMethod;
 			}
 		}
@@ -4090,7 +3978,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float CallNonvirtualFloatMethodA {
 			get {
 				if (_CallNonvirtualFloatMethodA == null)
-					_CallNonvirtualFloatMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualFloatMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float));
+					_CallNonvirtualFloatMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float> (env.CallNonvirtualFloatMethodA);
 				return _CallNonvirtualFloatMethodA;
 			}
 		}
@@ -4099,7 +3987,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double CallNonvirtualDoubleMethod {
 			get {
 				if (_CallNonvirtualDoubleMethod == null)
-					_CallNonvirtualDoubleMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualDoubleMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double));
+					_CallNonvirtualDoubleMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double> (env.CallNonvirtualDoubleMethod);
 				return _CallNonvirtualDoubleMethod;
 			}
 		}
@@ -4108,7 +3996,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double CallNonvirtualDoubleMethodA {
 			get {
 				if (_CallNonvirtualDoubleMethodA == null)
-					_CallNonvirtualDoubleMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualDoubleMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double));
+					_CallNonvirtualDoubleMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double> (env.CallNonvirtualDoubleMethodA);
 				return _CallNonvirtualDoubleMethodA;
 			}
 		}
@@ -4117,7 +4005,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_jobject_IntPtr CallNonvirtualVoidMethod {
 			get {
 				if (_CallNonvirtualVoidMethod == null)
-					_CallNonvirtualVoidMethod = (JniAction_JNIEnvPtr_jobject_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualVoidMethod, typeof (JniAction_JNIEnvPtr_jobject_jobject_IntPtr));
+					_CallNonvirtualVoidMethod = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_jobject_IntPtr> (env.CallNonvirtualVoidMethod);
 				return _CallNonvirtualVoidMethod;
 			}
 		}
@@ -4126,7 +4014,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr CallNonvirtualVoidMethodA {
 			get {
 				if (_CallNonvirtualVoidMethodA == null)
-					_CallNonvirtualVoidMethodA = (JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualVoidMethodA, typeof (JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr));
+					_CallNonvirtualVoidMethodA = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr> (env.CallNonvirtualVoidMethodA);
 				return _CallNonvirtualVoidMethodA;
 			}
 		}
@@ -4135,7 +4023,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetFieldID {
 			get {
 				if (_GetFieldID == null)
-					_GetFieldID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetFieldID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetFieldID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetFieldID);
 				return _GetFieldID;
 			}
 		}
@@ -4144,7 +4032,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject GetObjectField {
 			get {
 				if (_GetObjectField == null)
-					_GetObjectField = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.GetObjectField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_GetObjectField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.GetObjectField);
 				return _GetObjectField;
 			}
 		}
@@ -4153,7 +4041,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte GetBooleanField {
 			get {
 				if (_GetBooleanField == null)
-					_GetBooleanField = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.GetBooleanField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_GetBooleanField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.GetBooleanField);
 				return _GetBooleanField;
 			}
 		}
@@ -4162,7 +4050,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte GetByteField {
 			get {
 				if (_GetByteField == null)
-					_GetByteField = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.GetByteField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_GetByteField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.GetByteField);
 				return _GetByteField;
 			}
 		}
@@ -4171,7 +4059,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char GetCharField {
 			get {
 				if (_GetCharField == null)
-					_GetCharField = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.GetCharField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_GetCharField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.GetCharField);
 				return _GetCharField;
 			}
 		}
@@ -4180,7 +4068,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short GetShortField {
 			get {
 				if (_GetShortField == null)
-					_GetShortField = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.GetShortField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_GetShortField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.GetShortField);
 				return _GetShortField;
 			}
 		}
@@ -4189,7 +4077,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int GetIntField {
 			get {
 				if (_GetIntField == null)
-					_GetIntField = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetIntField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_GetIntField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.GetIntField);
 				return _GetIntField;
 			}
 		}
@@ -4198,7 +4086,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long GetLongField {
 			get {
 				if (_GetLongField == null)
-					_GetLongField = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.GetLongField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_GetLongField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.GetLongField);
 				return _GetLongField;
 			}
 		}
@@ -4207,7 +4095,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float GetFloatField {
 			get {
 				if (_GetFloatField == null)
-					_GetFloatField = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.GetFloatField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_GetFloatField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.GetFloatField);
 				return _GetFloatField;
 			}
 		}
@@ -4216,7 +4104,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double GetDoubleField {
 			get {
 				if (_GetDoubleField == null)
-					_GetDoubleField = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.GetDoubleField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_GetDoubleField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.GetDoubleField);
 				return _GetDoubleField;
 			}
 		}
@@ -4225,7 +4113,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_jobject SetObjectField {
 			get {
 				if (_SetObjectField == null)
-					_SetObjectField = (JniAction_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.SetObjectField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_jobject));
+					_SetObjectField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_jobject> (env.SetObjectField);
 				return _SetObjectField;
 			}
 		}
@@ -4234,7 +4122,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_byte SetBooleanField {
 			get {
 				if (_SetBooleanField == null)
-					_SetBooleanField = (JniAction_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.SetBooleanField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_byte));
+					_SetBooleanField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_byte> (env.SetBooleanField);
 				return _SetBooleanField;
 			}
 		}
@@ -4243,7 +4131,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_sbyte SetByteField {
 			get {
 				if (_SetByteField == null)
-					_SetByteField = (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.SetByteField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_SetByteField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_sbyte> (env.SetByteField);
 				return _SetByteField;
 			}
 		}
@@ -4252,7 +4140,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_char SetCharField {
 			get {
 				if (_SetCharField == null)
-					_SetCharField = (JniAction_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.SetCharField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_char));
+					_SetCharField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_char> (env.SetCharField);
 				return _SetCharField;
 			}
 		}
@@ -4261,7 +4149,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_short SetShortField {
 			get {
 				if (_SetShortField == null)
-					_SetShortField = (JniAction_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.SetShortField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_short));
+					_SetShortField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_short> (env.SetShortField);
 				return _SetShortField;
 			}
 		}
@@ -4270,7 +4158,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_int SetIntField {
 			get {
 				if (_SetIntField == null)
-					_SetIntField = (JniAction_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.SetIntField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_int));
+					_SetIntField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_int> (env.SetIntField);
 				return _SetIntField;
 			}
 		}
@@ -4279,7 +4167,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_long SetLongField {
 			get {
 				if (_SetLongField == null)
-					_SetLongField = (JniAction_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.SetLongField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_long));
+					_SetLongField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_long> (env.SetLongField);
 				return _SetLongField;
 			}
 		}
@@ -4288,7 +4176,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_float SetFloatField {
 			get {
 				if (_SetFloatField == null)
-					_SetFloatField = (JniAction_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.SetFloatField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_float));
+					_SetFloatField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_float> (env.SetFloatField);
 				return _SetFloatField;
 			}
 		}
@@ -4297,7 +4185,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_double SetDoubleField {
 			get {
 				if (_SetDoubleField == null)
-					_SetDoubleField = (JniAction_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.SetDoubleField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_double));
+					_SetDoubleField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_double> (env.SetDoubleField);
 				return _SetDoubleField;
 			}
 		}
@@ -4306,7 +4194,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetStaticMethodID {
 			get {
 				if (_GetStaticMethodID == null)
-					_GetStaticMethodID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetStaticMethodID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetStaticMethodID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetStaticMethodID);
 				return _GetStaticMethodID;
 			}
 		}
@@ -4315,7 +4203,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject CallStaticObjectMethod {
 			get {
 				if (_CallStaticObjectMethod == null)
-					_CallStaticObjectMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallStaticObjectMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_CallStaticObjectMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.CallStaticObjectMethod);
 				return _CallStaticObjectMethod;
 			}
 		}
@@ -4324,7 +4212,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject CallStaticObjectMethodA {
 			get {
 				if (_CallStaticObjectMethodA == null)
-					_CallStaticObjectMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallStaticObjectMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_CallStaticObjectMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.CallStaticObjectMethodA);
 				return _CallStaticObjectMethodA;
 			}
 		}
@@ -4333,7 +4221,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte CallStaticBooleanMethod {
 			get {
 				if (_CallStaticBooleanMethod == null)
-					_CallStaticBooleanMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallStaticBooleanMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_CallStaticBooleanMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.CallStaticBooleanMethod);
 				return _CallStaticBooleanMethod;
 			}
 		}
@@ -4342,7 +4230,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte CallStaticBooleanMethodA {
 			get {
 				if (_CallStaticBooleanMethodA == null)
-					_CallStaticBooleanMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallStaticBooleanMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte));
+					_CallStaticBooleanMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte> (env.CallStaticBooleanMethodA);
 				return _CallStaticBooleanMethodA;
 			}
 		}
@@ -4351,7 +4239,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte CallStaticByteMethod {
 			get {
 				if (_CallStaticByteMethod == null)
-					_CallStaticByteMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallStaticByteMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_CallStaticByteMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.CallStaticByteMethod);
 				return _CallStaticByteMethod;
 			}
 		}
@@ -4360,7 +4248,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte CallStaticByteMethodA {
 			get {
 				if (_CallStaticByteMethodA == null)
-					_CallStaticByteMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallStaticByteMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte));
+					_CallStaticByteMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte> (env.CallStaticByteMethodA);
 				return _CallStaticByteMethodA;
 			}
 		}
@@ -4369,7 +4257,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char CallStaticCharMethod {
 			get {
 				if (_CallStaticCharMethod == null)
-					_CallStaticCharMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.CallStaticCharMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_CallStaticCharMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.CallStaticCharMethod);
 				return _CallStaticCharMethod;
 			}
 		}
@@ -4378,7 +4266,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char CallStaticCharMethodA {
 			get {
 				if (_CallStaticCharMethodA == null)
-					_CallStaticCharMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char) Marshal.GetDelegateForFunctionPointer (env.CallStaticCharMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char));
+					_CallStaticCharMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char> (env.CallStaticCharMethodA);
 				return _CallStaticCharMethodA;
 			}
 		}
@@ -4387,7 +4275,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short CallStaticShortMethod {
 			get {
 				if (_CallStaticShortMethod == null)
-					_CallStaticShortMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.CallStaticShortMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_CallStaticShortMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.CallStaticShortMethod);
 				return _CallStaticShortMethod;
 			}
 		}
@@ -4396,7 +4284,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short CallStaticShortMethodA {
 			get {
 				if (_CallStaticShortMethodA == null)
-					_CallStaticShortMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short) Marshal.GetDelegateForFunctionPointer (env.CallStaticShortMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short));
+					_CallStaticShortMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short> (env.CallStaticShortMethodA);
 				return _CallStaticShortMethodA;
 			}
 		}
@@ -4405,7 +4293,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int CallStaticIntMethod {
 			get {
 				if (_CallStaticIntMethod == null)
-					_CallStaticIntMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.CallStaticIntMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_CallStaticIntMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.CallStaticIntMethod);
 				return _CallStaticIntMethod;
 			}
 		}
@@ -4414,7 +4302,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int CallStaticIntMethodA {
 			get {
 				if (_CallStaticIntMethodA == null)
-					_CallStaticIntMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int) Marshal.GetDelegateForFunctionPointer (env.CallStaticIntMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int));
+					_CallStaticIntMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int> (env.CallStaticIntMethodA);
 				return _CallStaticIntMethodA;
 			}
 		}
@@ -4423,7 +4311,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long CallStaticLongMethod {
 			get {
 				if (_CallStaticLongMethod == null)
-					_CallStaticLongMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.CallStaticLongMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_CallStaticLongMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.CallStaticLongMethod);
 				return _CallStaticLongMethod;
 			}
 		}
@@ -4432,7 +4320,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long CallStaticLongMethodA {
 			get {
 				if (_CallStaticLongMethodA == null)
-					_CallStaticLongMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long) Marshal.GetDelegateForFunctionPointer (env.CallStaticLongMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long));
+					_CallStaticLongMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long> (env.CallStaticLongMethodA);
 				return _CallStaticLongMethodA;
 			}
 		}
@@ -4441,7 +4329,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float CallStaticFloatMethod {
 			get {
 				if (_CallStaticFloatMethod == null)
-					_CallStaticFloatMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.CallStaticFloatMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_CallStaticFloatMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.CallStaticFloatMethod);
 				return _CallStaticFloatMethod;
 			}
 		}
@@ -4450,7 +4338,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float CallStaticFloatMethodA {
 			get {
 				if (_CallStaticFloatMethodA == null)
-					_CallStaticFloatMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float) Marshal.GetDelegateForFunctionPointer (env.CallStaticFloatMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float));
+					_CallStaticFloatMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float> (env.CallStaticFloatMethodA);
 				return _CallStaticFloatMethodA;
 			}
 		}
@@ -4459,7 +4347,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double CallStaticDoubleMethod {
 			get {
 				if (_CallStaticDoubleMethod == null)
-					_CallStaticDoubleMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.CallStaticDoubleMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_CallStaticDoubleMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.CallStaticDoubleMethod);
 				return _CallStaticDoubleMethod;
 			}
 		}
@@ -4468,7 +4356,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double CallStaticDoubleMethodA {
 			get {
 				if (_CallStaticDoubleMethodA == null)
-					_CallStaticDoubleMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double) Marshal.GetDelegateForFunctionPointer (env.CallStaticDoubleMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double));
+					_CallStaticDoubleMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double> (env.CallStaticDoubleMethodA);
 				return _CallStaticDoubleMethodA;
 			}
 		}
@@ -4477,7 +4365,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr CallStaticVoidMethod {
 			get {
 				if (_CallStaticVoidMethod == null)
-					_CallStaticVoidMethod = (JniAction_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.CallStaticVoidMethod, typeof (JniAction_JNIEnvPtr_jobject_IntPtr));
+					_CallStaticVoidMethod = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr> (env.CallStaticVoidMethod);
 				return _CallStaticVoidMethod;
 			}
 		}
@@ -4486,7 +4374,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr CallStaticVoidMethodA {
 			get {
 				if (_CallStaticVoidMethodA == null)
-					_CallStaticVoidMethodA = (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr) Marshal.GetDelegateForFunctionPointer (env.CallStaticVoidMethodA, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr));
+					_CallStaticVoidMethodA = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr> (env.CallStaticVoidMethodA);
 				return _CallStaticVoidMethodA;
 			}
 		}
@@ -4495,7 +4383,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetStaticFieldID {
 			get {
 				if (_GetStaticFieldID == null)
-					_GetStaticFieldID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetStaticFieldID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetStaticFieldID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetStaticFieldID);
 				return _GetStaticFieldID;
 			}
 		}
@@ -4504,7 +4392,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject GetStaticObjectField {
 			get {
 				if (_GetStaticObjectField == null)
-					_GetStaticObjectField = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.GetStaticObjectField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_GetStaticObjectField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.GetStaticObjectField);
 				return _GetStaticObjectField;
 			}
 		}
@@ -4513,7 +4401,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte GetStaticBooleanField {
 			get {
 				if (_GetStaticBooleanField == null)
-					_GetStaticBooleanField = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.GetStaticBooleanField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_GetStaticBooleanField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.GetStaticBooleanField);
 				return _GetStaticBooleanField;
 			}
 		}
@@ -4522,7 +4410,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte GetStaticByteField {
 			get {
 				if (_GetStaticByteField == null)
-					_GetStaticByteField = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.GetStaticByteField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_GetStaticByteField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.GetStaticByteField);
 				return _GetStaticByteField;
 			}
 		}
@@ -4531,7 +4419,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char GetStaticCharField {
 			get {
 				if (_GetStaticCharField == null)
-					_GetStaticCharField = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.GetStaticCharField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_GetStaticCharField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.GetStaticCharField);
 				return _GetStaticCharField;
 			}
 		}
@@ -4540,7 +4428,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short GetStaticShortField {
 			get {
 				if (_GetStaticShortField == null)
-					_GetStaticShortField = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.GetStaticShortField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_GetStaticShortField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.GetStaticShortField);
 				return _GetStaticShortField;
 			}
 		}
@@ -4549,7 +4437,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int GetStaticIntField {
 			get {
 				if (_GetStaticIntField == null)
-					_GetStaticIntField = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetStaticIntField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_GetStaticIntField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.GetStaticIntField);
 				return _GetStaticIntField;
 			}
 		}
@@ -4558,7 +4446,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long GetStaticLongField {
 			get {
 				if (_GetStaticLongField == null)
-					_GetStaticLongField = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.GetStaticLongField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_GetStaticLongField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.GetStaticLongField);
 				return _GetStaticLongField;
 			}
 		}
@@ -4567,7 +4455,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float GetStaticFloatField {
 			get {
 				if (_GetStaticFloatField == null)
-					_GetStaticFloatField = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.GetStaticFloatField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_GetStaticFloatField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.GetStaticFloatField);
 				return _GetStaticFloatField;
 			}
 		}
@@ -4576,7 +4464,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double GetStaticDoubleField {
 			get {
 				if (_GetStaticDoubleField == null)
-					_GetStaticDoubleField = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.GetStaticDoubleField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_GetStaticDoubleField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.GetStaticDoubleField);
 				return _GetStaticDoubleField;
 			}
 		}
@@ -4585,7 +4473,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_jobject SetStaticObjectField {
 			get {
 				if (_SetStaticObjectField == null)
-					_SetStaticObjectField = (JniAction_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.SetStaticObjectField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_jobject));
+					_SetStaticObjectField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_jobject> (env.SetStaticObjectField);
 				return _SetStaticObjectField;
 			}
 		}
@@ -4594,7 +4482,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_byte SetStaticBooleanField {
 			get {
 				if (_SetStaticBooleanField == null)
-					_SetStaticBooleanField = (JniAction_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.SetStaticBooleanField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_byte));
+					_SetStaticBooleanField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_byte> (env.SetStaticBooleanField);
 				return _SetStaticBooleanField;
 			}
 		}
@@ -4603,7 +4491,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_sbyte SetStaticByteField {
 			get {
 				if (_SetStaticByteField == null)
-					_SetStaticByteField = (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.SetStaticByteField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_SetStaticByteField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_sbyte> (env.SetStaticByteField);
 				return _SetStaticByteField;
 			}
 		}
@@ -4612,7 +4500,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_char SetStaticCharField {
 			get {
 				if (_SetStaticCharField == null)
-					_SetStaticCharField = (JniAction_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.SetStaticCharField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_char));
+					_SetStaticCharField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_char> (env.SetStaticCharField);
 				return _SetStaticCharField;
 			}
 		}
@@ -4621,7 +4509,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_short SetStaticShortField {
 			get {
 				if (_SetStaticShortField == null)
-					_SetStaticShortField = (JniAction_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.SetStaticShortField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_short));
+					_SetStaticShortField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_short> (env.SetStaticShortField);
 				return _SetStaticShortField;
 			}
 		}
@@ -4630,7 +4518,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_int SetStaticIntField {
 			get {
 				if (_SetStaticIntField == null)
-					_SetStaticIntField = (JniAction_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.SetStaticIntField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_int));
+					_SetStaticIntField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_int> (env.SetStaticIntField);
 				return _SetStaticIntField;
 			}
 		}
@@ -4639,7 +4527,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_long SetStaticLongField {
 			get {
 				if (_SetStaticLongField == null)
-					_SetStaticLongField = (JniAction_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.SetStaticLongField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_long));
+					_SetStaticLongField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_long> (env.SetStaticLongField);
 				return _SetStaticLongField;
 			}
 		}
@@ -4648,7 +4536,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_float SetStaticFloatField {
 			get {
 				if (_SetStaticFloatField == null)
-					_SetStaticFloatField = (JniAction_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.SetStaticFloatField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_float));
+					_SetStaticFloatField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_float> (env.SetStaticFloatField);
 				return _SetStaticFloatField;
 			}
 		}
@@ -4657,7 +4545,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_double SetStaticDoubleField {
 			get {
 				if (_SetStaticDoubleField == null)
-					_SetStaticDoubleField = (JniAction_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.SetStaticDoubleField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_double));
+					_SetStaticDoubleField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_double> (env.SetStaticDoubleField);
 				return _SetStaticDoubleField;
 			}
 		}
@@ -4666,7 +4554,7 @@ namespace
 		public JniFunc_JNIEnvPtr_charPtr_int_jobject NewString {
 			get {
 				if (_NewString == null)
-					_NewString = (JniFunc_JNIEnvPtr_charPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewString, typeof (JniFunc_JNIEnvPtr_charPtr_int_jobject));
+					_NewString = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_charPtr_int_jobject> (env.NewString);
 				return _NewString;
 			}
 		}
@@ -4675,7 +4563,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int GetStringLength {
 			get {
 				if (_GetStringLength == null)
-					_GetStringLength = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.GetStringLength, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_GetStringLength = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.GetStringLength);
 				return _GetStringLength;
 			}
 		}
@@ -4684,7 +4572,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr GetStringChars {
 			get {
 				if (_GetStringChars == null)
-					_GetStringChars = (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetStringChars, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr));
+					_GetStringChars = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr> (env.GetStringChars);
 				return _GetStringChars;
 			}
 		}
@@ -4693,7 +4581,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_charPtr ReleaseStringChars {
 			get {
 				if (_ReleaseStringChars == null)
-					_ReleaseStringChars = (JniAction_JNIEnvPtr_jobject_charPtr) Marshal.GetDelegateForFunctionPointer (env.ReleaseStringChars, typeof (JniAction_JNIEnvPtr_jobject_charPtr));
+					_ReleaseStringChars = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_charPtr> (env.ReleaseStringChars);
 				return _ReleaseStringChars;
 			}
 		}
@@ -4702,7 +4590,7 @@ namespace
 		public JniFunc_JNIEnvPtr_string_jobject NewStringUTF {
 			get {
 				if (_NewStringUTF == null)
-					_NewStringUTF = (JniFunc_JNIEnvPtr_string_jobject) Marshal.GetDelegateForFunctionPointer (env.NewStringUTF, typeof (JniFunc_JNIEnvPtr_string_jobject));
+					_NewStringUTF = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_string_jobject> (env.NewStringUTF);
 				return _NewStringUTF;
 			}
 		}
@@ -4711,7 +4599,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int GetStringUTFLength {
 			get {
 				if (_GetStringUTFLength == null)
-					_GetStringUTFLength = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.GetStringUTFLength, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_GetStringUTFLength = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.GetStringUTFLength);
 				return _GetStringUTFLength;
 			}
 		}
@@ -4720,7 +4608,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_string GetStringUTFChars {
 			get {
 				if (_GetStringUTFChars == null)
-					_GetStringUTFChars = (JniFunc_JNIEnvPtr_jobject_boolPtr_string) Marshal.GetDelegateForFunctionPointer (env.GetStringUTFChars, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_string));
+					_GetStringUTFChars = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_string> (env.GetStringUTFChars);
 				return _GetStringUTFChars;
 			}
 		}
@@ -4729,7 +4617,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_string ReleaseStringUTFChars {
 			get {
 				if (_ReleaseStringUTFChars == null)
-					_ReleaseStringUTFChars = (JniAction_JNIEnvPtr_jobject_string) Marshal.GetDelegateForFunctionPointer (env.ReleaseStringUTFChars, typeof (JniAction_JNIEnvPtr_jobject_string));
+					_ReleaseStringUTFChars = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_string> (env.ReleaseStringUTFChars);
 				return _ReleaseStringUTFChars;
 			}
 		}
@@ -4738,7 +4626,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int GetArrayLength {
 			get {
 				if (_GetArrayLength == null)
-					_GetArrayLength = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.GetArrayLength, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_GetArrayLength = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.GetArrayLength);
 				return _GetArrayLength;
 			}
 		}
@@ -4747,7 +4635,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject_jobject_jobject NewObjectArray {
 			get {
 				if (_NewObjectArray == null)
-					_NewObjectArray = (JniFunc_JNIEnvPtr_int_jobject_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewObjectArray, typeof (JniFunc_JNIEnvPtr_int_jobject_jobject_jobject));
+					_NewObjectArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject_jobject_jobject> (env.NewObjectArray);
 				return _NewObjectArray;
 			}
 		}
@@ -4756,7 +4644,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int_jobject GetObjectArrayElement {
 			get {
 				if (_GetObjectArrayElement == null)
-					_GetObjectArrayElement = (JniFunc_JNIEnvPtr_jobject_int_jobject) Marshal.GetDelegateForFunctionPointer (env.GetObjectArrayElement, typeof (JniFunc_JNIEnvPtr_jobject_int_jobject));
+					_GetObjectArrayElement = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int_jobject> (env.GetObjectArrayElement);
 				return _GetObjectArrayElement;
 			}
 		}
@@ -4765,7 +4653,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_jobject SetObjectArrayElement {
 			get {
 				if (_SetObjectArrayElement == null)
-					_SetObjectArrayElement = (JniAction_JNIEnvPtr_jobject_int_jobject) Marshal.GetDelegateForFunctionPointer (env.SetObjectArrayElement, typeof (JniAction_JNIEnvPtr_jobject_int_jobject));
+					_SetObjectArrayElement = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_jobject> (env.SetObjectArrayElement);
 				return _SetObjectArrayElement;
 			}
 		}
@@ -4774,7 +4662,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewBooleanArray {
 			get {
 				if (_NewBooleanArray == null)
-					_NewBooleanArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewBooleanArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewBooleanArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewBooleanArray);
 				return _NewBooleanArray;
 			}
 		}
@@ -4783,7 +4671,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewByteArray {
 			get {
 				if (_NewByteArray == null)
-					_NewByteArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewByteArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewByteArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewByteArray);
 				return _NewByteArray;
 			}
 		}
@@ -4792,7 +4680,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewCharArray {
 			get {
 				if (_NewCharArray == null)
-					_NewCharArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewCharArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewCharArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewCharArray);
 				return _NewCharArray;
 			}
 		}
@@ -4801,7 +4689,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewShortArray {
 			get {
 				if (_NewShortArray == null)
-					_NewShortArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewShortArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewShortArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewShortArray);
 				return _NewShortArray;
 			}
 		}
@@ -4810,7 +4698,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewIntArray {
 			get {
 				if (_NewIntArray == null)
-					_NewIntArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewIntArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewIntArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewIntArray);
 				return _NewIntArray;
 			}
 		}
@@ -4819,7 +4707,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewLongArray {
 			get {
 				if (_NewLongArray == null)
-					_NewLongArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewLongArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewLongArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewLongArray);
 				return _NewLongArray;
 			}
 		}
@@ -4828,7 +4716,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewFloatArray {
 			get {
 				if (_NewFloatArray == null)
-					_NewFloatArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewFloatArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewFloatArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewFloatArray);
 				return _NewFloatArray;
 			}
 		}
@@ -4837,7 +4725,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewDoubleArray {
 			get {
 				if (_NewDoubleArray == null)
-					_NewDoubleArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewDoubleArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewDoubleArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewDoubleArray);
 				return _NewDoubleArray;
 			}
 		}
@@ -4846,7 +4734,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr GetBooleanArrayElements {
 			get {
 				if (_GetBooleanArrayElements == null)
-					_GetBooleanArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr) Marshal.GetDelegateForFunctionPointer (env.GetBooleanArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr));
+					_GetBooleanArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr> (env.GetBooleanArrayElements);
 				return _GetBooleanArrayElements;
 			}
 		}
@@ -4855,7 +4743,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr GetByteArrayElements {
 			get {
 				if (_GetByteArrayElements == null)
-					_GetByteArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr) Marshal.GetDelegateForFunctionPointer (env.GetByteArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr));
+					_GetByteArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr> (env.GetByteArrayElements);
 				return _GetByteArrayElements;
 			}
 		}
@@ -4864,7 +4752,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr GetCharArrayElements {
 			get {
 				if (_GetCharArrayElements == null)
-					_GetCharArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetCharArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr));
+					_GetCharArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr> (env.GetCharArrayElements);
 				return _GetCharArrayElements;
 			}
 		}
@@ -4873,7 +4761,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr GetShortArrayElements {
 			get {
 				if (_GetShortArrayElements == null)
-					_GetShortArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr) Marshal.GetDelegateForFunctionPointer (env.GetShortArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr));
+					_GetShortArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr> (env.GetShortArrayElements);
 				return _GetShortArrayElements;
 			}
 		}
@@ -4882,7 +4770,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr GetIntArrayElements {
 			get {
 				if (_GetIntArrayElements == null)
-					_GetIntArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr) Marshal.GetDelegateForFunctionPointer (env.GetIntArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr));
+					_GetIntArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr> (env.GetIntArrayElements);
 				return _GetIntArrayElements;
 			}
 		}
@@ -4891,7 +4779,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr GetLongArrayElements {
 			get {
 				if (_GetLongArrayElements == null)
-					_GetLongArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr) Marshal.GetDelegateForFunctionPointer (env.GetLongArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr));
+					_GetLongArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr> (env.GetLongArrayElements);
 				return _GetLongArrayElements;
 			}
 		}
@@ -4900,7 +4788,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr GetFloatArrayElements {
 			get {
 				if (_GetFloatArrayElements == null)
-					_GetFloatArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr) Marshal.GetDelegateForFunctionPointer (env.GetFloatArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr));
+					_GetFloatArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr> (env.GetFloatArrayElements);
 				return _GetFloatArrayElements;
 			}
 		}
@@ -4909,7 +4797,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr GetDoubleArrayElements {
 			get {
 				if (_GetDoubleArrayElements == null)
-					_GetDoubleArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr) Marshal.GetDelegateForFunctionPointer (env.GetDoubleArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr));
+					_GetDoubleArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr> (env.GetDoubleArrayElements);
 				return _GetDoubleArrayElements;
 			}
 		}
@@ -4918,7 +4806,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_boolPtr_int ReleaseBooleanArrayElements {
 			get {
 				if (_ReleaseBooleanArrayElements == null)
-					_ReleaseBooleanArrayElements = (JniAction_JNIEnvPtr_jobject_boolPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseBooleanArrayElements, typeof (JniAction_JNIEnvPtr_jobject_boolPtr_int));
+					_ReleaseBooleanArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_boolPtr_int> (env.ReleaseBooleanArrayElements);
 				return _ReleaseBooleanArrayElements;
 			}
 		}
@@ -4927,7 +4815,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_sbytePtr_int ReleaseByteArrayElements {
 			get {
 				if (_ReleaseByteArrayElements == null)
-					_ReleaseByteArrayElements = (JniAction_JNIEnvPtr_jobject_sbytePtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseByteArrayElements, typeof (JniAction_JNIEnvPtr_jobject_sbytePtr_int));
+					_ReleaseByteArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_sbytePtr_int> (env.ReleaseByteArrayElements);
 				return _ReleaseByteArrayElements;
 			}
 		}
@@ -4936,7 +4824,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_charPtr_int ReleaseCharArrayElements {
 			get {
 				if (_ReleaseCharArrayElements == null)
-					_ReleaseCharArrayElements = (JniAction_JNIEnvPtr_jobject_charPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseCharArrayElements, typeof (JniAction_JNIEnvPtr_jobject_charPtr_int));
+					_ReleaseCharArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_charPtr_int> (env.ReleaseCharArrayElements);
 				return _ReleaseCharArrayElements;
 			}
 		}
@@ -4945,7 +4833,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_shortPtr_int ReleaseShortArrayElements {
 			get {
 				if (_ReleaseShortArrayElements == null)
-					_ReleaseShortArrayElements = (JniAction_JNIEnvPtr_jobject_shortPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseShortArrayElements, typeof (JniAction_JNIEnvPtr_jobject_shortPtr_int));
+					_ReleaseShortArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_shortPtr_int> (env.ReleaseShortArrayElements);
 				return _ReleaseShortArrayElements;
 			}
 		}
@@ -4954,7 +4842,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_intPtr_int ReleaseIntArrayElements {
 			get {
 				if (_ReleaseIntArrayElements == null)
-					_ReleaseIntArrayElements = (JniAction_JNIEnvPtr_jobject_intPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseIntArrayElements, typeof (JniAction_JNIEnvPtr_jobject_intPtr_int));
+					_ReleaseIntArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_intPtr_int> (env.ReleaseIntArrayElements);
 				return _ReleaseIntArrayElements;
 			}
 		}
@@ -4963,7 +4851,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_longPtr_int ReleaseLongArrayElements {
 			get {
 				if (_ReleaseLongArrayElements == null)
-					_ReleaseLongArrayElements = (JniAction_JNIEnvPtr_jobject_longPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseLongArrayElements, typeof (JniAction_JNIEnvPtr_jobject_longPtr_int));
+					_ReleaseLongArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_longPtr_int> (env.ReleaseLongArrayElements);
 				return _ReleaseLongArrayElements;
 			}
 		}
@@ -4972,7 +4860,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_floatPtr_int ReleaseFloatArrayElements {
 			get {
 				if (_ReleaseFloatArrayElements == null)
-					_ReleaseFloatArrayElements = (JniAction_JNIEnvPtr_jobject_floatPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseFloatArrayElements, typeof (JniAction_JNIEnvPtr_jobject_floatPtr_int));
+					_ReleaseFloatArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_floatPtr_int> (env.ReleaseFloatArrayElements);
 				return _ReleaseFloatArrayElements;
 			}
 		}
@@ -4981,7 +4869,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_doublePtr_int ReleaseDoubleArrayElements {
 			get {
 				if (_ReleaseDoubleArrayElements == null)
-					_ReleaseDoubleArrayElements = (JniAction_JNIEnvPtr_jobject_doublePtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseDoubleArrayElements, typeof (JniAction_JNIEnvPtr_jobject_doublePtr_int));
+					_ReleaseDoubleArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_doublePtr_int> (env.ReleaseDoubleArrayElements);
 				return _ReleaseDoubleArrayElements;
 			}
 		}
@@ -4990,7 +4878,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_boolPtr GetBooleanArrayRegion {
 			get {
 				if (_GetBooleanArrayRegion == null)
-					_GetBooleanArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_boolPtr) Marshal.GetDelegateForFunctionPointer (env.GetBooleanArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_boolPtr));
+					_GetBooleanArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_boolPtr> (env.GetBooleanArrayRegion);
 				return _GetBooleanArrayRegion;
 			}
 		}
@@ -4999,7 +4887,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_sbytePtr GetByteArrayRegion {
 			get {
 				if (_GetByteArrayRegion == null)
-					_GetByteArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr) Marshal.GetDelegateForFunctionPointer (env.GetByteArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr));
+					_GetByteArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_sbytePtr> (env.GetByteArrayRegion);
 				return _GetByteArrayRegion;
 			}
 		}
@@ -5008,7 +4896,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_charPtr GetCharArrayRegion {
 			get {
 				if (_GetCharArrayRegion == null)
-					_GetCharArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetCharArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_charPtr));
+					_GetCharArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_charPtr> (env.GetCharArrayRegion);
 				return _GetCharArrayRegion;
 			}
 		}
@@ -5017,7 +4905,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_shortPtr GetShortArrayRegion {
 			get {
 				if (_GetShortArrayRegion == null)
-					_GetShortArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_shortPtr) Marshal.GetDelegateForFunctionPointer (env.GetShortArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_shortPtr));
+					_GetShortArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_shortPtr> (env.GetShortArrayRegion);
 				return _GetShortArrayRegion;
 			}
 		}
@@ -5026,7 +4914,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_intPtr GetIntArrayRegion {
 			get {
 				if (_GetIntArrayRegion == null)
-					_GetIntArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_intPtr) Marshal.GetDelegateForFunctionPointer (env.GetIntArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_intPtr));
+					_GetIntArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_intPtr> (env.GetIntArrayRegion);
 				return _GetIntArrayRegion;
 			}
 		}
@@ -5035,7 +4923,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_longPtr GetLongArrayRegion {
 			get {
 				if (_GetLongArrayRegion == null)
-					_GetLongArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_longPtr) Marshal.GetDelegateForFunctionPointer (env.GetLongArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_longPtr));
+					_GetLongArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_longPtr> (env.GetLongArrayRegion);
 				return _GetLongArrayRegion;
 			}
 		}
@@ -5044,7 +4932,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_floatPtr GetFloatArrayRegion {
 			get {
 				if (_GetFloatArrayRegion == null)
-					_GetFloatArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_floatPtr) Marshal.GetDelegateForFunctionPointer (env.GetFloatArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_floatPtr));
+					_GetFloatArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_floatPtr> (env.GetFloatArrayRegion);
 				return _GetFloatArrayRegion;
 			}
 		}
@@ -5053,7 +4941,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_doublePtr GetDoubleArrayRegion {
 			get {
 				if (_GetDoubleArrayRegion == null)
-					_GetDoubleArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_doublePtr) Marshal.GetDelegateForFunctionPointer (env.GetDoubleArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_doublePtr));
+					_GetDoubleArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_doublePtr> (env.GetDoubleArrayRegion);
 				return _GetDoubleArrayRegion;
 			}
 		}
@@ -5062,7 +4950,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_boolPtr SetBooleanArrayRegion {
 			get {
 				if (_SetBooleanArrayRegion == null)
-					_SetBooleanArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_boolPtr) Marshal.GetDelegateForFunctionPointer (env.SetBooleanArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_boolPtr));
+					_SetBooleanArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_boolPtr> (env.SetBooleanArrayRegion);
 				return _SetBooleanArrayRegion;
 			}
 		}
@@ -5071,7 +4959,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_sbytePtr SetByteArrayRegion {
 			get {
 				if (_SetByteArrayRegion == null)
-					_SetByteArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr) Marshal.GetDelegateForFunctionPointer (env.SetByteArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr));
+					_SetByteArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_sbytePtr> (env.SetByteArrayRegion);
 				return _SetByteArrayRegion;
 			}
 		}
@@ -5080,7 +4968,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_charPtr SetCharArrayRegion {
 			get {
 				if (_SetCharArrayRegion == null)
-					_SetCharArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_charPtr) Marshal.GetDelegateForFunctionPointer (env.SetCharArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_charPtr));
+					_SetCharArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_charPtr> (env.SetCharArrayRegion);
 				return _SetCharArrayRegion;
 			}
 		}
@@ -5089,7 +4977,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_shortPtr SetShortArrayRegion {
 			get {
 				if (_SetShortArrayRegion == null)
-					_SetShortArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_shortPtr) Marshal.GetDelegateForFunctionPointer (env.SetShortArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_shortPtr));
+					_SetShortArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_shortPtr> (env.SetShortArrayRegion);
 				return _SetShortArrayRegion;
 			}
 		}
@@ -5098,7 +4986,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_intPtr SetIntArrayRegion {
 			get {
 				if (_SetIntArrayRegion == null)
-					_SetIntArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_intPtr) Marshal.GetDelegateForFunctionPointer (env.SetIntArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_intPtr));
+					_SetIntArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_intPtr> (env.SetIntArrayRegion);
 				return _SetIntArrayRegion;
 			}
 		}
@@ -5107,7 +4995,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_longPtr SetLongArrayRegion {
 			get {
 				if (_SetLongArrayRegion == null)
-					_SetLongArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_longPtr) Marshal.GetDelegateForFunctionPointer (env.SetLongArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_longPtr));
+					_SetLongArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_longPtr> (env.SetLongArrayRegion);
 				return _SetLongArrayRegion;
 			}
 		}
@@ -5116,7 +5004,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_floatPtr SetFloatArrayRegion {
 			get {
 				if (_SetFloatArrayRegion == null)
-					_SetFloatArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_floatPtr) Marshal.GetDelegateForFunctionPointer (env.SetFloatArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_floatPtr));
+					_SetFloatArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_floatPtr> (env.SetFloatArrayRegion);
 				return _SetFloatArrayRegion;
 			}
 		}
@@ -5125,7 +5013,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_doublePtr SetDoubleArrayRegion {
 			get {
 				if (_SetDoubleArrayRegion == null)
-					_SetDoubleArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_doublePtr) Marshal.GetDelegateForFunctionPointer (env.SetDoubleArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_doublePtr));
+					_SetDoubleArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_doublePtr> (env.SetDoubleArrayRegion);
 				return _SetDoubleArrayRegion;
 			}
 		}
@@ -5134,7 +5022,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int RegisterNatives {
 			get {
 				if (_RegisterNatives == null)
-					_RegisterNatives = (JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int) Marshal.GetDelegateForFunctionPointer (env.RegisterNatives, typeof (JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int));
+					_RegisterNatives = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int> (env.RegisterNatives);
 				return _RegisterNatives;
 			}
 		}
@@ -5143,7 +5031,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int UnregisterNatives {
 			get {
 				if (_UnregisterNatives == null)
-					_UnregisterNatives = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.UnregisterNatives, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_UnregisterNatives = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.UnregisterNatives);
 				return _UnregisterNatives;
 			}
 		}
@@ -5152,7 +5040,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int MonitorEnter {
 			get {
 				if (_MonitorEnter == null)
-					_MonitorEnter = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.MonitorEnter, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_MonitorEnter = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.MonitorEnter);
 				return _MonitorEnter;
 			}
 		}
@@ -5161,7 +5049,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int MonitorExit {
 			get {
 				if (_MonitorExit == null)
-					_MonitorExit = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.MonitorExit, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_MonitorExit = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.MonitorExit);
 				return _MonitorExit;
 			}
 		}
@@ -5170,7 +5058,7 @@ namespace
 		public JniFunc_JNIEnvPtr_outIntPtr_int GetJavaVM {
 			get {
 				if (_GetJavaVM == null)
-					_GetJavaVM = (JniFunc_JNIEnvPtr_outIntPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetJavaVM, typeof (JniFunc_JNIEnvPtr_outIntPtr_int));
+					_GetJavaVM = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_outIntPtr_int> (env.GetJavaVM);
 				return _GetJavaVM;
 			}
 		}
@@ -5179,7 +5067,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_charPtr GetStringRegion {
 			get {
 				if (_GetStringRegion == null)
-					_GetStringRegion = (JniAction_JNIEnvPtr_jobject_int_int_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetStringRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_charPtr));
+					_GetStringRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_charPtr> (env.GetStringRegion);
 				return _GetStringRegion;
 			}
 		}
@@ -5188,7 +5076,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_IntPtr GetStringUTFRegion {
 			get {
 				if (_GetStringUTFRegion == null)
-					_GetStringUTFRegion = (JniAction_JNIEnvPtr_jobject_int_int_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetStringUTFRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_IntPtr));
+					_GetStringUTFRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_IntPtr> (env.GetStringUTFRegion);
 				return _GetStringUTFRegion;
 			}
 		}
@@ -5197,7 +5085,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr GetPrimitiveArrayCritical {
 			get {
 				if (_GetPrimitiveArrayCritical == null)
-					_GetPrimitiveArrayCritical = (JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetPrimitiveArrayCritical, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr));
+					_GetPrimitiveArrayCritical = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr> (env.GetPrimitiveArrayCritical);
 				return _GetPrimitiveArrayCritical;
 			}
 		}
@@ -5206,7 +5094,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_int ReleasePrimitiveArrayCritical {
 			get {
 				if (_ReleasePrimitiveArrayCritical == null)
-					_ReleasePrimitiveArrayCritical = (JniAction_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleasePrimitiveArrayCritical, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_int));
+					_ReleasePrimitiveArrayCritical = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_int> (env.ReleasePrimitiveArrayCritical);
 				return _ReleasePrimitiveArrayCritical;
 			}
 		}
@@ -5215,7 +5103,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_string GetStringCritical {
 			get {
 				if (_GetStringCritical == null)
-					_GetStringCritical = (JniFunc_JNIEnvPtr_jobject_boolPtr_string) Marshal.GetDelegateForFunctionPointer (env.GetStringCritical, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_string));
+					_GetStringCritical = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_string> (env.GetStringCritical);
 				return _GetStringCritical;
 			}
 		}
@@ -5224,7 +5112,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_string ReleaseStringCritical {
 			get {
 				if (_ReleaseStringCritical == null)
-					_ReleaseStringCritical = (JniAction_JNIEnvPtr_jobject_string) Marshal.GetDelegateForFunctionPointer (env.ReleaseStringCritical, typeof (JniAction_JNIEnvPtr_jobject_string));
+					_ReleaseStringCritical = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_string> (env.ReleaseStringCritical);
 				return _ReleaseStringCritical;
 			}
 		}
@@ -5233,7 +5121,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject NewWeakGlobalRef {
 			get {
 				if (_NewWeakGlobalRef == null)
-					_NewWeakGlobalRef = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewWeakGlobalRef, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_NewWeakGlobalRef = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.NewWeakGlobalRef);
 				return _NewWeakGlobalRef;
 			}
 		}
@@ -5242,7 +5130,7 @@ namespace
 		public JniAction_JNIEnvPtr_IntPtr DeleteWeakGlobalRef {
 			get {
 				if (_DeleteWeakGlobalRef == null)
-					_DeleteWeakGlobalRef = (JniAction_JNIEnvPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.DeleteWeakGlobalRef, typeof (JniAction_JNIEnvPtr_IntPtr));
+					_DeleteWeakGlobalRef = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_IntPtr> (env.DeleteWeakGlobalRef);
 				return _DeleteWeakGlobalRef;
 			}
 		}
@@ -5251,7 +5139,7 @@ namespace
 		public JniFunc_JNIEnvPtr_byte ExceptionCheck {
 			get {
 				if (_ExceptionCheck == null)
-					_ExceptionCheck = (JniFunc_JNIEnvPtr_byte) Marshal.GetDelegateForFunctionPointer (env.ExceptionCheck, typeof (JniFunc_JNIEnvPtr_byte));
+					_ExceptionCheck = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_byte> (env.ExceptionCheck);
 				return _ExceptionCheck;
 			}
 		}
@@ -5260,7 +5148,7 @@ namespace
 		public JniFunc_JNIEnvPtr_IntPtr_long_jobject NewDirectByteBuffer {
 			get {
 				if (_NewDirectByteBuffer == null)
-					_NewDirectByteBuffer = (JniFunc_JNIEnvPtr_IntPtr_long_jobject) Marshal.GetDelegateForFunctionPointer (env.NewDirectByteBuffer, typeof (JniFunc_JNIEnvPtr_IntPtr_long_jobject));
+					_NewDirectByteBuffer = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_IntPtr_long_jobject> (env.NewDirectByteBuffer);
 				return _NewDirectByteBuffer;
 			}
 		}
@@ -5269,7 +5157,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr GetDirectBufferAddress {
 			get {
 				if (_GetDirectBufferAddress == null)
-					_GetDirectBufferAddress = (JniFunc_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetDirectBufferAddress, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr));
+					_GetDirectBufferAddress = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr> (env.GetDirectBufferAddress);
 				return _GetDirectBufferAddress;
 			}
 		}
@@ -5278,7 +5166,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_long GetDirectBufferCapacity {
 			get {
 				if (_GetDirectBufferCapacity == null)
-					_GetDirectBufferCapacity = (JniFunc_JNIEnvPtr_jobject_long) Marshal.GetDelegateForFunctionPointer (env.GetDirectBufferCapacity, typeof (JniFunc_JNIEnvPtr_jobject_long));
+					_GetDirectBufferCapacity = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_long> (env.GetDirectBufferCapacity);
 				return _GetDirectBufferCapacity;
 			}
 		}
@@ -5287,7 +5175,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType GetObjectRefType {
 			get {
 				if (_GetObjectRefType == null)
-					_GetObjectRefType = (JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType) Marshal.GetDelegateForFunctionPointer (env.GetObjectRefType, typeof (JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType));
+					_GetObjectRefType = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType> (env.GetObjectRefType);
 				return _GetObjectRefType;
 			}
 		}
@@ -5307,569 +5195,757 @@ namespace
 
 		const string JavaInteropLib = "java-interop";
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_get_version (IntPtr jnienv);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_define_class (IntPtr jnienv, out IntPtr thrown, string name, jobject loader, IntPtr buffer, int bufferLength);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_find_class (IntPtr jnienv, out IntPtr thrown, string classname);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_to_reflected_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, byte isStatic);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_get_superclass (IntPtr jnienv, jobject type);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_is_assignable_from (IntPtr jnienv, jobject class1, jobject class2);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_to_reflected_field (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr field, byte isStatic);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_throw (IntPtr jnienv, jobject toThrow);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_throw_new (IntPtr jnienv, jobject type, string message);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_exception_occurred (IntPtr jnienv);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_exception_describe (IntPtr jnienv);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_exception_clear (IntPtr jnienv);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_fatal_error (IntPtr jnienv, string message);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_push_local_frame (IntPtr jnienv, int capacity);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_pop_local_frame (IntPtr jnienv, jobject result);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_global_ref (IntPtr jnienv, jobject instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_delete_global_ref (IntPtr jnienv, IntPtr instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_delete_local_ref (IntPtr jnienv, IntPtr instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_is_same_object (IntPtr jnienv, jobject object1, jobject object2);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_local_ref (IntPtr jnienv, jobject instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_ensure_local_capacity (IntPtr jnienv, int capacity);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_alloc_object (IntPtr jnienv, out IntPtr thrown, jobject type);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_object (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_object_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_get_object_class (IntPtr jnienv, jobject instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_is_instance_of (IntPtr jnienv, jobject instance, jobject type);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe IntPtr java_interop_jnienv_get_method_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_call_object_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_call_object_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_call_boolean_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_call_boolean_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_call_byte_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_call_byte_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_call_char_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_call_char_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_call_short_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_call_short_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_call_int_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_call_int_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_call_long_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_call_long_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_call_float_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_call_float_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_call_double_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_call_double_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_call_void_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_call_void_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_call_nonvirtual_object_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_call_nonvirtual_object_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_call_nonvirtual_boolean_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_call_nonvirtual_boolean_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_call_nonvirtual_byte_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_call_nonvirtual_byte_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_call_nonvirtual_char_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_call_nonvirtual_char_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_call_nonvirtual_short_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_call_nonvirtual_short_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_call_nonvirtual_int_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_call_nonvirtual_int_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_call_nonvirtual_long_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_call_nonvirtual_long_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_call_nonvirtual_float_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_call_nonvirtual_float_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_call_nonvirtual_double_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_call_nonvirtual_double_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_call_nonvirtual_void_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_call_nonvirtual_void_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe IntPtr java_interop_jnienv_get_field_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_get_object_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_get_boolean_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_get_byte_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_get_char_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_get_short_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_get_int_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_get_long_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_get_float_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_get_double_field (IntPtr jnienv, jobject instance, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_object_field (IntPtr jnienv, jobject instance, IntPtr field, jobject value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_boolean_field (IntPtr jnienv, jobject instance, IntPtr field, byte value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_byte_field (IntPtr jnienv, jobject instance, IntPtr field, sbyte value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_char_field (IntPtr jnienv, jobject instance, IntPtr field, char value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_short_field (IntPtr jnienv, jobject instance, IntPtr field, short value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_int_field (IntPtr jnienv, jobject instance, IntPtr field, int value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_long_field (IntPtr jnienv, jobject instance, IntPtr field, long value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_float_field (IntPtr jnienv, jobject instance, IntPtr field, float value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_double_field (IntPtr jnienv, jobject instance, IntPtr field, double value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe IntPtr java_interop_jnienv_get_static_method_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_call_static_object_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_call_static_object_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_call_static_boolean_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_call_static_boolean_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_call_static_byte_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_call_static_byte_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_call_static_char_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_call_static_char_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_call_static_short_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_call_static_short_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_call_static_int_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_call_static_int_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_call_static_long_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_call_static_long_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_call_static_float_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_call_static_float_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_call_static_double_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_call_static_double_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_call_static_void_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_call_static_void_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe IntPtr java_interop_jnienv_get_static_field_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_get_static_object_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_get_static_boolean_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte java_interop_jnienv_get_static_byte_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char java_interop_jnienv_get_static_char_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short java_interop_jnienv_get_static_short_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_get_static_int_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_get_static_long_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float java_interop_jnienv_get_static_float_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double java_interop_jnienv_get_static_double_field (IntPtr jnienv, jobject type, IntPtr field);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_object_field (IntPtr jnienv, jobject type, IntPtr field, jobject value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_boolean_field (IntPtr jnienv, jobject type, IntPtr field, byte value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_byte_field (IntPtr jnienv, jobject type, IntPtr field, sbyte value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_char_field (IntPtr jnienv, jobject type, IntPtr field, char value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_short_field (IntPtr jnienv, jobject type, IntPtr field, short value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_int_field (IntPtr jnienv, jobject type, IntPtr field, int value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_long_field (IntPtr jnienv, jobject type, IntPtr field, long value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_float_field (IntPtr jnienv, jobject type, IntPtr field, float value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_static_double_field (IntPtr jnienv, jobject type, IntPtr field, double value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_string (IntPtr jnienv, out IntPtr thrown, char* unicodeChars, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_get_string_length (IntPtr jnienv, jobject stringInstance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char* java_interop_jnienv_get_string_chars (IntPtr jnienv, jobject stringInstance, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_string_chars (IntPtr jnienv, jobject stringInstance, char* chars);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_get_array_length (IntPtr jnienv, jobject array);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_object_array (IntPtr jnienv, out IntPtr thrown, int length, jobject elementClass, jobject initialElement);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_get_object_array_element (IntPtr jnienv, out IntPtr thrown, jobject array, int index);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_object_array_element (IntPtr jnienv, out IntPtr thrown, jobject array, int index, jobject value);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_boolean_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_byte_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_char_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_short_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_int_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_long_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_float_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_double_array (IntPtr jnienv, int length);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe bool* java_interop_jnienv_get_boolean_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe sbyte* java_interop_jnienv_get_byte_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe char* java_interop_jnienv_get_char_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe short* java_interop_jnienv_get_short_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int* java_interop_jnienv_get_int_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long* java_interop_jnienv_get_long_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe float* java_interop_jnienv_get_float_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe double* java_interop_jnienv_get_double_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_boolean_array_elements (IntPtr jnienv, jobject array, bool* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_byte_array_elements (IntPtr jnienv, jobject array, sbyte* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_char_array_elements (IntPtr jnienv, jobject array, char* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_short_array_elements (IntPtr jnienv, jobject array, short* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_int_array_elements (IntPtr jnienv, jobject array, int* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_long_array_elements (IntPtr jnienv, jobject array, long* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_float_array_elements (IntPtr jnienv, jobject array, float* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_double_array_elements (IntPtr jnienv, jobject array, double* elements, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_boolean_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, bool* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_byte_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, sbyte* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_char_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, char* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_short_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, short* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_int_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, int* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_long_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, long* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_float_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, float* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_get_double_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, double* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_boolean_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, bool* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_byte_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, sbyte* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_char_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, char* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_short_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, short* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_int_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, int* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_long_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, long* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_float_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, float* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_set_double_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, double* buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_register_natives (IntPtr jnienv, out IntPtr thrown, jobject type, JniNativeMethodRegistration [] methods, int numMethods);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_unregister_natives (IntPtr jnienv, jobject type);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_monitor_enter (IntPtr jnienv, jobject instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_monitor_exit (IntPtr jnienv, jobject instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe int java_interop_jnienv_get_java_vm (IntPtr jnienv, out IntPtr vm);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe IntPtr java_interop_jnienv_get_primitive_array_critical (IntPtr jnienv, jobject array, bool* isCopy);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_release_primitive_array_critical (IntPtr jnienv, jobject array, IntPtr carray, int mode);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_weak_global_ref (IntPtr jnienv, jobject instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe void java_interop_jnienv_delete_weak_global_ref (IntPtr jnienv, IntPtr instance);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe byte java_interop_jnienv_exception_check (IntPtr jnienv);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe jobject java_interop_jnienv_new_direct_byte_buffer (IntPtr jnienv, out IntPtr thrown, IntPtr address, long capacity);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe IntPtr java_interop_jnienv_get_direct_buffer_address (IntPtr jnienv, jobject buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe long java_interop_jnienv_get_direct_buffer_capacity (IntPtr jnienv, jobject buffer);
-
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-		internal static extern unsafe JniObjectReferenceType java_interop_jnienv_get_object_ref_type (IntPtr jnienv, jobject instance);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_get_version (IntPtr jnienv);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_define_class (IntPtr jnienv, out IntPtr thrown, string name, jobject loader, IntPtr buffer, int bufferLength);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_find_class (IntPtr jnienv, out IntPtr thrown, string classname);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_to_reflected_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, byte isStatic);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_get_superclass (IntPtr jnienv, jobject type);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_is_assignable_from (IntPtr jnienv, jobject class1, jobject class2);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_to_reflected_field (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr field, byte isStatic);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_throw (IntPtr jnienv, jobject toThrow);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_throw_new (IntPtr jnienv, jobject type, string message);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_exception_occurred (IntPtr jnienv);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_exception_describe (IntPtr jnienv);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_exception_clear (IntPtr jnienv);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_fatal_error (IntPtr jnienv, string message);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_push_local_frame (IntPtr jnienv, int capacity);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_pop_local_frame (IntPtr jnienv, jobject result);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_global_ref (IntPtr jnienv, jobject instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_delete_global_ref (IntPtr jnienv, IntPtr instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_delete_local_ref (IntPtr jnienv, IntPtr instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_is_same_object (IntPtr jnienv, jobject object1, jobject object2);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_local_ref (IntPtr jnienv, jobject instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_ensure_local_capacity (IntPtr jnienv, int capacity);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_alloc_object (IntPtr jnienv, out IntPtr thrown, jobject type);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_object (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_object_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_get_object_class (IntPtr jnienv, jobject instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_is_instance_of (IntPtr jnienv, jobject instance, jobject type);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial IntPtr java_interop_jnienv_get_method_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_call_object_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_call_object_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_call_boolean_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_call_boolean_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_call_byte_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_call_byte_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_call_char_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_call_char_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_call_short_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_call_short_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_call_int_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_call_int_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_call_long_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_call_long_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_call_float_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_call_float_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_call_double_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_call_double_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_call_void_method (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_call_void_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_call_nonvirtual_object_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_call_nonvirtual_object_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_call_nonvirtual_boolean_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_call_nonvirtual_boolean_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_call_nonvirtual_byte_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_call_nonvirtual_byte_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_call_nonvirtual_char_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_call_nonvirtual_char_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_call_nonvirtual_short_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_call_nonvirtual_short_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_call_nonvirtual_int_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_call_nonvirtual_int_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_call_nonvirtual_long_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_call_nonvirtual_long_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_call_nonvirtual_float_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_call_nonvirtual_float_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_call_nonvirtual_double_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_call_nonvirtual_double_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_call_nonvirtual_void_method (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_call_nonvirtual_void_method_a (IntPtr jnienv, out IntPtr thrown, jobject instance, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial IntPtr java_interop_jnienv_get_field_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_get_object_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_get_boolean_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_get_byte_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_get_char_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_get_short_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_get_int_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_get_long_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_get_float_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_get_double_field (IntPtr jnienv, jobject instance, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_object_field (IntPtr jnienv, jobject instance, IntPtr field, jobject value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_boolean_field (IntPtr jnienv, jobject instance, IntPtr field, byte value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_byte_field (IntPtr jnienv, jobject instance, IntPtr field, sbyte value);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_char_field (IntPtr jnienv, jobject instance, IntPtr field, char value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_short_field (IntPtr jnienv, jobject instance, IntPtr field, short value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_int_field (IntPtr jnienv, jobject instance, IntPtr field, int value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_long_field (IntPtr jnienv, jobject instance, IntPtr field, long value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_float_field (IntPtr jnienv, jobject instance, IntPtr field, float value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_double_field (IntPtr jnienv, jobject instance, IntPtr field, double value);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial IntPtr java_interop_jnienv_get_static_method_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_call_static_object_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_call_static_object_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_call_static_boolean_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_call_static_boolean_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_call_static_byte_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_call_static_byte_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_call_static_char_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_call_static_char_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_call_static_short_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_call_static_short_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_call_static_int_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_call_static_int_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_call_static_long_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_call_static_long_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_call_static_float_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_call_static_float_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_call_static_double_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_call_static_double_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_call_static_void_method (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_call_static_void_method_a (IntPtr jnienv, out IntPtr thrown, jobject type, IntPtr method, IntPtr args);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial IntPtr java_interop_jnienv_get_static_field_id (IntPtr jnienv, out IntPtr thrown, jobject type, string name, string signature);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_get_static_object_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_get_static_boolean_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte java_interop_jnienv_get_static_byte_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char java_interop_jnienv_get_static_char_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short java_interop_jnienv_get_static_short_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_get_static_int_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_get_static_long_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float java_interop_jnienv_get_static_float_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double java_interop_jnienv_get_static_double_field (IntPtr jnienv, jobject type, IntPtr field);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_object_field (IntPtr jnienv, jobject type, IntPtr field, jobject value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_boolean_field (IntPtr jnienv, jobject type, IntPtr field, byte value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_byte_field (IntPtr jnienv, jobject type, IntPtr field, sbyte value);
+
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_char_field (IntPtr jnienv, jobject type, IntPtr field, char value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_short_field (IntPtr jnienv, jobject type, IntPtr field, short value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_int_field (IntPtr jnienv, jobject type, IntPtr field, int value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_long_field (IntPtr jnienv, jobject type, IntPtr field, long value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_float_field (IntPtr jnienv, jobject type, IntPtr field, float value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_static_double_field (IntPtr jnienv, jobject type, IntPtr field, double value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_string (IntPtr jnienv, out IntPtr thrown, char* unicodeChars, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_get_string_length (IntPtr jnienv, jobject stringInstance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char* java_interop_jnienv_get_string_chars (IntPtr jnienv, jobject stringInstance, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_string_chars (IntPtr jnienv, jobject stringInstance, char* chars);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_get_array_length (IntPtr jnienv, jobject array);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_object_array (IntPtr jnienv, out IntPtr thrown, int length, jobject elementClass, jobject initialElement);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_get_object_array_element (IntPtr jnienv, out IntPtr thrown, jobject array, int index);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_object_array_element (IntPtr jnienv, out IntPtr thrown, jobject array, int index, jobject value);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_boolean_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_byte_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_char_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_short_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_int_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_long_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_float_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_double_array (IntPtr jnienv, int length);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial bool* java_interop_jnienv_get_boolean_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial sbyte* java_interop_jnienv_get_byte_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial char* java_interop_jnienv_get_char_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial short* java_interop_jnienv_get_short_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int* java_interop_jnienv_get_int_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long* java_interop_jnienv_get_long_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial float* java_interop_jnienv_get_float_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial double* java_interop_jnienv_get_double_array_elements (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_boolean_array_elements (IntPtr jnienv, jobject array, bool* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_byte_array_elements (IntPtr jnienv, jobject array, sbyte* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_char_array_elements (IntPtr jnienv, jobject array, char* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_short_array_elements (IntPtr jnienv, jobject array, short* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_int_array_elements (IntPtr jnienv, jobject array, int* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_long_array_elements (IntPtr jnienv, jobject array, long* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_float_array_elements (IntPtr jnienv, jobject array, float* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_double_array_elements (IntPtr jnienv, jobject array, double* elements, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_boolean_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, bool* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_byte_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, sbyte* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_char_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, char* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_short_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, short* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_int_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, int* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_long_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, long* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_float_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, float* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_get_double_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, double* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_boolean_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, bool* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_byte_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, sbyte* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_char_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, char* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_short_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, short* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_int_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, int* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_long_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, long* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_float_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, float* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_set_double_array_region (IntPtr jnienv, out IntPtr thrown, jobject array, int start, int length, double* buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_register_natives (IntPtr jnienv, out IntPtr thrown, jobject type, JniNativeMethodRegistration [] methods, int numMethods);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_unregister_natives (IntPtr jnienv, jobject type);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_monitor_enter (IntPtr jnienv, jobject instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_monitor_exit (IntPtr jnienv, jobject instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial int java_interop_jnienv_get_java_vm (IntPtr jnienv, out IntPtr vm);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial IntPtr java_interop_jnienv_get_primitive_array_critical (IntPtr jnienv, jobject array, bool* isCopy);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_release_primitive_array_critical (IntPtr jnienv, jobject array, IntPtr carray, int mode);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_weak_global_ref (IntPtr jnienv, jobject instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial void java_interop_jnienv_delete_weak_global_ref (IntPtr jnienv, IntPtr instance);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial byte java_interop_jnienv_exception_check (IntPtr jnienv);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial jobject java_interop_jnienv_new_direct_byte_buffer (IntPtr jnienv, out IntPtr thrown, IntPtr address, long capacity);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial IntPtr java_interop_jnienv_get_direct_buffer_address (IntPtr jnienv, jobject buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial long java_interop_jnienv_get_direct_buffer_capacity (IntPtr jnienv, jobject buffer);
+
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static unsafe partial JniObjectReferenceType java_interop_jnienv_get_object_ref_type (IntPtr jnienv, jobject instance);
 	}
 
 	partial class JniEnvironment {
@@ -6382,10 +6458,9 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var tmp = NativeMethods.java_interop_jnienv_throw_new (JniEnvironment.EnvironmentPointer, type.Handle, message);
+				var tmp = NativeMethods.java_interop_jnienv_throw_new (JniEnvironment.EnvironmentPointer, type.Handle, message);
 			return tmp;
 		}
 
@@ -6407,10 +6482,9 @@ namespace
 
 		public static unsafe void FatalError (string message)
 		{
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			NativeMethods.java_interop_jnienv_fatal_error (JniEnvironment.EnvironmentPointer, message);
+				NativeMethods.java_interop_jnienv_fatal_error (JniEnvironment.EnvironmentPointer, message);
 		}
 
 		public static unsafe bool ExceptionCheck ()
@@ -6426,12 +6500,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			IntPtr thrown;
+				IntPtr thrown;
 			var tmp = NativeMethods.java_interop_jnienv_get_field_id (JniEnvironment.EnvironmentPointer, out thrown, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable (thrown);
@@ -6447,9 +6519,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6462,9 +6533,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6476,9 +6546,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6490,9 +6559,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6504,9 +6572,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6518,9 +6585,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6532,9 +6598,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6546,9 +6611,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6560,9 +6624,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6574,9 +6637,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6587,9 +6649,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6600,9 +6661,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6613,9 +6673,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6626,9 +6685,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6639,9 +6697,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6652,9 +6709,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6665,9 +6721,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6678,9 +6733,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -6694,12 +6748,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			IntPtr thrown;
+				IntPtr thrown;
 			var tmp = NativeMethods.java_interop_jnienv_get_method_id (JniEnvironment.EnvironmentPointer, out thrown, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable (thrown);
@@ -6715,9 +6767,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6736,9 +6787,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6757,9 +6807,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6777,9 +6826,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6797,9 +6845,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6817,9 +6864,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6837,9 +6883,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6857,9 +6902,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6877,9 +6921,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6897,9 +6940,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6917,9 +6959,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6937,9 +6978,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6957,9 +6997,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6977,9 +7016,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -6997,9 +7035,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7017,9 +7054,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7037,9 +7073,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7057,9 +7092,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7077,9 +7111,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7096,9 +7129,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7117,9 +7149,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7140,9 +7171,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7163,9 +7193,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7185,9 +7214,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7207,9 +7235,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7229,9 +7256,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7251,9 +7277,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7273,9 +7298,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7295,9 +7319,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7317,9 +7340,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7339,9 +7361,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7361,9 +7382,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7383,9 +7403,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7405,9 +7424,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7427,9 +7445,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7449,9 +7466,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7471,9 +7487,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7493,9 +7508,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7515,9 +7529,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7536,9 +7549,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7632,9 +7644,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7653,9 +7664,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7747,9 +7757,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -7768,9 +7777,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -7792,12 +7800,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			IntPtr thrown;
+				IntPtr thrown;
 			var tmp = NativeMethods.java_interop_jnienv_get_static_field_id (JniEnvironment.EnvironmentPointer, out thrown, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable (thrown);
@@ -7813,9 +7819,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7828,9 +7833,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7842,9 +7846,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7856,9 +7859,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7870,9 +7872,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7884,9 +7885,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7898,9 +7898,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7912,9 +7911,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7926,9 +7924,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7940,9 +7937,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7953,9 +7949,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7966,9 +7961,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7979,9 +7973,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -7992,9 +7985,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -8005,9 +7997,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -8018,9 +8009,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -8031,9 +8021,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -8044,9 +8033,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -8060,12 +8048,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			IntPtr thrown;
+				IntPtr thrown;
 			var tmp = NativeMethods.java_interop_jnienv_get_static_method_id (JniEnvironment.EnvironmentPointer, out thrown, type.Handle, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable (thrown);
@@ -8081,9 +8067,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8102,9 +8087,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8123,9 +8107,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8143,9 +8126,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8163,9 +8145,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8183,9 +8164,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8203,9 +8183,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8223,9 +8202,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8243,9 +8221,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8263,9 +8240,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8283,9 +8259,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8303,9 +8278,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8323,9 +8297,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8343,9 +8316,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8363,9 +8335,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8383,9 +8354,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8403,9 +8373,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8423,9 +8392,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8443,9 +8411,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8462,9 +8429,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -8524,9 +8490,8 @@ namespace
 
 		public static unsafe JniObjectReference DefineClass (string name, JniObjectReference loader, IntPtr buffer, int bufferLength)
 		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (!loader.IsValid)
+				ArgumentNullException.ThrowIfNull (name);
+				if (!loader.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "loader");
 			if (buffer == IntPtr.Zero)
 				throw new ArgumentException ("'buffer' must not be IntPtr.Zero.", "buffer");
@@ -8544,10 +8509,9 @@ namespace
 
 		internal static unsafe JniObjectReference _FindClass (string classname)
 		{
-			if (classname == null)
-				throw new ArgumentNullException ("classname");
+				ArgumentNullException.ThrowIfNull (classname);
 
-			IntPtr thrown;
+				IntPtr thrown;
 			var tmp = NativeMethods.java_interop_jnienv_find_class (JniEnvironment.EnvironmentPointer, out thrown, classname);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable (thrown);
@@ -9296,10 +9260,9 @@ namespace
 		{
 			if (type == IntPtr.Zero)
 				throw new ArgumentException ("`type` must not be IntPtr.Zero.", "type");
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.ThrowNew (__info.EnvironmentPointer, type, message);
 			return tmp;
 		}
@@ -9325,10 +9288,9 @@ namespace
 
 		public static unsafe void FatalError (string message)
 		{
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			__info.Invoker.FatalError (__info.EnvironmentPointer, message);
 		}
 
@@ -9346,12 +9308,10 @@ namespace
 		{
 			if (type == IntPtr.Zero)
 				throw new ArgumentException ("`type` must not be IntPtr.Zero.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetFieldID (__info.EnvironmentPointer, type, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -9576,12 +9536,10 @@ namespace
 		{
 			if (type == IntPtr.Zero)
 				throw new ArgumentException ("`type` must not be IntPtr.Zero.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetMethodID (__info.EnvironmentPointer, type, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -10555,12 +10513,10 @@ namespace
 		{
 			if (type == IntPtr.Zero)
 				throw new ArgumentException ("`type` must not be IntPtr.Zero.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetStaticFieldID (__info.EnvironmentPointer, type, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -10785,12 +10741,10 @@ namespace
 		{
 			if (type == IntPtr.Zero)
 				throw new ArgumentException ("`type` must not be IntPtr.Zero.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.GetStaticMethodID (__info.EnvironmentPointer, type, name, signature);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -11190,9 +11144,8 @@ namespace
 
 		public static unsafe IntPtr DefineClass (string name, IntPtr loader, IntPtr buffer, int bufferLength)
 		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (loader == IntPtr.Zero)
+				ArgumentNullException.ThrowIfNull (name);
+				if (loader == IntPtr.Zero)
 				throw new ArgumentException ("`loader` must not be IntPtr.Zero.", "loader");
 			if (buffer == IntPtr.Zero)
 				throw new ArgumentException ("'buffer' must not be IntPtr.Zero.", "buffer");
@@ -11210,10 +11163,9 @@ namespace
 
 		internal static unsafe IntPtr _FindClass (string classname)
 		{
-			if (classname == null)
-				throw new ArgumentNullException ("classname");
+				ArgumentNullException.ThrowIfNull (classname);
 
-			var __info = JniEnvironment.CurrentInfo;
+				var __info = JniEnvironment.CurrentInfo;
 			var tmp = __info.Invoker.FindClass (__info.EnvironmentPointer, classname);
 
 			Exception? __e = JniEnvironment.GetExceptionForLastThrowable ();
@@ -11328,7 +11280,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int GetVersion {
 			get {
 				if (_GetVersion == null)
-					_GetVersion = (JniFunc_JNIEnvPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetVersion, typeof (JniFunc_JNIEnvPtr_int));
+					_GetVersion = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int> (env.GetVersion);
 				return _GetVersion;
 			}
 		}
@@ -11337,7 +11289,7 @@ namespace
 		public JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject DefineClass {
 			get {
 				if (_DefineClass == null)
-					_DefineClass = (JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.DefineClass, typeof (JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject));
+					_DefineClass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_string_jobject_IntPtr_int_jobject> (env.DefineClass);
 				return _DefineClass;
 			}
 		}
@@ -11346,7 +11298,7 @@ namespace
 		public JniFunc_JNIEnvPtr_string_jobject FindClass {
 			get {
 				if (_FindClass == null)
-					_FindClass = (JniFunc_JNIEnvPtr_string_jobject) Marshal.GetDelegateForFunctionPointer (env.FindClass, typeof (JniFunc_JNIEnvPtr_string_jobject));
+					_FindClass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_string_jobject> (env.FindClass);
 				return _FindClass;
 			}
 		}
@@ -11355,7 +11307,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr FromReflectedMethod {
 			get {
 				if (_FromReflectedMethod == null)
-					_FromReflectedMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.FromReflectedMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr));
+					_FromReflectedMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr> (env.FromReflectedMethod);
 				return _FromReflectedMethod;
 			}
 		}
@@ -11364,7 +11316,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr FromReflectedField {
 			get {
 				if (_FromReflectedField == null)
-					_FromReflectedField = (JniFunc_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.FromReflectedField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr));
+					_FromReflectedField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr> (env.FromReflectedField);
 				return _FromReflectedField;
 			}
 		}
@@ -11373,7 +11325,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject ToReflectedMethod {
 			get {
 				if (_ToReflectedMethod == null)
-					_ToReflectedMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject) Marshal.GetDelegateForFunctionPointer (env.ToReflectedMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject));
+					_ToReflectedMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject> (env.ToReflectedMethod);
 				return _ToReflectedMethod;
 			}
 		}
@@ -11382,7 +11334,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject GetSuperclass {
 			get {
 				if (_GetSuperclass == null)
-					_GetSuperclass = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.GetSuperclass, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_GetSuperclass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.GetSuperclass);
 				return _GetSuperclass;
 			}
 		}
@@ -11391,7 +11343,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_byte IsAssignableFrom {
 			get {
 				if (_IsAssignableFrom == null)
-					_IsAssignableFrom = (JniFunc_JNIEnvPtr_jobject_jobject_byte) Marshal.GetDelegateForFunctionPointer (env.IsAssignableFrom, typeof (JniFunc_JNIEnvPtr_jobject_jobject_byte));
+					_IsAssignableFrom = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_byte> (env.IsAssignableFrom);
 				return _IsAssignableFrom;
 			}
 		}
@@ -11400,7 +11352,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject ToReflectedField {
 			get {
 				if (_ToReflectedField == null)
-					_ToReflectedField = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject) Marshal.GetDelegateForFunctionPointer (env.ToReflectedField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject));
+					_ToReflectedField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte_jobject> (env.ToReflectedField);
 				return _ToReflectedField;
 			}
 		}
@@ -11409,7 +11361,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int Throw {
 			get {
 				if (_Throw == null)
-					_Throw = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.Throw, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_Throw = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.Throw);
 				return _Throw;
 			}
 		}
@@ -11418,7 +11370,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_int ThrowNew {
 			get {
 				if (_ThrowNew == null)
-					_ThrowNew = (JniFunc_JNIEnvPtr_jobject_string_int) Marshal.GetDelegateForFunctionPointer (env.ThrowNew, typeof (JniFunc_JNIEnvPtr_jobject_string_int));
+					_ThrowNew = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_int> (env.ThrowNew);
 				return _ThrowNew;
 			}
 		}
@@ -11427,7 +11379,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject ExceptionOccurred {
 			get {
 				if (_ExceptionOccurred == null)
-					_ExceptionOccurred = (JniFunc_JNIEnvPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.ExceptionOccurred, typeof (JniFunc_JNIEnvPtr_jobject));
+					_ExceptionOccurred = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject> (env.ExceptionOccurred);
 				return _ExceptionOccurred;
 			}
 		}
@@ -11436,7 +11388,7 @@ namespace
 		public JniAction_JNIEnvPtr ExceptionDescribe {
 			get {
 				if (_ExceptionDescribe == null)
-					_ExceptionDescribe = (JniAction_JNIEnvPtr) Marshal.GetDelegateForFunctionPointer (env.ExceptionDescribe, typeof (JniAction_JNIEnvPtr));
+					_ExceptionDescribe = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr> (env.ExceptionDescribe);
 				return _ExceptionDescribe;
 			}
 		}
@@ -11445,7 +11397,7 @@ namespace
 		public JniAction_JNIEnvPtr ExceptionClear {
 			get {
 				if (_ExceptionClear == null)
-					_ExceptionClear = (JniAction_JNIEnvPtr) Marshal.GetDelegateForFunctionPointer (env.ExceptionClear, typeof (JniAction_JNIEnvPtr));
+					_ExceptionClear = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr> (env.ExceptionClear);
 				return _ExceptionClear;
 			}
 		}
@@ -11454,7 +11406,7 @@ namespace
 		public JniAction_JNIEnvPtr_string FatalError {
 			get {
 				if (_FatalError == null)
-					_FatalError = (JniAction_JNIEnvPtr_string) Marshal.GetDelegateForFunctionPointer (env.FatalError, typeof (JniAction_JNIEnvPtr_string));
+					_FatalError = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_string> (env.FatalError);
 				return _FatalError;
 			}
 		}
@@ -11463,7 +11415,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_int PushLocalFrame {
 			get {
 				if (_PushLocalFrame == null)
-					_PushLocalFrame = (JniFunc_JNIEnvPtr_int_int) Marshal.GetDelegateForFunctionPointer (env.PushLocalFrame, typeof (JniFunc_JNIEnvPtr_int_int));
+					_PushLocalFrame = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_int> (env.PushLocalFrame);
 				return _PushLocalFrame;
 			}
 		}
@@ -11472,7 +11424,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject PopLocalFrame {
 			get {
 				if (_PopLocalFrame == null)
-					_PopLocalFrame = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.PopLocalFrame, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_PopLocalFrame = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.PopLocalFrame);
 				return _PopLocalFrame;
 			}
 		}
@@ -11481,7 +11433,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject NewGlobalRef {
 			get {
 				if (_NewGlobalRef == null)
-					_NewGlobalRef = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewGlobalRef, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_NewGlobalRef = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.NewGlobalRef);
 				return _NewGlobalRef;
 			}
 		}
@@ -11490,7 +11442,7 @@ namespace
 		public JniAction_JNIEnvPtr_IntPtr DeleteGlobalRef {
 			get {
 				if (_DeleteGlobalRef == null)
-					_DeleteGlobalRef = (JniAction_JNIEnvPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.DeleteGlobalRef, typeof (JniAction_JNIEnvPtr_IntPtr));
+					_DeleteGlobalRef = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_IntPtr> (env.DeleteGlobalRef);
 				return _DeleteGlobalRef;
 			}
 		}
@@ -11499,7 +11451,7 @@ namespace
 		public JniAction_JNIEnvPtr_IntPtr DeleteLocalRef {
 			get {
 				if (_DeleteLocalRef == null)
-					_DeleteLocalRef = (JniAction_JNIEnvPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.DeleteLocalRef, typeof (JniAction_JNIEnvPtr_IntPtr));
+					_DeleteLocalRef = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_IntPtr> (env.DeleteLocalRef);
 				return _DeleteLocalRef;
 			}
 		}
@@ -11508,7 +11460,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_byte IsSameObject {
 			get {
 				if (_IsSameObject == null)
-					_IsSameObject = (JniFunc_JNIEnvPtr_jobject_jobject_byte) Marshal.GetDelegateForFunctionPointer (env.IsSameObject, typeof (JniFunc_JNIEnvPtr_jobject_jobject_byte));
+					_IsSameObject = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_byte> (env.IsSameObject);
 				return _IsSameObject;
 			}
 		}
@@ -11517,7 +11469,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject NewLocalRef {
 			get {
 				if (_NewLocalRef == null)
-					_NewLocalRef = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewLocalRef, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_NewLocalRef = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.NewLocalRef);
 				return _NewLocalRef;
 			}
 		}
@@ -11526,7 +11478,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_int EnsureLocalCapacity {
 			get {
 				if (_EnsureLocalCapacity == null)
-					_EnsureLocalCapacity = (JniFunc_JNIEnvPtr_int_int) Marshal.GetDelegateForFunctionPointer (env.EnsureLocalCapacity, typeof (JniFunc_JNIEnvPtr_int_int));
+					_EnsureLocalCapacity = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_int> (env.EnsureLocalCapacity);
 				return _EnsureLocalCapacity;
 			}
 		}
@@ -11535,7 +11487,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject AllocObject {
 			get {
 				if (_AllocObject == null)
-					_AllocObject = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.AllocObject, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_AllocObject = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.AllocObject);
 				return _AllocObject;
 			}
 		}
@@ -11544,7 +11496,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject NewObject {
 			get {
 				if (_NewObject == null)
-					_NewObject = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.NewObject, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_NewObject = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.NewObject);
 				return _NewObject;
 			}
 		}
@@ -11553,7 +11505,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject NewObjectA {
 			get {
 				if (_NewObjectA == null)
-					_NewObjectA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.NewObjectA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_NewObjectA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.NewObjectA);
 				return _NewObjectA;
 			}
 		}
@@ -11562,7 +11514,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject GetObjectClass {
 			get {
 				if (_GetObjectClass == null)
-					_GetObjectClass = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.GetObjectClass, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_GetObjectClass = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.GetObjectClass);
 				return _GetObjectClass;
 			}
 		}
@@ -11571,7 +11523,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_byte IsInstanceOf {
 			get {
 				if (_IsInstanceOf == null)
-					_IsInstanceOf = (JniFunc_JNIEnvPtr_jobject_jobject_byte) Marshal.GetDelegateForFunctionPointer (env.IsInstanceOf, typeof (JniFunc_JNIEnvPtr_jobject_jobject_byte));
+					_IsInstanceOf = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_byte> (env.IsInstanceOf);
 				return _IsInstanceOf;
 			}
 		}
@@ -11580,7 +11532,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetMethodID {
 			get {
 				if (_GetMethodID == null)
-					_GetMethodID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetMethodID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetMethodID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetMethodID);
 				return _GetMethodID;
 			}
 		}
@@ -11589,7 +11541,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject CallObjectMethod {
 			get {
 				if (_CallObjectMethod == null)
-					_CallObjectMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallObjectMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_CallObjectMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.CallObjectMethod);
 				return _CallObjectMethod;
 			}
 		}
@@ -11598,7 +11550,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject CallObjectMethodA {
 			get {
 				if (_CallObjectMethodA == null)
-					_CallObjectMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallObjectMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_CallObjectMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.CallObjectMethodA);
 				return _CallObjectMethodA;
 			}
 		}
@@ -11607,7 +11559,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte CallBooleanMethod {
 			get {
 				if (_CallBooleanMethod == null)
-					_CallBooleanMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallBooleanMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_CallBooleanMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.CallBooleanMethod);
 				return _CallBooleanMethod;
 			}
 		}
@@ -11616,7 +11568,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte CallBooleanMethodA {
 			get {
 				if (_CallBooleanMethodA == null)
-					_CallBooleanMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallBooleanMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte));
+					_CallBooleanMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte> (env.CallBooleanMethodA);
 				return _CallBooleanMethodA;
 			}
 		}
@@ -11625,7 +11577,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte CallByteMethod {
 			get {
 				if (_CallByteMethod == null)
-					_CallByteMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallByteMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_CallByteMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.CallByteMethod);
 				return _CallByteMethod;
 			}
 		}
@@ -11634,7 +11586,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte CallByteMethodA {
 			get {
 				if (_CallByteMethodA == null)
-					_CallByteMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallByteMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte));
+					_CallByteMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte> (env.CallByteMethodA);
 				return _CallByteMethodA;
 			}
 		}
@@ -11643,7 +11595,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char CallCharMethod {
 			get {
 				if (_CallCharMethod == null)
-					_CallCharMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.CallCharMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_CallCharMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.CallCharMethod);
 				return _CallCharMethod;
 			}
 		}
@@ -11652,7 +11604,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char CallCharMethodA {
 			get {
 				if (_CallCharMethodA == null)
-					_CallCharMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char) Marshal.GetDelegateForFunctionPointer (env.CallCharMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char));
+					_CallCharMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char> (env.CallCharMethodA);
 				return _CallCharMethodA;
 			}
 		}
@@ -11661,7 +11613,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short CallShortMethod {
 			get {
 				if (_CallShortMethod == null)
-					_CallShortMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.CallShortMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_CallShortMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.CallShortMethod);
 				return _CallShortMethod;
 			}
 		}
@@ -11670,7 +11622,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short CallShortMethodA {
 			get {
 				if (_CallShortMethodA == null)
-					_CallShortMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short) Marshal.GetDelegateForFunctionPointer (env.CallShortMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short));
+					_CallShortMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short> (env.CallShortMethodA);
 				return _CallShortMethodA;
 			}
 		}
@@ -11679,7 +11631,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int CallIntMethod {
 			get {
 				if (_CallIntMethod == null)
-					_CallIntMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.CallIntMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_CallIntMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.CallIntMethod);
 				return _CallIntMethod;
 			}
 		}
@@ -11688,7 +11640,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int CallIntMethodA {
 			get {
 				if (_CallIntMethodA == null)
-					_CallIntMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int) Marshal.GetDelegateForFunctionPointer (env.CallIntMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int));
+					_CallIntMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int> (env.CallIntMethodA);
 				return _CallIntMethodA;
 			}
 		}
@@ -11697,7 +11649,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long CallLongMethod {
 			get {
 				if (_CallLongMethod == null)
-					_CallLongMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.CallLongMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_CallLongMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.CallLongMethod);
 				return _CallLongMethod;
 			}
 		}
@@ -11706,7 +11658,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long CallLongMethodA {
 			get {
 				if (_CallLongMethodA == null)
-					_CallLongMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long) Marshal.GetDelegateForFunctionPointer (env.CallLongMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long));
+					_CallLongMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long> (env.CallLongMethodA);
 				return _CallLongMethodA;
 			}
 		}
@@ -11715,7 +11667,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float CallFloatMethod {
 			get {
 				if (_CallFloatMethod == null)
-					_CallFloatMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.CallFloatMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_CallFloatMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.CallFloatMethod);
 				return _CallFloatMethod;
 			}
 		}
@@ -11724,7 +11676,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float CallFloatMethodA {
 			get {
 				if (_CallFloatMethodA == null)
-					_CallFloatMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float) Marshal.GetDelegateForFunctionPointer (env.CallFloatMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float));
+					_CallFloatMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float> (env.CallFloatMethodA);
 				return _CallFloatMethodA;
 			}
 		}
@@ -11733,7 +11685,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double CallDoubleMethod {
 			get {
 				if (_CallDoubleMethod == null)
-					_CallDoubleMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.CallDoubleMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_CallDoubleMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.CallDoubleMethod);
 				return _CallDoubleMethod;
 			}
 		}
@@ -11742,7 +11694,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double CallDoubleMethodA {
 			get {
 				if (_CallDoubleMethodA == null)
-					_CallDoubleMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double) Marshal.GetDelegateForFunctionPointer (env.CallDoubleMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double));
+					_CallDoubleMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double> (env.CallDoubleMethodA);
 				return _CallDoubleMethodA;
 			}
 		}
@@ -11751,7 +11703,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr CallVoidMethod {
 			get {
 				if (_CallVoidMethod == null)
-					_CallVoidMethod = (JniAction_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.CallVoidMethod, typeof (JniAction_JNIEnvPtr_jobject_IntPtr));
+					_CallVoidMethod = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr> (env.CallVoidMethod);
 				return _CallVoidMethod;
 			}
 		}
@@ -11760,7 +11712,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr CallVoidMethodA {
 			get {
 				if (_CallVoidMethodA == null)
-					_CallVoidMethodA = (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr) Marshal.GetDelegateForFunctionPointer (env.CallVoidMethodA, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr));
+					_CallVoidMethodA = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr> (env.CallVoidMethodA);
 				return _CallVoidMethodA;
 			}
 		}
@@ -11769,7 +11721,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject CallNonvirtualObjectMethod {
 			get {
 				if (_CallNonvirtualObjectMethod == null)
-					_CallNonvirtualObjectMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualObjectMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject));
+					_CallNonvirtualObjectMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_jobject> (env.CallNonvirtualObjectMethod);
 				return _CallNonvirtualObjectMethod;
 			}
 		}
@@ -11778,7 +11730,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject CallNonvirtualObjectMethodA {
 			get {
 				if (_CallNonvirtualObjectMethodA == null)
-					_CallNonvirtualObjectMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualObjectMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_CallNonvirtualObjectMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.CallNonvirtualObjectMethodA);
 				return _CallNonvirtualObjectMethodA;
 			}
 		}
@@ -11787,7 +11739,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte CallNonvirtualBooleanMethod {
 			get {
 				if (_CallNonvirtualBooleanMethod == null)
-					_CallNonvirtualBooleanMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualBooleanMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte));
+					_CallNonvirtualBooleanMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_byte> (env.CallNonvirtualBooleanMethod);
 				return _CallNonvirtualBooleanMethod;
 			}
 		}
@@ -11796,7 +11748,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte CallNonvirtualBooleanMethodA {
 			get {
 				if (_CallNonvirtualBooleanMethodA == null)
-					_CallNonvirtualBooleanMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualBooleanMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte));
+					_CallNonvirtualBooleanMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_byte> (env.CallNonvirtualBooleanMethodA);
 				return _CallNonvirtualBooleanMethodA;
 			}
 		}
@@ -11805,7 +11757,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte CallNonvirtualByteMethod {
 			get {
 				if (_CallNonvirtualByteMethod == null)
-					_CallNonvirtualByteMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualByteMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte));
+					_CallNonvirtualByteMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_sbyte> (env.CallNonvirtualByteMethod);
 				return _CallNonvirtualByteMethod;
 			}
 		}
@@ -11814,7 +11766,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte CallNonvirtualByteMethodA {
 			get {
 				if (_CallNonvirtualByteMethodA == null)
-					_CallNonvirtualByteMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualByteMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte));
+					_CallNonvirtualByteMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_sbyte> (env.CallNonvirtualByteMethodA);
 				return _CallNonvirtualByteMethodA;
 			}
 		}
@@ -11823,7 +11775,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char CallNonvirtualCharMethod {
 			get {
 				if (_CallNonvirtualCharMethod == null)
-					_CallNonvirtualCharMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualCharMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char));
+					_CallNonvirtualCharMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_char> (env.CallNonvirtualCharMethod);
 				return _CallNonvirtualCharMethod;
 			}
 		}
@@ -11832,7 +11784,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char CallNonvirtualCharMethodA {
 			get {
 				if (_CallNonvirtualCharMethodA == null)
-					_CallNonvirtualCharMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualCharMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char));
+					_CallNonvirtualCharMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_char> (env.CallNonvirtualCharMethodA);
 				return _CallNonvirtualCharMethodA;
 			}
 		}
@@ -11841,7 +11793,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short CallNonvirtualShortMethod {
 			get {
 				if (_CallNonvirtualShortMethod == null)
-					_CallNonvirtualShortMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualShortMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short));
+					_CallNonvirtualShortMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_short> (env.CallNonvirtualShortMethod);
 				return _CallNonvirtualShortMethod;
 			}
 		}
@@ -11850,7 +11802,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short CallNonvirtualShortMethodA {
 			get {
 				if (_CallNonvirtualShortMethodA == null)
-					_CallNonvirtualShortMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualShortMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short));
+					_CallNonvirtualShortMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_short> (env.CallNonvirtualShortMethodA);
 				return _CallNonvirtualShortMethodA;
 			}
 		}
@@ -11859,7 +11811,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int CallNonvirtualIntMethod {
 			get {
 				if (_CallNonvirtualIntMethod == null)
-					_CallNonvirtualIntMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualIntMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int));
+					_CallNonvirtualIntMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_int> (env.CallNonvirtualIntMethod);
 				return _CallNonvirtualIntMethod;
 			}
 		}
@@ -11868,7 +11820,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int CallNonvirtualIntMethodA {
 			get {
 				if (_CallNonvirtualIntMethodA == null)
-					_CallNonvirtualIntMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualIntMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int));
+					_CallNonvirtualIntMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_int> (env.CallNonvirtualIntMethodA);
 				return _CallNonvirtualIntMethodA;
 			}
 		}
@@ -11877,7 +11829,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long CallNonvirtualLongMethod {
 			get {
 				if (_CallNonvirtualLongMethod == null)
-					_CallNonvirtualLongMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualLongMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long));
+					_CallNonvirtualLongMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_long> (env.CallNonvirtualLongMethod);
 				return _CallNonvirtualLongMethod;
 			}
 		}
@@ -11886,7 +11838,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long CallNonvirtualLongMethodA {
 			get {
 				if (_CallNonvirtualLongMethodA == null)
-					_CallNonvirtualLongMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualLongMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long));
+					_CallNonvirtualLongMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_long> (env.CallNonvirtualLongMethodA);
 				return _CallNonvirtualLongMethodA;
 			}
 		}
@@ -11895,7 +11847,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float CallNonvirtualFloatMethod {
 			get {
 				if (_CallNonvirtualFloatMethod == null)
-					_CallNonvirtualFloatMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualFloatMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float));
+					_CallNonvirtualFloatMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_float> (env.CallNonvirtualFloatMethod);
 				return _CallNonvirtualFloatMethod;
 			}
 		}
@@ -11904,7 +11856,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float CallNonvirtualFloatMethodA {
 			get {
 				if (_CallNonvirtualFloatMethodA == null)
-					_CallNonvirtualFloatMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualFloatMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float));
+					_CallNonvirtualFloatMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_float> (env.CallNonvirtualFloatMethodA);
 				return _CallNonvirtualFloatMethodA;
 			}
 		}
@@ -11913,7 +11865,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double CallNonvirtualDoubleMethod {
 			get {
 				if (_CallNonvirtualDoubleMethod == null)
-					_CallNonvirtualDoubleMethod = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualDoubleMethod, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double));
+					_CallNonvirtualDoubleMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_double> (env.CallNonvirtualDoubleMethod);
 				return _CallNonvirtualDoubleMethod;
 			}
 		}
@@ -11922,7 +11874,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double CallNonvirtualDoubleMethodA {
 			get {
 				if (_CallNonvirtualDoubleMethodA == null)
-					_CallNonvirtualDoubleMethodA = (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualDoubleMethodA, typeof (JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double));
+					_CallNonvirtualDoubleMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr_double> (env.CallNonvirtualDoubleMethodA);
 				return _CallNonvirtualDoubleMethodA;
 			}
 		}
@@ -11931,7 +11883,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_jobject_IntPtr CallNonvirtualVoidMethod {
 			get {
 				if (_CallNonvirtualVoidMethod == null)
-					_CallNonvirtualVoidMethod = (JniAction_JNIEnvPtr_jobject_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualVoidMethod, typeof (JniAction_JNIEnvPtr_jobject_jobject_IntPtr));
+					_CallNonvirtualVoidMethod = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_jobject_IntPtr> (env.CallNonvirtualVoidMethod);
 				return _CallNonvirtualVoidMethod;
 			}
 		}
@@ -11940,7 +11892,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr CallNonvirtualVoidMethodA {
 			get {
 				if (_CallNonvirtualVoidMethodA == null)
-					_CallNonvirtualVoidMethodA = (JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr) Marshal.GetDelegateForFunctionPointer (env.CallNonvirtualVoidMethodA, typeof (JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr));
+					_CallNonvirtualVoidMethodA = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_jobject_IntPtr_JniArgumentValuePtr> (env.CallNonvirtualVoidMethodA);
 				return _CallNonvirtualVoidMethodA;
 			}
 		}
@@ -11949,7 +11901,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetFieldID {
 			get {
 				if (_GetFieldID == null)
-					_GetFieldID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetFieldID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetFieldID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetFieldID);
 				return _GetFieldID;
 			}
 		}
@@ -11958,7 +11910,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject GetObjectField {
 			get {
 				if (_GetObjectField == null)
-					_GetObjectField = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.GetObjectField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_GetObjectField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.GetObjectField);
 				return _GetObjectField;
 			}
 		}
@@ -11967,7 +11919,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte GetBooleanField {
 			get {
 				if (_GetBooleanField == null)
-					_GetBooleanField = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.GetBooleanField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_GetBooleanField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.GetBooleanField);
 				return _GetBooleanField;
 			}
 		}
@@ -11976,7 +11928,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte GetByteField {
 			get {
 				if (_GetByteField == null)
-					_GetByteField = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.GetByteField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_GetByteField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.GetByteField);
 				return _GetByteField;
 			}
 		}
@@ -11985,7 +11937,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char GetCharField {
 			get {
 				if (_GetCharField == null)
-					_GetCharField = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.GetCharField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_GetCharField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.GetCharField);
 				return _GetCharField;
 			}
 		}
@@ -11994,7 +11946,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short GetShortField {
 			get {
 				if (_GetShortField == null)
-					_GetShortField = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.GetShortField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_GetShortField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.GetShortField);
 				return _GetShortField;
 			}
 		}
@@ -12003,7 +11955,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int GetIntField {
 			get {
 				if (_GetIntField == null)
-					_GetIntField = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetIntField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_GetIntField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.GetIntField);
 				return _GetIntField;
 			}
 		}
@@ -12012,7 +11964,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long GetLongField {
 			get {
 				if (_GetLongField == null)
-					_GetLongField = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.GetLongField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_GetLongField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.GetLongField);
 				return _GetLongField;
 			}
 		}
@@ -12021,7 +11973,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float GetFloatField {
 			get {
 				if (_GetFloatField == null)
-					_GetFloatField = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.GetFloatField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_GetFloatField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.GetFloatField);
 				return _GetFloatField;
 			}
 		}
@@ -12030,7 +11982,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double GetDoubleField {
 			get {
 				if (_GetDoubleField == null)
-					_GetDoubleField = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.GetDoubleField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_GetDoubleField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.GetDoubleField);
 				return _GetDoubleField;
 			}
 		}
@@ -12039,7 +11991,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_jobject SetObjectField {
 			get {
 				if (_SetObjectField == null)
-					_SetObjectField = (JniAction_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.SetObjectField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_jobject));
+					_SetObjectField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_jobject> (env.SetObjectField);
 				return _SetObjectField;
 			}
 		}
@@ -12048,7 +12000,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_byte SetBooleanField {
 			get {
 				if (_SetBooleanField == null)
-					_SetBooleanField = (JniAction_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.SetBooleanField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_byte));
+					_SetBooleanField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_byte> (env.SetBooleanField);
 				return _SetBooleanField;
 			}
 		}
@@ -12057,7 +12009,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_sbyte SetByteField {
 			get {
 				if (_SetByteField == null)
-					_SetByteField = (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.SetByteField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_SetByteField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_sbyte> (env.SetByteField);
 				return _SetByteField;
 			}
 		}
@@ -12066,7 +12018,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_char SetCharField {
 			get {
 				if (_SetCharField == null)
-					_SetCharField = (JniAction_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.SetCharField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_char));
+					_SetCharField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_char> (env.SetCharField);
 				return _SetCharField;
 			}
 		}
@@ -12075,7 +12027,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_short SetShortField {
 			get {
 				if (_SetShortField == null)
-					_SetShortField = (JniAction_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.SetShortField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_short));
+					_SetShortField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_short> (env.SetShortField);
 				return _SetShortField;
 			}
 		}
@@ -12084,7 +12036,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_int SetIntField {
 			get {
 				if (_SetIntField == null)
-					_SetIntField = (JniAction_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.SetIntField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_int));
+					_SetIntField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_int> (env.SetIntField);
 				return _SetIntField;
 			}
 		}
@@ -12093,7 +12045,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_long SetLongField {
 			get {
 				if (_SetLongField == null)
-					_SetLongField = (JniAction_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.SetLongField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_long));
+					_SetLongField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_long> (env.SetLongField);
 				return _SetLongField;
 			}
 		}
@@ -12102,7 +12054,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_float SetFloatField {
 			get {
 				if (_SetFloatField == null)
-					_SetFloatField = (JniAction_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.SetFloatField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_float));
+					_SetFloatField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_float> (env.SetFloatField);
 				return _SetFloatField;
 			}
 		}
@@ -12111,7 +12063,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_double SetDoubleField {
 			get {
 				if (_SetDoubleField == null)
-					_SetDoubleField = (JniAction_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.SetDoubleField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_double));
+					_SetDoubleField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_double> (env.SetDoubleField);
 				return _SetDoubleField;
 			}
 		}
@@ -12120,7 +12072,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetStaticMethodID {
 			get {
 				if (_GetStaticMethodID == null)
-					_GetStaticMethodID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetStaticMethodID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetStaticMethodID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetStaticMethodID);
 				return _GetStaticMethodID;
 			}
 		}
@@ -12129,7 +12081,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject CallStaticObjectMethod {
 			get {
 				if (_CallStaticObjectMethod == null)
-					_CallStaticObjectMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallStaticObjectMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_CallStaticObjectMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.CallStaticObjectMethod);
 				return _CallStaticObjectMethod;
 			}
 		}
@@ -12138,7 +12090,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject CallStaticObjectMethodA {
 			get {
 				if (_CallStaticObjectMethodA == null)
-					_CallStaticObjectMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject) Marshal.GetDelegateForFunctionPointer (env.CallStaticObjectMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject));
+					_CallStaticObjectMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_jobject> (env.CallStaticObjectMethodA);
 				return _CallStaticObjectMethodA;
 			}
 		}
@@ -12147,7 +12099,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte CallStaticBooleanMethod {
 			get {
 				if (_CallStaticBooleanMethod == null)
-					_CallStaticBooleanMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallStaticBooleanMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_CallStaticBooleanMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.CallStaticBooleanMethod);
 				return _CallStaticBooleanMethod;
 			}
 		}
@@ -12156,7 +12108,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte CallStaticBooleanMethodA {
 			get {
 				if (_CallStaticBooleanMethodA == null)
-					_CallStaticBooleanMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte) Marshal.GetDelegateForFunctionPointer (env.CallStaticBooleanMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte));
+					_CallStaticBooleanMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_byte> (env.CallStaticBooleanMethodA);
 				return _CallStaticBooleanMethodA;
 			}
 		}
@@ -12165,7 +12117,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte CallStaticByteMethod {
 			get {
 				if (_CallStaticByteMethod == null)
-					_CallStaticByteMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallStaticByteMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_CallStaticByteMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.CallStaticByteMethod);
 				return _CallStaticByteMethod;
 			}
 		}
@@ -12174,7 +12126,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte CallStaticByteMethodA {
 			get {
 				if (_CallStaticByteMethodA == null)
-					_CallStaticByteMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.CallStaticByteMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte));
+					_CallStaticByteMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_sbyte> (env.CallStaticByteMethodA);
 				return _CallStaticByteMethodA;
 			}
 		}
@@ -12183,7 +12135,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char CallStaticCharMethod {
 			get {
 				if (_CallStaticCharMethod == null)
-					_CallStaticCharMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.CallStaticCharMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_CallStaticCharMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.CallStaticCharMethod);
 				return _CallStaticCharMethod;
 			}
 		}
@@ -12192,7 +12144,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char CallStaticCharMethodA {
 			get {
 				if (_CallStaticCharMethodA == null)
-					_CallStaticCharMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char) Marshal.GetDelegateForFunctionPointer (env.CallStaticCharMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char));
+					_CallStaticCharMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_char> (env.CallStaticCharMethodA);
 				return _CallStaticCharMethodA;
 			}
 		}
@@ -12201,7 +12153,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short CallStaticShortMethod {
 			get {
 				if (_CallStaticShortMethod == null)
-					_CallStaticShortMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.CallStaticShortMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_CallStaticShortMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.CallStaticShortMethod);
 				return _CallStaticShortMethod;
 			}
 		}
@@ -12210,7 +12162,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short CallStaticShortMethodA {
 			get {
 				if (_CallStaticShortMethodA == null)
-					_CallStaticShortMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short) Marshal.GetDelegateForFunctionPointer (env.CallStaticShortMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short));
+					_CallStaticShortMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_short> (env.CallStaticShortMethodA);
 				return _CallStaticShortMethodA;
 			}
 		}
@@ -12219,7 +12171,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int CallStaticIntMethod {
 			get {
 				if (_CallStaticIntMethod == null)
-					_CallStaticIntMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.CallStaticIntMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_CallStaticIntMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.CallStaticIntMethod);
 				return _CallStaticIntMethod;
 			}
 		}
@@ -12228,7 +12180,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int CallStaticIntMethodA {
 			get {
 				if (_CallStaticIntMethodA == null)
-					_CallStaticIntMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int) Marshal.GetDelegateForFunctionPointer (env.CallStaticIntMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int));
+					_CallStaticIntMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_int> (env.CallStaticIntMethodA);
 				return _CallStaticIntMethodA;
 			}
 		}
@@ -12237,7 +12189,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long CallStaticLongMethod {
 			get {
 				if (_CallStaticLongMethod == null)
-					_CallStaticLongMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.CallStaticLongMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_CallStaticLongMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.CallStaticLongMethod);
 				return _CallStaticLongMethod;
 			}
 		}
@@ -12246,7 +12198,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long CallStaticLongMethodA {
 			get {
 				if (_CallStaticLongMethodA == null)
-					_CallStaticLongMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long) Marshal.GetDelegateForFunctionPointer (env.CallStaticLongMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long));
+					_CallStaticLongMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_long> (env.CallStaticLongMethodA);
 				return _CallStaticLongMethodA;
 			}
 		}
@@ -12255,7 +12207,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float CallStaticFloatMethod {
 			get {
 				if (_CallStaticFloatMethod == null)
-					_CallStaticFloatMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.CallStaticFloatMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_CallStaticFloatMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.CallStaticFloatMethod);
 				return _CallStaticFloatMethod;
 			}
 		}
@@ -12264,7 +12216,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float CallStaticFloatMethodA {
 			get {
 				if (_CallStaticFloatMethodA == null)
-					_CallStaticFloatMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float) Marshal.GetDelegateForFunctionPointer (env.CallStaticFloatMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float));
+					_CallStaticFloatMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_float> (env.CallStaticFloatMethodA);
 				return _CallStaticFloatMethodA;
 			}
 		}
@@ -12273,7 +12225,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double CallStaticDoubleMethod {
 			get {
 				if (_CallStaticDoubleMethod == null)
-					_CallStaticDoubleMethod = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.CallStaticDoubleMethod, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_CallStaticDoubleMethod = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.CallStaticDoubleMethod);
 				return _CallStaticDoubleMethod;
 			}
 		}
@@ -12282,7 +12234,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double CallStaticDoubleMethodA {
 			get {
 				if (_CallStaticDoubleMethodA == null)
-					_CallStaticDoubleMethodA = (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double) Marshal.GetDelegateForFunctionPointer (env.CallStaticDoubleMethodA, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double));
+					_CallStaticDoubleMethodA = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr_double> (env.CallStaticDoubleMethodA);
 				return _CallStaticDoubleMethodA;
 			}
 		}
@@ -12291,7 +12243,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr CallStaticVoidMethod {
 			get {
 				if (_CallStaticVoidMethod == null)
-					_CallStaticVoidMethod = (JniAction_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.CallStaticVoidMethod, typeof (JniAction_JNIEnvPtr_jobject_IntPtr));
+					_CallStaticVoidMethod = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr> (env.CallStaticVoidMethod);
 				return _CallStaticVoidMethod;
 			}
 		}
@@ -12300,7 +12252,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr CallStaticVoidMethodA {
 			get {
 				if (_CallStaticVoidMethodA == null)
-					_CallStaticVoidMethodA = (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr) Marshal.GetDelegateForFunctionPointer (env.CallStaticVoidMethodA, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr));
+					_CallStaticVoidMethodA = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_JniArgumentValuePtr> (env.CallStaticVoidMethodA);
 				return _CallStaticVoidMethodA;
 			}
 		}
@@ -12309,7 +12261,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_string_string_IntPtr GetStaticFieldID {
 			get {
 				if (_GetStaticFieldID == null)
-					_GetStaticFieldID = (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetStaticFieldID, typeof (JniFunc_JNIEnvPtr_jobject_string_string_IntPtr));
+					_GetStaticFieldID = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_string_string_IntPtr> (env.GetStaticFieldID);
 				return _GetStaticFieldID;
 			}
 		}
@@ -12318,7 +12270,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_jobject GetStaticObjectField {
 			get {
 				if (_GetStaticObjectField == null)
-					_GetStaticObjectField = (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.GetStaticObjectField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_jobject));
+					_GetStaticObjectField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_jobject> (env.GetStaticObjectField);
 				return _GetStaticObjectField;
 			}
 		}
@@ -12327,7 +12279,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_byte GetStaticBooleanField {
 			get {
 				if (_GetStaticBooleanField == null)
-					_GetStaticBooleanField = (JniFunc_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.GetStaticBooleanField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_byte));
+					_GetStaticBooleanField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_byte> (env.GetStaticBooleanField);
 				return _GetStaticBooleanField;
 			}
 		}
@@ -12336,7 +12288,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte GetStaticByteField {
 			get {
 				if (_GetStaticByteField == null)
-					_GetStaticByteField = (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.GetStaticByteField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_GetStaticByteField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_sbyte> (env.GetStaticByteField);
 				return _GetStaticByteField;
 			}
 		}
@@ -12345,7 +12297,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_char GetStaticCharField {
 			get {
 				if (_GetStaticCharField == null)
-					_GetStaticCharField = (JniFunc_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.GetStaticCharField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_char));
+					_GetStaticCharField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_char> (env.GetStaticCharField);
 				return _GetStaticCharField;
 			}
 		}
@@ -12354,7 +12306,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_short GetStaticShortField {
 			get {
 				if (_GetStaticShortField == null)
-					_GetStaticShortField = (JniFunc_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.GetStaticShortField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_short));
+					_GetStaticShortField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_short> (env.GetStaticShortField);
 				return _GetStaticShortField;
 			}
 		}
@@ -12363,7 +12315,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_int GetStaticIntField {
 			get {
 				if (_GetStaticIntField == null)
-					_GetStaticIntField = (JniFunc_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetStaticIntField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_int));
+					_GetStaticIntField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_int> (env.GetStaticIntField);
 				return _GetStaticIntField;
 			}
 		}
@@ -12372,7 +12324,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_long GetStaticLongField {
 			get {
 				if (_GetStaticLongField == null)
-					_GetStaticLongField = (JniFunc_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.GetStaticLongField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_long));
+					_GetStaticLongField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_long> (env.GetStaticLongField);
 				return _GetStaticLongField;
 			}
 		}
@@ -12381,7 +12333,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_float GetStaticFloatField {
 			get {
 				if (_GetStaticFloatField == null)
-					_GetStaticFloatField = (JniFunc_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.GetStaticFloatField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_float));
+					_GetStaticFloatField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_float> (env.GetStaticFloatField);
 				return _GetStaticFloatField;
 			}
 		}
@@ -12390,7 +12342,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr_double GetStaticDoubleField {
 			get {
 				if (_GetStaticDoubleField == null)
-					_GetStaticDoubleField = (JniFunc_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.GetStaticDoubleField, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr_double));
+					_GetStaticDoubleField = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr_double> (env.GetStaticDoubleField);
 				return _GetStaticDoubleField;
 			}
 		}
@@ -12399,7 +12351,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_jobject SetStaticObjectField {
 			get {
 				if (_SetStaticObjectField == null)
-					_SetStaticObjectField = (JniAction_JNIEnvPtr_jobject_IntPtr_jobject) Marshal.GetDelegateForFunctionPointer (env.SetStaticObjectField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_jobject));
+					_SetStaticObjectField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_jobject> (env.SetStaticObjectField);
 				return _SetStaticObjectField;
 			}
 		}
@@ -12408,7 +12360,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_byte SetStaticBooleanField {
 			get {
 				if (_SetStaticBooleanField == null)
-					_SetStaticBooleanField = (JniAction_JNIEnvPtr_jobject_IntPtr_byte) Marshal.GetDelegateForFunctionPointer (env.SetStaticBooleanField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_byte));
+					_SetStaticBooleanField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_byte> (env.SetStaticBooleanField);
 				return _SetStaticBooleanField;
 			}
 		}
@@ -12417,7 +12369,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_sbyte SetStaticByteField {
 			get {
 				if (_SetStaticByteField == null)
-					_SetStaticByteField = (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte) Marshal.GetDelegateForFunctionPointer (env.SetStaticByteField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_sbyte));
+					_SetStaticByteField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_sbyte> (env.SetStaticByteField);
 				return _SetStaticByteField;
 			}
 		}
@@ -12426,7 +12378,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_char SetStaticCharField {
 			get {
 				if (_SetStaticCharField == null)
-					_SetStaticCharField = (JniAction_JNIEnvPtr_jobject_IntPtr_char) Marshal.GetDelegateForFunctionPointer (env.SetStaticCharField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_char));
+					_SetStaticCharField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_char> (env.SetStaticCharField);
 				return _SetStaticCharField;
 			}
 		}
@@ -12435,7 +12387,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_short SetStaticShortField {
 			get {
 				if (_SetStaticShortField == null)
-					_SetStaticShortField = (JniAction_JNIEnvPtr_jobject_IntPtr_short) Marshal.GetDelegateForFunctionPointer (env.SetStaticShortField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_short));
+					_SetStaticShortField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_short> (env.SetStaticShortField);
 				return _SetStaticShortField;
 			}
 		}
@@ -12444,7 +12396,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_int SetStaticIntField {
 			get {
 				if (_SetStaticIntField == null)
-					_SetStaticIntField = (JniAction_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.SetStaticIntField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_int));
+					_SetStaticIntField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_int> (env.SetStaticIntField);
 				return _SetStaticIntField;
 			}
 		}
@@ -12453,7 +12405,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_long SetStaticLongField {
 			get {
 				if (_SetStaticLongField == null)
-					_SetStaticLongField = (JniAction_JNIEnvPtr_jobject_IntPtr_long) Marshal.GetDelegateForFunctionPointer (env.SetStaticLongField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_long));
+					_SetStaticLongField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_long> (env.SetStaticLongField);
 				return _SetStaticLongField;
 			}
 		}
@@ -12462,7 +12414,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_float SetStaticFloatField {
 			get {
 				if (_SetStaticFloatField == null)
-					_SetStaticFloatField = (JniAction_JNIEnvPtr_jobject_IntPtr_float) Marshal.GetDelegateForFunctionPointer (env.SetStaticFloatField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_float));
+					_SetStaticFloatField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_float> (env.SetStaticFloatField);
 				return _SetStaticFloatField;
 			}
 		}
@@ -12471,7 +12423,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_double SetStaticDoubleField {
 			get {
 				if (_SetStaticDoubleField == null)
-					_SetStaticDoubleField = (JniAction_JNIEnvPtr_jobject_IntPtr_double) Marshal.GetDelegateForFunctionPointer (env.SetStaticDoubleField, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_double));
+					_SetStaticDoubleField = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_double> (env.SetStaticDoubleField);
 				return _SetStaticDoubleField;
 			}
 		}
@@ -12480,7 +12432,7 @@ namespace
 		public JniFunc_JNIEnvPtr_charPtr_int_jobject NewString {
 			get {
 				if (_NewString == null)
-					_NewString = (JniFunc_JNIEnvPtr_charPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewString, typeof (JniFunc_JNIEnvPtr_charPtr_int_jobject));
+					_NewString = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_charPtr_int_jobject> (env.NewString);
 				return _NewString;
 			}
 		}
@@ -12489,7 +12441,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int GetStringLength {
 			get {
 				if (_GetStringLength == null)
-					_GetStringLength = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.GetStringLength, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_GetStringLength = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.GetStringLength);
 				return _GetStringLength;
 			}
 		}
@@ -12498,7 +12450,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr GetStringChars {
 			get {
 				if (_GetStringChars == null)
-					_GetStringChars = (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetStringChars, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr));
+					_GetStringChars = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr> (env.GetStringChars);
 				return _GetStringChars;
 			}
 		}
@@ -12507,7 +12459,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_charPtr ReleaseStringChars {
 			get {
 				if (_ReleaseStringChars == null)
-					_ReleaseStringChars = (JniAction_JNIEnvPtr_jobject_charPtr) Marshal.GetDelegateForFunctionPointer (env.ReleaseStringChars, typeof (JniAction_JNIEnvPtr_jobject_charPtr));
+					_ReleaseStringChars = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_charPtr> (env.ReleaseStringChars);
 				return _ReleaseStringChars;
 			}
 		}
@@ -12516,7 +12468,7 @@ namespace
 		public JniFunc_JNIEnvPtr_string_jobject NewStringUTF {
 			get {
 				if (_NewStringUTF == null)
-					_NewStringUTF = (JniFunc_JNIEnvPtr_string_jobject) Marshal.GetDelegateForFunctionPointer (env.NewStringUTF, typeof (JniFunc_JNIEnvPtr_string_jobject));
+					_NewStringUTF = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_string_jobject> (env.NewStringUTF);
 				return _NewStringUTF;
 			}
 		}
@@ -12525,7 +12477,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int GetStringUTFLength {
 			get {
 				if (_GetStringUTFLength == null)
-					_GetStringUTFLength = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.GetStringUTFLength, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_GetStringUTFLength = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.GetStringUTFLength);
 				return _GetStringUTFLength;
 			}
 		}
@@ -12534,7 +12486,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_string GetStringUTFChars {
 			get {
 				if (_GetStringUTFChars == null)
-					_GetStringUTFChars = (JniFunc_JNIEnvPtr_jobject_boolPtr_string) Marshal.GetDelegateForFunctionPointer (env.GetStringUTFChars, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_string));
+					_GetStringUTFChars = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_string> (env.GetStringUTFChars);
 				return _GetStringUTFChars;
 			}
 		}
@@ -12543,7 +12495,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_string ReleaseStringUTFChars {
 			get {
 				if (_ReleaseStringUTFChars == null)
-					_ReleaseStringUTFChars = (JniAction_JNIEnvPtr_jobject_string) Marshal.GetDelegateForFunctionPointer (env.ReleaseStringUTFChars, typeof (JniAction_JNIEnvPtr_jobject_string));
+					_ReleaseStringUTFChars = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_string> (env.ReleaseStringUTFChars);
 				return _ReleaseStringUTFChars;
 			}
 		}
@@ -12552,7 +12504,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int GetArrayLength {
 			get {
 				if (_GetArrayLength == null)
-					_GetArrayLength = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.GetArrayLength, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_GetArrayLength = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.GetArrayLength);
 				return _GetArrayLength;
 			}
 		}
@@ -12561,7 +12513,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject_jobject_jobject NewObjectArray {
 			get {
 				if (_NewObjectArray == null)
-					_NewObjectArray = (JniFunc_JNIEnvPtr_int_jobject_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewObjectArray, typeof (JniFunc_JNIEnvPtr_int_jobject_jobject_jobject));
+					_NewObjectArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject_jobject_jobject> (env.NewObjectArray);
 				return _NewObjectArray;
 			}
 		}
@@ -12570,7 +12522,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int_jobject GetObjectArrayElement {
 			get {
 				if (_GetObjectArrayElement == null)
-					_GetObjectArrayElement = (JniFunc_JNIEnvPtr_jobject_int_jobject) Marshal.GetDelegateForFunctionPointer (env.GetObjectArrayElement, typeof (JniFunc_JNIEnvPtr_jobject_int_jobject));
+					_GetObjectArrayElement = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int_jobject> (env.GetObjectArrayElement);
 				return _GetObjectArrayElement;
 			}
 		}
@@ -12579,7 +12531,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_jobject SetObjectArrayElement {
 			get {
 				if (_SetObjectArrayElement == null)
-					_SetObjectArrayElement = (JniAction_JNIEnvPtr_jobject_int_jobject) Marshal.GetDelegateForFunctionPointer (env.SetObjectArrayElement, typeof (JniAction_JNIEnvPtr_jobject_int_jobject));
+					_SetObjectArrayElement = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_jobject> (env.SetObjectArrayElement);
 				return _SetObjectArrayElement;
 			}
 		}
@@ -12588,7 +12540,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewBooleanArray {
 			get {
 				if (_NewBooleanArray == null)
-					_NewBooleanArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewBooleanArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewBooleanArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewBooleanArray);
 				return _NewBooleanArray;
 			}
 		}
@@ -12597,7 +12549,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewByteArray {
 			get {
 				if (_NewByteArray == null)
-					_NewByteArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewByteArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewByteArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewByteArray);
 				return _NewByteArray;
 			}
 		}
@@ -12606,7 +12558,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewCharArray {
 			get {
 				if (_NewCharArray == null)
-					_NewCharArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewCharArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewCharArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewCharArray);
 				return _NewCharArray;
 			}
 		}
@@ -12615,7 +12567,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewShortArray {
 			get {
 				if (_NewShortArray == null)
-					_NewShortArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewShortArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewShortArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewShortArray);
 				return _NewShortArray;
 			}
 		}
@@ -12624,7 +12576,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewIntArray {
 			get {
 				if (_NewIntArray == null)
-					_NewIntArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewIntArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewIntArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewIntArray);
 				return _NewIntArray;
 			}
 		}
@@ -12633,7 +12585,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewLongArray {
 			get {
 				if (_NewLongArray == null)
-					_NewLongArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewLongArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewLongArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewLongArray);
 				return _NewLongArray;
 			}
 		}
@@ -12642,7 +12594,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewFloatArray {
 			get {
 				if (_NewFloatArray == null)
-					_NewFloatArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewFloatArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewFloatArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewFloatArray);
 				return _NewFloatArray;
 			}
 		}
@@ -12651,7 +12603,7 @@ namespace
 		public JniFunc_JNIEnvPtr_int_jobject NewDoubleArray {
 			get {
 				if (_NewDoubleArray == null)
-					_NewDoubleArray = (JniFunc_JNIEnvPtr_int_jobject) Marshal.GetDelegateForFunctionPointer (env.NewDoubleArray, typeof (JniFunc_JNIEnvPtr_int_jobject));
+					_NewDoubleArray = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_int_jobject> (env.NewDoubleArray);
 				return _NewDoubleArray;
 			}
 		}
@@ -12660,7 +12612,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr GetBooleanArrayElements {
 			get {
 				if (_GetBooleanArrayElements == null)
-					_GetBooleanArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr) Marshal.GetDelegateForFunctionPointer (env.GetBooleanArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr));
+					_GetBooleanArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_boolPtr> (env.GetBooleanArrayElements);
 				return _GetBooleanArrayElements;
 			}
 		}
@@ -12669,7 +12621,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr GetByteArrayElements {
 			get {
 				if (_GetByteArrayElements == null)
-					_GetByteArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr) Marshal.GetDelegateForFunctionPointer (env.GetByteArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr));
+					_GetByteArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_sbytePtr> (env.GetByteArrayElements);
 				return _GetByteArrayElements;
 			}
 		}
@@ -12678,7 +12630,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr GetCharArrayElements {
 			get {
 				if (_GetCharArrayElements == null)
-					_GetCharArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetCharArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr));
+					_GetCharArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_charPtr> (env.GetCharArrayElements);
 				return _GetCharArrayElements;
 			}
 		}
@@ -12687,7 +12639,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr GetShortArrayElements {
 			get {
 				if (_GetShortArrayElements == null)
-					_GetShortArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr) Marshal.GetDelegateForFunctionPointer (env.GetShortArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr));
+					_GetShortArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_shortPtr> (env.GetShortArrayElements);
 				return _GetShortArrayElements;
 			}
 		}
@@ -12696,7 +12648,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr GetIntArrayElements {
 			get {
 				if (_GetIntArrayElements == null)
-					_GetIntArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr) Marshal.GetDelegateForFunctionPointer (env.GetIntArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr));
+					_GetIntArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_intPtr> (env.GetIntArrayElements);
 				return _GetIntArrayElements;
 			}
 		}
@@ -12705,7 +12657,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr GetLongArrayElements {
 			get {
 				if (_GetLongArrayElements == null)
-					_GetLongArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr) Marshal.GetDelegateForFunctionPointer (env.GetLongArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr));
+					_GetLongArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_longPtr> (env.GetLongArrayElements);
 				return _GetLongArrayElements;
 			}
 		}
@@ -12714,7 +12666,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr GetFloatArrayElements {
 			get {
 				if (_GetFloatArrayElements == null)
-					_GetFloatArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr) Marshal.GetDelegateForFunctionPointer (env.GetFloatArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr));
+					_GetFloatArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_floatPtr> (env.GetFloatArrayElements);
 				return _GetFloatArrayElements;
 			}
 		}
@@ -12723,7 +12675,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr GetDoubleArrayElements {
 			get {
 				if (_GetDoubleArrayElements == null)
-					_GetDoubleArrayElements = (JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr) Marshal.GetDelegateForFunctionPointer (env.GetDoubleArrayElements, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr));
+					_GetDoubleArrayElements = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_doublePtr> (env.GetDoubleArrayElements);
 				return _GetDoubleArrayElements;
 			}
 		}
@@ -12732,7 +12684,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_boolPtr_int ReleaseBooleanArrayElements {
 			get {
 				if (_ReleaseBooleanArrayElements == null)
-					_ReleaseBooleanArrayElements = (JniAction_JNIEnvPtr_jobject_boolPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseBooleanArrayElements, typeof (JniAction_JNIEnvPtr_jobject_boolPtr_int));
+					_ReleaseBooleanArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_boolPtr_int> (env.ReleaseBooleanArrayElements);
 				return _ReleaseBooleanArrayElements;
 			}
 		}
@@ -12741,7 +12693,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_sbytePtr_int ReleaseByteArrayElements {
 			get {
 				if (_ReleaseByteArrayElements == null)
-					_ReleaseByteArrayElements = (JniAction_JNIEnvPtr_jobject_sbytePtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseByteArrayElements, typeof (JniAction_JNIEnvPtr_jobject_sbytePtr_int));
+					_ReleaseByteArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_sbytePtr_int> (env.ReleaseByteArrayElements);
 				return _ReleaseByteArrayElements;
 			}
 		}
@@ -12750,7 +12702,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_charPtr_int ReleaseCharArrayElements {
 			get {
 				if (_ReleaseCharArrayElements == null)
-					_ReleaseCharArrayElements = (JniAction_JNIEnvPtr_jobject_charPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseCharArrayElements, typeof (JniAction_JNIEnvPtr_jobject_charPtr_int));
+					_ReleaseCharArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_charPtr_int> (env.ReleaseCharArrayElements);
 				return _ReleaseCharArrayElements;
 			}
 		}
@@ -12759,7 +12711,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_shortPtr_int ReleaseShortArrayElements {
 			get {
 				if (_ReleaseShortArrayElements == null)
-					_ReleaseShortArrayElements = (JniAction_JNIEnvPtr_jobject_shortPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseShortArrayElements, typeof (JniAction_JNIEnvPtr_jobject_shortPtr_int));
+					_ReleaseShortArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_shortPtr_int> (env.ReleaseShortArrayElements);
 				return _ReleaseShortArrayElements;
 			}
 		}
@@ -12768,7 +12720,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_intPtr_int ReleaseIntArrayElements {
 			get {
 				if (_ReleaseIntArrayElements == null)
-					_ReleaseIntArrayElements = (JniAction_JNIEnvPtr_jobject_intPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseIntArrayElements, typeof (JniAction_JNIEnvPtr_jobject_intPtr_int));
+					_ReleaseIntArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_intPtr_int> (env.ReleaseIntArrayElements);
 				return _ReleaseIntArrayElements;
 			}
 		}
@@ -12777,7 +12729,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_longPtr_int ReleaseLongArrayElements {
 			get {
 				if (_ReleaseLongArrayElements == null)
-					_ReleaseLongArrayElements = (JniAction_JNIEnvPtr_jobject_longPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseLongArrayElements, typeof (JniAction_JNIEnvPtr_jobject_longPtr_int));
+					_ReleaseLongArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_longPtr_int> (env.ReleaseLongArrayElements);
 				return _ReleaseLongArrayElements;
 			}
 		}
@@ -12786,7 +12738,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_floatPtr_int ReleaseFloatArrayElements {
 			get {
 				if (_ReleaseFloatArrayElements == null)
-					_ReleaseFloatArrayElements = (JniAction_JNIEnvPtr_jobject_floatPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseFloatArrayElements, typeof (JniAction_JNIEnvPtr_jobject_floatPtr_int));
+					_ReleaseFloatArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_floatPtr_int> (env.ReleaseFloatArrayElements);
 				return _ReleaseFloatArrayElements;
 			}
 		}
@@ -12795,7 +12747,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_doublePtr_int ReleaseDoubleArrayElements {
 			get {
 				if (_ReleaseDoubleArrayElements == null)
-					_ReleaseDoubleArrayElements = (JniAction_JNIEnvPtr_jobject_doublePtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleaseDoubleArrayElements, typeof (JniAction_JNIEnvPtr_jobject_doublePtr_int));
+					_ReleaseDoubleArrayElements = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_doublePtr_int> (env.ReleaseDoubleArrayElements);
 				return _ReleaseDoubleArrayElements;
 			}
 		}
@@ -12804,7 +12756,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_boolPtr GetBooleanArrayRegion {
 			get {
 				if (_GetBooleanArrayRegion == null)
-					_GetBooleanArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_boolPtr) Marshal.GetDelegateForFunctionPointer (env.GetBooleanArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_boolPtr));
+					_GetBooleanArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_boolPtr> (env.GetBooleanArrayRegion);
 				return _GetBooleanArrayRegion;
 			}
 		}
@@ -12813,7 +12765,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_sbytePtr GetByteArrayRegion {
 			get {
 				if (_GetByteArrayRegion == null)
-					_GetByteArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr) Marshal.GetDelegateForFunctionPointer (env.GetByteArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr));
+					_GetByteArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_sbytePtr> (env.GetByteArrayRegion);
 				return _GetByteArrayRegion;
 			}
 		}
@@ -12822,7 +12774,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_charPtr GetCharArrayRegion {
 			get {
 				if (_GetCharArrayRegion == null)
-					_GetCharArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetCharArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_charPtr));
+					_GetCharArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_charPtr> (env.GetCharArrayRegion);
 				return _GetCharArrayRegion;
 			}
 		}
@@ -12831,7 +12783,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_shortPtr GetShortArrayRegion {
 			get {
 				if (_GetShortArrayRegion == null)
-					_GetShortArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_shortPtr) Marshal.GetDelegateForFunctionPointer (env.GetShortArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_shortPtr));
+					_GetShortArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_shortPtr> (env.GetShortArrayRegion);
 				return _GetShortArrayRegion;
 			}
 		}
@@ -12840,7 +12792,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_intPtr GetIntArrayRegion {
 			get {
 				if (_GetIntArrayRegion == null)
-					_GetIntArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_intPtr) Marshal.GetDelegateForFunctionPointer (env.GetIntArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_intPtr));
+					_GetIntArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_intPtr> (env.GetIntArrayRegion);
 				return _GetIntArrayRegion;
 			}
 		}
@@ -12849,7 +12801,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_longPtr GetLongArrayRegion {
 			get {
 				if (_GetLongArrayRegion == null)
-					_GetLongArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_longPtr) Marshal.GetDelegateForFunctionPointer (env.GetLongArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_longPtr));
+					_GetLongArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_longPtr> (env.GetLongArrayRegion);
 				return _GetLongArrayRegion;
 			}
 		}
@@ -12858,7 +12810,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_floatPtr GetFloatArrayRegion {
 			get {
 				if (_GetFloatArrayRegion == null)
-					_GetFloatArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_floatPtr) Marshal.GetDelegateForFunctionPointer (env.GetFloatArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_floatPtr));
+					_GetFloatArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_floatPtr> (env.GetFloatArrayRegion);
 				return _GetFloatArrayRegion;
 			}
 		}
@@ -12867,7 +12819,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_doublePtr GetDoubleArrayRegion {
 			get {
 				if (_GetDoubleArrayRegion == null)
-					_GetDoubleArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_doublePtr) Marshal.GetDelegateForFunctionPointer (env.GetDoubleArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_doublePtr));
+					_GetDoubleArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_doublePtr> (env.GetDoubleArrayRegion);
 				return _GetDoubleArrayRegion;
 			}
 		}
@@ -12876,7 +12828,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_boolPtr SetBooleanArrayRegion {
 			get {
 				if (_SetBooleanArrayRegion == null)
-					_SetBooleanArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_boolPtr) Marshal.GetDelegateForFunctionPointer (env.SetBooleanArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_boolPtr));
+					_SetBooleanArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_boolPtr> (env.SetBooleanArrayRegion);
 				return _SetBooleanArrayRegion;
 			}
 		}
@@ -12885,7 +12837,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_sbytePtr SetByteArrayRegion {
 			get {
 				if (_SetByteArrayRegion == null)
-					_SetByteArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr) Marshal.GetDelegateForFunctionPointer (env.SetByteArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_sbytePtr));
+					_SetByteArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_sbytePtr> (env.SetByteArrayRegion);
 				return _SetByteArrayRegion;
 			}
 		}
@@ -12894,7 +12846,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_charPtr SetCharArrayRegion {
 			get {
 				if (_SetCharArrayRegion == null)
-					_SetCharArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_charPtr) Marshal.GetDelegateForFunctionPointer (env.SetCharArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_charPtr));
+					_SetCharArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_charPtr> (env.SetCharArrayRegion);
 				return _SetCharArrayRegion;
 			}
 		}
@@ -12903,7 +12855,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_shortPtr SetShortArrayRegion {
 			get {
 				if (_SetShortArrayRegion == null)
-					_SetShortArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_shortPtr) Marshal.GetDelegateForFunctionPointer (env.SetShortArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_shortPtr));
+					_SetShortArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_shortPtr> (env.SetShortArrayRegion);
 				return _SetShortArrayRegion;
 			}
 		}
@@ -12912,7 +12864,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_intPtr SetIntArrayRegion {
 			get {
 				if (_SetIntArrayRegion == null)
-					_SetIntArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_intPtr) Marshal.GetDelegateForFunctionPointer (env.SetIntArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_intPtr));
+					_SetIntArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_intPtr> (env.SetIntArrayRegion);
 				return _SetIntArrayRegion;
 			}
 		}
@@ -12921,7 +12873,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_longPtr SetLongArrayRegion {
 			get {
 				if (_SetLongArrayRegion == null)
-					_SetLongArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_longPtr) Marshal.GetDelegateForFunctionPointer (env.SetLongArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_longPtr));
+					_SetLongArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_longPtr> (env.SetLongArrayRegion);
 				return _SetLongArrayRegion;
 			}
 		}
@@ -12930,7 +12882,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_floatPtr SetFloatArrayRegion {
 			get {
 				if (_SetFloatArrayRegion == null)
-					_SetFloatArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_floatPtr) Marshal.GetDelegateForFunctionPointer (env.SetFloatArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_floatPtr));
+					_SetFloatArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_floatPtr> (env.SetFloatArrayRegion);
 				return _SetFloatArrayRegion;
 			}
 		}
@@ -12939,7 +12891,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_doublePtr SetDoubleArrayRegion {
 			get {
 				if (_SetDoubleArrayRegion == null)
-					_SetDoubleArrayRegion = (JniAction_JNIEnvPtr_jobject_int_int_doublePtr) Marshal.GetDelegateForFunctionPointer (env.SetDoubleArrayRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_doublePtr));
+					_SetDoubleArrayRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_doublePtr> (env.SetDoubleArrayRegion);
 				return _SetDoubleArrayRegion;
 			}
 		}
@@ -12948,7 +12900,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int RegisterNatives {
 			get {
 				if (_RegisterNatives == null)
-					_RegisterNatives = (JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int) Marshal.GetDelegateForFunctionPointer (env.RegisterNatives, typeof (JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int));
+					_RegisterNatives = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_JniNativeMethodRegistrationArray_int_int> (env.RegisterNatives);
 				return _RegisterNatives;
 			}
 		}
@@ -12957,7 +12909,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int UnregisterNatives {
 			get {
 				if (_UnregisterNatives == null)
-					_UnregisterNatives = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.UnregisterNatives, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_UnregisterNatives = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.UnregisterNatives);
 				return _UnregisterNatives;
 			}
 		}
@@ -12966,7 +12918,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int MonitorEnter {
 			get {
 				if (_MonitorEnter == null)
-					_MonitorEnter = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.MonitorEnter, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_MonitorEnter = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.MonitorEnter);
 				return _MonitorEnter;
 			}
 		}
@@ -12975,7 +12927,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_int MonitorExit {
 			get {
 				if (_MonitorExit == null)
-					_MonitorExit = (JniFunc_JNIEnvPtr_jobject_int) Marshal.GetDelegateForFunctionPointer (env.MonitorExit, typeof (JniFunc_JNIEnvPtr_jobject_int));
+					_MonitorExit = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_int> (env.MonitorExit);
 				return _MonitorExit;
 			}
 		}
@@ -12984,7 +12936,7 @@ namespace
 		public JniFunc_JNIEnvPtr_outIntPtr_int GetJavaVM {
 			get {
 				if (_GetJavaVM == null)
-					_GetJavaVM = (JniFunc_JNIEnvPtr_outIntPtr_int) Marshal.GetDelegateForFunctionPointer (env.GetJavaVM, typeof (JniFunc_JNIEnvPtr_outIntPtr_int));
+					_GetJavaVM = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_outIntPtr_int> (env.GetJavaVM);
 				return _GetJavaVM;
 			}
 		}
@@ -12993,7 +12945,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_charPtr GetStringRegion {
 			get {
 				if (_GetStringRegion == null)
-					_GetStringRegion = (JniAction_JNIEnvPtr_jobject_int_int_charPtr) Marshal.GetDelegateForFunctionPointer (env.GetStringRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_charPtr));
+					_GetStringRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_charPtr> (env.GetStringRegion);
 				return _GetStringRegion;
 			}
 		}
@@ -13002,7 +12954,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_int_int_IntPtr GetStringUTFRegion {
 			get {
 				if (_GetStringUTFRegion == null)
-					_GetStringUTFRegion = (JniAction_JNIEnvPtr_jobject_int_int_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetStringUTFRegion, typeof (JniAction_JNIEnvPtr_jobject_int_int_IntPtr));
+					_GetStringUTFRegion = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_int_int_IntPtr> (env.GetStringUTFRegion);
 				return _GetStringUTFRegion;
 			}
 		}
@@ -13011,7 +12963,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr GetPrimitiveArrayCritical {
 			get {
 				if (_GetPrimitiveArrayCritical == null)
-					_GetPrimitiveArrayCritical = (JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetPrimitiveArrayCritical, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr));
+					_GetPrimitiveArrayCritical = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_IntPtr> (env.GetPrimitiveArrayCritical);
 				return _GetPrimitiveArrayCritical;
 			}
 		}
@@ -13020,7 +12972,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_IntPtr_int ReleasePrimitiveArrayCritical {
 			get {
 				if (_ReleasePrimitiveArrayCritical == null)
-					_ReleasePrimitiveArrayCritical = (JniAction_JNIEnvPtr_jobject_IntPtr_int) Marshal.GetDelegateForFunctionPointer (env.ReleasePrimitiveArrayCritical, typeof (JniAction_JNIEnvPtr_jobject_IntPtr_int));
+					_ReleasePrimitiveArrayCritical = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_IntPtr_int> (env.ReleasePrimitiveArrayCritical);
 				return _ReleasePrimitiveArrayCritical;
 			}
 		}
@@ -13029,7 +12981,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_boolPtr_string GetStringCritical {
 			get {
 				if (_GetStringCritical == null)
-					_GetStringCritical = (JniFunc_JNIEnvPtr_jobject_boolPtr_string) Marshal.GetDelegateForFunctionPointer (env.GetStringCritical, typeof (JniFunc_JNIEnvPtr_jobject_boolPtr_string));
+					_GetStringCritical = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_boolPtr_string> (env.GetStringCritical);
 				return _GetStringCritical;
 			}
 		}
@@ -13038,7 +12990,7 @@ namespace
 		public JniAction_JNIEnvPtr_jobject_string ReleaseStringCritical {
 			get {
 				if (_ReleaseStringCritical == null)
-					_ReleaseStringCritical = (JniAction_JNIEnvPtr_jobject_string) Marshal.GetDelegateForFunctionPointer (env.ReleaseStringCritical, typeof (JniAction_JNIEnvPtr_jobject_string));
+					_ReleaseStringCritical = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_jobject_string> (env.ReleaseStringCritical);
 				return _ReleaseStringCritical;
 			}
 		}
@@ -13047,7 +12999,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_jobject NewWeakGlobalRef {
 			get {
 				if (_NewWeakGlobalRef == null)
-					_NewWeakGlobalRef = (JniFunc_JNIEnvPtr_jobject_jobject) Marshal.GetDelegateForFunctionPointer (env.NewWeakGlobalRef, typeof (JniFunc_JNIEnvPtr_jobject_jobject));
+					_NewWeakGlobalRef = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_jobject> (env.NewWeakGlobalRef);
 				return _NewWeakGlobalRef;
 			}
 		}
@@ -13056,7 +13008,7 @@ namespace
 		public JniAction_JNIEnvPtr_IntPtr DeleteWeakGlobalRef {
 			get {
 				if (_DeleteWeakGlobalRef == null)
-					_DeleteWeakGlobalRef = (JniAction_JNIEnvPtr_IntPtr) Marshal.GetDelegateForFunctionPointer (env.DeleteWeakGlobalRef, typeof (JniAction_JNIEnvPtr_IntPtr));
+					_DeleteWeakGlobalRef = Marshal.GetDelegateForFunctionPointer<JniAction_JNIEnvPtr_IntPtr> (env.DeleteWeakGlobalRef);
 				return _DeleteWeakGlobalRef;
 			}
 		}
@@ -13065,7 +13017,7 @@ namespace
 		public JniFunc_JNIEnvPtr_byte ExceptionCheck {
 			get {
 				if (_ExceptionCheck == null)
-					_ExceptionCheck = (JniFunc_JNIEnvPtr_byte) Marshal.GetDelegateForFunctionPointer (env.ExceptionCheck, typeof (JniFunc_JNIEnvPtr_byte));
+					_ExceptionCheck = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_byte> (env.ExceptionCheck);
 				return _ExceptionCheck;
 			}
 		}
@@ -13074,7 +13026,7 @@ namespace
 		public JniFunc_JNIEnvPtr_IntPtr_long_jobject NewDirectByteBuffer {
 			get {
 				if (_NewDirectByteBuffer == null)
-					_NewDirectByteBuffer = (JniFunc_JNIEnvPtr_IntPtr_long_jobject) Marshal.GetDelegateForFunctionPointer (env.NewDirectByteBuffer, typeof (JniFunc_JNIEnvPtr_IntPtr_long_jobject));
+					_NewDirectByteBuffer = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_IntPtr_long_jobject> (env.NewDirectByteBuffer);
 				return _NewDirectByteBuffer;
 			}
 		}
@@ -13083,7 +13035,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_IntPtr GetDirectBufferAddress {
 			get {
 				if (_GetDirectBufferAddress == null)
-					_GetDirectBufferAddress = (JniFunc_JNIEnvPtr_jobject_IntPtr) Marshal.GetDelegateForFunctionPointer (env.GetDirectBufferAddress, typeof (JniFunc_JNIEnvPtr_jobject_IntPtr));
+					_GetDirectBufferAddress = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_IntPtr> (env.GetDirectBufferAddress);
 				return _GetDirectBufferAddress;
 			}
 		}
@@ -13092,7 +13044,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_long GetDirectBufferCapacity {
 			get {
 				if (_GetDirectBufferCapacity == null)
-					_GetDirectBufferCapacity = (JniFunc_JNIEnvPtr_jobject_long) Marshal.GetDelegateForFunctionPointer (env.GetDirectBufferCapacity, typeof (JniFunc_JNIEnvPtr_jobject_long));
+					_GetDirectBufferCapacity = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_long> (env.GetDirectBufferCapacity);
 				return _GetDirectBufferCapacity;
 			}
 		}
@@ -13101,7 +13053,7 @@ namespace
 		public JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType GetObjectRefType {
 			get {
 				if (_GetObjectRefType == null)
-					_GetObjectRefType = (JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType) Marshal.GetDelegateForFunctionPointer (env.GetObjectRefType, typeof (JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType));
+					_GetObjectRefType = Marshal.GetDelegateForFunctionPointer<JniFunc_JNIEnvPtr_jobject_JniObjectReferenceType> (env.GetObjectRefType);
 				return _GetObjectRefType;
 			}
 		}
@@ -14806,10 +14758,9 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var _message_ptr = Marshal.StringToCoTaskMemUTF8 (message);
+				var _message_ptr = Marshal.StringToCoTaskMemUTF8 (message);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
 			var tmp = JniNativeMethods.ThrowNew (__env, type.Handle, _message_ptr);
@@ -14838,10 +14789,9 @@ namespace
 
 		public static unsafe void FatalError (string message)
 		{
-			if (message == null)
-				throw new ArgumentNullException ("message");
+				ArgumentNullException.ThrowIfNull (message);
 
-			var _message_ptr = Marshal.StringToCoTaskMemUTF8 (message);
+				var _message_ptr = Marshal.StringToCoTaskMemUTF8 (message);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
 			JniNativeMethods.FatalError (__env, _message_ptr);
@@ -14862,12 +14812,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
+				var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
 			var _signature_ptr = Marshal.StringToCoTaskMemUTF8 (signature);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
@@ -14889,9 +14837,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14905,9 +14852,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14920,9 +14866,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14935,9 +14880,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14950,9 +14894,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14965,9 +14908,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14980,9 +14922,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -14995,9 +14936,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15010,9 +14950,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15025,9 +14964,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15039,9 +14977,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15053,9 +14990,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15067,9 +15003,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15081,9 +15016,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15095,9 +15029,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15109,9 +15042,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15123,9 +15055,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15137,9 +15068,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -15154,12 +15084,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
+				var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
 			var _signature_ptr = Marshal.StringToCoTaskMemUTF8 (signature);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
@@ -15181,9 +15109,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15203,9 +15130,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15225,9 +15151,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15246,9 +15171,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15267,9 +15191,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15288,9 +15211,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15309,9 +15231,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15330,9 +15251,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15351,9 +15271,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15372,9 +15291,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15393,9 +15311,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15414,9 +15331,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15435,9 +15351,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15456,9 +15371,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15477,9 +15391,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15498,9 +15411,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15519,9 +15431,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15540,9 +15451,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15561,9 +15471,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15581,9 +15490,8 @@ namespace
 		{
 			if (!instance.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "instance");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15603,9 +15511,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15627,9 +15534,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15651,9 +15557,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15674,9 +15579,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15697,9 +15601,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15720,9 +15623,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15743,9 +15645,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15766,9 +15667,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15789,9 +15689,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15812,9 +15711,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15835,9 +15733,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15858,9 +15755,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15881,9 +15777,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15904,9 +15799,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15927,9 +15821,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15950,9 +15843,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15973,9 +15865,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -15996,9 +15887,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -16019,9 +15909,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -16041,9 +15930,8 @@ namespace
 				throw new ArgumentException ("Handle must be valid.", "instance");
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -16144,9 +16032,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -16166,9 +16053,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -16275,9 +16161,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (!method.IsStatic);
 
@@ -16297,9 +16182,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (!field.IsStatic);
 
@@ -16322,12 +16206,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
+				var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
 			var _signature_ptr = Marshal.StringToCoTaskMemUTF8 (signature);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
@@ -16349,9 +16231,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16365,9 +16246,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16380,9 +16260,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16395,9 +16274,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16410,9 +16288,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16425,9 +16302,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16440,9 +16316,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16455,9 +16330,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16470,9 +16344,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16485,9 +16358,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16499,9 +16371,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16513,9 +16384,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16527,9 +16397,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16541,9 +16410,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16555,9 +16423,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16569,9 +16436,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16583,9 +16449,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16597,9 +16462,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (field == null)
-				throw new ArgumentNullException ("field");
-			if (!field.IsValid)
+				ArgumentNullException.ThrowIfNull (field);
+				if (!field.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "field");
 			System.Diagnostics.Debug.Assert (field.IsStatic);
 
@@ -16614,12 +16478,10 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (signature == null)
-				throw new ArgumentNullException ("signature");
+				ArgumentNullException.ThrowIfNull (name);
+				ArgumentNullException.ThrowIfNull (signature);
 
-			var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
+				var _name_ptr = Marshal.StringToCoTaskMemUTF8 (name);
 			var _signature_ptr = Marshal.StringToCoTaskMemUTF8 (signature);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
@@ -16641,9 +16503,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16663,9 +16524,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16685,9 +16545,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16706,9 +16565,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16727,9 +16585,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16748,9 +16605,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16769,9 +16625,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16790,9 +16645,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16811,9 +16665,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16832,9 +16685,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16853,9 +16705,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16874,9 +16725,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16895,9 +16745,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16916,9 +16765,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16937,9 +16785,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16958,9 +16805,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -16979,9 +16825,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -17000,9 +16845,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -17021,9 +16865,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -17041,9 +16884,8 @@ namespace
 		{
 			if (!type.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "type");
-			if (method == null)
-				throw new ArgumentNullException ("method");
-			if (!method.IsValid)
+				ArgumentNullException.ThrowIfNull (method);
+				if (!method.IsValid)
 				throw new ArgumentException ("Handle value is not valid.", "method");
 			System.Diagnostics.Debug.Assert (method.IsStatic);
 
@@ -17108,9 +16950,8 @@ namespace
 
 		public static unsafe JniObjectReference DefineClass (string name, JniObjectReference loader, IntPtr buffer, int bufferLength)
 		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (!loader.IsValid)
+				ArgumentNullException.ThrowIfNull (name);
+				if (!loader.IsValid)
 				throw new ArgumentException ("Handle must be valid.", "loader");
 			if (buffer == IntPtr.Zero)
 				throw new ArgumentException ("'buffer' must not be IntPtr.Zero.", "buffer");
@@ -17132,10 +16973,9 @@ namespace
 
 		internal static unsafe JniObjectReference _FindClass (string classname)
 		{
-			if (classname == null)
-				throw new ArgumentNullException ("classname");
+				ArgumentNullException.ThrowIfNull (classname);
 
-			var _classname_ptr = Marshal.StringToCoTaskMemUTF8 (classname);
+				var _classname_ptr = Marshal.StringToCoTaskMemUTF8 (classname);
 
 			IntPtr __env = JniEnvironment.EnvironmentPointer;
 			var tmp = JniNativeMethods.FindClass (__env, _classname_ptr);

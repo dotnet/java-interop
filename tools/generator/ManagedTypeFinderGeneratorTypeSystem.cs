@@ -6,7 +6,7 @@ using MonoDroid.Generation;
 
 namespace Xamarin.AndroidTools.AnnotationSupport
 {
-	public class ManagedTypeFinderGeneratorTypeSystem : ManagedTypeFinderDefault
+	internal class ManagedTypeFinderGeneratorTypeSystem : ManagedTypeFinderDefault
 	{
 		public ManagedTypeFinderGeneratorTypeSystem (GenBase [] types)
 		{
@@ -22,15 +22,15 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 
 		#region ManagedTypeFinder implementation
 
-		public abstract class Wrapper<T>
+		internal abstract class Wrapper<T>
 		{
 			public T Value { get; set; }
 		}
 
-		public class TType : Wrapper<GenBase>, IType { }
-		public class TDefinition : Wrapper<Field>, IDefinition { }
-		public class TProperty : Wrapper<Field>, IProperty { }
-		public class TMethodBase : Wrapper<MethodBase>, IMethodBase { }
+		internal class TType : Wrapper<GenBase>, IType { }
+		internal class TDefinition : Wrapper<Field>, IDefinition { }
+		internal class TProperty : Wrapper<Field>, IProperty { }
+		internal class TMethodBase : Wrapper<MethodBase>, IMethodBase { }
 
 		public override string GetManagedName (ManagedTypeFinder.IType t)
 		{

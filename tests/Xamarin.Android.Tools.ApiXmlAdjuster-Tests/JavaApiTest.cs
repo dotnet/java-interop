@@ -6,7 +6,7 @@ using System.Linq;
 namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 {
 	[TestFixture]
-	public class JavaApiTest
+	internal sealed class JavaApiTest
 	{
 		JavaApi api;
 		

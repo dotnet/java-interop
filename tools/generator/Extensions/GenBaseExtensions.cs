@@ -6,7 +6,7 @@ using MonoDroid.Generation;
 
 namespace Xamarin.AndroidTools.AnnotationSupport
 {
-	public static class GenBaseExtensions
+	internal static class GenBaseExtensions
 	{
 		public static IEnumerable<GenBase> FlattenTypes (this GenBase t)
 		{

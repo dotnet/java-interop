@@ -3,7 +3,7 @@ using Java.Interop.Tools.Maven.Models;
 
 namespace Java.Interop.Tools.Maven_Tests;
 
-public class MavenVersionRangeTests
+internal sealed class MavenVersionRangeTests
 {
 	[Test]
 	public void ParseTest ()

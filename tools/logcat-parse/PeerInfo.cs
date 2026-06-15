@@ -6,14 +6,14 @@ using System.Text;
 
 namespace Xamarin.Android.Tools.LogcatParse {
 
-	public enum JniHandleType {
+	internal enum JniHandleType {
 		None,
 		Local,
 		Global,
 		WeakGlobal,
 	}
 
-	public struct JniHandleInfo : IEquatable<JniHandleInfo> {
+	internal struct JniHandleInfo : IEquatable<JniHandleInfo> {
 
 		public  readonly    string          Handle;
 		public  readonly    JniHandleType   Type;
@@ -132,7 +132,7 @@ namespace Xamarin.Android.Tools.LogcatParse {
 		Finalized   = 1 << 2,
 	}
 
-	public class PeerInfo {
+	internal class PeerInfo {
 
 		PeerInfoState                       state;
 

@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Java.Interop.Tools.Generator_Tests
 {
-	public class ConstantEntryTests
+	internal sealed class ConstantEntryTests
 	{
 		[Test]
 		public void ParseEnumMapV1 ()

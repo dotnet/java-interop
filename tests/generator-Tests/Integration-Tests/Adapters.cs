@@ -4,9 +4,11 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class Adapters : BaseGeneratorTest
+	internal sealed class Adapters : BaseGeneratorTest
 	{
 		protected override bool TryJavaInterop1 => true;
+
+		private static readonly string [] additionalSupportPaths = new []{ "expected.ji/Adapters/SupportFiles" };
 
 		[Test]
 		public void GeneratedOK ()
@@ -15,7 +17,7 @@ namespace generatortests
 					outputRelativePath:     "Adapters",
 					apiDescriptionFile:     "expected.ji/Adapters/Adapters.xml",
 					expectedRelativePath:   "Adapters",
-					additionalSupportPaths: new[]{ "expected.ji/Adapters/SupportFiles" });
+					additionalSupportPaths: additionalSupportPaths);
 		}
 	}
 }

@@ -29,11 +29,11 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 				// saved in a static class (because C# interface cannot have consts) and
 				// they have identical [Register]-ed Java names as that of the corresponding interface types.
 				// In this java-C# matcher we don't need those consts-only classes, so filter them out.
-				.Where (t => (t.IsInterface || t.BaseType == null || t.BaseType.FullName != "System.Object") && (t.Methods.Where (m => !m.IsConstructor).Any () || t.Properties.Any ()))
+				.Where (t => (t.IsInterface || t.BaseType == null || t.BaseType.FullName != "System.Object") && (t.Methods.Where (m => !m.IsConstructor).Any () || t.Properties.Count != 0))
 				// This condition would also look weird, but some managed types have manual binding with
 				// [Register] attribute, namely ArrayAdapter<T>. They don't come up with
 				// JavaTypeParametersAttribute, so we have to exclude them.
-				.Where (t => !t.GenericParameters.Any ())
+				.Where (t => t.GenericParameters.Count == 0)
 				.Select (t => t.Wrap ())
 				.ToArray ();
 

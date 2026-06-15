@@ -4,8 +4,10 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class Streams : BaseGeneratorTest
+	internal sealed class Streams : BaseGeneratorTest
 	{
+		private static readonly string [] additionalSupportPaths = new []{ "expected.ji/Streams/SupportFiles" };
+
 		[Test]
 		public void GeneratedOK ()
 		{
@@ -13,7 +15,7 @@ namespace generatortests
 					outputRelativePath:     "Streams",
 					apiDescriptionFile:     "expected.ji/Streams/Streams.xml",
 					expectedRelativePath:   "Streams",
-					additionalSupportPaths: new[]{ "expected.ji/Streams/SupportFiles" });
+					additionalSupportPaths: additionalSupportPaths);
 		}
 	}
 }

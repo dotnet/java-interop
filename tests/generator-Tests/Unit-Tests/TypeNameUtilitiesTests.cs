@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class TypeNameUtilitiesTests
+	internal sealed class TypeNameUtilitiesTests
 	{
 		[Test]
 		public void MangleName ()

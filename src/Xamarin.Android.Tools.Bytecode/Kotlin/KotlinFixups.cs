@@ -460,13 +460,13 @@ namespace Xamarin.Android.Tools.Bytecode
 
 			// Sometimes Kotlin keeps its native types rather than converting them to Java native types
 			// ie: "Lkotlin/UShort;" instead of "S"
-			if (javaType.BinaryName.StartsWith ("L", StringComparison.Ordinal) && javaType.BinaryName.EndsWith (";", StringComparison.Ordinal)) {
+			if (javaType.BinaryName.StartsWith ('L') && javaType.BinaryName.EndsWith (';')) {
 				if (KotlinUtilities.ConvertKotlinClassToJava (javaType.BinaryName.Substring (1, javaType.BinaryName.Length - 2)) == KotlinUtilities.ConvertKotlinTypeSignature (kotlinType, kotlinFile))
 					return true;
 			}
 
 			// Same for some arrays
-			if (javaType.BinaryName.StartsWith ("[L", StringComparison.Ordinal) && javaType.BinaryName.EndsWith (";", StringComparison.Ordinal)) {
+			if (javaType.BinaryName.StartsWith ("[L", StringComparison.Ordinal) && javaType.BinaryName.EndsWith (';')) {
 				if ("[" + KotlinUtilities.ConvertKotlinClassToJava (javaType.BinaryName.Substring (2, javaType.BinaryName.Length - 3)) == KotlinUtilities.ConvertKotlinTypeSignature (kotlinType, kotlinFile))
 					return true;
 			}

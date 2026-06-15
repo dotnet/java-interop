@@ -666,7 +666,7 @@ namespace Java.Interop.Tools.JavaSource {
 		}
 	}
 
-	class JavaNestedType : JavaMember
+	sealed class JavaNestedType : JavaMember
 	{
 		public JavaNestedType (JavaType? type)
 			: base (type)

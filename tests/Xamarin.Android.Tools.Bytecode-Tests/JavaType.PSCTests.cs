@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class JavaType_PSCTests : ClassFileFixture {
+	internal sealed class JavaType_PSCTests : ClassFileFixture {
 
 		const string JavaType = "JavaType$PSC";
 

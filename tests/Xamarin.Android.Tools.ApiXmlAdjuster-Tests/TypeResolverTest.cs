@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 {
 	[TestFixture]
-	public class TypeResolverTest
+	internal sealed class TypeResolverTest
 	{
 		JavaApi api;
 		

@@ -4,7 +4,7 @@ using System;
 namespace Java.Interop {
 
 	[AttributeUsage (AttributeTargets.Constructor, AllowMultiple=false)]
-	public sealed class JavaCallableConstructorAttribute : Attribute {
+	internal sealed class JavaCallableConstructorAttribute : Attribute {
 
 		public JavaCallableConstructorAttribute ()
 		{

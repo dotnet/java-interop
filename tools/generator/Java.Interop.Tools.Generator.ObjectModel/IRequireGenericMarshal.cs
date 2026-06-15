@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MonoDroid.Generation
 {
-	public interface IRequireGenericMarshal
+	internal interface IRequireGenericMarshal
 	{
 		bool MayHaveManagedGenericArguments { get; }
 		string GetGenericJavaObjectTypeOverride ();

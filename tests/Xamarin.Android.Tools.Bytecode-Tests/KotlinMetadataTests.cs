@@ -6,7 +6,7 @@ using System.Linq;
 namespace Xamarin.Android.Tools.BytecodeTests
 {
 	[TestFixture]
-	public class KotlinMetadataTests : ClassFileFixture
+	internal sealed class KotlinMetadataTests : ClassFileFixture
 	{
 		[Test]
 		public void PublicKotlinClassFile ()

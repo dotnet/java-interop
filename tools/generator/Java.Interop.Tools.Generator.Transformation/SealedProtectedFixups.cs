@@ -5,7 +5,7 @@ using MonoDroid.Generation;
 
 namespace Java.Interop.Tools.Generator.Transformation
 {
-	public static class SealedProtectedFixups
+	internal static class SealedProtectedFixups
 	{
 		public static void Fixup (List<GenBase> gens)
 		{

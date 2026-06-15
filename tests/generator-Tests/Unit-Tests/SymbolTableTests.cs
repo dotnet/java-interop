@@ -7,7 +7,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 namespace generatortests
 {
 	[TestFixture]
-	public class SymbolTableTests
+	internal sealed class SymbolTableTests
 	{
 		[Test]
 		public void FindGenericTypes ()

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaTypeSystem.Tests
 {
 	[TestFixture]
-	public class JavaTypeReferenceTests
+	internal sealed class JavaTypeReferenceTests
 	{
 		[Test]
 		public void TypeReferenceEquals ()

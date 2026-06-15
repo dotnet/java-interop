@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class ModuleInfoTests : ClassFileFixture {
+	internal sealed class ModuleInfoTests : ClassFileFixture {
 
 		const string JavaType = "module-info";
 

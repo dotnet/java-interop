@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.SourceWriter.Tests
 {
 	[TestFixture]
-	public class TypeReferenceWriterTests
+	internal sealed class TypeReferenceWriterTests
 	{
 		[Test]
 		public void Constructor ()

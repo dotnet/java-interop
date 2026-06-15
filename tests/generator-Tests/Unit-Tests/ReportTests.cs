@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace generatortests
 {
-	public class ReportTests
+	internal sealed class ReportTests
 	{
 		[Test]
 		public void FormatTests ()

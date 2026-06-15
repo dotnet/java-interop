@@ -13,7 +13,7 @@ using Xamarin.Android.Tools;
 namespace MonoDroid.Generation
 {
 	// Represents a generic parameter definition in GenBase.
-	public class GenericParameterDefinition
+	internal class GenericParameterDefinition
 	{
 		public GenericParameterDefinition (string name, string [] constraints)
 		{
@@ -56,7 +56,7 @@ namespace MonoDroid.Generation
 		}
 	}
 	
-	public class GenericParameterDefinitionList : List<GenericParameterDefinition>
+	internal class GenericParameterDefinitionList : List<GenericParameterDefinition>
 	{
 		public static GenericParameterDefinitionList Merge (GenericParameterDefinitionList l1, GenericParameterDefinitionList l2)
 		{
@@ -98,7 +98,7 @@ namespace MonoDroid.Generation
 
 		public string ToGeneratedAttributeString ()
 		{
-			var typeArgList = this.Select (t => t.Name + (t.ConstraintExpressions.Any () ? " extends " + string.Join (" & ", t.ConstraintExpressions) : null));
+			var typeArgList = this.Select (t => t.Name + (t.ConstraintExpressions.Length != 0 ? " extends " + string.Join (" & ", t.ConstraintExpressions) : null));
 			return "[global::Java.Interop.JavaTypeParameters (new string [] {\"" +
 			                      string.Join ("\", \"", typeArgList) + "\"})]";
 		}

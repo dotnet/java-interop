@@ -13,7 +13,7 @@ using Java.Interop.Tools.JavaCallableWrappers.Adapters;
 
 namespace Java.Interop.Tools
 {
-	class App
+	sealed class App
 	{
 		public static int Main (string [] args)
 		{

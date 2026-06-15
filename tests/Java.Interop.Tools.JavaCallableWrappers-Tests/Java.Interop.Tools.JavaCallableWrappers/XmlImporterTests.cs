@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
 	[TestFixture]
-	public class XmlImporterTests
+	internal class XmlImporterTests
 	{
 		PackageNamingPolicy existingValue;
 

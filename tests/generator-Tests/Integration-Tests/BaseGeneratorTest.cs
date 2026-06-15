@@ -9,7 +9,7 @@ using Xamarin.Android.Binder;
 
 namespace generatortests
 {
-	public class BaseGeneratorTest
+	internal class BaseGeneratorTest
 	{
 		StringWriter sw = null;
 

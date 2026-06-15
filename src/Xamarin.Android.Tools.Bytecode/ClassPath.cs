@@ -61,8 +61,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public void Load (Stream jarStream, bool leaveOpen = false)
 		{
-			if (jarStream == null)
-				throw new ArgumentNullException (nameof (jarStream));
+			ArgumentNullException.ThrowIfNull (jarStream);
 
 			using (var jar = CreateZipArchive (jarStream, leaveOpen)) {
 				foreach (var entry in jar.Entries) {
@@ -127,8 +126,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public static bool IsJarFile (string jarFile)
 		{
-			if (jarFile == null)
-				throw new ArgumentNullException ("jarFile");
+			ArgumentNullException.ThrowIfNull (jarFile);
 			try {
 				using (var f = File.OpenRead (jarFile))
 				using (new ZipArchive (f)) {
@@ -142,8 +140,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public static bool IsJmodFile (string jmodFile)
 		{
-			if (jmodFile == null)
-				throw new ArgumentNullException (nameof (jmodFile));
+			ArgumentNullException.ThrowIfNull (jmodFile);
 			try {
 				using var f = File.OpenRead (jmodFile);
 				var h = new byte[4];
@@ -173,7 +170,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		bool IsGeneratedName (string parameterName)
 		{
-			return parameterName.StartsWith ("p", StringComparison.Ordinal) && parameterName.Length > 1 && Char.IsDigit (parameterName [1]);
+			return parameterName.StartsWith ('p') && parameterName.Length > 1 && Char.IsDigit (parameterName [1]);
 		}
 
 		IEnumerable<ClassFile> GetDescendants (ClassFile theClass, IList<ClassFile> classFiles)
@@ -256,7 +253,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 				List<ClassFile> implementations = GetDescendants (abstractClass, classFiles)
 					.ToList();
-				if (!implementations.Any ())
+				if (implementations.Count == 0)
 					continue;
 				FixUpParameters (abstractClass, implementations);
 			}
@@ -265,7 +262,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 						(c.AccessFlags & ClassAccessFlags.Interface) != 0)) {
 				List<ClassFile> implementations = GetInterfaceImplemetations (iface, classFiles)
 					.ToList();
-				if (!implementations.Any ())
+				if (implementations.Count == 0)
 					continue;
 				for (int i=0; i < implementations.Count; i++) {
 					implementations.AddRange ( GetDescendants (implementations [i], classFiles)
@@ -329,7 +326,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 								javaType: (string?) p.Attribute ("type") ?? ""))
 						.ToArray ();
 
-					if (!parameterTypes.Any ())
+					if (parameterTypes.Length == 0)
 						continue;
 
 					var nameInfo = new JavaMethodParameterNameInfo (

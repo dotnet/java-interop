@@ -10,7 +10,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundField : FieldWriter
+	internal class BoundField : FieldWriter
 	{
 		// // Metadata.xml XPath field reference: path="/api/package[@name='android.os']/class[@name='Vibrator']/field[@name='VIBRATION_EFFECT_SUPPORT_UNKNOWN']"
 		// [Register ("VIBRATION_EFFECT_SUPPORT_UNKNOWN", ApiSince = 30)]

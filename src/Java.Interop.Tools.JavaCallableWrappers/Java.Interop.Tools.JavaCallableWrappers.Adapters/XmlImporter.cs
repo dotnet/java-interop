@@ -160,6 +160,8 @@ public static class XmlImporter
 		return m;
 	}
 
+	private static readonly char [] separator = new [] { ',' };
+
 	static void FillInMethodDetails (CallableWrapperMethod method, XElement xml)
 	{
 		// Common between constructors and methods
@@ -175,7 +177,7 @@ public static class XmlImporter
 		method.ActivateCall = xml.GetAttributeOrDefault ("activate_call", (string?) null);
 
 		if (xml.GetAttributeOrDefault ("thrown_type_names", (string?) null) is string thrownTypeNames)
-			method.ThrownTypeNames = thrownTypeNames.Split (new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+			method.ThrownTypeNames = thrownTypeNames.Split (separator, StringSplitOptions.RemoveEmptyEntries);
 
 		ImportAnnotations (method.Annotations, xml.Element ("annotations"));
 	}

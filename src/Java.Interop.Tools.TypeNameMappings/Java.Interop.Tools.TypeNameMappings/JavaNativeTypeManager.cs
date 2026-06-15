@@ -62,7 +62,7 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		public static IEnumerable<JniTypeName> FromSignature (string signature)
 		{
-			if (signature.StartsWith ("(", StringComparison.Ordinal)) {
+			if (signature.Length > 0 && signature [0] == '(') {
 				int e = signature.IndexOf (')');
 				signature = signature.Substring (1, e >= 0 ? e-1 : signature.Length-1);
 			}
@@ -169,8 +169,12 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		static string? ToJniName (Type type, ExportParameterKind exportKind)
 		{
+#if NETSTANDARD2_0
 			if (type == null)
-				throw new ArgumentNullException ("type");
+				throw new ArgumentNullException (nameof (type));
+#else
+			ArgumentNullException.ThrowIfNull (type);
+#endif
 
 			if (type.IsValueType)
 				return GetPrimitiveClass (type);
@@ -542,8 +546,12 @@ namespace Java.Interop.Tools.TypeNameMappings
 
 		static string? ToJniName (TypeDefinition type, ExportParameterKind exportKind, IMetadataResolver cache)
 		{
+#if NETSTANDARD2_0
 			if (type == null)
-				throw new ArgumentNullException ("type");
+				throw new ArgumentNullException (nameof (type));
+#else
+			ArgumentNullException.ThrowIfNull (type);
+#endif
 
 			if (type.IsValueType)
 				return GetPrimitiveClass (type, cache);

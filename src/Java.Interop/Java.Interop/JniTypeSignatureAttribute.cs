@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Java.Interop
 {
 	[AttributeUsage (AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
-	public sealed class JniTypeSignatureAttribute : Attribute {
+	internal sealed class JniTypeSignatureAttribute : Attribute {
 
 		int arrayRank;
 

@@ -54,10 +54,8 @@ namespace Java.Interop {
 
 		public JreRuntimeOptions AddSystemProperty (string name, string value)
 		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			if (value == null)
-				throw new ArgumentNullException ("value");
+			ArgumentNullException.ThrowIfNull (name);
+			ArgumentNullException.ThrowIfNull (value);
 			if (name == "java.class.path")
 				throw new ArgumentException ("Do not use AddSystemProperty() for the 'java.class.path' property. Add to the ClassPath collection instead.", "name");
 			Options.Add (string.Format ("-D{0}={1}", name, value));
@@ -73,8 +71,7 @@ namespace Java.Interop {
 
 		public JreRuntime CreateJreVM (JniRuntime.JniTypeManager typeManager)
 		{
-			if (typeManager == null)
-				throw new ArgumentNullException (nameof (typeManager));
+			ArgumentNullException.ThrowIfNull (typeManager);
 			return new JreRuntime (this, typeManager);
 		}
 	}
@@ -89,16 +86,14 @@ namespace Java.Interop {
 		[RequiresUnreferencedCode ("The default JRE type manager is reflection-based and is not trimming-compatible.")]
 		static unsafe JreRuntimeOptions CreateJreVM (JreRuntimeOptions builder)
 		{
-			if (builder == null)
-				throw new ArgumentNullException ("builder");
+			ArgumentNullException.ThrowIfNull (builder);
 			builder.TypeManager     ??= new JreTypeManager (builder.typeMappings);
 			return CreateJreVMCore (builder);
 		}
 
 		static unsafe JreRuntimeOptions CreateJreVMWithoutDefaultTypeManager (JreRuntimeOptions builder)
 		{
-			if (builder == null)
-				throw new ArgumentNullException ("builder");
+			ArgumentNullException.ThrowIfNull (builder);
 			if (builder.TypeManager == null)
 				throw new InvalidOperationException ($"Member `{nameof (JniRuntime.CreationOptions)}.{nameof (JniRuntime.CreationOptions.TypeManager)}` must be set.");
 			return CreateJreVMCore (builder);
@@ -201,10 +196,8 @@ namespace Java.Interop {
 
 		static JreRuntimeOptions SetTypeManager (JreRuntimeOptions builder, JniRuntime.JniTypeManager typeManager)
 		{
-			if (builder == null)
-				throw new ArgumentNullException ("builder");
-			if (typeManager == null)
-				throw new ArgumentNullException (nameof (typeManager));
+			ArgumentNullException.ThrowIfNull (builder);
+			ArgumentNullException.ThrowIfNull (typeManager);
 			builder.TypeManager = typeManager;
 			return builder;
 		}
@@ -379,20 +372,24 @@ namespace Java.Interop {
 		}
 
 
-		[DllImport (JavaInteropLib, CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern void java_interop_free (IntPtr p);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial void java_interop_free (IntPtr p);
 
-		[DllImport (JavaInteropLib, CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_jvm_load_with_error_message (string path, out IntPtr message);
+		[LibraryImport (JavaInteropLib, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof (System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_jvm_load_with_error_message (string path, out IntPtr message);
 
-		[DllImport (JavaInteropLib, CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_jvm_create (out IntPtr javavm, out IntPtr jnienv, ref JavaVMInitArgs args);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_jvm_create (out IntPtr javavm, out IntPtr jnienv, ref JavaVMInitArgs args);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_jvm_list ([Out] IntPtr[]? handles, int bufLen, out int nVMs);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_jvm_list ([Out] IntPtr[]? handles, int bufLen, out int nVMs);
 
-		[DllImport ("kernel32", CharSet=CharSet.Unicode)]
-		internal static extern int AddDllDirectory (string NewDirectory);
+		[LibraryImport ("kernel32", StringMarshalling = StringMarshalling.Utf16)]
+		internal static partial int AddDllDirectory (string NewDirectory);
 	}
 }
 

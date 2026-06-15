@@ -129,8 +129,7 @@ namespace Java.Interop {
 				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
 
 			var r = value.PeerReference;
-			if (!r.IsValid)
-				throw new ObjectDisposedException (value.GetType ().FullName);
+			ObjectDisposedException.ThrowIf (!r.IsValid, value);
 			var o = PeekPeer (value.PeerReference);
 			if (o != null)
 				return;
@@ -199,8 +198,7 @@ namespace Java.Interop {
 			if (RegisteredInstances == null)
 				throw new ObjectDisposedException (nameof (MonoRuntimeValueManager));
 
-			if (value == null)
-				throw new ArgumentNullException (nameof (value));
+			ArgumentNullException.ThrowIfNull (value);
 
 			int key = value.JniIdentityHashCode;
 			lock (RegisteredInstances) {
@@ -374,35 +372,45 @@ namespace Java.Interop {
 
 		const   string JavaInteropLib = "java-interop";
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern IntPtr java_interop_gc_bridge_get_current ();
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial IntPtr java_interop_gc_bridge_get_current ();
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_set_current_once (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_set_current_once (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_register_hooks (IntPtr bridge, GCBridgeUseWeakReferenceKind weak_ref_kind);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_register_hooks (IntPtr bridge, GCBridgeUseWeakReferenceKind weak_ref_kind);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern IntPtr java_interop_gc_bridge_new (IntPtr jvm);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial IntPtr java_interop_gc_bridge_new (IntPtr jvm);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_free (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_free (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_add_current_app_domain (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_add_current_app_domain (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_remove_current_app_domain (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_remove_current_app_domain (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_set_bridge_processing_field (IntPtr bridge, RuntimeTypeHandle type_handle, string field_name);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_set_bridge_processing_field (IntPtr bridge, RuntimeTypeHandle type_handle, string field_name);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_register_bridgeable_type (IntPtr bridge, RuntimeTypeHandle type_handle);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_register_bridgeable_type (IntPtr bridge, RuntimeTypeHandle type_handle);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern void java_interop_gc_bridge_wait_for_bridge_processing (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (CallConvCdecl)])]
+		internal static partial void java_interop_gc_bridge_wait_for_bridge_processing (IntPtr bridge);
 	}
 
 	sealed class OverrideStackTrace : Exception {

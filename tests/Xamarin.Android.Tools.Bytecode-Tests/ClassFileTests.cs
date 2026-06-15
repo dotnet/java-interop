@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class ClassFileTests {
+	internal sealed class ClassFileTests {
 
 		[Test]
 		public void Constructor_Exceptions ()

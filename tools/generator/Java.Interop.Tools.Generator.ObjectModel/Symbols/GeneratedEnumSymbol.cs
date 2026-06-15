@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MonoDroid.Generation
 {
 	// This could be array and non-array, depending on metadata fixup.
-	public class GeneratedEnumSymbol : ISymbol
+	internal class GeneratedEnumSymbol : ISymbol
 	{
 		string enum_type;
 		bool is_array;

@@ -11,7 +11,7 @@ using Xamarin.Android.Tools;
 
 namespace MonoDroid.Generation {
 
-	public class Parameter : ISourceLineInfo
+	internal class Parameter : ISourceLineInfo
 	{
 		bool is_sender;
 		string name;
@@ -133,7 +133,7 @@ namespace MonoDroid.Generation {
 
 		public string JavaName {
 			get {
-				if (Name.StartsWith ("@", StringComparison.Ordinal))
+				if (Name.StartsWith ('@'))
 					return Name.Substring (1);
 				return Name;
 			}

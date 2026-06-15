@@ -14,7 +14,7 @@ using Xamarin.Android.Binder;
 namespace generatortests
 {
 	[TestFixture]
-	class EnumGeneratorTests : CodeGeneratorTestBase
+	sealed class EnumGeneratorTests : CodeGeneratorTestBase
 	{
 		protected new EnumGenerator generator;
 

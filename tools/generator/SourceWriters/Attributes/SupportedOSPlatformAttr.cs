@@ -9,7 +9,7 @@ using Java.Interop.Tools.Generator;
 
 namespace generator.SourceWriters
 {
-	public class SupportedOSPlatformAttr : AttributeWriter
+	internal class SupportedOSPlatformAttr : AttributeWriter
 	{
 		public AndroidSdkVersion Version { get; }
 

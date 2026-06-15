@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace generatortests
 {
-	class TestClass : ClassGen
+	sealed class TestClass : ClassGen
 	{
 		public TestClass (string baseType, string javaName) : base (new TestBaseSupport (javaName))
 		{
@@ -13,7 +13,7 @@ namespace generatortests
 		}
 	}
 
-	class TestBaseSupport : GenBaseSupport
+	sealed class TestBaseSupport : GenBaseSupport
 	{
 		public TestBaseSupport (string javaName)
 		{
@@ -29,7 +29,7 @@ namespace generatortests
 		}
 	}
 
-	class TestField : Field
+	sealed class TestField : Field
 	{
 		public TestField (string type, string name)
 		{
@@ -85,7 +85,7 @@ namespace generatortests
 		}
 	}
 
-	class TestMethod : Method
+	sealed class TestMethod : Method
 	{
 		public TestMethod (GenBase @class, string name, string @return = "void") : base (@class)
 		{
@@ -167,7 +167,7 @@ namespace generatortests
 		}
 	}
 
-	class TestCtor : Ctor
+	sealed class TestCtor : Ctor
 	{
 		public TestCtor (GenBase @class, string name) : base (@class)
 		{
@@ -205,7 +205,7 @@ namespace generatortests
 		}
 	}
 
-	class TestInterface : InterfaceGen
+	sealed class TestInterface : InterfaceGen
 	{
 		public TestInterface (string argsType, string javaName) : base (new TestBaseSupport (javaName))
 		{

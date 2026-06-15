@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class KotlinFixupsTests
+	internal sealed class KotlinFixupsTests
 	{
 		[Test]
 		public void CreateMethod_EnsureKotlinImplFix ()
@@ -89,6 +89,8 @@ namespace generatortests
 			Assert.IsTrue (klass.Methods.All (m => m.Name == "Add"));
 		}
 
+		private static readonly string [] expected = new [] { "long", "float" };
+
 		[Test]
 		public void MixedCollidingAndUniqueHashSiblings ()
 		{
@@ -113,7 +115,7 @@ namespace generatortests
 
 			Assert.AreEqual (2, klass.Methods.Count);
 			Assert.IsTrue (klass.Methods.All (m => m.Name == "Add"));
-			CollectionAssert.AreEquivalent (new [] { "long", "float" }, klass.Methods.Select (m => m.Parameters [0].RawNativeType).ToArray ());
+			CollectionAssert.AreEquivalent (expected, klass.Methods.Select (m => m.Parameters [0].RawNativeType).ToArray ());
 		}
 
 		[Test, NonParallelizable]

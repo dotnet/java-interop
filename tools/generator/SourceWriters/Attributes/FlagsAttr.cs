@@ -3,7 +3,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class FlagsAttr : AttributeWriter
+	internal class FlagsAttr : AttributeWriter
 	{
 		public override void WriteAttribute (CodeWriter writer)
 		{

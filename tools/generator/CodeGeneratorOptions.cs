@@ -10,7 +10,7 @@ using Java.Interop.Tools.Generator;
 
 namespace Xamarin.Android.Binder
 {
-	public class CodeGeneratorOptions
+	internal class CodeGeneratorOptions
 	{
 		public CodeGeneratorOptions ()
 		{

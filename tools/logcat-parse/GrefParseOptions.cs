@@ -3,7 +3,7 @@ using System;
 namespace Xamarin.Android.Tools.LogcatParse {
 
 	[Flags]
-	public enum GrefParseOptions {
+	internal enum GrefParseOptions {
 		None,
 
 		LogWarningOnMismatch            = 1 << 0,

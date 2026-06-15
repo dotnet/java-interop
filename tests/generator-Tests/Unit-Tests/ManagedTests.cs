@@ -9,16 +9,16 @@ using System.Linq;
 namespace Java.Lang
 {
 	[Register ("java/lang/Object")]
-	public class Object { }
+	internal class Object { }
 
 	[Register ("java/lang/String")]
-	public sealed class String : Object { }
+	internal sealed class String : Object { }
 }
 
 namespace Com.Mypackage
 {
 	[Register ("com/mypackage/foo")]
-	public class Foo : Java.Lang.Object
+	internal sealed class Foo : Java.Lang.Object
 	{
 		[Register ("foo", "()V", "")]
 		public Foo () { }
@@ -40,21 +40,21 @@ namespace Com.Mypackage
 	}
 
 	[Register ("com/mypackage/service")]
-	public interface IService { }
+	internal interface IService { }
 
 	[Register ("com/mypackage/FieldClass")]
-	public class FieldClass : Java.Lang.Object
+	internal sealed class FieldClass : Java.Lang.Object
 	{
 		public NestedFieldClass field;
 
-		public class NestedFieldClass : Java.Lang.Object { }
+		internal sealed class NestedFieldClass : Java.Lang.Object { }
 	}
 
 }
 
 namespace GenericTestClasses
 {
-	public class MyCollection<T> : List<T>
+	internal sealed class MyCollection<T> : List<T>
 	{
 		[Register ("mycollection", "()V", "")]
 		public MyCollection (List<T> p0, List<string> p1)
@@ -76,7 +76,7 @@ namespace GenericTestClasses
 namespace NullableTestTypes
 {
 #nullable enable
-	public class NullableClass
+	internal sealed class NullableClass
 	{
 		[Register ("<init>", "(Ljava/lang/String;Ljava/lang/String;)", "")]
 		public NullableClass (string notnull, string? nullable)
@@ -98,7 +98,7 @@ namespace NullableTestTypes
 namespace generatortests
 {
 	[TestFixture]
-	public class ManagedTests
+	internal sealed class ManagedTests
 	{
 		string tempFile;
 		ModuleDefinition module;

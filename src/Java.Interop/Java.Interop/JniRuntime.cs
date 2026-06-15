@@ -155,8 +155,7 @@ namespace Java.Interop
 
 		public static void SetCurrent (JniRuntime newCurrent)
 		{
-			if (newCurrent == null)
-				throw new ArgumentNullException (nameof (newCurrent));
+			ArgumentNullException.ThrowIfNull (newCurrent);
 			lock (Runtimes) {
 				Runtimes [newCurrent.InvocationPointer] = newCurrent;
 			}
@@ -179,8 +178,7 @@ namespace Java.Interop
 
 		protected JniRuntime (CreationOptions options)
 		{
-			if (options == null)
-				throw new ArgumentNullException (nameof (options));
+			ArgumentNullException.ThrowIfNull (options);
 			if (options.InvocationPointer == IntPtr.Zero && options.EnvironmentPointer == IntPtr.Zero)
 				throw new ArgumentException ("Need either options.InvocationPointer or options.EnvironmentPointer!", nameof (options));
 
@@ -412,8 +410,7 @@ namespace Java.Interop
 		internal void UnTrack (IntPtr key)
 		{
 			lock (TrackedInstances) {
-				if (TrackedInstances.ContainsKey (key))
-					TrackedInstances.Remove (key);
+				TrackedInstances.Remove (key);
 			}
 		}
 

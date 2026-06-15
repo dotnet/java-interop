@@ -10,7 +10,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceInvokerProperty : PropertyWriter
+	internal class InterfaceInvokerProperty : PropertyWriter
 	{
 		readonly MethodCallback getter_callback;
 		readonly MethodCallback setter_callback;

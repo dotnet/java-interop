@@ -24,7 +24,7 @@ namespace Android.App {
 		}
 
 		[Register ("android/app/Application$ActivityLifecycleCallbacks", DoNotGenerateAcw = true)]
-		public partial interface IActivityLifecycleCallbacks {
+		internal partial interface IActivityLifecycleCallbacks {
 			[Register (
 				name: "onActivityCreated",
 				signature: "(Landroid/app/Activity;Landroid/os/Bundle;)V",
@@ -32,7 +32,7 @@ namespace Android.App {
 			void OnActivityCreated (Android.App.Activity activity, global::Android.OS.Bundle savedInstanceState);
 		}
 
-		internal class IActivityLifecycleCallbacksInvoker : Java.Lang.Object, IActivityLifecycleCallbacks {
+		internal sealed class IActivityLifecycleCallbacksInvoker : Java.Lang.Object, IActivityLifecycleCallbacks {
 			static Delegate GetOnActivityCreated_Landroid_app_Activity_Landroid_os_Bundle_Handler ()
 			{
 				return null;
@@ -66,7 +66,7 @@ namespace Android.App {
 namespace Android.OS {
 
 	[Register ("android/os/Bundle", DoNotGenerateAcw = true)]
-	class Bundle : Java.Lang.Object
+	sealed class Bundle : Java.Lang.Object
 	{
 	}
 }
@@ -86,7 +86,7 @@ namespace Java.Lang {
 	}
 
 	[Register ("java/lang/Throwable", DoNotGenerateAcw = true)]
-	class Throwable : Exception, Android.Runtime.IJavaObject
+	sealed class Throwable : Exception, Android.Runtime.IJavaObject
 	{
 	}
 }
@@ -157,19 +157,19 @@ namespace Xamarin.Android.ToolsTests {
 	}
 
 	[Register ("my.AbstractClass")]
-	class AbstractClassInvoker : AbstractClass
+	sealed class AbstractClassInvoker : AbstractClass
 	{
 	}
 
 	[Activity (Name = "activity.Name")]
-	class ActivityName : Java.Lang.Object
+	sealed class ActivityName : Java.Lang.Object
 	{
 	}
 
 	[Application (Name = "application.Name")]
 	class ApplicationName : Application
 	{
-		public class ActivityLifecycleCallbacks : Java.Lang.Object, Application.IActivityLifecycleCallbacks
+		internal sealed class ActivityLifecycleCallbacks : Java.Lang.Object, Application.IActivityLifecycleCallbacks
 		{
 			public void OnActivityCreated (Activity activity, global::Android.OS.Bundle savedInstanceState)
 			{
@@ -177,7 +177,7 @@ namespace Xamarin.Android.ToolsTests {
 		}
 	}
 
-	class IndirectApplication : ApplicationName
+	sealed class IndirectApplication : ApplicationName
 	{
 		protected override void OnCreate ()
 		{
@@ -185,29 +185,29 @@ namespace Xamarin.Android.ToolsTests {
 		}
 	}
 
-	class DefaultName : Java.Lang.Object
+	sealed class DefaultName : Java.Lang.Object
 	{
-		public class A : Java.Lang.Object
+		internal sealed class A : Java.Lang.Object
 		{
-			public class B : Java.Lang.Object
+			internal sealed class B : Java.Lang.Object
 			{
 			}
 		}
-		public class C
+		internal sealed class C
 		{
-			public class D : Java.Lang.Object
+			internal sealed class D : Java.Lang.Object
 			{
 			}
 		}
 	}
 
 	[Instrumentation (Name = "instrumentation.Name")]
-	class InstrumentationName : Java.Lang.Object
+	sealed class InstrumentationName : Java.Lang.Object
 	{
 	}
 
 	[ContentProvider (Name = "provider.Name")]
-	class ProviderName : Java.Lang.Object
+	sealed class ProviderName : Java.Lang.Object
 	{
 	}
 
@@ -216,7 +216,7 @@ namespace Xamarin.Android.ToolsTests {
 	{
 
 		[Register ("register/NonStaticOuterClass$NonStaticInnerClass", DoNotGenerateAcw = true)]
-		public class NonStaticInnerClass : Java.Lang.Object
+		internal class NonStaticInnerClass : Java.Lang.Object
 		{
 			public NonStaticInnerClass (NonStaticOuterClass __self)
 			{
@@ -224,9 +224,9 @@ namespace Xamarin.Android.ToolsTests {
 		}
 	}
 
-	class ExampleOuterClass : NonStaticOuterClass
+	sealed class ExampleOuterClass : NonStaticOuterClass
 	{
-		public class ExampleInnerClass : NonStaticInnerClass
+		internal sealed class ExampleInnerClass : NonStaticInnerClass
 		{
 			public ExampleInnerClass (ExampleOuterClass outer)
 				: base (outer)
@@ -236,29 +236,29 @@ namespace Xamarin.Android.ToolsTests {
 	}
 
 	[Activity (Name = "my.ExampleActivity")]
-	class ExampleActivity : Activity
+	sealed class ExampleActivity : Activity
 	{
 	}
 
 	[Instrumentation (Name = "my.ExampleInstrumentation")]
-	class ExampleInstrumentation : Instrumentation
+	sealed class ExampleInstrumentation : Instrumentation
 	{
 	}
 
 	[BroadcastReceiver (Name = "receiver.Name")]
-	class ReceiverName : Java.Lang.Object
+	sealed class ReceiverName : Java.Lang.Object
 	{
 	}
 
 	[Register ("register.Name")]
-	class RegisterName : Java.Lang.Object
+	sealed class RegisterName : Java.Lang.Object
 	{
-		public class DefaultNestedName : Java.Lang.Object
+		internal sealed class DefaultNestedName : Java.Lang.Object
 		{
 		}
 
 		[Register ("register.Name$Override")]
-		public class OverrideNestedName : Java.Lang.Object
+		internal sealed class OverrideNestedName : Java.Lang.Object
 		{
 		}
 	}
@@ -278,25 +278,25 @@ namespace Xamarin.Android.ToolsTests {
 	}
 
 	[Register ("Kotlin.InvalidRegisterNameSubclass")]
-	class KotlinInvalidImplRegisterName : KotlinInvalidRegisterName
+	sealed class KotlinInvalidImplRegisterName : KotlinInvalidRegisterName
 	{
 		[Register ("foo-impl")]
 		public override void Foo () => base.Foo ();
 	}
 
 	[Register ("Kotlin.InvalidRegisterNameSubclass")]
-	class KotlinInvalidHashRegisterName : KotlinInvalidRegisterName
+	sealed class KotlinInvalidHashRegisterName : KotlinInvalidRegisterName
 	{
 		[Register ("foo-f8k2a13")]
 		public override void Bar () => base.Foo ();
 	}
 
 	[Service (Name = "service.Name")]
-	class ServiceName : Java.Lang.Object
+	sealed class ServiceName : Java.Lang.Object
 	{
 	}
 
-	class ExportsMembers : Java.Lang.Object
+	sealed class ExportsMembers : Java.Lang.Object
 	{
 		[ExportField ("STATIC_INSTANCE")]
 		public static ExportsMembers GetInstance ()
@@ -338,7 +338,7 @@ namespace Xamarin.Android.ToolsTests {
 	}
 
 	[Register ("register.ExportsConstructors")]
-	class ExportsConstructors : Java.Lang.Object
+	sealed class ExportsConstructors : Java.Lang.Object
 	{
 		[Export]
 		public ExportsConstructors () { }
@@ -348,7 +348,7 @@ namespace Xamarin.Android.ToolsTests {
 	}
 
 	[Register ("register.ExportsThrowsConstructors")]
-	class ExportsThrowsConstructors : Java.Lang.Object
+	sealed class ExportsThrowsConstructors : Java.Lang.Object
 	{
 		[Export (Throws = new [] { typeof (Java.Lang.Throwable) })]
 		public ExportsThrowsConstructors () { }
@@ -361,7 +361,7 @@ namespace Xamarin.Android.ToolsTests {
 	}
 
 	[JniTypeSignature ("register/JavaInteropExample")]
-	class JavaInteropExample : Java.Lang.Object {
+	sealed class JavaInteropExample : Java.Lang.Object {
 
 
 		[JavaCallableConstructor(SuperConstructorExpression="")]
@@ -373,6 +373,6 @@ namespace Xamarin.Android.ToolsTests {
 }
 
 [Register (nameof (GlobalClass))]
-class GlobalClass : Java.Lang.Object
+sealed class GlobalClass : Java.Lang.Object
 {
 }

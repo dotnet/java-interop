@@ -8,7 +8,7 @@ using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation
 {
-	public abstract class GenBase : IGeneratable, ApiVersionsSupport.IApiAvailability, ISourceLineInfo
+	internal abstract class GenBase : IGeneratable, ApiVersionsSupport.IApiAvailability, ISourceLineInfo
 	{
 		bool enum_updated;
 		bool property_filled;
@@ -141,15 +141,14 @@ namespace MonoDroid.Generation
 
 				if (Ancestors ().All (a => !a.prop_hash.ContainsKey (m.PropertyName)) && Ancestors ().Any (a => a.Methods.Any (mm => mm.Name == m.Name && ReturnTypeMatches (m, mm) && ParameterList.Equals (mm.Parameters, m.Parameters))))
 					unmatched.Add (m); // base setter exists, and it was not a property.
-				else if (prop_hash.ContainsKey (m.PropertyName)) {
+				else if (prop_hash.TryGetValue (m.PropertyName, out var setterProp)) {
 					Property baseProp = BaseGen?.Properties.FirstOrDefault (p => p.Name == m.PropertyName);
-					var prop = prop_hash [m.PropertyName];
-					if (prop.Getter.RetVal.FullName == m.Parameters [0].Type &&
-							prop.Getter.IsAbstract == m.IsAbstract && // SearchIterator abstract getIndex() and non-abstract setIndex()
-							prop.Getter.Visibility == m.Visibility &&
+					if (setterProp.Getter.RetVal.FullName == m.Parameters [0].Type &&
+							setterProp.Getter.IsAbstract == m.IsAbstract && // SearchIterator abstract getIndex() and non-abstract setIndex()
+							setterProp.Getter.Visibility == m.Visibility &&
 							(baseProp == null || baseProp.Setter != null) &&
-							prop.Getter.SourceApiLevel <= m.SourceApiLevel)
-						prop.Setter = m;
+							setterProp.Getter.SourceApiLevel <= m.SourceApiLevel)
+						setterProp.Setter = m;
 					else
 						unmatched.Add (m);
 				} else if (prop_hash.ContainsKey ("Is" + m.PropertyName)) {
@@ -166,8 +165,8 @@ namespace MonoDroid.Generation
 						unmatched.Add (m);
 				} else
 					unmatched.Add (m);
-				if (m.GenerateDispatchingSetter && prop_hash.ContainsKey (m.PropertyName))
-					prop_hash [m.PropertyName].GenerateDispatchingSetter = true;
+				if (m.GenerateDispatchingSetter && prop_hash.TryGetValue (m.PropertyName, out var value))
+					value.GenerateDispatchingSetter = true;
 			}
 			Methods = unmatched;
 		}
@@ -513,7 +512,7 @@ namespace MonoDroid.Generation
 			}
 			if (ShouldGenerateAnnotationAttribute) {
 				var baseName = Namespace.Length > 0 ? FullName.Substring (Namespace.Length + 1) : FullName;
-				var attrClassNameBase = baseName.Substring (TypeNamePrefix.Length) + "Attribute";
+				var attrClassNameBase = string.Concat (baseName.AsSpan (TypeNamePrefix.Length), "Attribute");
 				var localFullName = Namespace + (Namespace.Length > 0 ? "." : string.Empty) + attrClassNameBase;
 
 				using (var sw = gen_info.OpenStream (opt.GetFileName (localFullName))) {
@@ -660,8 +659,8 @@ namespace MonoDroid.Generation
 
 		public Property GetPropertyByName (string name, bool check_ifaces, bool check_base_ifaces)
 		{
-			if (prop_hash.ContainsKey (name))
-				return prop_hash [name];
+			if (prop_hash.TryGetValue (name, out var value))
+				return value;
 
 			if (check_ifaces) {
 				foreach (ISymbol isym in Interfaces) {

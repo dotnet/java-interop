@@ -5,7 +5,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class GenericTypeParameter : ISymbol {
+	internal class GenericTypeParameter : ISymbol {
 		
 		string type;
 		string java_type;
@@ -14,8 +14,7 @@ namespace MonoDroid.Generation {
 
 		public GenericTypeParameter (GenericParameterDefinition parm)
 		{
-			if (parm == null)
-				throw new ArgumentNullException ("parm");
+			ArgumentNullException.ThrowIfNull (parm);
 			this.parm = parm;
 #if false // FIXME: we want to enable generic type constraints to get valid JNI output. So far we "remove" any method that involves generic parameter constraints.
 			type = parm.Constraints != null ? parm.Constraints [0].FullName : "Java.Lang.Object";
@@ -83,13 +82,13 @@ namespace MonoDroid.Generation {
 
 		public string GetGenericType (Dictionary<string, string> mappings)
 		{
-			var mapped = mappings != null && mappings.ContainsKey (parm.Name) ? mappings [parm.Name] : null;
+			var mapped = mappings != null && mappings.TryGetValue (parm.Name, out var value) ? value : null;
 			return mapped ?? parm.Name;
 		}
 
 		public string ToNative (CodeGenerationOptions opt, string varname, Dictionary<string, string> mappings = null)
 		{
-			var mapped = mappings != null && mappings.ContainsKey (parm.Name) ? mappings [parm.Name] : null;
+			var mapped = mappings != null && mappings.TryGetValue (parm.Name, out var value) ? value : null;
 			string targetType = opt.GetOutputName (mappings == null ? parm.Name : mapped);
 			if (targetType == "string")
 				return string.Format ("new global::Java.Lang.String ({0})", varname);

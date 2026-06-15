@@ -40,6 +40,8 @@ namespace Java.Interop
 			get {return ArrayRank == 0 ? SimpleReference ?? throw new InvalidOperationException (): QualifiedReference;}
 		}
 
+		private static readonly char [] anyOf = new []{ '.', ';' };
+
 		public JniTypeSignature (string? simpleReference, int arrayRank = 0, bool keyword = false)
 		{
 			if (simpleReference != null) {
@@ -165,7 +167,7 @@ namespace Java.Interop
 				n   = signature;
 				break;
 			}
-			int bad = n.IndexOfAny (new[]{ '.', ';' });
+			int bad = n.IndexOfAny (anyOf);
 			if (bad >= 0)
 				return new ArgumentException (
 						string.Format ("Malformed JNI type reference: contains '{0}': {1}", n [bad], signature),

@@ -74,7 +74,7 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 
 			foreach (var p in maptmp)
 				// We don't want *Invoker classes to overwrite this mapping, so check name and skip them.
-				if (!typemap.ContainsKey (p.JavaName) || GetManagedName (typemap [p.JavaName]) == GetManagedName (p.Managed) + "Invoker")
+				if (!typemap.TryGetValue (p.JavaName, out var value) || GetManagedName (value) == GetManagedName (p.Managed) + "Invoker")
 					typemap [p.JavaName] = p.Managed;
 		}
 

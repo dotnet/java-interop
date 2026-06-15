@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	class XAJavaInteropInterfaceConstantsTests : InterfaceConstantsTests
+	sealed class XAJavaInteropInterfaceConstantsTests : InterfaceConstantsTests
 	{
 		protected override Xamarin.Android.Binder.CodeGenerationTarget Target => Xamarin.Android.Binder.CodeGenerationTarget.XAJavaInterop1;
 	}

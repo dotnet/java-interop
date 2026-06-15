@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Xamarin.Android.Tools.BytecodeTests {
 
-	public class ClassFileFixture {
+	internal class ClassFileFixture {
 
 		static void OnLog (TraceLevel level, int verbosity, string format, object[] args)
 		{

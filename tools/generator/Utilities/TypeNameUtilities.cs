@@ -7,7 +7,7 @@ using MonoDroid.Utils;
 
 namespace MonoDroid.Generation
 {
-	public static class TypeNameUtilities
+	internal static class TypeNameUtilities
 	{
 		// These must be sorted for BinarySearch to work
 		// Missing "this" because it's handled elsewhere as "this_"
@@ -71,8 +71,8 @@ namespace MonoDroid.Generation
 
 		public static string GetNativeName (string name)
 		{
-			if (name.StartsWith ("@", StringComparison.Ordinal))
-				return "native__" + name.Substring (1);
+			if (name.StartsWith ('@'))
+				return string.Concat ("native__", name.AsSpan (1));
 			return "native_" + name;
 		}
 

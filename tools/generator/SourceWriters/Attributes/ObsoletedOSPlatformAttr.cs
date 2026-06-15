@@ -5,7 +5,7 @@ using Java.Interop.Tools.Generator;
 
 namespace generator.SourceWriters
 {
-	public class ObsoletedOSPlatformAttr : AttributeWriter
+	internal class ObsoletedOSPlatformAttr : AttributeWriter
 	{
 		public string Message { get; set; }
 		public AndroidSdkVersion Version { get; }

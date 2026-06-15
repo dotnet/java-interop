@@ -30,7 +30,7 @@ namespace Xamarin.Android.Tools.BytecodeTests {
 				return null;
 			}
 			var buildName   = testDir.Replace ("Test", "Build");
-			if (buildName.IndexOf ("-", StringComparison.Ordinal) >= 0) {
+			if (buildName.IndexOf ('-') >= 0) {
 				buildName   = buildName.Substring (0, buildName.IndexOf ('-'));
 			}
 			var jdkPropFile = Path.Combine (binDir, buildName, "JdkInfo.props");

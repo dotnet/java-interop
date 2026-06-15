@@ -12,7 +12,7 @@ namespace generator.SourceWriters
 {
 	// This is a field that is not a constant, and thus we need to generate it as a
 	// property so it can access the Java field.
-	public class BoundFieldAsProperty : PropertyWriter
+	internal class BoundFieldAsProperty : PropertyWriter
 	{
 		readonly Field field;
 		readonly CodeGenerationOptions opt;

@@ -61,8 +61,7 @@ namespace Java.Interop {
 				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
 			var r = value.PeerReference;
-			if (!r.IsValid)
-				throw new ObjectDisposedException (value.GetType ().FullName);
+			ObjectDisposedException.ThrowIf (!r.IsValid, value);
 
 			if (r.Type != JniObjectReferenceType.Global) {
 				value.SetPeerReference (r.NewGlobalRef ());
@@ -149,8 +148,7 @@ namespace Java.Interop {
 			if (RegisteredInstances == null)
 				throw new ObjectDisposedException (nameof (ManagedValueManager));
 
-			if (value == null)
-				throw new ArgumentNullException (nameof (value));
+			ArgumentNullException.ThrowIfNull (value);
 
 			int key = value.JniIdentityHashCode;
 			lock (RegisteredInstances) {

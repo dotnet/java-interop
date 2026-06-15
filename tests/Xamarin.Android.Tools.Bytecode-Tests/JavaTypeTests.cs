@@ -11,7 +11,8 @@ using Assembly = System.Reflection.Assembly;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class JavaTypeTests : ClassFileFixture {
+	internal sealed class JavaTypeTests : ClassFileFixture {
+		private static readonly string [] interfaceBounds = new [] { "Ljava/lang/Comparable<TT;>;" };
 
 		[Test]
 		public void ClassFile_WithJavaType_class ()
@@ -271,7 +272,7 @@ namespace Xamarin.Android.Tools.BytecodeTests {
 						ReturnDescriptor        = "V",
 						TypeParameters = {
 							new TypeParameterInfo ("T",               "Ljava/lang/Object;"),
-							new TypeParameterInfo ("TExtendsNumber",  "Ljava/lang/Number;",  new [] { "Ljava/lang/Comparable<TT;>;" }),
+							new TypeParameterInfo ("TExtendsNumber",  "Ljava/lang/Number;",  interfaceBounds),
 							new TypeParameterInfo ("TThrowable",      "Ljava/lang/Throwable;"),
 						},
 						Parameters = {

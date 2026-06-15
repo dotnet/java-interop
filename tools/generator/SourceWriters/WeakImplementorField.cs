@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class WeakImplementorField : FieldWriter
+	internal class WeakImplementorField : FieldWriter
 	{
 		public WeakImplementorField (string name, CodeGenerationOptions opt)
 		{

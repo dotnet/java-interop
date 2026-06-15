@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 {
-	public class JavaApiTestHelper
+	internal sealed class JavaApiTestHelper
 	{
 		static  readonly    string  TopDir  = Path.Combine (
 				Path.GetDirectoryName (typeof (JavaApiTestHelper).Assembly.Location),

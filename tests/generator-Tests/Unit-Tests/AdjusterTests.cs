@@ -12,7 +12,7 @@ namespace generatortests
 	//For now this is a basic smoke test to validate the `generator --only-xml-adjuster` option
 	//	In the future, it should be expanded to fully test the Adjuster class
 	[TestFixture]
-	public class AdjusterTests
+	internal sealed class AdjusterTests
 	{
 		Adjuster adjuster;
 		CodeGenerationOptions options;

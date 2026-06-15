@@ -20,7 +20,7 @@ using Android.Content;
 namespace Xamarin.Android.ToolsTests
 {
 	[TestFixture]
-	public class TypeNameMapGeneratorTests
+	internal class TypeNameMapGeneratorTests
 	{
 		[Test]
 		public void ConstructorExceptions ()

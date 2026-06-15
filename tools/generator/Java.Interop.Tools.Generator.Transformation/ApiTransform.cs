@@ -6,7 +6,7 @@ using System.IO;
 
 namespace MonoDroid.Generation
 {
-	public class ApiTransform
+	internal class ApiTransform
 	{
 		public bool PreserveType { get; set; }
 		public string Version { get; set; }

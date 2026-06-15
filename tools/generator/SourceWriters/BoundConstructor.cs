@@ -10,7 +10,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class BoundConstructor : ConstructorWriter
+	internal class BoundConstructor : ConstructorWriter
 	{
 		protected Ctor constructor;
 		protected CodeGenerationOptions opt;
@@ -125,7 +125,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class StringOverloadConstructor : BoundConstructor
+	internal class StringOverloadConstructor : BoundConstructor
 	{
 		public StringOverloadConstructor (ClassGen klass, Ctor constructor, bool useBase, CodeGenerationOptions opt, CodeGeneratorContext context) :
 			base (klass, constructor, useBase, opt, context)

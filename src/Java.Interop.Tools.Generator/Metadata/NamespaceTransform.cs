@@ -18,12 +18,12 @@ namespace Java.Interop.Tools.Generator
 			OldValue = oldValue;
 			NewValue = newValue;
 
-			if (OldValue.EndsWith (".", StringComparison.Ordinal)) {
+			if (OldValue.EndsWith ('.')) {
 				IsStartsWith = true;
 				OldValue = OldValue.Substring (0, OldValue.Length - 1);
 			}
 
-			if (OldValue.StartsWith (".", StringComparison.Ordinal)) {
+			if (OldValue.StartsWith ('.')) {
 				IsEndsWith = true;
 				OldValue = OldValue.Substring (1);
 			}
@@ -57,7 +57,7 @@ namespace Java.Interop.Tools.Generator
 			// Handle a "starts with" transform
 			if (IsStartsWith) {
 				if (value.StartsWith (OldValue, StringComparison.OrdinalIgnoreCase))
-					return (NewValue + value.Substring (OldValue.Length)).TrimStart ('.');
+					return (string.Concat (NewValue, value.AsSpan (OldValue.Length))).TrimStart ('.');
 
 				return value;
 			}
@@ -65,7 +65,7 @@ namespace Java.Interop.Tools.Generator
 			// Handle an "ends with" transform
 			if (IsEndsWith) {
 				if (value.EndsWith (OldValue, StringComparison.OrdinalIgnoreCase))
-					return (value.Substring (0, value.Length - OldValue.Length) + NewValue).TrimEnd ('.');
+					return (string.Concat (value.AsSpan (0, value.Length - OldValue.Length), NewValue)).TrimEnd ('.');
 
 				return value;
 			}

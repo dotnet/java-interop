@@ -204,47 +204,61 @@ namespace Java.Interop {
 
 	partial class JreNativeMethods {
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_get_gref_count        (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_get_gref_count        (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_get_weak_gref_count   (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_get_weak_gref_count   (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern IntPtr java_interop_gc_bridge_lref_get_log_file  (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial IntPtr java_interop_gc_bridge_lref_get_log_file  (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_lref_set_log_level    (IntPtr bridge, int level);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_lref_set_log_level    (IntPtr bridge, int level);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern void java_interop_gc_bridge_lref_log_message     (IntPtr bridge, int level,      string? message);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial void java_interop_gc_bridge_lref_log_message     (IntPtr bridge, int level,      string? message);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern void java_interop_gc_bridge_lref_log_new         (IntPtr bridge, int lref_count, IntPtr curHandle, byte curType, IntPtr newHandle, byte newType, string? thread_name, long thread_id, string? from);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial void java_interop_gc_bridge_lref_log_new         (IntPtr bridge, int lref_count, IntPtr curHandle, byte curType, IntPtr newHandle, byte newType, string? thread_name, long thread_id, string? from);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern void java_interop_gc_bridge_lref_log_delete      (IntPtr bridge, int lref_count, IntPtr handle,    byte type,                                    string? thread_name, long thread_id, string? from);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial void java_interop_gc_bridge_lref_log_delete      (IntPtr bridge, int lref_count, IntPtr handle,    byte type,                                    string? thread_name, long thread_id, string? from);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern IntPtr java_interop_gc_bridge_gref_get_log_file  (IntPtr bridge);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial IntPtr java_interop_gc_bridge_gref_get_log_file  (IntPtr bridge);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_gref_set_log_level    (IntPtr bridge, int level);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_gref_set_log_level    (IntPtr bridge, int level);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern void java_interop_gc_bridge_gref_log_message     (IntPtr bridge, int level,      string? message);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial void java_interop_gc_bridge_gref_log_message     (IntPtr bridge, int level,      string? message);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_gref_log_new          (IntPtr bridge,                 IntPtr curHandle, byte curType, IntPtr newHandle, byte newType, string? thread_name, long thread_id, string? from);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_gref_log_new          (IntPtr bridge,                 IntPtr curHandle, byte curType, IntPtr newHandle, byte newType, string? thread_name, long thread_id, string? from);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_gref_log_delete       (IntPtr bridge,                 IntPtr handle,    byte type,                                    string? thread_name, long thread_id, string? from);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_gref_log_delete       (IntPtr bridge,                 IntPtr handle,    byte type,                                    string? thread_name, long thread_id, string? from);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_weak_gref_log_new     (IntPtr bridge,                 IntPtr curHandle, byte curType, IntPtr newHandle, byte newType, string? thread_name, long thread_id, string? from);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_weak_gref_log_new     (IntPtr bridge,                 IntPtr curHandle, byte curType, IntPtr newHandle, byte newType, string? thread_name, long thread_id, string? from);
 
-		[DllImport (JavaInteropLib, CallingConvention=CallingConvention.Cdecl)]
-		internal static extern int java_interop_gc_bridge_weak_gref_log_delete  (IntPtr bridge,                 IntPtr handle,    byte type,                                    string? thread_name, long thread_id, string? from);
+		[LibraryImport (JavaInteropLib)]
+		[UnmanagedCallConv (CallConvs = [typeof (System.Runtime.CompilerServices.CallConvCdecl)])]
+		internal static partial int java_interop_gc_bridge_weak_gref_log_delete  (IntPtr bridge,                 IntPtr handle,    byte type,                                    string? thread_name, long thread_id, string? from);
 	}
 }
 

@@ -103,7 +103,7 @@ namespace Java.InteropTests {
 			var slash       = jniSimpleReference.LastIndexOf ('/');
 			var desugarType = slash <= 0
 				? "Desugar" + jniSimpleReference
-				: jniSimpleReference.Substring (0, slash+1) + "Desugar" + jniSimpleReference.Substring (slash+1);
+				: string.Concat (jniSimpleReference.AsSpan (0, slash+1), "Desugar", jniSimpleReference.AsSpan (slash+1));
 
 			// These types likely won't ever exist on Desktop, but providing
 			// "potentially non-existent" types ensures that we don't throw
@@ -144,7 +144,7 @@ namespace Java.InteropTests {
 			var targetSig   = r.TargetSignature;
 			var paramCount  = r.ParamCount;
 			if (targetSig == null && r.TurnStatic) {
-				targetSig   = $"(L{jniSourceType};" + jniMethodSignature.Substring ("(".Length);
+				targetSig   = string.Concat ($"(L{jniSourceType};", jniMethodSignature.AsSpan ("(".Length));
 				paramCount  = paramCount ?? JniMemberSignature.GetParameterCountFromMethodSignature (jniMethodSignature);
 				paramCount++;
 			}

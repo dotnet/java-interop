@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class GeneratedEnumAttr : AttributeWriter
+	internal class GeneratedEnumAttr : AttributeWriter
 	{
 		readonly bool is_return;
 

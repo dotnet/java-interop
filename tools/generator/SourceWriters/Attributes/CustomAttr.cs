@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class CustomAttr : AttributeWriter
+	internal class CustomAttr : AttributeWriter
 	{
 		public string Value { get; set; }
 

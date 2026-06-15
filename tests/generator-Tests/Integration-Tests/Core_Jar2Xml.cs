@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class Core_Jar2Xml : BaseGeneratorTest
+	internal sealed class Core_Jar2Xml : BaseGeneratorTest
 	{
 		protected override bool TryJavaInterop1 => false;
 

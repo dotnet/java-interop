@@ -5,7 +5,7 @@ using System;
 namespace Android.Runtime {
 
 	[AttributeUsage (AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Interface | AttributeTargets.Method | AttributeTargets.Property)]
-	public sealed class RegisterAttribute : Attribute {
+	internal sealed class RegisterAttribute : Attribute {
 
 		public RegisterAttribute (string name)
 		{

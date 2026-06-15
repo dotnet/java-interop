@@ -5,7 +5,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation
 {
-	public class NamespaceMapping
+	internal class NamespaceMapping
 	{
 		Dictionary<string,string> mappings = new Dictionary<string,string> ();
 		

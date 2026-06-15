@@ -7,7 +7,7 @@ using NAssert   = NUnit.Framework.Assert;
 
 namespace Xamarin.Android.Tools.BytecodeTests {
 
-	class ExpectedFieldDeclaration {
+	sealed class ExpectedFieldDeclaration {
 
 		public  string              Name;
 		public  string              Descriptor;

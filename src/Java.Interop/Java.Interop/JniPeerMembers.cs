@@ -31,12 +31,10 @@ namespace Java.Interop {
 
 		JniPeerMembers (string jniPeerTypeName, Type managedPeerType, bool checkManagedPeerType, bool isInterface = false)
 		{
-			if (jniPeerTypeName == null)
-				throw new ArgumentNullException (nameof (jniPeerTypeName));
+			ArgumentNullException.ThrowIfNull (jniPeerTypeName);
 
 			if (checkManagedPeerType) {
-				if (managedPeerType == null)
-					throw new ArgumentNullException (nameof (managedPeerType));
+				ArgumentNullException.ThrowIfNull (managedPeerType);
 				if (!typeof (IJavaPeerable).IsAssignableFrom (managedPeerType))
 					throw new ArgumentException ("'managedPeerType' must implement the IJavaPeerable interface.", nameof (managedPeerType));
 
@@ -143,8 +141,7 @@ namespace Java.Interop {
 
 		internal static void AssertSelf (IJavaPeerable self)
 		{
-			if (self == null)
-				throw new ArgumentNullException (nameof (self));
+			ArgumentNullException.ThrowIfNull (self);
 
 			var peer    = self.PeerReference;
 			if (!peer.IsValid)
@@ -154,9 +151,8 @@ namespace Java.Interop {
 
 		internal static int GetSignatureSeparatorIndex (string encodedMember)
 		{
-			if (encodedMember == null)
-				throw new ArgumentNullException (nameof (encodedMember));
-			int n = encodedMember.IndexOf (".", StringComparison.Ordinal);
+			ArgumentNullException.ThrowIfNull (encodedMember);
+			int n = encodedMember.IndexOf ('.');
 			if (n < 0)
 				throw new ArgumentException (
 						"Invalid encoding; 'encodedMember' should be encoded as \"<NAME>.<SIGNATURE>\".",

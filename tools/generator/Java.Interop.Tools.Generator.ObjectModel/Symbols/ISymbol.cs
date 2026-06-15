@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MonoDroid.Generation {
 
-	public interface ISymbol  {
+	internal interface ISymbol  {
 
 		string DefaultValue { get; }
 		string FullName { get; }

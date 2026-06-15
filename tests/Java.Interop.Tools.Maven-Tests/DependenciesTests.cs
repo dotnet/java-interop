@@ -5,7 +5,7 @@ using Java.Interop.Tools.Maven_Tests.Extensions;
 
 namespace Java.Interop.Tools.Maven_Tests;
 
-public class DependenciesTests
+internal sealed class DependenciesTests
 {
 	[Test]
 	[TestCase ("dev.chrisbanes.snapper:snapper:0.3.0", "androidx.compose.foundation:foundation:1.2.1 - compile;org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21 - compile")]

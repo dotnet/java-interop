@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class JavaType_RNCTests : ClassFileFixture {
+	internal sealed class JavaType_RNCTests : ClassFileFixture {
 
 		const string JavaType = "JavaType$RNC";
 

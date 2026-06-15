@@ -262,7 +262,7 @@ namespace Java.InteropTests {
 		void CheckExpression (JniValueMarshalerContext context, string expected, Expression ret)
 		{
 			var body    = Expression.Block (context.CreationStatements.Concat (new[]{ ret }));
-			var cleanup = context.CleanupStatements.Any ()
+			var cleanup = context.CleanupStatements.Count != 0
 				? (Expression) Expression.Block (context.CleanupStatements.Reverse ())
 				: (Expression) Expression.Empty ();
 			var expr    = Expression.TryFinally (body, cleanup);
@@ -463,8 +463,11 @@ namespace Java.InteropTests {
 		protected   abstract    string  ValueMarshalerSourceType    {get;}
 
 		protected   override    T       Value {
-			get {return CreateArray (new[]{ 1, 2, 3 });}
+			get {return CreateArray (int32Array);}
 		}
+
+		private static readonly int [] int32Array = new []{ 1, 2, 3 };
+		private static readonly int [] int32Array0 = new []{ 1 };
 
 		protected   override    bool    Equals (T x, T y)
 		{
@@ -474,7 +477,7 @@ namespace Java.InteropTests {
 		[Test]
 		public unsafe void DestroyGenericArgumentState_UpdatesSource ()
 		{
-			var a   = CreateArray (new[]{ 1 });
+			var a   = CreateArray (int32Array0);
 			var s   = marshaler.CreateGenericObjectReferenceArgumentState (a);
 			fixed (int *p = new[]{3})
 				JniEnvironment.Arrays.SetIntArrayRegion (s.ReferenceValue, 0, 1, p);
@@ -523,6 +526,8 @@ namespace Java.InteropTests {
 
 		protected   override    string                  ValueMarshalerSourceType {get {return "int[]";}}
 
+		private static readonly int [] int32Array = new []{ 1 };
+
 		[Test]
 		public unsafe void CreateGenericObjectReferenceArgumentState_OutParameterDoesNotCopy ()
 		{
@@ -537,7 +542,7 @@ namespace Java.InteropTests {
 		[Test]
 		public unsafe void DestroyGenericArgumentState_InParameterDoesNotUpdatesSource ()
 		{
-			var a   = CreateArray (new[]{ 1 });
+			var a   = CreateArray (int32Array);
 			var s   = marshaler.CreateGenericObjectReferenceArgumentState (a);
 			fixed (int *p = new[]{3})
 				JniEnvironment.Arrays.SetIntArrayRegion (s.ReferenceValue, 0, 1, p);

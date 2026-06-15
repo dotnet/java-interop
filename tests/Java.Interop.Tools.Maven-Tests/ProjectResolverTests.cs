@@ -5,7 +5,7 @@ using Java.Interop.Tools.Maven_Tests.Extensions;
 
 namespace Java.Interop.Tools.Maven_Tests;
 
-public class ProjectResolverTests
+internal sealed class ProjectResolverTests
 {
 	[Test]
 	public void ResolveRawProject_Success ()

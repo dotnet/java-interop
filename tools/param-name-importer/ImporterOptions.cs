@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Xamarin.Android.ApiTools
 {
-	public class ImporterOptions
+	internal sealed class ImporterOptions
 	{
 		public string InputZipArchive { get; set; }
 		public string DocumentDirectory { get; set; }

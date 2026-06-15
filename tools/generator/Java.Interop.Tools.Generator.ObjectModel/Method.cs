@@ -5,7 +5,7 @@ using MonoDroid.Generation.Utilities;
 
 namespace MonoDroid.Generation
 {
-	public class Method : MethodBase
+	internal class Method : MethodBase
 	{
 		bool is_override;
 

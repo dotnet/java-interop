@@ -4,7 +4,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class CharSequenceSymbol : ISymbol {
+	internal class CharSequenceSymbol : ISymbol {
 
 		public string DefaultValue {
 			get { return "IntPtr.Zero"; }

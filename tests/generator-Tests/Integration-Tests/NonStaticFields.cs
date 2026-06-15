@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class NonStaticFields : BaseGeneratorTest
+	internal sealed class NonStaticFields : BaseGeneratorTest
 	{
 		[Test]
 		public void GeneratedOK ()

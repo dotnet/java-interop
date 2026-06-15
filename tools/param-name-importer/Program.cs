@@ -11,7 +11,7 @@ using Xamarin.Android.ApiTools.JavaStubImporter;
 
 namespace Xamarin.Android.ApiTools
 {
-	public class Driver
+	internal sealed class Driver
 	{
 		public static void Main (string [] args)
 		{

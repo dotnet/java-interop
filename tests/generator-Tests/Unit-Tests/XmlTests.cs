@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace generatortests
 {
 	[TestFixture]
-	public class XmlTests
+	internal sealed class XmlTests
 	{
 		XDocument xml;
 		XElement package;

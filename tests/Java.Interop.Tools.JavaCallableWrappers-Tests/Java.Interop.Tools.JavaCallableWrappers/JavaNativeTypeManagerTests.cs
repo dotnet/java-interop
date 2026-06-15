@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
 	[TestFixture]
-	public class JavaNativeTypeManagerTests
+	internal class JavaNativeTypeManagerTests
 	{
 		PackageNamingPolicy existingValue;
 

@@ -6,7 +6,7 @@ using Java.Interop.Tools.Maven.Repositories;
 
 namespace Java.Interop.Tools.Maven_Tests.Extensions;
 
-class MavenProjectResolver : IProjectResolver
+sealed class MavenProjectResolver : IProjectResolver
 {
 	readonly IMavenRepository repository;
 

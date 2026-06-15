@@ -6,7 +6,7 @@ using MonoDroid.Generation.Utilities;
 
 namespace MonoDroid.Generation
 {
-	public abstract class MethodBase : ApiVersionsSupport.IApiAvailability, ISourceLineInfo
+	internal abstract class MethodBase : ApiVersionsSupport.IApiAvailability, ISourceLineInfo
 	{
 		protected MethodBase (GenBase declaringType)
 		{

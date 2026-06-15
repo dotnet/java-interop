@@ -298,7 +298,7 @@ namespace Java.Interop.Tools.JavaSource {
 	}
 
 	// Based in part on WikiTextTerminal
-	class CharacterDataTerminal : Terminal {
+	sealed class CharacterDataTerminal : Terminal {
 
 		char[]? _stopChars;
 
@@ -357,7 +357,7 @@ namespace Java.Interop.Tools.JavaSource {
 		}
 	}
 
-	class PreBlockDeclarationBodyTerminal : Terminal {
+	sealed class PreBlockDeclarationBodyTerminal : Terminal {
 
 		public PreBlockDeclarationBodyTerminal ()
 			: base ("<pre> body")
@@ -385,7 +385,7 @@ namespace Java.Interop.Tools.JavaSource {
 		}
 	}
 
-	class UnknownHtmlElementStartTerminal : Terminal {
+	sealed class UnknownHtmlElementStartTerminal : Terminal {
 
 		bool    addingRemarks;
 

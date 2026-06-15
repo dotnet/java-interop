@@ -5,7 +5,7 @@ using System.Linq;
 namespace MonoDroid.Generation.Utilities
 {
 	// Finding all descendants of a type is expensive, so we cache the results here
-	public class AncestorDescendantCache
+	internal class AncestorDescendantCache
 	{
 		readonly List<GenBase> gens;
 		readonly Dictionary<GenBase, IEnumerable<GenBase>> cache = new Dictionary<GenBase, IEnumerable<GenBase>> ();

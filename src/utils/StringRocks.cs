@@ -21,7 +21,7 @@ namespace MonoDroid.Utils {
 			if (string.IsNullOrEmpty (value))
 				return value;
 
-			if (value.Contains ("."))
+			if (value.Contains ('.'))
 				throw new NotSupportedException ("Methods cannot contain '.'.");
 
 			return ToPascalCasePart (value, 1);

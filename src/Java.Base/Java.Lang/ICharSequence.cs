@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Java.Lang {
 
-	partial class ICharSequenceInvoker : IEnumerable {
+	partial sealed class ICharSequenceInvoker : IEnumerable {
 	}
 
 	public static partial class ICharSequenceExtensions {

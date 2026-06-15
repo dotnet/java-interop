@@ -12,7 +12,7 @@ using Xamarin.Android.Tools.ApiXmlAdjuster;
 
 namespace Xamarin.Android.ApiTools.JavaStubImporter
 {
-	public class JavaStubSourceImporter
+	internal sealed class JavaStubSourceImporter
 	{
 		public void Import (ImporterOptions options)
 		{

@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class NonGenericGlobalTypeTests : ClassFileFixture {
+	internal sealed class NonGenericGlobalTypeTests : ClassFileFixture {
 
 		const string JavaType = "NonGenericGlobalType";
 

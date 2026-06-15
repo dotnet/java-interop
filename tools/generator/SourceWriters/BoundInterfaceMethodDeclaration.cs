@@ -11,7 +11,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundInterfaceMethodDeclaration : MethodWriter
+	internal class BoundInterfaceMethodDeclaration : MethodWriter
 	{
 		readonly Method method;
 		readonly CodeGenerationOptions opt;

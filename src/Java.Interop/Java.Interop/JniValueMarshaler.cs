@@ -191,8 +191,7 @@ namespace Java.Interop {
 		{
 			Func<JniObjectReference, IntPtr>    m = JniEnvironment.References.NewReturnToJniRef;
 			var r   = Expression.Variable (MarshalType, namePrefix + "_rtn");
-			if (context == null)
-				throw new ArgumentNullException (nameof (context));
+			ArgumentNullException.ThrowIfNull (context);
 			context.LocalVariables.Add (r);
 			context.CreationStatements.Add (
 				Expression.Assign (r,

@@ -9,7 +9,7 @@ using Xamarin.Android.Tools.ApiXmlAdjuster;
 namespace Java.Interop.Tools.JavaSource.Tests
 {
 	[TestFixture]
-	public class JavaStubParserTests
+	internal sealed class JavaStubParserTests
 	{
 		[Test]
 		public void TryParse_EmptySource ()

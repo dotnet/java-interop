@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MonoDroid.Generation {
 
-	public class GenericSymbol : ISymbol {
+	internal class GenericSymbol : ISymbol {
 
 		bool is_concrete;
 		GenBase gen;
@@ -77,8 +77,8 @@ namespace MonoDroid.Generation {
 			foreach (var tp in type_params) {
 				if (sb.Length > 1)
 					sb.Append (", ");
-				if (mappings.ContainsKey (tp.FullName))
-					sb.Append (mappings[tp.FullName]);
+				if (mappings.TryGetValue (tp.FullName, out var value))
+					sb.Append (value);
 				else
 					sb.Append (tp.FullName);
 			}

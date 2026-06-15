@@ -8,7 +8,7 @@ using MonoDroid.Generation.Utilities;
 
 namespace MonoDroid.Generation
 {
-	public class Property
+	internal class Property
 	{
 		private Method setter;
 

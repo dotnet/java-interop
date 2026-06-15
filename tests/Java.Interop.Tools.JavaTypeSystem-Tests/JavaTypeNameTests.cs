@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaTypeSystem.Tests
 {
 	[TestFixture]
-	public class JavaTypeNameTests
+	internal sealed class JavaTypeNameTests
 	{
 		[Test]
 		public void ParseName ()

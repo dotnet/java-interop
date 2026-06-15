@@ -20,7 +20,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 			var jni = new JniSignature (JniTypeName.Parse (signature.Substring (idx)));
 
 			// Strip out return type
-			if (signature.StartsWith ("(", StringComparison.Ordinal)) {
+			if (signature.StartsWith ('(')) {
 				var e = signature.IndexOf (')');
 				signature = signature.Substring (1, e >= 0 ? e - 1 : signature.Length - 1);
 			}
@@ -71,7 +71,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 						var r = Parse (signature.Substring (index));
 
-						return new JniTypeName (signature.Substring (0, index) + r.Jni, r.Type + "[]", r.IsKeyword);
+						return new JniTypeName (string.Concat (signature.AsSpan (0, index), r.Jni), r.Type + "[]", r.IsKeyword);
 					}
 				case 'B':
 					return new JniTypeName ("B", "byte", true);

@@ -11,9 +11,10 @@ using Xamarin.Android.Tools;
 
 namespace MonoDroid.Generation
 {
-	class XmlApiImporter
+	partial class XmlApiImporter
 	{
-		static readonly Regex api_level = new Regex (@"api-(\d+).xml");
+		static readonly Regex api_level = MyRegex ();
+		internal static readonly char [] separator = new char [] { ',', ' ', '\n', '\r' };
 
 		public static List<GenBase> Parse (XDocument doc, CodeGenerationOptions options)
 		{
@@ -92,8 +93,8 @@ namespace MonoDroid.Generation
 			foreach (var name in nested.Keys) {
 				var top_ancestor = name.Substring (0, name.IndexOf ('.'));
 
-				if (by_name.ContainsKey (top_ancestor))
-					by_name [top_ancestor].AddNestedType (nested [name]);
+				if (by_name.TryGetValue (top_ancestor, out var value))
+					value.AddNestedType (nested [name]);
 				else {
 					Report.LogCodedWarning (0, Report.WarningNestedTypeAncestorNotFound, top_ancestor, nested [name].FullName);
 					nested [name].Invalidate ();
@@ -148,7 +149,7 @@ namespace MonoDroid.Generation
 			}
 
 			if (elem.Attribute ("skipInterfaceMethods")?.Value is string skip)
-				foreach (var m in skip.Split (new char [] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+				foreach (var m in skip.Split (separator, StringSplitOptions.RemoveEmptyEntries))
 					klass.SkippedInterfaceMethods.Add (m);
 
 			return klass;
@@ -239,7 +240,7 @@ namespace MonoDroid.Generation
 			if (elem.Attribute ("managedName") != null)
 				field.Name = elem.XGetAttribute ("managedName");
 			else {
-				field.Name = TypeNameUtilities.StudlyCase (char.IsLower (field.JavaName [0]) || field.JavaName.ToLowerInvariant ().ToUpperInvariant () != field.JavaName ? field.JavaName : field.JavaName.ToLowerInvariant ());
+				field.Name = TypeNameUtilities.StudlyCase (char.IsLower (field.JavaName [0]) || !field.JavaName.ToLowerInvariant ().Equals (field.JavaName, StringComparison.InvariantCultureIgnoreCase) ? field.JavaName : field.JavaName.ToLowerInvariant ());
 				field.Name = EnsureValidIdentifer (field.Name);
 			}
 
@@ -267,7 +268,7 @@ namespace MonoDroid.Generation
 			};
 
 			if (elem.Attribute ("skipInvokerMethods")?.Value is string skip)
-				foreach (var m in skip.Split (new char [] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+				foreach (var m in skip.Split (separator, StringSplitOptions.RemoveEmptyEntries))
 					support.SkippedInvokerMethods.Add (m);
 
 			if (support.IsDeprecated) {
@@ -571,10 +572,13 @@ namespace MonoDroid.Generation
 			var java_name = elem.XGetAttribute ("name");
 
 			// Ignore types that do not have a name (nested classes would end in a period like "Document.")
-			if (!java_name.HasValue () || java_name.EndsWith (".", StringComparison.Ordinal))
+			if (!java_name.HasValue () || java_name.EndsWith ('.'))
 				return false;
 
 			return true;
 		}
+
+		[GeneratedRegex (@"api-(\d+).xml")]
+		private static partial Regex MyRegex ();
 	}
 }

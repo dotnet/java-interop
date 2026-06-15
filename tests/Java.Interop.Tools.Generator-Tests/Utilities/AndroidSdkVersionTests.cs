@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.Generator_Tests;
 
 [TestFixture]
-public class AndroidSdkVersionTests
+internal sealed class AndroidSdkVersionTests
 {
 	[Test]
 	public void CompareTo()

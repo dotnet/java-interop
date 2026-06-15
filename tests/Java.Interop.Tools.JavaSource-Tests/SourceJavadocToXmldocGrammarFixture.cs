@@ -15,7 +15,7 @@ using Irony.Parsing;
 namespace Java.Interop.Tools.JavaSource.Tests
 {
 	[TestFixture]
-	public class SourceJavadocToXmldocGrammarFixture {
+	internal class SourceJavadocToXmldocGrammarFixture {
 
 		protected const string DocRootPrefixActual = "https://developer.android.com";
 		protected const string DocRootPrefixExpected = DocRootPrefixActual + "/";

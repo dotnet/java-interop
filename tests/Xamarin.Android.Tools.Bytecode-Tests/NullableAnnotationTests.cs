@@ -8,7 +8,7 @@ using System.Linq;
 namespace Xamarin.Android.Tools.BytecodeTests
 {
 	[TestFixture]
-	public class NullableAnnotationTests : ClassFileFixture
+	internal sealed class NullableAnnotationTests : ClassFileFixture
 	{
 		[Test]
 		public void RuntimeInvisibleAnnotations ()

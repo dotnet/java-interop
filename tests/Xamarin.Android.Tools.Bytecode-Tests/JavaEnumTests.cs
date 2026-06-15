@@ -11,7 +11,7 @@ using Assembly = System.Reflection.Assembly;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class JavaEnumTests : ClassFileFixture {
+	internal sealed class JavaEnumTests : ClassFileFixture {
 
 		const string JavaType = "JavaEnum";
 

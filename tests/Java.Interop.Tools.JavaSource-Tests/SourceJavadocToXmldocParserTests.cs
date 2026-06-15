@@ -15,7 +15,7 @@ using Irony.Parsing;
 namespace Java.Interop.Tools.JavaSource.Tests
 {
 	[TestFixture]
-	public class SourceJavadocToXmldocParserTests : SourceJavadocToXmldocGrammarFixture {
+	internal sealed class SourceJavadocToXmldocParserTests : SourceJavadocToXmldocGrammarFixture {
 
 		[Test, TestCaseSource (nameof (TryParse_Success))]
 		public void TryParse (ParseResult parseResult)
@@ -253,7 +253,7 @@ bar()}} for more details.</param>
 			},
 		};
 
-		public class ParseResult {
+		internal sealed class ParseResult {
 			public  string  Javadoc;
 			public  string  FullXml;
 			public  string  IntelliSenseXml;

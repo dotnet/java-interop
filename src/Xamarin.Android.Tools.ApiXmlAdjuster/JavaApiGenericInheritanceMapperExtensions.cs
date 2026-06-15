@@ -42,7 +42,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 						 (def, use) => new KeyValuePair<JavaTypeParameter, JavaTypeReference> (def, use))
 						 .Where (p => p.Value.ReferencedTypeParameter == null || p.Key.Name != p.Value.ReferencedTypeParameter.Name))
 						dic.Add (new JavaTypeReference (kvp.Key, null), kvp.Value);
-					if (dic.Any ()) {
+					if (dic.Count != 0) {
 						cls.GenericInheritanceMapping = dic;
 					}
 					else

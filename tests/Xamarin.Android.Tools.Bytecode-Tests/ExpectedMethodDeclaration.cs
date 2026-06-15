@@ -8,7 +8,7 @@ using NAssert   = NUnit.Framework.Assert;
 
 namespace Xamarin.Android.Tools.BytecodeTests {
 
-	class ExpectedMethodDeclaration {
+	sealed class ExpectedMethodDeclaration {
 
 		public  string                      Name;
 		public  MethodAccessFlags           AccessFlags;

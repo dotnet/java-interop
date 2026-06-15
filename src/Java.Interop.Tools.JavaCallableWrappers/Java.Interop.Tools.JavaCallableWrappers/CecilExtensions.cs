@@ -126,7 +126,7 @@ static class CecilExtensions
 		if (attr.Properties.Count == 0)
 			return new ExportAttribute (name);
 		var typeArgs = (CustomAttributeArgument []) attr.Properties.FirstOrDefault (p => p.Name == "Throws").Argument.Value;
-		var thrown = typeArgs != null && typeArgs.Any ()
+		var thrown = typeArgs != null && typeArgs.Length != 0
 			? (from caa in typeArgs select JavaNativeTypeManager.Parse (GetJniTypeName ((TypeReference) caa.Value, cache))?.Type)
 				.Where (v => v != null)
 				.ToArray ()

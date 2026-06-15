@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class CodeGeneratorContextTests
+	internal sealed class CodeGeneratorContextTests
 	{
 		[Test]
 		public void GetContextTypeMember ()

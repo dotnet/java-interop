@@ -105,7 +105,7 @@ namespace Java.Interop.Tools.Generator.Enumification
 				EnumMember = parser.GetField (2),
 				JavaSignature = parser.GetField (3),
 				Value = parser.GetField (4),
-				IsFlags = parser.GetField (5).ToLowerInvariant () == "flags",
+				IsFlags = parser.GetField (5).Equals ("flags", StringComparison.InvariantCultureIgnoreCase),
 				FieldAction = transientMode ? FieldAction.Remove : FieldAction.Keep
 			};
 
@@ -134,7 +134,7 @@ namespace Java.Interop.Tools.Generator.Enumification
 				EnumFullType = parser.GetField (4),
 				EnumMember = parser.GetField (5),
 				FieldAction = FromFieldActionString (parser.GetField (6)),
-				IsFlags = parser.GetField (7).ToLowerInvariant () == "flags",
+				IsFlags = parser.GetField (7).Equals ("flags", StringComparison.InvariantCultureIgnoreCase),
 				DeprecatedSince = parser.GetFieldAsNullableAndroidSdkVersion (8)
 			};
 

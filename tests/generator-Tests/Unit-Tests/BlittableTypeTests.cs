@@ -6,7 +6,7 @@ using Xamarin.Android.Binder;
 namespace generatortests;
 
 [TestFixture]
-class BlittableTypeTests : CodeGeneratorTestBase
+sealed class BlittableTypeTests : CodeGeneratorTestBase
 {
 	protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 

@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class RegisterAttr : AttributeWriter
+	internal class RegisterAttr : AttributeWriter
 	{
 		public string Name { get; set; }
 		public string Signature { get; set; }

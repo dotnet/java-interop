@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class Android_Graphics_Color : BaseGeneratorTest
+	internal sealed class Android_Graphics_Color : BaseGeneratorTest
 	{
 		[Test]
 		public void GeneratedOK ()

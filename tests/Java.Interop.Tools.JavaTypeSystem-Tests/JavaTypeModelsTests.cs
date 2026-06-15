@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaTypeSystem.Tests
 {
 	[TestFixture]
-	public class JavaTypeModelsTests
+	internal sealed class JavaTypeModelsTests
 	{
 		JavaTypeCollection api;
 		

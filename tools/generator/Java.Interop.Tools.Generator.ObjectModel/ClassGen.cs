@@ -8,7 +8,7 @@ using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation
 {
-	public class ClassGen : GenBase
+	internal class ClassGen : GenBase
 	{
 		bool fill_explicit_implementation_started;
 		HashSet<string> skipped_interface_methods;

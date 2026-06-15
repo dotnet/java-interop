@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceEventArgsClass : ClassWriter
+	internal class InterfaceEventArgsClass : ClassWriter
 	{
 		public InterfaceEventArgsClass (InterfaceGen iface, Method method)
 		{
@@ -84,7 +84,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class HandledProperty : PropertyWriter
+	internal class HandledProperty : PropertyWriter
 	{
 		public HandledProperty ()
 		{

@@ -161,7 +161,7 @@ namespace Xamarin.Android.Tools.ApiXmlAdjuster
 	}
 
 
-	class ManagedType : JavaType
+	sealed class ManagedType : JavaType
 	{
 		static JavaPackage dummy_system_package, dummy_system_io_package, dummy_system_xml_package;
 		static JavaType system_object, system_exception, system_io_stream, system_xml_xmlreader;

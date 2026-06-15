@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace generatortests.SourceWriters
 {
 	[TestFixture]
-	public class MethodExtensionAsyncWrapperTests : SourceWritersTestBase
+	internal sealed class MethodExtensionAsyncWrapperTests : SourceWritersTestBase
 	{
 		[Test]
 		public void MethodExtensionAsyncWrapper ()

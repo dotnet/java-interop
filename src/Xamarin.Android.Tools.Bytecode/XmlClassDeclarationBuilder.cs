@@ -19,8 +19,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public XmlClassDeclarationBuilder (ClassFile classFile)
 		{
-			if (classFile == null)
-				throw new ArgumentNullException ("classFile");
+			ArgumentNullException.ThrowIfNull (classFile);
 
 			this.classFile  = classFile;
 			signature       = classFile.GetSignature ();
@@ -238,7 +237,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 				typeBuilder.Append ("? super ");
 				return AppendGenericTypeNameFromSignature (typeBuilder, value, ref index);
 			}
-			typeBuilder.Append ("/* should not be reached */").Append (value.Substring (index));
+			typeBuilder.Append ("/* should not be reached */").Append (value.AsSpan (index));
 			index = value.Length;
 			return typeBuilder;
 		}
@@ -397,9 +396,9 @@ namespace Xamarin.Android.Tools.Bytecode {
 				var genericType = p.Type.TypeSignature;
 				var varargArray = (i == (parameters.Length - 1)) && varargs;
 				if (varargArray) {
-					Debug.Assert (p.Type.BinaryName.StartsWith ("[", StringComparison.Ordinal),
+					Debug.Assert (p.Type.BinaryName.StartsWith ('['),
 							"Varargs parameters MUST be arrays!");
-					Debug.Assert (p.Type.TypeSignature != null && p.Type.TypeSignature.StartsWith ("[", StringComparison.Ordinal),
+					Debug.Assert (p.Type.TypeSignature != null && p.Type.TypeSignature.StartsWith ('['),
 							"Varargs parameters MUST be arrays!");
 					type        = type.Substring (1);
 					genericType = genericType?.Substring (1);

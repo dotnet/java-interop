@@ -12,7 +12,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class ClassInvokerClass : ClassWriter
+	internal class ClassInvokerClass : ClassWriter
 	{
 		public ClassInvokerClass (ClassGen klass, CodeGenerationOptions opt)
 		{

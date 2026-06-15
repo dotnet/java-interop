@@ -9,7 +9,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class MethodCallback : MethodWriter
+	internal class MethodCallback : MethodWriter
 	{
 		readonly GenBase type;
 		readonly Method method;
@@ -126,7 +126,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class MethodCallbackDelegateField : FieldWriter
+	internal class MethodCallbackDelegateField : FieldWriter
 	{
 		// static Delegate cb_byteValueExact;
 		public MethodCallbackDelegateField (Method method, CodeGenerationOptions options)
@@ -142,7 +142,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class GetDelegateHandlerMethod : MethodWriter
+	internal class GetDelegateHandlerMethod : MethodWriter
 	{
 		readonly Method method;
 		readonly CodeGenerationOptions opt;

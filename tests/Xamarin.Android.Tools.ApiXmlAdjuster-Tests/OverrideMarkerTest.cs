@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 {
 	[TestFixture]
-	public class OverrideMarkerTest
+	internal sealed class OverrideMarkerTest
 	{
 		JavaApi api;
 		

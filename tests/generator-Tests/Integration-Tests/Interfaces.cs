@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class Interfaces : BaseGeneratorTest
+	internal sealed class Interfaces : BaseGeneratorTest
 	{
 		public Interfaces ()
 		{

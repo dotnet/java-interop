@@ -6,7 +6,7 @@ using Xamarin.Android.Binder;
 namespace generatortests.SourceWriters
 {
 	[TestFixture]
-	public class PeerMembersFieldTests : SourceWritersTestBase
+	internal sealed class PeerMembersFieldTests : SourceWritersTestBase
 	{
 		[Test]
 		public void PeerMembersField_Class ()

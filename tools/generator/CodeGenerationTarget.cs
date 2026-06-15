@@ -1,6 +1,6 @@
 namespace Xamarin.Android.Binder
 {
-	public enum CodeGenerationTarget
+	internal enum CodeGenerationTarget
 	{
 		XAJavaInterop1,
 		JavaInterop1,

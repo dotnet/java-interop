@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class DebuggerBrowsableAttr : AttributeWriter
+	internal class DebuggerBrowsableAttr : AttributeWriter
 	{
 		public override void WriteAttribute (CodeWriter writer)
 		{

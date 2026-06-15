@@ -9,7 +9,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceMemberAlternativeClass : ClassWriter
+	internal class InterfaceMemberAlternativeClass : ClassWriter
 	{
 		readonly List<TypeWriter> sibling_classes = new List<TypeWriter> ();
 
@@ -27,7 +27,7 @@ namespace generator.SourceWriters
 			var should_obsolete = opt.SupportInterfaceConstants && opt.SupportDefaultInterfaceMethods;
 
 			Name = iface.HasManagedName
-				? iface.Name.Substring (1) + "Consts"
+				? string.Concat (iface.Name.AsSpan (1), "Consts")
 				: iface.Name.Substring (1);
 
 			Inherits = "Java.Lang.Object";
@@ -170,11 +170,11 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class InterfaceConstsForwardClass : ClassWriter
+	internal class InterfaceConstsForwardClass : ClassWriter
 	{
 		public InterfaceConstsForwardClass (InterfaceGen iface, CodeGenerationOptions opt)
 		{
-			Name = iface.Name.Substring (1) + "Consts";
+			Name = string.Concat (iface.Name.AsSpan (1), "Consts");
 			Inherits = iface.Name.Substring (1);
 
 			IsPublic = true;

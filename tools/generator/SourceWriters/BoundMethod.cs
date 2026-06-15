@@ -11,7 +11,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundMethod : MethodWriter
+	internal class BoundMethod : MethodWriter
 	{
 		readonly MethodCallback callback;
 

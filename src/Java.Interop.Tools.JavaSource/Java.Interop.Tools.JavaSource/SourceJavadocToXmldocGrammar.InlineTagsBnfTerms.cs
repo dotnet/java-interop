@@ -158,7 +158,7 @@ namespace Java.Interop.Tools.JavaSource {
 		}
 	}
 
-	class IgnorableCharTerminal : Terminal
+	sealed class IgnorableCharTerminal : Terminal
 	{
 		public IgnorableCharTerminal (string name)
 			: base (name)

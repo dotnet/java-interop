@@ -10,7 +10,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class GenericExplicitInterfaceImplementationProperty : PropertyWriter
+	internal class GenericExplicitInterfaceImplementationProperty : PropertyWriter
 	{
 		public GenericExplicitInterfaceImplementationProperty (Property property, GenericSymbol gen, string adapter, Dictionary<string, string> mappings, CodeGenerationOptions opt)
 		{

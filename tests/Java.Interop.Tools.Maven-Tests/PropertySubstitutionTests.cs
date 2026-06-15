@@ -4,7 +4,7 @@ using Java.Interop.Tools.Maven_Tests.Extensions;
 
 namespace Java.Interop.Tools.Maven_Tests;
 
-public class PropertySubstitutionTests
+internal sealed class PropertySubstitutionTests
 {
 	[Test]
 	public void Resolve_ExplicitProperty ()

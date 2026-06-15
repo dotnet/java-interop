@@ -6,7 +6,7 @@ using Xamarin.SourceWriter;
 namespace generatortests.SourceWriters
 {
 	[TestFixture]
-	public class SourceWritersTestBase
+	internal class SourceWritersTestBase
 	{
 		protected string GetOutput (ISourceWriter writer)
 		{

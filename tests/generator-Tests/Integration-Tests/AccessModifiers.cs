@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class AccessModifiers : BaseGeneratorTest
+	internal sealed class AccessModifiers : BaseGeneratorTest
 	{
 		[Test]
 		public void GeneratedOK ()

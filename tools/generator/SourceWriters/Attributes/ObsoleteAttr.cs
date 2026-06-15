@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class ObsoleteAttr : AttributeWriter
+	internal class ObsoleteAttr : AttributeWriter
 	{
 		public string Message { get; set; }
 		public bool IsError { get; set; }

@@ -9,7 +9,7 @@ namespace Java.Interop {
 #if !JCW_ONLY_TYPE_NAMES
 	public
 #endif  // !JCW_ONLY_TYPE_NAMES
-	partial class ExportFieldAttribute : Attribute {
+	partial sealed class ExportFieldAttribute : Attribute {
 
 		public ExportFieldAttribute (string name)
 		{

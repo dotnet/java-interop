@@ -10,7 +10,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class BoundClass : ClassWriter
+	internal class BoundClass : ClassWriter
 	{
 		readonly CodeGenerationOptions opt;
 		readonly List<TypeWriter> sibling_types = new List<TypeWriter> ();

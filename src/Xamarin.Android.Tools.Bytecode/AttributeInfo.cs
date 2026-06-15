@@ -59,10 +59,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		protected AttributeInfo (ConstantPool constantPool, ushort nameIndex, Stream stream)
 		{
-			if (constantPool == null)
-				throw new ArgumentNullException ("constantPool");
-			if (stream == null)
-				throw new ArgumentNullException ("stream");
+			ArgumentNullException.ThrowIfNull (constantPool);
+			ArgumentNullException.ThrowIfNull (stream);
 
 			ConstantPool    = constantPool;
 			this.nameIndex  = nameIndex;
@@ -192,8 +190,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public CodeExceptionTableEntry (ConstantPool constantPool)
 		{
-			if (constantPool == null)
-				throw new ArgumentNullException ("constantPool");
+			ArgumentNullException.ThrowIfNull (constantPool);
 
 			ConstantPool    = constantPool;
 		}
@@ -344,8 +341,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public InnerClassInfo (ConstantPool constantPool)
 		{
-			if (constantPool == null)
-				throw new ArgumentNullException ("constantPool");
+			ArgumentNullException.ThrowIfNull (constantPool);
 
 			ConstantPool    = constantPool;
 		}
@@ -422,8 +418,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		public LocalVariableTableEntry (ConstantPool constantPool)
 		{
-			if (constantPool == null)
-				throw new ArgumentNullException ("constantPool");
+			ArgumentNullException.ThrowIfNull (constantPool);
 
 			ConstantPool    = constantPool;
 		}

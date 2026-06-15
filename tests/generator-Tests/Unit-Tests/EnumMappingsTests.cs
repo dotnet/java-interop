@@ -13,7 +13,7 @@ using Java.Interop.Tools.Generator;
 namespace generatortests
 {
 	[TestFixture]
-	public class EnumMappingsTests
+	internal sealed class EnumMappingsTests
 	{
 		[Test]
 		public void BasicEnumificationTest ()
@@ -85,6 +85,8 @@ namespace generatortests
 			Assert.AreEqual (true, enums.Single ().Value.BitField);
 		}
 
+		private static readonly string [] enumFlags = new [] { "Org.XmlPull.V1.XmlPullParserNode" };
+
 		[Test]
 		public void ExternalFlagsEnumerationTest ()
 		{
@@ -94,7 +96,7 @@ namespace generatortests
 			var sr = new StringReader (csv);
 
 			var removes = new List<KeyValuePair<string, string>> ();
-			var enums = mappings.ParseFieldMappings (sr, new [] { "Org.XmlPull.V1.XmlPullParserNode" }, new AndroidSdkVersion (30), removes);
+			var enums = mappings.ParseFieldMappings (sr, enumFlags, new AndroidSdkVersion (30), removes);
 
 			Assert.AreEqual (true, enums.Single ().Value.BitField);
 		}
@@ -248,7 +250,7 @@ namespace generatortests
 			var sr = new StringReader (csv);
 
 			var removes = new List<KeyValuePair<string, string>> ();
-			var enums = mappings.ParseFieldMappings (sr, new [] { "Org.XmlPull.V1.XmlPullParserNode" }, new AndroidSdkVersion (30), removes);
+			var enums = mappings.ParseFieldMappings (sr, enumFlags, new AndroidSdkVersion (30), removes);
 
 			Assert.AreEqual (true, enums.Single ().Value.BitField);
 		}

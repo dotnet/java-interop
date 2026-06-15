@@ -1,6 +1,7 @@
 using Java.Interop.Tools.Cecil;
 using Java.Interop.Tools.TypeNameMappings;
 using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,7 +64,7 @@ namespace MonoDroid.Generation
 				if (less_than_index == -1)
 					return type;
 
-				type = type.Substring (0, tick_index) + type.Substring (less_than_index);
+				type = string.Concat (type.AsSpan (0, tick_index), type.AsSpan (less_than_index));
 			}
 
 			return type;

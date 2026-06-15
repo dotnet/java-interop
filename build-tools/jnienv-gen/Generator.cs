@@ -13,7 +13,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	partial class Generator
+	partial sealed class Generator
 	{
 		static string jnienv_g_c;
 		static string jnienv_g_h;
@@ -656,7 +656,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class JniFunction {
+	sealed class JniFunction {
 
 		public string DeclaringType;
 
@@ -797,7 +797,7 @@ namespace Xamarin.Java.Interop
 			string p;
 			if (pointerMapping.TryGetValue (type, out p))
 				return new BuiltinTypeInfo (type, p);
-			if (type.EndsWith ("*", StringComparison.Ordinal))
+			if (type.EndsWith ('*'))
 				return new BuiltinTypeInfo (type, "IntPtr");
 			return new BuiltinTypeInfo (type, type);
 		}
@@ -843,7 +843,7 @@ namespace Xamarin.Java.Interop
 		public virtual string[] GetManagedToMarshalCleanupStatements (HandleStyle style, string variable) => Array.Empty<string> ();
 	}
 
-	class BuiltinTypeInfo : TypeInfo {
+	sealed class BuiltinTypeInfo : TypeInfo {
 
 		/// <summary>
 		/// NOTE: .NET framework can't marshal this
@@ -886,7 +886,7 @@ namespace Xamarin.Java.Interop
 		{
 			if (managed != "IntPtr")
 				return new string [0];
-			var variableName = variable.StartsWith ("@", StringComparison.Ordinal)
+			var variableName = variable.StartsWith ('@')
 				? variable.Substring (1)
 				: variable;
 			return new[] {
@@ -896,7 +896,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class BooleanTypeInfo : TypeInfo {
+	sealed class BooleanTypeInfo : TypeInfo {
 
 		public BooleanTypeInfo (string jni)
 			: base (jni)
@@ -926,7 +926,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class StringTypeInfo : TypeInfo {
+	sealed class StringTypeInfo : TypeInfo {
 
 		public StringTypeInfo (string jni)
 			: base (jni)
@@ -977,7 +977,7 @@ namespace Xamarin.Java.Interop
 
 		public override string[] VerifyParameter (HandleStyle style, string variable)
 		{
-			var variableName = variable.StartsWith ("@", StringComparison.Ordinal)
+			var variableName = variable.StartsWith ('@')
 				? variable.Substring (1)
 				: variable;
 			return new[] {
@@ -1011,7 +1011,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class JniReleaseArrayElementsModeTypeInfo : TypeInfo {
+	sealed class JniReleaseArrayElementsModeTypeInfo : TypeInfo {
 
 		public JniReleaseArrayElementsModeTypeInfo ()
 			: base ("jint")
@@ -1041,7 +1041,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class ArrayTypeInfo : LocalReferenceTypeInfo {
+	sealed class ArrayTypeInfo : LocalReferenceTypeInfo {
 
 		public ArrayTypeInfo (string jni)
 			: base (jni)
@@ -1090,7 +1090,7 @@ namespace Xamarin.Java.Interop
 
 		public override string[] VerifyParameter (HandleStyle style, string variable)
 		{
-			var variableName = variable.StartsWith ("@", StringComparison.Ordinal)
+			var variableName = variable.StartsWith ('@')
 				? variable.Substring (1)
 				: variable;
 			switch (style) {
@@ -1137,7 +1137,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class InstanceFieldTypeInfo : IdTypeInfo {
+	sealed class InstanceFieldTypeInfo : IdTypeInfo {
 
 		public InstanceFieldTypeInfo (string jni)
 			: base (jni, "JniFieldInfo")
@@ -1145,7 +1145,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class InstanceMethodTypeInfo : IdTypeInfo {
+	sealed class InstanceMethodTypeInfo : IdTypeInfo {
 
 		public InstanceMethodTypeInfo (string jni)
 			: base (jni, "JniMethodInfo")
@@ -1153,7 +1153,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class StaticFieldTypeInfo : IdTypeInfo {
+	sealed class StaticFieldTypeInfo : IdTypeInfo {
 
 		public StaticFieldTypeInfo (string jni)
 			: base (jni, "JniFieldInfo")
@@ -1165,7 +1165,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class StaticMethodTypeInfo : IdTypeInfo {
+	sealed class StaticMethodTypeInfo : IdTypeInfo {
 
 		public StaticMethodTypeInfo (string jni)
 			: base (jni, "JniMethodInfo")
@@ -1244,7 +1244,7 @@ namespace Xamarin.Java.Interop
 
 		public override string[] VerifyParameter (HandleStyle style, string variable)
 		{
-			var variableName = variable.StartsWith ("@", StringComparison.Ordinal)
+			var variableName = variable.StartsWith ('@')
 				? variable.Substring (1)
 				: variable;
 			switch (style) {
@@ -1282,7 +1282,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class WeakGlobalReferenceTypeInfo : ObjectReferenceTypeInfo {
+	sealed class WeakGlobalReferenceTypeInfo : ObjectReferenceTypeInfo {
 
 		public WeakGlobalReferenceTypeInfo (string jni)
 			: base (jni, "JniObjectReferenceType.WeakGlobal")
@@ -1290,7 +1290,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class GlobalReferenceTypeInfo : ObjectReferenceTypeInfo {
+	sealed class GlobalReferenceTypeInfo : ObjectReferenceTypeInfo {
 
 		public GlobalReferenceTypeInfo (string jni)
 			: base (jni, "JniObjectReferenceType.Global")
@@ -1298,7 +1298,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class JavaVMPointerTypeInfo : TypeInfo {
+	sealed class JavaVMPointerTypeInfo : TypeInfo {
 
 		public JavaVMPointerTypeInfo (string jni)
 			: base (jni)
@@ -1353,7 +1353,7 @@ namespace Xamarin.Java.Interop
 		}
 	}
 
-	class ParamInfo
+	sealed class ParamInfo
 	{
 		public TypeInfo Type;
 		public string Name;

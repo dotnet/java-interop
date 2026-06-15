@@ -4,7 +4,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class CollectionSymbol : ISymbol, IRequireGenericMarshal {
+	internal class CollectionSymbol : ISymbol, IRequireGenericMarshal {
 		
 		string java_name;
 		string managed_name;

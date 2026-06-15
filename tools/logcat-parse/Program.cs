@@ -5,7 +5,7 @@ using Mono.CSharp;
 
 namespace Xamarin.Android.Tools.LogcatParse {
 
-	public class Program {
+	internal class Program {
 
 		public static int Main (string[] args)
 		{

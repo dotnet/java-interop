@@ -6,7 +6,7 @@ using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation
 {
-	public class InterfaceGen : GenBase, IRequireGenericMarshal
+	internal class InterfaceGen : GenBase, IRequireGenericMarshal
 	{
 		public InterfaceGen (GenBaseSupport support) : base (support)
 		{
@@ -30,11 +30,11 @@ namespace MonoDroid.Generation
 
 				if (gen is InterfaceGen) {
 					// ex: my.namespace.IParentChild
-					gen.FullName = FullName + gen.Name.Substring (1);
-					gen.Name = Name + gen.Name.Substring (1);
+					gen.FullName = string.Concat (FullName, gen.Name.AsSpan (1));
+					gen.Name = string.Concat (Name, gen.Name.AsSpan (1));
 				} else {
-					gen.FullName = FullName.Substring (0, FullName.Length - Name.Length) + Name.Substring (1) + gen.Name;
-					gen.Name = Name.Substring (1) + gen.Name;
+					gen.FullName = string.Concat (FullName.AsSpan (0, FullName.Length - Name.Length), Name.AsSpan (1), gen.Name);
+					gen.Name = string.Concat (Name.AsSpan (1), gen.Name);
 				}
 			}
 		}
@@ -132,7 +132,7 @@ namespace MonoDroid.Generation
 				start = Name.StartsWith ("IOn", StringComparison.Ordinal) ? 3 : 1;
 				trim = 8; // "Listener"
 			}
-			return nameBase.Substring (start, nameBase.Length - start - trim) + "EventArgs";
+			return string.Concat (nameBase.AsSpan (start, nameBase.Length - start - trim), "EventArgs");
 		}
 
 		internal string GetEventDelegateName (Method m)
@@ -148,7 +148,7 @@ namespace MonoDroid.Generation
 				return "EventHandler<" + GetArgsName (m) + ">";
 			} else {
 				string methodSpec = Methods.Count > 1 ? m.AdjustedName : string.Empty;
-				return Name.Substring (start, Name.Length - start - 8) + methodSpec + "Handler";
+				return string.Concat (Name.AsSpan (start, Name.Length - start - 8), methodSpec, "Handler");
 			}
 		}
 

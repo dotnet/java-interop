@@ -10,7 +10,7 @@ using Xamarin.Android.Binder;
 
 namespace generator.SourceWriters
 {
-	public static class SourceWriterExtensions
+	internal static class SourceWriterExtensions
 	{
 		const int MINIMUM_API_LEVEL = 21;
 
@@ -97,7 +97,7 @@ namespace generator.SourceWriters
 					if (method.Name.StartsWith ("Set", StringComparison.Ordinal))
 						remove = string.Format ("__v => {0} (null)", method.Name);
 					else if (method.Name.StartsWith ("Add", StringComparison.Ordinal) &&
-						 (rm = "Remove" + method.Name.Substring ("Add".Length)) != null &&
+						 (rm = string.Concat ("Remove", method.Name.AsSpan ("Add".Length))) != null &&
 						 methods.Where (m => m.Name == rm).Any ())
 						remove = string.Format ("__v => {0} (__v)", rm);
 					else
@@ -143,14 +143,14 @@ namespace generator.SourceWriters
 				return;
 
 			var nameSpec = iface.Methods.Count > 1 ? method.AdjustedName : string.Empty;
-			var idx = iface.FullName.LastIndexOf (".", StringComparison.Ordinal);
+			var idx = iface.FullName.LastIndexOf ('.');
 			var start = iface.Name.StartsWith ("IOn", StringComparison.Ordinal) ? 3 : 1;
-			var full_delegate_name = iface.FullName.Substring (0, idx + 1) + iface.Name.Substring (start, iface.Name.Length - start - 8) + nameSpec;
+			var full_delegate_name = string.Concat (iface.FullName.AsSpan (0, idx + 1), iface.Name.AsSpan (start, iface.Name.Length - start - 8), nameSpec);
 
 			if (method.IsSimpleEventHandler)
 				full_delegate_name = "EventHandler";
 			else if (method.RetVal.IsVoid || method.IsEventHandlerWithHandledProperty)
-				full_delegate_name = "EventHandler<" + iface.FullName.Substring (0, idx + 1) + iface.GetArgsName (method) + ">";
+				full_delegate_name = string.Concat ("EventHandler<", iface.FullName.AsSpan (0, idx + 1), iface.GetArgsName (method), ">");
 			else
 				full_delegate_name += "Handler";
 

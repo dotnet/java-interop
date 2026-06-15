@@ -17,25 +17,25 @@ namespace Xamarin.Android.Tools.Bytecode
 			packages = this.LoadParameterFixupDescription(path);
 		}
 
-		class Parameter
+		sealed class Parameter
 		{
 			public string? Type { get; set; }
 			public string? Name { get; set; }
 		}
 
-		class Method
+		sealed class Method
 		{
 			public string? Name { get; set; }
 			public List<Parameter>? Parameters { get; set; }
 		}
 
-		class Type
+		sealed class Type
 		{
 			public string? Name { get; set; }
 			public List<Method>? Methods { get; set; }
 		}
 
-		class Package
+		sealed class Package
 		{
 			public string? Name { get; set; }
 			public List<Type>? Types { get; set; }
@@ -78,8 +78,8 @@ namespace Xamarin.Android.Tools.Bytecode
 			int currentLine = 0;
 			foreach (var l in File.ReadAllLines (path)) {
 				currentLine++;
-				var line = l.IndexOf (";", StringComparison.Ordinal) >= 0
-					? l.Substring (0, l.IndexOf (";", StringComparison.Ordinal)).TrimEnd (' ', '\t')
+				var line = l.IndexOf (';') >= 0
+					? l.Substring (0, l.IndexOf (';')).TrimEnd (' ', '\t')
 					: l;
 				if (line.Trim ().Length == 0)
 					continue;
@@ -89,13 +89,13 @@ namespace Xamarin.Android.Tools.Bytecode
 					fixup.Add (new Package { Name = package, Types = types });
 					continue;
 				} else if (line.StartsWith ("    ", StringComparison.Ordinal)) {
-					int open = line.IndexOf ("(", StringComparison.Ordinal);
+					int open = line.IndexOf ('(');
 					if (open < 0)
 						throw new ArgumentException ($"Unexpected line in {path} line {currentLine}: {line}");
 					string parameters = line.Substring (open + 1).TrimEnd (')');
 					string name = line.Substring (4, open - 4);
 					if (name.FirstOrDefault () == '<') // generic method can begin with type parameters.
-						name = name.Substring (name.IndexOf (" ", StringComparison.Ordinal) + 1);
+						name = name.Substring (name.IndexOf (' ') + 1);
 					methods.Add (new Method {
 						Name = name,
 						Parameters = parameters.Replace (", ", "\0").Split ('\0')
@@ -103,10 +103,10 @@ namespace Xamarin.Android.Tools.Bytecode
 						                       .Select (a => new Parameter { Type = string.Join (" ", a.Take (a.Length - 1)).Replace (",", ", "), Name = a.Last () }).ToList ()
 					});
 				} else {
-					type = line.Substring (line.IndexOf (" ", 2, StringComparison.Ordinal) + 1);
+					type = line.Substring (line.IndexOf (' ', 2) + 1);
 					// To match type name from class-parse, we need to strip off generic arguments here (generics are erased).
-					if (type.IndexOf ("<", StringComparison.Ordinal) > 0)
-						type = type.Substring (0, type.IndexOf ("<", StringComparison.Ordinal));
+					if (type.IndexOf ('<') > 0)
+						type = type.Substring (0, type.IndexOf ('<'));
 					methods = new List<Method> ();
 					types.Add (new Type { Name = type, Methods = methods });
 				}

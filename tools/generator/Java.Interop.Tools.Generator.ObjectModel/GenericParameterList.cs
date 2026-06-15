@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MonoDroid.Generation {
 
-	public class GenericParameterList {
+	internal class GenericParameterList {
 
 		public static string[] Parse (string type_params)
 		{

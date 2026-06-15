@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.LogcatParse.Tests {
 
 	[TestFixture]
-	public class JniHandleInfoTests {
+	internal class JniHandleInfoTests {
 
 		[Test]
 		public void ImplicitFromString ()

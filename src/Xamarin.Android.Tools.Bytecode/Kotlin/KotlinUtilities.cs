@@ -73,7 +73,7 @@ namespace Xamarin.Android.Tools.Bytecode
 		{
 			// Kotlin adds this to some constructors but I cannot tell which ones,
 			// so we'll just ignore them if we see them on the Java side
-			return method.GetParameters ().Where (p => p.Type.BinaryName != "Lkotlin/jvm/internal/DefaultConstructorMarker;" && !p.Name.StartsWith ("$", StringComparison.Ordinal)).ToArray ();
+			return method.GetParameters ().Where (p => p.Type.BinaryName != "Lkotlin/jvm/internal/DefaultConstructorMarker;" && !p.Name.StartsWith ('$')).ToArray ();
 		}
 
 		public static string GetMethodNameWithoutUnsignedSuffix (this MethodInfo method)
@@ -92,7 +92,7 @@ namespace Xamarin.Android.Tools.Bytecode
 
 			var index = name.IndexOf ('-');
 
-			return index >= 0 ? name.Substring (0, index) + dollar_suffix : name;
+			return index >= 0 ? string.Concat (name.AsSpan (0, index), dollar_suffix) : name;
 		}
 
 		public static bool IsDefaultConstructorMarker (this MethodInfo method)
@@ -141,13 +141,13 @@ namespace Xamarin.Android.Tools.Bytecode
 
 		public static bool IsPubliclyVisible (this KotlinPropertyFlags flags) => flags.HasFlag (KotlinPropertyFlags.Public) || flags.HasFlag (KotlinPropertyFlags.Protected);
 
-		public static bool IsUnnamedParameter (this ParameterInfo parameter) => parameter.Name.Length > 1 && parameter.Name.StartsWith ("p", StringComparison.Ordinal) && int.TryParse (parameter.Name.Substring (1), out var _);
+		public static bool IsUnnamedParameter (this ParameterInfo parameter) => parameter.Name.Length > 1 && parameter.Name.StartsWith ('p') && int.TryParse (parameter.Name.AsSpan (1), out var _);
 
-		public static bool IsCompilerNamed (this ParameterInfo parameter) => parameter.Name.Length > 0 && parameter.Name.StartsWith ("$", StringComparison.Ordinal);
+		public static bool IsCompilerNamed (this ParameterInfo parameter) => parameter.Name.Length > 0 && parameter.Name.StartsWith ('$');
 
 		public static bool IsUnnamedParameter (this KotlinValueParameter parameter) => parameter.Name?.Length > 1 &&
-			parameter.Name.StartsWith ("p", StringComparison.Ordinal) &&
-			int.TryParse (parameter.Name.Substring (1), out var _);
+			parameter.Name.StartsWith ('p') &&
+			int.TryParse (parameter.Name.AsSpan (1), out var _);
 
 		static Dictionary<string, string> unsigned_type_map = new Dictionary<string, string> {
 			{ "kotlin/UInt", "I" },

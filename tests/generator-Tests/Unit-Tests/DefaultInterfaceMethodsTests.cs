@@ -15,7 +15,7 @@ namespace generatortests
 #endif  // TODO_JAVA_INTEROP1
 
 	[TestFixture]
-	class XAJavaInteropDefaultInterfaceMethodsTests : DefaultInterfaceMethodsTests
+	sealed class XAJavaInteropDefaultInterfaceMethodsTests : DefaultInterfaceMethodsTests
 	{
 		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 	}

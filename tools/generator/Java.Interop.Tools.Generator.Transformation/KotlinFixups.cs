@@ -7,7 +7,7 @@ using MonoDroid.Utils;
 
 namespace Java.Interop.Tools.Generator.Transformation
 {
-	public static class KotlinFixups
+	internal static class KotlinFixups
 	{
 		public static void Fixup (List<GenBase> gens)
 		{

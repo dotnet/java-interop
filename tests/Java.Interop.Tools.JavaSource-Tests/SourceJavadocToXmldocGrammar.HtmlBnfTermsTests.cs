@@ -15,7 +15,7 @@ using Irony.Parsing;
 namespace Java.Interop.Tools.JavaSource.Tests
 {
 	[TestFixture]
-	public class SourceJavadocToXmldocGrammarHtmlBnfTermsTests : SourceJavadocToXmldocGrammarFixture {
+	internal sealed class SourceJavadocToXmldocGrammarHtmlBnfTermsTests : SourceJavadocToXmldocGrammarFixture {
 
 		[Test]
 		public void PBlockDeclaration ()

@@ -19,8 +19,7 @@ namespace Java.Interop {
 
 		static string GetMessage (Exception exception)
 		{
-			if (exception == null)
-				throw new ArgumentNullException (nameof (exception));
+			ArgumentNullException.ThrowIfNull (exception);
 			return exception.ToString ();
 		}
 	}

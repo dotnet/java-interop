@@ -5,7 +5,7 @@ using org.jetbrains.kotlin.metadata.jvm;
 namespace Xamarin.Android.Tools.Bytecode
 {
 	// https://github.com/JetBrains/kotlin/blob/master/core/metadata.jvm/src/org/jetbrains/kotlin/metadata/jvm/deserialization/JvmNameResolver.kt
-	class JvmNameResolver
+	sealed class JvmNameResolver
 	{
 		readonly List<StringTableTypes.Record> records = new List<StringTableTypes.Record> ();
 		readonly List<string> strings;
@@ -55,7 +55,7 @@ namespace Xamarin.Android.Tools.Bytecode
 				val = val.Replace ('$', '.');
 			else if (record.operation == StringTableTypes.Record.Operation.DescToClassId) {
 				if (val.Length >= 2)
-					val = val.Substring (1, val.Length - 1);
+					val = val.Substring (1);
 
 				val = val.Replace ('$', '.');
 			}

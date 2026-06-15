@@ -3,7 +3,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class RestrictToAttr : AttributeWriter
+	internal class RestrictToAttr : AttributeWriter
 	{
 		bool is_type;
 

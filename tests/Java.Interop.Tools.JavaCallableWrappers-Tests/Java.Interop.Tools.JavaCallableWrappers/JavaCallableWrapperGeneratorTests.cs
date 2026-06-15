@@ -19,7 +19,7 @@ using Java.Interop.Tools.Cecil;
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
 	[TestFixture]
-	public class JavaCallableWrapperGeneratorTests
+	internal class JavaCallableWrapperGeneratorTests
 	{
 		[Test]
 		public void ConstructorExceptions ()

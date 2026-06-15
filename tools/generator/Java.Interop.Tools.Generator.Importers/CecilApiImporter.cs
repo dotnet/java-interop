@@ -220,7 +220,7 @@ namespace MonoDroid.Generation
 			// Strip "Formatted" from ICharSequence-based method.
 			var name_base = method.IsReturnCharSequence ? m.Name.Substring (0, m.Name.Length - "Formatted".Length) : m.Name;
 
-			method.Name = m.IsGetter ? (m.Name.StartsWith ("get_Is", StringComparison.Ordinal) && m.Name.Length > 6 && char.IsUpper (m.Name [6]) ? string.Empty : "Get") + name_base.Substring (4) : m.IsSetter ? (m.Name.StartsWith ("set_Is", StringComparison.Ordinal) && m.Name.Length > 6 && char.IsUpper (m.Name [6]) ? string.Empty : "Set") + name_base.Substring (4) : name_base;
+			method.Name = m.IsGetter ? string.Concat (m.Name.StartsWith ("get_Is", StringComparison.Ordinal) && m.Name.Length > 6 && char.IsUpper (m.Name [6]) ? string.Empty : "Get", name_base.AsSpan (4)) : m.IsSetter ? string.Concat (m.Name.StartsWith ("set_Is", StringComparison.Ordinal) && m.Name.Length > 6 && char.IsUpper (m.Name [6]) ? string.Empty : "Set", name_base.AsSpan (4)) : name_base;
 
 			return method;
 		}
@@ -248,7 +248,7 @@ namespace MonoDroid.Generation
 			attributes.FirstOrDefault (a => a.AttributeType.FullNameCorrected () == "System.ObsoleteAttribute");
 
 		static string GetObsoleteComment (CustomAttribute attribute) =>
-			attribute?.ConstructorArguments.Any () == true ? (string) attribute.ConstructorArguments [0].Value : null;
+			attribute?.ConstructorArguments.Count != 0 == true ? (string) attribute.ConstructorArguments [0].Value : null;
 
 		static CustomAttribute GetRegisterAttribute (Collection<CustomAttribute> attributes, CodeGenerationOptions opt) =>
 			attributes.FirstOrDefault (a => {

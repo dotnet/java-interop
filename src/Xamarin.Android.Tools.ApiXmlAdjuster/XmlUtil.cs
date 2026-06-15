@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace Xamarin.Android.Tools.ApiXmlAdjuster
 {
-	class XmlUtil
+	sealed class XmlUtil
 	{
 		static string GetLocation (XmlReader reader)
 		{

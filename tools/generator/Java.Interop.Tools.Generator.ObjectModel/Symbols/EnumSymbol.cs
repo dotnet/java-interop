@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MonoDroid.Generation {
 
-	public class EnumSymbol : ISymbol {
+	internal class EnumSymbol : ISymbol {
 		
 		string type;
 

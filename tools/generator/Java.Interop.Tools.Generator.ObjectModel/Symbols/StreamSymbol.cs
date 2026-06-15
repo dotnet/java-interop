@@ -4,7 +4,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class StreamSymbol : ISymbol {
+	internal class StreamSymbol : ISymbol {
 
 		string base_name;
 		string java_name;

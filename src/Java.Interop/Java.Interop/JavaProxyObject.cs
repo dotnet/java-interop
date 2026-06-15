@@ -31,8 +31,7 @@ namespace Java.Interop {
 
 		JavaProxyObject (object value)
 		{
-			if (value == null)
-				throw new ArgumentNullException (nameof (value));
+			ArgumentNullException.ThrowIfNull (value);
 			Value = value;
 		}
 

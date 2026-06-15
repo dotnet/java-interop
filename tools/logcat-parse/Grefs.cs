@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Xamarin.Android.Tools.LogcatParse {
 
-	public class Grefs {
+	internal class Grefs {
 
 		const string FilePrefix           = @"\[monodroid-gref\] ";
 		const string AndroidPrefix        = @"(\d\d-\d\d \d\d:\d\d:[^:]+: )?I/monodroid-gref\(\s*(?<pid>{0})\): ";

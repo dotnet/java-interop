@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class CreateImplementorMethod : MethodWriter
+	internal class CreateImplementorMethod : MethodWriter
 	{
 		public CreateImplementorMethod (InterfaceGen iface, CodeGenerationOptions opt)
 		{

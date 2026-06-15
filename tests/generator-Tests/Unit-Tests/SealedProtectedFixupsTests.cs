@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class SealedProtectedFixupsTests
+	internal sealed class SealedProtectedFixupsTests
 	{
 		private CodeGenerationOptions options = new CodeGenerationOptions ();
 

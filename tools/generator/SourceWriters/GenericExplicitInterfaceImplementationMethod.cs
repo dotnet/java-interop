@@ -9,7 +9,7 @@ using Xamarin.SourceWriter;
 namespace generator.SourceWriters
 {
 	// This is supposed to generate instantiated generic method output, but I don't think it is done yet.
-	public class GenericExplicitInterfaceImplementationMethod : MethodWriter
+	internal class GenericExplicitInterfaceImplementationMethod : MethodWriter
 	{
 		readonly Method method;
 		readonly CodeGenerationOptions opt;

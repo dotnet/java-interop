@@ -10,7 +10,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceInvokerMethod : MethodWriter
+	internal class InterfaceInvokerMethod : MethodWriter
 	{
 		readonly MethodCallback method_callback;
 		readonly Method method;

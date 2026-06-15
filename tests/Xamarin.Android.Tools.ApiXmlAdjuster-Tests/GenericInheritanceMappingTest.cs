@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.ApiXmlAdjuster.Tests
 {
 	[TestFixture]
-	public class GenericInheritanceMappingTest
+	internal sealed class GenericInheritanceMappingTest
 	{
 		JavaApi api;
 		

@@ -5,7 +5,7 @@ using Java.Interop.Tools.Generator;
 
 namespace MonoDroid.Generation
 {
-	public class GenBaseSupport
+	internal class GenBaseSupport
 	{
 		HashSet<string> skipped_invoker_methods;
 

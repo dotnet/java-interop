@@ -16,7 +16,7 @@ namespace MonoDroid.Generation
 		DeveloperAndroidComReference_2020Nov,
 	}
 
-	public sealed class JavadocInfo {
+	internal sealed class JavadocInfo {
 
 		public  string          Javadoc             { get; set; }
 
@@ -71,8 +71,8 @@ namespace MonoDroid.Generation
 			string declaringJniType             = isType
 				? (string) element.Attribute ("jni-signature")
 				: (string) element.Parent.Attribute ("jni-signature");
-			if (declaringJniType.StartsWith ("L", StringComparison.Ordinal) &&
-					declaringJniType.EndsWith (";", StringComparison.Ordinal)) {
+			if (declaringJniType.StartsWith ('L') &&
+					declaringJniType.EndsWith (';')) {
 				declaringJniType = declaringJniType.Substring (1, declaringJniType.Length-2);
 			}
 
@@ -86,7 +86,7 @@ namespace MonoDroid.Generation
 
 
 			string declaringMemberParameterString = null;
-			if (!isType && (declaringMemberJniSignature?.StartsWith ("(", StringComparison.Ordinal) ?? false)) {
+			if (!isType && (declaringMemberJniSignature?.StartsWith ('(') ?? false)) {
 				var parameterTypes = element.Elements ("parameter")?.Select (e => e.Attribute ("type")?.Value)?.ToList ();
 				if (parameterTypes?.Any () ?? false) {
 					declaringMemberParameterString = $"({string.Join (", ", parameterTypes)})";
@@ -262,7 +262,7 @@ namespace MonoDroid.Generation
 				.Replace ("/", ".");
 
 			var url     = new StringBuilder (prefix);
-			if (!prefix.EndsWith ("/", StringComparison.Ordinal)) {
+			if (!prefix.EndsWith ('/')) {
 				url.Append ("/");
 			}
 			url.Append (declaringJniType);

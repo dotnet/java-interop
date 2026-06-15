@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class BoundMethodExtensionStringOverload : MethodWriter
+	internal class BoundMethodExtensionStringOverload : MethodWriter
 	{
 		readonly Method method;
 		readonly CodeGenerationOptions opt;

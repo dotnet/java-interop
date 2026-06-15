@@ -8,7 +8,7 @@ using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation {
 
-	public class ReturnValue {
+	internal class ReturnValue {
 
 		ISymbol sym;
 		string java_type;

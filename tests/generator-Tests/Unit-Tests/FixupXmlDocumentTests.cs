@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class FixupXmlDocumentTests
+	internal sealed class FixupXmlDocumentTests
 	{
 		[Test]
 		public void RemoveNode ()

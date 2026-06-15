@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceExtensionsClass : ClassWriter
+	internal class InterfaceExtensionsClass : ClassWriter
 	{
 		public InterfaceExtensionsClass (InterfaceGen iface, string declaringTypeName, CodeGenerationOptions opt)
 		{

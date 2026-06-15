@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonoDroid.Generation
 {
-	public class CsvParser
+	internal class CsvParser
 	{
 		readonly string [] fields;
 

@@ -9,7 +9,7 @@ using Xamarin.Android.Tools.ApiXmlAdjuster;
 
 namespace Xamarin.Android.ApiTools.DroidDocImporter
 {
-	public class DroidDocScrapingImporter
+	internal sealed class DroidDocScrapingImporter
 	{
 		static bool ClassContains (XElement e, string cls)
 		{

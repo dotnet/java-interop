@@ -24,8 +24,7 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 
 		public static IEnumerable<AnnotatedItem> GetAnnotations (this  AndroidAnnotationsSupport api, ManagedApiQuery query)
 		{
-			if (query == null)
-				throw new ArgumentNullException (nameof (query));
+			ArgumentNullException.ThrowIfNull (query);
 			if (query.TypeName == null)
 				throw new ArgumentNullException ("TypeName must not be null");
 
@@ -75,36 +74,30 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 		[Obsolete ("Use GetAnnotations() overload.")]
 		public static IEnumerable<AnnotatedItem> GetMethodsAnnotations (this AndroidAnnotationsSupport api, string managedTypeName, string managedMethodName)
 		{
-			if (managedMethodName == null)
-				throw new ArgumentNullException (nameof (managedMethodName));
+			ArgumentNullException.ThrowIfNull (managedMethodName);
 			return GetAnnotations (api, managedTypeName, managedMethodName);
 		}
 
 		[Obsolete ("Use GetAnnotations() overload.")]
 		public static IEnumerable<AnnotatedItem> GetFieldAnnotations (this AndroidAnnotationsSupport api, string managedTypeName, string managedPropertyName)
 		{
-			if (managedPropertyName == null)
-				throw new ArgumentNullException (nameof (managedPropertyName));
+			ArgumentNullException.ThrowIfNull (managedPropertyName);
 			return GetAnnotations (api, managedTypeName, managedPropertyName);
 		}
 
 		[Obsolete ("Use GetAnnotations() overload.")]
 		public static IEnumerable<AnnotatedItem> GetMethodAnnotations (this AndroidAnnotationsSupport api, string managedTypeName, string managedMethodName, string [] managedParameterTypes)
 		{
-			if (managedMethodName == null)
-				throw new ArgumentNullException (nameof (managedMethodName));
-			if (managedParameterTypes == null)
-				throw new ArgumentNullException (nameof (managedParameterTypes));
+			ArgumentNullException.ThrowIfNull (managedMethodName);
+			ArgumentNullException.ThrowIfNull (managedParameterTypes);
 			return GetAnnotations (api, managedTypeName, managedMethodName, managedParameterTypes);
 		}
 
 		[Obsolete ("Use GetAnnotations() overload.")]
 		public static IEnumerable<AnnotatedItem> GetParameterAnnotations (this AndroidAnnotationsSupport api, string managedTypeName, string managedMethodName, string [] managedParameterTypes, int parameterIndex)
 		{
-			if (managedMethodName == null)
-				throw new ArgumentNullException (nameof (managedMethodName));
-			if (managedParameterTypes == null)
-				throw new ArgumentNullException (nameof (managedParameterTypes));
+			ArgumentNullException.ThrowIfNull (managedMethodName);
+			ArgumentNullException.ThrowIfNull (managedParameterTypes);
 			return GetAnnotations (api, managedTypeName, managedMethodName, managedParameterTypes, parameterIndex);
 		}
 
@@ -130,8 +123,7 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 		[Obsolete ("Use GetIntDef(ManagedApiQuery)")]
 		public static AnnotationData GetFieldIntDef (this AndroidAnnotationsSupport api, string managedTypeName, string managedPropertyName)
 		{
-			if (managedPropertyName == null)
-				throw new ArgumentNullException (nameof (managedPropertyName));
+			ArgumentNullException.ThrowIfNull (managedPropertyName);
 			return api.GetAnnotations (managedTypeName, managedPropertyName).Data ().FirstOrDefault (is_intdef);
 		}
 
@@ -140,28 +132,23 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 		[Obsolete ("Use GetIntDef(ManagedApiQuery)")]
 		public static AnnotationData GetPropertyIntDef (this AndroidAnnotationsSupport api, string managedTypeName, string managedPropertyName)
 		{
-			if (managedPropertyName == null)
-				throw new ArgumentNullException (nameof (managedPropertyName));
+			ArgumentNullException.ThrowIfNull (managedPropertyName);
 			return api.GetAnnotations (managedTypeName, managedPropertyName).Data ().FirstOrDefault (is_intdef);
 		}
 
 		[Obsolete ("Use GetIntDef(ManagedApiQuery)")]
 		public static AnnotationData GetMethodReturnIntDef (this AndroidAnnotationsSupport api, string managedTypeName, string managedMethodName, string [] managedParameterTypes)
 		{
-			if (managedMethodName == null)
-				throw new ArgumentNullException (nameof (managedMethodName));
-			if (managedParameterTypes == null)
-				throw new ArgumentNullException (nameof (managedParameterTypes));
+			ArgumentNullException.ThrowIfNull (managedMethodName);
+			ArgumentNullException.ThrowIfNull (managedParameterTypes);
 			return api.GetAnnotations (managedTypeName, managedMethodName, managedParameterTypes).Data ().FirstOrDefault (is_intdef);
 		}
 
 		[Obsolete ("Use GetIntDef(ManagedApiQuery)")]
 		public static AnnotationData GetMethodParameterIntDef (this AndroidAnnotationsSupport api, string managedTypeName, string managedMethodName, string [] managedParameterTypes, int parameterIndex)
 		{
-			if (managedMethodName == null)
-				throw new ArgumentNullException (nameof (managedMethodName));
-			if (managedParameterTypes == null)
-				throw new ArgumentNullException (nameof (managedParameterTypes));
+			ArgumentNullException.ThrowIfNull (managedMethodName);
+			ArgumentNullException.ThrowIfNull (managedParameterTypes);
 			return api.GetAnnotations (managedTypeName, managedMethodName, managedParameterTypes, parameterIndex).Data ().FirstOrDefault (is_intdef);
 		}
 

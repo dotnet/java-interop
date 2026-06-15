@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace generatortests.SourceWriters
 {
 	[TestFixture]
-	public class WeakImplementorFieldTests : SourceWritersTestBase
+	internal sealed class WeakImplementorFieldTests : SourceWritersTestBase
 	{
 		[Test]
 		public void WeakImplementorField_Regular ()

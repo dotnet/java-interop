@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class DebuggerDisableUserUnhandledExceptionsAttributeAttr : AttributeWriter
+	internal class DebuggerDisableUserUnhandledExceptionsAttributeAttr : AttributeWriter
 	{
 		public override void WriteAttribute (CodeWriter writer)
 		{

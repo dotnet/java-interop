@@ -9,22 +9,21 @@ using Sgml;
 namespace Xamarin.Android.ApiTools.DroidDocImporter
 {
 
-	class HtmlLoader
+	sealed class HtmlLoader
 	{
 		// okay, SgmlReader itself has something similar, but I need something that makes sure to resolve only embedded resources.
-		class EmbeddedResourceEntityResolver : Sgml.IEntityResolver
+		sealed class EmbeddedResourceEntityResolver : Sgml.IEntityResolver
 		{
 			public IEntityContent GetContent (Uri uri)
 			{
 				return new EmbeddedResourceEntityContent (uri.LocalPath);
 			}
 
-			class EmbeddedResourceEntityContent : Sgml.IEntityContent
+			sealed class EmbeddedResourceEntityContent : Sgml.IEntityContent
 			{
 				public EmbeddedResourceEntityContent (string name)
 				{
-					if (name == null)
-						throw new ArgumentNullException (nameof (name));
+					ArgumentNullException.ThrowIfNull (name);
 					this.name = Path.GetFileName (name);
 				}
 

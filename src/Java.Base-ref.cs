@@ -3539,7 +3539,7 @@ namespace Java.Lang
         public const int MinExponent = -1022;
         public const double MinNormal = 2.2250738585072014E-308;
         public const double MinValue = 5E-324;
-        public const double NaN = 0.0 / 0.0;
+        public const double Nan = 0.0 / 0.0;
         public const double NegativeInfinity = -1.0 / 0.0;
         public const double PositiveInfinity = 1.0 / 0.0;
         public const int Size = 64;
@@ -3737,7 +3737,7 @@ namespace Java.Lang
         public const int MinExponent = -126;
         public const float MinNormal = 1.1754944E-38f;
         public const float MinValue = 1E-45f;
-        public const float NaN = 0.0f / 0.0f;
+        public const float Nan = 0.0f / 0.0f;
         public const float NegativeInfinity = -1.0f / 0.0f;
         public const float PositiveInfinity = 1.0f / 0.0f;
         public const int Size = 32;

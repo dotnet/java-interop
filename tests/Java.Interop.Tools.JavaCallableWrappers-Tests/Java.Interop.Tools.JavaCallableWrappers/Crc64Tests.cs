@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
 	[TestFixture]
-	public class Crc64Tests
+	internal class Crc64Tests
 	{
 		static string ToHash (string value)
 		{

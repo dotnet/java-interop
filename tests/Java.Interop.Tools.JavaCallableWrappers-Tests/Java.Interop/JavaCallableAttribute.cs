@@ -4,7 +4,7 @@ using System;
 namespace Java.Interop {
 
 	[AttributeUsage (AttributeTargets.Method, AllowMultiple=false)]
-	public sealed class JavaCallableAttribute : Attribute {
+	internal sealed class JavaCallableAttribute : Attribute {
 
 		public JavaCallableAttribute ()
 		{

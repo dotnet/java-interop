@@ -19,7 +19,7 @@ namespace MonoDroid.Generation {
 
 	partial class EnumMappings {
 
-		public class EnumDescription {
+		internal class EnumDescription {
 			public List<ConstantEntry> Members = new List<ConstantEntry> ();
 			public bool BitField;
 			public bool FieldsRemoved;

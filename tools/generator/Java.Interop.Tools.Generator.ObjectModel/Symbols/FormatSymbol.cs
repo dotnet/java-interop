@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MonoDroid.Generation {
 
-	public class FormatSymbol : ISymbol {
+	internal class FormatSymbol : ISymbol {
 		
 		string default_value;
 		string from_fmt;

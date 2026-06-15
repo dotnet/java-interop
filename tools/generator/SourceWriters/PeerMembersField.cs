@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class PeerMembersField : FieldWriter
+	internal class PeerMembersField : FieldWriter
 	{
 		// static readonly JniPeerMembers _members = new XAPeerMembers ("android/provider/ContactsContract$AggregationExceptions", typeof (AggregationExceptions));
 		public PeerMembersField (CodeGenerationOptions opt, string rawJniType, string declaringType, bool isInterface, string name = "_members")

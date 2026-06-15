@@ -141,8 +141,7 @@ namespace Java.Interop {
 			{
 				AssertValid ();
 
-				if (type == null)
- 					throw new ArgumentNullException (nameof (type));
+				ArgumentNullException.ThrowIfNull (type);
 
 				var builtIn = GetBuiltInTypeSignature (type);
 				return builtIn.IsValid ? builtIn : GetTypeSignatureCore (type);

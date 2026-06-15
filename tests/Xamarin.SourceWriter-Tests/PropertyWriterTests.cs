@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.SourceWriter.Tests
 {
 	[TestFixture]
-	public class PropertyWriterTests
+	internal sealed class PropertyWriterTests
 	{
 		[Test]
 		public void Basics ()

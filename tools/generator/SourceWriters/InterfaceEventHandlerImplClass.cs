@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceEventHandlerImplClass : ClassWriter
+	internal class InterfaceEventHandlerImplClass : ClassWriter
 	{
 		public InterfaceEventHandlerImplClass (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
@@ -84,7 +84,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class InterfaceEventHandlerImplMethod : MethodWriter
+	internal class InterfaceEventHandlerImplMethod : MethodWriter
 	{
 		readonly InterfaceGen iface;
 		readonly Method method;

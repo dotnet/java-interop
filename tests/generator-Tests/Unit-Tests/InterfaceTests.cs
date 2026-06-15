@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace generatortests
 {
-	public class InterfaceTests
+	internal sealed class InterfaceTests
 	{
 		[Test]
 		public void ValidateInterfaceMethods ()

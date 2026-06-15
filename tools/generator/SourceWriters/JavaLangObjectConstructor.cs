@@ -9,7 +9,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class JavaLangObjectConstructor : ConstructorWriter
+	internal class JavaLangObjectConstructor : ConstructorWriter
 	{
 		public JavaLangObjectConstructor (ClassGen klass, CodeGenerationOptions opt, string callPartialMethod)
 		{

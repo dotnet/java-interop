@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
 	[TestFixture]
-	public class IdentifierValidatorTests
+	internal class IdentifierValidatorTests
 	{
 		[Test]
 		public void CreateValidIdentifier_Simple ()

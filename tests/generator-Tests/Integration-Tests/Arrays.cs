@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class Arrays : BaseGeneratorTest
+	internal sealed class Arrays : BaseGeneratorTest
 	{
 		[Test]
 		public void GeneratedOK ()

@@ -46,8 +46,7 @@ namespace Java.Interop
 
 			protected override void ConstructPeerCore (IJavaPeerable peer, ref JniObjectReference reference, JniObjectReferenceOptions options)
 			{
-				if (peer == null)
-					throw new ArgumentNullException (nameof (peer));
+				ArgumentNullException.ThrowIfNull (peer);
 
 				var newRef  = peer.PeerReference;
 				if (newRef.IsValid) {
@@ -415,7 +414,7 @@ namespace Java.Interop
 			{
 				EnsureNotDisposed ();
 
-				var m   = GetValueMarshaler (typeof (T));
+				var m   = GetValueMarshaler<T> ();
 				var r   = m as JniValueMarshaler<T>;
 				if (r != null)
 					return r;
@@ -430,8 +429,7 @@ namespace Java.Interop
 			{
 				EnsureNotDisposed ();
 
-				if (type == null)
-					throw new ArgumentNullException (nameof (type));
+				ArgumentNullException.ThrowIfNull (type);
 				if (type.ContainsGenericParameters)
 					throw new ArgumentException ("Generic type definitions are not supported.", nameof (type));
 

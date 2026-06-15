@@ -6,12 +6,13 @@ using Xamarin.Android.Tools.Bytecode;
 namespace Xamarin.Android.Tools.BytecodeTests
 {
 	[TestFixture]
-	public class ParameterFixupTests : ClassFileFixture {
+	internal sealed class ParameterFixupTests : ClassFileFixture {
+		private static readonly string [] classResources = new [] {"IParameterInterface.class","ParameterAbstractClass.class", "ParameterClass.class", "ParameterClass2.class"};
 
 		[Test]
 		public void XmlDeclaration_FixedUpFromOtherClasses ()
 		{
-			AssertXmlDeclaration (new [] {"IParameterInterface.class","ParameterAbstractClass.class", "ParameterClass.class", "ParameterClass2.class"}, "ParameterFixup.xml");
+			AssertXmlDeclaration (classResources, "ParameterFixup.xml");
 		}
 
 		[Test]
@@ -64,7 +65,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		public void XmlDeclaration_DoesNotThrowAnExceptionIfDocumentationNotFound ()
 		{
 			try {
-				AssertXmlDeclaration (new [] {"IParameterInterface.class","ParameterAbstractClass.class", "ParameterClass.class", "ParameterClass2.class"}, "ParameterFixup.xml", "SomeNonExistantPath");
+				AssertXmlDeclaration (classResources, "ParameterFixup.xml", "SomeNonExistantPath");
 			} catch (Exception ex) {
 				Assert.Fail ("An unexpected exception was thrown : {0}", ex);
 			}
@@ -103,6 +104,9 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			Assert.AreEqual(JavaDocletType.DroidDoc2, JavaMethodParameterNameProvider.GetDocletType(droidDocsPath));
 		}
 
+		private static readonly string [] typeEvaluatorResources = new string [] { "TypeEvaluator.class" };
+		internal static readonly string [] classResourcesArray = new string [] { "NestedInterface$DnsSdTxtRecordListener.class" };
+
 		[Test]
 		public void XmlDeclaration_FixedUpFromParameterDescription ()
 		{
@@ -111,7 +115,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			try {
 				tempFile = LoadToTempFile ("ParameterDescription.txt");
 
-				AssertXmlDeclaration (new string [] { "TypeEvaluator.class" }, "ParameterFixupFromDocs.xml", tempFile);
+				AssertXmlDeclaration (typeEvaluatorResources, "ParameterFixupFromDocs.xml", tempFile);
 			}
 			finally {
 				if (File.Exists (tempFile))
@@ -121,7 +125,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			try {
 				tempFile = LoadToTempFile ("ParameterDescription.txt");
 
-				AssertXmlDeclaration (new string [] { "NestedInterface$DnsSdTxtRecordListener.class" }, "ParameterFixupFromDescriptionText.xml", tempFile);
+				AssertXmlDeclaration (classResourcesArray, "ParameterFixupFromDescriptionText.xml", tempFile);
 			} finally {
 				if (File.Exists (tempFile))
 					File.Delete (tempFile);

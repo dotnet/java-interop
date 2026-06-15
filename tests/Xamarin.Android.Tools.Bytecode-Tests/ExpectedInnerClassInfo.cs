@@ -6,7 +6,7 @@ using NAssert   = NUnit.Framework.Assert;
 
 namespace Xamarin.Android.Tools.BytecodeTests {
 
-	class ExpectedInnerClassInfo {
+	sealed class ExpectedInnerClassInfo {
 
 		public  string              InnerClassName;
 		public  string              OuterClassName;

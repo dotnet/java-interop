@@ -9,7 +9,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class ConstructorPartialMethod : MethodWriter
+	internal class ConstructorPartialMethod : MethodWriter
 	{
 		public ConstructorPartialMethod (string partialMethodName)
 		{

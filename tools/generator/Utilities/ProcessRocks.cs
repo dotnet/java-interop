@@ -8,7 +8,7 @@ using System.IO;
 
 namespace MonoDroid.Utils {
 
-	public static class ProcessRocks {
+	internal static class ProcessRocks {
 
 		public static IEnumerable<string> ReadStandardOutput (IEnumerable<string> commandLine, bool printCommandLine)
 		{
@@ -111,7 +111,7 @@ namespace MonoDroid.Utils {
 			// Recurse
 			foreach (var dir in Directory.GetDirectories (directory)) {
 				// Don't go into obj or bin directories				
-				if (Path.GetFileName (dir).ToLowerInvariant () == "obj" || Path.GetFileName (dir).ToLowerInvariant () == "bin")
+				if (Path.GetFileName (dir).Equals ("obj", StringComparison.InvariantCultureIgnoreCase) || Path.GetFileName (dir).Equals ("bin", StringComparison.InvariantCultureIgnoreCase))
 					continue;
 			
 				results.AddRange (FindFileInDirectory (dir, filename));
@@ -119,7 +119,7 @@ namespace MonoDroid.Utils {
 			
 			// Check this directory for the file
 			foreach (var file in Directory.GetFiles (directory)) {
-				if (Path.GetFileName (file).ToLowerInvariant () == filename.ToLowerInvariant ())
+				if (Path.GetFileName (file).Equals (filename, StringComparison.InvariantCultureIgnoreCase))
 					results.Add (file);
 			}
 			
@@ -127,7 +127,7 @@ namespace MonoDroid.Utils {
 		}		
 	}
 
-	class CommandFailedException : InvalidOperationException
+	partial class CommandFailedException : InvalidOperationException
 	{
 		public string FileName { get; private set; }
 		public string Arguments { get; private set; }
@@ -161,7 +161,7 @@ namespace MonoDroid.Utils {
 		
 		private string FormatForVS (string text)
 		{
-			Regex regex = new Regex (@"(?<FileName>.+):(?<LineNumber>\d+): error: Error: (?<Error>.+)");
+			Regex regex = MyRegex ();
 
 			if (!regex.IsMatch (text))
 				return text;
@@ -182,6 +182,9 @@ namespace MonoDroid.Utils {
 
 			return string.Format ("{0}({1}): error 1: {2}", MessageUtils.MapGeneratedToProjectFile (filename), line_no, error);
 		}
+
+		[GeneratedRegex (@"(?<FileName>.+):(?<LineNumber>\d+): error: Error: (?<Error>.+)")]
+		private static partial Regex MyRegex ();
 	}
 }
 

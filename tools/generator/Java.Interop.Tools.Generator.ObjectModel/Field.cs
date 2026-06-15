@@ -4,7 +4,7 @@ using Java.Interop.Tools.Generator;
 
 namespace MonoDroid.Generation
 {
-	public class Field : ApiVersionsSupport.IApiAvailability, ISourceLineInfo
+	internal class Field : ApiVersionsSupport.IApiAvailability, ISourceLineInfo
 	{
 		public string AnnotatedVisibility { get; set; }
 		public string Annotation { get; set; }

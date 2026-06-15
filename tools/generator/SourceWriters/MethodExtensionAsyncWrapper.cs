@@ -8,7 +8,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class MethodExtensionAsyncWrapper : MethodWriter
+	internal class MethodExtensionAsyncWrapper : MethodWriter
 	{
 		public MethodExtensionAsyncWrapper (Method method, CodeGenerationOptions opt, string selfType)
 		{

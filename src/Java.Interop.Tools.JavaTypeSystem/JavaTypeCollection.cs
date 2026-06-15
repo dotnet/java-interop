@@ -158,7 +158,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 					}
 				}
 
-				if (unresolvables.Any ())
+				if (unresolvables.Count != 0)
 					results.Add (new CollectionResolutionResult (unresolvables));
 
 				// We may have removed a type that other types/members reference, so we have

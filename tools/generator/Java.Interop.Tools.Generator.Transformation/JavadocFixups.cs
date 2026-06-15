@@ -13,7 +13,7 @@ using Xamarin.Android.Binder;
 
 namespace Java.Interop.Tools.Generator.Transformation
 {
-	public static class JavadocFixups
+	internal static class JavadocFixups
 	{
 		public static void Fixup (List<GenBase> gens, CodeGeneratorOptions options)
 		{

@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class CSharpKeywords : BaseGeneratorTest
+	internal sealed class CSharpKeywords : BaseGeneratorTest
 	{
 		[Test]
 		public void GeneratedOK ()

@@ -56,9 +56,8 @@ namespace Java.Interop
 
 		public JniMethodInfo GetConstructor (string signature)
 		{
-			if (signature == null)
-				throw new ArgumentNullException (nameof (signature));
-			lock (InstanceMethods) {
+				ArgumentNullException.ThrowIfNull (signature);
+				lock (InstanceMethods) {
 				if (!InstanceMethods.TryGetValue (signature, out var m)) {
 					m = JniPeerType.GetConstructor (signature);
 					InstanceMethods.Add (signature, m);
@@ -159,14 +158,12 @@ namespace Java.Interop
 		{
 			#pragma warning disable CS1717
 			parameters = parameters;    // Silence CA1801
-			#pragma warning restore CS1717
+#pragma warning restore CS1717
 
-			if (constructorSignature == null)
-				throw new ArgumentNullException (nameof (constructorSignature));
-			if (declaringType == null)
-				throw new ArgumentNullException (nameof (declaringType));
+				ArgumentNullException.ThrowIfNull (constructorSignature);
+				ArgumentNullException.ThrowIfNull (declaringType);
 
-			var r   = GetConstructorsForType (declaringType)
+				var r   = GetConstructorsForType (declaringType)
 				.JniPeerType
 				.AllocObject ();
 			r.Flags = JniObjectReferenceFlags.Alloc;
@@ -191,12 +188,10 @@ namespace Java.Interop
 
 		public unsafe void FinishCreateInstance (string constructorSignature, IJavaPeerable self, JniArgumentValue* parameters)
 		{
-			if (constructorSignature == null)
-				throw new ArgumentNullException (nameof (constructorSignature));
-			if (self == null)
-				throw new ArgumentNullException (nameof (self));
+				ArgumentNullException.ThrowIfNull (constructorSignature);
+				ArgumentNullException.ThrowIfNull (self);
 
-			var methods = GetConstructorsForType (self.GetType ());
+				var methods = GetConstructorsForType (self.GetType ());
 			var ctor    = methods.GetConstructor (constructorSignature);
 			JniEnvironment.InstanceMethods.CallNonvirtualVoidMethod (self.PeerReference, methods.JniPeerType.PeerReference, ctor, parameters);
 		}

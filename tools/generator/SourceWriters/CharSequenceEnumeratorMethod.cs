@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class CharSequenceEnumeratorMethod : MethodWriter
+	internal class CharSequenceEnumeratorMethod : MethodWriter
 	{
 		// System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		// {
@@ -22,7 +22,7 @@ namespace generator.SourceWriters
 		}		
 	}
 
-	public class CharSequenceGenericEnumeratorMethod : MethodWriter
+	internal class CharSequenceGenericEnumeratorMethod : MethodWriter
 	{
 		// public System.Collections.Generic.IEnumerator<char> GetEnumerator ()
 		// {

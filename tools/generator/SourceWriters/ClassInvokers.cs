@@ -7,7 +7,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class ClassHandleGetter : PropertyWriter
+	internal class ClassHandleGetter : PropertyWriter
 	{
 		// internal static new IntPtr class_ref {
 		//   get { return _members.JniPeerType.PeerReference.Handle; }
@@ -26,7 +26,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class InterfaceHandleGetter : PropertyWriter
+	internal class InterfaceHandleGetter : PropertyWriter
 	{
 		// static IntPtr java_class_ref {
 		//   get { return _members.JniPeerType.PeerReference.Handle; }
@@ -43,7 +43,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class JniPeerMembersGetter : PropertyWriter
+	internal class JniPeerMembersGetter : PropertyWriter
 	{
 		// [DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		// [EditorBrowsable (EditorBrowsableState.Never)]
@@ -66,7 +66,7 @@ namespace generator.SourceWriters
 		}		
 	}
 
-	public class ClassThresholdClassGetter : PropertyWriter
+	internal class ClassThresholdClassGetter : PropertyWriter
 	{
 		// [DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		// [EditorBrowsable (EditorBrowsableState.Never)]
@@ -89,7 +89,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class InterfaceThresholdClassGetter : PropertyWriter
+	internal class InterfaceThresholdClassGetter : PropertyWriter
 	{
 		// [DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		// [EditorBrowsable (EditorBrowsableState.Never)]
@@ -112,7 +112,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class ThresholdTypeGetter : PropertyWriter
+	internal class ThresholdTypeGetter : PropertyWriter
 	{
 		// [DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		// [EditorBrowsable (EditorBrowsableState.Never)]

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class ManagedExtensionsTests
+	internal sealed class ManagedExtensionsTests
 	{
 		[Test]
 		public void StripArity ()

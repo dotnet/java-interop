@@ -40,8 +40,7 @@ namespace Java.Interop {
 
 			public virtual void OnSetRuntime (JniRuntime runtime)
 			{
-				if (disposed)
-					throw new ObjectDisposedException (GetType ().Name);
+				ObjectDisposedException.ThrowIf (disposed, this);
 
 				this.runtime = runtime;
 			}

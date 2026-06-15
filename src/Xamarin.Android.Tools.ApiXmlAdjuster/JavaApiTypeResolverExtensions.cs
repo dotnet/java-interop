@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Xamarin.Android.Tools.ApiXmlAdjuster
 {
-	class JavaTypeResolutionException : Exception
+	sealed class JavaTypeResolutionException : Exception
 	{
 		public JavaTypeResolutionException (string message) : base (message)
 		{

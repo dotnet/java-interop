@@ -14,7 +14,7 @@ namespace MonoDroid.Generation
 	//          - Type: string
 	// A placeholder "{0}" is added because the type may extend past the generics:
 	// ex: "List<string>.Enumerator[]" becomes "List<{0}>.Enumerator[]"
-	public class ParsedType
+	internal class ParsedType
 	{
 		public string Type { get; set; }
 		public List<ParsedType> GenericArguments { get; } = new List<ParsedType> ();
@@ -32,7 +32,7 @@ namespace MonoDroid.Generation
 
 			var greater_than = type.LastIndexOf ('>');
 			var type_args = type.Substring (less_than + 1, greater_than - less_than - 1);
-			var type_string = type.Substring (0, less_than) + "<{0}>" + (greater_than + 1 < type.Length ? type.Substring (greater_than + 1) : string.Empty);
+			var type_string = string.Concat (type.AsSpan (0, less_than), "<{0}>", greater_than + 1 < type.Length ? type.Substring (greater_than + 1) : string.Empty);
 
 			var parsed_args = ParseTypeList (type_args);
 

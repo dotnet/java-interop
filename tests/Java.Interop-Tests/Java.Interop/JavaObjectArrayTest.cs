@@ -123,8 +123,13 @@ namespace Java.InteropTests
 
 	[TestFixture]
 	public class JavaObjectArray_JavaInt32Array_ContractTest : JavaObjectArrayContractTest<JavaInt32Array> {
-		protected override JavaInt32Array CreateValueA () {return new JavaInt32Array (new[]{1});}
-		protected override JavaInt32Array CreateValueB () {return new JavaInt32Array (new[]{2});}
+		private static readonly int [] valueA = new []{1};
+
+		protected override JavaInt32Array CreateValueA () {return new JavaInt32Array (valueA);}
+
+		private static readonly int [] valueB = new []{2};
+
+		protected override JavaInt32Array CreateValueB () {return new JavaInt32Array (valueB);}
 
 		[Test]
 		public void ObjectArrayType ()

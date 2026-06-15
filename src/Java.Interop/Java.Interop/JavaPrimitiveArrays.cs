@@ -127,8 +127,7 @@ namespace Java.Interop {
 
 		public ref Boolean this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -214,8 +213,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Boolean[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -226,8 +224,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Boolean[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -331,8 +328,7 @@ namespace Java.Interop {
 
 		public ref SByte this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -418,8 +414,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, SByte[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -430,8 +425,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (SByte[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -535,8 +529,7 @@ namespace Java.Interop {
 
 		public ref Char this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -622,8 +615,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Char[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -634,8 +626,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Char[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -739,8 +730,7 @@ namespace Java.Interop {
 
 		public ref Int16 this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -826,8 +816,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Int16[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -838,8 +827,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Int16[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -943,8 +931,7 @@ namespace Java.Interop {
 
 		public ref Int32 this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -1030,8 +1017,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Int32[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -1042,8 +1028,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Int32[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -1147,8 +1132,7 @@ namespace Java.Interop {
 
 		public ref Int64 this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -1234,8 +1218,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Int64[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -1246,8 +1229,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Int64[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -1351,8 +1333,7 @@ namespace Java.Interop {
 
 		public ref Single this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -1438,8 +1419,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Single[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -1450,8 +1430,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Single[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;
@@ -1555,8 +1534,7 @@ namespace Java.Interop {
 
 		public ref Double this [int index] {
 			get {
-				if (IsDisposed)
-					throw new ObjectDisposedException (GetType ().FullName);
+				ObjectDisposedException.ThrowIf (IsDisposed, this);
 				unsafe {
 					return ref Elements [index];
 				}
@@ -1642,8 +1620,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyTo (int sourceIndex, Double[] destinationArray, int destinationIndex, int length)
 		{
-			if (destinationArray == null)
-				throw new ArgumentNullException (nameof (destinationArray));
+			ArgumentNullException.ThrowIfNull (destinationArray);
 			CheckArrayCopy (sourceIndex, Length, destinationIndex, destinationArray.Length, length);
 			if (destinationArray.Length == 0)
 				return;
@@ -1654,8 +1631,7 @@ namespace Java.Interop {
 
 		public override unsafe void CopyFrom (Double[] sourceArray, int sourceIndex, int destinationIndex, int length)
 		{
-			if (sourceArray == null)
-				throw new ArgumentNullException (nameof (sourceArray));
+			ArgumentNullException.ThrowIfNull (sourceArray);
 			CheckArrayCopy (sourceIndex, sourceArray.Length, destinationIndex, Length, length);
 			if (sourceArray.Length == 0)
 				return;

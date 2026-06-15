@@ -6,7 +6,7 @@ using Xamarin.Android.Tools.ApiXmlAdjuster;
 
 namespace Xamarin.Android.Tools.ApiXmlAdjuster
 {
-	public static class JavaApiParameterNamesExporter
+	internal static class JavaApiParameterNamesExporter
 	{
 		public static void WriteParameterNamesXml (this JavaApi api, string file)
 		{

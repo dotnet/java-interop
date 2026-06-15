@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class IJavaInterfaceTests : ClassFileFixture {
+	internal sealed class IJavaInterfaceTests : ClassFileFixture {
 
 		const string JavaType = "IJavaInterface";
 

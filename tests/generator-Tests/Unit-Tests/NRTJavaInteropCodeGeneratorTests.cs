@@ -5,7 +5,7 @@ using Xamarin.Android.Binder;
 namespace generatortests
 {
 	[TestFixture]
-	class NRTJavaInteropCodeGeneratorTests : CodeGeneratorTests
+	sealed class NRTJavaInteropCodeGeneratorTests : CodeGeneratorTests
 	{
 		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 

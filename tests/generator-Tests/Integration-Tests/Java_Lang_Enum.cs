@@ -4,7 +4,7 @@ using System;
 namespace generatortests
 {
 	[TestFixture]
-	public class Java_Lang_Enum : BaseGeneratorTest
+	internal sealed class Java_Lang_Enum : BaseGeneratorTest
 	{
 		protected override bool TryJavaInterop1 => true;
 

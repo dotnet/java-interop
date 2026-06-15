@@ -139,8 +139,7 @@ namespace Java.Interop
 
 		public override void CopyTo (T[] array, int arrayIndex)
 		{
-			if (array == null)
-				throw new ArgumentNullException (nameof (array));
+			ArgumentNullException.ThrowIfNull (array);
 			CheckArrayCopy (0, Length, arrayIndex, array.Length, Length);
 			CopyToList (array, arrayIndex);
 		}

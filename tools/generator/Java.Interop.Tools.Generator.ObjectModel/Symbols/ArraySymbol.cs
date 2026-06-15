@@ -8,7 +8,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class ArraySymbol : ISymbol {
+	internal class ArraySymbol : ISymbol {
 
 		static ISymbol byte_sym = new SimpleSymbol ("0", "byte", "byte", "B");
 

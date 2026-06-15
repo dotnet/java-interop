@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.LogcatParse.Tests {
 
 	[TestFixture]
-	public class GrefsTest {
+	internal class GrefsTest {
 
 		[Test]
 		public void Instances_GrefToWgrefToCollected ()

@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace generatortests.SourceWriters
 {
 	[TestFixture]
-	public class MethodExplicitInterfaceImplementationTests : SourceWritersTestBase
+	internal sealed class MethodExplicitInterfaceImplementationTests : SourceWritersTestBase
 	{
 		[Test]
 		public void MethodExplicitInterfaceImplementation ()

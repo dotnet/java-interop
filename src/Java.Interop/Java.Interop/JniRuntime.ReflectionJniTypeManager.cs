@@ -108,8 +108,7 @@ namespace Java.Interop {
 			{
 				AssertValid ();
 
-				if (type == null)
-					throw new ArgumentNullException (nameof (type));
+				ArgumentNullException.ThrowIfNull (type);
 				if (type.IsArray)
 					throw new ArgumentException ("Array type '" + type.FullName + "' is not supported.", nameof (type));
 
@@ -475,7 +474,7 @@ namespace Java.Interop {
 				bool found = false;
 
 				foreach (var methodInfo in marshalType.GetRuntimeMethods ()) {
-					if (methodInfo.GetCustomAttribute (typeof (JniAddNativeMethodRegistrationAttribute)) == null) {
+					if (methodInfo.GetCustomAttribute<JniAddNativeMethodRegistrationAttribute> () == null) {
 						continue;
 					}
 
@@ -485,7 +484,7 @@ namespace Java.Interop {
 						throw new InvalidOperationException ($"The method `{declaringTypeName}.{methodInfo}` marked with [{nameof (JniAddNativeMethodRegistrationAttribute)}] must be static!");
 					}
 
-					var register = (Action<JniNativeMethodRegistrationArguments>)methodInfo.CreateDelegate (typeof (Action<JniNativeMethodRegistrationArguments>));
+					var register = methodInfo.CreateDelegate<Action<JniNativeMethodRegistrationArguments>> ();
 					register (arguments);
 
 					found = true;

@@ -1245,14 +1245,14 @@ namespace generatortests
 			int index;
 
 			while ((index = str.IndexOf ("[Register", StringComparison.Ordinal)) > -1)
-				str = str.Substring (0, index) + str.Substring (str.IndexOf (']', index) + 1);
+				str = string.Concat (str.AsSpan (0, index), str.AsSpan (str.IndexOf (']', index) + 1));
 
 			return str;
 		}
 	}
 
 	[TestFixture]
-	class JavaInteropCodeGeneratorTests : AnyJavaInteropCodeGeneratorTests
+	sealed class JavaInteropCodeGeneratorTests : AnyJavaInteropCodeGeneratorTests
 	{
 		protected override CodeGenerationTarget Target => CodeGenerationTarget.JavaInterop1;
 		protected override string  CommonDirectoryOverride => "JavaInterop1";
@@ -1324,7 +1324,7 @@ namespace generatortests
 	}
 
 	[TestFixture]
-	class XAJavaInteropCodeGeneratorTests : AnyJavaInteropCodeGeneratorTests
+	sealed class XAJavaInteropCodeGeneratorTests : AnyJavaInteropCodeGeneratorTests
 	{
 		protected override CodeGenerationTarget Target => CodeGenerationTarget.XAJavaInterop1;
 

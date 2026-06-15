@@ -11,7 +11,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundAbstractProperty : PropertyWriter
+	internal class BoundAbstractProperty : PropertyWriter
 	{
 		readonly MethodCallback getter_callback;
 		readonly MethodCallback setter_callback;

@@ -3,7 +3,7 @@ using Xamarin.SourceWriter;
 
 namespace generator.SourceWriters
 {
-	public class IntDefinitionAttr : AttributeWriter
+	internal class IntDefinitionAttr : AttributeWriter
 	{
 		public string ManagedMember { get; set; }
 		public string JniField { get; set; }

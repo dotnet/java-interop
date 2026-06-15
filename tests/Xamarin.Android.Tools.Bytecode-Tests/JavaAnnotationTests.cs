@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Xamarin.Android.Tools.BytecodeTests {
 
 	[TestFixture]
-	public class JavaAnnotationTests : ClassFileFixture {
+	internal sealed class JavaAnnotationTests : ClassFileFixture {
 
 		const string JavaType = "JavaAnnotation";
 

@@ -32,7 +32,7 @@ using Mono.CSharp;
 
 namespace Mono {
 
-	public class InteractiveBaseShell : InteractiveBase {
+	internal class InteractiveBaseShell : InteractiveBase {
 		static bool tab_at_start_completes;
 
 		static InteractiveBaseShell ()
@@ -62,7 +62,7 @@ namespace Mono {
 		}
 	}
 
-	public class CSharpShell {
+	internal class CSharpShell {
 		static bool isatty = true, is_unix = false;
 		protected string [] startup_files;
 

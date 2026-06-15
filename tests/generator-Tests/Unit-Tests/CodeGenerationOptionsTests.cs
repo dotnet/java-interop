@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class CodeGenerationOptionsTests
+	internal sealed class CodeGenerationOptionsTests
 	{
 		[Test]
 		public void GetOutputNameUseGlobal ()

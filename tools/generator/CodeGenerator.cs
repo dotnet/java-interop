@@ -21,7 +21,7 @@ using generator;
 
 namespace Xamarin.Android.Binder
 {
-	public class CodeGenerator
+	internal class CodeGenerator
 	{
 		public static int Main (string[] args)
 		{
@@ -43,8 +43,7 @@ namespace Xamarin.Android.Binder
 
 		public static void Run (CodeGeneratorOptions options)
 		{
-			if (options == null)
-				throw new ArgumentNullException ("options");
+			ArgumentNullException.ThrowIfNull (options);
 
 			using (var resolver = new DirectoryAssemblyResolver (Diagnostic.CreateConsoleLogger (), loadDebugSymbols: false)) {
 				Run (options, resolver);

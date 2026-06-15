@@ -8,7 +8,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class SymbolTable {
+	internal class SymbolTable {
 
 		// The symbols dictionary may contain shallow types (types that have not populated Ctors/Methods/Fields).
 		// If you make any changes to the SymbolTable class that accesses the symbols you need to keep
@@ -327,7 +327,7 @@ namespace MonoDroid.Generation {
 
 		private string AddArity (string key, string typeParams)
 		{
-			if (string.IsNullOrWhiteSpace (typeParams) || !typeParams.StartsWith ("<", StringComparison.Ordinal) || !typeParams.EndsWith (">", StringComparison.Ordinal))
+			if (string.IsNullOrWhiteSpace (typeParams) || !typeParams.StartsWith ('<') || !typeParams.EndsWith ('>'))
 				return key;
 
 			var nested_count = 0;

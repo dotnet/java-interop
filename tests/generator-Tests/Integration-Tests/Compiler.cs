@@ -12,7 +12,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generatortests
 {
-	public static class Compiler
+	internal static class Compiler
 	{
 		private static string supportFilePath = typeof (Compiler).Assembly.Location;
 		private static string unitTestFrameworkAssemblyPath = typeof (Assert).Assembly.Location;

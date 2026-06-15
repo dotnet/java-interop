@@ -108,8 +108,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 		//	- TODO?: array indicator fixup ("T..." should match "T[]")
 		public static bool IsImplementing (JavaMethodModel derived, JavaMethodModel basis, IDictionary<JavaTypeReference, JavaTypeReference> genericInstantiation)
 		{
-			if (genericInstantiation == null)
-				throw new ArgumentNullException ("genericInstantiation");
+			ArgumentNullException.ThrowIfNull (genericInstantiation);
 
 			if (basis.Name != derived.Name)
 				return false;
@@ -170,7 +169,7 @@ namespace Java.Interop.Tools.JavaTypeSystem.Models
 
 		static bool IsConformantType (JavaTypeParameter typeParameter, JavaTypeReference? examinedType)
 		{
-			if (!typeParameter.GenericConstraints.Any ())
+			if (typeParameter.GenericConstraints.Count == 0)
 				return true;
 			// FIXME: implement correct generic constraint conformance check.
 			//Log.LogDebug ("NOTICE: generic constraint conformance check is not implemented, so the type might be actually compatible. Type parameter: {0}{1}, examined type: {2}",

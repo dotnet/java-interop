@@ -12,7 +12,7 @@ using Xamarin.AndroidTools.AnnotationSupport;
 
 namespace MonoDroid.Generation
 {
-    public class CodeGenerationOptions
+    internal class CodeGenerationOptions
 	{
 		CodeGenerationTarget    codeGenerationTarget;
 		public      CodeGenerationTarget    CodeGenerationTarget    {
@@ -223,7 +223,7 @@ namespace MonoDroid.Generation
 
 			var jni_name = symbol.JniName;
 
-			if (jni_name.StartsWith ("L", StringComparison.Ordinal) || jni_name.StartsWith ("[", StringComparison.Ordinal))
+			if (jni_name.StartsWith ('L') || jni_name.StartsWith ('['))
 				return "L";
 
 			return symbol.JniName;
@@ -268,7 +268,7 @@ namespace MonoDroid.Generation
 			// Sadly that is not true in reality, so we need to exclude non-symbols
 			// when replacing the argument name with a valid identifier.
 			// (ReturnValue.ToNative() takes an argument which could be either an expression or mere symbol.)
-			if (name [name.Length-1] != ')' && !name.Contains ('.') && !name.StartsWith ("@", StringComparison.Ordinal)) {
+			if (name [name.Length-1] != ')' && !name.Contains ('.') && !name.StartsWith ('@')) {
 				if (!IdentifierValidator.IsValidIdentifier (name) ||
 						Array.BinarySearch (TypeNameUtilities.reserved_keywords, name, StringComparer.Ordinal) >= 0) {
 					name = name + "_";
@@ -297,7 +297,7 @@ namespace MonoDroid.Generation
 
 		public string GetTransformedNamespace (string value)
 		{
-			if (!value.HasValue () || !NamespaceTransforms.Any ())
+			if (!value.HasValue () || NamespaceTransforms.Count == 0)
 				return value;
 
 			foreach (var nt in NamespaceTransforms)

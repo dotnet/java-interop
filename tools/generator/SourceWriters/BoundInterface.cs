@@ -11,7 +11,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundInterface : InterfaceWriter
+	internal class BoundInterface : InterfaceWriter
 	{
 		readonly List<TypeWriter> pre_sibling_types = new List<TypeWriter> ();
 		readonly List<ISourceWriter> post_sibling_types = new List<ISourceWriter> ();
@@ -107,7 +107,7 @@ namespace generator.SourceWriters
 			var staticMethods = iface.Methods.Where (m => m.IsStatic);
 
 			if (opt.CodeGenerationTarget != CodeGenerationTarget.JavaInterop1 &&
-					(iface.Fields.Any () || staticMethods.Any ())) {
+					(iface.Fields.Count != 0 || staticMethods.Any ())) {
 				pre_sibling_types.Add (new InterfaceMemberAlternativeClass (iface, opt, context));
 			}
 		}

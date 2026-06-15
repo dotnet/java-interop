@@ -12,7 +12,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class InterfaceInvokerClass : ClassWriter
+	internal class InterfaceInvokerClass : ClassWriter
 	{
 		public InterfaceInvokerClass (InterfaceGen iface, CodeGenerationOptions opt, CodeGeneratorContext context)
 		{
@@ -132,7 +132,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class GetObjectMethod : MethodWriter
+	internal class GetObjectMethod : MethodWriter
 	{
 		// public static IInterface? GetObject (IntPtr handle, JniHandleOwnership transfer)
 		// {
@@ -154,7 +154,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class ValidateMethod : MethodWriter
+	internal class ValidateMethod : MethodWriter
 	{
 		// static IntPtr Validate (IntPtr handle)
 		// {
@@ -179,7 +179,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class DisposeMethod : MethodWriter
+	internal class DisposeMethod : MethodWriter
 	{
 		// protected override void Dispose (bool disposing)
 		// {
@@ -205,7 +205,7 @@ namespace generator.SourceWriters
 		}
 	}
 
-	public class InterfaceInvokerConstructor : ConstructorWriter
+	internal class InterfaceInvokerConstructor : ConstructorWriter
 	{
 		// public IfaceInvoker (IntPtr handle, JniHandleOwnership transfer) : base (Validate (handle), transfer)
 		// {

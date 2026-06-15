@@ -62,7 +62,7 @@ namespace Java.Interop.Tools.Generator
 					try {
 						var nodes = apiDocument.ApiDocument.XPathSelectElements (path).ToArray ();
 
-						if (nodes.Any ())
+						if (nodes.Length != 0)
 							foreach (var node in nodes)
 								node.Remove ();
 						else

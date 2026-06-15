@@ -10,7 +10,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundMethodAbstractDeclaration : MethodWriter
+	internal class BoundMethodAbstractDeclaration : MethodWriter
 	{
 		readonly Method method;
 		readonly CodeGenerationOptions opt;

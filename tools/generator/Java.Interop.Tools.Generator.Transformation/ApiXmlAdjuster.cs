@@ -3,7 +3,7 @@ using MonoDroid.Generation;
 
 namespace Xamarin.Android.Tools.ApiXmlAdjuster
 {
-	public class Adjuster
+	internal class Adjuster
 	{
 		public void Process (string inputXmlFile, CodeGenerationOptions opt, GenBase [] gens, string outputXmlFile, int reportVerbosity)
 		{

@@ -7,7 +7,7 @@ using NAssert   = NUnit.Framework.Assert;
 
 namespace Xamarin.Android.Tools.BytecodeTests {
 
-	class ExpectedTypeDeclaration {
+	sealed class ExpectedTypeDeclaration {
 
 		public  ushort                              MajorVersion;
 		public  ushort                              MinorVersion;

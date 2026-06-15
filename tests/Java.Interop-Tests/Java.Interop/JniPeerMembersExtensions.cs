@@ -14,8 +14,7 @@ namespace Java.InteropTests {
 			Type    declaringType,
 			T       value)
 		{
-			if (peer == null)
-				throw new ArgumentNullException (nameof (peer));
+			ArgumentNullException.ThrowIfNull (peer);
 			_ = value;
 
 			return peer.StartCreateInstance (constructorSignature, declaringType, null);
@@ -29,10 +28,8 @@ namespace Java.InteropTests {
 			IJavaPeerable self,
 			T             value)
 		{
-			if (peer == null)
-				throw new ArgumentNullException (nameof (peer));
-			if (self == null)
-				throw new ArgumentNullException (nameof (self));
+			ArgumentNullException.ThrowIfNull (peer);
+			ArgumentNullException.ThrowIfNull (self);
 
 			var __vm = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
 			var arg = __vm.CreateGenericArgumentState (value);
@@ -55,10 +52,8 @@ namespace Java.InteropTests {
 			IJavaPeerable self,
 			T             value)
 		{
-			if (peer == null)
-				throw new ArgumentNullException (nameof (peer));
-			if (self == null)
-				throw new ArgumentNullException (nameof (self));
+			ArgumentNullException.ThrowIfNull (peer);
+			ArgumentNullException.ThrowIfNull (self);
 
 			var __vm = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
 			var arg = __vm.CreateGenericArgumentState (value);
@@ -81,10 +76,8 @@ namespace Java.InteropTests {
 			IJavaPeerable self,
 			T             value)
 		{
-			if (peer == null)
-				throw new ArgumentNullException (nameof (peer));
-			if (self == null)
-				throw new ArgumentNullException (nameof (self));
+			ArgumentNullException.ThrowIfNull (peer);
+			ArgumentNullException.ThrowIfNull (self);
 
 			var __vm = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
 			var arg = __vm.CreateGenericArgumentState (value);
@@ -106,8 +99,7 @@ namespace Java.InteropTests {
 			string  encodedMember,
 			T       value)
 		{
-			if (peer == null)
-				throw new ArgumentNullException (nameof (peer));
+			ArgumentNullException.ThrowIfNull (peer);
 
 			var __vm = JniEnvironment.Runtime.ValueManager.GetValueMarshaler<T> ();
 			var arg = __vm.CreateGenericArgumentState (value);

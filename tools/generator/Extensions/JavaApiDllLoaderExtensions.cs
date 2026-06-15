@@ -6,7 +6,7 @@ using MonoDroid.Generation;
 
 namespace Xamarin.Android.Tools.ApiXmlAdjuster
 {
-	public static class JavaApiDllLoaderExtensions
+	internal static class JavaApiDllLoaderExtensions
 	{
 		public static void LoadReferences (this JavaApi api, CodeGenerationOptions opt, IEnumerable<GenBase> gens)
 		{

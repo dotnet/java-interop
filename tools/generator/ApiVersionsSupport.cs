@@ -15,9 +15,9 @@ namespace MonoDroid.Generation
 		}
 	}
 
-	public static class ApiVersionsSupport
+	internal static class ApiVersionsSupport
 	{
-		public interface IApiAvailability
+		internal interface IApiAvailability
 		{
 			AndroidSdkVersion ApiAvailableSince { get; set; }
 			AndroidSdkVersion ApiRemovedSince { get; set; }

@@ -7,7 +7,7 @@ using System.Xml;
 namespace generatortests
 {
 	[TestFixture]
-	public class Java_Lang_Object : BaseGeneratorTest
+	internal sealed class Java_Lang_Object : BaseGeneratorTest
 	{
 		[Test]
 		public void Generated_OK ()

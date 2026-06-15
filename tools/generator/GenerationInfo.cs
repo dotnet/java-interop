@@ -10,7 +10,7 @@ using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation {
 
-	public class GenerationInfo {
+	internal class GenerationInfo {
 
 		public GenerationInfo (string csdir, string javadir, string assembly)
 		{

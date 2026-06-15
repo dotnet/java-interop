@@ -10,7 +10,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 	// the generator's KotlinFixups must now de-collide) is actually what kotlinc
 	// emits for @JvmInline value-class parameters. See dotnet/java-interop#1431.
 	[TestFixture]
-	public class KotlinInlineClassCollisionTests : ClassFileFixture
+	internal sealed class KotlinInlineClassCollisionTests : ClassFileFixture
 	{
 		[Test]
 		public void Widgets_HasCollidingHashMangledSiblings ()
@@ -35,6 +35,8 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				"Expected one unique `tint-<hash>(F)V` (MyDp) that should survive deduplication.");
 		}
 
+		private static readonly string [] expected = new [] { "(F)F", "(FF)F" };
+
 		[Test]
 		public void Widgets_HasNonCollidingHashMangledOverloads ()
 		{
@@ -46,7 +48,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 
 			Assert.AreEqual (2, pads.Count);
 			CollectionAssert.AreEquivalent (
-				new [] { "(F)F", "(FF)F" },
+				expected,
 				pads.Select (m => m.Descriptor).ToArray (),
 				"`pad` overloads have distinct JVM signatures and should both survive after rename.");
 		}

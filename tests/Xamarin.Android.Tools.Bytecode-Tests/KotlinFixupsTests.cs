@@ -9,7 +9,7 @@ using Xamarin.Android.Tools.Bytecode;
 namespace Xamarin.Android.Tools.BytecodeTests
 {
 	[TestFixture]
-	public class KotlinFixupsTests : ClassFileFixture
+	internal sealed class KotlinFixupsTests : ClassFileFixture
 	{
 		[Test]
 		public void HideInternalClass ()

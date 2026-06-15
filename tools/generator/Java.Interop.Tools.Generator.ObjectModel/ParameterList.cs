@@ -9,7 +9,7 @@ using Xamarin.Android.Binder;
 
 namespace MonoDroid.Generation {
 
-	public class ParameterList : IEnumerable<Parameter> {
+	internal class ParameterList : IEnumerable<Parameter> {
 		
 		public static bool Equals (ParameterList l1, ParameterList l2)
 		{

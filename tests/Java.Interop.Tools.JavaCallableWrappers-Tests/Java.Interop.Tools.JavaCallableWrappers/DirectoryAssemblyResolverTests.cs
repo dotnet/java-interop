@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Java.Interop.Tools.JavaCallableWrappersTests
 {
 	[TestFixture]
-	public class DirectoryAssemblyResolverTests
+	internal class DirectoryAssemblyResolverTests
 	{
 		static void Log (TraceLevel level, string message)
 		{

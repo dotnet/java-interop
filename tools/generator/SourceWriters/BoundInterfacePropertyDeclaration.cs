@@ -11,7 +11,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace generator.SourceWriters
 {
-	public class BoundInterfacePropertyDeclaration : PropertyWriter
+	internal class BoundInterfacePropertyDeclaration : PropertyWriter
 	{
 		public BoundInterfacePropertyDeclaration (GenBase gen, Property property, string adapter, CodeGenerationOptions opt)
 		{

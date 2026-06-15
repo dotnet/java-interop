@@ -9,6 +9,9 @@ namespace Java.InteropTests
 	[TestFixture]
 	public class JniMarshalTests
 	{
+		private static readonly int [] objA = new []{ 1, 2, 3 };
+		private static readonly int [] objB = new []{ 1, 2, 3 };
+
 		[Test]
 		public void RecursiveEquals ()
 		{
@@ -17,9 +20,9 @@ namespace Java.InteropTests
 			Assert.IsFalse (JniMarshal.RecursiveEquals (new object (), null));
 			Assert.IsTrue (JniMarshal.RecursiveEquals (1, 1));
 			Assert.IsFalse (JniMarshal.RecursiveEquals (1, 2));
-			Assert.IsTrue (JniMarshal.RecursiveEquals (new[]{ 1, 2, 3 }, new[]{ 1, 2, 3 }));
-			Assert.IsFalse (JniMarshal.RecursiveEquals (new[]{ 1, 2, 3 }, new[]{ 1, 2 }));
-			Assert.IsFalse (JniMarshal.RecursiveEquals (new[]{ 1, 2 }, new[]{ 1, 2, 3 }));
+			Assert.IsTrue (JniMarshal.RecursiveEquals (objA, objB));
+			Assert.IsFalse (JniMarshal.RecursiveEquals (objA, new[]{ 1, 2 }));
+			Assert.IsFalse (JniMarshal.RecursiveEquals (new[]{ 1, 2 }, objB));
 			Assert.IsFalse (JniMarshal.RecursiveEquals (new[]{ 1, 2 }, null));
 			Assert.IsFalse (JniMarshal.RecursiveEquals (null, new[]{ 1, 2 }));
 			Assert.IsTrue (JniMarshal.RecursiveEquals (

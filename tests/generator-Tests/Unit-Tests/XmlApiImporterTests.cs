@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class XmlApiImporterTests
+	internal sealed class XmlApiImporterTests
 	{
 		CodeGenerationOptions opt = new CodeGenerationOptions ();
 

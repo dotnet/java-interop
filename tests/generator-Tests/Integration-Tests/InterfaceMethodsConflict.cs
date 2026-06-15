@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class InterfaceMethodsConflict : BaseGeneratorTest
+	internal sealed class InterfaceMethodsConflict : BaseGeneratorTest
 	{
 		[Test]
 		public void GeneratedOK ()

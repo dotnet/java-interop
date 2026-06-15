@@ -4,7 +4,7 @@ using CodeGenerationTarget = Xamarin.Android.Binder.CodeGenerationTarget;
 
 namespace MonoDroid.Generation {
 
-	public class XmlResourceParserSymbol : ISymbol {
+	internal class XmlResourceParserSymbol : ISymbol {
 
 		public string DefaultValue {
 			get { return "IntPtr.Zero"; }

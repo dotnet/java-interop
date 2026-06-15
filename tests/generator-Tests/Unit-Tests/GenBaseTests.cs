@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace generatortests
 {
 	[TestFixture]
-	public class GenBaseTests
+	internal sealed class GenBaseTests
 	{
 		CodeGenerationOptions options = new CodeGenerationOptions ();
 

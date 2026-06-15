@@ -8,7 +8,7 @@ using Xamarin.Android.Binder;
 
 namespace generator
 {
-	public static class JavaTypeResolutionFixups
+	internal static class JavaTypeResolutionFixups
 	{
 		[Obsolete ("Use the TypeDefinitionCache overload for better performance.", error: true)]
 		public static void Fixup (string xmlFile, string outputXmlFile, DirectoryAssemblyResolver resolver, string [] references) => throw new NotSupportedException ();

@@ -4,7 +4,7 @@ using Java.Interop.Tools.JavaTypeSystem.Models;
 
 namespace Java.Interop.Tools.JavaTypeSystem.Tests
 {
-	public class JavaApiTestHelper
+	internal sealed class JavaApiTestHelper
 	{
 		static readonly string TopDir = Path.Combine (Path.GetDirectoryName (typeof (JavaApiTestHelper).Assembly.Location), "..", "..");
 		static readonly string ApiPath = Path.Combine (TopDir, "tests", "Java.Interop.Tools.JavaTypeSystem-Tests", "api-24.xml.in");

@@ -6,7 +6,7 @@ using Java.Interop.Tools.Generator;
 
 namespace Xamarin.AndroidTools.AnnotationSupport
 {
-	public class ApiVersionsProvider
+	internal class ApiVersionsProvider
 	{
 		public void Parse (string apiVersionsFilePath)
 		{
@@ -57,7 +57,7 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 			}
 		}
 
-		public class Definition
+		internal class Definition
 		{
 			public string Name; // it is name + JNI signature for methods.
 			public AndroidSdkVersion Since;
@@ -97,7 +97,7 @@ namespace Xamarin.AndroidTools.AnnotationSupport
 			}
 		}
 
-		public class ClassDefinition : Definition
+		internal class ClassDefinition : Definition
 		{
 			public IList<Definition> Fields { get; private set; } = new List<Definition> ();
 			public IList<Definition> Methods { get; private set; } = new List<Definition> ();

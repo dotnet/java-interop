@@ -263,8 +263,8 @@ namespace Xamarin.Android.Tools.Bytecode
 		{
 			var sb = new StringBuilder ();
 
-			foreach (var f in Enum.GetNames (typeof (KotlinFunctionFlags))) {
-				if (Flags.HasFlag ((KotlinFunctionFlags)Enum.Parse (typeof (KotlinFunctionFlags), f)))
+			foreach (var f in Enum.GetNames<KotlinFunctionFlags> ()) {
+				if (Flags.HasFlag (Enum.Parse<KotlinFunctionFlags> (f)))
 					sb.Append (f);
 			}
 

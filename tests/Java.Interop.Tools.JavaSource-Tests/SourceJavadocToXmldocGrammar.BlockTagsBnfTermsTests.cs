@@ -12,7 +12,7 @@ using Irony.Parsing;
 namespace Java.Interop.Tools.JavaSource.Tests
 {
 	[TestFixture]
-	public class SourceJavadocToXmldocGrammarBlockTagsBnfTermsTests : SourceJavadocToXmldocGrammarFixture {
+	internal sealed class SourceJavadocToXmldocGrammarBlockTagsBnfTermsTests : SourceJavadocToXmldocGrammarFixture {
 
 		[Test]
 		public void ApiSinceDeclaration ()
