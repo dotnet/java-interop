@@ -4,13 +4,6 @@ using Java.Interop;
 
 namespace Java.Interop.Samples.NativeAotFromAndroid;
 
-// See the comment in Hello-NativeAOTFromJNI/NativeAotTypeManager.cs: this derives from the
-// reflection-based JniRuntime.ReflectionJniTypeManager (the pre-dotnet/java-interop#1441 base
-// behavior) so built-in runtime types such as JavaProxyObject get their native members registered
-// automatically. ReflectionJniTypeManager is annotated [RequiresDynamicCode]/[RequiresUnreferencedCode];
-// the reflection paths this sample exercises do not require runtime code generation, so the
-// constructor suppresses the resulting trimming/AOT warnings via [UnconditionalSuppressMessage]
-// (a #pragma would not survive the ILLink/ILC publish passes).
 partial class NativeAotTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 	Dictionary<string, Type> typeMappings = new () {
@@ -23,8 +16,8 @@ partial class NativeAotTypeManager : JniRuntime.ReflectionJniTypeManager {
 		["my/MainActivity"]                     = typeof (MainActivity),
 	};
 
-	[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Reflection-based registration used by this NativeAOT sample does not require unreferenced code; see class comment.")]
-	[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Reflection-based registration used by this NativeAOT sample does not require runtime code generation; see class comment.")]
+	[UnconditionalSuppressMessage ("Trimming", "IL2026", Justification = "Reflection-based registration used by this NativeAOT sample does not require unreferenced code.")]
+	[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Reflection-based registration used by this NativeAOT sample does not require runtime code generation.")]
 	public NativeAotTypeManager ()
 	{
 	}
