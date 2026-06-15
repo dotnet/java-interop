@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -18,9 +19,17 @@ namespace Java.Interop {
 		[JniAddNativeMethodRegistrationAttribute]
 		static void RegisterNativeMembers (JniNativeMethodRegistrationArguments args)
 		{
-			args.Registrations.Add (new JniNativeMethodRegistration ("equals",   "(Ljava/lang/Object;)Z", new EqualsMarshalMethod (Equals)));
-			args.Registrations.Add (new JniNativeMethodRegistration ("hashCode", "()I",                   new GetHashCodeMarshalMethod (GetHashCode)));
-			args.Registrations.Add (new JniNativeMethodRegistration ("toString", "()Ljava/lang/String;",  new ToStringMarshalMethod (ToString)));
+			AddBuiltInRegistrations (args.Registrations);
+		}
+
+		// Attribute-free entry point so the built-in registrations can be reused by the
+		// reflection-free NativeAOT path (JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers)
+		// without exposing [JniAddNativeMethodRegistrationAttribute] in the reference assembly.
+		internal static void AddBuiltInRegistrations (ICollection<JniNativeMethodRegistration> registrations)
+		{
+			registrations.Add (new JniNativeMethodRegistration ("equals",   "(Ljava/lang/Object;)Z", new EqualsMarshalMethod (Equals)));
+			registrations.Add (new JniNativeMethodRegistration ("hashCode", "()I",                   new GetHashCodeMarshalMethod (GetHashCode)));
+			registrations.Add (new JniNativeMethodRegistration ("toString", "()Ljava/lang/String;",  new ToStringMarshalMethod (ToString)));
 		}
 
 		public override JniPeerMembers JniPeerMembers {
