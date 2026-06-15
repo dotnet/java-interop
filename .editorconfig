@@ -471,6 +471,33 @@ dotnet_diagnostic.CA5401.severity = none		# Do not use CreateEncryptor with non-
 dotnet_diagnostic.CA5402.severity = none		# Use CreateEncryptor with the default IV
 dotnet_diagnostic.CA5403.severity = none		# Do not hard-code certificate
 dotnet_diagnostic.CA9999.severity = none		# Analyzer version mismatch
+
+# Rules newly enabled by default in Microsoft.CodeAnalysis.NetAnalyzers 10.x.
+# We're not ready for these yet, so disable them to match the rules above.
+
+dotnet_diagnostic.CA1311.severity = none		# Specify a culture or use an invariant version
+dotnet_diagnostic.CA1510.severity = none		# Use ArgumentNullException throw helper
+dotnet_diagnostic.CA1513.severity = none		# Use ObjectDisposedException throw helper
+dotnet_diagnostic.CA1514.severity = none		# Avoid redundant length argument
+dotnet_diagnostic.CA1515.severity = none		# Consider making public types internal
+dotnet_diagnostic.CA1845.severity = none		# Use span-based &apos;string.Concat&apos;
+dotnet_diagnostic.CA1846.severity = none		# Prefer &apos;AsSpan&apos; over &apos;Substring&apos;
+dotnet_diagnostic.CA1847.severity = none		# Use char literal for a single character lookup
+dotnet_diagnostic.CA1851.severity = none		# Possible multiple enumerations of &apos;IEnumerable&apos; collection
+dotnet_diagnostic.CA1852.severity = none		# Seal internal types
+dotnet_diagnostic.CA1853.severity = none		# Unnecessary call to &apos;Dictionary.ContainsKey(key)&apos;
+dotnet_diagnostic.CA1854.severity = none		# Prefer the &apos;IDictionary.TryGetValue(TKey, out TValue)&apos; method
+dotnet_diagnostic.CA1859.severity = none		# Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1860.severity = none		# Avoid using &apos;Enumerable.Any()&apos; extension method
+dotnet_diagnostic.CA1861.severity = none		# Avoid constant arrays as arguments
+dotnet_diagnostic.CA1862.severity = none		# Use the &apos;StringComparison&apos; method overloads to perform case-insensitive string comparisons
+dotnet_diagnostic.CA1863.severity = none		# Use &apos;CompositeFormat&apos;
+dotnet_diagnostic.CA1865.severity = none		# Use &apos;string.Method(char)&apos; instead of &apos;string.Method(string)&apos; for string with single char
+dotnet_diagnostic.CA1867.severity = none		# Use char overload
+dotnet_diagnostic.CA1870.severity = none		# Use a cached &apos;SearchValues&apos; instance
+dotnet_diagnostic.CA2251.severity = none		# Use &apos;string.Equals&apos;
+dotnet_diagnostic.CA2263.severity = none		# Prefer generic overload when type is known
+
 dotnet_diagnostic.IA2989.severity = none		# Do not use banned insecure deserialization APIs
 dotnet_diagnostic.IA2992.severity = none		# Do Not Use Banned APIs For Insecure Deserializers
 dotnet_diagnostic.IA2993.severity = none		# Do Not Use Banned Constructors For Insecure Deserializers
