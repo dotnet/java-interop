@@ -53,8 +53,6 @@ partial class NativeAotTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 	IEnumerable<string> CreateSimpleReferencesEnumerator (Type type)
 	{
-		if (typeMappings == null)
-			yield break;
 		foreach (var e in typeMappings) {
 			if (e.Value == type)
 				yield return e.Key;
