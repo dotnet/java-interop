@@ -8,7 +8,6 @@ virtual Java.Interop.JniRuntime.JniTypeManager.GetReflectionConstructibleTypes(J
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeForSimpleReference(string! jniSimpleReference) -> System.Type?
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignatureCore(System.Type! type) -> Java.Interop.JniTypeSignature
 virtual Java.Interop.JniRuntime.JniTypeManager.GetTypeSignaturesCore(System.Type! type) -> System.Collections.Generic.IEnumerable<Java.Interop.JniTypeSignature>!
-static Java.Interop.JniRuntime.JniTypeManager.TryRegisterBuiltInNativeMembers(Java.Interop.JniType! nativeClass, string! jniSimpleReference, System.ReadOnlySpan<char> methods) -> bool
 abstract Java.Interop.JniRuntime.JniValueManager.CreateLocalObjectReferenceArgumentCore(System.Type! type, object? value) -> Java.Interop.JniObjectReference
 Java.Interop.JavaException.JavaException(ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions transfer, Java.Interop.JniObjectReference throwableOverride) -> void
 Java.Interop.JavaException.SetJavaStackTrace(Java.Interop.JniObjectReference peerReferenceOverride = default(Java.Interop.JniObjectReference)) -> void
@@ -87,3 +86,4 @@ override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypes(Java.Interop.
 override Java.Interop.JniRuntime.ReflectionJniTypeManager.GetTypesForSimpleReference(string! jniSimpleReference) -> System.Collections.Generic.IEnumerable<System.Type!>!
 override Java.Interop.JniRuntime.ReflectionJniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, string? methods) -> void
 override Java.Interop.JniRuntime.ReflectionJniTypeManager.RegisterNativeMembers(Java.Interop.JniType! nativeClass, System.Type! type, System.ReadOnlySpan<char> methods) -> void
+virtual Java.Interop.JniRuntime.ReflectionJniValueManager.TryConstructPeer(Java.Interop.IJavaPeerable! self, ref Java.Interop.JniObjectReference reference, Java.Interop.JniObjectReferenceOptions options, System.Type! type) -> bool
