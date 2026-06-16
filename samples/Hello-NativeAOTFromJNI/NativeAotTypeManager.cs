@@ -4,6 +4,16 @@ using Java.Interop;
 
 namespace Hello_NativeAOTFromJNI;
 
+// This sample derives from the reflection-based JniRuntime.ReflectionJniTypeManager, which is
+// annotated [RequiresDynamicCode]/[RequiresUnreferencedCode], so the constructor below suppresses
+// the resulting IL2026/IL3050 trim/AOT warnings.
+//
+// Suppressing here is intentional and good enough: these NativeAOT projects are *samples*, not
+// product code. .NET for Android (what we actually ship) does not pair ReflectionJniTypeManager
+// with NativeAOT, so it isn't worth the effort to make these samples fully trim/AOT-clean right now.
+// The reflection paths were always trim/AOT-unsafe: before dotnet/java-interop#1441 the equivalent
+// suppressions lived (buried) inside JniTypeManager itself, justified "NotUsedInAndroid"; #1441 just
+// moved that responsibility to callers via [RequiresDynamicCode]/[RequiresUnreferencedCode].
 class NativeAotTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 	const DynamicallyAccessedMemberTypes MethodsConstructors =
