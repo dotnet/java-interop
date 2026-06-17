@@ -287,8 +287,14 @@ namespace Java.Interop
 				// miscompiled by crossgen2 under composite ReadyToRun + PGO: the JniNativeMethod `name`
 				// pointers end up referencing the managed `string` objects instead of marshalled UTF-8
 				// data, which corrupts the registered method names. See https://github.com/dotnet/android/issues/11633.
-				var natives = new JniNativeMethod [numMethods];
-				var unmanagedStrings = new IntPtr [numMethods * 2];
+				const int MaxStackAllocatedNativeMethods = 32;
+				bool useStackAllocatedBuffers = numMethods <= MaxStackAllocatedNativeMethods;
+				Span<JniNativeMethod> natives = useStackAllocatedBuffers
+					? stackalloc JniNativeMethod [numMethods]
+					: new JniNativeMethod [numMethods];
+				Span<IntPtr> unmanagedStrings = useStackAllocatedBuffers
+					? stackalloc IntPtr [numMethods * 2]
+					: new IntPtr [numMethods * 2];
 				try {
 					for (int i = 0; i < numMethods; ++i) {
 						var m       = methods [i];
@@ -298,7 +304,7 @@ namespace Java.Interop
 						unmanagedStrings [i * 2 + 1] = sig;
 						natives [i] = new JniNativeMethod ((byte*) name, (byte*) sig, GetFunctionPointerForDelegate (m.Marshaler));
 					}
-					RegisterNatives (type, new ReadOnlySpan<JniNativeMethod> (natives, 0, numMethods));
+					RegisterNatives (type, natives);
 					// Keep the Marshaler delegates alive at least until JNI has consumed the function pointers.
 					GC.KeepAlive (methods);
 				} finally {
