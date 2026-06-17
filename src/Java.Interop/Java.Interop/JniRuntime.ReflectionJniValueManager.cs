@@ -233,7 +233,7 @@ namespace Java.Interop
 			static  readonly    Type            ByRefJniObjectReference = typeof (JniObjectReference).MakeByRefType ();
 			static  readonly    Type[]          JIConstructorSignature  = new Type [] { ByRefJniObjectReference, typeof (JniObjectReferenceOptions) };
 
-			bool TryConstructPeer (
+			protected virtual bool TryConstructPeer (
 					IJavaPeerable self,
 					ref JniObjectReference reference,
 					JniObjectReferenceOptions options,
@@ -247,7 +247,8 @@ namespace Java.Interop
 						options,
 					};
 					c.Invoke (self, args);
-					reference   = (JniObjectReference) args [0];
+					reference = (JniObjectReference) args [0];
+					JniObjectReference.Dispose (ref reference, options);
 					return true;
 				}
 				return false;
@@ -468,6 +469,24 @@ namespace Java.Interop
 				}
 
 				return ProxyValueMarshaler.Instance;
+			}
+
+			protected override JniObjectReference CreateLocalObjectReferenceArgumentCore (
+				[DynamicallyAccessedMembers (Constructors)]
+				Type type,
+				object? value)
+			{
+				EnsureNotDisposed ();
+				var marshaler = GetValueMarshaler (type);
+				var state = marshaler.CreateObjectReferenceArgumentState (value);
+				try {
+					if (!state.ReferenceValue.IsValid) {
+						return new JniObjectReference ();
+					}
+					return state.ReferenceValue.NewLocalRef ();
+				} finally {
+					marshaler.DestroyArgumentState (value, ref state);
+				}
 			}
 
 			static Type? GetListType (Type type)
