@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Java.Interop;
@@ -42,6 +43,7 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Test exercises non-AOT-compatible JniType.RegisterNativeMethods API.")]
 		public unsafe void Dispose_Exceptions ()
 		{
 			var t = new JniType ("java/lang/Object");
@@ -175,6 +177,7 @@ namespace Java.InteropTests
 		}
 
 		[Test]
+		[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Test exercises non-AOT-compatible JniType.RegisterNativeMethods API.")]
 		public void RegisterNativeMethods ()
 		{
 			using (var TestType_class = new JniType ("net/dot/jni/test/CallNonvirtualBase")) {

@@ -252,11 +252,13 @@ namespace Java.Interop
 				return value.Replace ('.', '/');
 			}
 
+			[RequiresDynamicCode ("Native method registration via JniNativeMethodRegistration[] requires dynamic code generation. Use the blittable RegisterNatives(JniObjectReference, ReadOnlySpan<JniNativeMethod>) overload with statically-compiled function pointers for Native AOT compatibility.")]
 			public static void RegisterNatives (JniObjectReference type, JniNativeMethodRegistration [] methods)
 			{
 				RegisterNatives (type, methods, methods == null ? 0 : methods.Length);
 			}
 
+			[RequiresDynamicCode ("Native method registration via JniNativeMethodRegistration[] requires dynamic code generation. Use the blittable RegisterNatives(JniObjectReference, ReadOnlySpan<JniNativeMethod>) overload with statically-compiled function pointers for Native AOT compatibility.")]
 			public static unsafe void RegisterNatives (JniObjectReference type, JniNativeMethodRegistration [] methods, int numMethods)
 			{
 				if ((numMethods < 0) ||
@@ -314,10 +316,7 @@ namespace Java.Interop
 				}
 			}
 
-			// Native method registration via JniNativeMethodRegistration[] only runs on JIT-capable
-			// runtimes (MonoVM/CoreCLR). Under NativeAOT, native methods are registered through the
-			// trimmable type map using statically-compiled function pointers, so this path is never reached.
-			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "Not reached under NativeAOT; only JIT-capable runtimes register via JniNativeMethodRegistration[].")]
+			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "RequiresDynamicCode on RegisterNatives propagates the requirement; this helper is only called from that method.")]
 			static IntPtr GetFunctionPointerForDelegate (Delegate marshaler) =>
 				Marshal.GetFunctionPointerForDelegate (marshaler);
 

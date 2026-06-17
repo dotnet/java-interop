@@ -253,6 +253,7 @@ namespace Java.Interop {
 				};
 			}
 
+			[RequiresDynamicCode ("Native method registration via JniNativeMethodRegistration[] requires dynamic code generation and is not compatible with Native AOT.")]
 			protected static bool TryRegisterBuiltInNativeMembers (
 					JniType nativeClass,
 					string jniSimpleReference,
