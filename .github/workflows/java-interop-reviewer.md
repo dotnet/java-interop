@@ -10,7 +10,9 @@ permissions:
   pull-requests: read
 engine:
   id: copilot
-  model: claude-opus-4.6
+  model: claude-opus-4.8
+max-daily-ai-credits: -1
+max-ai-credits: -1
 network:
   allowed:
     - defaults
