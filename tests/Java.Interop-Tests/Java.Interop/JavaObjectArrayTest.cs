@@ -65,6 +65,7 @@ namespace Java.InteropTests
 		}
 	}
 
+
 	[TestFixture]
 	public class JavaObjectArrayContractTest : JavaObjectArrayContractTest<JavaObject> {
 		protected override JavaObject CreateValueA () {return new JavaObject ();}
@@ -150,6 +151,7 @@ namespace Java.InteropTests
 	}
 
 	[TestFixture]
+	[Category ("TrimmableTypeMapUnsupported")]
 	public class JavaObjectArray_object_ContractTest : JavaObjectArrayContractTest<object> {
 		static  readonly    object  a   = new object ();
 
@@ -185,4 +187,3 @@ namespace Java.InteropTests
 		}
 	}
 }
-
