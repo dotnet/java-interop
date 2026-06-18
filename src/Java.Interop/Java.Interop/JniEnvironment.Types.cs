@@ -312,7 +312,8 @@ namespace Java.Interop
 					GC.KeepAlive (methods);
 				} finally {
 					for (int i = 0; i < unmanagedStrings.Length; ++i) {
-						Marshal.ZeroFreeCoTaskMemUTF8 (unmanagedStrings [i]);
+						if (unmanagedStrings [i] != IntPtr.Zero)
+							Marshal.ZeroFreeCoTaskMemUTF8 (unmanagedStrings [i]);
 					}
 				}
 			}
