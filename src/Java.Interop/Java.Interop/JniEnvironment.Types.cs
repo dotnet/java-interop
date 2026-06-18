@@ -305,7 +305,7 @@ namespace Java.Interop
 						unmanagedStrings [i * 2] = name;
 						IntPtr sig  = Marshal.StringToCoTaskMemUTF8 (m.Signature);
 						unmanagedStrings [i * 2 + 1] = sig;
-						natives [i] = new JniNativeMethod ((byte*) name, (byte*) sig, GetFunctionPointerForDelegate (m.Marshaler));
+						natives [i] = new JniNativeMethod ((byte*) name, (byte*) sig, Marshal.GetFunctionPointerForDelegate (m.Marshaler));
 					}
 					RegisterNatives (type, natives);
 					// Keep the Marshaler delegates alive at least until JNI has consumed the function pointers.
@@ -317,10 +317,6 @@ namespace Java.Interop
 					}
 				}
 			}
-
-			[UnconditionalSuppressMessage ("AOT", "IL3050", Justification = "RequiresDynamicCode on RegisterNatives propagates the requirement; this helper is only called from that method.")]
-			static IntPtr GetFunctionPointerForDelegate (Delegate marshaler) =>
-				Marshal.GetFunctionPointerForDelegate (marshaler);
 
 			/// <summary>
 			/// Registers JNI native methods using blittable <see cref="JniNativeMethod"/> structs
