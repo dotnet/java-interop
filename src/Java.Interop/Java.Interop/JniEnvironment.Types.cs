@@ -297,12 +297,13 @@ namespace Java.Interop
 				Span<IntPtr> unmanagedStrings = useStackAllocatedBuffers
 					? stackalloc IntPtr [numMethods * 2]
 					: new IntPtr [numMethods * 2];
+				unmanagedStrings.Clear ();
 				try {
 					for (int i = 0; i < numMethods; ++i) {
 						var m       = methods [i];
 						IntPtr name = Marshal.StringToCoTaskMemUTF8 (m.Name);
+						unmanagedStrings [i * 2] = name;
 						IntPtr sig  = Marshal.StringToCoTaskMemUTF8 (m.Signature);
-						unmanagedStrings [i * 2]     = name;
 						unmanagedStrings [i * 2 + 1] = sig;
 						natives [i] = new JniNativeMethod ((byte*) name, (byte*) sig, GetFunctionPointerForDelegate (m.Marshaler));
 					}
@@ -345,7 +346,7 @@ namespace Java.Interop
 
 				// Surface (and clear) any pending Java exception raised by JNI::RegisterNatives()
 				// — e.g. NoSuchMethodError — before falling back to the return-code check, matching
-				// the behavior of the generated `_RegisterNatives` wrapper. Leaving a pending
+				// the behavior of the prior JniNativeMethodRegistration[] registration path. Leaving a pending
 				// exception in the JNIEnv would make subsequent JNI calls fail or abort.
 				var thrown = JniEnvironment.GetExceptionForLastThrowable ();
 				if (thrown != null)
