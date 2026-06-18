@@ -65,7 +65,6 @@ namespace Java.InteropTests
 		}
 	}
 
-
 	[TestFixture]
 	public class JavaObjectArrayContractTest : JavaObjectArrayContractTest<JavaObject> {
 		protected override JavaObject CreateValueA () {return new JavaObject ();}
