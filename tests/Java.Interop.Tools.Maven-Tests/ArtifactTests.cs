@@ -44,6 +44,7 @@ public class ArtifactTests
 	[TestCase ("a/b:c:1")]
 	[TestCase ("a:b@c:1")]
 	[TestCase ("a:b!:1")]
+	[TestCase ("a:b:c:d:e:f:g")]
 	[TestCase ("../a:b:1")]
 	[TestCase ("a:../b:1")]
 	[TestCase ("a:b:../1")]

@@ -47,14 +47,17 @@ public class Artifact
 		throw new ArgumentException ($"Invalid artifact format: {value}");
 	}
 
-	public static bool TryParse (string value, [NotNullWhen (true)]out Artifact? artifact)
+	public static bool TryParse (string? value, [NotNullWhen (true)]out Artifact? artifact)
 	{
 		artifact = null;
 
 		if (value is null)
 			return false;
 
-		var parts = value.Split (':');
+		// Limit the split to 4 so adversarial input with many ':' characters
+		// can't trigger an unbounded allocation; anything with extras is
+		// rejected by the Length check below.
+		var parts = value.Split (new [] { ':' }, 4);
 
 		if (parts.Length != 3)
 			return false;
