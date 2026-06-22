@@ -43,6 +43,7 @@ static class JavaInteropRuntime
 		public ExistingJniRuntime (IntPtr jnienv)
 			: base (new CreationOptions {
 				EnvironmentPointer      = jnienv,
+				TypeManager             = new JniRuntime.JniTypeManager (),
 				ObjectReferenceManager  = new ObjectReferenceManager (),
 				ValueManager            = new ValueManager (),
 			})
