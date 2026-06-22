@@ -54,10 +54,7 @@ public class Artifact
 		if (value is null)
 			return false;
 
-		// Limit the split to 4 so adversarial input with many ':' characters
-		// can't trigger an unbounded allocation; anything with extras is
-		// rejected by the Length check below.
-		var parts = value.Split (new [] { ':' }, 4);
+		var parts = value.Split ([':'], 4);
 
 		if (parts.Length != 3)
 			return false;
