@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 using Java.Interop;
@@ -93,6 +95,79 @@ static class JavaInteropRuntime
 		public override IJavaPeerable? PeekPeer (JniObjectReference reference)
 		{
 			return null;
+		}
+
+		public override void ActivatePeer (
+			JniObjectReference reference,
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type type,
+			ConstructorInfo cinfo,
+			object?[]? argumentValues)
+		{
+			throw new NotSupportedException ();
+		}
+
+		protected override void ConstructPeerCore (IJavaPeerable peer, ref JniObjectReference reference, JniObjectReferenceOptions options)
+		{
+			throw new NotSupportedException ();
+		}
+
+		public override IJavaPeerable? CreatePeer (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions transfer,
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type? targetType)
+		{
+			throw new NotSupportedException ();
+		}
+
+		[return: MaybeNull]
+		protected override T CreateValueCore<[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T> (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type? targetType = null)
+		{
+			throw new NotSupportedException ();
+		}
+
+		protected override object? CreateValueCore (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type? targetType = null)
+		{
+			throw new NotSupportedException ();
+		}
+
+		[return: MaybeNull]
+		protected override T GetValueCore<[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T> (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type? targetType = null)
+		{
+			throw new NotSupportedException ();
+		}
+
+		protected override object? GetValueCore (
+			ref JniObjectReference reference,
+			JniObjectReferenceOptions options,
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type? targetType = null)
+		{
+			throw new NotSupportedException ();
+		}
+
+		protected override JniValueMarshaler GetValueMarshalerCore (Type type)
+		{
+			throw new NotSupportedException ();
+		}
+
+		protected override JniValueMarshaler<T> GetValueMarshalerCore<[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T> ()
+		{
+			throw new NotSupportedException ();
+		}
+
+		protected override JniObjectReference CreateLocalObjectReferenceArgumentCore (
+			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type type,
+			object? value)
+		{
+			throw new NotSupportedException ();
 		}
 	}
 }
