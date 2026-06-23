@@ -15,12 +15,6 @@ namespace Java.Interop.Samples.NativeAotFromAndroid;
 // suppressions lived (buried) inside JniTypeManager itself, justified "NotUsedInAndroid"; #1441 just
 // moved that responsibility to callers via [RequiresDynamicCode]/[RequiresUnreferencedCode].
 partial class NativeAotTypeManager : JniRuntime.ReflectionJniTypeManager {
-
-	const DynamicallyAccessedMemberTypes MethodsConstructors =
-		DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
-		DynamicallyAccessedMemberTypes.NonPublicNestedTypes |
-		DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
-
 	Dictionary<string, Type> typeMappings = new () {
 		["android/app/Activity"]                = typeof (Android.App.Activity),
 		["android/content/Context"]             = typeof (Android.Content.Context),
@@ -39,7 +33,6 @@ partial class NativeAotTypeManager : JniRuntime.ReflectionJniTypeManager {
 
 	// GetType() dispatches through GetTypeForSimpleReference (singular), so the sample's own type
 	// map has to be applied here; the base ReflectionJniTypeManager only knows the built-in types.
-	[return: DynamicallyAccessedMembers (MethodsConstructors)]
 	protected override Type? GetTypeForSimpleReference (string jniSimpleReference)
 	{
 		if (typeMappings.TryGetValue (jniSimpleReference, out var target))
