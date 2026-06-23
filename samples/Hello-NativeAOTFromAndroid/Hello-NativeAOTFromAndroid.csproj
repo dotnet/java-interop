@@ -22,6 +22,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <RuntimeHostConfigurationOption Include="Java.Interop.RuntimeFeature.ManagedPeerNativeRegistration" Value="false" Trim="true" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- https://github.com/exelix11/SysDVR/blob/master/Client/Client.csproj -->
     <!-- Android needs a proper soname property or it will refuse to load the library -->
     <LinkerArg Include="-Wl,-soname,lib$(AssemblyName)$(NativeBinaryExt)" />
