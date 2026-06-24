@@ -125,6 +125,18 @@ namespace Xamarin.Android.Tools.Bytecode {
 					x => classFiles.Where (p => p.PackageName == x).ToList ()));
 		}
 
+		// Returns the `package-info.class` for the given package, if one
+		// is present on this ClassPath. Used by `XmlClassDeclarationBuilder`
+		// to honor package-level JSpecify `@NullMarked` annotations.
+		public ClassFile? GetPackageInfo (string packageName)
+		{
+			foreach (var c in classFiles) {
+				if (c.IsPackageInfo && c.PackageName == packageName)
+					return c;
+			}
+			return null;
+		}
+
 		public static bool IsJarFile (string jarFile)
 		{
 			if (jarFile == null)
@@ -375,8 +387,9 @@ namespace Xamarin.Android.Tools.Bytecode {
 					.Select (p => new XElement ("package",
 						new XAttribute ("name", p),
 						new XAttribute ("jni-name", p.Replace ('.', '/')),
-						packagesDictionary [p].OrderBy (c => c.ThisClass.Name.Value, StringComparer.OrdinalIgnoreCase)
-						.Select (c => new XmlClassDeclarationBuilder (c).ToXElement ()))));
+						packagesDictionary [p].Where (c => !c.IsPackageInfo)
+						.OrderBy (c => c.ThisClass.Name.Value, StringComparer.OrdinalIgnoreCase)
+						.Select (c => new XmlClassDeclarationBuilder (c, GetPackageInfo (p)).ToXElement ()))));
 			FixupParametersFromDocs (api);
 			return api;
 		}
