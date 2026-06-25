@@ -38,10 +38,25 @@
     <CustomLinkerArg Include="-Wl,-soname,lib$(NativeBinary)$(NativeBinaryExt)" />
   </ItemGroup>
 
-  <ItemGroup Condition=" $([MSBuild]::IsOSPlatform('osx')) And Exists('/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk') ">
-    <CustomLinkerArg Include="-isysroot" />
-    <CustomLinkerArg Include="/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk" />
-  </ItemGroup>
+  <!--
+    Resolve the macOS SDK dynamically via `xcrun --show-sdk-path` so we don't pin to a specific
+    SDK version (e.g. MacOSX15.sdk) that would silently stop applying on newer CI/dev images.
+  -->
+  <Target Name="_DetectMacOSXSdk"
+          BeforeTargets="LinkNative"
+          Condition=" $([MSBuild]::IsOSPlatform('osx')) ">
+    <Exec Command="xcrun --show-sdk-path"
+          ConsoleToMSBuild="true"
+          IgnoreExitCode="true"
+          EchoOff="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_MacOSXSdkPath" />
+      <Output TaskParameter="ExitCode" PropertyName="_MacOSXSdkExitCode" />
+    </Exec>
+    <ItemGroup Condition=" '$(_MacOSXSdkExitCode)' == '0' And '$(_MacOSXSdkPath)' != '' ">
+      <CustomLinkerArg Include="-isysroot" />
+      <CustomLinkerArg Include="$(_MacOSXSdkPath)" />
+    </ItemGroup>
+  </Target>
 
   <Import Project="Hello-NativeAOTFromJNI.targets" />
 

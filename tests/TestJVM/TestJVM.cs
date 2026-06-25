@@ -475,6 +475,10 @@ namespace Java.Interop {
 		{
 			var h = value.PeerReference;
 			var o = Runtime.ObjectReferenceManager;
+			// MUST NOT use SafeHandle.ReferenceType: local refs are tied to a JniEnvironment
+			// and the JniEnvironment's corresponding thread; it's a thread-local value.
+			// Accessing SafeHandle.ReferenceType won't kill anything (so far...), but
+			// instead it always returns JniReferenceType.Invalid.
 			if (!h.IsValid || h.Type == JniObjectReferenceType.Local) {
 				RemovePeer (value);
 				value.SetPeerReference (new JniObjectReference ());
