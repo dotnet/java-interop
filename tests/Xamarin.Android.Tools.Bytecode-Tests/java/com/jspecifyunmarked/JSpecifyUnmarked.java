@@ -1,5 +1,6 @@
 package com.jspecifyunmarked;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -17,5 +18,11 @@ public class JSpecifyUnmarked {
 		return value;
 	}
 
+	public @NonNull String nonNullReturn (@NonNull String value) {
+		return value;
+	}
+
 	public String defaultField;
+
+	public @NonNull String nonNullField = "";
 }

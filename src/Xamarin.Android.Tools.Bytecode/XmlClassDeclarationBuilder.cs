@@ -596,10 +596,6 @@ namespace Xamarin.Android.Tools.Bytecode {
 			return null;
 		}
 
-		// Returns true when the slot is known non-null, false when known
-		// nullable, null when no information. JSpecify TYPE_USE `@Nullable`
-		// (top-of-type only) overrides the scope default; an explicit
-		// declaration-level `@NonNull`-style annotation always wins.
 		bool? GetMethodReturnNullness (MethodInfo method)
 		{
 			if (HasDeclarationNotNullAnnotation (method.Attributes))
@@ -608,16 +604,22 @@ namespace Xamarin.Android.Tools.Bytecode {
 				ta => ta.TargetType == TypeAnnotationTargetType.MethodReturn);
 			if (typeNullness.HasValue)
 				return typeNullness;
-			if (isNullMarked && IsReferenceTypeDescriptor (GetReturnDescriptor (method.Descriptor)))
+			if (isNullMarked && IsReferenceTypeDescriptor (GetReturnDescriptor (method.Descriptor))
+					&& !IsTopLevelTypeVariableSignature (method.GetSignature ()?.ReturnTypeSignature))
 				return true;
 			return null;
 		}
 
 		bool? GetParameterNullness (MethodInfo method, IList<ParameterAnnotation>? annotations, int parameterIndex)
 		{
-			var ann = annotations?.FirstOrDefault (a => a.ParameterIndex == parameterIndex)?.Annotations;
-			if (ann?.Any (a => IsNotNullAnnotation (a)) == true)
-				return true;
+			if (annotations != null) {
+				foreach (var pa in annotations) {
+					if (pa.ParameterIndex != parameterIndex)
+						continue;
+					if (pa.Annotations.Any (a => IsNotNullAnnotation (a)))
+						return true;
+				}
+			}
 
 			var typeNullness = GetTypeUseNullness (method.Attributes,
 				ta => ta.TargetType == TypeAnnotationTargetType.MethodFormalParameter
@@ -628,8 +630,14 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if (isNullMarked) {
 				var parameters = method.GetParameters ();
 				if (parameterIndex >= 0 && parameterIndex < parameters.Length
-						&& IsReferenceTypeDescriptor (parameters [parameterIndex].Type.BinaryName))
-					return true;
+						&& IsReferenceTypeDescriptor (parameters [parameterIndex].Type.BinaryName)) {
+					var msig = method.GetSignature ();
+					string? paramSig = null;
+					if (msig != null && parameterIndex < msig.Parameters.Count)
+						paramSig = msig.Parameters [parameterIndex];
+					if (!IsTopLevelTypeVariableSignature (paramSig))
+						return true;
+				}
 			}
 			return null;
 		}
@@ -642,7 +650,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 				ta => ta.TargetType == TypeAnnotationTargetType.Field);
 			if (typeNullness.HasValue)
 				return typeNullness;
-			if (isNullMarked && IsReferenceTypeDescriptor (field.Descriptor))
+			if (isNullMarked && IsReferenceTypeDescriptor (field.Descriptor)
+					&& !IsTopLevelTypeVariableSignature (field.GetSignature ()))
 				return true;
 			return null;
 		}
@@ -694,33 +703,47 @@ namespace Xamarin.Android.Tools.Bytecode {
 		static bool IsNullableAnnotation (Annotation annotation)
 		{
 			switch (annotation.Type) {
-			case "Lorg/jspecify/annotations/Nullable;":
-			case "Landroidx/annotation/Nullable;":
 			case "Landroid/annotation/Nullable;":
 			case "Landroid/support/annotation/Nullable;":
+			case "Landroidx/annotation/Nullable;":
+			case "Landroidx/annotation/RecentlyNullable;":
+			case "Lcom/android/annotations/Nullable;":
+			case "Ledu/umd/cs/findbugs/annotations/Nullable;":
+			case "Ljakarta/annotation/Nullable;":
+			case "Ljavax/annotation/Nullable;":
+			case "Lorg/checkerframework/checker/nullness/compatqual/NullableDecl;":
+			case "Lorg/checkerframework/checker/nullness/qual/Nullable;":
+			case "Lorg/eclipse/jdt/annotation/Nullable;":
+			case "Lorg/jetbrains/annotations/Nullable;":
+			case "Lorg/jspecify/annotations/Nullable;":
 				return true;
 			}
 			return false;
 		}
 
-		// Returns the return-type portion of a method descriptor, e.g.
-		// "(ILjava/lang/String;)Ljava/lang/Object;" -> "Ljava/lang/Object;".
 		static string GetReturnDescriptor (string descriptor)
 		{
 			var i = descriptor.LastIndexOf (')');
 			return i < 0 ? descriptor : descriptor.Substring (i + 1);
 		}
 
-		// A descriptor refers to a reference type (object or array) iff
-		// it starts with 'L' (object), 'T' (type variable — appears in
-		// `Signature`, not `Descriptor`, but harmless to include), or '['
-		// (array of anything). Primitives and `V` (void) return false.
 		static bool IsReferenceTypeDescriptor (string descriptor)
 		{
 			if (string.IsNullOrEmpty (descriptor))
 				return false;
 			var c = descriptor [0];
 			return c == 'L' || c == '[' || c == 'T';
+		}
+
+		// JSpecify gives unannotated type-variable *usages* parametric
+		// nullness, so e.g. `<T> T get()` must not gain `not-null="true"`
+		// in a null-marked scope. A JVMS signature for a type-variable
+		// use begins with 'T' (followed by the variable name and ';').
+		// Returns false for `null` so callers can pass the raw signature
+		// when no Signature attribute is present.
+		static bool IsTopLevelTypeVariableSignature (string? signature)
+		{
+			return !string.IsNullOrEmpty (signature) && signature [0] == 'T';
 		}
 
 		static bool IsNotNullAnnotation (Annotation annotation)

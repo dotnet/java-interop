@@ -36,4 +36,11 @@ public class JSpecifyPackageMarked {
 	public String unmarkedReturn (String value) {
 		return value;
 	}
+
+	// Type-variable usages have parametric nullness per JSpecify;
+	// they must not gain `not-null` from the scope default even
+	// though their erased descriptor is `Ljava/lang/Object;`.
+	public <T> T typeVariableReturn (T value) {
+		return value;
+	}
 }

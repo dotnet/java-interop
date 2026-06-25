@@ -35,6 +35,12 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		static XElement Field (XElement classXml, string name)
 			=> classXml.Elements ("field").First (f => f.Attribute ("name")?.Value == name);
 
+		static XElement FirstParameter (XElement method)
+		{
+			return method.Element ("parameter")
+				?? throw new AssertionException ($"method '{method.Attribute ("name")?.Value}' has no <parameter>");
+		}
+
 		static string? Attr (XElement e, string name) => e.Attribute (name)?.Value;
 
 		[Test]
@@ -46,8 +52,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			Assert.AreEqual ("true", Attr (m, "return-not-null"),
 				"unannotated reference return in @NullMarked package must be not-null");
 
-			var p = m.Element ("parameter");
-			Assert.AreEqual ("true", Attr (p!, "not-null"),
+			Assert.AreEqual ("true", Attr (FirstParameter (m), "not-null"),
 				"unannotated reference parameter in @NullMarked package must be not-null");
 
 			var f = Field (xml, "defaultField");
@@ -78,8 +83,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			Assert.IsNull (Attr (m, "return-not-null"),
 				"@Nullable return must override the @NullMarked default");
 
-			var p = m.Element ("parameter");
-			Assert.IsNull (Attr (p!, "not-null"),
+			Assert.IsNull (Attr (FirstParameter (m), "not-null"),
 				"@Nullable parameter must override the @NullMarked default");
 
 			var f = Field (xml, "nullableField");
@@ -98,6 +102,19 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		}
 
 		[Test]
+		public void PackageMarked_TypeVariableUsage_HasParametricNullness ()
+		{
+			var xml = BuildXml ("JSpecifyPackageMarked.class", "package-info.class");
+
+			var m = Method (xml, "typeVariableReturn");
+			Assert.IsNull (Attr (m, "return-not-null"),
+				"unannotated type-variable return must not gain not-null from the scope default");
+
+			Assert.IsNull (Attr (FirstParameter (m), "not-null"),
+				"unannotated type-variable parameter must not gain not-null from the scope default");
+		}
+
+		[Test]
 		public void ClassMarked_DefaultReferenceMembers_AreNotNull ()
 		{
 			var xml = BuildXml ("JSpecifyClassMarked.class");
@@ -106,8 +123,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			Assert.AreEqual ("true", Attr (m, "return-not-null"),
 				"unannotated reference return in @NullMarked class must be not-null");
 
-			var p = m.Element ("parameter");
-			Assert.AreEqual ("true", Attr (p!, "not-null"),
+			Assert.AreEqual ("true", Attr (FirstParameter (m), "not-null"),
 				"unannotated reference parameter in @NullMarked class must be not-null");
 
 			var f = Field (xml, "defaultField");
@@ -124,8 +140,7 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			Assert.IsNull (Attr (m, "return-not-null"),
 				"@Nullable return must override the class-level @NullMarked default");
 
-			var p = m.Element ("parameter");
-			Assert.IsNull (Attr (p!, "not-null"),
+			Assert.IsNull (Attr (FirstParameter (m), "not-null"),
 				"@Nullable parameter must override the class-level @NullMarked default");
 
 			var f = Field (xml, "nullableField");
@@ -142,13 +157,29 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			Assert.IsNull (Attr (m, "return-not-null"),
 				"outside a @NullMarked scope, unannotated reference returns must not gain not-null");
 
-			var p = m.Element ("parameter");
-			Assert.IsNull (Attr (p!, "not-null"),
+			Assert.IsNull (Attr (FirstParameter (m), "not-null"),
 				"outside a @NullMarked scope, unannotated reference parameters must not gain not-null");
 
 			var f = Field (xml, "defaultField");
 			Assert.IsNull (Attr (f, "not-null"),
 				"outside a @NullMarked scope, unannotated reference fields must not gain not-null");
+		}
+
+		[Test]
+		public void Unmarked_ExplicitNonNullAnnotation_IsHonored ()
+		{
+			var xml = BuildXml ("JSpecifyUnmarked.class");
+
+			var m = Method (xml, "nonNullReturn");
+			Assert.AreEqual ("true", Attr (m, "return-not-null"),
+				"explicit @NonNull return must produce not-null even outside a @NullMarked scope");
+
+			Assert.AreEqual ("true", Attr (FirstParameter (m), "not-null"),
+				"explicit @NonNull parameter must produce not-null even outside a @NullMarked scope");
+
+			var f = Field (xml, "nonNullField");
+			Assert.AreEqual ("true", Attr (f, "not-null"),
+				"explicit @NonNull field must produce not-null even outside a @NullMarked scope");
 		}
 
 		[Test]
@@ -158,14 +189,13 @@ namespace Xamarin.Android.Tools.BytecodeTests
 			var method = c.Methods.First (m => m.Name == "nullableReturn");
 			var typeAnn = method.Attributes
 				.OfType<RuntimeInvisibleTypeAnnotationsAttribute> ()
-				.FirstOrDefault ();
-			Assert.NotNull (typeAnn,
-				"javac must emit a RuntimeInvisibleTypeAnnotations attribute for @Nullable members");
-			Assert.IsTrue (typeAnn!.Annotations.Any (a =>
+				.FirstOrDefault ()
+				?? throw new AssertionException ("javac must emit a RuntimeInvisibleTypeAnnotations attribute for @Nullable members");
+			Assert.IsTrue (typeAnn.Annotations.Any (a =>
 				a.Annotation.Type == "Lorg/jspecify/annotations/Nullable;"
 					&& a.TargetType == TypeAnnotationTargetType.MethodReturn),
 				"@Nullable return type annotation must be parsed with MethodReturn target");
-			Assert.IsTrue (typeAnn!.Annotations.Any (a =>
+			Assert.IsTrue (typeAnn.Annotations.Any (a =>
 				a.Annotation.Type == "Lorg/jspecify/annotations/Nullable;"
 					&& a.TargetType == TypeAnnotationTargetType.MethodFormalParameter
 					&& a.FormalParameterIndex == 0),
