@@ -378,8 +378,9 @@ namespace Xamarin.Android.Tools.Bytecode {
 			FixupModuleVisibility (removeModules: true);
 
 			var packagesDictionary = GetPackages ();
-			var packageInfos = packagesDictionary.Keys
-				.ToDictionary (p => p, p => GetPackageInfo (p));
+			var packageInfos = packagesDictionary.ToDictionary (
+				kv => kv.Key,
+				kv => kv.Value.FirstOrDefault (c => c.IsPackageInfo));
 			var api = new XElement ("api",
 					GetApiSource (),
 					GetPlatform (),
