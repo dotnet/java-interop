@@ -91,14 +91,17 @@ namespace Xamarin.Android.Tools.BytecodeTests
 				"@Nullable field must override the @NullMarked default");
 		}
 
+		// `@NullUnmarked` on a method is intentionally not honored yet
+		// (only class- and package-level scope are). This test pins the
+		// current behavior so the limitation is visible.
 		[Test]
-		public void PackageMarked_NullUnmarkedMethod_RevertsToUnknown ()
+		public void PackageMarked_MethodLevelNullUnmarked_IsNotYetHonored ()
 		{
 			var xml = BuildXml ("JSpecifyPackageMarked.class", "package-info.class");
 
 			var m = Method (xml, "unmarkedReturn");
 			Assert.AreEqual ("true", Attr (m, "return-not-null"),
-				"method-level @NullUnmarked is not yet honored (documented limitation)");
+				"method-level @NullUnmarked is not yet honored; the package-level @NullMarked scope still applies");
 		}
 
 		[Test]

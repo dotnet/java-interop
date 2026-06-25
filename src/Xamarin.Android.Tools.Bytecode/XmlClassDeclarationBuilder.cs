@@ -607,7 +607,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if (typeNullness.HasValue)
 				return typeNullness;
 			if (isNullMarked && IsReferenceTypeDescriptor (GetReturnDescriptor (method.Descriptor))
-					&& !IsTopLevelTypeVariableSignature (method.GetSignature ()?.ReturnTypeSignature))
+					&& !IsTopLevelTypeVariableSignature (method.ReturnType.TypeSignature))
 				return true;
 			return null;
 		}
@@ -639,14 +639,9 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if (isNullMarked) {
 				var parameters = method.GetParameters ();
 				if (parameterIndex >= 0 && parameterIndex < parameters.Length
-						&& IsReferenceTypeDescriptor (parameters [parameterIndex].Type.BinaryName)) {
-					var msig = method.GetSignature ();
-					string? paramSig = null;
-					if (msig != null && parameterIndex < msig.Parameters.Count)
-						paramSig = msig.Parameters [parameterIndex];
-					if (!IsTopLevelTypeVariableSignature (paramSig))
-						return true;
-				}
+						&& IsReferenceTypeDescriptor (parameters [parameterIndex].Type.BinaryName)
+						&& !IsTopLevelTypeVariableSignature (parameters [parameterIndex].Type.TypeSignature))
+					return true;
 			}
 			return null;
 		}
