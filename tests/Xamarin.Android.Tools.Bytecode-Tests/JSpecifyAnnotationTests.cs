@@ -183,6 +183,34 @@ namespace Xamarin.Android.Tools.BytecodeTests
 		}
 
 		[Test]
+		public void PackageMarked_DeclarationNullable_OverridesScope ()
+		{
+			var xml = BuildXml ("JSpecifyPackageMarked.class", "package-info.class");
+
+			var m = Method (xml, "declarationNullableReturn");
+			Assert.IsNull (Attr (m, "return-not-null"),
+				"declaration-level @Nullable return must override the @NullMarked default");
+
+			Assert.IsNull (Attr (FirstParameter (m), "not-null"),
+				"declaration-level @Nullable parameter must override the @NullMarked default");
+
+			var f = Field (xml, "declarationNullableField");
+			Assert.IsNull (Attr (f, "not-null"),
+				"declaration-level @Nullable field must override the @NullMarked default");
+		}
+
+		[Test]
+		public void PackageMarked_NestedNullable_DoesNotLeakToContainer ()
+		{
+			var xml = BuildXml ("JSpecifyPackageMarked.class", "package-info.class");
+
+			var f = Field (xml, "nestedNullableField");
+			Assert.AreEqual ("true", Attr (f, "not-null"),
+				"nested @Nullable on an inner type argument must not affect the container's nullness; "
+					+ "the field's List type is non-null in a @NullMarked scope");
+		}
+
+		[Test]
 		public void TypeAnnotationsAttribute_IsParsed ()
 		{
 			var c = LoadClassFile ("JSpecifyPackageMarked.class");

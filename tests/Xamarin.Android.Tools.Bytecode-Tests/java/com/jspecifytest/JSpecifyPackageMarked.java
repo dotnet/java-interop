@@ -1,6 +1,8 @@
 package com.jspecifytest;
 
-import org.jspecify.annotations.Nullable;
+import java.util.List;
+
+import androidx.annotation.Nullable;
 import org.jspecify.annotations.NullUnmarked;
 
 /**
@@ -25,13 +27,22 @@ public class JSpecifyPackageMarked {
 	public int primitiveField;
 
 	// TYPE_USE `@Nullable` overrides scope default.
-	public @Nullable String nullableReturn (@Nullable String value) {
+	public @org.jspecify.annotations.Nullable String nullableReturn (@org.jspecify.annotations.Nullable String value) {
 		return value;
 	}
 
-	public @Nullable String nullableField;
+	public @org.jspecify.annotations.Nullable String nullableField;
 
-	// `@NullUnmarked` at the method level reverts the scope.
+	// Declaration-style `@Nullable` (lives in `Runtime(In)visibleAnnotations`,
+	// not the type-annotation table) must also override the scope default.
+	@Nullable
+	public String declarationNullableReturn (@Nullable String value) {
+		return value;
+	}
+
+	@Nullable
+	public String declarationNullableField;
+
 	@NullUnmarked
 	public String unmarkedReturn (String value) {
 		return value;
@@ -43,4 +54,10 @@ public class JSpecifyPackageMarked {
 	public <T> T typeVariableReturn (T value) {
 		return value;
 	}
+
+	// Nested `@Nullable` on an inner type argument. The container
+	// (List) is still non-null in a `@NullMarked` scope; the inner
+	// annotation has a non-empty `type_path` and must be ignored
+	// at the top level.
+	public List<@org.jspecify.annotations.Nullable String> nestedNullableField;
 }

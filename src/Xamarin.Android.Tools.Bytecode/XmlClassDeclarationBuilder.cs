@@ -600,6 +600,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 		{
 			if (HasDeclarationNotNullAnnotation (method.Attributes))
 				return true;
+			if (HasDeclarationNullableAnnotation (method.Attributes))
+				return null;
 			var typeNullness = GetTypeUseNullness (method.Attributes,
 				ta => ta.TargetType == TypeAnnotationTargetType.MethodReturn);
 			if (typeNullness.HasValue)
@@ -612,14 +614,21 @@ namespace Xamarin.Android.Tools.Bytecode {
 
 		bool? GetParameterNullness (MethodInfo method, IList<ParameterAnnotation>? annotations, int parameterIndex)
 		{
+			bool hasDeclarationNullable = false;
 			if (annotations != null) {
 				foreach (var pa in annotations) {
 					if (pa.ParameterIndex != parameterIndex)
 						continue;
-					if (pa.Annotations.Any (a => IsNotNullAnnotation (a)))
-						return true;
+					foreach (var a in pa.Annotations) {
+						if (IsNotNullAnnotation (a))
+							return true;
+						if (IsNullableAnnotation (a))
+							hasDeclarationNullable = true;
+					}
 				}
 			}
+			if (hasDeclarationNullable)
+				return null;
 
 			var typeNullness = GetTypeUseNullness (method.Attributes,
 				ta => ta.TargetType == TypeAnnotationTargetType.MethodFormalParameter
@@ -646,6 +655,8 @@ namespace Xamarin.Android.Tools.Bytecode {
 		{
 			if (HasDeclarationNotNullAnnotation (field.Attributes))
 				return true;
+			if (HasDeclarationNullableAnnotation (field.Attributes))
+				return null;
 			var typeNullness = GetTypeUseNullness (field.Attributes,
 				ta => ta.TargetType == TypeAnnotationTargetType.Field);
 			if (typeNullness.HasValue)
@@ -662,6 +673,17 @@ namespace Xamarin.Android.Tools.Bytecode {
 				return false;
 			foreach (var a in EnumerateDeclarationAnnotations (attributes)) {
 				if (IsNotNullAnnotation (a))
+					return true;
+			}
+			return false;
+		}
+
+		static bool HasDeclarationNullableAnnotation (AttributeCollection? attributes)
+		{
+			if (attributes == null)
+				return false;
+			foreach (var a in EnumerateDeclarationAnnotations (attributes)) {
+				if (IsNullableAnnotation (a))
 					return true;
 			}
 			return false;
@@ -732,7 +754,7 @@ namespace Xamarin.Android.Tools.Bytecode {
 			if (string.IsNullOrEmpty (descriptor))
 				return false;
 			var c = descriptor [0];
-			return c == 'L' || c == '[' || c == 'T';
+			return c == 'L' || c == '[';
 		}
 
 		// JSpecify gives unannotated type-variable *usages* parametric
