@@ -39,8 +39,8 @@
   </ItemGroup>
 
   <!--
-    Resolve the macOS SDK dynamically via `xcrun --show-sdk-path` so we don't pin to a specific
-    SDK version (e.g. MacOSX15.sdk) that would silently stop applying on newer CI/dev images.
+    Resolve the macOS SDK dynamically via `xcrun` so we don't pin to a specific SDK version
+    (e.g. MacOSX15.sdk) that would silently stop applying on newer CI/dev images.
   -->
   <Target Name="_DetectMacOSXSdk"
           BeforeTargets="LinkNative"
