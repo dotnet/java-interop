@@ -301,6 +301,8 @@ namespace Java.Interop
 				try {
 					for (int i = 0; i < numMethods; ++i) {
 						var m       = methods [i];
+						if (m.Marshaler == null)
+							throw new ArgumentException ($"JniNativeMethodRegistration[{i}] ({m.Name}{m.Signature}) has a null Marshaler delegate.", nameof (methods));
 						IntPtr name = Marshal.StringToCoTaskMemUTF8 (m.Name);
 						unmanagedStrings [i * 2] = name;
 						IntPtr sig  = Marshal.StringToCoTaskMemUTF8 (m.Signature);
