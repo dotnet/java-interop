@@ -100,7 +100,7 @@ static class JavaInteropRuntime
 
 		public override void ActivatePeer (
 			JniObjectReference reference,
-			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type type,
+			Type type,
 			ConstructorInfo cinfo,
 			object?[]? argumentValues)
 		{
@@ -159,13 +159,13 @@ static class JavaInteropRuntime
 			throw new NotSupportedException ();
 		}
 
-		protected override JniValueMarshaler<T> GetValueMarshalerCore<[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T> ()
+		protected override JniValueMarshaler<T> GetValueMarshalerCore<T> ()
 		{
 			throw new NotSupportedException ();
 		}
 
 		protected override JniObjectReference CreateLocalObjectReferenceArgumentCore (
-			[DynamicallyAccessedMembers (DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type type,
+			Type type,
 			object? value)
 		{
 			throw new NotSupportedException ();
