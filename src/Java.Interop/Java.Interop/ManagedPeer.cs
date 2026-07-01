@@ -18,15 +18,15 @@ namespace Java.Interop {
 
 		static  readonly    JniPeerMembers  _members        = new JniPeerMembers (JniTypeName, typeof (ManagedPeer));
 
-		unsafe static ManagedPeer ()
+		static unsafe ManagedPeer ()
 		{
 			fixed (byte* constructNamePtr = "construct"u8)
 			fixed (byte* constructSigPtr = "(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;)V"u8)
 			fixed (byte* registerNativeMembersNamePtr = "registerNativeMembers"u8)
 			fixed (byte* registerNativeMembersSigPtr = "(Ljava/lang/Class;Ljava/lang/String;)V"u8)
 			{
-				var constructFnPtr = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void>)&Construct;
-				var registerNativeMembersFnPtr = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr, IntPtr, IntPtr, void>)&RegisterNativeMembers;
+				var constructFnPtr = (IntPtr) (delegate* unmanaged<IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void>) &Construct;
+				var registerNativeMembersFnPtr = (IntPtr) (delegate* unmanaged<IntPtr, IntPtr, IntPtr, IntPtr, void>) &RegisterNativeMembers;
 
 				JniEnvironment.Types.RegisterNatives (_members.JniPeerType.PeerReference, [
 					new JniNativeMethod (constructNamePtr, constructSigPtr, constructFnPtr),
@@ -259,7 +259,7 @@ namespace Java.Interop {
 				IntPtr n_methods)
 		{
 			if (!JniEnvironment.BeginMarshalMethod (jnienv, out var envp, out var __r)) {
-				Console.WriteLine ($"error: could not begin ManagedPeer.RegisterNativePeers!");
+				Console.WriteLine ($"error: could not begin ManagedPeer.RegisterNativeMembers!");
 				return;
 			}
 
