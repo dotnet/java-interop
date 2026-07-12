@@ -342,32 +342,85 @@ namespace MonoDroid.Generation
 			// Process property getter/setter methods for ApiRemovedSince fixup
 			foreach (var prop in Properties) {
 				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
-					var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Type == prop.Type);
+					// Match by name only (not type) to handle covariant return types
+					var baseProp = bt.Properties.FirstOrDefault (p => p.Name == prop.Name);
 					if (baseProp == null) {
+						// Check if base has a property with same Java getter/setter names (different C# name due to type refinement)
+						// This handles cases like ListView.Adapter overriding AdapterView.RawAdapter
+						if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0) {
+							var basePropByGetter = bt.Properties.FirstOrDefault (p =>
+								p.Getter?.JavaName == prop.Getter.JavaName &&
+								p.Getter.ApiRemovedSince == 0);
+							if (basePropByGetter != null) {
+								prop.Getter.ApiRemovedSince = default;
+								// Also fix setter if it matches
+								if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 &&
+									basePropByGetter.Setter?.JavaName == prop.Setter.JavaName &&
+									basePropByGetter.Setter.ApiRemovedSince == 0) {
+									prop.Setter.ApiRemovedSince = default;
+								}
+								break;
+							}
+						}
+						// Check if base has a method that matches the setter (e.g. manually-defined property in partial class)
+						// This handles cases like AbsListView.Adapter which is defined in a partial class but has setAdapter method.
+						if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0) {
+							var baseSetterMethod = bt.Methods.FirstOrDefault (m =>
+								m.JavaName == prop.Setter.JavaName &&
+								m.Parameters.Count == prop.Setter.Parameters.Count &&
+								m.RetVal.JavaName == "void" &&
+								m.ApiRemovedSince == 0);
+							if (baseSetterMethod != null) {
+								prop.Setter.ApiRemovedSince = default;
+								break;
+							}
+							// Also check for base property with same Java setter name (different C# name due to type refinement)
+							var basePropBySetter = bt.Properties.FirstOrDefault (p =>
+								p.Setter?.JavaName == prop.Setter.JavaName &&
+								p.Setter.ApiRemovedSince == 0);
+							if (basePropBySetter != null) {
+								prop.Setter.ApiRemovedSince = default;
+								break;
+							}
+						}
 						continue;
 					}
 
 					bool shouldBreak = false;
 					if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
-						if (baseProp.Getter.Visibility == prop.Getter.Visibility &&
-							ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
-							baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
-							// If a "removed" property getter overrides a "not removed" getter, the method was
-							// likely moved to a base class, so don't mark it as removed.
-							prop.Getter.ApiRemovedSince = default;
-							shouldBreak = true;
-						}
+						// If a "removed" property getter overrides a "not removed" getter, the method was
+						// likely moved to a base class (or is a covariant override), so don't mark it as removed.
+						// Note: We don't check return type equality to support covariant return types.
+						prop.Getter.ApiRemovedSince = default;
+						shouldBreak = true;
 					}
 					if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
-						if (baseProp.Setter.Visibility == prop.Setter.Visibility &&
-							ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
-							// If a "removed" property setter overrides a "not removed" setter, the method was
-							// likely moved to a base class, so don't mark it as removed.
-							prop.Setter.ApiRemovedSince = default;
-							shouldBreak = true;
-						}
+						// If a "removed" property setter overrides a "not removed" setter, the method was
+						// likely moved to a base class, so don't mark it as removed.
+						// Note: We don't check parameter types to support contravariant parameter types.
+						prop.Setter.ApiRemovedSince = default;
+						shouldBreak = true;
+					} else if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter == null && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+						// Base has getter-only property; setter in derived should not be marked removed
+						prop.Setter.ApiRemovedSince = default;
+						shouldBreak = true;
 					}
 					if (shouldBreak) {
+						break;
+					}
+				}
+			}
+
+			// Process standalone setter methods (setXxx) that correspond to base class properties.
+			// If the base property getter isn't removed, the setter shouldn't be either.
+			foreach (var m in Methods.Where (m => !m.IsStatic && !m.IsInterfaceDefaultMethod && m.ApiRemovedSince > 0)) {
+				if (!m.JavaName.StartsWith ("set", StringComparison.Ordinal) || m.Parameters.Count != 1 || m.RetVal.JavaName != "void")
+					continue;
+				var propertyName = m.JavaName.Substring (3);
+				for (var bt = GetBaseGen (opt); bt != null; bt = bt.GetBaseGen (opt)) {
+					var baseProp = bt.Properties.FirstOrDefault (p => p.Getter?.JavaName == "get" + propertyName);
+					if (baseProp?.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+						m.ApiRemovedSince = default;
 						break;
 					}
 				}
@@ -400,25 +453,29 @@ namespace MonoDroid.Generation
 				// Process interface property getter/setter methods for ApiRemovedSince fixup
 				foreach (var prop in Properties) {
 					foreach (var baseIface in baseInterfaces) {
-						var baseProp = baseIface.Properties.FirstOrDefault (p => p.Name == prop.Name && p.Type == prop.Type);
+						// Match by name only (not type) to handle covariant return types
+						var baseProp = baseIface.Properties.FirstOrDefault (p => p.Name == prop.Name);
 						if (baseProp == null)
 							continue;
 
 						bool shouldBreak = false;
 						if (prop.Getter != null && prop.Getter.ApiRemovedSince > 0 && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
-							if (baseProp.Getter.Visibility == prop.Getter.Visibility &&
-								ParameterList.Equals (baseProp.Getter.Parameters, prop.Getter.Parameters) &&
-								baseProp.Getter.RetVal.FullName == prop.Getter.RetVal.FullName) {
-								prop.Getter.ApiRemovedSince = default;
-								shouldBreak = true;
-							}
+							// If a "removed" property getter overrides a "not removed" getter, the method was
+							// likely moved to a base interface (or is a covariant override), so don't mark it as removed.
+							// Note: We don't check return type equality to support covariant return types.
+							prop.Getter.ApiRemovedSince = default;
+							shouldBreak = true;
 						}
 						if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter != null && baseProp.Setter.ApiRemovedSince == 0) {
-							if (baseProp.Setter.Visibility == prop.Setter.Visibility &&
-								ParameterList.Equals (baseProp.Setter.Parameters, prop.Setter.Parameters)) {
-								prop.Setter.ApiRemovedSince = default;
-								shouldBreak = true;
-							}
+							// If a "removed" property setter overrides a "not removed" setter, the method was
+							// likely moved to a base interface, so don't mark it as removed.
+							// Note: We don't check parameter types to support contravariant parameter types.
+							prop.Setter.ApiRemovedSince = default;
+							shouldBreak = true;
+						} else if (prop.Setter != null && prop.Setter.ApiRemovedSince > 0 && baseProp.Setter == null && baseProp.Getter != null && baseProp.Getter.ApiRemovedSince == 0) {
+							// Base has getter-only property; setter in derived should not be marked removed
+							prop.Setter.ApiRemovedSince = default;
+							shouldBreak = true;
 						}
 						if (shouldBreak) {
 							break;
