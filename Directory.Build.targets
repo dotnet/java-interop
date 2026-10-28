@@ -26,7 +26,7 @@
   <!-- NuGet Dependencies -->
   <ItemGroup>
     <PackageReference Update="GitInfo"                                      Version="2.1.2" />
-    <PackageReference Update="HtmlAgilityPack"                              Version="1.12.4" />
+    <PackageReference Update="HtmlAgilityPack"                              Version="1.13.1" />
     <PackageReference Update="Irony"                                        Version="1.5.3" />
     <PackageReference Update="Microsoft.Build.Framework"                    Version="17.3.2" />
     <PackageReference Update="Microsoft.Build.Utilities.Core"               Version="17.3.2" />
