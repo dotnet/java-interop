@@ -210,7 +210,7 @@ namespace Java.Interop
 				if (o != null && object.ReferenceEquals (o, value))
 					return;
 
-				DisposePeer (h, value);
+				DisposePeer (value);
 			}
 
 			public abstract IJavaPeerable? PeekPeer (JniObjectReference reference);
